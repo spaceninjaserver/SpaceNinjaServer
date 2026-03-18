@@ -9,20 +9,20 @@ import { logger } from "../../utils/logger.ts";
 import type { IDojoComponentDatabase } from "../../types/guildTypes.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import { Types } from "mongoose";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 
 export const changeDojoRootController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId, "GuildId LevelKeys");
+    const account = await getAccountForRequest(req);
+    const inventory = await getInventory(account._id, "GuildId LevelKeys");
     const guild = await getGuildForRequestEx(req, inventory);
-    if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Architect))) {
+    if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, account._id, GuildPermission.Architect))) {
         res.json({ DojoRequestStatus: -1 });
         return;
     }
 
     // Example POST body: {"pivot":[0, 0, -64],"components":"{\"670429301ca0a63848ccc467\":{\"R\":[0,0,0],\"P\":[0,3,32]},\"6704254a1ca0a63848ccb33c\":{\"R\":[0,0,0],\"P\":[0,9.25,-32]},\"670429461ca0a63848ccc731\":{\"R\":[-90,0,0],\"P\":[-47.999992370605,3,16]}}"}
-    if (req.body) {
+    if (req.body && req.body != "") {
         logger.debug(`data provided to ${req.path}: ${String(req.body)}`);
         throw new Error("dojo reparent operation should not need deco repositioning"); // because we always provide SortId
     }
@@ -67,7 +67,7 @@ export const changeDojoRootController: RequestHandler = async (req, res) => {
 
     await guild.save();
 
-    res.json(await getDojoClient(guild, 0));
+    res.json(await getDojoClient(guild, 0, undefined, account.BuildLabel));
 };
 
 interface INode {
