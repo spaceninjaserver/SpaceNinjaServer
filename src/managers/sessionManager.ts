@@ -85,17 +85,49 @@ function getSessionByCreatorID(creatorId: string | Types.ObjectId): ISession | u
     return sessions.find(session => session.creatorId.equals(creatorId));
 }
 
-function updateSession(sessionId: string | Types.ObjectId, sessionData: string): boolean {
-    logger.debug(`session update: ${sessionData}`);
+function updateSession(sessionId: string | Types.ObjectId, updateData: string): boolean {
+    logger.debug(`session update: ${updateData}`);
     const session = sessions.find(session => session.sessionId.equals(sessionId));
-    if (!session) return false;
-    try {
-        Object.assign(session, JSONParse(sessionData));
-        return true;
-    } catch (error) {
-        logger.error("Invalid JSON string for session update.");
+    if (!session) {
         return false;
     }
+    if (updateData.substring(0, 1) == "{") {
+        try {
+            Object.assign(session, JSONParse(updateData));
+        } catch (error) {
+            logger.error("Invalid JSON string for session update.");
+            return false;
+        }
+    } else {
+        const updates: string[] = updateData.split("&");
+        for (const update of updates) {
+            const arr = update.split("=");
+            if (arr.length == 2) {
+                const [key, value] = arr;
+                switch (key) {
+                    case "maxPlayers":
+                    case "minPlayers":
+                    case "privateSlots":
+                    case "scoreLimit":
+                    case "timeLimit":
+                    case "gameModeId":
+                    case "eloRating":
+                    case "regionId":
+                    case "difficulty":
+                    case "freePublic":
+                    case "freePrivate":
+                        session[key] = parseInt(value);
+                        break;
+
+                    default:
+                        logger.error(`unexpected key in legacy session update format: ${key}`);
+                        break;
+                }
+            }
+        }
+    }
+    //logger.debug(`session after update:`, session);
+    return true;
 }
 
 function deleteSession(sessionId: string | Types.ObjectId): boolean {
