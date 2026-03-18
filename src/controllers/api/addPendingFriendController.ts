@@ -9,6 +9,7 @@ import type { IFriendInfo } from "../../types/friendTypes.ts";
 import type { RequestHandler, Response } from "express";
 import { logger } from "../../utils/logger.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { sendCustomMessageToNrs } from "../../helpers/udp.ts";
 
 export const addPendingFriendPostController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -59,6 +60,16 @@ const sendFriendRequest = async (
         logger.debug(`friend request failed due to ${String(e)}`);
         res.status(400).send(`user ${name} already in friend list`);
         return;
+    }
+
+    const requesterUsesNrsNotifications =
+        requesterAccount.BuildLabel && version_compare(requesterAccount.BuildLabel, gameToBuildVersion["40.0.0"]) < 0;
+    const requesteeUsesNrsNotifications =
+        requesteeAccount.BuildLabel && version_compare(requesteeAccount.BuildLabel, gameToBuildVersion["40.0.0"]) < 0;
+    if (requesteeUsesNrsNotifications && !requesterUsesNrsNotifications) {
+        void sendCustomMessageToNrs(
+            `addPendingFriend,${requesterAccount._id.toString()},${requesteeAccount._id.toString()}`
+        );
     }
 
     if (

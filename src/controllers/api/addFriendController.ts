@@ -1,11 +1,14 @@
 import type { Types } from "mongoose";
-import { toOid } from "../../helpers/inventoryHelpers.ts";
+import { fromOid, toOid, version_compare } from "../../helpers/inventoryHelpers.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { Friendship } from "../../models/friendModel.ts";
 import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "../../services/friendService.ts";
 import { getAccountForRequest, getAccountIdForRequest } from "../../services/loginService.ts";
 import type { IFriendInfo } from "../../types/friendTypes.ts";
 import type { RequestHandler } from "express";
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { Account } from "../../models/loginModel.ts";
+import { sendCustomMessageToNrs } from "../../helpers/udp.ts";
 
 export const addFriendPostController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -34,9 +37,21 @@ export const addFriendPostController: RequestHandler = async (req, res) => {
     } else {
         await acceptFriendRequest(account._id, payload.friend, newFriends);
     }
+    const requesterUsesNrsNotifications =
+        account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["40.0.0"]) < 0;
     for (const newFriend of newFriends) {
         promises.push(addAccountDataToFriendInfo(newFriend, account.BuildLabel));
         promises.push(addInventoryDataToFriendInfo(newFriend));
+        if (!requesterUsesNrsNotifications) {
+            void Account.findById(fromOid(newFriend._id), "BuildLabel").then(newFriendAcct => {
+                const requesteeUsesNrsNotifications =
+                    newFriendAcct!.BuildLabel &&
+                    version_compare(newFriendAcct!.BuildLabel, gameToBuildVersion["40.0.0"]) < 0;
+                if (requesteeUsesNrsNotifications) {
+                    void sendCustomMessageToNrs(`addFriend,${account._id.toString()},${newFriendAcct!._id.toString()}`);
+                }
+            });
+        }
     }
     await Promise.all(promises);
     res.json({

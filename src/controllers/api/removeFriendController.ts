@@ -1,10 +1,11 @@
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 import { fromOid, toOid2, version_compare } from "../../helpers/inventoryHelpers.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
+import { sendCustomMessageToNrs } from "../../helpers/udp.ts";
 import { Friendship } from "../../models/friendModel.ts";
 import { Account } from "../../models/loginModel.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getUnicodeName } from "../../services/loginService.ts";
+import { getAccountForRequest, getUnicodeName, type TAccountDocument } from "../../services/loginService.ts";
 import type { IOidWithLegacySupport } from "../../types/commonTypes.ts";
 import { parallelForeach } from "../../utils/async-utils.ts";
 import type { RequestHandler } from "express";
@@ -27,14 +28,14 @@ export const removeFriendGetController: RequestHandler = async (req, res) => {
             }
         }
         await Promise.all(promises);
-        res.json(await toRemoveFriendsResponse(account.BuildLabel, friends));
+        res.json(await toRemoveFriendsResponse(account, friends));
     } else {
         const friendId = req.query.friendId as string;
         await Promise.all([
             Friendship.deleteOne({ owner: accountId, friend: friendId }),
             Friendship.deleteOne({ owner: friendId, friend: accountId })
         ]);
-        res.json(await toRemoveFriendsResponse(account.BuildLabel, [{ $oid: friendId }]));
+        res.json(await toRemoveFriendsResponse(account, [{ $oid: friendId }]));
     }
 };
 
@@ -76,7 +77,7 @@ export const removeFriendPostController: RequestHandler = async (req, res) => {
         }
     }
     await Promise.all(promises);
-    res.json(await toRemoveFriendsResponse(account.BuildLabel, removeFriendOids));
+    res.json(await toRemoveFriendsResponse(account, removeFriendOids));
 };
 
 // The friend ids format is a bit weird, e.g. when 6633b81e9dba0b714f28ff02 (A) is friends with 67cdac105ef1f4b49741c267 (B), A's friend id for B is 808000105ef1f40560ca079e and B's friend id for A is 8000b81e9dba0b06408a8075.
@@ -101,17 +102,20 @@ interface IRemoveFriendsResponseU39 {
 }
 
 const toRemoveFriendsResponse = async (
-    buildLabel: string | undefined,
+    account: TAccountDocument,
     friends: IOidWithLegacySupport[]
 ): Promise<IRemoveFriendsResponseU39 | IRemoveFriendsResponseU40> => {
-    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0) {
+    if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["40.0.0"]) < 0) {
         return { Friends: friends } satisfies IRemoveFriendsResponseU39;
     } else {
         const response: IRemoveFriendsResponseU40 = { FriendNames: [] };
         for (const friend of friends) {
-            const acct = await Account.findById(fromOid(friend));
-            if (acct) {
-                response.FriendNames.push(getUnicodeName(acct, buildLabel));
+            const friendAcct = await Account.findById(fromOid(friend));
+            if (friendAcct) {
+                response.FriendNames.push(getUnicodeName(friendAcct, account.BuildLabel));
+                if (friendAcct.BuildLabel && version_compare(friendAcct.BuildLabel, gameToBuildVersion["40.0.0"]) < 0) {
+                    void sendCustomMessageToNrs(`removeFriend,${account._id.toString()},${friendAcct._id.toString()}`);
+                }
             }
         }
         return response;

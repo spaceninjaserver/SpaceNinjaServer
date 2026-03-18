@@ -282,3 +282,14 @@ export const getWebServerParams = (): IWebServerParams => {
         keyFile: config.httpsKeyFile || "static/cert/key.pem"
     };
 };
+
+export const getNrsAddress = (): [string, number] => {
+    let nrsAddr = (config.nrsAddress || "%THIS_MACHINE%").split("%THIS_MACHINE%").join("127.0.0.1");
+    let nrsPort = 4950;
+    const colon = nrsAddr.indexOf(":");
+    if (colon != -1) {
+        nrsPort = parseInt(nrsAddr.substring(colon + 1));
+        nrsAddr = nrsAddr.substring(0, colon);
+    }
+    return [nrsAddr, nrsPort];
+};
