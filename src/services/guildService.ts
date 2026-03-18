@@ -22,7 +22,7 @@ import type {
     ITechProjectDatabase
 } from "../types/guildTypes.ts";
 import { GuildPermission } from "../types/guildTypes.ts";
-import { toMongoDate, toOid, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
+import { toMongoDate, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
 import type { Types } from "mongoose";
 import type { IDojoBuild, IDojoResearch } from "warframe-public-export-plus";
 import { ExportDojoRecipes, ExportResources } from "warframe-public-export-plus";
@@ -858,7 +858,7 @@ export const deleteAlliance = async (allianceId: Types.ObjectId): Promise<void> 
 export const getAllianceClient = async (
     alliance: IAllianceDatabase,
     guild: TGuildDatabaseDocument,
-    buildLabel?: string
+    buildLabel: string | undefined
 ): Promise<IAllianceClient> => {
     const allianceMembers = await AllianceMember.find({ allianceId: alliance._id });
     const clans: IAllianceMemberClient[] = [];
@@ -867,7 +867,7 @@ export const getAllianceClient = async (
             ? guild
             : (await Guild.findById(allianceMember.guildId))!;
         clans.push({
-            _id: toOid(allianceMember.guildId),
+            _id: toOid2(allianceMember.guildId, buildLabel),
             Name: memberGuild.Name,
             Tier: memberGuild.Tier,
             Pending: allianceMember.Pending,

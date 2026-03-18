@@ -8,7 +8,7 @@ export const getAllianceController: RequestHandler = async (req, res) => {
         const guild = await Guild.findById(guildId, "Name Tier AllianceId");
         if (guild && guild.AllianceId) {
             const alliance = (await Alliance.findById(guild.AllianceId))!;
-            res.json(await getAllianceClient(alliance, guild));
+            res.json(await getAllianceClient(alliance, guild, undefined));
             return;
         }
     }

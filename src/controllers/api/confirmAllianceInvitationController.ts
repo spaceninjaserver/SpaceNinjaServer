@@ -1,12 +1,12 @@
 import { Alliance, AllianceMember, Guild, GuildMember } from "../../models/guildModel.ts";
 import { getAllianceClient } from "../../services/guildService.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 export const confirmAllianceInvitationController: RequestHandler = async (req, res) => {
     // Check requester is a warlord in their guild
-    const accountId = await getAccountIdForRequest(req);
-    const guildMember = (await GuildMember.findOne({ accountId, status: 0 }))!;
+    const account = await getAccountForRequest(req);
+    const guildMember = (await GuildMember.findOne({ accountId: account._id, status: 0 }))!;
     if (guildMember.rank > 1) {
         res.status(400).json({ Error: 104 });
         return;
@@ -29,7 +29,7 @@ export const confirmAllianceInvitationController: RequestHandler = async (req, r
 
     // Give client the new alliance data which uses "AllianceId" instead of "_id" in this response
     const alliance = (await Alliance.findById(allianceMember.allianceId))!;
-    const { _id, ...rest } = await getAllianceClient(alliance, guild);
+    const { _id, ...rest } = await getAllianceClient(alliance, guild, account.BuildLabel);
     res.json({
         AllianceId: _id,
         ...rest
