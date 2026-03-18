@@ -66,6 +66,18 @@ export const getGuildRankBase = (buildLabel: string | undefined): number => {
     return buildLabel && version_compare(buildLabel, gameToBuildVersion["24.0.0"]) < 0 ? 1 : 0;
 };
 
+const rankTagToName: Record<string, string> = {
+    "/Lotus/Language/Game/Rank_Creator": "Founding Warlord",
+    "/Lotus/Language/Game/Rank_General": "General",
+    "/Lotus/Language/Game/Rank_Initiate": "Initiate",
+    "/Lotus/Language/Game/Rank_Leader": "Leader",
+    "/Lotus/Language/Game/Rank_Officer": "Officer",
+    "/Lotus/Language/Game/Rank_Sage": "Sage",
+    "/Lotus/Language/Game/Rank_Soldier": "Soldier",
+    "/Lotus/Language/Game/Rank_Utility": "Utility",
+    "/Lotus/Language/Game/Rank_Warlord": "Warlord"
+};
+
 export const getGuildClient = async (
     guild: TGuildDatabaseDocument,
     account: TAccountDocument
@@ -112,8 +124,8 @@ export const getGuildClient = async (
     let ranks = guild.Ranks;
     if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["24.0.0"]) < 0) {
         ranks = ranks.map(x => ({
-            ...x,
-            Name: x.Name == "/Lotus/Language/Game/Rank_Creator" ? "Founding Warlord" : x.Name
+            Name: rankTagToName[x.Name] ?? x.Name,
+            Permissions: x.Permissions
         }));
     }
 
