@@ -20,3 +20,4 @@ yarn.lock
 # Default Docker directory
 /docker-data
 /.vs/**
+/.vs/VSWorkspaceState.json
