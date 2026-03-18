@@ -8,7 +8,7 @@ import { PersonalRooms } from "../models/personalRoomsModel.ts";
 import type { Request } from "express";
 import { config } from "./configService.ts";
 import { createStats } from "./statsService.ts";
-import crc32 from "crc-32";
+import { crc32 } from "node:zlib";
 import crypto from "node:crypto";
 import { logger } from "../utils/logger.ts";
 import { version_compare } from "../helpers/inventoryHelpers.ts";
@@ -136,7 +136,8 @@ const platform_magics = [753, 639, 247, 37, 60, 161];
 export const getSuffixedName = (account: TAccountDocument): string => {
     const name = account.DisplayName;
     const platformId = getOriginalPlatform(account); // Name suffix is based on the original platform, so cross-save does not change it.
-    const suffix = ((crc32.str(name.toLowerCase() + "595") >>> 0) + platform_magics[platformId]) % 1000;
+    const suffix =
+        ((crc32(Buffer.from(name.toLowerCase() + "595", "utf8")) >>> 0) + platform_magics[platformId]) % 1000;
     return name + "#" + suffix.toString().padStart(3, "0");
 };
 
