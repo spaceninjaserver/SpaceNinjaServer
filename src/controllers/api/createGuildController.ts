@@ -10,7 +10,7 @@ import type { IGuildClient } from "../../types/guildTypes.ts";
 
 export const createGuildGetController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const guildName = req.query.guildName as string;
+    const guildName = decodeURIComponent(req.query.guildName as string);
     const response = await processCreateGuildRequest(account, { guildName });
     res.json(response);
 };

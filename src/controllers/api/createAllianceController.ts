@@ -21,7 +21,7 @@ export const createAllianceController: RequestHandler = async (req, res) => {
     }
     const data: ICreateAllianceRequest = req.body
         ? getJSONfromString<ICreateAllianceRequest>(String(req.body))
-        : { allianceName: req.query.allianceName as string };
+        : { allianceName: decodeURIComponent(req.query.allianceName as string) };
     const alliance = new Alliance({ Name: data.allianceName });
     try {
         await alliance.save();
