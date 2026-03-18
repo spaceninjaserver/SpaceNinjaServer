@@ -144,7 +144,7 @@ const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
                     } else {
                         account = null;
                     }
-                } else if (data.auth.isRegister) {
+                } else if (data.auth.isRegister && data.auth.email.indexOf("@") != -1) {
                     const name = await getUsernameFromEmail(data.auth.email);
                     account = await createAccount({
                         email: data.auth.email,
