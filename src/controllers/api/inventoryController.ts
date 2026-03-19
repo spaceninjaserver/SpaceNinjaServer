@@ -16,6 +16,7 @@ import {
 import type { IPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import { ArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import type { ICountedItem } from "warframe-public-export-plus";
+import { ExportArcanes } from "warframe-public-export-plus";
 import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "../../services/infestedFoundryService.ts";
 import {
     addEmailItem,
@@ -567,6 +568,13 @@ export const getInventoryResponse = async (
                         item.Gild = true;
                     }
                 }
+            }
+
+            if (version_compare(buildLabel, gameToBuildVersion["22.13.4"]) <= 0) {
+                // Before U22.14.0 Arcanes was installed directly at cosmetic items so client doesn't know about ranked up arcanes and UI displays them unproperly
+                inventoryResponse.Upgrades = inventoryResponse.Upgrades.filter(
+                    upgrade => !(upgrade.ItemType in ExportArcanes)
+                );
             }
 
             if (version_compare(buildLabel, gameToBuildVersion["22.13.4"]) < 0) {
