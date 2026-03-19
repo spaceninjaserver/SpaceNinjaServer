@@ -24,7 +24,8 @@ export const claimJunctionChallengeRewardController: RequestHandler = async (req
     for (const reward of challengeMeta.countedRewards!) {
         combineInventoryChanges(
             inventoryChanges,
-            (await handleStoreItemAcquisition(reward.StoreItem, inventory, reward.ItemCount)).InventoryChanges
+            (await handleStoreItemAcquisition(reward.StoreItem, inventory, reward.ItemCount, undefined, true))
+                .InventoryChanges
         );
     }
     await inventory.save();
