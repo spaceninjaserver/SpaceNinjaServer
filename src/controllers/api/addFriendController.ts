@@ -40,7 +40,7 @@ export const addFriendPostController: RequestHandler = async (req, res) => {
     const requesterUsesNrsNotifications =
         account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["40.0.0"]) < 0;
     for (const newFriend of newFriends) {
-        promises.push(addAccountDataToFriendInfo(newFriend, account.BuildLabel));
+        promises.push(addAccountDataToFriendInfo(newFriend, account.BuildLabel, !requesterUsesNrsNotifications));
         promises.push(addInventoryDataToFriendInfo(newFriend));
         if (!requesterUsesNrsNotifications) {
             void Account.findById(fromOid(newFriend._id), "BuildLabel").then(newFriendAcct => {
