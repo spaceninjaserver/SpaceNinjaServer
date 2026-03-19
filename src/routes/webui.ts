@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs/promises";
 import { repoDir, rootDir } from "../helpers/pathHelper.ts";
 import { args } from "../helpers/commandLineArguments.ts";
+import { config } from "../services/configService.ts";
 
 const baseDir = args.dev ? repoDir : rootDir;
 
@@ -62,6 +63,12 @@ webuiRouter.use("/webui", express.static(path.join(baseDir, "static/webui")));
 webuiRouter.get("/favicon.ico", async (_req, res) => {
     res.set("Content-Type", "image/vnd.microsoft.icon");
     res.send(await fs.readFile(path.join(repoDir, "static/fixed_responses/favicon.ico")));
+});
+
+// Serve config
+webuiRouter.get("/webui/config.js", (_req, res) => {
+    res.set("Content-Type", "text/javascript;charset=utf8");
+    res.send("webui_conf=" + JSON.stringify(config.webui ?? {}));
 });
 
 // Serve warframe-riven-info

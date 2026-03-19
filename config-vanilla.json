@@ -28,6 +28,9 @@
   "skipTutorial": false,
   "fullyStockedVendors": false,
   "skipClanKeyCrafting": false,
+  "webui": {
+    "defaultLanguage": "en"
+  },
   "unfaithfulBugFixes": {
     "ignore1999LastRegionPlayed": false,
     "fixXtraCheeseTimer": false,

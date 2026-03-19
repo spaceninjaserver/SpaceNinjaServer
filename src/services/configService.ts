@@ -38,6 +38,9 @@ export interface IConfig {
     skipTutorial?: boolean;
     fullyStockedVendors?: boolean;
     skipClanKeyCrafting?: boolean;
+    webui?: {
+        defaultLanguage?: string;
+    };
     unfaithfulBugFixes?: {
         ignore1999LastRegionPlayed?: boolean;
         fixXtraCheeseTimer?: boolean;

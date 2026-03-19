@@ -101,6 +101,16 @@ export const validateConfig = (): void => {
             }
         }
     }
+    if (config.webui?.defaultLanguage) {
+        if (
+            ["en", "de", "es", "fr", "it", "ja", "ko", "pl", "pt", "ru", "tr", "uk", "zh", "tc", "th"].indexOf(
+                config.webui.defaultLanguage
+            ) == -1
+        ) {
+            config.webui.defaultLanguage = "en";
+            modified = true;
+        }
+    }
     if (
         config.worldState?.galleonOfGhouls &&
         config.worldState.galleonOfGhouls != 1 &&
