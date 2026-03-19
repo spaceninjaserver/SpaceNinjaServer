@@ -842,65 +842,6 @@ export const getBoosterPack = (uniqueName: string, buildLabel: string = ""): IBo
         }
         return boosterPack;
     }
-    if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) < 0) {
-        if (uniqueName == "/Lotus/Types/BoosterPacks/CommonFusionPack") {
-            return {
-                name: "/Lotus/Language/Items/CommonFusionPack",
-                description: "/Lotus/Language/Items/CommonFusionPackDesc",
-                icon: "/Lotus/Interface/Icons/Store/FusionCorePackBronze.png",
-                components: [
-                    { Item: "/Lotus/Upgrades/Mods/Fusers/RareModFuser", Rarity: "RARE", Amount: 1 },
-                    { Item: "/Lotus/Upgrades/Mods/Fusers/UncommonModFuser", Rarity: "UNCOMMON", Amount: 1 },
-                    { Item: "/Lotus/Upgrades/Mods/Fusers/CommonModFuser", Rarity: "COMMON", Amount: 1 }
-                ],
-                rarityWeightsPerRoll: [
-                    { COMMON: 0.60000002, UNCOMMON: 0.40000001, RARE: 0, LEGENDARY: 0 },
-                    { COMMON: 0.60000002, UNCOMMON: 0.40000001, RARE: 0, LEGENDARY: 0 },
-                    { COMMON: 0.5, UNCOMMON: 0.30000001, RARE: 0.2, LEGENDARY: 0 }
-                ],
-                canGiveDuplicates: true,
-                platinumCost: 55
-            };
-        }
-        if (uniqueName == "/Lotus/Types/BoosterPacks/PremiumUncommonFusionPack") {
-            return {
-                name: "/Lotus/Language/Items/PremiumUncommonFusionPack",
-                description: "/Lotus/Language/Items/PremiumUncommonFusionPackDesc",
-                icon: "/Lotus/Interface/Icons/Store/FusionCorePackSilver.png",
-                components: [
-                    { Item: "/Lotus/Upgrades/Mods/Fusers/RareModFuser", Rarity: "RARE", Amount: 1 },
-                    { Item: "/Lotus/Upgrades/Mods/Fusers/UncommonModFuser", Rarity: "UNCOMMON", Amount: 1 },
-                    { Item: "/Lotus/Upgrades/Mods/Fusers/CommonModFuser", Rarity: "COMMON", Amount: 1 }
-                ],
-                rarityWeightsPerRoll: [
-                    { COMMON: 0, UNCOMMON: 1, RARE: 0, LEGENDARY: 0 },
-                    { COMMON: 0.5, UNCOMMON: 0.30000001, RARE: 0.2, LEGENDARY: 0 },
-                    { COMMON: 0.5, UNCOMMON: 0.30000001, RARE: 0.2, LEGENDARY: 0 }
-                ],
-                canGiveDuplicates: true,
-                platinumCost: 70
-            };
-        }
-        if (uniqueName == "/Lotus/Types/BoosterPacks/PremiumRareFusionPack") {
-            return {
-                name: "/Lotus/Language/Items/PremiumRareFusionPack",
-                description: "/Lotus/Language/Items/PremiumRareFusionPackDesc",
-                icon: "/Lotus/Interface/Icons/Store/FusionCorePackGold.png",
-                components: [
-                    { Item: "/Lotus/Upgrades/Mods/Fusers/CommonModFuser", Rarity: "COMMON", Amount: 1 },
-                    { Item: "/Lotus/Upgrades/Mods/Fusers/UncommonModFuser", Rarity: "UNCOMMON", Amount: 1 },
-                    { Item: "/Lotus/Upgrades/Mods/Fusers/RareModFuser", Rarity: "RARE", Amount: 1 }
-                ],
-                rarityWeightsPerRoll: [
-                    { COMMON: 0.5, UNCOMMON: 0.30000001, RARE: 0.2, LEGENDARY: 0 },
-                    { COMMON: 0.5, UNCOMMON: 0.30000001, RARE: 0.2, LEGENDARY: 0 },
-                    { COMMON: 0, UNCOMMON: 0, RARE: 1, LEGENDARY: 0 }
-                ],
-                canGiveDuplicates: true,
-                platinumCost: 80
-            };
-        }
-    }
 
     return ExportBoosterPacks[uniqueName];
 };
