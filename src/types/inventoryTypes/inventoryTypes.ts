@@ -1093,7 +1093,7 @@ export interface IShipInventory {
     ItemType: string;
     ShipExterior: IShipCustomization;
     AirSupportPower: string;
-    ItemId: IOid;
+    ItemId: IOidWithLegacySupport;
 }
 
 export interface ISpectreLoadout {
@@ -1135,7 +1135,7 @@ export interface IWeaponSkinDatabase {
 }
 
 export interface IWeaponSkinClient extends Omit<IWeaponSkinDatabase, "_id"> {
-    ItemId: IOid;
+    ItemId: IOidWithLegacySupport;
 }
 
 export interface IWebFlags {

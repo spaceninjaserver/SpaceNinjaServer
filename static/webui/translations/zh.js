@@ -76,6 +76,7 @@ dict = {
     code_setInactive: `使任务处于未激活状态`,
     code_completed: `已完成`,
     code_active: `正在执行`,
+    code_cosmeticUnenhancer: `赋能萃聚器`,
     code_pigment: `颜料`,
     code_bossNavCode: `雷凡魔像导航坐标`,
     code_lawOfRetribution: `复仇法则`,

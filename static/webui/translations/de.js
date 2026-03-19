@@ -76,6 +76,7 @@ dict = {
     code_setInactive: `Quest inaktiv setzen`,
     code_completed: `Abgeschlossen`,
     code_active: `Aktiv`,
+    code_cosmeticUnenhancer: `Arkana Destillator`,
     code_pigment: `Pigment`,
     code_bossNavCode: `Lephantis Nav-Koordinaten`,
     code_lawOfRetribution: `DAS GESETZ DER VERGELTUNG`,

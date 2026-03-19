@@ -1,14 +1,16 @@
 import type { RequestHandler } from "express";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
-import { getInventory, addMods } from "../../services/inventoryService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
+import { getInventory, addMods, addMiscItem } from "../../services/inventoryService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import { logger } from "../../utils/logger.ts";
 import { JSONParse } from "json-with-bigint";
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { version_compare } from "../../helpers/inventoryHelpers.ts";
 
 export const arcaneCommonController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const account = await getAccountForRequest(req);
+    const inventory = await getInventory(account._id.toString());
     const body = String(req.body);
 
     const parsed: unknown = JSONParse(body.substring(0, body.lastIndexOf("}") + 1));
@@ -52,11 +54,17 @@ export const arcaneCommonController: RequestHandler = async (req, res) => {
                 item.UpgradeFingerprint = undefined;
                 item.UpgradeType = undefined;
                 addMods(inventory, [{ ItemType: arcaneType, ItemCount: numToRefund }]);
+                if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["19.4.1"]) <= 0) {
+                    addMiscItem(inventory, "/Lotus/Types/Recipes/CosmeticUnenhancerItem", -1);
+                }
                 res.json({ arcaneType, numToRefund });
             } else {
                 logger.debug(`data provided to ${req.path}: ${String(req.body)}`);
                 throw new Error(`unknown legacy arcaneCommon operationType: ${json.operationType}`);
             }
+        } else {
+            logger.debug(`data provided to ${req.path}: ${String(req.body)}`);
+            throw new Error(`Failed to find item with OID ${json.skinId}`);
         }
         await inventory.save();
         return;

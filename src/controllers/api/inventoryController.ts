@@ -528,11 +528,29 @@ export const getInventoryResponse = async (
             }
         }
 
+        if (version_compare(buildLabel, gameToBuildVersion["38.5.0"]) < 0) {
+            for (const category of equipmentKeys) {
+                for (const item of inventoryResponse[category]) {
+                    delete item.IsNew;
+                }
+            }
+            for (const item of inventoryResponse.WeaponSkins) {
+                delete item.IsNew;
+            }
+        }
+
         // Old versions crash when faced with an unrecognised CollectibleType, so filter this array.
         if (inventoryResponse.CollectibleSeries && version_compare(buildLabel, gameToBuildVersion["33.0.0"]) < 0) {
             inventoryResponse.CollectibleSeries = inventoryResponse.CollectibleSeries.filter(
                 x => x.CollectibleType != "/Lotus/Types/Lore/Fragments/DuviriFragments/DuviriCollectibleDeco"
             );
+        }
+
+        // U28.1 introduced Steel Path
+        if (version_compare(buildLabel, "2020.07.08.00.00") < 0) {
+            for (const mission of inventoryResponse.Missions) {
+                delete mission.Tier;
+            }
         }
 
         if (version_compare(buildLabel, gameToBuildVersion["24.4.0"]) < 0) {
@@ -578,6 +596,18 @@ export const getInventoryResponse = async (
                                 }
                             }
                         }
+                    }
+
+                    for (const item of inventoryResponse.WeaponSkins) {
+                        toLegacyOid(item.ItemId);
+                    }
+
+                    for (const ship of inventoryResponse.Ships) {
+                        toLegacyOid(ship.ItemId);
+                    }
+
+                    for (const item of inventoryResponse.RawUpgrades) {
+                        if (item.LastAdded) toLegacyOid(item.LastAdded);
                     }
 
                     if (version_compare(buildLabel, "2014.02.05.00.00") < 0) {

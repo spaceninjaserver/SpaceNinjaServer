@@ -568,6 +568,7 @@ function fetchItemList() {
             });
 
             data.miscitems.push(
+                { uniqueName: "/Lotus/Types/Recipes/CosmeticUnenhancerItem", name: loc("code_cosmeticUnenhancer") },
                 {
                     uniqueName: "/Lotus/Types/Items/Research/DojoColors/GenericDojoColorPigment",
                     name: loc("code_pigment")

@@ -75,6 +75,7 @@ dict = {
     code_setInactive: `Make the quest inactive`,
     code_completed: `Completed`,
     code_active: `Active`,
+    code_cosmeticUnenhancer: `Arcane Distiller`,
     code_pigment: `Pigment`,
     code_bossNavCode: `Lephantis Nav Coordinate`,
     code_lawOfRetribution: `THE LAW OF RETRIBUTION`,

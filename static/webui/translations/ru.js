@@ -76,6 +76,7 @@ dict = {
     code_setInactive: `Сделать квест неактивным`,
     code_completed: `Завершено`,
     code_active: `Активный`,
+    code_cosmeticUnenhancer: `Мистический дистиллятор`,
     code_pigment: `Пигмент`,
     code_bossNavCode: `Координаты Лефантиса`,
     code_lawOfRetribution: `ЗАКОН ВОЗДАЯНИЯ`,

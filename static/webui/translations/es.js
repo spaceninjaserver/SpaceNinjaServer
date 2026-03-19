@@ -76,6 +76,7 @@ dict = {
     code_setInactive: `Marcar la misión como inactiva`,
     code_completed: `Completada`,
     code_active: `Activa`,
+    code_cosmeticUnenhancer: `Destilador Arcano`,
     code_pigment: `Pigmento`,
     code_bossNavCode: `Coordenadas de Navegación de Lephantis`,
     code_lawOfRetribution: `LA LEY DE LA RETRIBUCIÓN`,

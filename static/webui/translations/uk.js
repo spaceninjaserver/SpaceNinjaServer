@@ -76,6 +76,7 @@ dict = {
     code_setInactive: `Зробити пригоду неактивною`,
     code_completed: `Завершено`,
     code_active: `Активний`,
+    code_cosmeticUnenhancer: `Перегінник містифікаторів`,
     code_pigment: `Барвник`,
     code_bossNavCode: `Навкоордината Лефантиса`,
     code_lawOfRetribution: `ЗАКОН ВІДПЛАТИ`,

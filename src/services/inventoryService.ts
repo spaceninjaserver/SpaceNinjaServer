@@ -1163,6 +1163,20 @@ export const addItem = async (
                         return { LevelKeys: levelKeyChanges };
                     }
                     break;
+                case "Recipes":
+                    if (typeName == "/Lotus/Types/Recipes/CosmeticUnenhancerItem") {
+                        const miscItemChanges = [
+                            {
+                                ItemType: typeName,
+                                ItemCount: quantity
+                            } satisfies IMiscItem
+                        ];
+                        addMiscItems(inventory, miscItemChanges);
+                        return {
+                            MiscItems: miscItemChanges
+                        };
+                    }
+                    break;
             }
             break;
         case "Weapons": {
