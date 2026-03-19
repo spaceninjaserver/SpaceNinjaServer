@@ -139,6 +139,21 @@ function deleteSession(sessionId: string | Types.ObjectId): boolean {
     return false;
 }
 
+function aggregateSessions(): { gameModeId: number; count: number }[] {
+    const result: { gameModeId: number; count: number }[] = [];
+    for (const session of sessions) {
+        if (session.freePublic != 0) {
+            const obj = result.find(x => x.gameModeId == session.gameModeId);
+            if (obj) {
+                obj.count += 1;
+            } else {
+                result.push({ gameModeId: session.gameModeId, count: 1 });
+            }
+        }
+    }
+    return result;
+}
+
 export {
     createNewSession,
     getAllSessions,
@@ -146,5 +161,6 @@ export {
     getSessionByCreatorID,
     updateSession,
     deleteSession,
-    getSession
+    getSession,
+    aggregateSessions
 };

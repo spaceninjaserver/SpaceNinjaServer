@@ -1,8 +1,15 @@
 import type { RequestHandler } from "express";
-import aggregateSessions from "../../../static/fixed_responses/aggregateSessions.json" with { type: "json" };
+import { aggregateSessions } from "../../managers/sessionManager.ts";
 
-const aggregateSessionsController: RequestHandler = (_req, res) => {
-    res.json(aggregateSessions);
+export const aggregateSessionsController: RequestHandler = (_req, res) => {
+    res.json({
+        Results: aggregateSessions()
+    } satisfies IAggregateSessionsResponse);
 };
 
-export { aggregateSessionsController };
+interface IAggregateSessionsResponse {
+    Results: {
+        gameModeId: number;
+        count: number;
+    }[];
+}
