@@ -106,6 +106,7 @@ dict = {
     code_feature_64: `Друга комірка містифікатора`,
     code_feature_512: `Інкарнонський генезис`,
     code_feature_1024: `Валентна перевага`,
+    login_title: `[UNTRANSLATED] Login`,
     login_description: `Увійдіть, використовуючи облікові дані OpenWF (ті ж, що й у грі при підключенні до цього серверу).`,
     login_emailLabel: `Адреса електронної пошти`,
     login_passwordLabel: `Пароль`,

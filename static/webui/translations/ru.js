@@ -106,6 +106,7 @@ dict = {
     code_feature_64: `Второй слот Мистификатора`,
     code_feature_512: `Генезис Инкарнона`,
     code_feature_1024: `Переопределение валентности`,
+    login_title: `[UNTRANSLATED] Login`,
     login_description: `Войдите, используя учетные данные OpenWF (те же, что и в игре при подключении к этому серверу).`,
     login_emailLabel: `Адрес электронной почты`,
     login_passwordLabel: `Пароль`,

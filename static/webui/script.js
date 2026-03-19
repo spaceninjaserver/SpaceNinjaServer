@@ -206,6 +206,13 @@ function deleteAccount() {
     }
 }
 
+function updateTitle() {
+    const tag = single.getCurrentRoute().elm.getAttribute("data-title-tag");
+    if (tag) {
+        document.querySelector("title").textContent = loc(tag) + " | OpenWF WebUI";
+    }
+}
+
 single.on("route_load", function (event) {
     if (event.route.paths[0] != "/webui/") {
         // Authorised route?
@@ -223,6 +230,10 @@ single.on("route_load", function (event) {
     if (navLink) {
         navLink.classList.add("active");
     }
+
+    window.dictPromise.then(() => {
+        updateTitle();
+    });
 });
 
 function loc(tag) {
@@ -280,6 +291,7 @@ function setActiveLanguage(lang) {
         script.src = "/translations/" + webui_lang + ".js";
         script.onload = function () {
             updateLocElements();
+            updateTitle();
             resolve(window.dict);
         };
         document.documentElement.appendChild(script);

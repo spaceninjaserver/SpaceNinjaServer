@@ -106,6 +106,7 @@ dict = {
     code_feature_64: `Emplacement d'Arcane pour les Armes Secondaire`,
     code_feature_512: `Genesis Incarnon`,
     code_feature_1024: `Fusion de Valence`,
+    login_title: `[UNTRANSLATED] Login`,
     login_description: `Connexion avec les informations de connexion OpenWF.`,
     login_emailLabel: `Email`,
     login_passwordLabel: `Mot de passe`,

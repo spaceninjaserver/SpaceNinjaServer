@@ -106,6 +106,7 @@ dict = {
     code_feature_64: `次要赋能槽位`,
     code_feature_512: `灵化之源`,
     code_feature_1024: `效价覆写`,
+    login_title: `[UNTRANSLATED] Login`,
     login_description: `使用您的 OpenWF 账户凭证登录(与游戏内连接本服务器时使用的昵称相同)`,
     login_emailLabel: `电子邮箱`,
     login_passwordLabel: `密码`,

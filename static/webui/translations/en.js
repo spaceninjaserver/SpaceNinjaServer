@@ -105,6 +105,7 @@ dict = {
     code_feature_64: `Second Arcane Slot`,
     code_feature_512: `Incarnon Genesis`,
     code_feature_1024: `Valence Override`,
+    login_title: `Login`,
     login_description: `Login using your OpenWF account credentials (same as in-game when connecting to this server).`,
     login_emailLabel: `Email address`,
     login_passwordLabel: `Password`,

@@ -106,6 +106,7 @@ dict = {
     code_feature_64: `[UNTRANSLATED] Second Arcane Slot`,
     code_feature_512: `Génesis Incarnon`,
     code_feature_1024: `Anulación de valencia`,
+    login_title: `[UNTRANSLATED] Login`,
     login_description: `Inicia sesión con las credenciales de tu cuenta OpenWF (las mismas que usas en el juego al conectarte a este servidor).`,
     login_emailLabel: `Dirección de correo electrónico`,
     login_passwordLabel: `Contraseña`,
