@@ -297,7 +297,7 @@ function setActiveLanguage(lang) {
         document.documentElement.appendChild(script);
     });
 }
-setActiveLanguage(localStorage.getItem("lang") ?? webui_conf.defaultLanguage ?? en);
+setActiveLanguage(localStorage.getItem("lang") ?? webui_conf.defaultLanguage ?? "en");
 
 function setLanguage(lang) {
     setActiveLanguage(lang);
