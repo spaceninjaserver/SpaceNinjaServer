@@ -107,7 +107,7 @@ dict = {
     code_feature_64: `Zweiter Arkana Slot`,
     code_feature_512: `Incarnon-Genesis`,
     code_feature_1024: `Valenz-Überbrückung`,
-    login_title: `[UNTRANSLATED] Login`,
+    login_title: `Anmeldung`,
     login_description: `Melde dich mit deinem OpenWF-Account an (denselben Angaben wie im Spiel, wenn du dich mit diesem Server verbindest).`,
     login_emailLabel: `E-Mail-Adresse`,
     login_passwordLabel: `Passwort`,
