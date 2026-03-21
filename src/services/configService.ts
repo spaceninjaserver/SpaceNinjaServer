@@ -39,6 +39,7 @@ export interface IConfig {
     fullyStockedVendors?: boolean;
     skipClanKeyCrafting?: boolean;
     webui?: {
+        enabled?: boolean;
         defaultLanguage?: string;
     };
     unfaithfulBugFixes?: {

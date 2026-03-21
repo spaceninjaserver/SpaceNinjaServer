@@ -29,6 +29,7 @@
   "fullyStockedVendors": false,
   "skipClanKeyCrafting": false,
   "webui": {
+    "enabled": true,
     "defaultLanguage": "en"
   },
   "unfaithfulBugFixes": {
