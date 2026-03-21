@@ -63,7 +63,7 @@ export interface ILoginRequest {
 export interface ILoginResponse extends IAccountAndLoginResponseCommons {
     id: string;
     Groups?: IGroup[];
-    BuildLabel: string;
+    BuildLabel?: string;
     MatchmakingBuildId?: string;
     platformCDNs?: string[];
     NRS?: string[];

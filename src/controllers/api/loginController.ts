@@ -159,9 +159,11 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
     const resp: ILoginResponse = {
         id: account.id,
         DisplayName: account.DisplayName,
-        Nonce: account.Nonce,
-        BuildLabel: buildLabel
+        Nonce: account.Nonce
     };
+    if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0) {
+        resp.BuildLabel = buildLabel; // U5 no likey
+    }
     if (version_compare(buildLabel, gameToBuildVersion["13.0.0"]) >= 0) {
         // U13 and up
         resp.CountryCode = account.CountryCode;
@@ -169,7 +171,9 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
         // U12 and down
         resp.NatHash =
             "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        resp.SteamId = "0";
+        if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0) {
+            resp.SteamId = "0"; // U5 no likey
+        }
     }
     if (version_compare(buildLabel, gameToBuildVersion["15.14.1"]) >= 0) {
         resp.NRS = [(config.nrsAddress || "%THIS_MACHINE%").split("%THIS_MACHINE%").join(myAddress)];
