@@ -1142,7 +1142,8 @@ const EquipmentSchema = new Schema<IEquipmentDatabase>(
         Details: detailsSchema,
         Favorite: Boolean,
         IsNew: Boolean,
-        AltWeaponModeId: Types.ObjectId
+        AltWeaponModeId: Types.ObjectId,
+        UpgradeNodes: Number
     },
     { id: false }
 );

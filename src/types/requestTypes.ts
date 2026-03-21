@@ -246,7 +246,12 @@ export interface IUpgradesRequest {
 }
 export interface IUpgradesRequestLegacy {
     Category: TEquipmentKey;
-    Weapon: { ItemType: string; ItemId: IOidWithLegacySupport };
+    Weapon: {
+        ItemType: string;
+        ItemId: IOidWithLegacySupport;
+        UpgradeNodes?: number;
+        UnlockLevel?: number;
+    };
     UpgradeVer: number;
     UnlockLevel: number;
     Polarized: number;

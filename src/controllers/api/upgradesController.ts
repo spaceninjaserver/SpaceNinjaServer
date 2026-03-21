@@ -145,6 +145,17 @@ export const upgradesController: RequestHandler = async (req, res) => {
                     });
                 }
             }
+
+            if (payload.Weapon.UnlockLevel && payload.Weapon.UnlockLevel > 0) {
+                const item = inventory[payload.Category].id(itemId)!;
+                item.Features ??= 0;
+                item.Features |= EquipmentFeatures.DOUBLE_CAPACITY;
+                updateCurrency(inventory, 20, true);
+            }
+            if (payload.Weapon.UpgradeNodes != undefined) {
+                const item = inventory[payload.Category].id(itemId)!;
+                item.UpgradeNodes = payload.Weapon.UpgradeNodes;
+            }
         }
     } else {
         const payload = JSON.parse(String(req.body)) as IUpgradesRequest;

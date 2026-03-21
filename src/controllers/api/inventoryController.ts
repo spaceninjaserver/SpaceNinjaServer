@@ -778,6 +778,16 @@ export const getInventoryResponse = async (
                     for (const item of inventoryResponse.Drones) {
                         toLegacyOid(item.ItemId);
                     }
+
+                    if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) < 0) {
+                        for (const category of equipmentKeys) {
+                            for (const item of inventoryResponse[category]) {
+                                if (item.Features && item.Features & EquipmentFeatures.DOUBLE_CAPACITY) {
+                                    item.UnlockLevel = 1;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
