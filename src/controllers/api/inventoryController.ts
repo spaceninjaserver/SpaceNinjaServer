@@ -787,6 +787,27 @@ export const getInventoryResponse = async (
                                 }
                             }
                         }
+
+                        // U5.1 Mods
+                        const allowedMods = [
+                            "/Lotus/Upgrades/Modules/GrineerMeleeModule",
+                            "/Lotus/Upgrades/Modules/GrineerPistolModule",
+                            "/Lotus/Upgrades/Modules/GrineerRifleModule",
+                            "/Lotus/Upgrades/Modules/GrineerShotgunModule",
+                            "/Lotus/Upgrades/Modules/OrokinWarframeModule",
+                            "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod"
+                        ];
+                        inventoryResponse.RawUpgrades = inventoryResponse.RawUpgrades.filter(x =>
+                            allowedMods.includes(x.ItemType)
+                        );
+                        inventoryResponse.Upgrades = inventoryResponse.Upgrades.filter(x =>
+                            allowedMods.includes(x.ItemType)
+                        );
+                        if (inventoryResponse.Cards) {
+                            inventoryResponse.Cards = inventoryResponse.Cards.filter(x =>
+                                allowedMods.includes(x.ItemType)
+                            );
+                        }
                     }
                 }
             }
