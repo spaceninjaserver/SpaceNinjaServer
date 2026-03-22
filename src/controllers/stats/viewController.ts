@@ -5,7 +5,7 @@ import type { IStatsClient } from "../../types/statTypes.ts";
 import { getProfileViewingDataByGuildId } from "../dynamic/getProfileViewingDataController.ts";
 
 const viewController: RequestHandler = async (req, res) => {
-    const lookupId = String(req.query.id ?? req.query.lookupId);
+    const lookupId = String(req.query.id ?? req.query.lookupId ?? req.query.accountId);
 
     if (req.query.guild == "1") {
         const data = await getProfileViewingDataByGuildId(lookupId);
