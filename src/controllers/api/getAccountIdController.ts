@@ -1,9 +1,17 @@
-import type { RequestHandler } from "express";
+import type { RequestHandler, Response } from "express";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { Account } from "../../models/loginModel.ts";
 
-export const getAccountIdController: RequestHandler = async (req, res) => {
-    let { targetName } = getJSONfromString<IGetAccountIdRequest>(String(req.body));
+export const getAccountIdPostController: RequestHandler = (req, res) => {
+    const { targetName } = getJSONfromString<IGetAccountIdRequest>(String(req.body));
+    return getAccountId(targetName, res);
+};
+
+export const getAccountIdGetController: RequestHandler = (req, res) => {
+    return getAccountId(req.query.targetName as string, res);
+};
+
+const getAccountId = async (targetName: string, res: Response): Promise<void> => {
     if (targetName.charCodeAt(targetName.length - 1) >= 0xe000) {
         targetName = targetName.substring(0, targetName.length - 1);
     }

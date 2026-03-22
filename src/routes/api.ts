@@ -64,7 +64,7 @@ import { forceRemoveItemController } from "../controllers/api/forceRemoveItemCon
 import { fusionTreasuresController } from "../controllers/api/fusionTreasuresController.ts";
 import { gardeningController } from "../controllers/api/gardeningController.ts";
 import { genericUpdateController } from "../controllers/api/genericUpdateController.ts";
-import { getAccountIdController } from "../controllers/api/getAccountIdController.ts";
+import { getAccountIdGetController, getAccountIdPostController } from "../controllers/api/getAccountIdController.ts";
 import { getAllianceController } from "../controllers/api/getAllianceController.ts";
 import { getDailyDealStockLevelsController } from "../controllers/api/getDailyDealStockLevelsController.ts";
 import { getFriendsController } from "../controllers/api/getFriendsController.ts";
@@ -213,6 +213,7 @@ apiRouter.get("/declineGuildInvite.php", declineGuildInviteController);
 apiRouter.get("/deleteSession.php", deleteSessionController);
 apiRouter.get("/divvyAllianceVault.php", divvyAllianceVaultController);
 apiRouter.get("/drones.php", dronesController);
+apiRouter.get("/getAccountId.php", getAccountIdGetController); // U11
 apiRouter.get("/getAlliance.php", getAllianceController);
 apiRouter.get("/getDailyDealStockLevels.php", getDailyDealStockLevelsController);
 apiRouter.get("/getFriends.php", getFriendsController);
@@ -316,7 +317,7 @@ apiRouter.post("/forceRemoveItem.php", forceRemoveItemController);
 apiRouter.post("/fusionTreasures.php", fusionTreasuresController);
 apiRouter.post("/gardening.php", gardeningController);
 apiRouter.post("/genericUpdate.php", genericUpdateController);
-apiRouter.post("/getAccountId.php", getAccountIdController);
+apiRouter.post("/getAccountId.php", getAccountIdPostController);
 apiRouter.post("/getAlliance.php", getAllianceController);
 apiRouter.post("/getFriends.php", getFriendsController);
 apiRouter.post("/getGuildDojo.php", getGuildDojoController);
