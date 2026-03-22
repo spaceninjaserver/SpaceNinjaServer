@@ -38,6 +38,7 @@ import { Ship } from "../../models/shipModel.ts";
 import {
     convertIColorToLegacyColors,
     convertIColorToLegacyColorsWithAtt,
+    convertToLegacyFingerprint,
     fromOid,
     toLegacyOid,
     toOid,
@@ -621,19 +622,21 @@ export const getInventoryResponse = async (
                     if (version_compare(buildLabel, "2014.02.05.00.00") < 0) {
                         // Pre-U12 builds store mods in an array called Cards, and have no concept of RawUpgrades
                         inventoryResponse.Cards = [];
-                        for (const rawUpgrade of inventoryResponse.RawUpgrades) {
-                            const id = inventory.RawUpgrades.find(x => x.ItemType == rawUpgrade.ItemType)?._id;
-                            if (id) {
-                                for (let i = 0; i < rawUpgrade.ItemCount; i++) {
-                                    const card = {
-                                        ItemType: rawUpgrade.ItemType,
-                                        ItemId: toOid2(id, buildLabel),
-                                        Rank: 0,
-                                        AmountRemaining: rawUpgrade.ItemCount
-                                    } as IUpgradeClient;
-                                    // Client doesn't see the mods unless they are in both Cards and Upgrades
-                                    inventoryResponse.Cards.push(card);
-                                    inventoryResponse.Upgrades.push(card);
+                        if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0) {
+                            for (const rawUpgrade of inventoryResponse.RawUpgrades) {
+                                const id = inventory.RawUpgrades.find(x => x.ItemType == rawUpgrade.ItemType)?._id;
+                                if (id) {
+                                    for (let i = 0; i < rawUpgrade.ItemCount; i++) {
+                                        const card = {
+                                            ItemType: rawUpgrade.ItemType,
+                                            ItemId: toOid2(id, buildLabel),
+                                            Rank: 0,
+                                            AmountRemaining: rawUpgrade.ItemCount
+                                        } as IUpgradeClient;
+                                        // Client doesn't see the mods unless they are in both Cards and Upgrades
+                                        inventoryResponse.Cards.push(card);
+                                        inventoryResponse.Upgrades.push(card);
+                                    }
                                 }
                             }
                         }
@@ -661,17 +664,15 @@ export const getInventoryResponse = async (
                         toLegacyOid(upgrade.ItemId);
                         if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) < 0) {
                             // Pre-U18.18 builds use a different UpgradeFingerprint format
-                            let rank: number = 0;
-                            if (upgrade.UpgradeFingerprint) {
-                                rank = Number.parseFloat(
-                                    upgrade.UpgradeFingerprint.substring(
-                                        upgrade.UpgradeFingerprint.indexOf(":") + 1,
-                                        upgrade.UpgradeFingerprint.lastIndexOf("}")
-                                    )
-                                );
-                            }
-                            upgrade.UpgradeFingerprint = `lvl=${rank}|`;
-                            if (version_compare(buildLabel, gameToBuildVersion["13.0.0"]) < 0) {
+                            const json = JSON.parse(upgrade.UpgradeFingerprint || '{"lvl":0}') as { lvl?: number };
+                            const rank: number = json.lvl ?? 0;
+                            upgrade.UpgradeFingerprint = convertToLegacyFingerprint(
+                                upgrade.UpgradeFingerprint || '{"lvl":0}'
+                            );
+                            if (
+                                version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0 &&
+                                version_compare(buildLabel, gameToBuildVersion["13.0.0"]) < 0
+                            ) {
                                 // Pre-U10 builds
                                 if (
                                     !upgrade.AmountRemaining ||
@@ -803,11 +804,7 @@ export const getInventoryResponse = async (
                         inventoryResponse.Upgrades = inventoryResponse.Upgrades.filter(x =>
                             allowedMods.includes(x.ItemType)
                         );
-                        if (inventoryResponse.Cards) {
-                            inventoryResponse.Cards = inventoryResponse.Cards.filter(x =>
-                                allowedMods.includes(x.ItemType)
-                            );
-                        }
+                        if (inventoryResponse.Cards) inventoryResponse.Cards = [];
                     }
                 }
             }

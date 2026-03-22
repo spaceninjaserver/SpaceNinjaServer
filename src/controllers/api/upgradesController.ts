@@ -156,6 +156,9 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 const item = inventory[payload.Category].id(itemId)!;
                 item.UpgradeNodes = payload.Weapon.UpgradeNodes;
             }
+            if (payload.Cost) {
+                updateCurrency(inventory, payload.Cost, false);
+            }
         }
     } else {
         const payload = JSON.parse(String(req.body)) as IUpgradesRequest;

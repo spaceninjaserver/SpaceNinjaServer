@@ -312,7 +312,7 @@ export const sellController: RequestHandler = async (req, res) => {
                 break;
             case "Upgrades":
                 payload.Items.Upgrades.forEach(sellItem => {
-                    if (sellItem.Count == 0) {
+                    if (sellItem.Count == 0 || !sellItem.String.includes("/")) {
                         inventory.Upgrades.pull({ _id: sellItem.String });
                     } else {
                         addMods(inventory, [

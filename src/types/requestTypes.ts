@@ -266,6 +266,7 @@ export interface IUpgradesRequestLegacy {
     PolarityRemap: IPolarity[];
     UpgradesToAttach?: IUpgradeClient[];
     UpgradesToDetach?: IUpgradeClient[];
+    Cost?: number;
 }
 export interface IUpgradeOperation {
     OperationType: string;

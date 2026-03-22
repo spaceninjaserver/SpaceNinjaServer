@@ -793,6 +793,21 @@ function fetchItemList() {
                 },
                 "/Lotus/Language/Game/Rank_Utility": {
                     name: loc("guildView_rank_utility")
+                },
+                "/Lotus/Upgrades/Modules/GrineerMeleeModule": {
+                    name: loc("code_meleeMod")
+                },
+                "/Lotus/Upgrades/Modules/GrineerPistolModule": {
+                    name: loc("code_pistolMod")
+                },
+                "/Lotus/Upgrades/Modules/GrineerRifleModule": {
+                    name: loc("code_rifleMod")
+                },
+                "/Lotus/Upgrades/Modules/GrineerShotgunModule": {
+                    name: loc("code_shotgunMod")
+                },
+                "/Lotus/Upgrades/Modules/OrokinWarframeModule": {
+                    name: loc("code_warframeMod")
                 }
             };
             for (const [type, items] of Object.entries(data)) {
@@ -1670,7 +1685,7 @@ function translateInventoryDataToDom() {
                     td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
                     if (itemMap[item.ItemType]?.badReason == "notraw") {
                         // Assuming this is a riven with a pending challenge, so rank would be N/A, but otherwise it's fine.
-                    } else {
+                    } else if (!Number.isNaN(rank)) {
                         td.innerHTML += " <span title='" + loc("code_rank") + "'>★ " + rank + "/" + maxRank + "</span>";
                     }
                     tr.appendChild(td);

@@ -95,7 +95,13 @@ import {
 import { config } from "./configService.ts";
 import libraryDailyTasks from "../../static/fixed_responses/libraryDailyTasks.json" with { type: "json" };
 import type { IGoal, ISyndicateJob, ISyndicateMissionInfo } from "../types/worldStateTypes.ts";
-import { fromOid, toObjectId, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
+import {
+    convertFromLegacyFingerprint,
+    fromOid,
+    toObjectId,
+    toOid2,
+    version_compare
+} from "../helpers/inventoryHelpers.ts";
 import type { TAccountDocument } from "./loginService.ts";
 import type { ITypeCount } from "../types/commonTypes.ts";
 import type { IEquipmentClient } from "../types/equipmentTypes.ts";
@@ -531,10 +537,9 @@ export const addMissionInventoryUpdates = async (
                     clientUpgrade.ItemCount ??= 1;
                     if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["18.18.0"]) < 0) {
                         // Acquired Mods have a different UpgradeFingerprint format in pre-U18.18.0 builds, this converts them to the format the database expects
-                        clientUpgrade.UpgradeFingerprint = `{"lvl":${clientUpgrade.UpgradeFingerprint.substring(
-                            clientUpgrade.UpgradeFingerprint.indexOf("=") + 1,
-                            clientUpgrade.UpgradeFingerprint.lastIndexOf("|")
-                        )}}`;
+                        clientUpgrade.UpgradeFingerprint = convertFromLegacyFingerprint(
+                            clientUpgrade.UpgradeFingerprint
+                        );
                     }
                     // Handle Fusion Core drops
                     const parsedFingerprint = JSON.parse(clientUpgrade.UpgradeFingerprint) as { lvl?: number };
@@ -544,13 +549,24 @@ export const addMissionInventoryUpdates = async (
                             UpgradeFingerprint: clientUpgrade.UpgradeFingerprint
                         });
                     } else if (id == "") {
-                        // U19 does not provide RawUpgrades and instead interleaves them with riven progress here
-                        addMods(inventory, [
-                            {
+                        if (
+                            account.BuildLabel &&
+                            version_compare(account.BuildLabel, gameToBuildVersion["7.3.0"]) >= 0
+                        ) {
+                            // U19 does not provide RawUpgrades and instead interleaves them with riven progress here
+                            addMods(inventory, [
+                                {
+                                    ItemType: clientUpgrade.ItemType,
+                                    ItemCount: clientUpgrade.ItemCount
+                                }
+                            ]);
+                        } else {
+                            // U5 Mods
+                            inventory.Upgrades.push({
                                 ItemType: clientUpgrade.ItemType,
-                                ItemCount: clientUpgrade.ItemCount
-                            }
-                        ]);
+                                UpgradeFingerprint: clientUpgrade.UpgradeFingerprint
+                            });
+                        }
                     } else {
                         const upgrade = inventory.Upgrades.id(id)!;
                         upgrade.UpgradeFingerprint = clientUpgrade.UpgradeFingerprint; // primitive way to copy over the riven challenge progress

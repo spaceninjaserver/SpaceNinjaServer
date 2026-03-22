@@ -105,6 +105,87 @@ export const convertIColorToLegacyColorsWithAtt = (
     return convertedColors;
 };
 
+// ChatGPT wrote that and seems it looks fine
+export const convertFromLegacyFingerprint = (s: string): string => {
+    let index = 0;
+
+    const parseBlock = (isArrayItem = false): Record<string, unknown> | Record<string, unknown>[] => {
+        const obj: Record<string, unknown> = {};
+
+        while (index < s.length) {
+            if (s[index] === "|") {
+                index++;
+                continue;
+            }
+            if (s[index] === "}") {
+                index++;
+                break;
+            }
+
+            const eqPos = s.indexOf("=", index);
+            if (eqPos === -1) break;
+            const key = s.slice(index, eqPos);
+            index = eqPos + 1;
+
+            if (s[index] === "{" && s[index + 1] === "|") {
+                index += 2;
+                const items: Record<string, unknown>[] = [];
+                while (index < s.length && !(s[index] === "|" && s[index + 1] === "}")) {
+                    if (s[index] === "{" && s[index + 1] === "|") index += 2;
+                    const item = parseBlock(true) as Record<string, unknown>;
+                    items.push(item);
+                }
+                index += 2;
+                obj[key] = items;
+                continue;
+            }
+
+            if (s[index] === "{") {
+                index++;
+                obj[key] = parseBlock() as Record<string, unknown>;
+                continue;
+            }
+
+            const nextSep = s.indexOf("|", index);
+            const value = nextSep === -1 ? s.slice(index) : s.slice(index, nextSep);
+            index = nextSep === -1 ? s.length : nextSep;
+            obj[key] = value;
+        }
+
+        return isArrayItem ? obj : obj;
+    };
+
+    const result = parseBlock() as Record<string, unknown>;
+    return JSON.stringify(result);
+};
+
+export const convertToLegacyFingerprint = (s: string): string => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const obj: Record<string, unknown> = JSON.parse(s);
+    const serialize = (o: unknown): string => {
+        if (Array.isArray(o)) {
+            return o.map(item => `{|${serialize(item)}|}`).join("|");
+        } else if (typeof o === "object" && o !== null) {
+            const parts: string[] = [];
+            for (const k in o as Record<string, unknown>) {
+                const v = (o as Record<string, unknown>)[k];
+                if (Array.isArray(v)) {
+                    parts.push(`${k}={|${serialize(v)}|}`);
+                } else if (typeof v === "object" && v !== null) {
+                    parts.push(`${k}={|${serialize(v)}|}`);
+                } else {
+                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+                    parts.push(`${k}=${v}`);
+                }
+            }
+            return parts.join("|");
+        } else {
+            return String(o);
+        }
+    };
+    return serialize(obj) + "|";
+};
+
 export const convertLegacyColorsToIColor = (colors: number[] | undefined): IColor => {
     if (colors) {
         return { t0: colors[0], t1: colors[1], t2: colors[2], t3: colors[3], en: colors[4] };
