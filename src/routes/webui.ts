@@ -1,4 +1,4 @@
-import express from "express";
+import express, { type RequestHandler } from "express";
 import path from "path";
 import fs from "fs/promises";
 import { repoDir, rootDir } from "../helpers/pathHelper.ts";
@@ -11,50 +11,38 @@ const webuiRouter = express.Router();
 
 // Redirect / to /webui/
 webuiRouter.get("/", (_req, res) => {
-    res.redirect("/webui/");
+    if (config.webui?.enabled ?? true) {
+        res.redirect("/webui/");
+    } else {
+        res.sendStatus(404);
+    }
 });
 
 // Redirect /webui to /webui/
 webuiRouter.use("/webui", (req, res, next) => {
-    if (req.originalUrl === "/") {
+    if (req.originalUrl === "/" && (config.webui?.enabled ?? true)) {
         return res.redirect("/webui/");
     }
     next();
 });
 
 // Serve virtual routes
-webuiRouter.get("/webui/inventory", async (_req, res) => {
-    res.set("Content-Type", "text/html;charset=utf8");
-    res.send(await fs.readFile(path.join(baseDir, "static/webui/index.html")));
-});
-webuiRouter.get("/webui/detailedView", async (_req, res) => {
-    res.set("Content-Type", "text/html;charset=utf8");
-    res.send(await fs.readFile(path.join(baseDir, "static/webui/index.html")));
-});
-webuiRouter.get("/webui/mods", async (_req, res) => {
-    res.set("Content-Type", "text/html;charset=utf8");
-    res.send(await fs.readFile(path.join(baseDir, "static/webui/index.html")));
-});
-webuiRouter.get("/webui/settings", async (_req, res) => {
-    res.set("Content-Type", "text/html;charset=utf8");
-    res.send(await fs.readFile(path.join(baseDir, "static/webui/index.html")));
-});
-webuiRouter.get("/webui/quests", async (_req, res) => {
-    res.set("Content-Type", "text/html;charset=utf8");
-    res.send(await fs.readFile(path.join(baseDir, "static/webui/index.html")));
-});
-webuiRouter.get("/webui/cheats", async (_req, res) => {
-    res.set("Content-Type", "text/html;charset=utf8");
-    res.send(await fs.readFile(path.join(baseDir, "static/webui/index.html")));
-});
-webuiRouter.get("/webui/import", async (_req, res) => {
-    res.set("Content-Type", "text/html;charset=utf8");
-    res.send(await fs.readFile(path.join(baseDir, "static/webui/index.html")));
-});
-webuiRouter.get("/webui/guildView", async (_req, res) => {
-    res.set("Content-Type", "text/html;charset=utf8");
-    res.send(await fs.readFile(path.join(baseDir, "static/webui/index.html")));
-});
+const virtualRouteController: RequestHandler = async (_req, res) => {
+    if (config.webui?.enabled ?? true) {
+        res.set("Content-Type", "text/html;charset=utf8");
+        res.send(await fs.readFile(path.join(baseDir, "static/webui/index.html")));
+    } else {
+        res.sendStatus(404);
+    }
+};
+webuiRouter.get("/webui/inventory", virtualRouteController);
+webuiRouter.get("/webui/detailedView", virtualRouteController);
+webuiRouter.get("/webui/mods", virtualRouteController);
+webuiRouter.get("/webui/settings", virtualRouteController);
+webuiRouter.get("/webui/quests", virtualRouteController);
+webuiRouter.get("/webui/cheats", virtualRouteController);
+webuiRouter.get("/webui/import", virtualRouteController);
+webuiRouter.get("/webui/guildView", virtualRouteController);
 
 // Serve static files
 webuiRouter.use("/webui", express.static(path.join(baseDir, "static/webui")));
