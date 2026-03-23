@@ -17,7 +17,7 @@ import type { IMissionInventoryUpdateRequest, IRewardInfo } from "../types/reque
 import { logger } from "../utils/logger.ts";
 import type { IRngResult } from "./rngService.ts";
 import { SRng, generateRewardSeed, getRandomElement, getRandomInt, getRandomReward } from "./rngService.ts";
-import type { IMission, TEquipmentKey } from "../types/inventoryTypes/inventoryTypes.ts";
+import type { IDailyAffiliations, IMission, TEquipmentKey } from "../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
 import {
     addBooster,
@@ -41,6 +41,7 @@ import {
     addShipDecorations,
     addSkin,
     addStanding,
+    allDailyAffiliationKeys,
     applyClientEquipmentUpdates,
     combineInventoryChanges,
     CurrencyType,
@@ -1053,6 +1054,8 @@ export const addMissionInventoryUpdates = async (
             default:
                 if (equipmentKeys.includes(key as TEquipmentKey)) {
                     applyClientEquipmentUpdates(inventory, value as IEquipmentClient[], key as TEquipmentKey);
+                } else if (allDailyAffiliationKeys.includes(key as keyof IDailyAffiliations)) {
+                    inventory[key as keyof IDailyAffiliations] -= value as number;
                 }
                 break;
             // if (
