@@ -805,6 +805,12 @@ export const getInventoryResponse = async (
                             allowedMods.includes(x.ItemType)
                         );
                         if (inventoryResponse.Cards) inventoryResponse.Cards = [];
+
+                        inventoryResponse.Missions = inventoryResponse.Missions.filter(m => {
+                            if (!m.Tag.startsWith("SolNode")) return false;
+                            const n = Number.parseInt(m.Tag.slice(7), 10);
+                            return n >= 1 && n <= 128;
+                        });
                     }
                 }
             }
