@@ -871,7 +871,7 @@ export const pushClassicBounties = (
     const bountyCycleStart = bountyCycle * 9000000;
     const bountyCycleEnd = bountyCycleStart + 9000000;
 
-    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["22.0.0"]) >= 0) {
+    if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["22.0.0"]) >= 0) {
         const rng = new SRng(seed);
         const pool = [...eidolonJobs];
         syndicateMissions.push({
@@ -888,7 +888,7 @@ export const pushClassicBounties = (
                     jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierATable${table}Rewards`,
                     // Should be U22.10
-                    ...(version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0 && {
+                    ...((!buildLabel || version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0) && {
                         masteryReq: 0
                     }),
                     minEnemyLevel: 5,
@@ -898,7 +898,7 @@ export const pushClassicBounties = (
                 {
                     jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierBTable${table}Rewards`,
-                    ...(version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0 && {
+                    ...((!buildLabel || version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0) && {
                         masteryReq: 1
                     }),
                     minEnemyLevel: 10,
@@ -908,7 +908,7 @@ export const pushClassicBounties = (
                 {
                     jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierCTable${table}Rewards`,
-                    ...(version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0 && {
+                    ...((!buildLabel || version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0) && {
                         masteryReq: 2
                     }),
                     minEnemyLevel: 20,
@@ -918,7 +918,7 @@ export const pushClassicBounties = (
                 {
                     jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierDTable${table}Rewards`,
-                    ...(version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0 && {
+                    ...((!buildLabel || version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0) && {
                         masteryReq: 3
                     }),
                     minEnemyLevel: 30,
@@ -928,7 +928,7 @@ export const pushClassicBounties = (
                 {
                     jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierETable${table}Rewards`,
-                    ...(version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0 && {
+                    ...((!buildLabel || version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0) && {
                         masteryReq: 4
                     }),
                     minEnemyLevel: 40,
@@ -936,7 +936,7 @@ export const pushClassicBounties = (
                     xpAmounts: generateXpAmounts(rng, 5, 4000, 4500)
                 },
                 // U28.1
-                ...(version_compare(buildLabel, gameToBuildVersion["28.3.0"]) >= 0
+                ...(!buildLabel || version_compare(buildLabel, gameToBuildVersion["28.3.0"]) >= 0
                     ? [
                           {
                               jobType: rng.randomElementPop(pool),
@@ -948,7 +948,7 @@ export const pushClassicBounties = (
                           }
                       ]
                     : []),
-                ...(version_compare(buildLabel, gameToBuildVersion["31.0.0"]) >= 0
+                ...(!buildLabel || version_compare(buildLabel, gameToBuildVersion["31.0.0"]) >= 0
                     ? [
                           {
                               jobType: rng.randomElement(eidolonNarmerJobs),
@@ -964,7 +964,7 @@ export const pushClassicBounties = (
         });
     }
 
-    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["24.0.0"]) >= 0) {
+    if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["24.0.0"]) >= 0) {
         const rng = new SRng(seed);
         const pool = [...venusJobs];
         syndicateMissions.push({
@@ -1018,7 +1018,7 @@ export const pushClassicBounties = (
                     xpAmounts: generateXpAmounts(rng, 5, 4000, 4500)
                 },
                 // U28.1
-                ...(version_compare(buildLabel, gameToBuildVersion["28.3.0"]) >= 0
+                ...(!buildLabel || version_compare(buildLabel, gameToBuildVersion["28.3.0"]) >= 0
                     ? [
                           {
                               jobType: rng.randomElementPop(pool),
@@ -1030,7 +1030,7 @@ export const pushClassicBounties = (
                           }
                       ]
                     : []),
-                ...(version_compare(buildLabel, gameToBuildVersion["31.0.0"]) >= 0
+                ...(!buildLabel || version_compare(buildLabel, gameToBuildVersion["31.0.0"]) >= 0
                     ? [
                           {
                               jobType: rng.randomElement(venusNarmerJobs),
@@ -1046,7 +1046,7 @@ export const pushClassicBounties = (
         });
     }
 
-    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["29.0.0"]) >= 0) {
+    if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["29.0.0"]) >= 0) {
         const rng = new SRng(seed);
         const pool = [...microplanetJobs];
         syndicateMissions.push({
@@ -1563,7 +1563,7 @@ const getIdealTimeSatsifyingConstraints = (constraints: ITimeConstraint[]): numb
 };
 
 const fullyStockBaro = (vt: IVoidTrader, buildLabel?: string): void => {
-    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["40.0.0"]) >= 0) {
+    if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["40.0.0"]) >= 0) {
         for (const item of baro.evilBaro as IVoidTraderOffer[]) {
             vt.Manifest.push(item);
         }
@@ -1586,21 +1586,21 @@ const fullyStockBaro = (vt: IVoidTrader, buildLabel?: string): void => {
     }
 };
 
-const getVarziaRotation = (week: number, buildLabel: string): string => {
+const getVarziaRotation = (week: number, buildLabel: string | undefined): string => {
     const seed = new SRng(week).randomInt(0, 100_000);
     const rng = new SRng(seed);
     const [itemType, rotation] = rng.randomElement(Object.entries(varzia.primeDualPacks))!;
-    if (version_compare(buildLabel, rotation.minBuildLabel) >= 0) {
+    if (!buildLabel || version_compare(buildLabel, rotation.minBuildLabel) >= 0) {
         return itemType;
     } else {
         return "/Lotus/StoreItems/Types/StoreItems/Packages/MegaPrimeVault/LastChanceItemC";
     }
 };
 
-const getVarziaManifest = (dualPack: string, buildLabel: string): IPrimeVaultTraderOffer[] => {
+const getVarziaManifest = (dualPack: string, buildLabel: string | undefined): IPrimeVaultTraderOffer[] => {
     const rotationManifest = varzia.primeDualPacks[dualPack];
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (!rotationManifest || version_compare(buildLabel, rotationManifest.minBuildLabel) < 0) {
+    if (!rotationManifest || (buildLabel && version_compare(buildLabel, rotationManifest.minBuildLabel) < 0)) {
         return [];
     }
     const mainPack = [{ ItemType: dualPack, PrimePrice: 10 }];
@@ -1609,7 +1609,10 @@ const getVarziaManifest = (dualPack: string, buildLabel: string): IPrimeVaultTra
     const items: IPrimeVaultTraderOffer[] = [];
     const bobbleHeads: IPrimeVaultTraderOffer[] = [];
 
-    if (config.worldState?.vanguardVaultRelics && version_compare(buildLabel, gameToBuildVersion["41.0.0"]) >= 0) {
+    if (
+        config.worldState?.vanguardVaultRelics &&
+        (!buildLabel || version_compare(buildLabel, gameToBuildVersion["41.0.0"]) >= 0)
+    ) {
         vanguardRelics.push(...varzia.vanguardVaultRelics);
     }
 
@@ -1628,7 +1631,7 @@ const getVarziaManifest = (dualPack: string, buildLabel: string): IPrimeVaultTra
     return [singlePacks[0], ...mainPack, singlePacks[1], ...vanguardRelics, ...items, ...bobbleHeads, ...relics];
 };
 
-const getAllVarziaManifests = (buildLabel: string): IPrimeVaultTraderOffer[] => {
+const getAllVarziaManifests = (buildLabel: string | undefined): IPrimeVaultTraderOffer[] => {
     const dualPacks: IPrimeVaultTraderOffer[] = [];
     const singlePacks: IPrimeVaultTraderOffer[] = [];
     const vanguardRelics: IPrimeVaultTraderOffer[] = [];
@@ -1640,12 +1643,15 @@ const getAllVarziaManifests = (buildLabel: string): IPrimeVaultTraderOffer[] => 
     const itemsSet = new Set<string>();
     const bobbleHeadsSet = new Set<string>();
 
-    if (config.worldState?.vanguardVaultRelics && version_compare(buildLabel, gameToBuildVersion["41.0.0"]) >= 0) {
+    if (
+        config.worldState?.vanguardVaultRelics &&
+        (!buildLabel || version_compare(buildLabel, gameToBuildVersion["41.0.0"]) >= 0)
+    ) {
         vanguardRelics.push(...varzia.vanguardVaultRelics);
     }
 
     Object.entries(varzia.primeDualPacks)
-        .filter(([_, dualPack]) => version_compare(buildLabel, dualPack.minBuildLabel) >= 0)
+        .filter(([_, dualPack]) => !buildLabel || version_compare(buildLabel, dualPack.minBuildLabel) >= 0)
         .forEach(([dualPackItemType, dualPack]) => {
             dualPacks.push({ ItemType: dualPackItemType, PrimePrice: 10 });
 
@@ -2013,8 +2019,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     const isFebruary = date.getUTCMonth() == 1;
     if (
         (config.worldState?.starDaysOverride ?? isFebruary) &&
-        buildLabel &&
-        version_compare(buildLabel, gameToBuildVersion["29.10.0"]) >= 0
+        (!buildLabel || version_compare(buildLabel, gameToBuildVersion["29.10.0"]) >= 0)
     ) {
         worldState.Goals.push({
             _id: { $oid: "67a4dcce2a198564d62e1647" },
@@ -2045,7 +2050,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     }
 
     // < U38.6.0
-    if (buildLabel && version_compare(buildLabel, "2025.05.20.10.18") >= 0) {
+    if (!buildLabel || version_compare(buildLabel, "2025.05.20.10.18") >= 0) {
         // The client gets kinda confused when multiple goals have the same tag, so considering these mutually exclusive.
         if (config.worldState?.galleonOfGhouls == 1) {
             worldState.Goals.push({
@@ -2128,8 +2133,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     const isPlagueStarActive = timeMs >= plagueStarStart && timeMs < plagueStarEnd;
     if (
         (config.worldState?.plagueStarOverride ?? isPlagueStarActive) &&
-        buildLabel &&
-        version_compare(buildLabel, gameToBuildVersion["22.7.0"]) >= 0
+        (!buildLabel || version_compare(buildLabel, gameToBuildVersion["22.7.0"]) >= 0)
     ) {
         worldState.Goals.push({
             _id: { $oid: "654a5058c757487cdb11824f" },
@@ -2200,8 +2204,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     const isDogDaysActive = timeMs >= dogDaysStart && timeMs < dogDaysEnd;
     if (
         (config.worldState?.dogDaysOverride ?? isDogDaysActive) &&
-        buildLabel &&
-        version_compare(buildLabel, gameToBuildVersion["25.7.0"]) >= 0
+        (!buildLabel || version_compare(buildLabel, gameToBuildVersion["25.7.0"]) >= 0)
     ) {
         const activation = config.worldState?.dogDaysOverride ? 1699372800000 : dogDaysStart;
         const expiry = config.worldState?.dogDaysOverride ? 2000000000000 : dogDaysEnd;
@@ -2419,8 +2422,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     const isSaintPatrickActive = timeMs >= saintPatrickStart && timeMs < saintPatrickEnd;
     if (
         (config.worldState?.saintPatrickOverride ?? isSaintPatrickActive) &&
-        buildLabel &&
-        version_compare(buildLabel, gameToBuildVersion["13.0.0"]) >= 0
+        (!buildLabel || version_compare(buildLabel, gameToBuildVersion["13.0.0"]) >= 0)
     ) {
         const activation = config.worldState?.saintPatrickOverride ? 1772467200000 : saintPatrickStart;
         const expiry = config.worldState?.saintPatrickOverride ? 2000000000000 : saintPatrickEnd;
@@ -2652,8 +2654,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
     if (
         config.worldState?.wolfHunt != undefined &&
-        buildLabel &&
-        version_compare(buildLabel, gameToBuildVersion["25.0.0"]) >= 0
+        (!buildLabel || version_compare(buildLabel, gameToBuildVersion["25.0.0"]) >= 0)
     ) {
         if (config.worldState.wolfHunt == 0) {
             worldState.Goals.push({
@@ -2772,8 +2773,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
     if (
         config.worldState?.hallowedFlame &&
-        buildLabel &&
-        version_compare(buildLabel, gameToBuildVersion["26.0.0"]) >= 0
+        (!buildLabel || version_compare(buildLabel, gameToBuildVersion["26.0.0"]) >= 0)
     ) {
         worldState.Goals.push(
             {
@@ -2841,8 +2841,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
     if (
         config.worldState?.hallowedNightmares &&
-        buildLabel &&
-        version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0
+        (!buildLabel || version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0)
     ) {
         const rewards = [
             // 2018
@@ -2939,8 +2938,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
     if (
         config.worldState?.proxyRebellion &&
-        buildLabel &&
-        version_compare(buildLabel, gameToBuildVersion["23.2.0"]) >= 0
+        (!buildLabel || version_compare(buildLabel, gameToBuildVersion["23.2.0"]) >= 0)
     ) {
         const rewards = [
             // 2019
@@ -3021,8 +3019,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
     if (
         config.worldState?.longShadow &&
-        buildLabel &&
-        version_compare(buildLabel, gameToBuildVersion["18.22.1"]) >= 0
+        (!buildLabel || version_compare(buildLabel, gameToBuildVersion["18.22.1"]) >= 0)
     ) {
         worldState.Goals.push({
             _id: { $oid: "5bc9e8f7272d5d184c8398c9" },
@@ -3070,8 +3067,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     const isOctober = date.getUTCMonth() == 9; // October = month index 9
     if (
         (config.worldState?.naberusNightsOverride ?? isOctober) &&
-        buildLabel &&
-        version_compare(buildLabel, gameToBuildVersion["29.3.1"]) >= 0
+        (!buildLabel || version_compare(buildLabel, gameToBuildVersion["29.3.1"]) >= 0)
     ) {
         const activation = config.worldState?.naberusNightsOverride
             ? 1727881200000
@@ -3239,7 +3235,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         pushFlashSales(worldState, storeItems, activation, expiry, "SEASONAL", buildLabel);
     }
 
-    if (config.worldState?.bellyOfTheBeast && buildLabel && version_compare(buildLabel, "2024.06.12.18.42") >= 0) {
+    if (config.worldState?.bellyOfTheBeast && (!buildLabel || version_compare(buildLabel, "2024.06.12.18.42") >= 0)) {
         worldState.Goals.push({
             _id: { $oid: "67a5035c2a198564d62e165e" },
             Activation: { $date: { $numberLong: "1738868400000" } },
@@ -3264,7 +3260,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     }
 
     // <U39
-    if (config.worldState?.eightClaw && buildLabel && version_compare(buildLabel, "2025.06.23.11.39") >= 0) {
+    if (config.worldState?.eightClaw && (!buildLabel || version_compare(buildLabel, "2025.06.23.11.39") >= 0)) {
         worldState.Goals.push({
             _id: { $oid: "685c15f80000000000000000" },
             Activation: { $date: { $numberLong: "1750865400000" } },
@@ -3350,8 +3346,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
     if (
         config.worldState?.orphixVenom &&
-        buildLabel &&
-        version_compare(buildLabel, gameToBuildVersion["29.6.8"]) >= 0
+        (!buildLabel || version_compare(buildLabel, gameToBuildVersion["29.6.8"]) >= 0)
     ) {
         worldState.Goals.push(
             {
@@ -3431,8 +3426,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
     if (
         config.worldState?.bloodOfPerita &&
-        buildLabel &&
-        version_compare(buildLabel, gameToBuildVersion["41.0.0"]) >= 0
+        (!buildLabel || version_compare(buildLabel, gameToBuildVersion["41.0.0"]) >= 0)
     ) {
         worldState.Goals.push({
             _id: { $oid: "694189080000000000000000" },
@@ -3461,8 +3455,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
     if (
         (config.worldState?.thermiaFracturesOverride ?? isThermiaFracturesActive) &&
-        buildLabel &&
-        version_compare(buildLabel, gameToBuildVersion["24.5.1"]) >= 0
+        (!buildLabel || version_compare(buildLabel, gameToBuildVersion["24.5.1"]) >= 0)
     ) {
         const activeStartDay = day - activeThermiaFracturesCycleDay;
 
@@ -3620,8 +3613,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     const isGhoulEmergenceActive = ghoulsCycleDay >= 17 && ghoulsCycleDay <= 20; // 4 days for event and 17 days for break
     if (
         (config.worldState?.ghoulEmergenceOverride ?? isGhoulEmergenceActive) &&
-        buildLabel &&
-        version_compare(buildLabel, gameToBuildVersion["22.8.2"])
+        (!buildLabel || version_compare(buildLabel, gameToBuildVersion["22.8.2"]) >= 0)
     ) {
         const ghoulPool = [...eidolonGhoulJobs];
         const pastGhoulPool = [...eidolonGhoulJobs];
@@ -3856,7 +3848,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
     // Varzia
     // introduced in 30.9.4
-    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["31.0.0"]) >= 0) {
+    if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["31.0.0"]) >= 0) {
         const pt: IPrimeVaultTrader = {
             _id: { $oid: ((weekStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "c36af423770eaa97" },
             Activation: { $date: { $numberLong: weekStart.toString() } },
@@ -4520,7 +4512,7 @@ const pushConclaveWeekly = (
     );
 };
 
-const pushGoalAlerts = (ws: IWorldState, tag: string, buildLabel: string): void => {
+const pushGoalAlerts = (ws: IWorldState, tag: string, buildLabel: string | undefined): void => {
     const genMeta = alertGeneratorConfig[tag];
     const neededAlerts = genMeta.alertLength / genMeta.alertInterval;
     const currentAlertIndex = Math.floor((ws.Time * 1000 - EPOCH) / genMeta.alertInterval);
@@ -4529,7 +4521,12 @@ const pushGoalAlerts = (ws: IWorldState, tag: string, buildLabel: string): void 
     }
 };
 
-const generateGoalAlert = (tag: string, alertIdx: number, wsAlerts: IAlert[], buildLabel?: string): IAlert => {
+const generateGoalAlert = (
+    tag: string,
+    alertIdx: number,
+    wsAlerts: IAlert[],
+    buildLabel: string | undefined
+): IAlert => {
     const genMeta = alertGeneratorConfig[tag];
     const defenseWavesPerRotation = buildLabel && version_compare(buildLabel, gameToBuildVersion["38.5.0"]) < 0 ? 5 : 3;
     const activation = EPOCH + alertIdx * genMeta.alertInterval;
