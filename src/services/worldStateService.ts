@@ -832,6 +832,13 @@ export const pushWeeklyActs = (
     pushSeasonWeeklyChallenge(activeChallenges, pools.hardWeekly, nightwaveSeason, week, 6);
 };
 
+const eidolonEpoch = 1391990400;
+const timeOfDayRate = 0.0026670000515878;
+const eidolonCycleDuration = 24 / timeOfDayRate;
+const eidolonHourDuration = eidolonCycleDuration / 24;
+
+const bountyEpoch = eidolonEpoch + 5 * eidolonHourDuration;
+
 const generateXpAmounts = (rng: SRng, stageCount: number, minXp: number, maxXp: number): number[] => {
     const step = minXp < 1000 ? 1 : 10;
     const totalDeciXp = rng.randomInt(minXp / step, maxXp / step);
@@ -868,8 +875,8 @@ export const pushClassicBounties = (
     const deimosDTable = String.fromCharCode(65 + (bountyCycle % 2));
 
     const seed = new SRng(bountyCycle).randomInt(0, 100_000);
-    const bountyCycleStart = bountyCycle * 9000000;
-    const bountyCycleEnd = bountyCycleStart + 9000000;
+    const bountyCycleStart = Math.trunc((bountyEpoch + bountyCycle * eidolonCycleDuration) * 1000);
+    const bountyCycleEnd = Math.trunc(bountyCycleStart + eidolonCycleDuration * 1000);
 
     if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["22.0.0"]) >= 0) {
         const rng = new SRng(seed);
@@ -1451,45 +1458,51 @@ interface ITimeConstraint {
 const eidolonDayConstraint: ITimeConstraint = {
     name: "eidolon day",
     isValidTime: (timeSecs: number): boolean => {
-        const eidolonEpoch = 1391992660;
-        const eidolonCycle = Math.trunc((timeSecs - eidolonEpoch) / 9000);
-        const eidolonCycleStart = eidolonEpoch + eidolonCycle * 9000;
-        const eidolonCycleEnd = eidolonCycleStart + 9000;
-        const eidolonCycleNightStart = eidolonCycleEnd - 3000;
-        return !isBeforeNextExpectedWorldStateRefresh(timeSecs * 1000, eidolonCycleNightStart * 1000);
+        const eidolonCycle = Math.trunc((timeSecs - eidolonEpoch) / eidolonCycleDuration);
+        const eidolonCycleStart = eidolonEpoch + eidolonCycle * eidolonCycleDuration;
+        const hour = 24 * (((timeSecs - eidolonEpoch) % eidolonCycleDuration) / eidolonCycleDuration);
+        // const isDay = hour > 5 && hour < 21.9;
+        if (hour > 5) {
+            const eidolonCycleNightStart = eidolonCycleStart + 21.9 * eidolonHourDuration;
+            return !isBeforeNextExpectedWorldStateRefresh(timeSecs * 1000, eidolonCycleNightStart * 1000);
+        }
+        return false;
     },
     getIdealTimeBefore: (timeSecs: number): number => {
-        const eidolonEpoch = 1391992660;
-        const eidolonCycle = Math.trunc((timeSecs - eidolonEpoch) / 9000);
-        const eidolonCycleStart = eidolonEpoch + eidolonCycle * 9000;
-        return eidolonCycleStart;
+        const eidolonCycle = Math.trunc((timeSecs - eidolonEpoch) / eidolonCycleDuration);
+        const eidolonCycleStart = eidolonEpoch + eidolonCycle * eidolonCycleDuration;
+        const hour = 24 * (((timeSecs - eidolonEpoch) % eidolonCycleDuration) / eidolonCycleDuration);
+        if (hour > 5) {
+            return Math.trunc(eidolonCycleStart + 5 * eidolonHourDuration); // Today's morning
+        } else {
+            return Math.trunc(eidolonCycleStart - eidolonCycleDuration + 5 * eidolonHourDuration); // Yesterday's morning
+        }
     }
 };
 
 const eidolonNightConstraint: ITimeConstraint = {
     name: "eidolon night",
     isValidTime: (timeSecs: number): boolean => {
-        const eidolonEpoch = 1391992660;
-        const eidolonCycle = Math.trunc((timeSecs - eidolonEpoch) / 9000);
-        const eidolonCycleStart = eidolonEpoch + eidolonCycle * 9000;
-        const eidolonCycleEnd = eidolonCycleStart + 9000;
-        const eidolonCycleNightStart = eidolonCycleEnd - 3000;
-        return (
-            timeSecs >= eidolonCycleNightStart &&
-            !isBeforeNextExpectedWorldStateRefresh(timeSecs * 1000, eidolonCycleEnd * 1000)
-        );
+        const eidolonCycle = Math.trunc((timeSecs - eidolonEpoch) / eidolonCycleDuration);
+        const eidolonCycleStart = eidolonEpoch + eidolonCycle * eidolonCycleDuration;
+        const hour = 24 * (((timeSecs - eidolonEpoch) % eidolonCycleDuration) / eidolonCycleDuration);
+        if (hour > 5) {
+            const eidolonCycleNightStart = eidolonCycleStart + 21.9 * eidolonHourDuration;
+            return timeSecs >= eidolonCycleNightStart;
+        } else {
+            const eidolonCycleDayStart = eidolonCycleStart + 5 * eidolonHourDuration;
+            return !isBeforeNextExpectedWorldStateRefresh(timeSecs * 1000, eidolonCycleDayStart * 1000);
+        }
     },
     getIdealTimeBefore: (timeSecs: number): number => {
-        const eidolonEpoch = 1391992660;
-        const eidolonCycle = Math.trunc((timeSecs - eidolonEpoch) / 9000);
-        const eidolonCycleStart = eidolonEpoch + eidolonCycle * 9000;
-        const eidolonCycleEnd = eidolonCycleStart + 9000;
-        const eidolonCycleNightStart = eidolonCycleEnd - 3000;
+        const eidolonCycle = Math.trunc((timeSecs - eidolonEpoch) / eidolonCycleDuration);
+        const eidolonCycleStart = eidolonEpoch + eidolonCycle * eidolonCycleDuration;
+        const eidolonCycleNightStart = eidolonCycleStart + 21.9 * eidolonHourDuration;
         if (eidolonCycleNightStart > timeSecs) {
             // Night hasn't started yet, but we need to return a time in the past.
-            return eidolonCycleNightStart - 9000;
+            return Math.trunc(eidolonCycleNightStart - eidolonCycleDuration);
         }
-        return eidolonCycleNightStart;
+        return Math.trunc(eidolonCycleNightStart);
     }
 };
 
@@ -3576,11 +3589,11 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     worldState.NodeOverrides.find(x => x.Node == "SolNode802")!.Seed = new SRng(week).randomInt(0, 0xff_ffff);
 
     // Holdfast, Cavia, & Hex bounties cycling every 2.5 hours; unfaithful implementation
-    let bountyCycle = Math.trunc(timeSecs / 9000);
+    let bountyCycle = Math.trunc((timeSecs - bountyEpoch) / eidolonCycleDuration);
     let bountyCycleEnd: number | undefined;
     do {
-        const bountyCycleStart = bountyCycle * 9000000;
-        bountyCycleEnd = bountyCycleStart + 9000000;
+        const bountyCycleStart = Math.trunc((bountyEpoch + bountyCycle * eidolonCycleDuration) * 1000);
+        bountyCycleEnd = Math.trunc(bountyCycleStart + eidolonCycleDuration * 1000);
         worldState.SyndicateMissions.push({
             _id: { $oid: ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000029" },
             Activation: { $date: { $numberLong: bountyCycleStart.toString() } },
