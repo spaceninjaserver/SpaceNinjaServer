@@ -400,6 +400,7 @@ dict = {
     import_samples_maxStratos: `Max. Rang-Symbol für Stratos Emblem`,
     import_samples_clearWishlist: `Wunschliste leeren`,
     import_samples_clearLocPins: `Lok-Pins leeren`,
+    import_samples_eidolonLocPins: `Eidolon Jagd Lok-Pins`,
 
     upgrade_Equilibrium: `+|VAL|% Energie bei Gesundheitskugeln, +|VAL|% Gesundheit bei Energiekugeln`,
     upgrade_MeleeCritDamage: `+|VAL|% Krit. Nahkampfschaden`,

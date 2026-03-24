@@ -400,6 +400,7 @@ dict = {
     import_samples_maxStratos: `[UNTRANSLATED] Max Rank Stratos Emblem Icon`,
     import_samples_clearWishlist: `[UNTRANSLATED] Clear Wishlist`,
     import_samples_clearLocPins: `[UNTRANSLATED] Clear Loc-Pins`,
+    import_samples_eidolonLocPins: `[UNTRANSLATED] Eidolon Hunt Loc-Pins`,
 
     upgrade_Equilibrium: `+|VAL|% de Energía al recoger salud, +|VAL|% de Salud al recoger energía`,
     upgrade_MeleeCritDamage: `+|VAL|% de daño crítico cuerpo a cuerpo`,

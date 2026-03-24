@@ -400,6 +400,7 @@ dict = {
     import_samples_maxStratos: `最大 Stratos Emblem Icon等级`,
     import_samples_clearWishlist: `[UNTRANSLATED] Clear Wishlist`,
     import_samples_clearLocPins: `[UNTRANSLATED] Clear Loc-Pins`,
+    import_samples_eidolonLocPins: `[UNTRANSLATED] Eidolon Hunt Loc-Pins`,
 
     upgrade_Equilibrium: `拾取生命球+|VAL|%能量,拾取能量球+|VAL|%生命`,
     upgrade_MeleeCritDamage: `+|VAL|%近战暴击伤害`,

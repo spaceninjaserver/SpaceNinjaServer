@@ -400,6 +400,7 @@ dict = {
     import_samples_maxStratos: `Максимальный ранг значка Стратос`,
     import_samples_clearWishlist: `Очистить список желаний`,
     import_samples_clearLocPins: `[UNTRANSLATED] Clear Loc-Pins`,
+    import_samples_eidolonLocPins: `[UNTRANSLATED] Eidolon Hunt Loc-Pins`,
 
     upgrade_Equilibrium: `Подбор сфер здоровья даёт +|VAL|% энергии. Подбор сфер энергии даёт +|VAL|% здоровья.`,
     upgrade_MeleeCritDamage: `+|VAL|% к крит. урону в ближнем бою.`,

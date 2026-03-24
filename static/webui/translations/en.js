@@ -399,6 +399,7 @@ dict = {
     import_samples_maxStratos: `Max Rank Stratos Emblem Icon`,
     import_samples_clearWishlist: `Clear Wishlist`,
     import_samples_clearLocPins: `Clear Loc-Pins`,
+    import_samples_eidolonLocPins: `Eidolon Hunt Loc-Pins`,
 
     upgrade_Equilibrium: `+|VAL|% Energy from Health pickups, +|VAL|% Health from Energy pickups`,
     upgrade_MeleeCritDamage: `+|VAL|% Melee Critical Damage`,

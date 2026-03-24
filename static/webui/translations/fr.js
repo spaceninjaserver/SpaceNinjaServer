@@ -400,6 +400,7 @@ dict = {
     import_samples_maxStratos: `Badge Stratos rang max`,
     import_samples_clearWishlist: `Effacer la liste de souhaits`,
     import_samples_clearLocPins: `Effacer les loc-pins`,
+    import_samples_eidolonLocPins: `[UNTRANSLATED] Eidolon Hunt Loc-Pins`,
 
     upgrade_Equilibrium: `Ramasser de la santé donne +|VAL|% d'énergie supplémentaire. Ramasser de l'énergie donne +|VAL|% de santé supplémentaire.`,
     upgrade_MeleeCritDamage: `+|VAL|% de dégâts critique en mêlée`,

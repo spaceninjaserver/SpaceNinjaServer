@@ -4649,6 +4649,111 @@ const importSamples = {
     },
     clearLocPins: {
         CustomMarkers: []
+    },
+    eidolonLocPins: {
+        CustomMarkers: [
+            {
+                tag: "EidolonPlains",
+                markerInfos: [
+                    {
+                        icon: "/Lotus/Interface/Icons/Markers/MiniMapEidolonFishmonger.png",
+                        markers: [
+                            {
+                                anchorName: "/Layer255/Layer1/EPOutdoorZoneAttribs66",
+                                color: 16711890,
+                                label: "East QC",
+                                x: 70.513519,
+                                y: -247.81601,
+                                z: -18.476288,
+                                showInHud: true
+                            },
+                            {
+                                anchorName: "/Layer255/Layer1/EPOutdoorZoneAttribs56",
+                                color: 16711890,
+                                label: "Log Blink",
+                                x: -50.438316,
+                                y: -275.70209,
+                                z: -88.562752,
+                                showInHud: true
+                            },
+                            {
+                                icon: "/Lotus/Interface/Icons/Markers/MiniMapEidolonFishmonger.png",
+                                anchorName: "/Layer255/Layer1/EPOutdoorZoneAttribs66",
+                                color: 16711680,
+                                label: "Long Air",
+                                x: 13.079987,
+                                y: -311.91776,
+                                z: -107.16344,
+                                showInHud: true
+                            },
+                            {
+                                anchorName: "/Layer255/Layer1/EPOutdoorZoneAttribs66",
+                                color: 6874122,
+                                label: "Mid Air",
+                                x: -104.24564,
+                                y: -310.20673,
+                                z: 6.829391,
+                                showInHud: true
+                            },
+                            {
+                                anchorName: "/Layer255/Layer1/EPOutdoorZoneAttribs66",
+                                color: 6874122,
+                                label: "CL Air",
+                                x: -75.868011,
+                                y: -312.39841,
+                                z: 63.519012,
+                                showInHud: true
+                            },
+                            {
+                                anchorName: "/Layer255/Layer1/EPOutdoorZoneAttribs56",
+                                color: 6874122,
+                                label: "CR Air",
+                                x: 94.204071,
+                                y: -313.16812,
+                                z: 55.651489,
+                                showInHud: true
+                            },
+                            {
+                                anchorName: "/Layer255/Layer1/EPOutdoorZoneAttribs66",
+                                color: 16711890,
+                                label: "Long Water Limb",
+                                x: 12.869019,
+                                y: -326.29846,
+                                z: -87.977646,
+                                showInHud: true
+                            },
+                            {
+                                anchorName: "/Layer255/Layer1/EPOutdoorZoneAttribs66",
+                                color: 16711890,
+                                label: "Mid Water Limb",
+                                x: -92.617157,
+                                y: -330.29135,
+                                z: 27.153122,
+                                showInHud: true
+                            },
+                            {
+                                anchorName: "/Layer255/Layer1/EPOutdoorZoneAttribs66",
+                                color: 16711890,
+                                label: "CL Water Limb",
+                                x: -104.2038,
+                                y: -331.92703,
+                                z: 62.632507,
+                                showInHud: true
+                            },
+                            {
+                                anchorName: "/Layer255/Layer1/EPOutdoorZoneAttribs56",
+                                color: 16711890,
+                                label: "CR Water Limb",
+                                x: 105.64627,
+                                y: -336.7074,
+                                z: 85.621521,
+                                showInHud: true
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
     }
 };
 function setImportSample(key) {

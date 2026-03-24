@@ -400,6 +400,7 @@ dict = {
     import_samples_maxStratos: `Максимальний рівень відзнаки Страта`,
     import_samples_clearWishlist: `Очистити список бажаного`,
     import_samples_clearLocPins: `[UNTRANSLATED] Clear Loc-Pins`,
+    import_samples_eidolonLocPins: `[UNTRANSLATED] Eidolon Hunt Loc-Pins`,
 
     upgrade_Equilibrium: `Згустки здоров'я дають +|VAL|% енергії, згустки енергії дають +|VAL|% здоров'я.`,
     upgrade_MeleeCritDamage: `+|VAL|% до критичної шкоди від холодної зброї.`,
