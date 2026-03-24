@@ -251,6 +251,7 @@ dict = {
     cheats_noArgonCrystalDecay: `Argon-Kristalle verschwinden niemals`,
     cheats_noMasteryRankUpCooldown: `Keine Wartezeit beim Meisterschaftsrangaufstieg`,
     cheats_noVendorPurchaseLimits: `Keine Kaufbeschränkungen bei Händlern`,
+    cheats_noNodeEntryFees: `Keine Node Kosten`,
     cheats_noDeathMarks: `Keine Todesmarkierungen`,
     cheats_noKimCooldowns: `Keine Wartezeit bei KIM`,
     cheats_noBlessingCooldown: `Keine Wartezeit für Gaben`,

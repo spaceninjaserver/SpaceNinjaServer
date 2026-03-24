@@ -219,7 +219,7 @@ export const addMissionInventoryUpdates = async (
     if (inventoryUpdates.EndOfMatchUpload) {
         if (inventoryUpdates.Missions && inventoryUpdates.Missions.Tag in ExportRegions) {
             const node = ExportRegions[inventoryUpdates.Missions.Tag];
-            if (node.miscItemFee) {
+            if (node.miscItemFee && !inventory.noNodeEntryFees) {
                 addMiscItems(inventory, [
                     {
                         ItemType: node.miscItemFee.ItemType,
@@ -701,7 +701,9 @@ export const addMissionInventoryUpdates = async (
                 break;
             }
             case "creditsFee": {
-                updateCurrency(inventory, value, CurrencyType.CREDITS, inventoryChanges);
+                if (!inventory.noNodeEntryFees) {
+                    updateCurrency(inventory, value, CurrencyType.CREDITS, inventoryChanges);
+                }
                 break;
             }
             case "GoalProgress": {

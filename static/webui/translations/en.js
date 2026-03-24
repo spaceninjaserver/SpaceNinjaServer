@@ -250,6 +250,7 @@ dict = {
     cheats_noArgonCrystalDecay: `No Argon Crystal Decay`,
     cheats_noMasteryRankUpCooldown: `No Mastery Rank Up Cooldown`,
     cheats_noVendorPurchaseLimits: `No Vendor Purchase Limits`,
+    cheats_noNodeEntryFees: `No Node Entry Fees`,
     cheats_noDeathMarks: `No Death Marks`,
     cheats_noKimCooldowns: `No KIM Cooldowns`,
     cheats_noBlessingCooldown: `No Blessing Cooldown`,

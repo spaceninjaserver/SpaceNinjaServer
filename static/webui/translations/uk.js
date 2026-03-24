@@ -251,6 +251,7 @@ dict = {
     cheats_noArgonCrystalDecay: `Без розпаду Аргонових кристалів`,
     cheats_noMasteryRankUpCooldown: `Підвищення ранга майстерності без очікування`,
     cheats_noVendorPurchaseLimits: `Відсутність лімітів на купівлю у продавців`,
+    cheats_noNodeEntryFees: `[UNTRANSLATED] No Node Entry Fees`,
     cheats_noDeathMarks: `Без позначок смерті`,
     cheats_noKimCooldowns: `Чати KIM без очікування`,
     cheats_noBlessingCooldown: `Благословіння без очікування`,

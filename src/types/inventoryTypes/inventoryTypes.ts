@@ -57,6 +57,7 @@ export const accountCheatBooleans = [
     "noArgonCrystalDecay",
     "noMasteryRankUpCooldown",
     "noVendorPurchaseLimits",
+    "noNodeEntryFees",
     "noDeathMarks",
     "noKimCooldowns",
     "noBlessingCooldown",

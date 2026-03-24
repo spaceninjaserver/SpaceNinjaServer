@@ -1574,6 +1574,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         noArgonCrystalDecay: Boolean,
         noMasteryRankUpCooldown: Boolean,
         noVendorPurchaseLimits: Boolean,
+        noNodeEntryFees: Boolean,
         noDeathMarks: Boolean,
         noKimCooldowns: Boolean,
         noBlessingCooldown: Boolean,
