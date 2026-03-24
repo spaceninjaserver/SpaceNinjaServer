@@ -15,5 +15,15 @@
       "ItemType": "/Lotus/Types/Items/EmailItems/TennokaiEmailItem",
       "ItemCount": 1
     }
+  ],
+  "/Lotus/Types/Keys/PriestFrameQuest/PriestQuestKeyChain": [
+    {
+      "ItemType": "/Lotus/Types/Recipes/WarframeRecipes/PriestBlueprint",
+      "ItemCount": 1
+    },
+    {
+      "ItemType": "/Lotus/Types/Keys/ApostasyQuest/ApostasyKeyChain",
+      "ItemCount": 1
+    }
   ]
 }
