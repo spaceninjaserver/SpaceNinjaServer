@@ -29,17 +29,18 @@ export const loginController: RequestHandler = async (request, response) => {
     if (isAndroid) {
         try {
             const { userId, email } = await getGoogleAccountData(loginRequest.GoogleTokenId);
-            if (email === undefined || email === "") {
-                response.status(400).json({ error: "incorrect login data" });
-                return;
-            }
-            loginRequest.email = email;
+            loginRequest.email = email ?? "";
             loginRequest.GoogleTokenId = userId;
         } catch (error: unknown) {
             response.status(400).json({ error: "incorrect login data" });
             return;
         }
         loginRequest.password = "android"; // edit in mongodb if you want to access it via webui
+    }
+
+    if (!loginRequest.email) {
+        response.status(400).json({ error: "incorrect login data" });
+        return;
     }
 
     if (config.tunables?.useLoginToken) {
@@ -61,31 +62,25 @@ export const loginController: RequestHandler = async (request, response) => {
         ((config.autoCreateAccount && loginRequest.ClientType != "webui") ||
             loginRequest.ClientType == "webui-register")
     ) {
-        try {
-            const name = await getUsernameFromEmail(loginRequest.email);
-            const newAccount = await createAccount({
-                email: loginRequest.email,
-                password: loginRequest.password,
-                DisplayName: name,
-                CountryCode: loginRequest.lang?.toUpperCase() ?? "EN",
-                ClientType: loginRequest.ClientType,
-                GoogleTokenId: loginRequest.GoogleTokenId,
-                Nonce: createNonce(),
-                BuildLabel: buildLabel,
-                LastLogin: new Date()
-            });
-            logger.debug("created new account");
-            if (isAndroid) {
-                response.status(400).json({ error: `noAndroidAccount;countryCode=US` });
-            } else {
-                response.send(createLoginResponse(request, newAccount, buildLabel)).end();
-            }
-            return;
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                throw new Error(`error creating account ${error.message}`);
-            }
+        const name = await getUsernameFromEmail(loginRequest.email);
+        const newAccount = await createAccount({
+            email: loginRequest.email,
+            password: loginRequest.password,
+            DisplayName: name,
+            CountryCode: loginRequest.lang?.toUpperCase() ?? "EN",
+            ClientType: loginRequest.ClientType,
+            GoogleTokenId: loginRequest.GoogleTokenId,
+            Nonce: createNonce(),
+            BuildLabel: buildLabel,
+            LastLogin: new Date()
+        });
+        logger.debug("created new account");
+        if (isAndroid) {
+            response.status(400).json({ error: `noAndroidAccount;countryCode=US` });
+        } else {
+            response.send(createLoginResponse(request, newAccount, buildLabel)).end();
         }
+        return;
     }
 
     if (!account) {
