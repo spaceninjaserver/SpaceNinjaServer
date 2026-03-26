@@ -65,6 +65,7 @@ export interface IEquipmentDatabase {
     IsNew?: boolean;
     AltWeaponModeId?: Types.ObjectId;
     UpgradeNodes?: number;
+    ExtraRemaining?: number; // Revives remaining
     _id: Types.ObjectId;
 }
 

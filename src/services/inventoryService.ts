@@ -2155,7 +2155,7 @@ export const applyClientEquipmentUpdates = (
 ): void => {
     const category = inventory[categoryName];
 
-    gearArray.forEach(({ ItemId, XP, InfestationDate }) => {
+    gearArray.forEach(({ ItemId, XP, InfestationDate, ExtraRemaining }) => {
         const item = category.id(fromOid(ItemId));
         if (!item) {
             logger.warn(`Skipping unknown ${categoryName} item: id ${fromOid(ItemId)} not found`);
@@ -2201,6 +2201,11 @@ export const applyClientEquipmentUpdates = (
             // 2147483647000 means cured, otherwise became infected
             item.InfestationDate =
                 InfestationDate.$date.$numberLong == "2147483647000" ? new Date(0) : fromMongoDate(InfestationDate);
+        }
+
+        if (ExtraRemaining) {
+            item.ExtraRemaining ??= 4;
+            item.ExtraRemaining += ExtraRemaining;
         }
     });
 };

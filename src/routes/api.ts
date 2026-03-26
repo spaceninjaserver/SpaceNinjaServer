@@ -119,6 +119,7 @@ import { purchaseGetController, purchasePostController } from "../controllers/ap
 import { questControlController } from "../controllers/api/questControlController.ts";
 import { queueDojoComponentDestructionController } from "../controllers/api/queueDojoComponentDestructionController.ts";
 import { redeemPromoCodeController } from "../controllers/api/redeemPromoCodeController.ts";
+import { refillRevivesController } from "../controllers/api/refillRevivesController.ts";
 import { releasePetController } from "../controllers/api/releasePetController.ts";
 import { removeFriendGetController, removeFriendPostController } from "../controllers/api/removeFriendController.ts";
 import { removeFromAllianceController } from "../controllers/api/removeFromAllianceController.ts";
@@ -358,6 +359,7 @@ apiRouter.post("/projectionManager.php", projectionManagerController);
 apiRouter.post("/purchase.php", purchasePostController);
 apiRouter.post("/questControl.php", questControlController); // U17
 apiRouter.post("/redeemPromoCode.php", redeemPromoCodeController);
+apiRouter.post("/refillRevives.php", refillRevivesController);
 apiRouter.post("/releasePet.php", releasePetController);
 apiRouter.post("/removeFriend.php", removeFriendPostController);
 apiRouter.post("/removeFromGuild.php", removeFromGuildPostController);

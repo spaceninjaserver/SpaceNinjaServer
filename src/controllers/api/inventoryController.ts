@@ -136,6 +136,12 @@ export const inventoryController: RequestHandler = async (request, response) => 
                 }
             }
 
+            for (const suit of inventory.Suits) {
+                if (suit.ExtraRemaining !== undefined) {
+                    suit.ExtraRemaining = undefined;
+                }
+            }
+
             // Handle weekly reset
             const lastLoginWeek = Math.trunc(
                 (inventory.NextRefill.getTime() - (86400000 + KAHL_EPOCH)) / unixTimesInMs.week
