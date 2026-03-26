@@ -70,6 +70,8 @@ import { createShip } from "./shipService.ts";
 import type { TTraitsPool } from "../helpers/inventoryHelpers.ts";
 import {
     catbrowDetails,
+    convertFromLegacyFingerprint,
+    convertToLegacyFingerprint,
     fromMongoDate,
     fromOid,
     kubrowDetails,
@@ -2753,6 +2755,34 @@ export const cleanupInventory = (inventory: TInventoryDatabaseDocument): void =>
         }
         if (fixed) {
             logger.debug(`fixed ${fixed} invalid skin upgrade ids`);
+        }
+    }
+
+    {
+        let fixed = 0;
+        for (const upgrade of inventory.Upgrades) {
+            if (upgrade.UpgradeFingerprint) {
+                const fingerprint = upgrade.UpgradeFingerprint;
+                const json = JSON.parse(fingerprint) as {
+                    lvl?: number | string;
+                    lvlReq?: number | string;
+                    Progress?: number | string;
+                    reqLevel?: number | string;
+                };
+
+                if (
+                    typeof json.lvl == "string" ||
+                    typeof json.lvlReq == "string" ||
+                    typeof json.Progress == "string" ||
+                    typeof json.reqLevel == "string"
+                ) {
+                    upgrade.UpgradeFingerprint = convertFromLegacyFingerprint(convertToLegacyFingerprint(fingerprint));
+                    ++fixed;
+                }
+            }
+        }
+        if (fixed) {
+            logger.debug(`fixed ${fixed} invalid upgrade fingerprints`);
         }
     }
 

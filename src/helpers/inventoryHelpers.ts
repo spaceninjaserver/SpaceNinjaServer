@@ -149,7 +149,12 @@ export const convertFromLegacyFingerprint = (s: string): string => {
             const nextSep = s.indexOf("|", index);
             const value = nextSep === -1 ? s.slice(index) : s.slice(index, nextSep);
             index = nextSep === -1 ? s.length : nextSep;
-            obj[key] = value;
+            const num = Number(value);
+            if (!Number.isNaN(num)) {
+                obj[key] = num;
+            } else {
+                obj[key] = value;
+            }
         }
 
         return isArrayItem ? obj : obj;
