@@ -4147,7 +4147,7 @@ export const populateDailyDeal = async (worldState: IWorldState): Promise<void> 
 };
 
 export const idToBountyCycle = (id: string): number => {
-    return Math.trunc((parseInt(id.substring(0, 8), 16) * 1000) / 9000_000);
+    return Math.round((parseInt(id.substring(0, 8), 16) - bountyEpoch) / eidolonCycleDuration);
 };
 
 export const idToDay = (id: string): number => {
