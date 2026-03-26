@@ -8,10 +8,11 @@ import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import { Types } from "mongoose";
 import type { ISpectreLoadout } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { fromOid, toOid } from "../../helpers/inventoryHelpers.ts";
+import { fromOid, toOid, U5ToModernRecipes, version_compare } from "../../helpers/inventoryHelpers.ts";
 import { ExportWeapons } from "warframe-public-export-plus";
 import { getRandomElement } from "../../services/rngService.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 interface IStartRecipeRequest {
     RecipeName: string;
@@ -26,6 +27,10 @@ export const startRecipeController: RequestHandler = async (req, res) => {
 
     let recipeName = startRecipeRequest.RecipeName;
     if (req.query.recipeName) recipeName = String(req.query.recipeName); // U8
+    if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["7.3.0"]) < 0) {
+        const modernItemType = U5ToModernRecipes[recipeName];
+        if (modernItemType) recipeName = modernItemType;
+    }
     const recipe = getRecipe(recipeName);
 
     if (!recipe) {
@@ -53,6 +58,11 @@ export const startRecipeController: RequestHandler = async (req, res) => {
                 const index = inventory.KubrowPetEggs.findIndex(x => x._id.equals(startRecipeRequest.Ids[i]));
                 if (index != -1) {
                     inventory.KubrowPetEggs.splice(index, 1);
+                }
+            } else if (recipe.ingredients[i].ItemType.startsWith("/Lotus/Upgrades/")) {
+                const index = inventory.Upgrades.findIndex(x => x._id.equals(startRecipeRequest.Ids[i]));
+                if (index != -1) {
+                    inventory.Upgrades.splice(index, 1);
                 }
             } else {
                 const category = ExportWeapons[recipe.ingredients[i].ItemType].productCategory;

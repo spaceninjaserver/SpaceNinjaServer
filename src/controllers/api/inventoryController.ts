@@ -40,9 +40,11 @@ import {
     convertIColorToLegacyColorsWithAtt,
     convertToLegacyFingerprint,
     fromOid,
+    modernToU5Recipes,
     toLegacyOid,
     toOid,
     toOid2,
+    U5Recipes,
     version_compare
 } from "../../helpers/inventoryHelpers.ts";
 import { Inbox } from "../../models/inboxModel.ts";
@@ -811,6 +813,37 @@ export const getInventoryResponse = async (
                             const n = Number.parseInt(m.Tag.slice(7), 10);
                             return n >= 1 && n <= 128;
                         });
+
+                        inventoryResponse.Recipes = inventoryResponse.Recipes.map(recipe => {
+                            const U5ItemType = modernToU5Recipes[recipe.ItemType];
+                            return U5ItemType ? { ...recipe, ItemType: U5ItemType } : recipe;
+                        }).filter(recipe => U5Recipes.includes(recipe.ItemType));
+                        inventoryResponse.PendingRecipes = inventoryResponse.PendingRecipes.map(recipe => {
+                            const U5ItemType = modernToU5Recipes[recipe.ItemType];
+                            return U5ItemType ? { ...recipe, ItemType: U5ItemType } : recipe;
+                        }).filter(recipe => U5Recipes.includes(recipe.ItemType));
+
+                        const allowedMiscItems = [
+                            "/Lotus/Types/Items/MiscItems/Actuator",
+                            "/Lotus/Types/Items/MiscItems/AlloyPlate",
+                            "/Lotus/Types/Items/MiscItems/Circuits",
+                            "/Lotus/Types/Items/MiscItems/ControlModule",
+                            "/Lotus/Types/Items/MiscItems/Ferrite",
+                            "/Lotus/Types/Items/MiscItems/Gallium",
+                            "/Lotus/Types/Items/MiscItems/Morphic",
+                            "/Lotus/Types/Items/MiscItems/Nanospores",
+                            "/Lotus/Types/Items/MiscItems/NeuralSensor",
+                            "/Lotus/Types/Items/MiscItems/Neurode",
+                            "/Lotus/Types/Items/MiscItems/OrokinCell",
+                            "/Lotus/Types/Items/MiscItems/Plastids",
+                            "/Lotus/Types/Items/MiscItems/PolymerBundle",
+                            "/Lotus/Types/Items/MiscItems/Rubedo",
+                            "/Lotus/Types/Items/MiscItems/Salvage"
+                        ];
+
+                        inventoryResponse.MiscItems = inventoryResponse.MiscItems.filter(m =>
+                            allowedMiscItems.includes(m.ItemType)
+                        );
                     }
                 }
             }

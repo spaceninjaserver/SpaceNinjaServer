@@ -537,6 +537,36 @@ function fetchItemList() {
                 {
                     uniqueName: "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod",
                     name: loc("code_traumaticPeculiar")
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Modules/GrineerMeleeModule",
+                    name: loc("code_U5Mod").replace("|TYPE|", loc("code_melee")),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Modules/GrineerPistolModule",
+                    name: loc("code_U5Mod").replace("|TYPE|", loc("code_pistol")),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Modules/GrineerRifleModule",
+                    name: loc("code_U5Mod").replace("|TYPE|", loc("code_rifle")),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Modules/GrineerShotgunModule",
+                    name: loc("code_U5Mod").replace("|TYPE|", loc("code_shotgun")),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Modules/OrokinWarframeModule",
+                    name: loc("code_U5Mod").replace("|TYPE|", loc("code_warframe")),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod",
+                    name: loc("code_infernoMod"),
+                    fusionLimit: 0
                 }
             );
 
@@ -717,6 +747,14 @@ function fetchItemList() {
                         "|ITEM|",
                         data.miscitems.find(i => i.uniqueName === "/Lotus/Types/Keys/DerelictSurvivalKey").name
                     )
+                },
+                {
+                    uniqueName: "/Lotus/Types/Recipes/KevinTestRecipe",
+                    name: data.blueprintAndItem.replace("|ITEM|", loc("code_infernoMod"))
+                },
+                {
+                    uniqueName: "/Lotus/Types/Recipes/IncendiaryRifleModBlueprint",
+                    name: data.blueprintAndItem.replace("|ITEM|", loc("code_infernoMod"))
                 }
             );
 
@@ -794,21 +832,7 @@ function fetchItemList() {
                 "/Lotus/Language/Game/Rank_Utility": {
                     name: loc("guildView_rank_utility")
                 },
-                "/Lotus/Upgrades/Modules/GrineerMeleeModule": {
-                    name: loc("code_meleeMod")
-                },
-                "/Lotus/Upgrades/Modules/GrineerPistolModule": {
-                    name: loc("code_pistolMod")
-                },
-                "/Lotus/Upgrades/Modules/GrineerRifleModule": {
-                    name: loc("code_rifleMod")
-                },
-                "/Lotus/Upgrades/Modules/GrineerShotgunModule": {
-                    name: loc("code_shotgunMod")
-                },
-                "/Lotus/Upgrades/Modules/OrokinWarframeModule": {
-                    name: loc("code_warframeMod")
-                }
+                "/Lotus/Types/Game/PowerSuit": { name: loc("code_warframe") }
             };
             for (const [type, items] of Object.entries(data)) {
                 if (type == "archonCrystalUpgrades") {
@@ -1683,6 +1707,25 @@ function translateInventoryDataToDom() {
                 {
                     const td = document.createElement("td");
                     td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+                    if (
+                        [
+                            "/Lotus/Upgrades/Modules/GrineerMeleeModule",
+                            "/Lotus/Upgrades/Modules/GrineerPistolModule",
+                            "/Lotus/Upgrades/Modules/GrineerRifleModule",
+                            "/Lotus/Upgrades/Modules/GrineerShotgunModule",
+                            "/Lotus/Upgrades/Modules/OrokinWarframeModule"
+                        ].includes(item.ItemType)
+                    ) {
+                        if (item.UpgradeFingerprint) {
+                            const fingerprint = JSON.parse(item.UpgradeFingerprint);
+                            if (fingerprint.fits) {
+                                td.textContent = loc("code_U5Mod").replace(
+                                    "|TYPE|",
+                                    itemMap[fingerprint.fits]?.name ?? fingerprint.fits
+                                );
+                            }
+                        }
+                    }
                     if (itemMap[item.ItemType]?.badReason == "notraw") {
                         // Assuming this is a riven with a pending challenge, so rank would be N/A, but otherwise it's fine.
                     } else if (!Number.isNaN(rank)) {
@@ -3965,10 +4008,19 @@ function doAddAllMods() {
     for (const child of document.getElementById("datalist-mods").children) {
         modsAll.add(child.getAttribute("data-key"));
     }
-    modsAll.delete("/Lotus/Upgrades/Mods/Fusers/CommonModFuser");
-    modsAll.delete("/Lotus/Upgrades/Mods/Fusers/UncommonModFuser");
-    modsAll.delete("/Lotus/Upgrades/Mods/Fusers/RareModFuser");
-    modsAll.delete("/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser");
+
+    [
+        "/Lotus/Upgrades/Mods/Fusers/CommonModFuser",
+        "/Lotus/Upgrades/Mods/Fusers/UncommonModFuser",
+        "/Lotus/Upgrades/Mods/Fusers/RareModFuser",
+        "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser",
+        "/Lotus/Upgrades/Modules/GrineerMeleeModule",
+        "/Lotus/Upgrades/Modules/GrineerPistolModule",
+        "/Lotus/Upgrades/Modules/GrineerRifleModule",
+        "/Lotus/Upgrades/Modules/GrineerShotgunModule",
+        "/Lotus/Upgrades/Modules/OrokinWarframeModule",
+        "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod"
+    ].forEach(path => modsAll.delete(path));
 
     revalidateAuthz().then(() => {
         getInventoryData().then(data => {

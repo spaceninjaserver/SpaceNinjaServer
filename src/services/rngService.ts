@@ -18,6 +18,10 @@ export const getRandomInt = (min: number, max: number): number => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+export const getRandomFloat = (min: number, max: number, decimals = 9): number => {
+    return Number((Math.random() * (max - min) + min).toFixed(decimals));
+};
+
 export const generateRewardSeed = (): bigint => {
     const hiDword = getRandomInt(0, 0x7fffffff);
     const loDword = getRandomInt(0, 0xffffffff);

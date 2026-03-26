@@ -19,12 +19,13 @@ import {
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { IPendingRecipeDatabase } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { fromOid, toOid2, version_compare } from "../../helpers/inventoryHelpers.ts";
+import { fromOid, toOid2, U5ToModernRecipes, version_compare } from "../../helpers/inventoryHelpers.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
 import type { IRecipe } from "warframe-public-export-plus";
 import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
 import { EquipmentFeatures, Status } from "../../types/equipmentTypes.ts";
 import { pseudoRecipeToOwnedRecipeMap } from "../../services/foundryService.ts";
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 interface IClaimCompletedRecipeRequest {
     RecipeIds?: IOidWithLegacySupport[]; // U24.4 and beyond
@@ -86,7 +87,11 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
             throw new Error(`recipe list from request was undefined?`);
         }
     } else {
-        const recipeName = String(req.query.recipeName); // U8
+        let recipeName = String(req.query.recipeName); // U8
+        if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["7.3.0"]) < 0) {
+            const modernItemType = U5ToModernRecipes[recipeName];
+            if (modernItemType) recipeName = modernItemType;
+        }
         const pendingRecipe = inventory.PendingRecipes.find(r => r.ItemType == recipeName);
         if (!pendingRecipe) {
             throw new Error(`no pending recipe found with ItemType ${recipeName}`);

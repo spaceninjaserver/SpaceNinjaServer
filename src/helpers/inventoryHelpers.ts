@@ -339,3 +339,47 @@ export const kubrowDetails: TTraitsPool = {
 
     Tails: []
 };
+
+export const modernToU5Recipes: Record<string, string> = {
+    "/Lotus/Types/Recipes/Weapons/CeramicDaggerBlueprint": "/Lotus/Types/Recipes/Weapons/CeramicDaggeBlueprint",
+    "/Lotus/Types/Recipes/Weapons/DarkDaggerBlueprint": "/Lotus/Types/Recipes/Weapons/DarkDaggeBlueprint",
+    "/Lotus/Types/Recipes/Weapons/HeatDaggerBlueprint": "/Lotus/Types/Recipes/Weapons/HeatDaggeBlueprint"
+};
+
+export const U5ToModernRecipes: Record<string, string> = Object.fromEntries(
+    Object.entries(modernToU5Recipes).map(([modern, U5]) => [U5, modern])
+);
+
+export const U5Recipes = [
+    "/Lotus/Types/Recipes/KevinTestRecipe",
+    "/Lotus/Types/Recipes/CronusBlueprint",
+    "/Lotus/Types/Recipes/IncendiaryRifleModBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/AshBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/AshChassisBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/AshHelmetBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/AshSystemsBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/EmberBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/EmberChassisBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/EmberHelmetBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/EmberSystemsBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/RhinoBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/RhinoChassisBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/RhinoHelmetBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/RhinoSystemsBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/TrinityBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/TrinityChassisBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/TrinityHelmetBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/TrinitySystemsBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/MagBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/MagChassisBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/MagHelmetBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/MagSystemsBlueprint",
+    "/Lotus/Types/Recipes/Weapons/CeramicDaggeBlueprint",
+    "/Lotus/Types/Recipes/Weapons/DarkDaggeBlueprint",
+    "/Lotus/Types/Recipes/Weapons/HeatDaggeBlueprint",
+    "/Lotus/Types/Recipes/Weapons/HeatSwordBlueprint",
+    "/Lotus/Types/Recipes/Weapons/JawBlueprint",
+    "/Lotus/Types/Recipes/Weapons/PangolinSwordBlueprint",
+    "/Lotus/Types/Recipes/Weapons/PlasmaSwordBlueprint",
+    "/Lotus/Types/Recipes/DarkSwordBlueprint"
+];

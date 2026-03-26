@@ -33,7 +33,14 @@ import { InventorySlot, equipmentKeys } from "../types/inventoryTypes/inventoryT
 import type { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate.ts";
 import type { IKeyChainRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes.ts";
 import { logger } from "../utils/logger.ts";
-import { convertInboxMessage, fromStoreItem, getKeyChainItems } from "./itemDataService.ts";
+import {
+    convertInboxMessage,
+    fromStoreItem,
+    getKeyChainItems,
+    supplementalRecipes,
+    U5ModsWeights,
+    U5Modules
+} from "./itemDataService.ts";
 import type { IFlavourItem, IItemConfig, IItemConfigDatabase } from "../types/inventoryTypes/commonInventoryTypes.ts";
 import type { IDefaultUpgrade, IPowersuit, ISentinel, TStandingLimitBin } from "warframe-public-export-plus";
 import {
@@ -74,7 +81,14 @@ import {
 import { addQuestKey, completeQuest } from "./questService.ts";
 import { handleBundleAcquisition } from "./purchaseService.ts";
 import libraryDailyTasks from "../../static/fixed_responses/libraryDailyTasks.json" with { type: "json" };
-import { generateRewardSeed, getRandomElement, getRandomInt, getRandomWeightedReward, SRng } from "./rngService.ts";
+import {
+    generateRewardSeed,
+    getRandomElement,
+    getRandomFloat,
+    getRandomInt,
+    getRandomWeightedReward,
+    SRng
+} from "./rngService.ts";
 import type { IMessageCreationTemplate } from "./inboxService.ts";
 import { createMessage } from "./inboxService.ts";
 import { getMaxStanding, getMinStanding } from "../helpers/syndicateStandingHelper.ts";
@@ -483,7 +497,7 @@ export const addItem = async (
     }
 
     // Strict typing
-    if (typeName in ExportRecipes) {
+    if (typeName in ExportRecipes || typeName in supplementalRecipes) {
         const recipeChanges = [
             {
                 ItemType: typeName,
@@ -625,11 +639,35 @@ export const addItem = async (
     if (
         typeName in ExportUpgrades ||
         typeName in ExportArcanes ||
+        typeName in U5Modules ||
         (typeName.startsWith("/Lotus/Upgrades/Mods/") && // Fusion Core, Legendary Core
             !typeName.startsWith("/Lotus/Upgrades/Mods/FusionBundles/")) ||
         typeName.startsWith("/Lotus/Upgrades/CosmeticEnhancers/") || // Traumatic Peculiar
         (typeName.endsWith("AbilityCard") && typeName.startsWith("/Lotus/Powersuits/"))
     ) {
+        if (!targetFingerprint && typeName in U5Modules) {
+            const meta = U5Modules[typeName];
+            const equipment = getRandomWeightedReward(meta.fits, U5ModsWeights)!;
+            const upgrades = [];
+            {
+                const rolledUpgrade = getRandomWeightedReward(meta.upgrades, U5ModsWeights)!;
+                const rolledRarity = getRandomWeightedReward(
+                    (["COMMON", "UNCOMMON", "RARE"] as const).map(rarity => ({ rarity })),
+                    U5ModsWeights
+                )!.rarity;
+                const valueRange = rolledUpgrade.ValueRanges[rolledRarity];
+                upgrades.push({
+                    upgrade: rolledUpgrade.UpgradeType,
+                    valueRarity: rolledRarity,
+                    value: getRandomFloat(valueRange[0], valueRange[1]) * (equipment.StatAtten || 1)
+                });
+            }
+            targetFingerprint = JSON.stringify({
+                reqLevel: getRandomInt(0, 30),
+                fits: equipment.Type,
+                upgrades: upgrades
+            });
+        }
         if (targetFingerprint && typeName.startsWith("/Lotus/Upgrades/Mods/Randomized/Raw")) {
             logger.debug(`ignoring fingerprint for raw riven mod`);
         } else if (targetFingerprint && targetFingerprint != `{"lvl":0}`) {
@@ -1148,16 +1186,7 @@ export const addItem = async (
                     }
                     break;
                 case "Keys":
-                    if (typeName.endsWith("Blueprint")) {
-                        const recipeChanges = [
-                            {
-                                ItemType: typeName,
-                                ItemCount: quantity
-                            } satisfies ITypeCount
-                        ];
-                        addRecipes(inventory, recipeChanges);
-                        return { Recipes: recipeChanges };
-                    } else if (typeName.endsWith("Key") || typeName.substring(1).split("/")[3] == "RaidKeys") {
+                    if (typeName.endsWith("Key") || typeName.substring(1).split("/")[3] == "RaidKeys") {
                         const levelKeyChanges = [{ ItemType: typeName, ItemCount: quantity }];
                         addLevelKeys(inventory, levelKeyChanges);
                         return { LevelKeys: levelKeyChanges };
