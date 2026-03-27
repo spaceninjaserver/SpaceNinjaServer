@@ -218,6 +218,13 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
             resp.platformCDNs = [`${myUrlBase}/`];
         }
     }
+    if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0) {
+        resp.Token =
+            Math.trunc(Date.now() / 1000)
+                .toString(16)
+                .padStart(16, "0") + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        resp.TokenTTL = 999999999999999;
+    }
 
     let raw = JSON.stringify(resp);
     if (

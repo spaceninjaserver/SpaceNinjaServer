@@ -74,6 +74,8 @@ export interface ILoginResponse extends IAccountAndLoginResponseCommons {
     SteamId?: string;
     AmazonAuthToken?: string;
     AmazonRefreshToken?: string;
+    Token?: string;
+    TokenTTL?: number;
 }
 
 export interface IGroup {
