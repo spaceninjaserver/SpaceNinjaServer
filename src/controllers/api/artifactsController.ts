@@ -1,13 +1,10 @@
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
-import type {
-    IInventoryClient,
-    IUpgradeClient,
-    IUpgradeFromClient
-} from "../../types/inventoryTypes/inventoryTypes.ts";
+import type { IUpgradeClient, IUpgradeFromClient } from "../../types/inventoryTypes/inventoryTypes.ts";
 import {
     addFusionPoints,
+    addMiscItem,
     addMods,
     CurrencyType,
     getInventory,
@@ -33,11 +30,16 @@ export const artifactsController: RequestHandler = async (req, res) => {
         version_compare(account.BuildLabel, gameToBuildVersion["18.18.0"]) >= 0
     ) {
         const safeUpgradeFingerprint = UpgradeFingerprint || '{"lvl":0}';
-        const parsedUpgradeFingerprint = JSON.parse(safeUpgradeFingerprint) as { lvl: number };
+        const parsedUpgradeFingerprint = JSON.parse(safeUpgradeFingerprint) as { lvl: number; variant?: number };
         parsedUpgradeFingerprint.lvl += LevelDiff;
+        if (artifactsData.VariantFusion !== undefined) {
+            parsedUpgradeFingerprint.variant = artifactsData.VariantFusion;
+            addMiscItem(inventory, "/Lotus/Types/Items/MiscItems/FoilModUnlocker", -1);
+        }
         const stringifiedUpgradeFingerprint = JSON.stringify(parsedUpgradeFingerprint);
 
-        let itemIndex = Upgrades.findIndex(upgrade => upgrade._id.equals(fromOid(ItemId)));
+        const itemId = fromOid(ItemId);
+        let itemIndex = Upgrades.findIndex(upgrade => upgrade._id.equals(itemId));
 
         if (itemIndex !== -1) {
             Upgrades[itemIndex].UpgradeFingerprint = stringifiedUpgradeFingerprint;
@@ -65,13 +67,7 @@ export const artifactsController: RequestHandler = async (req, res) => {
             ]);
         }
 
-        const changedInventory = (await inventory.save()).toJSON<IInventoryClient>();
-        const itemId =
-            changedInventory.Upgrades[itemIndex].ItemId.$oid ?? changedInventory.Upgrades[itemIndex].ItemId.$id;
-
-        if (!itemId) {
-            throw new Error("Item Id not found in upgradeMod");
-        }
+        await inventory.save();
 
         res.send(itemId);
     } else {
@@ -140,4 +136,5 @@ interface IArtifactsRequest {
     LegendaryFusion?: boolean;
     Fingerprint?: string;
     Consumed?: IUpgradeFromClient[];
+    VariantFusion?: number;
 }
