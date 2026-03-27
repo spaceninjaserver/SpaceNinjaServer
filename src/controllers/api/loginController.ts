@@ -164,8 +164,14 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
         resp.CountryCode = account.CountryCode;
     } else {
         // U12 and down
-        resp.NatHash =
-            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+        // The NatHash is a 64 byte (128 hexit) value which was presumably used for NRS authentication.
+        // (OpenWF-specific) We can use this to smuggle custom data like the username to NRS.
+        resp.NatHash = Array.from(new TextEncoder().encode("OWF1" + account.DisplayName))
+            .map(byte => byte.toString(16).padStart(2, "0"))
+            .join("")
+            .padEnd(128, "0");
+
         if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0) {
             resp.SteamId = "0"; // U5 no likey
         }
