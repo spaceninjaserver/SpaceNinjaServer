@@ -32,7 +32,7 @@ dict = {
     code_ancientFusionCoreUncommon: `Antiker Fusionskern (Ungewöhnlich)`,
     code_ancientFusionCoreRare: `Antiker Fusionskern (Selten)`,
     code_U5Mod: `|TYPE|-Mod`,
-    code_infernoMod: `[UNTRANSLATED] Inferno Mod`,
+    code_infernoMod: `Hitze-Mod`,
     code_legendaryCore: `Legendärer Kern`,
     code_traumaticPeculiar: `Kuriose Mod: Traumatisch`,
     code_starter: `|MOD| (Defekt)`,
