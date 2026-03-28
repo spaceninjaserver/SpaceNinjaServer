@@ -1,6 +1,6 @@
 import { addString } from "../../helpers/stringHelpers.ts";
-import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { addChallenges, getInventory } from "../../services/inventoryService.ts";
+import { getAccountForRequest, getAccountIdForRequest } from "../../services/loginService.ts";
 import { addFixedLevelRewards } from "../../services/missionInventoryUpdateService.ts";
 import { handleStoreItemAcquisition } from "../../services/purchaseService.ts";
 import type { IMissionReward } from "../../types/missionTypes.ts";
@@ -8,6 +8,7 @@ import type { RequestHandler } from "express";
 import { ExportRegions } from "warframe-public-export-plus";
 
 export const completeAllMissionsController: RequestHandler = async (req, res) => {
+    const account = await getAccountForRequest(req);
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId);
     const MissionRewards: IMissionReward[] = [];
@@ -34,6 +35,70 @@ export const completeAllMissionsController: RequestHandler = async (req, res) =>
     for (const reward of MissionRewards) {
         await handleStoreItemAcquisition(reward.StoreItem, inventory, reward.ItemCount, undefined, true);
     }
+    await addChallenges(
+        account,
+        inventory,
+        [
+            {
+                Progress: 1,
+                Name: `KillPhorid`
+            },
+            {
+                Progress: 1,
+                Name: `SaviourOfCeres`
+            },
+            {
+                Progress: 1,
+                Name: `SaviourOfEarth`
+            },
+            {
+                Progress: 1,
+                Name: `SaviourOfEuropa`
+            },
+            {
+                Progress: 1,
+                Name: `SaviourOfJupiter`
+            },
+            {
+                Progress: 1,
+                Name: `SaviourOfMars`
+            },
+            {
+                Progress: 1,
+                Name: `SaviourOfMercury`
+            },
+            {
+                Progress: 1,
+                Name: `SaviourOfNeptune`
+            },
+            {
+                Progress: 1,
+                Name: `SaviourOfPhobos`
+            },
+            {
+                Progress: 1,
+                Name: `SaviourOfPluto`
+            },
+            {
+                Progress: 1,
+                Name: `SaviourOfSaturn`
+            },
+            {
+                Progress: 1,
+                Name: `SaviourOfSedna`
+            },
+            {
+                Progress: 1,
+                Name: `SaviourOfUranus`
+            },
+            {
+                Progress: 1,
+                Name: `SaviourOfVenus`
+            }
+        ],
+        [],
+        {}
+    );
     addString(inventory.NodeIntrosCompleted, "TeshinHardModeUnlocked");
     addString(inventory.NodeIntrosCompleted, "CetusInvasionNodeIntro");
     addString(inventory.NodeIntrosCompleted, "CetusSyndicate_IntroJob");
