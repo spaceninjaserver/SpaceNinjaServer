@@ -20,7 +20,7 @@ export const getTokenForClient = (clientAddress: string): string => {
 export const getTunablesForClient = (clientAddress: string, reflexiveAddress: string): ITunables => {
     const tunables: ITunables = {
         // To successfully update the NRS address for pre-U15.14 clients, this needs to be set before login.
-        nrs: (config.nrsAddress || "%THIS_MACHINE%").split("%THIS_MACHINE%").join(reflexiveAddress),
+        nrs: ((config.nrsAddresses ?? [])[0] || "%THIS_MACHINE%").split("%THIS_MACHINE%").join(reflexiveAddress),
 
         // if (version_compare(buildLabel, gameToBuildVersion["16.5.5"]) < 0) {
         irc: (config.ircAddress || "%THIS_MACHINE%").split("%THIS_MACHINE%").join(reflexiveAddress)

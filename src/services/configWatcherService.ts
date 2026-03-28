@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-deprecated */
 import chokidar from "chokidar";
 import { logger } from "../utils/logger.ts";
 import {
@@ -87,6 +88,11 @@ export const validateConfig = (): void => {
         if (config.tunables) {
             delete config.tunables.udpProxyUpstream;
         }
+        modified = true;
+    }
+    if (config.nrsAddress) {
+        config.nrsAddresses = [config.nrsAddress];
+        delete config.nrsAddress;
         modified = true;
     }
     if (config.administratorNames) {

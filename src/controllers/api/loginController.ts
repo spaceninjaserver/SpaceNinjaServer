@@ -177,7 +177,7 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
         }
     }
     if (version_compare(buildLabel, gameToBuildVersion["15.14.1"]) >= 0) {
-        resp.NRS = [(config.nrsAddress || "%THIS_MACHINE%").split("%THIS_MACHINE%").join(myAddress)];
+        resp.NRS = (config.nrsAddresses ?? []).map(x => x.split("%THIS_MACHINE%").join(myAddress));
     }
     if (version_compare(buildLabel, gameToBuildVersion["16.5.5"]) >= 0) {
         resp.IRC = [(config.ircAddress || "%THIS_MACHINE%").split("%THIS_MACHINE%").join(myAddress)];

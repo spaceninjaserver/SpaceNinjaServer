@@ -28,10 +28,11 @@ export interface IConfig {
     ircExecutable?: string;
     ircAddress?: string;
     hubExecutable?: string;
-    hubAddress?: string;
+    /** @deprecated */ hubAddress?: string;
     hubServers?: IHubServer[];
     noHubDiscrimination?: boolean;
-    nrsAddress?: string;
+    /** @deprecated */ nrsAddress?: string;
+    nrsAddresses?: string[];
     dtls?: number;
     administratorNames?: string[];
     autoCreateAccount?: boolean;
@@ -287,13 +288,15 @@ export const getWebServerParams = (): IWebServerParams => {
     };
 };
 
-export const getNrsAddress = (): [string, number] => {
-    let nrsAddr = (config.nrsAddress || "%THIS_MACHINE%").split("%THIS_MACHINE%").join("127.0.0.1");
-    let nrsPort = 4950;
-    const colon = nrsAddr.indexOf(":");
-    if (colon != -1) {
-        nrsPort = parseInt(nrsAddr.substring(colon + 1));
-        nrsAddr = nrsAddr.substring(0, colon);
-    }
-    return [nrsAddr, nrsPort];
+export const getNrsAddresses = (): [string, number][] => {
+    return (config.nrsAddresses ?? []).map(nrsAddr => {
+        nrsAddr = nrsAddr.split("%THIS_MACHINE%").join("127.0.0.1");
+        let nrsPort = 4950;
+        const colon = nrsAddr.indexOf(":");
+        if (colon != -1) {
+            nrsPort = parseInt(nrsAddr.substring(colon + 1));
+            nrsAddr = nrsAddr.substring(0, colon);
+        }
+        return [nrsAddr, nrsPort];
+    });
 };

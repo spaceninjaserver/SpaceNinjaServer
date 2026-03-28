@@ -11,7 +11,7 @@
   "httpsCertFile": "static/cert/cert.pem",
   "httpsKeyFile": "static/cert/key.pem",
   "ircExecutable": null,
-  "ircAddress": null,
+  "ircAddress": "%THIS_MACHINE%",
   "hubExecutable": null,
   "hubServers": [
     {
@@ -21,7 +21,7 @@
     }
   ],
   "noHubDiscrimination": false,
-  "nrsAddress": null,
+  "nrsAddresses": [],
   "dtls": null,
   "administratorNames": [],
   "autoCreateAccount": true,
