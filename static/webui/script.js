@@ -2029,7 +2029,7 @@ function translateInventoryDataToDom() {
                                             abilityOverrideInput.value = options.find(
                                                 option =>
                                                     config.AbilityOverride.Ability == option.getAttribute("data-key")
-                                            ).value;
+                                            )?.value;
                                         }
                                         abilityOverrideInputGroup.appendChild(abilityOverrideInput);
 
@@ -4981,6 +4981,10 @@ function handleAbilityOverride(event, configIndex) {
     const urlParams = new URLSearchParams(window.location.search);
     const action = event.submitter.value;
     const Ability = getKey(document.getElementById(`abilityOverride-ability-config-${configIndex}`));
+    if (action == "set" && !Ability) {
+        $(`#abilityOverride-ability-config-${configIndex}`).addClass("is-invalid").focus();
+        return;
+    }
     const Index = document.getElementById(`abilityOverride-ability-index-config-${configIndex}`).value;
     revalidateAuthz().then(() => {
         $.post({

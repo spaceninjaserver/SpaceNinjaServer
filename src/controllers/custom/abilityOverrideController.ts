@@ -11,6 +11,9 @@ export const abilityOverrideController: RequestHandler = async (req, res) => {
         const inventory = await getInventory(accountId, request.category);
         const item = inventory[request.category].id(request.oid);
         if (item) {
+            while (item.Configs.length <= request.configIndex) {
+                item.Configs.push({});
+            }
             if (request.action == "set") {
                 item.Configs[request.configIndex].AbilityOverride = request.AbilityOverride;
             } else {
