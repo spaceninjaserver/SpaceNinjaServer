@@ -9,21 +9,27 @@ import { Account } from "../../models/loginModel.ts";
 export const getRecentPlayersController: RequestHandler = async (req, res): Promise<void> => {
     const account = await getAccountForRequest(req);
     const payload = getJSONfromString<IRecentPlayersPayload>(String(req.body));
-    const promises: Promise<void>[] = [];
+    const results: IFriendInfo[] = [];
     for (const info of payload.RecentPlayers) {
-        if (!fromOid(info._id)) {
-            // U18 may provide an empty $id but with a DisplayName for us to look us.
-            const otherAccount = await Account.findOne({ DisplayName: info.DisplayName }, "_id");
-            if (!otherAccount) {
-                continue;
+        try {
+            if (!fromOid(info._id)) {
+                // U18 may provide an empty $id but with a DisplayName for us to look us.
+                const otherAccount = await Account.findOne({ DisplayName: info.DisplayName }, "_id");
+                if (!otherAccount) {
+                    continue;
+                }
+                info._id = toOid2(otherAccount._id, account.BuildLabel);
             }
-            info._id = toOid2(otherAccount._id, account.BuildLabel);
+            await Promise.all([
+                addAccountDataToFriendInfo(info, account.BuildLabel),
+                addInventoryDataToFriendInfo(info)
+            ]);
+            results.push(info);
+        } catch (_) {
+            /* empty */
         }
-        promises.push(addAccountDataToFriendInfo(info, account.BuildLabel));
-        promises.push(addInventoryDataToFriendInfo(info));
     }
-    await Promise.all(promises);
-    res.json(payload);
+    res.json({ RecentPlayers: results });
 };
 
 interface IRecentPlayersPayload {

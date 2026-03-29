@@ -152,3 +152,10 @@ export const getUnicodeName = (account: TAccountDocument, buildLabel: string | u
     const platformId = getOriginalPlatform(account);
     return account.DisplayName + String.fromCharCode(0xe000 + platformId);
 };
+
+export const stripUnicodeSuffix = (name: string): string => {
+    if (name.charCodeAt(name.length) >= 0xe000) {
+        name = name.substring(0, name.length - 1);
+    }
+    return name;
+};
