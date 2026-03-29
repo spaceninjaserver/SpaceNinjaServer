@@ -91,7 +91,7 @@ export const validateConfig = (): void => {
         modified = true;
     }
     if (config.nrsAddress) {
-        config.nrsAddresses = [config.nrsAddress];
+        config.nrsAddresses = Array.isArray(config.nrsAddress) ? config.nrsAddress : [config.nrsAddress];
         delete config.nrsAddress;
         modified = true;
     }
