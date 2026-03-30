@@ -38,7 +38,7 @@ export const artifactsController: RequestHandler = async (req, res) => {
         }
         const stringifiedUpgradeFingerprint = JSON.stringify(parsedUpgradeFingerprint);
 
-        const itemId = fromOid(ItemId);
+        let itemId = fromOid(ItemId);
         let itemIndex = Upgrades.findIndex(upgrade => upgrade._id.equals(itemId));
 
         if (itemIndex !== -1) {
@@ -49,6 +49,7 @@ export const artifactsController: RequestHandler = async (req, res) => {
                     UpgradeFingerprint: stringifiedUpgradeFingerprint,
                     ItemType
                 }) - 1;
+            itemId = Upgrades[itemIndex]._id.toString();
 
             addMods(inventory, [{ ItemType, ItemCount: -1 }]);
         }
