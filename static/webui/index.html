@@ -41,6 +41,8 @@
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="/webui/" onclick="doLogout();" data-loc="navbar_logout"></a></li>
                     <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#" onclick="event.preventDefault();changeAccountPassword();" data-loc="navbar_changePassword"></a></li>
+                    <li><a class="dropdown-item" href="#" onclick="event.preventDefault();changeAccountEmail();" data-loc="navbar_changeEmail"></a></li>
                     <li><a class="dropdown-item" href="#" onclick="event.preventDefault();renameAccount();" data-loc="navbar_renameAccount"></a></li>
                     <li><a class="dropdown-item" href="#" onclick="event.preventDefault();deleteAccount();" data-loc="navbar_deleteAccount"></a></li>
                 </ul>
@@ -917,7 +919,7 @@
                     </div>
                 </div>
             </div>
-            <div data-route="/webui/cheats, /webui/settings" data-title-tag="navbar_cheats">
+            <div data-route="/webui/cheats" data-title-tag="navbar_cheats">
                 <div class="row g-3">
                     <div class="col-md-6">
                         <div class="card">

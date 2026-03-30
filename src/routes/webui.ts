@@ -38,7 +38,6 @@ const virtualRouteController: RequestHandler = async (_req, res) => {
 webuiRouter.get("/webui/inventory", virtualRouteController);
 webuiRouter.get("/webui/detailedView", virtualRouteController);
 webuiRouter.get("/webui/mods", virtualRouteController);
-webuiRouter.get("/webui/settings", virtualRouteController);
 webuiRouter.get("/webui/quests", virtualRouteController);
 webuiRouter.get("/webui/cheats", virtualRouteController);
 webuiRouter.get("/webui/import", virtualRouteController);

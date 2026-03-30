@@ -206,6 +206,103 @@ function deleteAccount() {
     }
 }
 
+function changeAccountPassword() {
+    const cur = window.prompt(loc("code_promptCurrentPassword"));
+    if (cur === null) {
+        return;
+    }
+    if (!cur.length) {
+        toast(loc("settings_changeFailed"));
+        return;
+    }
+    const nw = window.prompt(loc("code_promptNewPassword"));
+    if (nw === null) {
+        return;
+    }
+    if (!nw.length) {
+        toast(loc("settings_changeFailed"));
+        return;
+    }
+    const cf = window.prompt(loc("code_promptConfirmNewPassword"));
+    if (cf === null) {
+        return;
+    }
+    if (nw !== cf) {
+        toast(loc("settings_passwordMismatch"));
+        return;
+    }
+    revalidateAuthz().then(() => {
+        fetch("/custom/changePassword?" + window.authz, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                currentPassword: wp.encSync(cur),
+                newPassword: wp.encSync(nw)
+            })
+        }).then(res => {
+            if (res.status == 200) {
+                localStorage.setItem("password", nw);
+                toast(loc("settings_passwordSuccess"));
+            } else if (res.status == 403) {
+                toast(loc("settings_wrongPassword"));
+            } else {
+                res.text().then(t => toast(t || loc("settings_changeFailed")));
+            }
+        });
+    });
+}
+
+function changeAccountEmail() {
+    const curPw = window.prompt(loc("code_promptEmailCurrentPassword"));
+    if (curPw === null) {
+        return;
+    }
+    if (!curPw.length) {
+        toast(loc("settings_changeFailed"));
+        return;
+    }
+    const currentHash = wp.encSync(curPw);
+    function promptAndSend(conflictEmail) {
+        const newEmailRaw = window.prompt(
+            `${conflictEmail ? loc("code_changeEmailRetry").replace("|EMAIL|", conflictEmail) + " " : ""}${loc("code_promptNewEmail")}`
+        );
+        if (newEmailRaw === null) {
+            return;
+        }
+        const newEmail = newEmailRaw.trim().toLowerCase();
+        if (!newEmail.length) {
+            toast(loc("settings_changeFailed"));
+            return;
+        }
+        if (!newEmail.includes("@")) {
+            toast(loc("settings_changeFailed"));
+            return;
+        }
+        revalidateAuthz().then(() => {
+            fetch("/custom/changeEmail?" + window.authz, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    currentPassword: currentHash,
+                    newEmail
+                })
+            }).then(res => {
+                if (res.status == 200) {
+                    localStorage.setItem("email", newEmail);
+                    toast(loc("settings_emailSuccess"));
+                } else if (res.status == 403) {
+                    toast(loc("settings_wrongPassword"));
+                } else if (res.status == 409) {
+                    promptAndSend(newEmail);
+                } else {
+                    res.text().then(t => toast(t || loc("settings_changeFailed")));
+                }
+            });
+        });
+    }
+    promptAndSend();
+}
+
 function updateTitle() {
     const tag = single.getCurrentRoute().elm.getAttribute("data-title-tag");
     if (tag) {

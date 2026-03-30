@@ -11,6 +11,8 @@ import { getAccountInfoController } from "../controllers/custom/getAccountInfoCo
 import { getGuildController } from "../controllers/custom/getGuildController.ts";
 import { getAllianceController } from "../controllers/custom/getAllianceController.ts";
 import { renameAccountController } from "../controllers/custom/renameAccountController.ts";
+import { changePasswordController } from "../controllers/custom/changePasswordController.ts";
+import { changeEmailController } from "../controllers/custom/changeEmailController.ts";
 import { ircDroppedController } from "../controllers/custom/ircDroppedController.ts";
 import { hubDroppedController } from "../controllers/custom/hubDroppedController.ts";
 import { unlockAllIntrinsicsController } from "../controllers/custom/unlockAllIntrinsicsController.ts";
@@ -107,6 +109,9 @@ customRouter.post("/setInvigoration", setInvigorationController);
 customRouter.post("/setUmbraEchoes", setUmbraEchoesController);
 customRouter.post("/setAccountCheat", setAccountCheatController);
 customRouter.post("/setGuildCheat", setGuildCheatController);
+
+customRouter.post("/changePassword", changePasswordController);
+customRouter.post("/changeEmail", changeEmailController);
 
 customRouter.post("/getConfig", getConfigController);
 customRouter.post("/setConfig", setConfigController);
