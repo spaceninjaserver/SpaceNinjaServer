@@ -2043,10 +2043,10 @@ function translateInventoryDataToDom() {
                                         abilityOverrideSecondInput.id = `abilityOverride-ability-index-config-${i}`;
                                         abilityOverrideSecondInput.classList = "form-control";
                                         abilityOverrideSecondInput.setAttribute("type", "number");
-                                        abilityOverrideSecondInput.setAttribute("min", "0");
-                                        abilityOverrideSecondInput.setAttribute("max", "3");
+                                        abilityOverrideSecondInput.setAttribute("min", "1");
+                                        abilityOverrideSecondInput.setAttribute("max", "4");
                                         if (config.AbilityOverride)
-                                            abilityOverrideSecondInput.value = config.AbilityOverride.Index;
+                                            abilityOverrideSecondInput.value = config.AbilityOverride.Index + 1;
                                         abilityOverrideInputGroup.appendChild(abilityOverrideSecondInput);
 
                                         const abilityOverrideSetButton = document.createElement("button");
@@ -4985,7 +4985,9 @@ function handleAbilityOverride(event, configIndex) {
         $(`#abilityOverride-ability-config-${configIndex}`).addClass("is-invalid").focus();
         return;
     }
-    const Index = document.getElementById(`abilityOverride-ability-index-config-${configIndex}`).value;
+    const input = document.getElementById(`abilityOverride-ability-index-config-${configIndex}`);
+    if (!input.value) return;
+    const Index = input.value - 1;
     revalidateAuthz().then(() => {
         $.post({
             url: "/custom/abilityOverride?" + window.authz,
@@ -5001,6 +5003,7 @@ function handleAbilityOverride(event, configIndex) {
                 }
             })
         }).done(function () {
+            toast(loc("code_succChange"));
             updateInventory();
         });
     });
