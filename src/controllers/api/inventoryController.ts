@@ -42,6 +42,7 @@ import {
     fromOid,
     modernToU5Recipes,
     toLegacyOid,
+    toMongoDate2,
     toOid,
     toOid2,
     U5Recipes,
@@ -614,18 +615,17 @@ export const getInventoryResponse = async (
                             }
                         }
                     }
-
                     for (const item of inventoryResponse.WeaponSkins) {
                         toLegacyOid(item.ItemId);
                     }
-
                     for (const ship of inventoryResponse.Ships) {
                         toLegacyOid(ship.ItemId);
                     }
-
                     for (const item of inventoryResponse.RawUpgrades) {
                         if (item.LastAdded) toLegacyOid(item.LastAdded);
                     }
+                    // as well as a different date format
+                    inventoryResponse.NextRefill = toMongoDate2(inventory.NextRefill!, buildLabel);
 
                     if (version_compare(buildLabel, "2014.02.05.00.00") < 0) {
                         // Pre-U12 builds store mods in an array called Cards, and have no concept of RawUpgrades

@@ -1,5 +1,11 @@
 import type { Types } from "mongoose";
-import type { IOid, IMongoDate, IOidWithLegacySupport, ITypeCount } from "../commonTypes.ts";
+import type {
+    IOid,
+    IMongoDate,
+    IOidWithLegacySupport,
+    ITypeCount,
+    IMongoDateWithLegacySupport
+} from "../commonTypes.ts";
 import type {
     IColor,
     IItemConfig,
@@ -458,7 +464,7 @@ export interface IInventoryClient
     OperatorCustomizationSlotPurchases?: number;
     NemesisAbandonedRewards: string[];
     LastInventorySync?: IOid;
-    NextRefill?: IMongoDate;
+    NextRefill?: IMongoDateWithLegacySupport;
     FoundToday?: IMiscItem[]; // for Argon Crystals
     CustomMarkers?: ICustomMarkers[];
     //ActiveLandscapeTraps: any[];
