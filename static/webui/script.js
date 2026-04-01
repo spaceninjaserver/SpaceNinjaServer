@@ -4068,16 +4068,16 @@ document.querySelectorAll("#account-cheats .input-group").forEach(grp => {
         const input = btn.closest(".input-group").querySelector('input[type="number"]');
         if (!input) return;
         revalidateAuthz().then(() => {
-            const value = input.value;
+            const value = Math.min(Number(input.value), Number(input.max));
             $.post({
                 url: "/custom/setAccountCheat?" + window.authz,
                 contentType: "application/json",
                 data: JSON.stringify({
                     key: input.id,
-                    value: parseInt(value)
+                    value: value
                 })
             }).done(() => {
-                btn.value = value;
+                input.value = value;
             });
         });
     };
