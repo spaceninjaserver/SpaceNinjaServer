@@ -115,6 +115,14 @@ class KuvaLichManifestVersionSix extends KuvaLichManifestVersionFive {
     }
 }
 
+class KuvaLichManifestVersionSeven extends KuvaLichManifestVersionSix {
+    constructor() {
+        super();
+        this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/Melee/Ghoulsaw/KuvaGhoulSaw");
+        this.minBuild = gameToBuildVersion["42.0.0"];
+    }
+}
+
 class LawyerManifest implements INemesisManifest {
     weapons = [
         "/Lotus/Weapons/Corpus/LongGuns/CrpBriefcaseLauncher/CrpBriefcaseLauncher",
@@ -171,6 +179,14 @@ class LawyerManifestVersionFour extends LawyerManifestVersionThree {
     }
 }
 
+class LawyerManifestVersionFive extends LawyerManifestVersionFour {
+    constructor() {
+        super();
+        this.weapons.push("/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuanta");
+        this.minBuild = gameToBuildVersion["42.0.0"];
+    }
+}
+
 class InfestedLichManfest implements INemesisManifest {
     weapons = [];
     systemIndexes = [23];
@@ -193,10 +209,12 @@ const nemesisManifests: Record<string, INemesisManifest> = {
     "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionFour": new KuvaLichManifestVersionFour(),
     "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionFive": new KuvaLichManifestVersionFive(),
     "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionSix": new KuvaLichManifestVersionSix(),
+    "/Lotus/Types/Game/Nemesis/KuvaLich/KuvaLichManifestVersionSeven": new KuvaLichManifestVersionSeven(),
     "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifest": new LawyerManifest(),
     "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionTwo": new LawyerManifestVersionTwo(),
     "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionThree": new LawyerManifestVersionThree(),
     "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionFour": new LawyerManifestVersionFour(),
+    "/Lotus/Types/Enemies/Corpus/Lawyers/LawyerManifestVersionFive": new LawyerManifestVersionFive(),
     "/Lotus/Types/Enemies/InfestedLich/InfestedLichManifest": new InfestedLichManfest()
 };
 
