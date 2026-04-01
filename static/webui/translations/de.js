@@ -248,6 +248,7 @@ dict = {
     cheats_dontSubtractPurchasePlatinumCost: `Platinum beim Kauf nicht verbrauchen`,
     cheats_dontSubtractPurchaseItemCost: `Inhalte beim Kauf nicht verbrauchen`,
     cheats_dontSubtractPurchaseStandingCost: `Ansehen beim Kauf nicht verbrauchen`,
+    cheats_dontSubtractKuvaForRivens: `Kuva für Riven-Mods nicht verbrauchen`,
     cheats_dontSubtractVoidTraces: `Void-Spuren nicht verbrauchen`,
     cheats_dontSubtractConsumables: `Verbrauchsgüter (Ausrüstung) nicht verbrauchen`,
     cheats_dontSubtractKeys: `Schlüssel nicht verbrauchen`,

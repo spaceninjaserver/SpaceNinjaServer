@@ -248,6 +248,7 @@ dict = {
     cheats_dontSubtractPurchasePlatinumCost: `No restar costo en platino al comprar`,
     cheats_dontSubtractPurchaseItemCost: `No restar costo de ítem al comprar`,
     cheats_dontSubtractPurchaseStandingCost: `No restar costo en reputación al comprar`,
+    cheats_dontSubtractKuvaForRivens: `[UNTRANSLATED] Don't Subtract Kuva For Rivens`,
     cheats_dontSubtractVoidTraces: `No descontar vestigios del Vacío`,
     cheats_dontSubtractConsumables: `No restar consumibles`,
     cheats_dontSubtractKeys: `[UNTRANSLATED] Don't Subtract Keys`,

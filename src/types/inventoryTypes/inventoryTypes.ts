@@ -41,6 +41,7 @@ export const accountCheatBooleans = [
     "dontSubtractPurchasePlatinumCost",
     "dontSubtractPurchaseItemCost",
     "dontSubtractPurchaseStandingCost",
+    "dontSubtractKuvaForRivens",
     "dontSubtractVoidTraces",
     "dontSubtractConsumables",
     "dontSubtractKeys",

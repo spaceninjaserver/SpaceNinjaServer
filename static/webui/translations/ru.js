@@ -248,6 +248,7 @@ dict = {
     cheats_dontSubtractPurchasePlatinumCost: `Не вычитать стоимость Платины при покупке`,
     cheats_dontSubtractPurchaseItemCost: `Не вычитать стоимость предметов при покупке`,
     cheats_dontSubtractPurchaseStandingCost: `Не вычитать стоимость репутации при покупке`,
+    cheats_dontSubtractKuvaForRivens: `[UNTRANSLATED] Don't Subtract Kuva For Rivens`,
     cheats_dontSubtractVoidTraces: `Не вычитать количество Отголосков Бездны`,
     cheats_dontSubtractConsumables: `Не вычитать количество расходников`,
     cheats_dontSubtractKeys: `[UNTRANSLATED] Don't Subtract Keys`,

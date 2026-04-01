@@ -248,6 +248,7 @@ dict = {
     cheats_dontSubtractPurchasePlatinumCost: `购物时不减少白金花费`,
     cheats_dontSubtractPurchaseItemCost: `购物时不减少物品花费`,
     cheats_dontSubtractPurchaseStandingCost: `购物时不减少声望花费`,
+    cheats_dontSubtractKuvaForRivens: `[UNTRANSLATED] Don't Subtract Kuva For Rivens`,
     cheats_dontSubtractVoidTraces: `虚空光体无消耗`,
     cheats_dontSubtractConsumables: `消耗物品使用时无损耗`,
     cheats_dontSubtractKeys: `[UNTRANSLATED] Don't Subtract Keys`,

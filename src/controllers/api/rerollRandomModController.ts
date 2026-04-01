@@ -12,7 +12,7 @@ export const rerollRandomModController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const request = getJSONfromString<RerollRandomModRequest>(String(req.body));
     if ("ItemIds" in request) {
-        const inventory = await getInventory(account._id, "Upgrades MiscItems");
+        const inventory = await getInventory(account._id, "Upgrades MiscItems dontSubtractKuvaForRivens");
         const changes: IChange[] = [];
         let totalKuvaCost = 0;
         request.ItemIds.forEach(itemId => {
@@ -24,14 +24,16 @@ export const rerollRandomModController: RequestHandler = async (req, res) => {
                 );
             } else {
                 fingerprint.rerolls ??= 0;
-                const kuvaCost = fingerprint.rerolls < rerollCosts.length ? rerollCosts[fingerprint.rerolls] : 3500;
-                totalKuvaCost += kuvaCost;
-                addMiscItems(inventory, [
-                    {
-                        ItemType: "/Lotus/Types/Items/MiscItems/Kuva",
-                        ItemCount: kuvaCost * -1
-                    }
-                ]);
+                if (!inventory.dontSubtractKuvaForRivens) {
+                    const kuvaCost = fingerprint.rerolls < rerollCosts.length ? rerollCosts[fingerprint.rerolls] : 3500;
+                    totalKuvaCost += kuvaCost;
+                    addMiscItems(inventory, [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/Kuva",
+                            ItemCount: kuvaCost * -1
+                        }
+                    ]);
+                }
 
                 fingerprint.rerolls++;
                 upgrade.UpgradeFingerprint = JSON.stringify(fingerprint);

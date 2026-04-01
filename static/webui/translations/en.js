@@ -247,6 +247,7 @@ dict = {
     cheats_dontSubtractPurchasePlatinumCost: `Don't Subtract Purchase Platinum Cost`,
     cheats_dontSubtractPurchaseItemCost: `Don't Subtract Purchase Item Cost`,
     cheats_dontSubtractPurchaseStandingCost: `Don't Subtract Purchase Standing Cost`,
+    cheats_dontSubtractKuvaForRivens: `Don't Subtract Kuva For Rivens`,
     cheats_dontSubtractVoidTraces: `Don't Subtract Void Traces`,
     cheats_dontSubtractConsumables: `Don't Subtract Consumables`,
     cheats_dontSubtractKeys: `Don't Subtract Keys`,
