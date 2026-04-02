@@ -1436,6 +1436,24 @@ export const getBoosterPack = (uniqueName: string, buildLabel: string = ""): IBo
         }
         return boosterPack;
     }
+    if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) < 0) {
+        if (
+            [
+                "/Lotus/Types/BoosterPacks/CommonFusionPack",
+                "/Lotus/Types/BoosterPacks/PremiumUncommonFusionPack",
+                "/Lotus/Types/BoosterPacks/PremiumRareFusionPack"
+            ].includes(uniqueName)
+        ) {
+            return {
+                ...ExportBoosterPacks[uniqueName],
+                components: [
+                    { Item: "/Lotus/Upgrades/Mods/Fusers/CommonModFuser", Rarity: "COMMON", Amount: 1 },
+                    { Item: "/Lotus/Upgrades/Mods/Fusers/UncommonModFuser", Rarity: "UNCOMMON", Amount: 1 },
+                    { Item: "/Lotus/Upgrades/Mods/Fusers/RareModFuser", Rarity: "RARE", Amount: 1 }
+                ]
+            };
+        }
+    }
 
     return ExportBoosterPacks[uniqueName];
 };
