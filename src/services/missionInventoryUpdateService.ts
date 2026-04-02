@@ -626,9 +626,9 @@ export const addMissionInventoryUpdates = async (
                 break;
             }
             case "KubrowPetEggs": {
-                for (const egg of value) {
+                for (let i = 0; i != value.length; ++i) {
                     inventory.KubrowPetEggs.push({
-                        ItemType: egg.ItemType,
+                        ItemType: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg",
                         _id: new Types.ObjectId()
                     });
                 }
