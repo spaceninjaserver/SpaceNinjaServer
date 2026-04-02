@@ -292,6 +292,7 @@ dict = {
     cheats_addMissingDangerRooms: `[UNTRANSLATED] Add Missing Simulacrum Scenes`,
     cheats_disableDailyTribute: `Вимкнути щоденні нагороди`,
     cheats_spoofMasteryRank: `Підроблений ранг майстерності (-1 для вимкнення)`,
+    cheats_dailyTributeRewardMultiplier: `[UNTRANSLATED] Daily Tribute Reward Multiplier`,
     cheats_relicRewardItemCountMultiplier: `Множник кількості предметів нагороди реліквії`,
     cheats_nightwaveStandingMultiplier: `Множник репутації Нічної хвилі`,
     cheats_save: `Зберегти`,

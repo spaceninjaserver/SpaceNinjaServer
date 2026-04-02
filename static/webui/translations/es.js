@@ -292,6 +292,7 @@ dict = {
     cheats_addMissingDangerRooms: `[UNTRANSLATED] Add Missing Simulacrum Scenes`,
     cheats_disableDailyTribute: `Desactivar tributo diario`,
     cheats_spoofMasteryRank: `Rango de maestría simulado (-1 para desactivar)`,
+    cheats_dailyTributeRewardMultiplier: `[UNTRANSLATED] Daily Tribute Reward Multiplier`,
     cheats_relicRewardItemCountMultiplier: `Multiplicador de cantidad de recompensas de reliquia`,
     cheats_nightwaveStandingMultiplier: `Multiplicador de Reputación de Onda Nocturna`,
     cheats_save: `Guardar`,

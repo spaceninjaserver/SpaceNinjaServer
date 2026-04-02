@@ -125,11 +125,22 @@ const getRandomLoginReward = (rng: SRng, day: number, inventory: TInventoryDatab
         //ItemType: "",
         StoreItemType: storeItemType,
         //ProductCategory: "Pistols",
-        Amount: reward.Duration ? 1 : Math.round(scaleAmount(day, reward.Amount, reward.ScalingMultiplier)),
+        Amount: reward.Duration
+            ? 1
+            : Math.round(
+                  scaleAmount(day, reward.Amount, reward.ScalingMultiplier) *
+                      (inventory.dailyTributeRewardMultiplier ?? 1)
+              ),
         ScalingMultiplier: reward.ScalingMultiplier,
         //Durability: "COMMON",
         //DisplayName: "",
-        Duration: reward.Duration ? Math.round(reward.Duration * scaleAmount(day, 1, reward.ScalingMultiplier)) : 0,
+        Duration: reward.Duration
+            ? Math.round(
+                  reward.Duration *
+                      scaleAmount(day, 1, reward.ScalingMultiplier) *
+                      (inventory.dailyTributeRewardMultiplier ?? 1)
+              )
+            : 0,
         //CouponSku: 0,
         //Rarity: 0,
         Transmission: reward.Transmission

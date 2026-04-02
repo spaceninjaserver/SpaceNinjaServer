@@ -292,6 +292,7 @@ dict = {
     cheats_addMissingDangerRooms: `Ajouter les simulacres manquants`,
     cheats_disableDailyTribute: `Désactiver la récompense quotidienne de connexion`,
     cheats_spoofMasteryRank: `Rang de maîtrise personnalisé (-1 pour désactiver)`,
+    cheats_dailyTributeRewardMultiplier: `[UNTRANSLATED] Daily Tribute Reward Multiplier`,
     cheats_relicRewardItemCountMultiplier: `Multiplicateur de récompenses de relique`,
     cheats_nightwaveStandingMultiplier: `Multiplicateur de réputation des Ondes Nocturnes`,
     cheats_save: `Sauvegarder`,

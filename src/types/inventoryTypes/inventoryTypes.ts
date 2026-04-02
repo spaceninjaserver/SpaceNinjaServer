@@ -86,6 +86,7 @@ export const accountCheatNumbers = [
     "nemesisHintProgressMultiplierCorpus",
     "nemesisExtraWeapon",
     "spoofMasteryRank",
+    "dailyTributeRewardMultiplier",
     "relicRewardItemCountMultiplier",
     "nightwaveStandingMultiplier"
 ] as const;

@@ -1597,6 +1597,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         nemesisHintProgressMultiplierCorpus: Number,
         nemesisExtraWeapon: Number,
         spoofMasteryRank: Number,
+        dailyTributeRewardMultiplier: Number,
         relicRewardItemCountMultiplier: Number,
         nightwaveStandingMultiplier: Number,
 

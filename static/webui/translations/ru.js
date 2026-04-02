@@ -292,6 +292,7 @@ dict = {
     cheats_addMissingDangerRooms: `Добавить отсутвующие сцены Симулякрума`,
     cheats_disableDailyTribute: `Отключить ежедневные награды`,
     cheats_spoofMasteryRank: `Поддельный ранг мастерства (-1 для отключения)`,
+    cheats_dailyTributeRewardMultiplier: `[UNTRANSLATED] Daily Tribute Reward Multiplier`,
     cheats_relicRewardItemCountMultiplier: `Мультипликатор количества предметов награды реликвии`,
     cheats_nightwaveStandingMultiplier: `Мультипликатор репутации Ночной волны`,
     cheats_save: `Сохранить`,
