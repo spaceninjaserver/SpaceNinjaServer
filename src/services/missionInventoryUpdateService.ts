@@ -2314,20 +2314,117 @@ function getRandomMissionDrops(
         }
 
         if (RewardInfo.nightmareMode) {
-            const deck = ExportRewards["/Lotus/Types/Game/MissionDecks/NightmareModeRewards"];
-            let rotation = 0;
+            // Pre-U19 nightmare mode used a single combined pool without A/B/C rotations
+            // In U19, Chilling Reload, Drifting Contact, and Streamlined Form were added
+            // and the rewards were split into A/B/C pools
+            if (account.BuildLabel && version_compare(account.BuildLabel, "2016.10.27.13.03") < 0) {
+                // In U19, they still had A/B/C probabilities, taken from wiki; all in one pool
+                const preU19Pool: IReward[] = [
+                    // 8.431%
+                    {
+                        type: "/Lotus/StoreItems/Upgrades/Mods/Pistol/DualStat/IceStormMod",
+                        itemCount: 1,
+                        probability: 0.08431
+                    }, // Ice Storm
+                    {
+                        type: "/Lotus/StoreItems/Upgrades/Mods/Pistol/DualStat/StunningSpeedMod",
+                        itemCount: 1,
+                        probability: 0.08431
+                    }, // Stunning Speed
+                    {
+                        type: "/Lotus/StoreItems/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+                        itemCount: 1,
+                        probability: 0.08431
+                    }, // Lethal Torrent
+                    {
+                        type: "/Lotus/StoreItems/Upgrades/Mods/Rifle/DualStat/WildfireMod",
+                        itemCount: 1,
+                        probability: 0.08431
+                    }, // Wildfire
+                    {
+                        type: "/Lotus/StoreItems/Upgrades/Mods/Rifle/DualStat/ShredMod",
+                        itemCount: 1,
+                        probability: 0.08431
+                    }, // Shred
+                    {
+                        type: "/Lotus/StoreItems/Upgrades/Mods/Shotgun/DualStat/AcceleratedBlastMod",
+                        itemCount: 1,
+                        probability: 0.08431
+                    }, // Accelerated Blast
+                    {
+                        type: "/Lotus/StoreItems/Upgrades/Mods/Warframe/DualStat/VigorMod",
+                        itemCount: 1,
+                        probability: 0.08431
+                    }, // Vigor
+                    {
+                        type: "/Lotus/StoreItems/Upgrades/Mods/Melee/DualStat/FocusEnergyMod",
+                        itemCount: 1,
+                        probability: 0.08431
+                    }, // Focus Energy
+                    {
+                        type: "/Lotus/StoreItems/Upgrades/Mods/Shotgun/DualStat/ReloadSpeedPunchThroughMod",
+                        itemCount: 1,
+                        probability: 0.08431
+                    }, // Seeking Fury
+                    // 5.527%
+                    {
+                        type: "/Lotus/StoreItems/Upgrades/Mods/Warframe/DualStat/ConstitutionMod",
+                        itemCount: 1,
+                        probability: 0.05527
+                    }, // Constitution
+                    {
+                        type: "/Lotus/StoreItems/Upgrades/Mods/Warframe/DualStat/FortitudeMod",
+                        itemCount: 1,
+                        probability: 0.05527
+                    }, // Fortitude
+                    {
+                        type: "/Lotus/StoreItems/Upgrades/Mods/Melee/DualStat/RendingStrikeMod",
+                        itemCount: 1,
+                        probability: 0.05527
+                    }, // Rending Strike
+                    {
+                        type: "/Lotus/StoreItems/Upgrades/Mods/Sentinel/SentinelLootRadarEnemyRadarMod",
+                        itemCount: 1,
+                        probability: 0.05527
+                    }, // Animal Instinct
+                    // 0.671%
+                    {
+                        type: "/Lotus/StoreItems/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+                        itemCount: 1,
+                        probability: 0.00671
+                    }, // Hammer Shot
+                    {
+                        type: "/Lotus/StoreItems/Upgrades/Mods/Shotgun/DualStat/BlazeMod",
+                        itemCount: 1,
+                        probability: 0.00671
+                    }, // Blaze
+                    {
+                        type: "/Lotus/StoreItems/Upgrades/Mods/Warframe/DualStat/RunSpeedArmorMod",
+                        itemCount: 1,
+                        probability: 0.00671
+                    } // Armored Agility
+                ];
+                const drop = getRandomRewardByChance(preU19Pool);
+                if (drop) {
+                    drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount });
+                }
+            } else {
+                // U19+: A/B/C pool structure with rotations
+                const deck = ExportRewards["/Lotus/Types/Game/MissionDecks/NightmareModeRewards"];
+                let rotation = 0;
 
-            if (region.missionType == "MT_RESCUE" && RewardInfo.rewardTier) {
-                rotation = RewardInfo.rewardTier;
-            } else if ([6, 7, 8, 10, 11].includes(region.systemIndex)) {
-                rotation = 2;
-            } else if ([4, 9, 12, 14, 15, 16, 17, 18].includes(region.systemIndex)) {
-                rotation = 1;
-            }
+                if (region.missionType == "MT_RESCUE" && RewardInfo.rewardTier) {
+                    rotation = RewardInfo.rewardTier;
+                } else if ([6, 7, 8, 10, 11].includes(region.systemIndex)) {
+                    rotation = 2;
+                } else if ([4, 9, 12, 14, 15, 16, 17, 18].includes(region.systemIndex)) {
+                    rotation = 1;
+                }
 
-            const drop = getRandomRewardByChance(deck[rotation]);
-            if (drop) {
-                drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount });
+                const drop = getRandomRewardByChance(deck[rotation]);
+                if (drop) {
+                    drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount });
+                }
             }
         }
 
