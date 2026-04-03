@@ -77,6 +77,9 @@ export const inventoryController: RequestHandler = async (request, response) => 
         inventory.DailyFocus = 250000 + inventory.PlayerLevel * 5000;
         inventory.GiftsRemaining = Math.max(8, inventory.PlayerLevel);
         inventory.TradesRemaining = inventory.PlayerLevel;
+        if (inventory.Founder) {
+            inventory.TradesRemaining += 2;
+        }
 
         inventory.LibraryAvailableDailyTaskInfo = createLibraryDailyTask();
 
