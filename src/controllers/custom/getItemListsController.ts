@@ -334,17 +334,25 @@ const getItemListsController: RequestHandler = (req, response) => {
         });
     }
     for (const [uniqueName, item] of Object.entries(ExportCustoms)) {
-        if (
-            item.productCategory == "WeaponSkins" &&
-            !uniqueName.startsWith("/Lotus/Types/Game/Lotus") && // Base Items
-            !uniqueName.endsWith("ProjectileSkin") && // UnrealTournament ProjectileSkins
-            !uniqueName.endsWith("Coat") // Frost Prime stuff
-        ) {
-            res.WeaponSkins.push({
-                uniqueName: uniqueName,
-                name: getString(item.name, lang),
-                alwaysAvailable: item.alwaysAvailable
-            });
+        if (item.productCategory == "WeaponSkins") {
+            if (
+                !uniqueName.startsWith("/Lotus/Types/Game/Lotus") && // Base Items
+                !uniqueName.endsWith("ProjectileSkin") && // UnrealTournament ProjectileSkins
+                !uniqueName.endsWith("Coat") // Frost Prime stuff
+            ) {
+                res.WeaponSkins.push({
+                    uniqueName: uniqueName,
+                    name: getString(item.name, lang),
+                    alwaysAvailable: item.alwaysAvailable
+                });
+            }
+        } else /*if (item.productCategory == "CrewShipWeaponSkins")*/ {
+            if (!item.alwaysAvailable) {
+                res.miscitems.push({
+                    uniqueName: uniqueName,
+                    name: getString(item.name, lang)
+                });
+            }
         }
     }
 
