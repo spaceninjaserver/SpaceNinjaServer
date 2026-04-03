@@ -19,6 +19,7 @@ type TInnateDamageTag =
 
 export interface INemesisManifest {
     weapons: readonly string[];
+    weaponUpgradeValueAttenuationExponent: number;
     systemIndexes: readonly number[];
     showdownNode: string;
     ephemeraChance: number;
@@ -49,6 +50,7 @@ class KuvaLichManifest implements INemesisManifest {
         "/Lotus/Weapons/Grineer/HeavyWeapons/GrnHeavyGrenadeLauncher",
         "/Lotus/Weapons/Grineer/LongGuns/GrnKuvaLichRifle/GrnKuvaLichRifleWeapon"
     ];
+    weaponUpgradeValueAttenuationExponent = 2.25;
     systemIndexes = [2, 3, 9, 11, 18];
     showdownNode = "CrewBattleNode557";
     ephemeraChance = 0.05;
@@ -119,6 +121,7 @@ class KuvaLichManifestVersionSeven extends KuvaLichManifestVersionSix {
     constructor() {
         super();
         this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/Melee/Ghoulsaw/KuvaGhoulSaw");
+        this.weaponUpgradeValueAttenuationExponent = 1;
         this.minBuild = gameToBuildVersion["42.0.0"];
     }
 }
@@ -134,6 +137,7 @@ class LawyerManifest implements INemesisManifest {
         "/Lotus/Weapons/Corpus/Pistols/CrpIgniterPistol/CrpIgniterPistol",
         "/Lotus/Weapons/Corpus/Pistols/CrpBriefcaseAkimbo/CrpBriefcaseAkimboPistol"
     ];
+    weaponUpgradeValueAttenuationExponent = 2.25;
     systemIndexes = [1, 15, 4, 7, 8];
     showdownNode = "CrewBattleNode558";
     ephemeraChance = 0.2;
@@ -183,12 +187,14 @@ class LawyerManifestVersionFive extends LawyerManifestVersionFour {
     constructor() {
         super();
         this.weapons.push("/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuanta");
+        this.weaponUpgradeValueAttenuationExponent = 1;
         this.minBuild = gameToBuildVersion["42.0.0"];
     }
 }
 
 class InfestedLichManfest implements INemesisManifest {
     weapons = [];
+    weaponUpgradeValueAttenuationExponent = 1;
     systemIndexes = [23];
     showdownNode = "CrewBattleNode559";
     ephemeraChance = 0;
@@ -421,8 +427,7 @@ export const generateNemesisProfile = (
 ): INemesisProfile => {
     const rng = new SRng(fp);
     rng.randomFloat(); // used for the weapon index
-    const WeaponUpgradeValueAttenuationExponent = 2.25;
-    let value = Math.pow(rng.randomFloat(), WeaponUpgradeValueAttenuationExponent);
+    let value = Math.pow(rng.randomFloat(), manifest.weaponUpgradeValueAttenuationExponent);
     if (value >= 0.941428) {
         value = 1;
     }

@@ -741,8 +741,9 @@ export const addItem = async (
                     "InnateRadDamage",
                     "InnateToxinDamage"
                 ]);
-                const WeaponUpgradeValueAttenuationExponent = 2.25;
-                let value = Math.pow(rng.randomFloat(), WeaponUpgradeValueAttenuationExponent);
+                //const WeaponUpgradeValueAttenuationExponent = 2.25;
+                //let value = Math.pow(rng.randomFloat(), WeaponUpgradeValueAttenuationExponent);
+                let value = rng.randomFloat();
                 if (value >= 0.941428) {
                     value = 1;
                 }
