@@ -642,14 +642,17 @@ const playerSkillsSchema = new Schema<IPlayerSkills>(
     { _id: false }
 );
 
-const settingsSchema = new Schema<ISettings>({
-    FriendInvRestriction: String,
-    GiftMode: String,
-    GuildInvRestriction: String,
-    ShowFriendInvNotifications: Boolean,
-    TradingRulesConfirmed: Boolean,
-    SubscribedToSurveys: Boolean
-});
+const settingsSchema = new Schema<ISettings>(
+    {
+        FriendInvRestriction: String,
+        GiftMode: String,
+        GuildInvRestriction: String,
+        ShowFriendInvNotifications: Boolean,
+        TradingRulesConfirmed: Boolean,
+        SubscribedToSurveys: Boolean
+    },
+    { _id: false }
+);
 
 const consumedSchuitsSchema = new Schema<IConsumedSuit>(
     {
