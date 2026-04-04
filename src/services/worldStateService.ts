@@ -4094,11 +4094,11 @@ export const populateFissures = async (worldState: IWorldState): Promise<void> =
             for (const node of nodes) {
                 const meta = ExportRegions[node];
                 worldState.ActiveMissions.push({
-                    _id: { $oid: (i++).toString().padStart(8, "0") + "8e0c70ba050f1eb7" },
+                    _id: toOid2((i++).toString().padStart(8, "0") + "8e0c70ba050f1eb7", worldState.BuildLabel),
                     Region: meta.systemIndex + 1,
                     Seed: 1337,
-                    Activation: { $date: { $numberLong: "1000000000000" } },
-                    Expiry: { $date: { $numberLong: "2000000000000" } },
+                    Activation: toMongoDate2(1000000000000, worldState.BuildLabel),
+                    Expiry: toMongoDate2(2000000000000, worldState.BuildLabel),
                     Node: node,
                     MissionType: meta.missionType,
                     Modifier: tier,
@@ -4111,19 +4111,55 @@ export const populateFissures = async (worldState: IWorldState): Promise<void> =
         for (const fissure of fissures) {
             const meta = ExportRegions[fissure.Node];
             worldState.ActiveMissions.push({
-                _id: toOid(fissure._id),
+                _id: toOid2(fissure._id, worldState.BuildLabel),
                 Region: meta.systemIndex + 1,
                 Seed: 1337,
                 Activation:
                     fissure.Activation.getTime() < Date.now() // Activation is in the past?
-                        ? { $date: { $numberLong: "1000000000000" } } // Let the client know 'explicitly' to avoid interference from time constraints.
-                        : toMongoDate(fissure.Activation),
-                Expiry: toMongoDate(fissure.Expiry),
+                        ? toMongoDate2(1000000000000, worldState.BuildLabel) // Let the client know 'explicitly' to avoid interference from time constraints.
+                        : toMongoDate2(fissure.Activation, worldState.BuildLabel),
+                Expiry: toMongoDate2(fissure.Expiry, worldState.BuildLabel),
                 Node: fissure.Node,
                 MissionType: meta.missionType,
                 Modifier: fissure.Modifier,
                 Hard: fissure.Hard
             });
+        }
+    }
+    worldState.ActiveMissions = worldState.ActiveMissions.filter(fissure => {
+        const meta = ExportRegions[fissure.Node];
+        if (
+            (meta.faction == "FC_MITW" || fissure.Modifier == "VoidT6") &&
+            version_compare(worldState.BuildLabel, gameToBuildVersion["35.5.0"]) < 0
+        ) {
+            return false;
+        }
+        if (fissure.Hard && version_compare(worldState.BuildLabel, gameToBuildVersion["32.0.0"]) < 0) {
+            return false;
+        }
+        if (meta.systemIndex == 16 && version_compare(worldState.BuildLabel, gameToBuildVersion["29.0.0"]) < 0) {
+            return false;
+        }
+        if (fissure.Modifier == "VoidT5" && version_compare(worldState.BuildLabel, gameToBuildVersion["26.0.0"]) < 0) {
+            return false;
+        }
+        if (
+            fissure.MissionType == "MT_ARTIFACT" &&
+            version_compare(worldState.BuildLabel, gameToBuildVersion["25.7.0"]) < 0
+        ) {
+            return false;
+        }
+        if (
+            meta.systemIndex == 17 &&
+            version_compare(worldState.BuildLabel, gameToBuildVersion["18.0.2"]) < 0 // Should be 18.0.0
+        ) {
+            return false;
+        }
+        return true;
+    });
+    if (version_compare(worldState.BuildLabel, gameToBuildVersion["32.0.0"]) < 0) {
+        for (const fissure of worldState.ActiveMissions) {
+            delete fissure.Hard;
         }
     }
 };

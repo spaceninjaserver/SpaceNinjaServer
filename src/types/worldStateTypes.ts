@@ -228,11 +228,11 @@ export interface IInvasionMissionInfo {
 }
 
 export interface IFissure {
-    _id: IOid;
+    _id: IOidWithLegacySupport;
     Region: number;
     Seed: number;
-    Activation: IMongoDate;
-    Expiry: IMongoDate;
+    Activation: IMongoDateWithLegacySupport;
+    Expiry: IMongoDateWithLegacySupport;
     Node: string;
     MissionType: string;
     Modifier: string;
