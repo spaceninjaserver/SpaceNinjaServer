@@ -29,6 +29,7 @@ import { removeCustomizationController } from "../controllers/custom/removeCusto
 import { removeIsNewController } from "../controllers/custom/removeIsNewController.ts";
 import { removeItemsController } from "../controllers/custom/removeItemsController.ts";
 import { retroactivelyApplyCheatController } from "../controllers/api/retroactivelyApplyCheatController.ts";
+import { retroactivelyApplyGuildCheatController } from "../controllers/custom/retroactivelyApplyGuildCheatController.ts";
 
 import { abilityOverrideController } from "../controllers/custom/abilityOverrideController.ts";
 import { createAccountController } from "../controllers/custom/createAccountController.ts";
@@ -86,6 +87,7 @@ customRouter.get("/removeCustomization", removeCustomizationController);
 customRouter.get("/removeIsNew", removeIsNewController);
 customRouter.get("/removeItems", removeItemsController);
 customRouter.get("/retroactivelyApplyCheat", retroactivelyApplyCheatController);
+customRouter.get("/retroactivelyApplyGuildCheat", retroactivelyApplyGuildCheatController);
 
 customRouter.post("/abilityOverride", abilityOverrideController);
 customRouter.post("/createAccount", createAccountController);

@@ -41,8 +41,8 @@ export interface IGuildClient {
 // Fields specific to SNS
 export interface IGuildCheats {
     noDojoRoomBuildStage?: boolean;
-    noDojoDecoBuildStage?: boolean;
     fastDojoRoomDestruction?: boolean;
+    noDojoDecoBuildStage?: boolean;
     noDojoResearchCosts?: boolean;
     noDojoResearchTime?: boolean;
     fastClanAscension?: boolean;
@@ -217,7 +217,15 @@ export interface IDojoComponentSettings {
 
 export interface IDojoComponentDatabase extends Omit<
     IDojoComponentClient,
-    "id" | "SortId" | "pi" | "CompletionTime" | "DestructionTime" | "Decos" | "PaintBot"
+    | "id"
+    | "SortId"
+    | "pi"
+    | "CompletionTime"
+    | "TimeRemaining"
+    | "DestructionTime"
+    | "DestructionTimeRemaining"
+    | "Decos"
+    | "PaintBot"
 > {
     _id: Types.ObjectId;
     SortId?: Types.ObjectId;

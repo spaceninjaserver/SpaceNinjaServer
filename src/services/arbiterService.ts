@@ -1,4 +1,6 @@
+import { packHubDatagram } from "../helpers/udp.ts";
 import { config, type IHubServer } from "./configService.ts";
+import dgram from "node:dgram";
 
 export type TRegionId = "ASIA" | "OCEANIA" | "EUROPE" | "RUSSIA" | "NORTH_AMERICA" | "SOUTH_AMERICA";
 
@@ -37,4 +39,42 @@ export const pickHubServer = (regionId: TRegionId): IHubServer => {
         }
     }
     return bestServer;
+};
+
+export const broadcastControlMessages = (level: string, msgs: string[]): void => {
+    const instance = hubInstances[level] as IHubInstance | undefined;
+    if (instance) {
+        instance.Players += 1; // to account for the hubDropped that we will cause here
+
+        const [host, port] = instance.Hub.split("%THIS_MACHINE%").join("127.0.0.1").split(":");
+        const socket = dgram.createSocket("udp4");
+
+        socket.send(
+            packHubDatagram(
+                Buffer.concat([
+                    Buffer.from([0xb4, 0x03, 0x18, 0x00, 0x00, 0x00]),
+                    Buffer.from("000000000000000000000000", "utf8"),
+                    Buffer.alloc(8),
+                    Buffer.from([0x03, 0x00, 0x00, 0x00]),
+                    Buffer.from("SNS", "utf8"),
+                    Buffer.alloc(4),
+                    Buffer.from([level.length, 0x00, 0x00, 0x00]),
+                    Buffer.from(level, "utf8")
+                ])
+            ),
+            parseInt(port),
+            host
+        );
+        socket.once("message", msg => {
+            const peerId = msg.readUInt16LE(13);
+            for (const msg of msgs) {
+                const header = Buffer.alloc(8);
+                header.writeUInt8(0xb4, 0);
+                header.writeUInt8(0x07, 1);
+                header.writeUInt16LE(peerId, 2);
+                header.writeUInt32LE(msg.length, 4);
+                socket.send(packHubDatagram(Buffer.concat([header, Buffer.from(msg, "utf8")])), parseInt(port), host);
+            }
+        });
+    }
 };

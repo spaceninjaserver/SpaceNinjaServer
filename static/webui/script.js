@@ -4094,6 +4094,19 @@ document.querySelectorAll("#guild-cheats input[type=checkbox]").forEach(elm => {
                     key: elm.id,
                     value: elm.checked
                 })
+            }).done(res => {
+                if (res == "retroactivable") {
+                    if (window.confirm(loc("cheats_retroactivePrompt"))) {
+                        $.get(
+                            "/custom/retroactivelyApplyGuildCheat?" +
+                                window.authz +
+                                "&guildId=" +
+                                window.guildId +
+                                "&cheat=" +
+                                elm.id
+                        );
+                    }
+                }
             });
         });
     };
