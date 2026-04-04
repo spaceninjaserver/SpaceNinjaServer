@@ -184,7 +184,8 @@ export const inventoryController: RequestHandler = async (request, response) => 
         if (
             inventory.CalendarProgress!.Iteration != previousYearIteration &&
             inventory.DialogueHistory &&
-            inventory.DialogueHistory.Dialogues
+            inventory.DialogueHistory.Dialogues &&
+            !inventory.RetroDisableKissInboxMessage
         ) {
             let kalymos = false;
             for (const { dialogueName, kissEmail } of [

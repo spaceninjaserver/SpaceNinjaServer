@@ -1988,7 +1988,12 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         SpecialItemRewardAttenuation: { type: [rewardAttenutationSchema], default: undefined },
 
-        NokkoColony: { type: nokkoColonySchema, default: undefined }
+        NokkoColony: { type: nokkoColonySchema, default: undefined },
+
+        RetroWallpaperId: Number,
+        RetroFastTyping: Boolean,
+        RetroPlayAllConvos: Boolean,
+        RetroDisableKissInboxMessage: Boolean
     },
     { timestamps: { createdAt: "Created", updatedAt: false } }
 );

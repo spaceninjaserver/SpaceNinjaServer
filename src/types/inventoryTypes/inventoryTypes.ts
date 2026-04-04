@@ -507,6 +507,10 @@ export interface IInventoryClient
     ClaimedJunctionChallengeRewards?: string[]; // U39
     SpecialItemRewardAttenuation?: IRewardAttenuation[]; // Baro's Void Surplus
     NokkoColony?: INokkoColony; // Field Guide
+    RetroWallpaperId?: number;
+    RetroFastTyping?: boolean;
+    RetroPlayAllConvos?: boolean;
+    RetroDisableKissInboxMessage?: boolean;
 }
 
 export interface IAffiliation {
