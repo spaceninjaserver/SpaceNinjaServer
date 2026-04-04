@@ -610,7 +610,6 @@ const handleBoosterPackPurchase = async (
     buildLabel?: string
 ): Promise<IPurchaseResponse> => {
     const pack = getBoosterPack(typeName, buildLabel);
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!pack) {
         throw new Error(`unknown booster pack: ${typeName}`);
     }
