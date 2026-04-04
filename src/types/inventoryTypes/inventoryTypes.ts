@@ -91,8 +91,8 @@ export const accountCheatNumbers = [
     "nightwaveStandingMultiplier"
 ] as const;
 
-type TAccountCheatBooleanKey = (typeof accountCheatBooleans)[number];
-type TAccountCheatNumberKey = (typeof accountCheatNumbers)[number];
+export type TAccountCheatBooleanKey = (typeof accountCheatBooleans)[number];
+export type TAccountCheatNumberKey = (typeof accountCheatNumbers)[number];
 
 type IAccountCheatBooleans = {
     [_ in TAccountCheatBooleanKey]: boolean | undefined;
