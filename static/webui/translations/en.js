@@ -121,7 +121,6 @@ dict = {
     code_promptCurrentPassword: `Enter your current password:`,
     code_promptNewPassword: `Enter your new password:`,
     code_promptConfirmNewPassword: `Confirm your new password:`,
-    code_promptEmailCurrentPassword: `Enter your current password:`,
     code_promptNewEmail: `Enter your new email address:`,
     code_changeEmailRetry: `|EMAIL| is already registered.`,
     navbar_renameAccount: `Rename Account`,
