@@ -2993,6 +2993,7 @@ function addMissingDangerRooms() {
                 const allItemKeys = Object.entries(itemMap)
                     .filter(([_key, item]) => item.parentName === "/Lotus/Types/Items/DangerRoom/DangerRoomTile")
                     .map(([key]) => key);
+                allItemKeys.push("/Lotus/Types/Items/MiscItems/DangerRoomKey"); // also give access to the simulacrum itself
                 const existingItems = new Set(
                     data.MiscItems.filter(item => item.ItemCount > 0).map(item => item.ItemType)
                 );
