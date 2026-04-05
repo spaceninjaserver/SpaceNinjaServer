@@ -253,7 +253,7 @@ function changeAccountPassword() {
 }
 
 function changeAccountEmail() {
-    const curPw = window.prompt(loc("code_promptEmailCurrentPassword"));
+    const curPw = window.prompt(loc("code_promptCurrentPassword"));
     if (curPw === null) {
         return;
     }

@@ -122,7 +122,6 @@ dict = {
     code_promptCurrentPassword: `[UNTRANSLATED] Enter your current password:`,
     code_promptNewPassword: `[UNTRANSLATED] Enter your new password:`,
     code_promptConfirmNewPassword: `[UNTRANSLATED] Confirm your new password:`,
-    code_promptEmailCurrentPassword: `[UNTRANSLATED] Enter your current password:`,
     code_promptNewEmail: `[UNTRANSLATED] Enter your new email address:`,
     code_changeEmailRetry: `[UNTRANSLATED] |EMAIL| is already registered.`,
     navbar_renameAccount: `Переименовать аккаунт`,
