@@ -55,6 +55,7 @@ export const setAccountCheatController: RequestHandler = async (req, res) => {
             "infiniteEndo",
             "infiniteRegalAya",
             "infiniteTrades",
+            "infiniteGifts",
             "skipAllDialogue",
             "skipAllPopups"
         ].indexOf(payload.key) != -1

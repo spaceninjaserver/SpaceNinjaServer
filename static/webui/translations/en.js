@@ -241,6 +241,7 @@ dict = {
     cheats_infiniteEndo: `Infinite Endo`,
     cheats_infiniteRegalAya: `Infinite Regal Aya`,
     cheats_infiniteTrades: `Infinite Trades`,
+    cheats_infiniteGifts: `Infinite Gifts`,
     cheats_infiniteHelminthMaterials: `Infinite Helminth Materials`,
     cheats_claimingBlueprintRefundsIngredients: `Claiming Blueprint Refunds Ingredients`,
     cheats_dontSubtractPurchaseCreditCost: `Don't Subtract Purchase Credit Cost`,

@@ -1566,6 +1566,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         infiniteEndo: Boolean,
         infiniteRegalAya: Boolean,
         infiniteTrades: Boolean,
+        infiniteGifts: Boolean,
         infiniteHelminthMaterials: Boolean,
         universalPolarityEverywhere: Boolean,
         unlockDoubleCapacityPotatoesEverywhere: Boolean,
@@ -1645,18 +1646,18 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         //How many trades do you have left
         TradesRemaining: { type: Number, default: 0 },
-        //How many Gift do you have left*(gift spends the trade)
+        //How many gifts do you have left
         GiftsRemaining: { type: Number, default: 8 },
-        //Curent trade info Giving or Getting items
+        //Current trade info Giving or Getting items
         //PendingTrades: [Schema.Types.Mixed],
 
         //Syndicate currently being pledged to.
         SupportedSyndicate: String,
-        //Curent Syndicates rank\exp
+        //Current Syndicates rank\exp
         Affiliations: [affiliationsSchema],
-        //Syndicates Missions complate(Navigation->Syndicate)
+        //Syndicates Missions completed(Navigation->Syndicate)
         CompletedSyndicates: [String],
-        //Daily Syndicates Exp
+        //Daily Syndicates exp
         DailyAffiliation: { type: Number, default: 16000 },
         DailyAffiliationPvp: { type: Number, default: 16000 },
         DailyAffiliationLibrary: { type: Number, default: 16000 },

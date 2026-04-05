@@ -374,6 +374,9 @@ export const getInventoryResponse = async (
     if (inventory.infiniteTrades) {
         inventoryResponse.TradesRemaining = 9999;
     }
+    if (inventory.infiniteGifts) {
+        inventoryResponse.GiftsRemaining = 9999;
+    }
 
     if (inventory.skipAllDialogue) {
         inventoryResponse.TauntHistory ??= [];

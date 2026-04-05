@@ -77,11 +77,13 @@ export const giftingController: RequestHandler = async (req, res) => {
 
     const senderInventory = await getInventory(senderAccount._id);
 
-    if (senderInventory.GiftsRemaining == 0) {
-        res.status(400).send("10").end();
-        return;
+    if (!senderInventory.infiniteGifts) {
+        if (senderInventory.GiftsRemaining == 0) {
+            res.status(400).send("10").end();
+            return;
+        }
+        senderInventory.GiftsRemaining -= 1;
     }
-    senderInventory.GiftsRemaining -= 1;
 
     const response: IPurchaseResponse = {
         InventoryChanges: {}

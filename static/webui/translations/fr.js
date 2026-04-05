@@ -242,6 +242,7 @@ dict = {
     cheats_infiniteEndo: `Endo infini`,
     cheats_infiniteRegalAya: `Aya Raffiné infini`,
     cheats_infiniteTrades: `Échanges infinis`,
+    cheats_infiniteGifts: `[UNTRANSLATED] Infinite Gifts`,
     cheats_infiniteHelminthMaterials: `Ressources d'Helminth infinies`,
     cheats_claimingBlueprintRefundsIngredients: `Récupérer les items rend les ressources`,
     cheats_dontSubtractPurchaseCreditCost: `Ne pas retirer le coût en crédits`,

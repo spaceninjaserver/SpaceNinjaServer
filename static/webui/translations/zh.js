@@ -242,6 +242,7 @@ dict = {
     cheats_infiniteEndo: `无限内融核心`,
     cheats_infiniteRegalAya: `无限御品阿耶`,
     cheats_infiniteTrades: `[UNTRANSLATED] Infinite Trades`,
+    cheats_infiniteGifts: `[UNTRANSLATED] Infinite Gifts`,
     cheats_infiniteHelminthMaterials: `无限Helminth材料`,
     cheats_claimingBlueprintRefundsIngredients: `蓝图制造完成领取后返还材料`,
     cheats_dontSubtractPurchaseCreditCost: `购物时不减少现金花费`,

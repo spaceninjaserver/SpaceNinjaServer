@@ -51,6 +51,7 @@ export const accountCheatBooleans = [
     "infiniteEndo",
     "infiniteRegalAya",
     "infiniteTrades",
+    "infiniteGifts",
     "infiniteHelminthMaterials",
     "universalPolarityEverywhere",
     "unlockDoubleCapacityPotatoesEverywhere",
