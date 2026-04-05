@@ -358,6 +358,12 @@ function updateLocElements() {
     });
     document.querySelectorAll("[data-loc-replace]").forEach(elm => {
         elm.innerHTML = elm.innerHTML.replace("|VAL|", elm.getAttribute("data-loc-replace"));
+        if (elm.getAttribute("data-loc") == "worldState_lunarNewYearEntry") {
+            const animal = loc(
+                `worldState_lunarNewYearAnimal${((parseInt(elm.getAttribute("data-loc-replace")) - 4) % 12) + 1}`
+            );
+            elm.innerHTML = elm.innerHTML.replace("|ANIMAL|", animal);
+        }
     });
     $(".inventory-update-note").text(
         loc(window.have_game_ws ? "general_inventoryUpdateNoteGameWs" : "general_inventoryUpdateNote")

@@ -147,6 +147,15 @@ export const validateConfig = (): void => {
         config.worldState.baroRelayOverride = 0;
         modified = true;
     }
+    if (
+        config.worldState?.lunarNewYear &&
+        !["all", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026"].includes(
+            config.worldState.lunarNewYear
+        )
+    ) {
+        delete config.worldState.lunarNewYear;
+        modified = true;
+    }
     if (modified) {
         logger.info(`Updating config file to fix some issues with it.`);
         void saveConfig();
