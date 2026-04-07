@@ -12,7 +12,7 @@ export const retroactivelyApplyGuildCheatController: RequestHandler = async (req
     const member = await GuildMember.findOne({ accountId: accountId, guildId: guild._id });
     if (member && member.rank <= 1) {
         const meta = clanLockCheats[req.query.cheat as string as keyof IGuildCheats]!;
-        const msgs = meta.cleanupGuild(guild);
+        const msgs = await meta.cleanupGuild(guild);
         if (!meta.isGuildInIdealState(guild)) {
             throw new Error(`cleanupGuild for ${req.query.cheat as string} does not satsify its isGuildInIdealState`);
         }
