@@ -485,7 +485,7 @@ const getItemListsController: RequestHandler = (req, response) => {
     for (const uniqueName of Object.keys(varzia.primeDualPacks)) {
         res.VarziaOffers.push({
             uniqueName,
-            name: getString(getItemName(uniqueName) || "", lang)
+            name: getString(getItemName(uniqueName) || uniqueName, lang)
         });
     }
 

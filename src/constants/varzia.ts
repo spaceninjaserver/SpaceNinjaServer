@@ -590,6 +590,38 @@ const varzia: IVarzia = {
                 { ItemType: "/Lotus/StoreItems/Upgrades/Skins/Scarves/PrimeSuratorSyandana", PrimePrice: 2 }
             ],
             BobbleHeads: ["/Lotus/StoreItems/Types/Items/ShipDecos/HildrynPrimeBobbleHead"]
+        },
+        "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVGaussPrimeSinglePack": {
+            Items: [
+                { ItemType: "/Lotus/StoreItems/Powersuits/Runner/GaussPrime", PrimePrice: 3 },
+                {
+                    ItemType: "/Lotus/StoreItems/Weapons/Tenno/LongGuns/PrimeAcceltra/PrimeAcceltraWeapon",
+                    PrimePrice: 2
+                },
+                { ItemType: "/Lotus/StoreItems/Weapons/Tenno/Pistols/PrimeAkarius/PrimeAkariusWeapon", PrimePrice: 2 },
+                {
+                    ItemType: "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVDopplinePrimeArmorSet",
+                    PrimePrice: 2
+                },
+                { ItemType: "/Lotus/StoreItems/Upgrades/Skins/Scarves/PrimeAltraScarf", PrimePrice: 2 }
+            ],
+            BobbleHeads: ["/Lotus/StoreItems/Types/Items/ShipDecos/GaussPrimeBobbleHead"]
+        },
+        "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVGrendelPrimeSinglePack": {
+            Items: [
+                { ItemType: "/Lotus/StoreItems/Powersuits/Devourer/GrendelPrime", PrimePrice: 3 },
+                {
+                    ItemType: "/Lotus/StoreItems/Weapons/Tenno/Melee/Swords/PrimeMasseter/PrimeMasseter",
+                    PrimePrice: 2
+                },
+                { ItemType: "/Lotus/StoreItems/Weapons/Tenno/Pistols/PrimeZylok/ZylokPrimePistol", PrimePrice: 2 },
+                {
+                    ItemType: "/Lotus/StoreItems/Upgrades/Skins/Effects/GrendelPrimeEphemera",
+                    PrimePrice: 2
+                },
+                { ItemType: "/Lotus/StoreItems/Upgrades/Skins/Scarves/PrimeGrendelSyandana", PrimePrice: 2 }
+            ],
+            BobbleHeads: ["/Lotus/StoreItems/Types/Items/ShipDecos/GrendelPrimeBobbleHead"]
         }
     },
     primeDualPacks: {
@@ -985,6 +1017,21 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionWispHildrynVaultBBronze"
             ],
             minBuildLabel: "2025.10.14.16.10" // < 40.0.0
+        },
+        "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVGaussGrendelPrimeDualPack": {
+            SinglePacks: [
+                "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVGaussPrimeSinglePack",
+                "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVGrendelPrimeSinglePack"
+            ],
+            Relics: [
+                "/Lotus/StoreItems/Types/Game/Projections/T1VoidProjectionGaussGrendelVaultABronze",
+                "/Lotus/StoreItems/Types/Game/Projections/T2VoidProjectionGaussGrendelVaultABronze",
+                "/Lotus/StoreItems/Types/Game/Projections/T2VoidProjectionGaussGrendelVaultBBronze",
+                "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionGaussGrendelVaultABronze",
+                "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionGaussGrendelVaultBBronze",
+                "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionGaussGrendelVaultABronze"
+            ],
+            minBuildLabel: gameToBuildVersion["42.0.0"]
         }
     },
     vanguardVaultRelics: [
