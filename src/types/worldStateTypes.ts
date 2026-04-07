@@ -274,7 +274,7 @@ export interface ISortie {
 }
 
 export interface ISortieMission {
-    missionType: string;
+    missionType: TMissionType;
     modifierType: string;
     node: string;
     tileset: string;

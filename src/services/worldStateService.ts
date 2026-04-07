@@ -601,8 +601,7 @@ const pushTilesetModifiers = (modifiers: string[], tileset: TSortieTileset): voi
 };
 
 export const getSortie = (day: number): ISortie => {
-    const seed = new SRng(day).randomInt(0, 100_000);
-    const rng = new SRng(seed);
+    const rng = new SRng(new SRng(day).randomInt(0, 100_000));
 
     const boss = rng.randomElement(sortieBosses)!;
     const enemyFaction = sortieBossToFaction[boss];
@@ -682,7 +681,7 @@ export const getSortie = (day: number): ISortie => {
         const tileset = sortieTilesets[node as keyof typeof sortieTilesets] as TSortieTileset;
         pushTilesetModifiers(modifiers, tileset);
 
-        const missionType = rng.randomElement(sortieTilesetMissions[tileset])!;
+        const missionType = rng.randomElement(sortieTilesetMissions[tileset])! as TMissionType;
 
         if (missionTypes.has(missionType) || missionType == "MT_ASSASSINATION") {
             i--;
@@ -709,6 +708,11 @@ export const getSortie = (day: number): ISortie => {
         missionTypes.add(missionType);
     }
 
+    let clientSeed = rng.randomInt(0, 100_000);
+    while (!validateSortieSeed(clientSeed, selectedNodes)) {
+        clientSeed = rng.randomInt(0, 100_000);
+    }
+
     const dayStart = getSortieTime(day);
     const dayEnd = getSortieTime(day + 1);
     return {
@@ -716,14 +720,61 @@ export const getSortie = (day: number): ISortie => {
         Activation: { $date: { $numberLong: dayStart.toString() } },
         Expiry: { $date: { $numberLong: dayEnd.toString() } },
         Reward: "/Lotus/Types/Game/MissionDecks/SortieRewards",
-        Seed: selectedNodes.find(
-            x => x.tileset == "CorpusIcePlanetTileset" || x.tileset == "CorpusIcePlanetTilesetCaves"
-        )
-            ? 2081 // this seed produces 12 zeroes in a row if asked to pick (0, 1); this way the CorpusIcePlanetTileset/CorpusIcePlanetTilesetCaves image is always index 0, the 'correct' choice.
-            : seed,
+        Seed: clientSeed,
         Boss: boss,
         Variants: selectedNodes
     };
+};
+
+const SORTIE_FALLBACK_MISSION_TYPES: TMissionType[] = [
+    "MT_EXTERMINATION",
+    "MT_SURVIVAL",
+    "MT_RESCUE",
+    "MT_SABOTAGE",
+    //"MT_CAPTURE",
+    "MT_INTEL",
+    "MT_DEFENSE",
+    "MT_MOBILE_DEFENSE",
+    "MT_TERRITORY",
+    "MT_RETRIEVAL",
+    "MT_HIVE",
+    "MT_EXCAVATE",
+    "MT_ARTIFACT"
+];
+
+const validateSortieSeed = (seed: number, variants: ISortieMission[]): boolean => {
+    const rng = new SRng(seed);
+    for (const variant of variants) {
+        if (variant.missionType != "MT_ASSASSINATION") {
+            const tileset = ExportTilesets[variant.tileset];
+            let missionPermutation = tileset.missions[variant.missionType];
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            if (!missionPermutation) {
+                const options = SORTIE_FALLBACK_MISSION_TYPES.filter(missionType => missionType in tileset.missions);
+                const replacementType = options[rng.randomInt(0, options.length - 1)];
+                missionPermutation = tileset.missions[replacementType];
+                /*logger.debug(
+                    `${variant.missionType} not supported by ${variant.tileset}; picking ${replacementType} instead`
+                );*/
+            }
+            if (missionPermutation.enemySpecs?.length) {
+                rng.randomInt(1, missionPermutation.enemySpecs.length);
+            }
+            if (missionPermutation.extraEnemySpecs?.length) {
+                rng.randomInt(1, missionPermutation.extraEnemySpecs.length);
+            }
+            rng.randomFloat(); // difficulty
+        }
+        if (variant.missionType != "MT_ARENA" && variant.missionType != "MT_JUNCTION") {
+            const locationTextureIndex = rng.randomInt(0, 1); // In general, each tileset has 2 texture options (there are exceptions of course, like MT_ARENA and MT_JUNCTION).
+            if (variant.tileset == "CorpusIcePlanetTileset" || variant.tileset == "CorpusIcePlanetTilesetCaves") {
+                if (locationTextureIndex != 0) {
+                    return false; // For the corpus ice planet tileset, index 1 is an infested corpus ship image, which we don't want.
+                }
+            }
+        }
+    }
+    return true;
 };
 
 interface IRotatingSeasonChallengePools {
