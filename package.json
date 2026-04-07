@@ -30,6 +30,7 @@
     "express": "^5",
     "google-auth-library": "^10.5.0",
     "json-with-bigint": "^3.4.4",
+    "mongodb-memory-server-core": "^11.0.1",
     "mongoose": "^8.11.0",
     "morgan": "^1.10.0",
     "ncp": "^2.0.0",

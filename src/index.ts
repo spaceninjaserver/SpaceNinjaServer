@@ -25,6 +25,7 @@ import { startWebServer } from "./services/webService.ts";
 import { validateConfig } from "./services/configWatcherService.ts";
 import { updateWorldStateCollections } from "./services/worldStateService.ts";
 import { repoDir } from "./helpers/pathHelper.ts";
+import { MongoMemoryServer } from "mongodb-memory-server-core";
 
 JSON.stringify = JSONStringify; // Patch JSON.stringify to work flawlessly with Bigints.
 
@@ -36,8 +37,25 @@ fs.readFile(path.join(repoDir, "BUILD_DATE"), "utf-8", (err, data) => {
     }
 });
 
+let mongodUri = config.mongodbUrl;
+if (mongodUri.startsWith("file://")) {
+    let dataDir = path.resolve(mongodUri.substring("file://".length));
+    if (dataDir.substring(0, 1) == "/" && process.platform == "win32") {
+        dataDir = dataDir.substring(1); // Absolute path on Windows must not start with /
+    }
+    fs.mkdirSync(dataDir, { recursive: true });
+    const mongod = await MongoMemoryServer.create({
+        instance: {
+            dbPath: dataDir
+        }
+    });
+    mongodUri = mongod.getUri();
+    logger.debug(`MongoDB server running at ${mongodUri}`);
+    mongodUri += "openWF";
+}
+
 mongoose
-    .connect(config.mongodbUrl)
+    .connect(mongodUri)
     .then(() => {
         logger.info("Connected to MongoDB");
         syncConfigWithDatabase();

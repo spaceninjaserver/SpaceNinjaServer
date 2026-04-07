@@ -3,6 +3,7 @@
 echo "Updating SpaceNinjaServer..."
 git fetch --prune
 if [ $? -eq 0 ]; then
+    git restore package-lock.json
     git stash
     git checkout -f origin/main
 
