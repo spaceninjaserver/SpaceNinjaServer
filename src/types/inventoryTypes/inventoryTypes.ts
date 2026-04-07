@@ -1251,6 +1251,7 @@ export interface IDialogueClient {
     QueuedDialogues: string[];
     Gifts: IDialogueGift[];
     Booleans: string[];
+    Counters?: IDialogueCounter[];
     Completed: ICompletedDialogue[];
     DialogueName: string;
 }
@@ -1272,8 +1273,16 @@ export interface IDialogueGift {
 
 export interface ICompletedDialogue {
     Id: string;
+    Persist?: boolean;
     Booleans: string[];
+    Counters?: IDialogueCounter[];
     Choices: number[];
+}
+
+export interface IDialogueCounter {
+    Name: string;
+    Count: number;
+    Persist: boolean;
 }
 
 export interface ICustomMarkers {

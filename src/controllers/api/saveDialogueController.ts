@@ -1,12 +1,13 @@
 import { addEmailItem, getDialogue, getInventory, updateCurrency } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
-import type { ICompletedDialogue } from "../../types/inventoryTypes/inventoryTypes.ts";
+import type { ICompletedDialogue, IDialogueCounter } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
 
 export const saveDialogueController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const request = JSON.parse(String(req.body)) as SaveDialogueRequest;
+    //logger.debug(`saveDialogue:`, request);
     if ("YearIteration" in request) {
         const inventory = await getInventory(accountId, "DialogueHistory noKimCooldowns");
         inventory.DialogueHistory ??= {};
@@ -37,6 +38,17 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
             const index = dialogue.Booleans.findIndex(x => x == bool);
             if (index != -1) {
                 dialogue.Booleans.splice(index, 1);
+            }
+        }
+        if (request.Counters) {
+            dialogue.Counters ??= [];
+            for (const clientCounter of request.Counters) {
+                const dbCounter = dialogue.Counters.find(x => x.Name == clientCounter.Name);
+                if (dbCounter) {
+                    dbCounter.Count = clientCounter.Count;
+                } else {
+                    dialogue.Counters.push(clientCounter);
+                }
             }
         }
         for (const info of request.OtherDialogueInfos) {
@@ -94,6 +106,7 @@ interface SaveCompletedDialogueRequest {
     };
     Booleans: string[];
     ResetBooleans: string[];
+    Counters?: IDialogueCounter[];
     Data?: ICompletedDialogue;
     EventTriggered?: boolean; // U41
     OtherDialogueInfos: IOtherDialogueInfo[];

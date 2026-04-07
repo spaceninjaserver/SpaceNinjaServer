@@ -8,6 +8,7 @@ export const clearDialogueHistoryController: RequestHandler = async (req, res) =
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId, "DialogueHistory");
     const request = JSON.parse(String(req.body)) as IClearDialogueRequest;
+    //logger.debug(`clearDialogueHistory:`, request);
     if (inventory.DialogueHistory && inventory.DialogueHistory.Dialogues) {
         inventory.DialogueHistory.Resets ??= 0;
         inventory.DialogueHistory.Resets += 1;
@@ -32,7 +33,15 @@ export const clearDialogueHistoryController: RequestHandler = async (req, res) =
         for (const dialogueName of request.Dialogues) {
             const index = inventory.DialogueHistory.Dialogues.findIndex(x => x.DialogueName == dialogueName);
             if (index != -1) {
-                inventory.DialogueHistory.Dialogues.splice(index, 1);
+                if (request.ClearPersist) {
+                    inventory.DialogueHistory.Dialogues.splice(index, 1);
+                } else {
+                    inventory.DialogueHistory.Dialogues[index] = {
+                        ...inventory.DialogueHistory.Dialogues[index],
+                        Counters: inventory.DialogueHistory.Dialogues[index].Counters?.filter(x => x.Persist),
+                        Completed: inventory.DialogueHistory.Dialogues[index].Completed.filter(x => x.Persist)
+                    };
+                }
             }
         }
     }

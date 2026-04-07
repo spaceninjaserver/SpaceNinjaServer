@@ -99,7 +99,8 @@ import type {
     IFocusLoadoutDatabase,
     IChallengeInstanceStateDatabase,
     IChallengeInstanceStateClient,
-    IParam
+    IParam,
+    IDialogueCounter
 } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IOid, ITypeCount } from "../../types/commonTypes.ts";
@@ -980,10 +981,21 @@ const dialogueGiftSchema = new Schema<IDialogueGift>(
     { _id: false }
 );
 
+const dialogueCounterSchema = new Schema<IDialogueCounter>(
+    {
+        Name: { type: String, required: true },
+        Count: { type: Number, required: true },
+        Persist: { type: Boolean, required: true }
+    },
+    { _id: false }
+);
+
 const completedDialogueSchema = new Schema<ICompletedDialogue>(
     {
         Id: { type: String, required: true },
+        Persist: { type: Boolean, required: false },
         Booleans: { type: [String], required: true },
+        Counters: { type: [dialogueCounterSchema], required: false },
         Choices: { type: [Number], required: true }
     },
     { _id: false }
@@ -1000,6 +1012,7 @@ const dialogueSchema = new Schema<IDialogueDatabase>(
         QueuedDialogues: { type: [String], default: [] },
         Gifts: { type: [dialogueGiftSchema], default: [] },
         Booleans: { type: [String], default: [] },
+        Counters: { type: [dialogueCounterSchema], required: false },
         Completed: { type: [completedDialogueSchema], default: [] },
         DialogueName: String
     },
