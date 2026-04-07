@@ -6,7 +6,7 @@ import { unixTimesInMs } from "../../constants/timeConstants.ts";
 
 export const clearDialogueHistoryController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId, "DialogueHistory");
+    const inventory = await getInventory(accountId, "DialogueHistory noKimCooldowns");
     const request = JSON.parse(String(req.body)) as IClearDialogueRequest;
     //logger.debug(`clearDialogueHistory:`, request);
     if (inventory.DialogueHistory && inventory.DialogueHistory.Dialogues) {
@@ -26,7 +26,7 @@ export const clearDialogueHistoryController: RequestHandler = async (req, res) =
                         }) - 1
                     ];
             }
-            resetDate.Date = new Date(Date.now() + 28 * unixTimesInMs.day);
+            resetDate.Date = inventory.noKimCooldowns ? new Date() : new Date(Date.now() + 28 * unixTimesInMs.day);
             resetDate.Resets += 1;
         }
 
