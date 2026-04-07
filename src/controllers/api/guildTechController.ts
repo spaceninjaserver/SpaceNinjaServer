@@ -40,6 +40,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
     const accountId = account._id.toString();
     const inventory = await getInventory(accountId);
     const data = JSON.parse(String(req.body)) as TGuildTechRequest;
+    //logger.debug(`guildTech:`, data);
     if (data.Action == "Sync") {
         let needSave = false;
         const techProjects: ITechProjectClient[] = [];
@@ -76,7 +77,9 @@ export const guildTechController: RequestHandler = async (req, res) => {
                 res.status(400).send("-1").end();
                 return;
             }
-            const recipeType: string = (data.RecipeType || data.ResearchId)!;
+            const recipeType: string = (data.RecipeType ??
+                data.ResearchId ??
+                (req.query.researchId as string | undefined))!;
             const recipe = ExportDojoRecipes.research[recipeType];
             guild.TechProjects ??= [];
             if (!guild.TechProjects.find(x => x.ItemType == recipeType)) {
@@ -137,8 +140,8 @@ export const guildTechController: RequestHandler = async (req, res) => {
             });
         }
     } else if (data.Action == "Contribute") {
-        if ((req.query.guildId as string) == "000000000000000000000000") {
-            const techProject = inventory.PersonalTechProjects.id(data.ResearchId)!;
+        if ("guildId" in req.query && (req.query.guildId as string) == "000000000000000000000000") {
+            const techProject = inventory.PersonalTechProjects.id(data.ResearchId!)!;
 
             techProject.ReqCredits -= data.RegularCredits;
             const inventoryChanges: IInventoryChanges = updateCurrency(inventory, data.RegularCredits, false);
@@ -185,7 +188,9 @@ export const guildTechController: RequestHandler = async (req, res) => {
                 { accountId, guildId: guild._id },
                 "RegularCreditsContributed MiscItemsContributed"
             ))!;
-            const recipeType = data.RecipeType || data.ResearchId;
+            const recipeType: string = (data.RecipeType ??
+                data.ResearchId ??
+                (req.query.researchId as string | undefined))!;
             const techProject = guild.TechProjects!.find(x => x.ItemType == recipeType)!;
 
             if (data.VaultCredits) {
@@ -204,7 +209,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
             guildMember.RegularCreditsContributed ??= 0;
             guildMember.RegularCreditsContributed += data.RegularCredits;
 
-            if (data.VaultMiscItems.length) {
+            if (data.VaultMiscItems?.length) {
                 for (const miscItem of data.VaultMiscItems) {
                     const reqItem = techProject.ReqItems.find(x => x.ItemType == miscItem.ItemType);
                     if (reqItem) {
@@ -251,7 +256,9 @@ export const guildTechController: RequestHandler = async (req, res) => {
     } else if (data.Action.split(",")[0] == "Buy") {
         const purchase = data as IGuildTechBuyRequest;
         if (purchase.Mode != "Personal") {
-            const recipeType: string = (purchase.RecipeType || purchase.ResearchId)!;
+            const recipeType: string = (purchase.RecipeType ??
+                purchase.ResearchId ??
+                (req.query.researchId as string | undefined))!;
             const guild = await getGuildForRequestEx(req, inventory);
             if (
                 !hasAccessToDojo(inventory) ||
@@ -398,7 +405,7 @@ type TGuildTechRequest =
 
 interface IGuildTechBasicRequest {
     Action: "Start" | "Fabricate" | "Pause" | "Unpause" | "Cancel" | "Rush" | "InstantFinish";
-    Mode: "Guild" | "Personal";
+    Mode?: "Guild" | "Personal";
     ResearchId?: string; // U18.0.6 uses that instead RecipeType
     RecipeType?: string;
     TechProductCategory?: string;
@@ -411,12 +418,12 @@ interface IGuildTechBuyRequest extends Omit<IGuildTechBasicRequest, "Action"> {
 
 interface IGuildTechContributeRequest {
     Action: "Contribute";
-    ResearchId: string;
+    ResearchId?: string;
     RecipeType?: string;
     RegularCredits: number;
     MiscItems: IMiscItem[];
-    VaultCredits: number;
-    VaultMiscItems: IMiscItem[];
+    VaultCredits?: number;
+    VaultMiscItems?: IMiscItem[];
 }
 
 const getSalvageCategory = (

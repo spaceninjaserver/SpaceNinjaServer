@@ -50,13 +50,17 @@ export const getGuildForRequestEx = async (
     req: Request,
     inventory: TInventoryDatabaseDocument
 ): Promise<TGuildDatabaseDocument> => {
-    const guildId = req.query.guildId as string;
-    if (!inventory.GuildId || inventory.GuildId.toString() != guildId) {
-        throw new Error("Account is not in the guild that it has sent a request for");
+    // guildTech requests from U8 don't have the guildId query param
+    if ("guildId" in req.query) {
+        const guildId = req.query.guildId as string;
+        if (!inventory.GuildId || inventory.GuildId.toString() != guildId) {
+            throw new Error("Account is not in the guild that it has sent a request for");
+        }
     }
-    const guild = await Guild.findById(guildId);
+
+    const guild = await Guild.findById(inventory.GuildId);
     if (!guild) {
-        throw new Error("Account thinks it is in a guild that doesn't exist");
+        throw new Error("Account is in a guild that doesn't exist (anymore)");
     }
     return guild;
 };
