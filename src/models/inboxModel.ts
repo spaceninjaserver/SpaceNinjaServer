@@ -38,6 +38,7 @@ export interface IMessage {
     countedAtt?: ITypeCount[];
     startDate?: Date;
     endDate?: Date;
+    QuestReq?: string;
     goalTag?: string;
     CrossPlatform?: boolean;
     arg?: Arg[];
@@ -115,6 +116,7 @@ const messageSchema = new Schema<IMessageDatabase>(
         customData: String,
         icon: String,
         highPriority: Boolean,
+        QuestReq: String,
         lowPrioNewPlayers: Boolean,
         startDate: Date,
         endDate: Date,

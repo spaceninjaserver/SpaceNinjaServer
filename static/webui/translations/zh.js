@@ -364,6 +364,8 @@ dict = {
     worldState_eightClawProgressOverride: `大帝金币收集进度(%)`,
     worldState_thermiaFractures: `热美亚裂缝`,
     worldState_thermiaFracturesProgressOverride: `热美亚裂缝进度`,
+    worldState_operationAtramentum: `《行动代号：墨痕》`,
+    worldState_operationAtramentumProgressOverride: `[UNTRANSLATED] Operation: Atramentum Progress`,
     worldState_qtccAlerts: `癌症征服任务警报`,
     worldState_evilBaroStage: `邪恶Baro`,
     worldState_baroRelayOverride: `[UNTRANSLATED] Baro Relay Override`,

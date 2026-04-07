@@ -34,7 +34,8 @@ const databaseAccountSchema = new Schema<IDatabaseAccountJson>(
         receivedEventMessage_affinityBoost: Boolean,
         receivedEventMessage_resourceBoost: Boolean,
         receivedEventMessage_galleonOfGhouls: Boolean,
-        receivedEventMessage_longShadow: Boolean
+        receivedEventMessage_longShadow: Boolean,
+        receivedEventMessage_operationAtramentum: Boolean
     },
     opts
 );

@@ -93,6 +93,8 @@ export interface IConfig {
         lunarNewYear?: string;
         dogDaysOverride?: boolean;
         dogDaysRewardsOverride?: number;
+        operationAtramentum?: boolean;
+        operationAtramentumProgressOverride?: number;
         bellyOfTheBeast?: boolean;
         bellyOfTheBeastProgressOverride?: number;
         eightClaw?: boolean;
@@ -249,6 +251,12 @@ export const syncConfigWithDatabase = (): void => {
     if (!config.worldState?.longShadow) {
         void Account.updateMany({}, { $unset: { receivedEventMessage_longShadow: 1 } }).then(() => {});
         void Inbox.deleteMany({ goalTag: "NightwatchTacAlert" }).then(() => {});
+    }
+    if (!config.worldState?.operationAtramentum) {
+        void Account.updateMany({}, { $unset: { receivedEventMessage_operationAtramentum: 1 } }).then(() => {});
+        void Inbox.deleteMany({
+            transmission: "/Lotus/Sounds/Dialog/Shadowgrapher/Vendor/DSGInbox0011AspirantZorba"
+        }).then(() => {});
     }
 };
 

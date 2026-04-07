@@ -548,7 +548,7 @@ const getItemListsController: RequestHandler = (req, response) => {
         if (uniqueName.startsWith("/Lotus/Levels/ClanDojo/ComponentPropRecipes/GradivusDilemma")) {
             const factionTag = uniqueName.includes("Corpus") ? "FC_CORPUS" : "FC_GRINEER";
             const faction = ExportFactions[factionTag].name;
-            name += ` [${getString(faction, lang)}]`;
+            name += ` [${getString(faction || factionTag, lang)}]`;
         }
         res.VaultDecoRecipes.push({
             uniqueName,

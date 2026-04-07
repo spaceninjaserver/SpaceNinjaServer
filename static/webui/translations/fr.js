@@ -364,6 +364,8 @@ dict = {
     worldState_eightClawProgressOverride: `Progrès de la Huitième Griffe`,
     worldState_thermiaFractures: `Crevasses Thermia`,
     worldState_thermiaFracturesProgressOverride: `Progrès des Fractures Thermia`,
+    worldState_operationAtramentum: `Opération: Atramentum`,
+    worldState_operationAtramentumProgressOverride: `[UNTRANSLATED] Operation: Atramentum Progress`,
     worldState_qtccAlerts: `Alertes Quête pour Vaincre le Cancer`,
     worldState_evilBaroStage: `Baro Maléfique`,
     worldState_baroRelayOverride: `Relais Baro`,

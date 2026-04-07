@@ -711,6 +711,13 @@ export const addMissionInventoryUpdates = async (
                     const goal = getWorldState(account.BuildLabel).Goals.find(
                         x => x._id.$oid == uploadProgress._id.$oid
                     );
+                    if (goal && goal.Tag == "ShadowgrapherEvent") {
+                        if (inventoryUpdates.RewardInfo!.node == goal.Node) {
+                            const extraCount = inventoryUpdates.Missions?.Tier ? 4 : 3;
+                            uploadProgress.Best += extraCount;
+                            uploadProgress.Count += extraCount;
+                        }
+                    }
                     if (goal && goal.Personal) {
                         inventory.PersonalGoalProgress ??= [];
                         const goalProgress = inventory.PersonalGoalProgress.find(x => x.goalId.equals(goal._id.$oid));
@@ -1361,6 +1368,31 @@ export const addMissionRewards = async (
                 ItemCount: getRandomInt(8, 15) + (missions?.Tier ? 2 : 0)
             });
         }
+    }
+
+    if (
+        config.worldState?.operationAtramentum &&
+        inventory.QuestKeys.some(x => x.ItemType.endsWith("PriestQuestKeyChain") && x.Completed) &&
+        (!account.BuildLabel || version_compare(account.BuildLabel, gameToBuildVersion["42.0.0"]) >= 0) &&
+        rewardInfo.nightmareMode
+    ) {
+        if (inventory.GuildId) {
+            const goal = getWorldState(account.BuildLabel).Goals.find(x => x.Tag == "ShadowgrapherEvent");
+            if (goal && goal.ClanGoal) {
+                const guild = await Guild.findById(inventory.GuildId, "GoalProgress Tier VaultDecoRecipes");
+                if (guild) {
+                    await handleGuildGoalProgress(guild, {
+                        Count: 10,
+                        Tag: goal.Tag,
+                        goalId: new Types.ObjectId(goal._id.$oid)
+                    });
+                }
+            }
+        }
+        MissionRewards.push({
+            StoreItem: "/Lotus/StoreItems/Types/Gameplay/Shadowgrapher/Resources/ShadowgrapherEventResource",
+            ItemCount: 10
+        });
     }
 
     if (levelKeyName) {

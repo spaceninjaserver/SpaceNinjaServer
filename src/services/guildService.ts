@@ -979,5 +979,20 @@ export const goalGuildRewardByTag: Record<string, { guildGoals: number[][]; rewa
             "/Lotus/Levels/ClanDojo/ComponentPropRecipes/MechEventTrophySilverRecipe",
             "/Lotus/Levels/ClanDojo/ComponentPropRecipes/MechEventTrophyGoldRecipe"
         ]
+    },
+    ShadowgrapherEvent: {
+        guildGoals: [
+            [84, 168, 252, 336],
+            [252, 504, 756, 1008],
+            [840, 1680, 2520, 3360],
+            [2520, 5040, 7560, 10080],
+            [8400, 16800, 25200, 33600]
+        ],
+        rewards: [
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/ShadowgrapherEventPewterTrophyRecipe",
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/ShadowgrapherEventBronzeTrophyRecipe",
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/ShadowgrapherEventSilverTrophyRecipe",
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/ShadowgrapherEventGoldTrophyRecipe"
+        ]
     }
 };

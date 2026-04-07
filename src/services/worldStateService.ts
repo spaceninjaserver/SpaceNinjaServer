@@ -3272,6 +3272,32 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         pushGoalAlerts(worldState, "JadeShadows", buildLabel);
     }
 
+    if (
+        config.worldState?.operationAtramentum &&
+        (!buildLabel || version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0)
+    ) {
+        worldState.Goals.push({
+            _id: { $oid: "69ce8b780000000000000000" },
+            Activation: { $date: { $numberLong: "1738868400000" } },
+            Expiry: { $date: { $numberLong: "2000000000000" } },
+            Count: config.worldState.operationAtramentumProgressOverride ?? 0,
+            HealthPct: (config.worldState.operationAtramentumProgressOverride ?? 0) / 100,
+            Goal: 0,
+            Personal: true,
+            Community: true,
+            ClanGoal: [72, 216, 648, 1944, 5832],
+            Tag: "ShadowgrapherEvent",
+            Faction: "FC_TENNO",
+            Desc: "/Lotus/Language/Shadowgrapher/ShadowgrapherEventName",
+            ToolTip: "/Lotus/Language/Shadowgrapher/ShadowgrapherShortEventDesc",
+            Icon: "/Lotus/Interface/Icons/WorldStatePanel/OperationAntramentumIcon.png",
+            ScoreLocTag: "/Lotus/Language/Shadowgrapher/ShadowgrapherEventScore",
+            Node: "SolNode239",
+            MissionKeyName: "/Lotus/Types/Keys/ShadowgrapherEventMission",
+            ItemType: "/Lotus/Types/Gameplay/Shadowgrapher/Resources/ShadowgrapherEventResource"
+        });
+    }
+
     // <U39
     if (config.worldState?.eightClaw && (!buildLabel || version_compare(buildLabel, "2025.06.23.11.39") >= 0)) {
         worldState.Goals.push({

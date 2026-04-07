@@ -279,6 +279,20 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
         });
     }
 
+    if (config.worldState?.operationAtramentum && !account.receivedEventMessage_operationAtramentum) {
+        account.receivedEventMessage_operationAtramentum = true;
+        newEventMessages.push({
+            sndr: "/Lotus/Language/Shadowgrapher/ZorbaName",
+            sub: "/Lotus/Language/Shadowgrapher/ShadowgrapherEventInboxSubject",
+            msg: "/Lotus/Language/Shadowgrapher/ShadowgrapherEventInboxBody",
+            icon: "/Lotus/Interface/Icons/Npcs/Syndicates/Zorba.png",
+            transmission: "/Lotus/Sounds/Dialog/Shadowgrapher/Vendor/DSGInbox0011AspirantZorba",
+            startDate: new Date(),
+            QuestReq: "/Lotus/Types/Keys/PriestFrameQuest/PriestQuestKeyChain",
+            CrossPlatform: true
+        });
+    }
+
     if (newEventMessages.length === 0) {
         return;
     }

@@ -364,6 +364,8 @@ dict = {
     worldState_eightClawProgressOverride: `Прогресс Восьми когтей`,
     worldState_thermiaFractures: `Разломы Термии`,
     worldState_thermiaFracturesProgressOverride: `Прогресс Разломов Термии`,
+    worldState_operationAtramentum: `Операция «Атраментум»`,
+    worldState_operationAtramentumProgressOverride: `Прогресс Операции «Атраментум»`,
     worldState_qtccAlerts: `Тревоги Quest to Conquer Cancer`,
     worldState_evilBaroStage: `Злой Баро`,
     worldState_baroRelayOverride: `Изменение Реле Баро`,

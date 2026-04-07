@@ -1516,6 +1516,24 @@
                                 </div>
                                 <div class="form-group mt-2 d-flex gap-2">
                                     <div class="flex-fill">
+                                        <label class="form-label" for="worldState.operationAtramentum" data-loc="worldState_operationAtramentum"></label>
+                                        <select class="form-control" id="worldState.operationAtramentum" data-default="false">
+                                            <option value="true" data-loc="enabled"></option>
+                                            <option value="false" data-loc="disabled"></option>
+                                        </select>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <form class="form-group" onsubmit="doSaveConfigInt('worldState.operationAtramentumProgressOverride'); return false;">
+                                            <label class="form-label" for="worldState.operationAtramentumProgressOverride" data-loc="worldState_operationAtramentumProgressOverride"></label>
+                                            <div class="input-group">
+                                                <input id="worldState.operationAtramentumProgressOverride" class="form-control" type="number" min="0" max="100" data-default="0" />
+                                                <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-2 d-flex gap-2">
+                                    <div class="flex-fill">
                                         <label class="form-label" for="worldState.bellyOfTheBeast" data-loc="worldState_bellyOfTheBeast"></label>
                                         <select class="form-control" id="worldState.bellyOfTheBeast" data-default="false">
                                             <option value="true" data-loc="enabled"></option>

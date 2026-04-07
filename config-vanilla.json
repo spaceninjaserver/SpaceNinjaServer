@@ -80,6 +80,8 @@
     "lunarNewYear": null,
     "dogDaysOverride": null,
     "dogDaysRewardsOverride": null,
+    "operationAtramentum": false,
+    "operationAtramentumProgressOverride": 0,
     "bellyOfTheBeast": false,
     "bellyOfTheBeastProgressOverride": 0,
     "eightClaw": false,
