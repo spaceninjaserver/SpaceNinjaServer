@@ -2984,3 +2984,28 @@ export const updateEntratiVault = (inventory: TInventoryDatabaseDocument): void 
         }
     }
 };
+
+export const ensureUserHasFounderHonoria = async (inventory: TInventoryDatabaseDocument): Promise<void> => {
+    if (!inventory.FlavourItems.some(x => x.ItemType == "/Lotus/Types/Items/Titles/FounderLvl1Title")) {
+        const eligibleItems = [
+            "/Lotus/Types/Items/Titles/FounderLvl1Title",
+            "/Lotus/Types/Items/Titles/FounderLvl2Title",
+            "/Lotus/Types/Items/Titles/FounderLvl3Title",
+            "/Lotus/Types/Items/Titles/FounderLvl4Title"
+        ].splice(0, inventory.Founder);
+        for (const item of eligibleItems) {
+            addCustomization(inventory, item);
+        }
+        await createMessage(inventory.accountOwnerId, [
+            {
+                sndr: "/Lotus/Language/CircleOfHell/RoatheName",
+                icon: "/Lotus/Interface/Icons/Npcs/Roathe.png",
+                sub: "/Lotus/Language/Inbox/FounderTitleReceivedTitle",
+                msg: "/Lotus/Language/Inbox/FounderTitleReceivedBody",
+                att: eligibleItems,
+                highPriority: true, // TOVERIFY
+                attVisualOnly: true
+            }
+        ]);
+    }
+};

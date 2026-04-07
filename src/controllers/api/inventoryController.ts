@@ -26,6 +26,7 @@ import {
     checkCalendarAutoAdvance,
     cleanupInventory,
     createLibraryDailyTask,
+    ensureUserHasFounderHonoria,
     getCalendarProgress
 } from "../../services/inventoryService.ts";
 import { logger } from "../../utils/logger.ts";
@@ -229,6 +230,10 @@ export const inventoryController: RequestHandler = async (request, response) => 
             if (kalymos) {
                 await addEmailItem(inventory, "/Lotus/Types/Items/EmailItems/KalymosKissEmailItem");
             }
+        }
+
+        if (inventory.Founder) {
+            await ensureUserHasFounderHonoria(inventory);
         }
 
         cleanupInventory(inventory);

@@ -1,5 +1,5 @@
 import { importInventory, importLoadOutPresets, importPersonalRooms } from "../../services/importService.ts";
-import { getInventory } from "../../services/inventoryService.ts";
+import { ensureUserHasFounderHonoria, getInventory } from "../../services/inventoryService.ts";
 import { getLoadout } from "../../services/loadoutService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getPersonalRooms } from "../../services/personalRoomsService.ts";
@@ -18,6 +18,9 @@ export const importController: RequestHandler = async (req, res) => {
         importInventory(inventory, request.inventory);
         if (inventory.isModified()) {
             anyKnownKey = true;
+            if (inventory.Founder) {
+                await ensureUserHasFounderHonoria(inventory);
+            }
             await inventory.save();
         }
 
