@@ -218,7 +218,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
                 const dialogue = inventory.DialogueHistory.Dialogues.find(x => x.DialogueName == dialogueName);
                 if (dialogue) {
                     if (dialogue.Rank == 7) {
-                        await addEmailItem(inventory, kissEmail);
+                        await addEmailItem(inventory, kissEmail, {}, account.BuildLabel);
                         kalymos = false;
                         break;
                     }
@@ -228,7 +228,12 @@ export const inventoryController: RequestHandler = async (request, response) => 
                 }
             }
             if (kalymos) {
-                await addEmailItem(inventory, "/Lotus/Types/Items/EmailItems/KalymosKissEmailItem");
+                await addEmailItem(
+                    inventory,
+                    "/Lotus/Types/Items/EmailItems/KalymosKissEmailItem",
+                    {},
+                    account.BuildLabel
+                );
             }
         }
 

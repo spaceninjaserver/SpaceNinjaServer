@@ -2105,7 +2105,8 @@ const addCrewMember = (
 export const addEmailItem = async (
     inventory: TInventoryDatabaseDocument,
     typeName: string,
-    inventoryChanges: IInventoryChanges = {}
+    inventoryChanges: IInventoryChanges = {},
+    buildLabel?: string
 ): Promise<IInventoryChanges> => {
     const meta = ExportEmailItems[typeName];
     const emailItem = inventory.EmailItems.find(x => x.ItemType == typeName);
@@ -2115,18 +2116,38 @@ export const addEmailItem = async (
             msg.cinematic == "/Lotus/Levels/1999/PlayerHomeBalconyCinematics.level" ||
             msg.cinematic == "/Lotus/Levels/EntratiLab/TriadRomanceCinematics.level"
         ) {
-            msg.customData = JSON.stringify({
-                Tag: msg.customData + "KissCin",
-                CinLoadout: {
-                    Skins: inventory.AdultOperatorLoadOuts[0].Skins,
-                    Upgrades: inventory.AdultOperatorLoadOuts[0].Upgrades,
-                    attcol: inventory.AdultOperatorLoadOuts[0].attcol,
-                    cloth: inventory.AdultOperatorLoadOuts[0].cloth,
-                    eyecol: inventory.AdultOperatorLoadOuts[0].eyecol,
-                    pricol: inventory.AdultOperatorLoadOuts[0].pricol,
-                    syancol: inventory.AdultOperatorLoadOuts[0].syancol
-                }
-            });
+            if (buildLabel && version_compare(buildLabel, gameToBuildVersion["41.0.0"]) < 0) {
+                msg.customData = JSON.stringify({
+                    Tag: msg.customData + "KissCin",
+                    CinLoadout: {
+                        Skins: inventory.AdultOperatorLoadOuts[0].Skins,
+                        Upgrades: inventory.AdultOperatorLoadOuts[0].Upgrades,
+                        attcol: inventory.AdultOperatorLoadOuts[0].attcol,
+                        cloth: inventory.AdultOperatorLoadOuts[0].cloth,
+                        eyecol: inventory.AdultOperatorLoadOuts[0].eyecol,
+                        pricol: inventory.AdultOperatorLoadOuts[0].pricol,
+                        syancol: inventory.AdultOperatorLoadOuts[0].syancol
+                    }
+                });
+            } else {
+                const postRemasterAdultOperator =
+                    inventory.OperatorSuits.find(
+                        x => x.ItemType == "/Lotus/Powersuits/Operator/AdultOperatorSuitRemaster"
+                        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                    )?.Configs?.[0] ?? {};
+                msg.customData = JSON.stringify({
+                    Tag: msg.customData + "KissCin",
+                    CinLoadout: {
+                        Skins: postRemasterAdultOperator.Skins,
+                        Upgrades: postRemasterAdultOperator.Upgrades,
+                        attcol: postRemasterAdultOperator.attcol,
+                        cloth: postRemasterAdultOperator.cloth,
+                        eyecol: postRemasterAdultOperator.eyecol,
+                        pricol: postRemasterAdultOperator.pricol,
+                        syancol: postRemasterAdultOperator.syancol
+                    }
+                });
+            }
         }
         await createMessage(inventory.accountOwnerId, [msg]);
 
