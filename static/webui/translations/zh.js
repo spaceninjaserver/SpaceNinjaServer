@@ -265,6 +265,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `商城或商人无购买限制`,
     cheats_noNodeEntryFees: `[UNTRANSLATED] No Node Entry Fees`,
     cheats_noDeathMarks: `无死亡标记(不会被 Stalker/Grustrag 三霸/Zanuka 猎人等标记)`,
+    cheats_noNemesis: `[UNTRANSLATED] No Nemesis`,
     cheats_noKimCooldowns: `即时通无冷却时间`,
     cheats_noBlessingCooldown: `祝福无冷却时间`,
     cheats_fullyStockedVendors: `商人贩卖所有商品`,

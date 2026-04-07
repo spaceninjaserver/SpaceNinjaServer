@@ -245,7 +245,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
         await inventory.save();
         res.json({ LastEnc: inventory.Nemesis!.LastEnc });
     } else if ((req.query.mode as string) == "s") {
-        const inventory = await getInventory(account._id, "Nemesis");
+        const inventory = await getInventory(account._id, "Nemesis noNemesis");
         if (inventory.Nemesis) {
             logger.warn(`overwriting an existing nemesis as a new one is being requested`);
         }
@@ -275,32 +275,34 @@ export const nemesisController: RequestHandler = async (req, res) => {
             }
         }
 
-        inventory.Nemesis = {
-            fp: body.target.fp,
-            manifest: body.target.manifest,
-            KillingSuit: body.target.KillingSuit,
-            killingDamageType: body.target.killingDamageType,
-            ShoulderHelmet: body.target.ShoulderHelmet,
-            WeaponIdx: weaponIdx,
-            AgentIdx: body.target.AgentIdx,
-            BirthNode: body.target.BirthNode,
-            Faction: body.target.Faction,
-            Rank: 0,
-            k: false,
-            Traded: false,
-            d: new Date(),
-            InfNodes: getInfNodes(manifest, 0),
-            GuessHistory: [],
-            Hints: [],
-            HintProgress: 0,
-            Weakened: false,
-            PrevOwners: 0,
-            HenchmenKilled: 0,
-            SecondInCommand: false,
-            MissionCount: 0,
-            LastEnc: 0
-        };
-        await inventory.save();
+        if (!inventory.noNemesis) {
+            inventory.Nemesis = {
+                fp: body.target.fp,
+                manifest: body.target.manifest,
+                KillingSuit: body.target.KillingSuit,
+                killingDamageType: body.target.killingDamageType,
+                ShoulderHelmet: body.target.ShoulderHelmet,
+                WeaponIdx: weaponIdx,
+                AgentIdx: body.target.AgentIdx,
+                BirthNode: body.target.BirthNode,
+                Faction: body.target.Faction,
+                Rank: 0,
+                k: false,
+                Traded: false,
+                d: new Date(),
+                InfNodes: getInfNodes(manifest, 0),
+                GuessHistory: [],
+                Hints: [],
+                HintProgress: 0,
+                Weakened: false,
+                PrevOwners: 0,
+                HenchmenKilled: 0,
+                SecondInCommand: false,
+                MissionCount: 0,
+                LastEnc: 0
+            };
+            await inventory.save();
+        }
 
         res.json({
             target: inventory.toJSON().Nemesis

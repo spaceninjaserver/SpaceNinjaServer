@@ -48,6 +48,17 @@ export const lockCheats: Partial<Record<keyof IAccountCheats, ILockCheat>> = {
         }
     },
 
+    noNemesis: {
+        projection: "Nemesis NemesisAbandonedRewards NemesisTaxedCredits",
+        isInventoryInIdealState: (inventory: TInventoryDatabaseDocument) =>
+            !inventory.Nemesis && !inventory.NemesisAbandonedRewards.length && !inventory.NemesisTaxedCredits,
+        cleanupInventory: (inventory: TInventoryDatabaseDocument) => {
+            inventory.Nemesis = undefined;
+            inventory.NemesisAbandonedRewards.splice(0);
+            inventory.NemesisTaxedCredits = undefined;
+        }
+    },
+
     noMasteryRankUpCooldown: {
         projection: "TrainingDate",
         isInventoryInIdealState: (inventory: TInventoryDatabaseDocument) =>

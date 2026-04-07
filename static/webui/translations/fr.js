@@ -265,6 +265,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `Aucune limite d'achat chez les PNJ`,
     cheats_noNodeEntryFees: `Aucun frais de lancement de mission`,
     cheats_noDeathMarks: `Aucune marque d'assassin`,
+    cheats_noNemesis: `[UNTRANSLATED] No Nemesis`,
     cheats_noKimCooldowns: `Aucun cooldown sur le KIM`,
     cheats_noBlessingCooldown: `Pas de temps de recharge pour les bénédictions`,
     cheats_fullyStockedVendors: `Les vendeurs ont un stock à 100%`,

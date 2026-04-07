@@ -67,6 +67,7 @@ export const accountCheatBooleans = [
     "noVendorPurchaseLimits",
     "noNodeEntryFees",
     "noDeathMarks",
+    "noNemesis",
     "noKimCooldowns",
     "noBlessingCooldown",
     "claimingBlueprintRefundsIngredients",

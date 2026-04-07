@@ -264,6 +264,7 @@ dict = {
     cheats_noVendorPurchaseLimits: `No Vendor Purchase Limits`,
     cheats_noNodeEntryFees: `No Node Entry Fees`,
     cheats_noDeathMarks: `No Death Marks`,
+    cheats_noNemesis: `No Nemesis`,
     cheats_noKimCooldowns: `No KIM Cooldowns`,
     cheats_noBlessingCooldown: `No Blessing Cooldown`,
     cheats_fullyStockedVendors: `Fully Stocked Vendors`,
