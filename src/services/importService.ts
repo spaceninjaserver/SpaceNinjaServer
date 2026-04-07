@@ -32,7 +32,9 @@ import type {
     IWeaponSkinClient,
     IWeaponSkinDatabase,
     IPeriodicMissionCompletionResponse,
-    IPeriodicMissionCompletionDatabase
+    IPeriodicMissionCompletionDatabase,
+    INemesisBaseClient,
+    INemesisBaseDatabase
 } from "../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
@@ -262,6 +264,14 @@ const convertPendingRecipe = (client: IPendingRecipeClient): IPendingRecipeDatab
     return {
         ...client,
         CompletionDate: convertDate(client.CompletionDate)
+    };
+};
+
+const convertNemesisBase = (client: INemesisBaseClient): INemesisBaseDatabase => {
+    return {
+        ...client,
+        fp: BigInt(client.fp),
+        d: convertDate(client.d)
     };
 };
 
@@ -518,6 +528,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     if (client.Nemesis !== undefined) {
         db.Nemesis = convertNemesis(client.Nemesis);
+    }
+    if (client.NemesisHistory !== undefined) {
+        db.NemesisHistory = client.NemesisHistory.map(convertNemesisBase);
     }
     if (client.PlayerSkills !== undefined) {
         db.PlayerSkills = client.PlayerSkills;
