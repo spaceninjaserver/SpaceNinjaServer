@@ -2175,7 +2175,8 @@ const xpEarningParts: readonly string[] = [
 export const applyClientEquipmentUpdates = (
     inventory: TInventoryDatabaseDocument,
     gearArray: IEquipmentClient[],
-    categoryName: TEquipmentKey
+    categoryName: TEquipmentKey,
+    buildLabel: string | undefined
 ): void => {
     const category = inventory[categoryName];
 
@@ -2228,8 +2229,23 @@ export const applyClientEquipmentUpdates = (
         }
 
         if (ExtraRemaining) {
-            item.ExtraRemaining ??= 4;
-            item.ExtraRemaining += ExtraRemaining;
+            if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["8.0.0"]) >= 0) {
+                if (ExtraRemaining > 0) {
+                    throw new Error(
+                        `unexpected value for ExtraRemaining (${ExtraRemaining}); expected a delta from this client`
+                    );
+                }
+                item.ExtraRemaining ??= 4;
+                item.ExtraRemaining += ExtraRemaining;
+            } else {
+                // U7 still provided an absolute value; unclear when this changed.
+                if (ExtraRemaining < 0) {
+                    throw new Error(
+                        `unexpected value for ExtraRemaining (${ExtraRemaining}); expected an absolute value from this client`
+                    );
+                }
+                item.ExtraRemaining = ExtraRemaining;
+            }
         }
     });
 };

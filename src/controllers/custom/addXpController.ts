@@ -22,7 +22,7 @@ export const addXpController: RequestHandler = async (req, res) => {
                 }
             }
         }
-        applyClientEquipmentUpdates(inventory, gear, category as TEquipmentKey);
+        applyClientEquipmentUpdates(inventory, gear, category as TEquipmentKey, undefined);
     }
     await inventory.save();
     res.end();

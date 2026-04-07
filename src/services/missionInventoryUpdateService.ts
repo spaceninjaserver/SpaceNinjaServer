@@ -1062,7 +1062,12 @@ export const addMissionInventoryUpdates = async (
                 break;
             default:
                 if (equipmentKeys.includes(key as TEquipmentKey)) {
-                    applyClientEquipmentUpdates(inventory, value as IEquipmentClient[], key as TEquipmentKey);
+                    applyClientEquipmentUpdates(
+                        inventory,
+                        value as IEquipmentClient[],
+                        key as TEquipmentKey,
+                        account.BuildLabel
+                    );
                 } else if (allDailyAffiliationKeys.includes(key as keyof IDailyAffiliations)) {
                     inventory[key as keyof IDailyAffiliations] -= value as number;
                 }
