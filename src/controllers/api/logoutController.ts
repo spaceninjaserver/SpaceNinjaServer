@@ -17,7 +17,8 @@ export const logoutController: RequestHandler = async (req, res) => {
             Nonce: nonce
         },
         {
-            Nonce: 0
+            Nonce: 0,
+            $unset: { Dropped: 1 }
         }
     );
     if (stat.modifiedCount) {
