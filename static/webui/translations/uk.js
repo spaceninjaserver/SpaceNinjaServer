@@ -10,6 +10,8 @@ dict = {
 
     code_loginFail: `Не вдалося увійти. Перевірте адресу електронної пошти та пароль.`,
     code_regFail: `Не вдалося зареєструватися. Обліковий запис вже існує?`,
+    code_adminOnlyLogin: `[UNTRANSLATED] You are not allowed to login because the WebUI is admin-only on this instance.`,
+    code_adminOnlyRegister: `[UNTRANSLATED] Your account has successfully been created, but the WebUI is admin-only on this instance.`,
     code_genFail: `Ім'я не може бути довше 24 символів.`,
     code_changeNameConfirm: `Яке ім'я ви хочете встановити для свого облікового запису?`,
     code_changeNameRetry: `|NAME| вже зайнято.`,

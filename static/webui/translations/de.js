@@ -10,6 +10,8 @@ dict = {
 
     code_loginFail: `Anmeldung fehlgeschlagen. Bitte überprüfe deine Angaben.`,
     code_regFail: `Registrierung fehlgeschlagen. Account existiert bereits?`,
+    code_adminOnlyLogin: `[UNTRANSLATED] You are not allowed to login because the WebUI is admin-only on this instance.`,
+    code_adminOnlyRegister: `[UNTRANSLATED] Your account has successfully been created, but the WebUI is admin-only on this instance.`,
     code_genFail: `Der Name darf nicht länger als 24 Zeichen sein.`,
     code_changeNameConfirm: `In welchen Namen möchtest du deinen Account umbenennen?`,
     code_changeNameRetry: `|NAME| ist bereits vergeben.`,

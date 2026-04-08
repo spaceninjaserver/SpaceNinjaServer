@@ -8,6 +8,7 @@ import {
     createNonce,
     getAccountForQuery,
     getUsernameFromEmail,
+    isAdministrator,
     isCorrectPassword
 } from "./loginService.ts";
 import type { IDatabaseAccountJson } from "../types/loginTypes.ts";
@@ -38,6 +39,7 @@ export const stopWsServers = (promises: Promise<void>[]): void => {
                 wsServer!.close(() => {
                     resolve();
                 });
+                wsServer!.emit("close");
             })
         );
     }
@@ -47,6 +49,7 @@ export const stopWsServers = (promises: Promise<void>[]): void => {
                 wssServer!.close(() => {
                     resolve();
                 });
+                wssServer!.emit("close");
             })
         );
     }
@@ -83,23 +86,21 @@ interface IWsMsgFromClient {
 
 export interface IWsMsgToClientCommon {
     wsid?: number;
-}
-
-export interface IWsMsgToClientWebui {
-    reload?: boolean;
     ports?: {
         http: number | undefined;
         https: number | undefined;
     };
+}
+
+export interface IWsMsgToClientWebui extends IWsMsgToClientCommon {
+    reload?: boolean;
     config_reloaded?: boolean;
     auth_succ?: {
         id: string;
         DisplayName: string;
         Nonce: number;
     };
-    auth_fail?: {
-        isRegister: boolean;
-    };
+    auth_fail?: "bad login" | "bad register" | "admin only" | "registered but admin only";
     nonce_updated?: boolean;
     update_inventory?: boolean;
     logged_out?: boolean;
@@ -107,13 +108,13 @@ export interface IWsMsgToClientWebui {
 }
 
 // specific to the bootstrapper (https://openwf.io/bootstrapper-manual)
-export interface IWsMsgToClientGame {
+export interface IWsMsgToClientGame extends IWsMsgToClientCommon {
     sync_inventory?: boolean;
     sync_world_state?: boolean;
     tunables?: ITunables;
 }
 
-export type IWsMsgToClient = IWsMsgToClientCommon | IWsMsgToClientWebui | IWsMsgToClientGame;
+export type IWsMsgToClient = IWsMsgToClientWebui | IWsMsgToClientGame;
 
 const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
     if (req.url == "/custom/selftest") {
@@ -157,22 +158,28 @@ const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
                 }
                 if (account) {
                     (ws as IWsCustomData).accountId = account.id;
-                    ws.send(
-                        JSON.stringify({
-                            auth_succ: {
-                                id: account.id,
-                                DisplayName: account.DisplayName,
-                                Nonce: account.Nonce
-                            },
-                            have_game_ws: haveGameWs(account.id)
-                        } satisfies IWsMsgToClient)
-                    );
+                    if (!config.webui?.adminOnly || isAdministrator(account)) {
+                        ws.send(
+                            JSON.stringify({
+                                auth_succ: {
+                                    id: account.id,
+                                    DisplayName: account.DisplayName,
+                                    Nonce: account.Nonce
+                                },
+                                have_game_ws: haveGameWs(account.id)
+                            } satisfies IWsMsgToClient)
+                        );
+                    } else {
+                        ws.send(
+                            JSON.stringify({
+                                auth_fail: data.auth.isRegister ? "registered but admin only" : "admin only"
+                            } satisfies IWsMsgToClient)
+                        );
+                    }
                 } else {
                     ws.send(
                         JSON.stringify({
-                            auth_fail: {
-                                isRegister: data.auth.isRegister
-                            }
+                            auth_fail: data.auth.isRegister ? "bad register" : "bad login"
                         } satisfies IWsMsgToClient)
                     );
                 }
@@ -325,6 +332,19 @@ export const handleNonceInvalidation = (accountId: string): void => {
             } else {
                 client.send(JSON.stringify({ nonce_updated: true, have_game_ws: false } satisfies IWsMsgToClient));
             }
+        }
+    });
+};
+
+export const bootNonAdminsFromWebui = (): void => {
+    forEachWsClient(client => {
+        if (client.accountId && !client.isGame) {
+            void Account.findById(client.accountId).then(account => {
+                if (!account || !isAdministrator(account)) {
+                    client.send(JSON.stringify({ logged_out: true } satisfies IWsMsgToClientWebui));
+                    client.close();
+                }
+            });
         }
     });
 };

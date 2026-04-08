@@ -30,6 +30,7 @@
   "skipClanKeyCrafting": false,
   "webui": {
     "enabled": true,
+    "adminOnly": false,
     "defaultLanguage": "en"
   },
   "unfaithfulBugFixes": {

@@ -41,6 +41,7 @@ export interface IConfig {
     skipClanKeyCrafting?: boolean;
     webui?: {
         enabled?: boolean;
+        adminOnly?: boolean;
         defaultLanguage?: string;
     };
     unfaithfulBugFixes?: {

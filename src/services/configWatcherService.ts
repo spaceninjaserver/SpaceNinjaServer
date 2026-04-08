@@ -12,7 +12,13 @@ import {
 } from "./configService.ts";
 import { saveConfig, shouldReloadConfig } from "./configWriterService.ts";
 import { startWebServer, stopWebServer } from "./webService.ts";
-import { forEachWsClient, sendWsBroadcast, type IWsMsgToClient } from "./wsService.ts";
+import {
+    bootNonAdminsFromWebui,
+    forEachWsClient,
+    sendWsBroadcast,
+    sendWsBroadcastToWebui,
+    type IWsMsgToClient
+} from "./wsService.ts";
 import varzia from "../constants/varzia.ts";
 import { getTunablesForClient } from "./tunablesService.ts";
 
@@ -58,7 +64,12 @@ chokidar.watch(configPath).on("change", () => {
                 }
             });
         } else {
-            sendWsBroadcast({ config_reloaded: true });
+            sendWsBroadcastToWebui({ config_reloaded: true });
+        }
+
+        // Handle change to adminOnly or administratorNames
+        if (config.webui?.adminOnly) {
+            bootNonAdminsFromWebui();
         }
     }
 });

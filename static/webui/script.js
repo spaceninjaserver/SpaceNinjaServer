@@ -83,7 +83,17 @@ function openWebSocket() {
             auth_pending = false;
             logout();
             if (single.getCurrentPath() == "/webui/") {
-                alert(loc(msg.auth_fail.isRegister ? "code_regFail" : "code_loginFail"));
+                if (msg.auth_fail == "bad login") {
+                    alert(loc("code_loginFail"));
+                } else if (msg.auth_fail == "bad register") {
+                    alert(loc("code_regFail"));
+                } else if (msg.auth_fail == "admin only") {
+                    alert(loc("code_adminOnlyLogin"));
+                } else if (msg.auth_fail == "registered but admin only") {
+                    alert(loc("code_adminOnlyRegister"));
+                } else {
+                    alert(msg.auth_fail);
+                }
             } else {
                 single.loadRoute("/webui/");
             }

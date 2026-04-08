@@ -124,7 +124,7 @@ export const getAccountIdForRequest = async (req: Request): Promise<string> => {
     return (await getAccountForRequest(req))._id.toString();
 };
 
-export const isAdministrator = (account: TAccountDocument): boolean => {
+export const isAdministrator = (account: Pick<TAccountDocument, "DisplayName">): boolean => {
     return config.administratorNames?.indexOf(account.DisplayName) != -1;
 };
 

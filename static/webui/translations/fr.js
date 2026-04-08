@@ -10,6 +10,8 @@ dict = {
 
     code_loginFail: `Connexion échouée. Vérifiez le mot de passe.`,
     code_regFail: `Enregistrement impossible. Compte existant?`,
+    code_adminOnlyLogin: `[UNTRANSLATED] You are not allowed to login because the WebUI is admin-only on this instance.`,
+    code_adminOnlyRegister: `[UNTRANSLATED] Your account has successfully been created, but the WebUI is admin-only on this instance.`,
     code_genFail: `Le nom ne peut pas dépasser 24 caractères.`,
     code_changeNameConfirm: `Nouveau nom du compte :`,
     code_changeNameRetry: `|NAME| est déjà pris.`,

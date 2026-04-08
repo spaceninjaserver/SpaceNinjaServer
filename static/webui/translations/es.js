@@ -10,6 +10,8 @@ dict = {
 
     code_loginFail: `Error al iniciar sesión. Verifica el correo electrónico y la contraseña.`,
     code_regFail: `Error al registrar la cuenta. ¿Ya existe una cuenta con este correo?`,
+    code_adminOnlyLogin: `[UNTRANSLATED] You are not allowed to login because the WebUI is admin-only on this instance.`,
+    code_adminOnlyRegister: `[UNTRANSLATED] Your account has successfully been created, but the WebUI is admin-only on this instance.`,
     code_genFail: `[UNTRANSLATED] Name cannot be longer than 24 characters.`,
     code_changeNameConfirm: `¿Qué nombre te gustaría ponerle a tu cuenta?`,
     code_changeNameRetry: `|NAME| Ya está en uso.`,

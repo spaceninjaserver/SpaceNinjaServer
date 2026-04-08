@@ -87,6 +87,7 @@ export const stopWebServer = async (): Promise<void> => {
                 httpServer!.close(() => {
                     resolve();
                 });
+                httpServer!.emit("close");
             })
         );
     }
@@ -96,6 +97,7 @@ export const stopWebServer = async (): Promise<void> => {
                 httpsServer!.close(() => {
                     resolve();
                 });
+                httpsServer!.emit("close");
             })
         );
     }

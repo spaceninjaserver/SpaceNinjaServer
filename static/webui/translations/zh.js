@@ -10,6 +10,8 @@ dict = {
 
     code_loginFail: `登录失败.请检查邮箱和密码.`,
     code_regFail: `注册失败.账号是否已存在？`,
+    code_adminOnlyLogin: `[UNTRANSLATED] You are not allowed to login because the WebUI is admin-only on this instance.`,
+    code_adminOnlyRegister: `[UNTRANSLATED] Your account has successfully been created, but the WebUI is admin-only on this instance.`,
     code_genFail: `名称不能长于24个字符.`,
     code_changeNameConfirm: `您想将账户名称更改为?`,
     code_changeNameRetry: `|NAME| 已存在相同昵称.`,
