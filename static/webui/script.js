@@ -2235,7 +2235,9 @@ function translateInventoryDataToDom() {
             document.getElementById("changeSyndicate").value = data.SupportedSyndicate ?? "";
 
             if (single.getCurrentPath().startsWith("/webui/guildView")) {
-                const guildReq = $.get("/custom/getGuild?guildId=" + window.guildId);
+                const guildReq = window.guildId
+                    ? $.get("/custom/getGuild?guildId=" + window.guildId)
+                    : { done: () => {}, fail: f => f() };
                 guildReq.done(guildData => {
                     window.itemListPromise.then(itemMap => {
                         document.getElementById("TechProjects-bulkAdd").classList.add("d-none");
