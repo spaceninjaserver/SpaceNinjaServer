@@ -292,6 +292,7 @@ dict = {
     cheats_unlockAllSimarisResearchEntries: `解锁所有Simaris研究条目`,
     cheats_addMissingDangerRooms: `[UNTRANSLATED] Add Missing Simulacrum Scenes`,
     cheats_disableDailyTribute: `禁用每日登录奖励`,
+    cheats_incrementDailyTributeBy50: `[UNTRANSLATED] Increment Daily Tribute to Next 50`,
     cheats_spoofMasteryRank: `伪造精通段位(-1为禁用)`,
     cheats_dailyTributeRewardMultiplier: `[UNTRANSLATED] Daily Tribute Reward Multiplier`,
     cheats_relicRewardItemCountMultiplier: `虚空遗物奖励物品数量倍率`,

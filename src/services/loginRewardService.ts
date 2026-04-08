@@ -174,7 +174,14 @@ export const claimLoginReward = async (
     throw new Error(`unknown login reward type: ${reward.RewardType}`);
 };
 
-export const setAccountGotLoginRewardToday = (account: TAccountDocument): void => {
-    account.LoginDays += 1;
+export const setAccountGotLoginRewardToday = (
+    account: TAccountDocument,
+    inventory: Pick<TInventoryDatabaseDocument, "incrementDailyTributeBy50">
+): void => {
+    if (inventory.incrementDailyTributeBy50) {
+        account.LoginDays = Math.max(50, (Math.trunc(account.LoginDays / 50) + 1) * 50);
+    } else {
+        account.LoginDays += 1;
+    }
     account.LastLoginRewardDate = Math.trunc(Date.now() / 86400000) * 86400;
 };

@@ -292,6 +292,7 @@ dict = {
     cheats_unlockAllSimarisResearchEntries: `Разблокировать все записи исследований Симэриса`,
     cheats_addMissingDangerRooms: `Добавить отсутвующие сцены Симулякрума`,
     cheats_disableDailyTribute: `Отключить ежедневные награды`,
+    cheats_incrementDailyTributeBy50: `[UNTRANSLATED] Increment Daily Tribute to Next 50`,
     cheats_spoofMasteryRank: `Поддельный ранг мастерства (-1 для отключения)`,
     cheats_dailyTributeRewardMultiplier: `[UNTRANSLATED] Daily Tribute Reward Multiplier`,
     cheats_relicRewardItemCountMultiplier: `Мультипликатор количества предметов награды реликвии`,

@@ -78,6 +78,7 @@ export const accountCheatBooleans = [
     "flawlessRelicsAlwaysGiveSilverReward",
     "radiantRelicsAlwaysGiveGoldReward",
     "disableDailyTribute",
+    "incrementDailyTributeBy50",
     "tradesDontTouchInventory" // API-only cheat for bot developers
 ] as const;
 export const accountCheatNumbers = [

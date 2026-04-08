@@ -291,6 +291,7 @@ dict = {
     cheats_unlockAllSimarisResearchEntries: `Unlock All Simaris Research Entries`,
     cheats_addMissingDangerRooms: `Add Missing Simulacrum Scenes`,
     cheats_disableDailyTribute: `Disable Daily Tribute`,
+    cheats_incrementDailyTributeBy50: `Increment Daily Tribute to Next 50`,
     cheats_spoofMasteryRank: `Spoofed Mastery Rank (-1 to disable)`,
     cheats_dailyTributeRewardMultiplier: `Daily Tribute Reward Multiplier`,
     cheats_relicRewardItemCountMultiplier: `Relic Reward Item Count Multiplier`,

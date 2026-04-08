@@ -292,6 +292,7 @@ dict = {
     cheats_unlockAllSimarisResearchEntries: `Розблокувати всі записи досліджень Симаріса`,
     cheats_addMissingDangerRooms: `[UNTRANSLATED] Add Missing Simulacrum Scenes`,
     cheats_disableDailyTribute: `Вимкнути щоденні нагороди`,
+    cheats_incrementDailyTributeBy50: `[UNTRANSLATED] Increment Daily Tribute to Next 50`,
     cheats_spoofMasteryRank: `Підроблений ранг майстерності (-1 для вимкнення)`,
     cheats_dailyTributeRewardMultiplier: `[UNTRANSLATED] Daily Tribute Reward Multiplier`,
     cheats_relicRewardItemCountMultiplier: `Множник кількості предметів нагороди реліквії`,

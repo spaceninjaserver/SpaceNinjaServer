@@ -1606,6 +1606,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         flawlessRelicsAlwaysGiveSilverReward: Boolean,
         radiantRelicsAlwaysGiveGoldReward: Boolean,
         disableDailyTribute: Boolean,
+        incrementDailyTributeBy50: Boolean,
         tradesDontTouchInventory: Boolean, // API-only cheat for bot developers
 
         nemesisHenchmenKillsMultiplierGrineer: Number,

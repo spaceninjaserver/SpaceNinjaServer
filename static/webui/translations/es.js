@@ -292,6 +292,7 @@ dict = {
     cheats_unlockAllSimarisResearchEntries: `Desbloquear todas las entradas de investigación de Simaris`,
     cheats_addMissingDangerRooms: `[UNTRANSLATED] Add Missing Simulacrum Scenes`,
     cheats_disableDailyTribute: `Desactivar tributo diario`,
+    cheats_incrementDailyTributeBy50: `[UNTRANSLATED] Increment Daily Tribute to Next 50`,
     cheats_spoofMasteryRank: `Rango de maestría simulado (-1 para desactivar)`,
     cheats_dailyTributeRewardMultiplier: `[UNTRANSLATED] Daily Tribute Reward Multiplier`,
     cheats_relicRewardItemCountMultiplier: `Multiplicador de cantidad de recompensas de reliquia`,

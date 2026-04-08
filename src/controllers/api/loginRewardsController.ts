@@ -47,7 +47,7 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
                 response.DailyTributeInfo.HasChosenReward = true;
                 response.DailyTributeInfo.ChosenReward = randomRewards[0];
                 response.DailyTributeInfo.NewInventory = await claimLoginReward(inventory, randomRewards[0]);
-                setAccountGotLoginRewardToday(account);
+                setAccountGotLoginRewardToday(account, inventory);
                 await Promise.all([inventory.save(), account.save()]);
 
                 sendWsBroadcastTo(account._id.toString(), { update_inventory: true });
