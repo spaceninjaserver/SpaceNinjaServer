@@ -20,7 +20,7 @@ webuiRouter.get("/", (_req, res) => {
 
 // Redirect /webui to /webui/
 webuiRouter.use("/webui", (req, res, next) => {
-    if (req.originalUrl === "/" && (config.webui?.enabled ?? true)) {
+    if (req.originalUrl === "/webui" && (config.webui?.enabled ?? true)) {
         return res.redirect("/webui/");
     }
     next();
@@ -35,6 +35,7 @@ const virtualRouteController: RequestHandler = async (_req, res) => {
         res.sendStatus(404);
     }
 };
+webuiRouter.get("/webui/", virtualRouteController); // can be handled by express.static, but would not check webui.enabled config.
 webuiRouter.get("/webui/inventory", virtualRouteController);
 webuiRouter.get("/webui/detailedView", virtualRouteController);
 webuiRouter.get("/webui/mods", virtualRouteController);
