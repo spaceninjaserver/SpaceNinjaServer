@@ -24,7 +24,7 @@ export const changeEmailController: RequestHandler = async (req, res) => {
         return;
     }
     if (newEmail === account.email) {
-        res.status(400).send("That is already your email").end();
+        res.send("noop").end();
         return;
     }
     const taken = await Account.findOne({ email: newEmail });

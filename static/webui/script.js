@@ -280,11 +280,13 @@ function changeAccountPassword() {
         }).then(res => {
             if (res.status == 200) {
                 localStorage.setItem("password", nw);
-                toast(loc("settings_passwordSuccess"));
+                res.text().then(text => {
+                    toast(loc(text == "noop" ? "code_nothingToDo" : "settings_passwordSuccess"));
+                });
             } else if (res.status == 403) {
                 toast(loc("settings_wrongPassword"));
             } else {
-                res.text().then(t => toast(t || loc("settings_changeFailed")));
+                toast(loc("settings_changeFailed"));
             }
         });
     });
@@ -327,13 +329,15 @@ function changeAccountEmail() {
             }).then(res => {
                 if (res.status == 200) {
                     localStorage.setItem("email", newEmail);
-                    toast(loc("settings_emailSuccess"));
+                    res.text().then(text => {
+                        toast(loc(text == "noop" ? "code_nothingToDo" : "settings_emailSuccess"));
+                    });
                 } else if (res.status == 403) {
                     toast(loc("settings_wrongPassword"));
                 } else if (res.status == 409) {
                     promptAndSend(newEmail);
                 } else {
-                    res.text().then(t => toast(t || loc("settings_changeFailed")));
+                    toast(loc("settings_changeFailed"));
                 }
             });
         });

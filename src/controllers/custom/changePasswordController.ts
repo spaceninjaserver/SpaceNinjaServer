@@ -22,7 +22,7 @@ export const changePasswordController: RequestHandler = async (req, res) => {
         return;
     }
     if (body.currentPassword === body.newPassword) {
-        res.status(400).send("New password must differ from the current one").end();
+        res.send("noop").end();
         return;
     }
     account.password = body.newPassword;
