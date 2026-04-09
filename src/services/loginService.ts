@@ -105,13 +105,23 @@ export const getAccountForQuery = async (
         throw new Error("Request is missing nonce parameter");
     }
     const account = await Account.findById(query.accountId);
-    if (!account || account.Nonce != nonce) {
+    if (!account) {
         throw new Error("Invalid accountId-nonce pair");
     }
-    if (account.Dropped && query.ct) {
-        logger.debug(`removing dropped mark from ${query.accountId}`);
-        account.Dropped = undefined;
-        await account.save();
+    if (query.possesser) {
+        const possesser = await Account.findOne({ _id: query.possesser, Nonce: nonce });
+        if (!possesser || !isAdministrator(possesser)) {
+            throw new Error(`Invalid accountId-nonce pair`);
+        }
+    } else {
+        if (account.Nonce != nonce) {
+            throw new Error("Invalid accountId-nonce pair");
+        }
+        if (account.Dropped && query.ct) {
+            logger.debug(`removing dropped mark from ${query.accountId}`);
+            account.Dropped = undefined;
+            await account.save();
+        }
     }
     return account;
 };

@@ -16,6 +16,7 @@ dict = {
     code_changeNameConfirm: `Nouveau nom du compte :`,
     code_changeNameRetry: `|NAME| est déjà pris.`,
     code_deleteAccountConfirm: `Supprimer |DISPLAYNAME| (|EMAIL|) ? Cette action est irreversible.`,
+    code_deletePosssedAccountConfirm: `[UNTRANSLATED] Are you sure you want to delete the account |DISPLAYNAME|? This action cannot be undone.`,
     code_archgun: `Archgun`,
     code_melee: `Melee`,
     code_pistol: `Pistolet`,
@@ -529,6 +530,10 @@ dict = {
     guildView_bulkComplete: `Tout compléter`,
     guildView_promote: `Promouvoir`,
     guildView_demote: `Rétrograder`,
+
+    navbar_admin: `[UNTRANSLATED] Admin`,
+    admin_users: `[UNTRANSLATED] Users`,
+    admin_possess: `[UNTRANSLATED] Possess`,
 
     prettier_sucks_ass: ``
 };

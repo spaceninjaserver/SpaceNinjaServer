@@ -16,6 +16,7 @@ dict = {
     code_changeNameConfirm: `您想将账户名称更改为?`,
     code_changeNameRetry: `|NAME| 已存在相同昵称.`,
     code_deleteAccountConfirm: `确定要删除您的账户 |DISPLAYNAME|(|EMAIL|) 吗？此操作不可撤销.`,
+    code_deletePosssedAccountConfirm: `[UNTRANSLATED] Are you sure you want to delete the account |DISPLAYNAME|? This action cannot be undone.`,
     code_archgun: `空战`,
     code_melee: `近战`,
     code_pistol: `手枪`,
@@ -529,6 +530,10 @@ dict = {
     guildView_bulkComplete: `[UNTRANSLATED] Complete All`,
     guildView_promote: `升级`,
     guildView_demote: `降级`,
+
+    navbar_admin: `[UNTRANSLATED] Admin`,
+    admin_users: `[UNTRANSLATED] Users`,
+    admin_possess: `[UNTRANSLATED] Possess`,
 
     prettier_sucks_ass: ``
 };

@@ -21,6 +21,7 @@ const sendAuth = isRegister => {
                 auth: {
                     email: localStorage.getItem("email").toLowerCase(),
                     password: wp.encSync(localStorage.getItem("password")),
+                    possessing: localStorage.getItem("possessing"),
                     isRegister
                 }
             })
@@ -65,7 +66,17 @@ function openWebSocket() {
             $("#password").val("");
             $(".displayname").text(data.DisplayName);
             window.accountId = data.id;
-            window.authz = "accountId=" + data.id + "&nonce=" + data.Nonce + "&wsid=" + wsid;
+            window.authz = "accountId=";
+            let possessing = localStorage.getItem("possessing");
+            if (possessing == data.id) {
+                localStorage.removeItem("possessing");
+                possessing = null;
+            }
+            if (possessing) {
+                window.accountId = possessing;
+                window.authz += possessing + "&possesser=";
+            }
+            window.authz += data.id + "&nonce=" + data.Nonce + "&wsid=" + wsid;
             if (window.dict) {
                 updateLocElements();
             }
@@ -81,21 +92,26 @@ function openWebSocket() {
         }
         if ("auth_fail" in msg) {
             auth_pending = false;
-            logout();
-            if (single.getCurrentPath() == "/webui/") {
-                if (msg.auth_fail == "bad login") {
-                    alert(loc("code_loginFail"));
-                } else if (msg.auth_fail == "bad register") {
-                    alert(loc("code_regFail"));
-                } else if (msg.auth_fail == "admin only") {
-                    alert(loc("code_adminOnlyLogin"));
-                } else if (msg.auth_fail == "registered but admin only") {
-                    alert(loc("code_adminOnlyRegister"));
-                } else {
-                    alert(msg.auth_fail);
-                }
+            if (localStorage.getItem("possessing")) {
+                localStorage.removeItem("possessing");
+                sendAuth();
             } else {
-                single.loadRoute("/webui/");
+                logout();
+                if (single.getCurrentPath() == "/webui/") {
+                    if (msg.auth_fail == "bad login") {
+                        alert(loc("code_loginFail"));
+                    } else if (msg.auth_fail == "bad register") {
+                        alert(loc("code_regFail"));
+                    } else if (msg.auth_fail == "admin only") {
+                        alert(loc("code_adminOnlyLogin"));
+                    } else if (msg.auth_fail == "registered but admin only") {
+                        alert(loc("code_adminOnlyRegister"));
+                    } else {
+                        alert(msg.auth_fail);
+                    }
+                } else {
+                    single.loadRoute("/webui/");
+                }
             }
         }
         if ("nonce_updated" in msg) {
@@ -107,8 +123,13 @@ function openWebSocket() {
             updateInventory();
         }
         if ("logged_out" in msg) {
-            logout();
-            single.loadRoute("/webui/"); // Show login screen
+            if (localStorage.getItem("possessing")) {
+                localStorage.removeItem("possessing");
+                sendAuth();
+            } else {
+                logout();
+                single.loadRoute("/webui/"); // Show login screen
+            }
         }
         if ("have_game_ws" in msg) {
             window.have_game_ws = msg.have_game_ws;
@@ -129,8 +150,8 @@ openWebSocket();
 
 function refreshServerConfig() {
     //window.is_admin = undefined;
-    if (single.getCurrentPath() == "/webui/cheats") {
-        single.loadRoute("/webui/cheats");
+    if (single.getCurrentPath() == "/webui/cheats" || single.getCurrentPath() == "/webui/admin") {
+        single.loadRoute(single.getCurrentPath());
     }
 }
 
@@ -177,10 +198,16 @@ function logout() {
 }
 
 function doLogout() {
-    logout();
-    if (ws_is_open) {
-        // Unsubscribe from notifications about nonce invalidation
-        window.ws.send(JSON.stringify({ logout: true }));
+    if (localStorage.getItem("possessing")) {
+        localStorage.removeItem("possessing");
+        location.href = "/webui/inventory";
+    } else {
+        logout();
+        if (ws_is_open) {
+            // Unsubscribe from notifications about nonce invalidation
+            window.ws.send(JSON.stringify({ logout: true }));
+        }
+        location.href = "/webui/";
     }
 }
 
@@ -206,12 +233,13 @@ function renameAccount(taken_name) {
 }
 
 function deleteAccount() {
-    if (window.confirm(loc("code_deleteAccountConfirm"))) {
+    if (
+        window.confirm(
+            loc(localStorage.getItem("possessing") ? "code_deletePosssedAccountConfirm" : "code_deleteAccountConfirm")
+        )
+    ) {
         revalidateAuthz().then(() => {
-            fetch("/custom/deleteAccount?" + window.authz).then(() => {
-                logout();
-                single.loadRoute("/webui/"); // Show login screen
-            });
+            fetch("/custom/deleteAccount?" + window.authz);
         });
     }
 }
@@ -3940,8 +3968,8 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
             })
                 .done(json => {
                     //window.is_admin = true;
-                    $(".config-admin-hide").addClass("d-none");
-                    $(".config-admin-show").removeClass("d-none");
+                    $(".admin-hide").addClass("d-none");
+                    $(".admin-show").removeClass("d-none");
                     Object.entries(json).forEach(entry => {
                         const [key, value] = entry;
                         const elm = document.getElementById(key);
@@ -3968,8 +3996,8 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
                         });
                     } else {
                         //window.is_admin = false;
-                        $(".config-admin-hide").removeClass("d-none");
-                        $(".config-admin-show").addClass("d-none");
+                        $(".admin-hide").removeClass("d-none");
+                        $(".admin-show").addClass("d-none");
                     }
                 });
         }
@@ -5150,3 +5178,64 @@ function removeItems(category) {
         }
     });
 }
+
+single.getRoute("/webui/admin").on("beforeload", function () {
+    let interval;
+    interval = setInterval(() => {
+        if (window.authz) {
+            clearInterval(interval);
+            $.get("/custom/getRegisteredLosers?" + window.authz)
+                .done(users => {
+                    //window.is_admin = true;
+                    $(".admin-hide").addClass("d-none");
+                    $(".admin-show").removeClass("d-none");
+                    document.getElementById("registered-losers").innerHTML = "";
+                    for (const user of users) {
+                        const tr = document.createElement("tr");
+                        {
+                            const td = document.createElement("td");
+                            td.textContent = user.DisplayName;
+                            tr.appendChild(td);
+                        }
+                        {
+                            const td = document.createElement("td");
+                            td.innerHTML = `<code>${user.id}</code>`;
+                            tr.appendChild(td);
+                        }
+                        {
+                            const td = document.createElement("td");
+                            if (window.accountId != user.id) {
+                                const a = document.createElement("a");
+                                a.textContent = loc(`admin_possess`);
+                                a.href = "#";
+                                a.onclick = function () {
+                                    localStorage.setItem("possessing", user.id);
+                                    location.href = "/webui/inventory";
+                                };
+                                td.appendChild(a);
+                            }
+                            tr.appendChild(td);
+                        }
+                        document.getElementById("registered-losers").appendChild(tr);
+                    }
+                })
+                .fail(res => {
+                    if (res.responseText == "Log-in expired") {
+                        if (ws_is_open && !auth_pending) {
+                            console.warn("Credentials invalidated but the server didn't let us know");
+                            sendAuth();
+                        }
+                        revalidateAuthz().then(() => {
+                            if (single.getCurrentPath() == "/webui/admin") {
+                                single.loadRoute("/webui/admin");
+                            }
+                        });
+                    } else {
+                        //window.is_admin = false;
+                        $(".admin-hide").removeClass("d-none");
+                        $(".admin-show").addClass("d-none");
+                    }
+                });
+        }
+    }, 10);
+});

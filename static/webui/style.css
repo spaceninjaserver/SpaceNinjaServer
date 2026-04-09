@@ -29,6 +29,10 @@ body:not(.logged-in) .user-dropdown {
     display: none;
 }
 
+.card-body .table.mb-0 tr:last-child {
+    border-bottom-color: transparent;
+}
+
 /* font awesome icons */
 svg {
     fill: currentColor;

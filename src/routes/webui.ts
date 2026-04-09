@@ -43,6 +43,7 @@ webuiRouter.get("/webui/quests", virtualRouteController);
 webuiRouter.get("/webui/cheats", virtualRouteController);
 webuiRouter.get("/webui/import", virtualRouteController);
 webuiRouter.get("/webui/guildView", virtualRouteController);
+webuiRouter.get("/webui/admin", virtualRouteController);
 
 // Serve static files
 webuiRouter.use("/webui", express.static(path.join(baseDir, "static/webui")));

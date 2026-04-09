@@ -39,7 +39,7 @@
             <div class="nav-item dropdown user-dropdown">
                 <button class="nav-link dropdown-toggle displayname" data-bs-toggle="dropdown" aria-expanded="false"></button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="/webui/" onclick="doLogout();" data-loc="navbar_logout"></a></li>
+                    <li><a class="dropdown-item" href="#" onclick="event.preventDefault();doLogout();" data-loc="navbar_logout"></a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="#" onclick="event.preventDefault();changeAccountPassword();" data-loc="navbar_changePassword"></a></li>
                     <li><a class="dropdown-item" href="#" onclick="event.preventDefault();changeAccountEmail();" data-loc="navbar_changeEmail"></a></li>
@@ -73,8 +73,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/webui/import" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_import"></a>
                         </li>
-                        <li class="nav-item" id="nav-guildView">
+                        <li class="nav-item">
                             <a class="nav-link" href="/webui/guildView" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_guildView"></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/webui/admin" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_admin"></a>
                         </li>
                     </ul>
                 </div>
@@ -1200,10 +1203,10 @@
                         <div class="card mb-3">
                             <h5 class="card-header" data-loc="cheats_server"></h5>
                             <div class="card-body">
-                                <div class="d-none config-admin-hide">
+                                <div class="d-none admin-hide">
                                     <p class="card-text" data-loc="cheats_administratorRequirement"></p>
                                 </div>
-                                <div class="d-none config-admin-show config-form">
+                                <div class="d-none admin-show config-form">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="skipTutorial" />
                                         <label class="form-check-label" for="skipTutorial" data-loc="cheats_skipTutorial"></label>
@@ -1223,7 +1226,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card d-none config-admin-show config-form">
+                        <div class="card d-none admin-show config-form">
                             <h5 class="card-header" data-loc="worldState"></h5>
                             <div class="card-body">
                                 <div class="form-check">
@@ -1704,6 +1707,21 @@
                     <li><a href="#" onclick="event.preventDefault();setImportSample('clearLocPins');" data-loc="import_samples_clearLocPins"></a></li>
                     <li><a href="#" onclick="event.preventDefault();setImportSample('eidolonLocPins');" data-loc="import_samples_eidolonLocPins"></a></li>
                 </ul>
+            </div>
+            <div data-route="/webui/admin" data-title-tag="navbar_admin">
+                <div class="d-none admin-hide">
+                    <p class="card-text" data-loc="cheats_administratorRequirement"></p>
+                </div>
+                <div class="d-none admin-show">
+                    <div class="card">
+                        <h5 class="card-header" data-loc="admin_users"></h5>
+                        <div class="card-body">
+                            <table class="table table-small table-hover mb-0">
+                                <tbody id="registered-losers"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>

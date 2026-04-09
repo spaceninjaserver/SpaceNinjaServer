@@ -62,6 +62,7 @@ interface IWsCustomData extends WebSocket {
     address: string;
     reflexiveAddress: string;
     accountId?: string;
+    realAccountId?: string;
     isGame?: boolean;
 }
 
@@ -69,6 +70,7 @@ interface IWsMsgFromClient {
     auth?: {
         email: string;
         password: string;
+        possessing?: string;
         isRegister: boolean;
     };
     auth_game?:
@@ -135,12 +137,18 @@ const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
             const data = JSON.parse(String(msg)) as IWsMsgFromClient;
             if (data.auth) {
                 let account: IDatabaseAccountJson | null = await Account.findOne({ email: data.auth.email });
+                let accessedAccount = account;
                 if (account) {
                     if (isCorrectPassword(data.auth.password, account.password)) {
                         if (!account.Nonce) {
                             account.ClientType = "webui";
                             account.Nonce = createNonce();
                             await (account as HydratedDocument<IDatabaseAccountJson>).save();
+                        }
+                        if (data.auth.possessing) {
+                            accessedAccount = isAdministrator(account)
+                                ? await Account.findById(data.auth.possessing)
+                                : null;
                         }
                     } else {
                         account = null;
@@ -155,18 +163,20 @@ const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
                         DisplayName: name,
                         Nonce: createNonce()
                     });
+                    accessedAccount = account;
                 }
-                if (account) {
-                    (ws as IWsCustomData).accountId = account.id;
+                if (account && accessedAccount) {
+                    (ws as IWsCustomData).accountId = accessedAccount.id;
+                    (ws as IWsCustomData).realAccountId = account.id;
                     if (!config.webui?.adminOnly || isAdministrator(account)) {
                         ws.send(
                             JSON.stringify({
                                 auth_succ: {
                                     id: account.id,
-                                    DisplayName: account.DisplayName,
+                                    DisplayName: accessedAccount.DisplayName,
                                     Nonce: account.Nonce
                                 },
-                                have_game_ws: haveGameWs(account.id)
+                                have_game_ws: haveGameWs(accessedAccount.id)
                             } satisfies IWsMsgToClient)
                         );
                     } else {
@@ -339,7 +349,7 @@ export const handleNonceInvalidation = (accountId: string): void => {
 export const bootNonAdminsFromWebui = (): void => {
     forEachWsClient(client => {
         if (client.accountId && !client.isGame) {
-            void Account.findById(client.accountId).then(account => {
+            void Account.findById(client.realAccountId ?? client.accountId).then(account => {
                 if (!account || !isAdministrator(account)) {
                     client.send(JSON.stringify({ logged_out: true } satisfies IWsMsgToClientWebui));
                     client.close();

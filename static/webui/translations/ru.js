@@ -16,6 +16,7 @@ dict = {
     code_changeNameConfirm: `Какое имя вы хотите установить для своей учетной записи?`,
     code_changeNameRetry: `|NAME| уже занято.`,
     code_deleteAccountConfirm: `Вы уверены, что хотите удалить аккаунт |DISPLAYNAME| (|EMAIL|)? Это действие нельзя отменить.`,
+    code_deletePosssedAccountConfirm: `[UNTRANSLATED] Are you sure you want to delete the account |DISPLAYNAME|? This action cannot be undone.`,
     code_archgun: `Арч-Пушка`,
     code_melee: `Ближний бой`,
     code_pistol: `Пистолет`,
@@ -529,6 +530,10 @@ dict = {
     guildView_bulkComplete: `Завершить все`,
     guildView_promote: `Повысить`,
     guildView_demote: `Понизить`,
+
+    navbar_admin: `[UNTRANSLATED] Admin`,
+    admin_users: `[UNTRANSLATED] Users`,
+    admin_possess: `[UNTRANSLATED] Possess`,
 
     prettier_sucks_ass: ``
 };
