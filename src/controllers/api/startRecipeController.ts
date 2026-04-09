@@ -87,14 +87,15 @@ export const startRecipeController: RequestHandler = async (req, res) => {
 
     let inventoryChanges: IInventoryChanges | undefined;
     if (recipe.secretIngredientAction == "SIA_CREATE_KUBROW") {
-        inventoryChanges = addKubrowPet(
-            inventory,
-            getRandomElement(recipe.secretIngredients!)!.ItemType,
-            undefined,
-            false,
-            {},
-            account.BuildLabel
-        );
+        const infestedSuitId = startRecipeRequest.Ids[startRecipeRequest.Ids.length - 1];
+        const infestedSuit = infestedSuitId.length == 24 ? inventory.Suits.id(infestedSuitId) : undefined;
+        const resultSuitType = infestedSuit
+            ? "/Lotus/Types/Game/KubrowPet/ChargerKubrowPetPowerSuit"
+            : getRandomElement(recipe.secretIngredients!)!.ItemType;
+        if (infestedSuit) {
+            infestedSuit.InfestationDate = new Date();
+        }
+        inventoryChanges = addKubrowPet(inventory, resultSuitType, undefined, false, {}, account.BuildLabel);
         pr.KubrowPet = new Types.ObjectId(fromOid(inventoryChanges.KubrowPets![0].ItemId));
     } else if (recipe.secretIngredientAction == "SIA_DISTILL_PRINT") {
         pr.KubrowPet = new Types.ObjectId(startRecipeRequest.Ids[recipe.ingredients.length]);
