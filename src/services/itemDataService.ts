@@ -1154,8 +1154,11 @@ export const getNormalizedString = (key: string, dict: Record<string, string>): 
     return getString(key, dict).split("‘").join("'").split("’").join("'").split("\r\n").join(" ");
 };
 
-export const getKeyChainItems = ({ KeyChain, ChainStage }: IKeyChainRequest): string[] => {
-    const chainStages = ExportKeys[KeyChain].chainStages;
+export const getKeyChainItems = (
+    { KeyChain, ChainStage }: IKeyChainRequest,
+    buildLabel: string | undefined
+): string[] => {
+    const chainStages = getKey(KeyChain, buildLabel)?.chainStages;
     if (!chainStages) {
         throw new Error(`KeyChain ${KeyChain} does not contain chain stages`);
     }
@@ -1194,6 +1197,25 @@ export const getLevelKeyRewards = (
     if (buildLabel && version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0) {
         if (levelKey in vorsPrizePreU40Rewards) {
             levelKeyRewards2 = vorsPrizePreU40Rewards[levelKey as keyof typeof vorsPrizePreU40Rewards] as TReward[];
+        } else {
+            // Before U19 (Hotfix: Specters of the Rail 0.12, 2016-07-20), The New Strange gave Chroma component blueprints more directly.
+            if (buildLabel && version_compare(buildLabel, "2016.07.20.00.00") < 0) {
+                if (levelKey == "/Lotus/Types/Keys/DragonQuest/DragonQuestMissionTwo") {
+                    levelKeyRewards2 = [
+                        {
+                            rewardType: "RT_STORE_ITEM",
+                            itemType: "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/ChromaHelmetBlueprint"
+                        }
+                    ];
+                } else if (levelKey == "/Lotus/Types/Keys/DragonQuest/DragonQuestMissionThree") {
+                    levelKeyRewards2 = [
+                        {
+                            rewardType: "RT_STORE_ITEM",
+                            itemType: "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/ChromaSystemsBlueprint"
+                        }
+                    ];
+                }
+            }
         }
     }
 
@@ -1458,7 +1480,7 @@ export const getBoosterPack = (uniqueName: string, buildLabel: string = ""): IBo
     return ExportBoosterPacks[uniqueName];
 };
 
-export const getKey = (uniqueName: string): IKey | undefined => {
+export const getKey = (uniqueName: string, buildLabel?: string): IKey | undefined => {
     if (
         uniqueName == "/Lotus/Types/Keys/RaidKeys/Raid01Stage01KeyItem" ||
         uniqueName == "/Lotus/Types/Keys/RaidKeys/Raid01Stage01NightmareKeyItem"
@@ -1603,6 +1625,38 @@ export const getKey = (uniqueName: string): IKey | undefined => {
                 maxEnemyLevel: 35
             }
         };
+    } else if (uniqueName == "/Lotus/Types/Keys/DragonQuest/DragonQuestKeyChain") {
+        // Before U19 (Hotfix: Specters of the Rail 0.12, 2016-07-20), The New Strange gave Chroma component blueprints more directly.
+        if (buildLabel && version_compare(buildLabel, "2016.07.20.00.00") < 0) {
+            const latestData = ExportKeys["/Lotus/Types/Keys/DragonQuest/DragonQuestKeyChain"];
+            return {
+                ...latestData,
+                chainStages: latestData.chainStages!.map(chainStage => {
+                    if ("itemsToGiveWhenTriggered" in chainStage && chainStage.itemsToGiveWhenTriggered.length == 1) {
+                        if (
+                            chainStage.itemsToGiveWhenTriggered[0] ==
+                            "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/ChromaBeaconABlueprint"
+                        ) {
+                            return {
+                                itemsToGiveWhenTriggered: [
+                                    "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/ChromaChassisBlueprint"
+                                ]
+                            };
+                        } else if (
+                            chainStage.itemsToGiveWhenTriggered[0] ==
+                                "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/ChromaBeaconBBlueprint" ||
+                            chainStage.itemsToGiveWhenTriggered[0] ==
+                                "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/ChromaBeaconCBlueprint"
+                        ) {
+                            return {
+                                itemsToGiveWhenTriggered: []
+                            };
+                        }
+                    }
+                    return chainStage;
+                })
+            };
+        }
     }
 
     return ExportKeys[uniqueName];

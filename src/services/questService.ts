@@ -10,7 +10,7 @@ import {
     addPowerSuit,
     setupKahlSyndicate
 } from "./inventoryService.ts";
-import { fromStoreItem, getKeyChainMessage, getLevelKeyRewards } from "./itemDataService.ts";
+import { fromStoreItem, getKey, getKeyChainMessage, getLevelKeyRewards } from "./itemDataService.ts";
 import type { IQuestKeyClient, IQuestKeyDatabase, IQuestStage } from "../types/inventoryTypes/inventoryTypes.ts";
 import { logger } from "../utils/logger.ts";
 import { ExportKeys, ExportRecipes } from "warframe-public-export-plus";
@@ -363,12 +363,13 @@ const handleQuestCompletion = async (
 export const giveKeyChainItem = async (
     inventory: TInventoryDatabaseDocument,
     keyChainInfo: IKeyChainRequest,
-    questKey: IQuestKeyDatabase
+    questKey: IQuestKeyDatabase,
+    buildLabel: string | undefined
 ): Promise<IInventoryChanges> => {
     let inventoryChanges: IInventoryChanges = {};
 
     if (!questKey.Progress?.[keyChainInfo.ChainStage]?.i) {
-        inventoryChanges = await addKeyChainItems(inventory, keyChainInfo);
+        inventoryChanges = await addKeyChainItems(inventory, keyChainInfo, buildLabel);
 
         if (isEmptyObject(inventoryChanges)) {
             logger.warn("inventory changes was empty after getting keychain items: should not happen");
@@ -422,8 +423,7 @@ export const giveKeyChainMissionReward = async (
     keyChainInfo: IKeyChainRequest,
     buildLabel: string | undefined
 ): Promise<void> => {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    const chainStages = ExportKeys[keyChainInfo.KeyChain]?.chainStages;
+    const chainStages = getKey(keyChainInfo.KeyChain, buildLabel)?.chainStages;
 
     if (chainStages) {
         const missionName = chainStages[keyChainInfo.ChainStage].key;
@@ -472,7 +472,7 @@ export const giveKeyChainStageTriggered = async (
 
     if (chainStages && questKey) {
         if (chainStages[keyChainInfo.ChainStage].itemsToGiveWhenTriggered.length > 0) {
-            await giveKeyChainItem(inventory, keyChainInfo, questKey);
+            await giveKeyChainItem(inventory, keyChainInfo, questKey, undefined);
         }
 
         if (chainStages[keyChainInfo.ChainStage].messageToSendWhenTriggered) {

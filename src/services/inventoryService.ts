@@ -2651,9 +2651,10 @@ export const updateSyndicate = (
  */
 export const addKeyChainItems = async (
     inventory: TInventoryDatabaseDocument,
-    keyChainData: IKeyChainRequest
+    keyChainData: IKeyChainRequest,
+    buildLabel: string | undefined
 ): Promise<IInventoryChanges> => {
-    const keyChainItems = getKeyChainItems(keyChainData);
+    const keyChainItems = getKeyChainItems(keyChainData, buildLabel);
 
     logger.debug(
         `adding key chain items ${keyChainItems.join()} for ${keyChainData.KeyChain} at stage ${keyChainData.ChainStage}`
