@@ -5013,11 +5013,11 @@ document.querySelectorAll("#sidebar .nav-link").forEach(function (elm) {
 
 async function markAllAsRead() {
     await revalidateAuthz();
-    const { Inbox } = await fetch("/api/inbox.php?" + window.authz).then(x => x.json());
+    const { Inbox } = await fetch("/api/inbox.php?" + window.authz + "&ignoreBuildLabel=1").then(x => x.json());
     let any = false;
     for (const msg of Inbox) {
         if (!msg.r) {
-            await fetch("/api/inbox.php?" + window.authz + "&messageId=" + msg.messageId.$oid);
+            await fetch("/api/inbox.php?" + window.authz + "&ignoreBuildLabel=1&messageId=" + msg.messageId.$oid);
             any = true;
         }
     }

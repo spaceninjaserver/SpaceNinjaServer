@@ -4,7 +4,13 @@ import { config, getReflexiveAddress } from "../../services/configService.ts";
 import { buildConfig } from "../../services/buildConfigService.ts";
 
 import { Account } from "../../models/loginModel.ts";
-import { createAccount, createNonce, getUsernameFromEmail, isCorrectPassword } from "../../services/loginService.ts";
+import {
+    buildVersionToInt,
+    createAccount,
+    createNonce,
+    getUsernameFromEmail,
+    isCorrectPassword
+} from "../../services/loginService.ts";
 import {
     Platform,
     type IDatabaseAccountJson,
@@ -203,14 +209,7 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
         resp.HUB = `${myUrlBase}/api/`;
 
         // The MatchmakingBuildId is a 64-bit integer represented as a decimal string. On live, the value is seemingly random per build, but really any value that is different across builds should work.
-        const [year, month, day, hour, minute] = buildLabel.split(".").map(x => parseInt(x));
-        resp.MatchmakingBuildId = (
-            year * 1_00_00_00_00 +
-            month * 1_00_00_00 +
-            day * 1_00_00 +
-            hour * 1_00 +
-            minute
-        ).toString();
+        resp.MatchmakingBuildId = buildVersionToInt(buildLabel).toString();
     }
     if (version_compare(buildLabel, gameToBuildVersion["33.0.0"]) >= 0) {
         if (version_compare(buildLabel, gameToBuildVersion["40.0.0"]) >= 0) {

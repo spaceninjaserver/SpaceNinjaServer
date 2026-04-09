@@ -6,10 +6,11 @@ import {
     deleteAllMessagesReadNonCin,
     deleteMessageRead,
     exportInboxMessage,
-    getAllMessagesSorted,
+    getMessagesSorted,
     type IMessageCreationTemplate
 } from "../../services/inboxService.ts";
 import {
+    buildVersionToInt,
     getAccountForRequest,
     getAccountFromSuffixedName,
     getSuffixedName,
@@ -37,6 +38,7 @@ export const inboxController: RequestHandler = async (req, res) => {
     const { deleteId, lastMessage: latestClientMessageId, messageId } = req.query;
 
     const account = await getAccountForRequest(req);
+    const buildLabel = "ignoreBuildLabel" in req.query ? undefined : account.BuildLabel;
 
     if (deleteId) {
         if (deleteId === "DeleteAllRead") {
@@ -124,30 +126,19 @@ export const inboxController: RequestHandler = async (req, res) => {
         res.json({ InventoryChanges: inventoryChanges });
     } else if (latestClientMessageId) {
         await createNewEventMessages(account);
-        const messages = await Inbox.find({ ownerId: account._id }).sort({ date: 1 });
-
-        const latestClientMessage = messages.find(m => m._id.toString() === parseOid(latestClientMessageId as string));
-
-        if (!latestClientMessage) {
-            logger.debug(`this should only happen after DeleteAllRead `);
-            res.json({
-                Inbox: messages.map(x => exportInboxMessage(x, account.BuildLabel)) satisfies IMessageClient[]
-            });
-            return;
-        }
-        const newMessages = messages.filter(m => m.date > latestClientMessage.date);
+        const newMessages = await getMessagesSorted(account._id, buildLabel, parseOid(latestClientMessageId as string));
 
         if (newMessages.length === 0) {
             res.send("no-new");
             return;
         }
 
-        res.json({ Inbox: newMessages.map(x => exportInboxMessage(x, account.BuildLabel)) satisfies IMessageClient[] });
+        res.json({ Inbox: newMessages.map(x => exportInboxMessage(x, buildLabel)) satisfies IMessageClient[] });
     } else {
         //newly created event messages must be newer than account.LatestEventMessageDate
         await createNewEventMessages(account);
-        const messages = await getAllMessagesSorted(account._id);
-        const inbox = messages.map(x => exportInboxMessage(x, account.BuildLabel));
+        const messages = await getMessagesSorted(account._id, buildLabel);
+        const inbox = messages.map(x => exportInboxMessage(x, buildLabel));
         res.json({ Inbox: inbox satisfies IMessageClient[] });
     }
 };
@@ -289,7 +280,8 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
             transmission: "/Lotus/Sounds/Dialog/Shadowgrapher/Vendor/DSGInbox0011AspirantZorba",
             startDate: new Date(),
             QuestReq: "/Lotus/Types/Keys/PriestFrameQuest/PriestQuestKeyChain",
-            CrossPlatform: true
+            CrossPlatform: true,
+            minBuildVersion: buildVersionToInt(gameToBuildVersion["42.0.0"])
         });
     }
 

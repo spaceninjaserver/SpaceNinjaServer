@@ -6,7 +6,15 @@ import type { IMongoDateWithLegacySupport, IOid, IOidWithLegacySupport, ITypeCou
 
 export interface IMessageClient extends Omit<
     IMessageDatabase,
-    "_id" | "globaUpgradeId" | "date" | "startDate" | "endDate" | "ownerId" | "attVisualOnly" | "expiry"
+    | "_id"
+    | "globaUpgradeId"
+    | "date"
+    | "startDate"
+    | "endDate"
+    | "ownerId"
+    | "attVisualOnly"
+    | "expiry"
+    | "minBuildVersion"
 > {
     _id?: IOid;
     globaUpgradeId?: IOidWithLegacySupport; // [sic]
@@ -17,10 +25,11 @@ export interface IMessageClient extends Omit<
 }
 
 export interface IMessageDatabase extends IMessage {
-    ownerId: Types.ObjectId;
+    ownerId: Types.ObjectId; // SNS-specific
     globaUpgradeId?: Types.ObjectId; // [sic]
     date: Date; //created at
-    attVisualOnly?: boolean;
+    attVisualOnly?: boolean; // SNS-specific
+    minBuildVersion?: number; // SNS-specific
     _id: Types.ObjectId;
 }
 
@@ -143,7 +152,8 @@ const messageSchema = new Schema<IMessageDatabase>(
         acceptAction: String,
         declineAction: String,
         hasAccountAction: Boolean,
-        RegularCredits: Number
+        RegularCredits: Number,
+        minBuildVersion: Number
     },
     { id: false }
 );
@@ -160,6 +170,7 @@ messageSchema.set("toJSON", {
         delete returnedObject.ownerId;
         delete returnedObject.attVisualOnly;
         delete returnedObject.expiry;
+        delete returnedObject.minBuildVersion;
 
         // oid & date conversions done in inboxService's exportInboxMessage
     }

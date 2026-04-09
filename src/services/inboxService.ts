@@ -1,11 +1,25 @@
 import { toMongoDate2, toOid2 } from "../helpers/inventoryHelpers.ts";
 import type { IMessageClient, IMessageDatabase, TMessageDocument } from "../models/inboxModel.ts";
 import { Inbox } from "../models/inboxModel.ts";
-import type { Types } from "mongoose";
+import type { FilterQuery, Types } from "mongoose";
+import { buildVersionToInt } from "./loginService.ts";
 
-export const getAllMessagesSorted = async (accountId: string | Types.ObjectId): Promise<TMessageDocument[]> => {
-    const inbox = await Inbox.find({ ownerId: accountId }).sort({ date: -1 });
-    return inbox;
+export const getMessagesSorted = async (
+    accountId: string | Types.ObjectId,
+    buildLabel: string | undefined,
+    afterId?: string | Types.ObjectId
+): Promise<TMessageDocument[]> => {
+    const query: FilterQuery<IMessageDatabase> = { ownerId: accountId };
+    if (buildLabel) {
+        query.$or = [
+            { minBuildVersion: { $exists: false } },
+            { minBuildVersion: { $lte: buildVersionToInt(buildLabel) } }
+        ];
+    }
+    if (afterId) {
+        query._id = { $gt: afterId };
+    }
+    return await Inbox.find(query).sort({ date: -1 });
 };
 
 export const deleteMessageRead = async (messageId: string | Types.ObjectId): Promise<void> => {
