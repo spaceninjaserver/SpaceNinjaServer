@@ -5,7 +5,7 @@ import fissureMissions from "../../static/fixed_responses/worldState/fissureMiss
 import sortieTilesets from "../../static/fixed_responses/worldState/sortieTilesets.json" with { type: "json" };
 import sortieTilesetMissions from "../../static/fixed_responses/worldState/sortieTilesetMissions.json" with { type: "json" };
 import syndicateMissions from "../../static/fixed_responses/worldState/syndicateMissions.json" with { type: "json" };
-import darvoDeals from "../../static/fixed_responses/worldState/darvoDeals.json" with { type: "json" };
+import darvoDeals from "../constants/darvoDeals.ts";
 import invasionNodes from "../../static/fixed_responses/worldState/invasionNodes.json" with { type: "json" };
 import invasionRewards from "../../static/fixed_responses/worldState/invasionRewards.json" with { type: "json" };
 import pvpChallenges from "../../static/fixed_responses/worldState/pvpChallenges.json" with { type: "json" };
@@ -39,7 +39,7 @@ import type {
     IFlashSale,
     IAlertMissionInfo
 } from "../types/worldStateTypes.ts";
-import { toMongoDate, toMongoDate2, toOid, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
+import { toMongoDate2, toOid, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
 import { DailyDeal, Fissure } from "../models/worldStateModel.ts";
 import { factionToInt, getConquest, getMissionTypeForLegacyOverride } from "./conquestService.ts";
@@ -4464,11 +4464,15 @@ export const populateFissures = async (worldState: IWorldState): Promise<void> =
 export const populateDailyDeal = async (worldState: IWorldState): Promise<void> => {
     const dailyDeals = await DailyDeal.find({});
     for (const dailyDeal of dailyDeals) {
-        if (dailyDeal.Expiry.getTime() > Date.now()) {
+        const meta = darvoDeals.find(d => d.StoreItem == dailyDeal.StoreItem);
+        if (
+            (!meta || version_compare(worldState.BuildLabel, meta.minBuildLabel) >= 0) &&
+            dailyDeal.Expiry.getTime() > Date.now()
+        ) {
             worldState.DailyDeals.push({
                 StoreItem: dailyDeal.StoreItem,
-                Activation: toMongoDate(dailyDeal.Activation),
-                Expiry: toMongoDate(dailyDeal.Expiry),
+                Activation: toMongoDate2(dailyDeal.Activation, worldState.BuildLabel),
+                Expiry: toMongoDate2(dailyDeal.Expiry, worldState.BuildLabel),
                 Discount: dailyDeal.Discount,
                 OriginalPrice: dailyDeal.OriginalPrice,
                 SalePrice: dailyDeal.SalePrice,

@@ -345,8 +345,8 @@ export interface IScheduleInfo {
 
 export interface IDailyDeal {
     StoreItem: string;
-    Activation: IMongoDate;
-    Expiry: IMongoDate;
+    Activation: IMongoDateWithLegacySupport;
+    Expiry: IMongoDateWithLegacySupport;
     Discount: number;
     OriginalPrice: number;
     SalePrice: number;
