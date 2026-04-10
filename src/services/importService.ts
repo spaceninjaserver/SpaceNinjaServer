@@ -263,7 +263,8 @@ const convertPurchaseHistory = (client: IVendorPurchaseHistoryEntryClient): IVen
 const convertPendingRecipe = (client: IPendingRecipeClient): IPendingRecipeDatabase => {
     return {
         ...client,
-        CompletionDate: convertDate(client.CompletionDate)
+        CompletionDate: convertDate(client.CompletionDate),
+        KubrowPet: client.TargetItemId ? new Types.ObjectId(client.TargetItemId) : undefined
     };
 };
 
@@ -578,8 +579,8 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         const recipe = getRecipe(pr.ItemType);
         if (recipe?.secretIngredientAction == "SIA_CREATE_KUBROW" && !pr.KubrowPet) {
             pr.KubrowPet = db.KubrowPets.find(x => x.Details!.Status == Status.StatusIncubating)?._id;
-            logger.debug(
-                `importing an incubating pet; associating pet ${pr.KubrowPet?.toString()} with recipe ${pr._id.toString()} (${pr.ItemType})`
+            logger.warn(
+                `imported recipe ${pr._id.toString()} (${pr.ItemType}) had no TargetItemId; best guess fixup is ${pr.KubrowPet?.toString()}`
             );
         }
     }

@@ -1579,7 +1579,7 @@ export const addKubrowPet = (
             HasCollar: isCatbrow || questCompleted,
             PrintsRemaining: !isPreU26 && isCatbrow ? 3 : 2,
             Status: premiumPurchase ? Status.StatusStasis : Status.StatusIncubating,
-            HatchDate: premiumPurchase ? new Date() : new Date(Date.now() + 10 * unixTimesInMs.hour), // On live, this seems to be somewhat randomised so that the pet hatches 9~11 hours after start.
+            HatchDate: premiumPurchase ? new Date() : new Date(Date.now() + 10 * unixTimesInMs.hour), // On live, this seems to be somewhat randomised so that the pet hatches 9~11 hours after start. TOVERIFY: Although it might differ for the quest recipe?
             IsMale: !!getRandomInt(0, 1),
             Size: getRandomInt(70, 100) / 100,
             DominantTraits: dominantTraits,

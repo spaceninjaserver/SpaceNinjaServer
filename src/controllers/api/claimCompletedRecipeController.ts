@@ -183,18 +183,9 @@ const claimCompletedRecipe = async (
     }
 
     if (recipe.secretIngredientAction == "SIA_CREATE_KUBROW") {
+        // This request is sent automatically once the pending recipe is completed.
         const pet = inventory.KubrowPets.id(pendingRecipe.KubrowPet!)!;
-        if (pet.Details!.HatchDate!.getTime() > Date.now()) {
-            pet.Details!.HatchDate = new Date();
-        }
-        let canSetActive = true;
-        for (const pet of inventory.KubrowPets) {
-            if (pet.Details!.Status == Status.StatusAvailable) {
-                canSetActive = false;
-                break;
-            }
-        }
-        pet.Details!.Status = canSetActive ? Status.StatusAvailable : Status.StatusStasis;
+        pet.Details!.Status = Status.StatusIncubated;
     } else if (recipe.secretIngredientAction == "SIA_DISTILL_PRINT") {
         const pet = inventory.KubrowPets.id(pendingRecipe.KubrowPet!)!;
         addKubrowPetPrint(

@@ -1214,7 +1214,6 @@ const pendingRecipeSchema = new Schema<IPendingRecipeDatabase>(
     {
         ItemType: String,
         CompletionDate: Date,
-        TargetItemId: String,
         TargetFingerprint: String,
         LongGuns: { type: [EquipmentSchema], default: undefined },
         Pistols: { type: [EquipmentSchema], default: undefined },
@@ -1231,16 +1230,23 @@ pendingRecipeSchema.virtual("ItemId").get(function () {
 
 pendingRecipeSchema.set("toJSON", {
     virtuals: true,
-    transform(_document, returnedObject: Record<string, any>) {
-        delete returnedObject._id;
-        delete returnedObject.__v;
-        delete returnedObject.LongGuns;
-        delete returnedObject.Pistols;
-        delete returnedObject.Melees;
-        delete returnedObject.SuitToUnbrand;
-        delete returnedObject.KubrowPet;
-        (returnedObject as IPendingRecipeClient).CompletionDate = {
-            $date: { $numberLong: (returnedObject as IPendingRecipeDatabase).CompletionDate.getTime().toString() }
+    transform(_document, obj: Record<string, any>) {
+        delete obj._id;
+        delete obj.__v;
+        delete obj.LongGuns;
+        delete obj.Pistols;
+        delete obj.Melees;
+        delete obj.SuitToUnbrand;
+
+        const client = obj as IPendingRecipeClient;
+        const db = obj as IPendingRecipeDatabase;
+
+        if (db.KubrowPet) {
+            client.TargetItemId = db.KubrowPet.toString();
+            delete obj.KubrowPet;
+        }
+        client.CompletionDate = {
+            $date: { $numberLong: db.CompletionDate.getTime().toString() }
         };
     }
 });

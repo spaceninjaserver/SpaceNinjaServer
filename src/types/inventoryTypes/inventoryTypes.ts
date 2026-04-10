@@ -949,7 +949,6 @@ export interface IPendingCouponClient {
 export interface IPendingRecipeDatabase {
     ItemType: string;
     CompletionDate: Date;
-    TargetItemId?: string; // unsure what this is for
     TargetFingerprint?: string;
     LongGuns?: IEquipmentDatabase[];
     Pistols?: IEquipmentDatabase[];
@@ -964,6 +963,7 @@ export interface IPendingRecipeClient extends Omit<
 > {
     ItemId: IOid;
     CompletionDate: IMongoDate;
+    TargetItemId?: string;
 }
 
 export interface IAccolades {

@@ -136,9 +136,11 @@ export interface IKubrowPetDetailsClient extends Omit<IKubrowPetDetailsDatabase,
 }
 
 export enum Status {
+    StatusIncubating = "STATUS_INCUBATING",
+    StatusIncubated = "STATUS_INCUBATED",
     StatusAvailable = "STATUS_AVAILABLE",
     StatusStasis = "STATUS_STASIS",
-    StatusIncubating = "STATUS_INCUBATING"
+    StatusDistilling = "STATUS_DISTILLING" // TODO: We currently don't ever set this, but we probably should?
 }
 
 // inventory.CrewShips[0].Weapon
