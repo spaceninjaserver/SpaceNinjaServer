@@ -5,9 +5,16 @@ import {
     populateFeaturedGuilds,
     populateFissures
 } from "../../services/worldStateService.ts";
+import { buildConfig } from "../../services/buildConfigService.ts";
 
 export const worldStateController: RequestHandler = async (req, res) => {
-    const buildLabel = req.query.buildLabel as string | undefined;
+    let buildLabel = req.query.buildLabel as string | undefined;
+    // For /cdn/worldState.php, keep buildLabel=undefined to mean latest,
+    // but for /dynamic/worldState.php, we might be dealing with a U5 client, so grab buildLabel from buildConfig, instead.
+    if (!buildLabel && req.originalUrl == "/dynamic/worldState.php") {
+        buildLabel = buildConfig.buildLabel;
+    }
+
     const worldState = getWorldState(buildLabel);
 
     await Promise.all([
