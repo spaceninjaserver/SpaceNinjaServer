@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
-import { config, getReflexiveAddress, type IHubServer } from "../../services/configService.ts";
-import { hubInstances, pickHubServer, type TRegionId } from "../../services/arbiterService.ts";
+import { config, getReflexiveAddress, type IHubServer, type TRegionId } from "../../services/configService.ts";
+import { hubInstances, pickHubServer } from "../../services/arbiterService.ts";
 
 export const hubController: RequestHandler = (req, res) => {
     const arr = (req.query.level as string).split("_");

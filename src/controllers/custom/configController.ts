@@ -1,5 +1,6 @@
 import type { RequestHandler } from "express";
-import { config, syncConfigWithDatabase } from "../../services/configService.ts";
+import { config } from "../../services/configService.ts";
+import { syncConfigWithDatabase } from "../../services/configWatcherService.ts";
 import { getAccountForRequest, isAdministrator } from "../../services/loginService.ts";
 import { saveConfig } from "../../services/configWriterService.ts";
 import { sendWsBroadcastEx, sendWsBroadcast } from "../../services/wsService.ts";

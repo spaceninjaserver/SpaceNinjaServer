@@ -7,7 +7,6 @@ import {
     configRemovedOptionsKeys,
     getWebServerParams,
     loadConfig,
-    syncConfigWithDatabase,
     type IConfig
 } from "./configService.ts";
 import { saveConfig, shouldReloadConfig } from "./configWriterService.ts";
@@ -21,6 +20,9 @@ import {
 } from "./wsService.ts";
 import varzia from "../constants/varzia.ts";
 import { getTunablesForClient } from "./tunablesService.ts";
+import { Account } from "../models/loginModel.ts";
+import { Inbox } from "../models/inboxModel.ts";
+import { createMessage } from "./inboxService.ts";
 
 chokidar.watch(configPath).on("change", () => {
     if (shouldReloadConfig()) {
@@ -170,5 +172,57 @@ export const validateConfig = (): void => {
     if (modified) {
         logger.info(`Updating config file to fix some issues with it.`);
         void saveConfig();
+    }
+};
+
+export const syncConfigWithDatabase = (): void => {
+    // Event messages are deleted after endDate. Since we don't use beginDate/endDate and instead have config toggles, we need to delete the messages once those bools are false.
+    // Also, for some reason, I can't just do `Inbox.deleteMany(...)`; - it needs this whole circus.
+    if (!config.worldState?.creditBoost) {
+        void Account.updateMany({}, { $unset: { receivedEventMessage_creditBoost: 1 } }).then(() => {});
+        void Inbox.deleteMany({ globaUpgradeId: "5b23106f283a555109666672" }).then(() => {});
+    }
+    if (!config.worldState?.affinityBoost) {
+        void Account.updateMany({}, { $unset: { receivedEventMessage_affinityBoost: 1 } }).then(() => {});
+        void Inbox.deleteMany({ globaUpgradeId: "5b23106f283a555109666673" }).then(() => {});
+    }
+    if (!config.worldState?.resourceBoost) {
+        void Account.updateMany({}, { $unset: { receivedEventMessage_resourceBoost: 1 } }).then(() => {});
+        void Inbox.deleteMany({ globaUpgradeId: "5b23106f283a555109666674" }).then(() => {});
+    }
+    if (!config.worldState?.galleonOfGhouls) {
+        void Account.updateMany({}, { $unset: { receivedEventMessage_galleonOfGhouls: 1 } }).then(() => {});
+        void Inbox.deleteMany({ goalTag: "GalleonRobbery" }).then(() => {});
+    }
+    if (!config.worldState?.longShadow) {
+        void Account.updateMany({}, { $unset: { receivedEventMessage_longShadow: 1 } }).then(() => {});
+        void Inbox.deleteMany({ goalTag: "NightwatchTacAlert" }).then(() => {});
+    }
+    if (!config.worldState?.bloodOfPerita) {
+        void Account.find({ receivedEventMessage_bloodOfPerita: { $exists: true } }, "_id").then(accounts => {
+            for (const account of accounts) {
+                void createMessage(account._id, [
+                    {
+                        sndr: "/Lotus/Language/1999/MessengerRoatheName",
+                        sub: "/Lotus/Language/TauPrequel/TauPrequelFinal/RoathesValorOutroInboxTitle",
+                        msg: "/Lotus/Language/TauPrequel/TauPrequelFinal/RoathesValorOutroInbox",
+                        icon: "/Lotus/Interface/Icons/Npcs/Roathe.png",
+                        // startDate & endDate would be present with the event dates but MongoDB would delete the message if we set an endDate in the past.
+                        transmission: "/Lotus/Sounds/Dialog/Tau/RoatheEventOutroInbox/DRoatheEventOutroInbox0020Roathe",
+                        QuestReq: "/Lotus/Types/Keys/TauPrequel/TauPrequelQuestKeyChain"
+                    }
+                ]);
+            }
+            void Account.updateMany({}, { $unset: { receivedEventMessage_bloodOfPerita: 1 } }).then(() => {});
+        });
+        void Inbox.deleteMany({
+            transmission: "/Lotus/Sounds/Dialog/Tau/RoatheEventOutroInbox/DRoatheEventIntroInbox0010Roathe"
+        }).then(() => {});
+    }
+    if (!config.worldState?.operationAtramentum) {
+        void Account.updateMany({}, { $unset: { receivedEventMessage_operationAtramentum: 1 } }).then(() => {});
+        void Inbox.deleteMany({
+            transmission: "/Lotus/Sounds/Dialog/Shadowgrapher/Vendor/DSGInbox0011AspirantZorba"
+        }).then(() => {});
     }
 };

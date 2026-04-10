@@ -1,8 +1,6 @@
 import { packHubDatagram } from "../helpers/udp.ts";
-import { config, type IHubServer } from "./configService.ts";
+import { config, type IHubServer, type TRegionId } from "./configService.ts";
 import dgram from "node:dgram";
-
-export type TRegionId = "ASIA" | "OCEANIA" | "EUROPE" | "RUSSIA" | "NORTH_AMERICA" | "SOUTH_AMERICA";
 
 export interface IHubInstance {
     Players: number;

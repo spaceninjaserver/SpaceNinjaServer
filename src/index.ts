@@ -1,5 +1,5 @@
 // First, init config.
-import { config, configPath, loadConfig, syncConfigWithDatabase } from "./services/configService.ts";
+import { config, configPath, loadConfig } from "./services/configService.ts";
 import fs from "fs";
 try {
     loadConfig();
@@ -22,7 +22,7 @@ import path from "path";
 import child_process from "child_process";
 import { JSONStringify } from "json-with-bigint";
 import { startWebServer } from "./services/webService.ts";
-import { validateConfig } from "./services/configWatcherService.ts";
+import { syncConfigWithDatabase, validateConfig } from "./services/configWatcherService.ts";
 import { updateWorldStateCollections } from "./services/worldStateService.ts";
 import { repoDir } from "./helpers/pathHelper.ts";
 import { MongoMemoryServer } from "mongodb-memory-server-core";

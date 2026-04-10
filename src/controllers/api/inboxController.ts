@@ -258,6 +258,18 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
             goalTag: "GalleonRobbery"
         });
     }
+    if (config.worldState?.bloodOfPerita && !account.receivedEventMessage_bloodOfPerita) {
+        account.receivedEventMessage_bloodOfPerita = true;
+        newEventMessages.push({
+            sndr: "/Lotus/Language/1999/MessengerRoatheName",
+            sub: "/Lotus/Language/TauPrequel/TauPrequelFinal/RoathesValorIntroInboxTitle",
+            msg: "/Lotus/Language/TauPrequel/TauPrequelFinal/RoathesValorIntroInbox",
+            icon: "/Lotus/Interface/Icons/Npcs/Roathe.png",
+            startDate: new Date(),
+            transmission: "/Lotus/Sounds/Dialog/Tau/RoatheEventOutroInbox/DRoatheEventIntroInbox0010Roathe",
+            QuestReq: "/Lotus/Types/Keys/TauPrequel/TauPrequelQuestKeyChain"
+        });
+    }
     if (config.worldState?.longShadow && !account.receivedEventMessage_longShadow) {
         account.receivedEventMessage_longShadow = true;
         newEventMessages.push({
@@ -269,7 +281,6 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
             goalTag: "NightwatchTacAlert"
         });
     }
-
     if (config.worldState?.operationAtramentum && !account.receivedEventMessage_operationAtramentum) {
         account.receivedEventMessage_operationAtramentum = true;
         newEventMessages.push({

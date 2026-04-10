@@ -1,11 +1,6 @@
 import type { RequestHandler } from "express";
-import {
-    getAllHubServerStats,
-    hubInstances,
-    type IHubServerStats,
-    type TRegionId
-} from "../../services/arbiterService.ts";
-import { config } from "../../services/configService.ts";
+import { getAllHubServerStats, hubInstances, type IHubServerStats } from "../../services/arbiterService.ts";
+import { config, type TRegionId } from "../../services/configService.ts";
 
 export const statsController: RequestHandler = (_req, res) => {
     const response: IArbiterStatsResponse = {
