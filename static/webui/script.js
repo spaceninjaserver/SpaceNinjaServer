@@ -3718,32 +3718,35 @@ function removeCountItems(uniqueName, count) {
 
 function addItemByItemType() {
     const ItemType = document.getElementById("typeName-type").value;
-    // Must start with "/Lotus/", contain only letters A–Z, digits 0–9, no "//", and not end with "/"
-    if (!ItemType || !/^\/Lotus\/(?:[A-Za-z0-9]+(?:\/[A-Za-z0-9]+)*)$/.test(ItemType)) {
-        $("#typeName-type").addClass("is-invalid").focus();
-        return;
-    }
-    revalidateAuthz().then(() => {
-        $.post({
-            url: "/custom/addItems?" + window.authz,
-            contentType: "application/json",
-            data: JSON.stringify([
-                {
-                    ItemType,
-                    ItemCount: 1
-                }
-            ])
-        })
-            .done(function (_, __, jqXHR) {
-                if (jqXHR.status === 200) {
-                    toast(loc("code_succAdded"));
-                    updateInventory();
-                }
+    const ItemCount = parseInt($(`#typeName-count`).val());
+    if (ItemCount != 0 && !Number.isNaN(ItemCount)) {
+        revalidateAuthz().then(() => {
+            $.post({
+                url: "/custom/addItems?" + window.authz,
+                contentType: "application/json",
+                data: JSON.stringify([
+                    {
+                        ItemType,
+                        ItemCount
+                    }
+                ])
             })
-            .fail(function () {
-                $("#typeName-type").addClass("is-invalid").focus();
-            });
-    });
+                .done(function (didAnything) {
+                    if (didAnything) {
+                        if (ItemCount > 0) {
+                            toast(loc("code_succAdded"));
+                        } else {
+                            toast(loc("code_succRemoved"));
+                        }
+                    } else {
+                        toast(loc("code_nothingToDo"));
+                    }
+                })
+                .fail(r => {
+                    toast(r.responseText);
+                });
+        });
+    }
 }
 
 function doAcquireRiven() {
