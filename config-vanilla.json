@@ -107,8 +107,7 @@
     "prohibitFreecam": false,
     "prohibitTeleport": false,
     "prohibitScripts": false,
-    "motd": null,
-    "udpProxyUpstream": false
+    "motd": null
   },
   "dev": {
     "keepVendorsExpired": false
