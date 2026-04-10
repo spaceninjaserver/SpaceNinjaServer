@@ -3,7 +3,14 @@ import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
 import { getRecipe } from "../../services/itemDataService.ts";
-import { addItem, addKubrowPet, freeUpSlot, getInventory, updateCurrency } from "../../services/inventoryService.ts";
+import {
+    addItem,
+    addKubrowPet,
+    addMiscItem,
+    freeUpSlot,
+    getInventory,
+    updateCurrency
+} from "../../services/inventoryService.ts";
 import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import { Types } from "mongoose";
 import type { ISpectreLoadout } from "../../types/inventoryTypes/inventoryTypes.ts";
@@ -55,10 +62,7 @@ export const startRecipeController: RequestHandler = async (req, res) => {
                 recipe.ingredients[i].ItemType == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg" ||
                 recipe.ingredients[i].ItemType == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem"
             ) {
-                const index = inventory.KubrowPetEggs.findIndex(x => x._id.equals(startRecipeRequest.Ids[i]));
-                if (index != -1) {
-                    inventory.KubrowPetEggs.splice(index, 1);
-                }
+                addMiscItem(inventory, "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg", -1);
             } else if (recipe.ingredients[i].ItemType.startsWith("/Lotus/Upgrades/")) {
                 const index = inventory.Upgrades.findIndex(x => x._id.equals(startRecipeRequest.Ids[i]));
                 if (index != -1) {

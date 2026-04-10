@@ -34,6 +34,7 @@ import {
     addKahlProgress,
     addLevelKeys,
     addLoreFragmentScans,
+    addMiscItem,
     addMiscItems,
     addMissionComplete,
     addMods,
@@ -626,12 +627,7 @@ export const addMissionInventoryUpdates = async (
                 break;
             }
             case "KubrowPetEggs": {
-                for (let i = 0; i != value.length; ++i) {
-                    inventory.KubrowPetEggs.push({
-                        ItemType: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg",
-                        _id: new Types.ObjectId()
-                    });
-                }
+                addMiscItem(inventory, "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg", value.length);
                 break;
             }
             case "DiscoveredMarkers": {

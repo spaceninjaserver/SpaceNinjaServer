@@ -20,7 +20,7 @@ import type {
     ILockedWeaponGroupClient,
     IInvasionProgressClient,
     IWeaponSkinClient,
-    IKubrowPetEggClient,
+    IKubrowPetEgg,
     INemesisClient,
     IUpgradeClient,
     IChallengeInstanceStateClient,
@@ -140,7 +140,7 @@ export type IMissionInventoryUpdateRequest = {
         NumExtraRewards: number;
         Count: number;
     }[];
-    KubrowPetEggs?: IKubrowPetEggClient[];
+    KubrowPetEggs?: IKubrowPetEgg[];
     DiscoveredMarkers?: IDiscoveredMarker[];
     BrandedSuits?: IOid; // sent when captured by g3
     LockedWeaponGroup?: ILockedWeaponGroupClient; // sent when captured by zanuka

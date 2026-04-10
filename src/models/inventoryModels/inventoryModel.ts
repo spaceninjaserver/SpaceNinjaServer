@@ -46,8 +46,6 @@ import type {
     IDialogueClient,
     IUpgradeDatabase,
     TEquipmentKey,
-    IKubrowPetEggDatabase,
-    IKubrowPetEggClient,
     ICustomMarkers,
     IMarkerInfo,
     IMarker,
@@ -529,26 +527,6 @@ StepSequencersSchema.set("toJSON", {
     transform(_document, returnedObject: Record<string, any>) {
         delete returnedObject._id;
         delete returnedObject.__v;
-    }
-});
-
-const kubrowPetEggSchema = new Schema<IKubrowPetEggDatabase>(
-    {
-        ItemType: String
-    },
-    { id: false }
-);
-kubrowPetEggSchema.set("toJSON", {
-    virtuals: true,
-    transform(_document, obj: Record<string, any>) {
-        const client = obj as IKubrowPetEggClient;
-        const db = obj as IKubrowPetEggDatabase;
-
-        client.ExpirationDate = { $date: { $numberLong: "2000000000000" } };
-        client.ItemId = toOid(db._id);
-
-        delete obj._id;
-        delete obj.__v;
     }
 });
 
@@ -1728,7 +1706,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //The Mandachord(Octavia) is a step sequencer
         StepSequencers: [StepSequencersSchema],
 
-        KubrowPetEggs: [kubrowPetEggSchema],
+        KubrowPetEggs: { type: [], default: undefined },
         //Prints   Cat(3 Prints)\Kubrow(2 Prints) Pets
         KubrowPetPrints: [kubrowPetPrintSchema],
 

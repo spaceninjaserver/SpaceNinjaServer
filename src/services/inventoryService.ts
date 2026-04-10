@@ -14,8 +14,6 @@ import type {
     TEquipmentKey,
     IFusionTreasure,
     IDailyAffiliations,
-    IKubrowPetEggDatabase,
-    IKubrowPetEggClient,
     ILibraryDailyTaskInfo,
     IDroneClient,
     IUpgradeClient,
@@ -27,7 +25,8 @@ import type {
     INemesisPetTargetFingerprint,
     IDialogueDatabase,
     IKubrowPetPrintClient,
-    IWeeklyMissionChallengeInfo
+    IWeeklyMissionChallengeInfo,
+    IKubrowPetEgg
 } from "../types/inventoryTypes/inventoryTypes.ts";
 import { InventorySlot, equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate.ts";
@@ -77,7 +76,9 @@ import {
     kubrowDetails,
     kubrowFurPatternsWeights,
     kubrowWeights,
+    toMongoDate2,
     toOid,
+    toOid2,
     version_compare
 } from "../helpers/inventoryHelpers.ts";
 import { addQuestKey, completeQuest } from "./questService.ts";
@@ -572,26 +573,6 @@ export const addItem = async (
             return {
                 ShipDecorations: changes
             };
-        } else if (ExportResources[typeName].productCategory == "KubrowPetEggs") {
-            const changes: IKubrowPetEggClient[] = [];
-            if (quantity < 0 || quantity > 100) {
-                throw new Error(`unexpected acquisition quantity of KubrowPetEggs: got ${quantity}, expected 0..100`);
-            }
-            for (let i = 0; i != quantity; ++i) {
-                const egg: IKubrowPetEggDatabase = {
-                    ItemType: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg",
-                    _id: new Types.ObjectId()
-                };
-                inventory.KubrowPetEggs.push(egg);
-                changes.push({
-                    ItemType: egg.ItemType,
-                    ExpirationDate: { $date: { $numberLong: "2000000000000" } },
-                    ItemId: toOid(egg._id) // TODO: Pass on buildLabel from purchaseService
-                });
-            }
-            return {
-                KubrowPetEggs: changes
-            };
         } else {
             throw new Error(`unknown product category: ${ExportResources[typeName].productCategory}`);
         }
@@ -1078,9 +1059,33 @@ export const addItem = async (
                                 );
                             }
                             return inventoryChanges;
+                        } else if (typeName == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem") {
+                            // pre-U40 acquisition
+                            if (quantity < 0 || quantity > 100) {
+                                throw new Error(
+                                    `unexpected acquisition quantity of KubrowPetEggs: got ${quantity}, expected 0..100`
+                                );
+                            }
+                            const idBase = Math.min(
+                                inventory.MiscItems.find(
+                                    x => x.ItemType == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg"
+                                )?.ItemCount ?? 0,
+                                100
+                            );
+                            // add to inventory as a MiscItem
+                            addMiscItem(inventory, "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg", quantity);
+                            // but give the client the expected response format
+                            const changes: IKubrowPetEgg[] = [];
+                            for (let i = 0; i != quantity; ++i) {
+                                changes.push({
+                                    ItemType: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem",
+                                    ExpirationDate: toMongoDate2(2000000000000, buildLabel),
+                                    ItemId: toOid2((idBase + i).toString().padStart(24, "0"), buildLabel)
+                                });
+                            }
+                            return { KubrowPetEggs: changes };
                         } else if (
                             typeName != "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg" &&
-                            typeName != "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem" &&
                             typeName != "/Lotus/Types/Game/KubrowPet/BlankTraitPrint" &&
                             typeName != "/Lotus/Types/Game/KubrowPet/ImprintedTraitPrint"
                         ) {
@@ -2830,6 +2835,12 @@ export const cleanupInventory = (inventory: TInventoryDatabaseDocument): void =>
             logger.debug(`removing invalid pet ${pet.ItemType} (${pet._id.toString()})`);
             inventory.KubrowPets.pull({ _id: pet._id });
         }
+    }
+
+    if (inventory.KubrowPetEggs) {
+        addMiscItem(inventory, "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg", inventory.KubrowPetEggs.length);
+        logger.debug(`migrated ${inventory.KubrowPetEggs.length} KubrowPetEggs to MiscItems`);
+        inventory.KubrowPetEggs = undefined;
     }
 };
 

@@ -183,7 +183,7 @@ export interface IInventoryDatabase
     KahlLoadOuts: IOperatorConfigDatabase[];
     InfestedFoundry?: IInfestedFoundryDatabase;
     DialogueHistory?: IDialogueHistoryDatabase;
-    KubrowPetEggs: IKubrowPetEggDatabase[];
+    KubrowPetEggs?: [];
     KubrowPetPrints: IKubrowPetPrintDatabase[];
     PendingCoupon?: IPendingCouponDatabase;
     Drones: IDroneDatabase[];
@@ -396,7 +396,7 @@ export interface IInventoryClient
     TauntHistory?: ITaunt[];
     StoryModeChoice: string;
     PeriodicMissionCompletions: IPeriodicMissionCompletionResponse[];
-    KubrowPetEggs?: IKubrowPetEggClient[];
+    KubrowPetEggs?: IKubrowPetEgg[];
     LoreFragmentScans: ILoreFragmentScan[];
     EquippedEmotes: string[];
     //PendingTrades: IPendingTrade[];
@@ -812,15 +812,10 @@ export interface IInvasionProgressDatabase extends Omit<IInvasionProgressClient,
     invasionId: Types.ObjectId;
 }
 
-export interface IKubrowPetEggClient {
+export interface IKubrowPetEgg {
     ItemType: string;
-    ExpirationDate: IMongoDate; // seems to be set to 7 days ahead @ 0 UTC
-    ItemId: IOid;
-}
-
-export interface IKubrowPetEggDatabase {
-    ItemType: string;
-    _id: Types.ObjectId;
+    ExpirationDate: IMongoDateWithLegacySupport; // seems to be set to 7 days ahead @ 0 UTC
+    ItemId: IOidWithLegacySupport;
 }
 
 export interface IKubrowPetPrintClient {

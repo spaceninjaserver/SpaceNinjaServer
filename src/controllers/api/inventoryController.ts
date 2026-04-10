@@ -548,11 +548,26 @@ export const getInventoryResponse = async (
             inventoryResponse.Nemesis = undefined;
         }
 
-        // U40 changed the path from /Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem to /Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg
+        // U40 migrated from KubrowPetEggs with ItemType /Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem to MiscItems with ItemType /Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg
         // so translate it back for older versions
-        if (inventoryResponse.KubrowPetEggs && version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0) {
-            for (const ke of inventoryResponse.KubrowPetEggs) {
-                ke.ItemType = "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem";
+        if (version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0) {
+            inventoryResponse.KubrowPetEggs = [];
+            const index = inventoryResponse.MiscItems.findIndex(
+                x => x.ItemType == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg"
+            );
+            if (index != -1) {
+                const numKubrowEggs = Math.min(
+                    inventoryResponse.MiscItems[index].ItemCount,
+                    100 // capped to avoid sending an overly large array
+                );
+                inventoryResponse.MiscItems.splice(index, 1);
+                for (let i = 0; i != numKubrowEggs; ++i) {
+                    inventoryResponse.KubrowPetEggs.push({
+                        ItemType: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem",
+                        ExpirationDate: toMongoDate2(2000000000000, buildLabel),
+                        ItemId: toOid2(i.toString().padStart(24, "0"), buildLabel)
+                    });
+                }
             }
         }
 
