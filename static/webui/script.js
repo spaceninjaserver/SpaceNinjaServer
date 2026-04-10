@@ -5213,7 +5213,8 @@ single.getRoute("/webui/admin").on("beforeload", function () {
                             const td = document.createElement("td");
                             if (window.accountId != user.id) {
                                 const a = document.createElement("a");
-                                a.textContent = loc(`admin_possess`);
+                                a.textContent = loc("admin_possess");
+                                a.setAttribute("data-loc", "admin_possess");
                                 a.href = "#";
                                 a.onclick = function () {
                                     localStorage.setItem("possessing", user.id);
