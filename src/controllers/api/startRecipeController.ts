@@ -85,7 +85,7 @@ export const startRecipeController: RequestHandler = async (req, res) => {
         } else {
             const itemType = recipe.ingredients[i].ItemType;
             const itemCount = recipe.ingredients[i].ItemCount;
-            await addItem(inventory, itemType, itemCount * -1);
+            await addItem(inventory, itemType, itemCount * -1, undefined, undefined, undefined, true);
         }
     }
 
