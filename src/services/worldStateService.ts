@@ -3941,6 +3941,8 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         const progress = (dayWithFraction - activeStartDay) / (activeEndDay - activeStartDay);
         const healthPct = 1 - Math.min(Math.max(progress, 0), 1);
 
+        const bountyCycleStartSecs = Math.trunc(bountyEpoch + bountyCycle * eidolonCycleDuration);
+
         worldState.Goals.push({
             _id: { $oid: "687ebbe6d1d17841c9c59f38" },
             Activation: {
@@ -3967,7 +3969,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Tag: "GhoulEmergence",
             JobAffiliationTag: "CetusSyndicate",
             JobCurrentVersion: {
-                $oid: ((bountyCycle * 9000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000008"
+                $oid: (bountyCycleStartSecs & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000008"
             },
             Jobs: [
                 {
