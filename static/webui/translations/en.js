@@ -532,7 +532,7 @@ dict = {
 
     navbar_admin: `Admin`,
     admin_users: `Users`,
-    admin_possess: `Possess`,
+    admin_possess: `Impersonate`,
 
     prettier_sucks_ass: ``
 };

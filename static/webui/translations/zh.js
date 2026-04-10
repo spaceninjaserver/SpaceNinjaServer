@@ -533,7 +533,7 @@ dict = {
 
     navbar_admin: `管理员`,
     admin_users: `用户`,
-    admin_possess: `接管`,
+    admin_possess: `[UNTRANSLATED] Impersonate`,
 
     prettier_sucks_ass: ``
 };
