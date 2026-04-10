@@ -1028,8 +1028,45 @@ export const getRecipe = (uniqueName: string): IRecipe | undefined => {
 };
 
 export const getSyndicate = (tag: string, buildLabel: string | undefined): ISyndicate | undefined => {
-    if (tag == "EntratiSyndicate" && buildLabel && version_compare(buildLabel, gameToBuildVersion["41.0.0"]) < 0) {
-        return EntratiSyndicate_pre_U41 as ISyndicate;
+    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["41.0.0"]) < 0) {
+        if (tag == "EntratiSyndicate") {
+            return EntratiSyndicate_pre_U41 as ISyndicate;
+        }
+        if (version_compare(buildLabel, gameToBuildVersion["33.5.0"]) < 0) {
+            let syndicate = ExportSyndicates[tag];
+            if (tag == "ArbitersSyndicate") {
+                syndicate = {
+                    ...syndicate,
+                    initiationReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilArbitersOfHexisA"
+                };
+            } else if (tag == "CephalonSudaSyndicate") {
+                syndicate = {
+                    ...syndicate,
+                    initiationReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilCephalonSudaA"
+                };
+            } else if (tag == "NewLokaSyndicate") {
+                syndicate = {
+                    ...syndicate,
+                    initiationReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilNewLokaA"
+                };
+            } else if (tag == "PerrinSyndicate") {
+                syndicate = {
+                    ...syndicate,
+                    initiationReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilPerrinSequenceA"
+                };
+            } else if (tag == "RedVeilSyndicate") {
+                syndicate = {
+                    ...syndicate,
+                    initiationReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilRedVeilA"
+                };
+            } else if (tag == "SteelMeridianSyndicate") {
+                syndicate = {
+                    ...syndicate,
+                    initiationReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilSteelMeridianA"
+                };
+            }
+            return syndicate;
+        }
     }
     return ExportSyndicates[tag];
 };
