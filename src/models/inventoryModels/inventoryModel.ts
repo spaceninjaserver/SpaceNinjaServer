@@ -593,16 +593,19 @@ const seasonChallengeHistorySchema = new Schema<ISeasonChallenge>(
     { _id: false }
 );
 
-const personalTechProjectSchema = new Schema<IPersonalTechProjectDatabase>({
-    State: Number,
-    ReqCredits: Number,
-    ItemType: String,
-    ProductCategory: String,
-    CategoryItemId: Schema.Types.ObjectId,
-    ReqItems: { type: [typeCountSchema], default: undefined },
-    HasContributions: Boolean,
-    CompletionDate: Date
-});
+const personalTechProjectSchema = new Schema<IPersonalTechProjectDatabase>(
+    {
+        State: Number,
+        ReqCredits: Number,
+        ItemType: String,
+        ProductCategory: String,
+        CategoryItemId: Schema.Types.ObjectId,
+        ReqItems: { type: [typeCountSchema], default: undefined },
+        HasContributions: Boolean,
+        CompletionDate: Date
+    },
+    { id: false }
+);
 
 personalTechProjectSchema.virtual("ItemId").get(function () {
     return { $oid: this._id.toString() };
@@ -1075,14 +1078,17 @@ const traitsSchema = new Schema<ITraits>(
     { _id: false }
 );
 
-const kubrowPetPrintSchema = new Schema<IKubrowPetPrintDatabase>({
-    ItemType: String,
-    Name: String,
-    IsMale: Boolean,
-    Size: Number,
-    DominantTraits: traitsSchema,
-    RecessiveTraits: traitsSchema
-});
+const kubrowPetPrintSchema = new Schema<IKubrowPetPrintDatabase>(
+    {
+        ItemType: String,
+        Name: String,
+        IsMale: Boolean,
+        Size: Number,
+        DominantTraits: traitsSchema,
+        RecessiveTraits: traitsSchema
+    },
+    { id: false }
+);
 kubrowPetPrintSchema.set("toJSON", {
     virtuals: true,
     transform(_doc, obj: Record<string, any>) {
