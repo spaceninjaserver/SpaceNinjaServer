@@ -959,8 +959,8 @@ const crewShipMembersSchema = new Schema<ICrewShipMembersDatabase>(
 
 const dialogueGiftSchema = new Schema<IDialogueGift>(
     {
-        Item: String,
-        GiftedQuantity: Number
+        Item: { type: String, required: true },
+        GiftedQuantity: { type: Number, required: true }
     },
     { _id: false }
 );
@@ -987,12 +987,12 @@ const completedDialogueSchema = new Schema<ICompletedDialogue>(
 
 const dialogueSchema = new Schema<IDialogueDatabase>(
     {
-        Rank: Number,
-        Chemistry: Number,
-        AvailableDate: Date,
-        AvailableGiftDate: Date,
-        RankUpExpiry: Date,
-        BountyChemExpiry: Date,
+        Rank: { type: Number, required: true },
+        Chemistry: { type: Number, required: true },
+        AvailableDate: { type: Date, required: true },
+        AvailableGiftDate: { type: Date, required: true },
+        RankUpExpiry: { type: Date, required: true },
+        BountyChemExpiry: { type: Date, required: true },
         QueuedDialogues: { type: [String], default: [] },
         Gifts: { type: [dialogueGiftSchema], default: [] },
         Booleans: { type: [String], default: [] },
@@ -1017,9 +1017,9 @@ dialogueSchema.set("toJSON", {
 
 const dialogueResetDateSchema = new Schema<IDialogueResetDateDatabase>(
     {
-        Date: Date,
-        Pack: String,
-        Resets: Number
+        Date: { type: Date, required: true },
+        Pack: { type: String, required: true },
+        Resets: { type: Number, required: true }
     },
     { _id: false }
 );
@@ -1035,8 +1035,8 @@ dialogueResetDateSchema.set("toJSON", {
 
 const dialogueHistorySchema = new Schema<IDialogueHistoryDatabase>(
     {
-        YearIteration: Number,
-        Resets: Number,
+        YearIteration: { type: Number, required: false },
+        Resets: { type: Number, required: false },
         ResetDates: { type: [dialogueResetDateSchema], required: false },
         Dialogues: { type: [dialogueSchema], required: false }
     },
