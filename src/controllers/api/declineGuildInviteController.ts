@@ -1,9 +1,9 @@
 import { GuildMember } from "../../models/guildModel.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 export const declineGuildInviteController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountForRequest(req);
+    const accountId = await getAccountIdForRequest(req);
 
     await GuildMember.deleteOne({
         accountId: accountId,

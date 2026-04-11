@@ -1,7 +1,7 @@
 import { toMongoDate2, toOid2 } from "../helpers/inventoryHelpers.ts";
 import type { IMessageClient, IMessageDatabase, TMessageDocument } from "../models/inboxModel.ts";
 import { Inbox } from "../models/inboxModel.ts";
-import type { FilterQuery, Types } from "mongoose";
+import type { QueryFilter, Types } from "mongoose";
 import { buildVersionToInt } from "./loginService.ts";
 
 export const getMessagesSorted = async (
@@ -9,7 +9,7 @@ export const getMessagesSorted = async (
     buildLabel: string | undefined,
     afterId?: string | Types.ObjectId
 ): Promise<TMessageDocument[]> => {
-    const query: FilterQuery<IMessageDatabase> = { ownerId: accountId };
+    const query: QueryFilter<IMessageDatabase> = { ownerId: accountId };
     if (buildLabel) {
         query.$or = [
             { minBuildVersion: { $exists: false } },

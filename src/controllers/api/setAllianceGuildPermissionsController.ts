@@ -27,7 +27,7 @@ export const setAllianceGuildPermissionsController: RequestHandler = async (req,
 
     const targetAllianceMember = (await AllianceMember.findOne({
         allianceId: allianceMember.allianceId,
-        guildId: req.query.guildId
+        guildId: req.query.guildId as string
     }))!;
     targetAllianceMember.Permissions =
         parseInt(req.query.perms as string) &

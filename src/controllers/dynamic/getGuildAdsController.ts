@@ -4,7 +4,7 @@ import type { IGuildAdInfoClient } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
 export const getGuildAdsController: RequestHandler = async (req, res) => {
-    const ads = await GuildAd.find(req.query.tier ? { Tier: req.query.tier } : {});
+    const ads = await GuildAd.find(req.query.tier ? { Tier: parseInt(req.query.tier as string) } : {});
     const guildAdInfos: IGuildAdInfoClient[] = [];
     for (const ad of ads) {
         guildAdInfos.push({

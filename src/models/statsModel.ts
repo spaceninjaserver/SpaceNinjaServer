@@ -1,4 +1,4 @@
-import type { Document, Types } from "mongoose";
+import type { HydratedDocument } from "mongoose";
 import { Schema, model } from "mongoose";
 import type {
     IEnemy,
@@ -134,8 +134,4 @@ statsSchema.index({ accountOwnerId: 1 }, { unique: true });
 
 export const Stats = model<IStatsDatabase>("Stats", statsSchema);
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export type TStatsDatabaseDocument = Document<unknown, {}, IStatsDatabase> & {
-    _id: Types.ObjectId;
-    __v: number;
-} & IStatsDatabase;
+export type TStatsDatabaseDocument = HydratedDocument<IStatsDatabase>;

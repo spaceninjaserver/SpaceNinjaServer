@@ -18,7 +18,7 @@ export const divvyAllianceVaultController: RequestHandler = async (req, res) => 
 
         // Check guild has treasurer permissions in the alliance
         const allianceMember = (await AllianceMember.findOne({
-            allianceId: req.query.allianceId,
+            allianceId: req.query.allianceId as string,
             guildId: guildMember.guildId
         }))!;
         if (!(allianceMember.Permissions & GuildPermission.Treasurer)) {
@@ -26,7 +26,7 @@ export const divvyAllianceVaultController: RequestHandler = async (req, res) => 
             return;
         }
 
-        const allianceMembers = await AllianceMember.find({ allianceId: req.query.allianceId });
+        const allianceMembers = await AllianceMember.find({ allianceId: req.query.allianceId as string });
         const memberCounts: Record<string, number> = {};
         let totalMembers = 0;
         await parallelForeach(allianceMembers, async allianceMember => {

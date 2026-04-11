@@ -19,7 +19,7 @@ export const addToAllianceController: RequestHandler = async (req, res) => {
 
     // Check guild has invite permissions in the alliance
     const allianceMember = (await AllianceMember.findOne({
-        allianceId: req.query.allianceId,
+        allianceId: req.query.allianceId as string,
         guildId: guildMember.guildId
     }))!;
     if (!(allianceMember.Permissions & GuildPermission.Recruiter)) {
@@ -57,7 +57,7 @@ export const addToAllianceController: RequestHandler = async (req, res) => {
     // Add clan as a pending alliance member
     try {
         await AllianceMember.insertOne({
-            allianceId: req.query.allianceId,
+            allianceId: req.query.allianceId as string,
             guildId: guilds[0]._id,
             Pending: true,
             Permissions: 0

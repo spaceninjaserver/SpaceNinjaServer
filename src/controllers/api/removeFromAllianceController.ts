@@ -22,7 +22,7 @@ export const removeFromAllianceController: RequestHandler = async (req, res) => 
         }
 
         // Update allianceMember to point to the alliance to kick
-        allianceMember = (await AllianceMember.findOne({ guildId: req.query.guildId }))!;
+        allianceMember = (await AllianceMember.findOne({ guildId: req.query.guildId as string }))!;
     }
 
     if (allianceMember.Permissions & GuildPermission.Ruler) {

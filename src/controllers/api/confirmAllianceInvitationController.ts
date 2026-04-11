@@ -13,7 +13,7 @@ export const confirmAllianceInvitationController: RequestHandler = async (req, r
     }
 
     const allianceMember = await AllianceMember.findOne({
-        allianceId: req.query.allianceId,
+        allianceId: req.query.allianceId as string,
         guildId: guildMember.guildId
     });
     if (!allianceMember || !allianceMember.Pending) {

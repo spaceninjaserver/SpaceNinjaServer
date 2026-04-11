@@ -1,5 +1,6 @@
 import type { IMissionReward, TFaction, TMissionType } from "warframe-public-export-plus";
 import type { IMongoDateWithLegacySupport, IMongoDate, IOid, IOidWithLegacySupport } from "./commonTypes.ts";
+import type { Types } from "mongoose";
 
 export interface IWorldState {
     WorldSeed?: string;
@@ -363,6 +364,7 @@ export interface IDailyDealDatabase {
     SalePrice: number;
     AmountTotal: number;
     AmountSold: number;
+    _id: Types.ObjectId;
 }
 
 export interface IPVPChallengeInstance {

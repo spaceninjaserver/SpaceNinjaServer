@@ -11,7 +11,7 @@ export const declineAllianceInviteController: RequestHandler = async (req, res) 
         return;
     }
 
-    await AllianceMember.deleteOne({ allianceId: req.query.allianceId, guildId: guildMember.guildId });
+    await AllianceMember.deleteOne({ allianceId: req.query.allianceId as string, guildId: guildMember.guildId });
 
     res.end();
 };

@@ -7,7 +7,7 @@ import type { RequestHandler } from "express";
 export const getGuildContributionsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const guildId = (await getInventory(accountId, "GuildId")).GuildId;
-    const guildMember = (await GuildMember.findOne({ guildId, accountId: req.query.buddyId }))!;
+    const guildMember = (await GuildMember.findOne({ guildId, accountId: req.query.buddyId as string }))!;
     res.json({
         _id: { $oid: req.query.buddyId as string },
         RegularCreditsContributed: guildMember.RegularCreditsContributed,
