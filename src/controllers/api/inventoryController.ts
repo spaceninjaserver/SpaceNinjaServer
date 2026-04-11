@@ -16,7 +16,7 @@ import {
 import type { IPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import { ArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import type { ICountedItem } from "warframe-public-export-plus";
-import { ExportArcanes } from "warframe-public-export-plus";
+import { ExportArcanes, ExportWarframes, ExportWeapons } from "warframe-public-export-plus";
 import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "../../services/infestedFoundryService.ts";
 import {
     addEmailItem,
@@ -609,6 +609,32 @@ export const getInventoryResponse = async (
                     if (item.Features && item.Features & EquipmentFeatures.GILDED) {
                         item.Gild = true;
                     }
+                }
+            }
+
+            // U15 ~ U18 are known to crash with unknown item types in XPInfo, so filter this array.
+            {
+                const prevLength = inventoryResponse.XPInfo.length;
+                inventoryResponse.XPInfo = inventoryResponse.XPInfo.filter(item => {
+                    let introducedAt: number | undefined;
+                    if (item.ItemType in ExportWarframes) {
+                        introducedAt = ExportWarframes[item.ItemType].introducedAt;
+                    } else if (item.ItemType in ExportWeapons) {
+                        introducedAt = ExportWeapons[item.ItemType].introducedAt;
+                    }
+                    if (!introducedAt) {
+                        return false;
+                    }
+                    const date = new Date(introducedAt * 1000);
+                    return (
+                        version_compare(
+                            buildLabel,
+                            `${date.getUTCFullYear()}.${date.getUTCMonth()}.${date.getUTCDate()}.${date.getUTCHours()}.${date.getUTCMinutes()}`
+                        ) >= 0
+                    );
+                });
+                if (prevLength != inventoryResponse.XPInfo.length) {
+                    logger.debug(`omitting mastery info for ${prevLength - inventoryResponse.XPInfo.length} item(s)`);
                 }
             }
 

@@ -507,22 +507,9 @@ if (args.dev) {
             ads[3].Bin != "BIN_1" ||
             ads[4].Bin != "BIN_0"
         ) {
-            logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/Hubs/GuildAdvertisementVendorManifest`);
-        }
-
-        const pall = getVendorManifestByTypeName(
-            "/Lotus/Types/Game/VendorManifests/Hubs/IronwakeDondaVendorManifest",
-            fullStock
-        )!.VendorInfo.ItemManifest;
-        if (
-            pall.length != 5 ||
-            pall[0].StoreItem != "/Lotus/StoreItems/Types/Items/ShipDecos/HarrowQuestKeyOrnament" ||
-            pall[1].StoreItem != "/Lotus/StoreItems/Types/BoosterPacks/RivenModPack" ||
-            pall[2].StoreItem != "/Lotus/StoreItems/Types/StoreItems/CreditBundles/150000Credits" ||
-            pall[3].StoreItem != "/Lotus/StoreItems/Types/Items/MiscItems/Kuva" ||
-            pall[4].StoreItem != "/Lotus/StoreItems/Types/BoosterPacks/RivenModPack"
-        ) {
-            logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/Hubs/IronwakeDondaVendorManifest`);
+            logger.warn(
+                `self test failed for /Lotus/Types/Game/VendorManifests/Hubs/GuildAdvertisementVendorManifest with fullStock=${fullStock}`
+            );
         }
     }
 

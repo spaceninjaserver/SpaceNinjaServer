@@ -27,6 +27,7 @@ import { getTokenForClient, getTunablesForClient } from "../../services/tunables
 import type { AddressInfo } from "node:net";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 import { getGoogleAccountData } from "../../helpers/customHelpers/customHelpers.ts";
+import { args } from "../../helpers/commandLineArguments.ts";
 
 export const loginController: RequestHandler = async (request, response) => {
     const loginRequest = JSON.parse(String(request.body)) as ILoginRequest; // parse octet stream of json data to json object
@@ -62,6 +63,15 @@ export const loginController: RequestHandler = async (request, response) => {
         typeof request.query.buildLabel == "string"
             ? request.query.buildLabel.split(" ").join("+")
             : buildConfig.buildLabel;
+
+    if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0) {
+        if (args.dev) {
+            logger.debug(`We are eagerly awaiting your pull requests!`);
+        } else {
+            response.status(400).json({ error: "do you want me to change your diapers, too?" });
+            return;
+        }
+    }
 
     if (
         !account &&
