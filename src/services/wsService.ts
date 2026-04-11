@@ -200,6 +200,7 @@ const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
                     const account = await getAccountForQuery({ ...data.auth_game, ct: "WS" }, "WS");
                     const accountId = account._id.toString();
                     (ws as IWsCustomData).accountId = accountId;
+                    (ws as IWsCustomData).realAccountId = accountId;
                     logger.debug(`got bootstrapper connection for ${accountId}`);
                     sendWsBroadcastToWebui({ have_game_ws: true }, accountId);
                 } catch (e) {
@@ -207,9 +208,10 @@ const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
                 }
             }
             if (data.logout) {
-                const accountId = (ws as IWsCustomData).accountId;
+                const accountId = (ws as IWsCustomData).realAccountId;
                 if (accountId && !(ws as IWsCustomData).isGame) {
                     (ws as IWsCustomData).accountId = undefined;
+                    (ws as IWsCustomData).realAccountId = undefined;
 
                     const stat = await Account.updateOne(
                         {
@@ -335,12 +337,12 @@ export const broadcastInventoryUpdate = (req: Request): void => {
 
 export const handleNonceInvalidation = (accountId: string): void => {
     forEachWsClient(client => {
-        if (client.accountId == accountId) {
+        if (client.realAccountId == accountId) {
             if (client.isGame) {
                 client.accountId = undefined; // prevent processing of the close event
                 client.close();
             } else {
-                client.send(JSON.stringify({ nonce_updated: true, have_game_ws: false } satisfies IWsMsgToClient));
+                client.send(JSON.stringify({ nonce_updated: true, have_game_ws: false } satisfies IWsMsgToClientWebui));
             }
         }
     });
@@ -349,7 +351,7 @@ export const handleNonceInvalidation = (accountId: string): void => {
 export const bootNonAdminsFromWebui = (): void => {
     forEachWsClient(client => {
         if (client.accountId && !client.isGame) {
-            void Account.findById(client.realAccountId ?? client.accountId).then(account => {
+            void Account.findById(client.realAccountId).then(account => {
                 if (!account || !isAdministrator(account)) {
                     client.send(JSON.stringify({ logged_out: true } satisfies IWsMsgToClientWebui));
                     client.close();
