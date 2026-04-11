@@ -414,7 +414,7 @@ export interface IInventoryClient
     EmailItems: ITypeCount[];
     CompletedSyndicates: string[];
     FocusXP?: IFocusXP;
-    FocusCapacity?: number;
+    FocusCapacity?: number; // Focus 2.0
     Wishlist: string[];
     Alignment?: IAlignment;
     CompletedSorties: string[];
@@ -740,7 +740,10 @@ export interface IFocusUpgrade {
     ItemType: string;
     Level?: number;
     IsUniversal?: boolean;
-    IsActive?: number; // Focus 2.0
+    IsActive?: number | boolean; // Focus 2.0 | Focus 1.0
+    TotalCapacity?: number; // Focus 1.0
+    CooldownTier?: number; // Focus 1.0
+    IsCooldownReductionActive?: boolean; // Focus 1.0
 }
 
 export interface IFocusXP {

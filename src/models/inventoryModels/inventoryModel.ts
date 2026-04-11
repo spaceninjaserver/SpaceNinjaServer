@@ -158,7 +158,10 @@ const focusUpgradeSchema = new Schema<IFocusUpgrade>(
         ItemType: String,
         Level: Number,
         IsUniversal: Boolean,
-        IsActive: Number
+        IsActive: Schema.Types.Mixed,
+        TotalCapacity: Number,
+        CooldownTier: Number,
+        IsCooldownReductionActive: Boolean
     },
     { _id: false }
 );
