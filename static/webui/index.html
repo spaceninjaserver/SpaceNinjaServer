@@ -65,9 +65,6 @@
                             <a class="nav-link" href="/webui/mods" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_mods"></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/webui/quests" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_quests"></a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="/webui/cheats" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_cheats"></a>
                         </li>
                         <li class="nav-item">
@@ -466,6 +463,22 @@
                 <div class="row g-3 mb-3">
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
+                            <div class="card-header" data-cardType="QuestKeys"></div>
+                            <div class="card-body d-flex flex-column">
+                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('QuestKeys');return false;">
+                                    <input class="form-control" id="acquire-type-QuestKeys" list="datalist-QuestKeys" autocomplete="off" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                </form>
+                                <div class="overflow-auto">
+                                    <table class="table table-hover w-100">
+                                        <tbody id="QuestKeys-list"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card" style="height: 400px;">
                             <div class="card-header" data-cardType="EvolutionProgress"></div>
                             <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEvolution();return false;">
@@ -480,6 +493,8 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="row g-3 mb-3">
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <div class="card-header" data-cardType="Boosters"></div>
@@ -496,8 +511,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row g-3 mb-3">
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                            <div class="card-header" data-cardType="FlavourItems"></div>
@@ -514,6 +527,8 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="row g-3 mb-3">
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <div class="card-header" data-cardType="ShipDecorations"></div>
@@ -531,8 +546,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row g-3 mb-3">
                     <div class="col-lg-6">
                         <div class="card" style="height: 400px;">
                             <div class="card-header" data-cardType="WeaponSkins"></div>
@@ -885,39 +898,6 @@
                                 <button class="btn btn-primary" onclick="doAddAllMods();" data-loc="mods_addMissingUnrankedMods"></button>
                                 <button class="btn btn-danger" onclick="doRemoveUnrankedMods();" data-loc="mods_removeUnranked"></button>
                                 <button class="btn btn-primary" onclick="doAddMissingMaxRankMods();" data-loc="mods_addMissingMaxRankMods"></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div data-route="/webui/quests" data-title-tag="navbar_quests">
-                <p class="mb-3 inventory-update-note"></p>
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="card" style="height: 800px;">
-                            <h5 class="card-header" data-loc="quests_list"></h5>
-                            <div class="card-body d-flex flex-column">
-                                <form class="input-group mb-3" onsubmit="doAcquireEquipment('QuestKeys');return false;">
-                                    <input class="form-control" id="acquire-type-QuestKeys" list="datalist-QuestKeys" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
-                                </form>
-                                <div class="overflow-auto">
-                                    <table class="table table-hover w-100">
-                                        <tbody id="QuestKeys-list"></tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card">
-                            <h5 class="card-header" data-loc="general_bulkActions"></h5>
-                            <div class="card-body">
-                                <div class="d-flex flex-wrap gap-2">
-                                    <button class="btn btn-primary" onclick="doBulkQuestUpdate('giveAll');" data-loc="quests_giveAll"></button>
-                                    <button class="btn btn-primary" onclick="doBulkQuestUpdate('completeAll');" data-loc="quests_completeAll"></button>
-                                    <button class="btn btn-primary" onclick="doBulkQuestUpdate('resetAll');" data-loc="quests_resetAll"></button>
-                                </div>
                             </div>
                         </div>
                     </div>

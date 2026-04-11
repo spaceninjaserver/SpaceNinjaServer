@@ -1664,7 +1664,6 @@ function translateInventoryDataToDom() {
                 }
             });
 
-            // Populate quests route
             document.getElementById("QuestKeys-list").innerHTML = "";
             data.QuestKeys.forEach(item => {
                 const tr = document.createElement("tr");
@@ -2631,30 +2630,54 @@ dictPromise.then(() => {
                 a.href = "#";
                 a.onclick = function (event) {
                     event.preventDefault();
-                    if (cardType != "EvolutionProgress") {
-                        debounce(addMissingEquipment, [cardType]);
-                    } else {
+                    if (cardType == "EvolutionProgress") {
                         debounce(addMissingEvolutionProgress);
+                    } else {
+                        debounce(addMissingEquipment, [cardType]);
                     }
                 };
                 a.title = loc("inventory_bulkAdd");
                 a.innerHTML = icons.plus;
                 butDiv.appendChild(a);
             }
-            if (!["Boosters", "FlavourItems", "ShipDecorations", "WeaponSkins"].includes(cardType)) {
+            if (!["QuestKeys", "Boosters", "FlavourItems", "ShipDecorations", "WeaponSkins"].includes(cardType)) {
                 const a = document.createElement("a");
                 a.href = "#";
                 a.onclick = function (event) {
                     event.preventDefault();
-                    if (cardType != "EvolutionProgress") {
-                        debounce(maxRankAllEquipment, [cardType]);
-                    } else {
+                    if (cardType == "EvolutionProgress") {
                         debounce(maxRankAllEvolutions);
+                    } else {
+                        debounce(maxRankAllEquipment, [cardType]);
                     }
                 };
                 a.title = loc("inventory_bulkRankUp");
                 a.innerHTML = icons.arrowUp;
                 butDiv.appendChild(a);
+            }
+            if (cardType == "QuestKeys") {
+                {
+                    const a = document.createElement("a");
+                    a.href = "#";
+                    a.onclick = function (event) {
+                        event.preventDefault();
+                        doBulkQuestUpdate("completeAll");
+                    };
+                    a.title = loc("inventory_bulkComplete");
+                    a.innerHTML = icons.check;
+                    butDiv.appendChild(a);
+                }
+                {
+                    const a = document.createElement("a");
+                    a.href = "#";
+                    a.onclick = function (event) {
+                        event.preventDefault();
+                        doBulkQuestUpdate("resetAll");
+                    };
+                    a.title = loc("inventory_bulkReset");
+                    a.innerHTML = icons.arrowRotateRight;
+                    butDiv.appendChild(a);
+                }
             }
             if (!["EvolutionProgress", "Boosters"].includes(cardType)) {
                 const a = document.createElement("a");

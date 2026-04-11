@@ -1,11 +1,6 @@
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
-import {
-    addQuestKey,
-    completeQuest,
-    giveKeyChainMissionReward,
-    giveKeyChainStageTriggered
-} from "../../services/questService.ts";
+import { completeQuest, giveKeyChainMissionReward, giveKeyChainStageTriggered } from "../../services/questService.ts";
 import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
 import { ExportKeys } from "warframe-public-export-plus";
@@ -16,7 +11,6 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
     const operation = req.query.operation as
         | "completeAll"
         | "resetAll"
-        | "giveAll"
         | "completeKey"
         | "deleteKey"
         | "resetKey"
@@ -48,10 +42,6 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
                 questKey.CompletionDate = undefined;
             }
             inventory.ActiveQuest = "";
-            break;
-        }
-        case "giveAll": {
-            allQuestKeys.forEach(questKey => addQuestKey(inventory, { ItemType: questKey }, true));
             break;
         }
         case "deleteKey": {

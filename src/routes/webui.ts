@@ -39,7 +39,6 @@ webuiRouter.get("/webui/", virtualRouteController); // can be handled by express
 webuiRouter.get("/webui/inventory", virtualRouteController);
 webuiRouter.get("/webui/detailedView", virtualRouteController);
 webuiRouter.get("/webui/mods", virtualRouteController);
-webuiRouter.get("/webui/quests", virtualRouteController);
 webuiRouter.get("/webui/cheats", virtualRouteController);
 webuiRouter.get("/webui/import", virtualRouteController);
 webuiRouter.get("/webui/guildView", virtualRouteController);

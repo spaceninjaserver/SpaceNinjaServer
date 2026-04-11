@@ -11,6 +11,7 @@ export const removeItemsController: RequestHandler = async (req, res) => {
         | "WeaponSkins"
         | "ShipDecorations"
         | "FlavourItems"
+        | "QuestKeys"
         | undefined;
     if (category) {
         const inventory = await getInventory(accountId, category);
