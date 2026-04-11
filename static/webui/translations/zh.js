@@ -165,9 +165,9 @@ dict = {
     inventory_weaponSkins: `外观`,
     inventory_bulkAdd: `添加缺失物品`,
     inventory_bulkRankUp: `全部升至满级`,
-    inventory_bulkRemove: `移除全部`,
-    inventory_bulkComplete: `[UNTRANSLATED] Complete All`,
-    inventory_bulkReset: `[UNTRANSLATED] Reset All`,
+    inventory_bulkRemove: `全部移除`,
+    inventory_bulkComplete: `全部完成`,
+    inventory_bulkReset: `全部重置`,
     inventory_removeIsNew: `移除所有新装备上的感叹号图标`,
 
     currency_RegularCredits: `现金`,
@@ -531,7 +531,7 @@ dict = {
 
     navbar_admin: `管理员`,
     admin_users: `用户`,
-    admin_possess: `[UNTRANSLATED] Impersonate`,
+    admin_possess: `管理此账户`,
 
     prettier_sucks_ass: ``
 };
