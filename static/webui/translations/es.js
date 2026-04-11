@@ -85,6 +85,7 @@ dict = {
     code_cosmeticUnenhancer: `Destilador Arcano`,
     code_pigment: `Pigmento`,
     code_bossNavCode: `Coordenadas de Navegación de Lephantis`,
+    code_actuator: `[UNTRANSLATED] Actuators`,
     code_lawOfRetribution: `LA LEY DE LA RETRIBUCIÓN`,
     code_lawOfRetributionNm: `LA LEY DE LA RETRIBUCIÓN (PESADILLA)`,
     code_jordasVerdict: `EL VEREDICTO DE JORDAS`,

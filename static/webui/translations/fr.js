@@ -85,6 +85,7 @@ dict = {
     code_cosmeticUnenhancer: `Arcane Distiller`,
     code_pigment: `Pigment`,
     code_bossNavCode: `Coord. Nav de Lephantis`,
+    code_actuator: `[UNTRANSLATED] Actuators`,
     code_lawOfRetribution: `LE DROIT DE RÉTRIBUTION`,
     code_lawOfRetributionNm: `LE DROIT DE RÉTRIBUTION (CAUCHEMAR)`,
     code_jordasVerdict: `LE VERDICT DE JORDAS`,

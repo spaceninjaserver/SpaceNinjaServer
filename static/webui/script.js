@@ -753,6 +753,10 @@ function fetchItemList() {
                     name: loc("code_bossNavCode")
                 },
                 {
+                    uniqueName: "/Lotus/Types/Items/MiscItems/Actuator",
+                    name: loc("code_actuator")
+                },
+                {
                     uniqueName: "/Lotus/Types/Keys/RaidKeys/Raid01Stage01KeyItem",
                     name: loc("code_lawOfRetribution")
                 },

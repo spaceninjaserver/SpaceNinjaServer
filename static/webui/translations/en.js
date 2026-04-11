@@ -84,6 +84,7 @@ dict = {
     code_cosmeticUnenhancer: `Arcane Distiller`,
     code_pigment: `Pigment`,
     code_bossNavCode: `Lephantis Nav Coordinate`,
+    code_actuator: `Actuators`,
     code_lawOfRetribution: `THE LAW OF RETRIBUTION`,
     code_lawOfRetributionNm: `THE LAW OF RETRIBUTION (NIGHTMARE)`,
     code_jordasVerdict: `THE JORDAS VERDICT`,

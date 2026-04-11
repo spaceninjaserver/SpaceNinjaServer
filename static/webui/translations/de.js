@@ -85,6 +85,7 @@ dict = {
     code_cosmeticUnenhancer: `Arkana Destillator`,
     code_pigment: `Pigment`,
     code_bossNavCode: `Lephantis Nav-Koordinaten`,
+    code_actuator: `Aktuatoren`,
     code_lawOfRetribution: `DAS GESETZ DER VERGELTUNG`,
     code_lawOfRetributionNm: `DAS GESETZ DER VERGELTUNG (ALBTRAUM)`,
     code_jordasVerdict: `DAS JORDAS-URTEIL`,
