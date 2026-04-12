@@ -739,7 +739,16 @@ const handleTypesPurchase = async (
     switch (typeCategory) {
         default:
             return {
-                InventoryChanges: await addItem(inventory, typesName, quantity, premiumPurchase, seed, undefined, true)
+                InventoryChanges: await addItem(
+                    inventory,
+                    typesName,
+                    quantity,
+                    premiumPurchase,
+                    seed,
+                    undefined,
+                    true,
+                    buildLabel
+                )
             };
         case "BoosterPacks":
             return handleBoosterPackPurchase(typesName, inventory, quantity, buildLabel);

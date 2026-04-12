@@ -484,6 +484,8 @@ export const freeUpSlot = (inventory: TInventoryDatabaseDocument, bin: Inventory
     updateSlots(inventory, bin, 1, 0);
 };
 
+export const PRE_U40_MAX_KUBROW_EGGS = 100; // capped to avoid sending an overly large array
+
 export const addItem = async (
     inventory: TInventoryDatabaseDocument,
     typeName: string,
@@ -521,6 +523,33 @@ export const addItem = async (
                 } satisfies IMiscItem
             ];
             addMiscItems(inventory, miscItemChanges);
+
+            if (
+                buildLabel &&
+                typeName == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg" &&
+                version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0
+            ) {
+                if (quantity < 0 || quantity > 100) {
+                    throw new Error(
+                        `unexpected acquisition quantity of KubrowPetEggs: got ${quantity}, expected 0..100`
+                    );
+                }
+                const idBase = Math.min(
+                    inventory.MiscItems.find(x => x.ItemType == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg")
+                        ?.ItemCount ?? 0,
+                    PRE_U40_MAX_KUBROW_EGGS
+                );
+                const changes: IKubrowPetEgg[] = [];
+                for (let i = 0; i != quantity; ++i) {
+                    changes.push({
+                        ItemType: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg",
+                        ExpirationDate: toMongoDate2(2000000000000, buildLabel),
+                        ItemId: toOid2((idBase + i).toString().padStart(24, "0"), buildLabel)
+                    });
+                }
+                return { KubrowPetEggs: changes };
+            }
+
             return {
                 MiscItems: miscItemChanges
             };
@@ -1061,33 +1090,9 @@ export const addItem = async (
                                 );
                             }
                             return inventoryChanges;
-                        } else if (typeName == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem") {
-                            // pre-U40 acquisition
-                            if (quantity < 0 || quantity > 100) {
-                                throw new Error(
-                                    `unexpected acquisition quantity of KubrowPetEggs: got ${quantity}, expected 0..100`
-                                );
-                            }
-                            const idBase = Math.min(
-                                inventory.MiscItems.find(
-                                    x => x.ItemType == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg"
-                                )?.ItemCount ?? 0,
-                                100
-                            );
-                            // add to inventory as a MiscItem
-                            addMiscItem(inventory, "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg", quantity);
-                            // but give the client the expected response format
-                            const changes: IKubrowPetEgg[] = [];
-                            for (let i = 0; i != quantity; ++i) {
-                                changes.push({
-                                    ItemType: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem",
-                                    ExpirationDate: toMongoDate2(2000000000000, buildLabel),
-                                    ItemId: toOid2((idBase + i).toString().padStart(24, "0"), buildLabel)
-                                });
-                            }
-                            return { KubrowPetEggs: changes };
                         } else if (
                             typeName != "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg" &&
+                            typeName != "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem" &&
                             typeName != "/Lotus/Types/Game/KubrowPet/BlankTraitPrint" &&
                             typeName != "/Lotus/Types/Game/KubrowPet/ImprintedTraitPrint"
                         ) {

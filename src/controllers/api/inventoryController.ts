@@ -27,7 +27,8 @@ import {
     cleanupInventory,
     createLibraryDailyTask,
     ensureUserHasFounderHonoria,
-    getCalendarProgress
+    getCalendarProgress,
+    PRE_U40_MAX_KUBROW_EGGS
 } from "../../services/inventoryService.ts";
 import { logger } from "../../utils/logger.ts";
 import { addString } from "../../helpers/stringHelpers.ts";
@@ -548,22 +549,18 @@ export const getInventoryResponse = async (
             inventoryResponse.Nemesis = undefined;
         }
 
-        // U40 migrated from KubrowPetEggs with ItemType /Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem to MiscItems with ItemType /Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg
-        // so translate it back for older versions
+        // U40 migrated KubrowPetEggs to MiscItems so translate it back for older versions
         if (version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0) {
             inventoryResponse.KubrowPetEggs = [];
             const index = inventoryResponse.MiscItems.findIndex(
                 x => x.ItemType == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg"
             );
             if (index != -1) {
-                const numKubrowEggs = Math.min(
-                    inventoryResponse.MiscItems[index].ItemCount,
-                    100 // capped to avoid sending an overly large array
-                );
+                const numKubrowEggs = Math.min(inventoryResponse.MiscItems[index].ItemCount, PRE_U40_MAX_KUBROW_EGGS);
                 inventoryResponse.MiscItems.splice(index, 1);
                 for (let i = 0; i != numKubrowEggs; ++i) {
                     inventoryResponse.KubrowPetEggs.push({
-                        ItemType: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowPetEggItem",
+                        ItemType: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg",
                         ExpirationDate: toMongoDate2(2000000000000, buildLabel),
                         ItemId: toOid2(i.toString().padStart(24, "0"), buildLabel)
                     });
