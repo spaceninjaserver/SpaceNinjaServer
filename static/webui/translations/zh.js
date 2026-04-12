@@ -394,6 +394,7 @@ dict = {
     worldState_sorrow: `悲伤`,
     worldState_fear: `恐惧`,
     worldState_nightwaveOverride: `午夜电波系列`,
+    worldState_RadioLegionIntermission15Syndicate: `《诺拉的混选：时间风暴》`,
     worldState_RadioLegionIntermission14Syndicate: `诺拉的混选:亡者之梦`,
     worldState_RadioLegionIntermission13Syndicate: `诺拉的混选VOL.9`,
     worldState_RadioLegionIntermission12Syndicate: `诺拉的混选VOL.8`,

@@ -394,6 +394,7 @@ dict = {
     worldState_sorrow: `Tristeza`,
     worldState_fear: `Miedo`,
     worldState_nightwaveOverride: `Volúmen de Onda Nocturna`,
+    worldState_RadioLegionIntermission15Syndicate: `Mix de Nora: Tempestades temporales`,
     worldState_RadioLegionIntermission14Syndicate: `Mix de Nora: Sueños de los Muertos`,
     worldState_RadioLegionIntermission13Syndicate: `Mix de Nora Vol. 9`,
     worldState_RadioLegionIntermission12Syndicate: `Mix de Nora Vol. 8`,

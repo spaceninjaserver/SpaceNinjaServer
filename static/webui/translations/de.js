@@ -394,6 +394,7 @@ dict = {
     worldState_sorrow: `Trauer`,
     worldState_fear: `Angst`,
     worldState_nightwaveOverride: `Nightwave-Überschreibung`,
+    worldState_RadioLegionIntermission15Syndicate: `Noras Mix: Chronosturm`,
     worldState_RadioLegionIntermission14Syndicate: `Noras Mix: Träume der Toten`,
     worldState_RadioLegionIntermission13Syndicate: `Noras Mix - Vol. 9`,
     worldState_RadioLegionIntermission12Syndicate: `Noras Mix - Vol. 8`,

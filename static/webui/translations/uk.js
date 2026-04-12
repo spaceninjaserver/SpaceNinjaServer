@@ -394,6 +394,7 @@ dict = {
     worldState_sorrow: `Журба`,
     worldState_fear: `Страх`,
     worldState_nightwaveOverride: `Сезон Нічної хвилі`,
+    worldState_RadioLegionIntermission15Syndicate: `Вибірка Нори «Часові бурі»`,
     worldState_RadioLegionIntermission14Syndicate: `Вибірка Нори: «Сни мерців»`,
     worldState_RadioLegionIntermission13Syndicate: `Вибірка Нори 9`,
     worldState_RadioLegionIntermission12Syndicate: `Вибірка Нори 8`,

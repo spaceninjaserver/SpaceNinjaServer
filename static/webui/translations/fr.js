@@ -394,6 +394,7 @@ dict = {
     worldState_sorrow: `hagrin`,
     worldState_fear: `Peur`,
     worldState_nightwaveOverride: `Saison des Ondes Nocturnes`,
+    worldState_RadioLegionIntermission15Syndicate: `Mix de Nora : Tempêtes Temporelles`,
     worldState_RadioLegionIntermission14Syndicate: `Mix de Nora: Les Rêves des Morts`,
     worldState_RadioLegionIntermission13Syndicate: `Mix de Nora Vol. 9`,
     worldState_RadioLegionIntermission12Syndicate: `Mix de Nora Vol. 8`,
