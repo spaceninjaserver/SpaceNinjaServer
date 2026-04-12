@@ -94,7 +94,7 @@ function openWebSocket() {
             auth_pending = false;
             if (localStorage.getItem("possessing")) {
                 localStorage.removeItem("possessing");
-                sendAuth();
+                doAccountSwitch("/webui/admin");
             } else {
                 logout();
                 if (single.getCurrentPath() == "/webui/") {
@@ -125,7 +125,7 @@ function openWebSocket() {
         if ("logged_out" in msg) {
             if (localStorage.getItem("possessing")) {
                 localStorage.removeItem("possessing");
-                sendAuth();
+                doAccountSwitch("/webui/admin");
             } else {
                 logout();
                 single.loadRoute("/webui/"); // Show login screen
@@ -153,6 +153,13 @@ function refreshServerConfig() {
     if (single.getCurrentPath() == "/webui/cheats" || single.getCurrentPath() == "/webui/admin") {
         single.loadRoute(single.getCurrentPath());
     }
+}
+
+function doAccountSwitch(to_route) {
+    window.authz = undefined;
+    did_initial_auth = false;
+    single.loadRoute(to_route);
+    sendAuth();
 }
 
 function getWebSocket() {
@@ -200,7 +207,7 @@ function logout() {
 function doLogout() {
     if (localStorage.getItem("possessing")) {
         localStorage.removeItem("possessing");
-        location.href = "/webui/inventory";
+        doAccountSwitch("/webui/admin");
     } else {
         logout();
         if (ws_is_open) {
@@ -5257,7 +5264,7 @@ single.getRoute("/webui/admin").on("beforeload", function () {
                                 a.href = "#";
                                 a.onclick = function () {
                                     localStorage.setItem("possessing", user.id);
-                                    location.href = "/webui/inventory";
+                                    doAccountSwitch("/webui/inventory");
                                 };
                                 td.appendChild(a);
                             }
