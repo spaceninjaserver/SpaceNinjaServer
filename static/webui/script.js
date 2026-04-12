@@ -242,7 +242,7 @@ function renameAccount(taken_name) {
 function deleteAccount() {
     if (
         window.confirm(
-            loc(localStorage.getItem("possessing") ? "code_deletePosssedAccountConfirm" : "code_deleteAccountConfirm")
+            loc(localStorage.getItem("possessing") ? "code_deletePossessedAccountConfirm" : "code_deleteAccountConfirm")
         )
     ) {
         revalidateAuthz().then(() => {

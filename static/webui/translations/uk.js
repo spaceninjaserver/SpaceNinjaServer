@@ -16,7 +16,7 @@ dict = {
     code_changeNameConfirm: `Яке ім'я ви хочете встановити для свого облікового запису?`,
     code_changeNameRetry: `|NAME| вже зайнято.`,
     code_deleteAccountConfirm: `Ви впевнені, що хочете видалити обліковий запис |DISPLAYNAME| (|EMAIL|)? Цю дію не можна скасувати.`,
-    code_deletePosssedAccountConfirm: `[UNTRANSLATED] Are you sure you want to delete the account |DISPLAYNAME|? This action cannot be undone.`,
+    code_deletePossessedAccountConfirm: `[UNTRANSLATED] Are you sure you want to delete the account |DISPLAYNAME|? This action cannot be undone.`,
     code_archgun: `Арк-гармата`,
     code_melee: `Холодна зброя`,
     code_pistol: `Пістолет`,

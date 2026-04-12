@@ -15,7 +15,7 @@ dict = {
     code_changeNameConfirm: `What would you like to change your account name to?`,
     code_changeNameRetry: `|NAME| is already taken.`,
     code_deleteAccountConfirm: `Are you sure you want to delete your account |DISPLAYNAME| (|EMAIL|)? This action cannot be undone.`,
-    code_deletePosssedAccountConfirm: `Are you sure you want to delete the account |DISPLAYNAME|? This action cannot be undone.`,
+    code_deletePossessedAccountConfirm: `Are you sure you want to delete the account |DISPLAYNAME|? This action cannot be undone.`,
     code_archgun: `Archgun`,
     code_melee: `Melee`,
     code_pistol: `Pistol`,

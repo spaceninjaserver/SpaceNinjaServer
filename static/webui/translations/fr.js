@@ -16,7 +16,7 @@ dict = {
     code_changeNameConfirm: `Nouveau nom du compte :`,
     code_changeNameRetry: `|NAME| est déjà pris.`,
     code_deleteAccountConfirm: `Supprimer |DISPLAYNAME| (|EMAIL|) ? Cette action est irreversible.`,
-    code_deletePosssedAccountConfirm: `Supprimer le compte |DISPLAYNAME| ? Cette action est irreversible.`,
+    code_deletePossessedAccountConfirm: `Supprimer le compte |DISPLAYNAME| ? Cette action est irreversible.`,
     code_archgun: `Archgun`,
     code_melee: `Melee`,
     code_pistol: `Pistolet`,

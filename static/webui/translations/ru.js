@@ -16,7 +16,7 @@ dict = {
     code_changeNameConfirm: `Какое имя вы хотите установить для своей учетной записи?`,
     code_changeNameRetry: `|NAME| уже занято.`,
     code_deleteAccountConfirm: `Вы уверены, что хотите удалить аккаунт |DISPLAYNAME| (|EMAIL|)? Это действие нельзя отменить.`,
-    code_deletePosssedAccountConfirm: `Вы уверены, что хотите удалить аккаунт |DISPLAYNAME|? Это действие нельзя отменить.`,
+    code_deletePossessedAccountConfirm: `Вы уверены, что хотите удалить аккаунт |DISPLAYNAME|? Это действие нельзя отменить.`,
     code_archgun: `Арч-Пушка`,
     code_melee: `Ближний бой`,
     code_pistol: `Пистолет`,
