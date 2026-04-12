@@ -533,18 +533,18 @@ export const addMissionInventoryUpdates = async (
             case "Upgrades":
                 value.forEach(clientUpgrade => {
                     const id = fromOid(clientUpgrade.ItemId);
-                    // Really old builds (tested U7-U8) do not have the UpgradeFingerprint set for unranked mod drops
-                    clientUpgrade.UpgradeFingerprint ||= "lvl=0|";
                     // U11 and below also don't initialize ItemCount since RawUpgrade doesn't exist in them
                     clientUpgrade.ItemCount ??= 1;
                     if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["18.18.0"]) < 0) {
+                        // Really old builds (tested U7-U8) do not have the UpgradeFingerprint set for unranked mod drops (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/3361)
+                        clientUpgrade.UpgradeFingerprint ||= "lvl=0|";
                         // Acquired Mods have a different UpgradeFingerprint format in pre-U18.18.0 builds, this converts them to the format the database expects
                         clientUpgrade.UpgradeFingerprint = convertFromLegacyFingerprint(
                             clientUpgrade.UpgradeFingerprint
                         );
                     }
                     // Handle Fusion Core drops
-                    const parsedFingerprint = JSON.parse(clientUpgrade.UpgradeFingerprint) as { lvl?: number };
+                    const parsedFingerprint = JSON.parse(clientUpgrade.UpgradeFingerprint || "{}") as { lvl?: number };
                     if (parsedFingerprint.lvl) {
                         inventory.Upgrades.push({
                             ItemType: clientUpgrade.ItemType,
