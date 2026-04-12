@@ -390,6 +390,9 @@ function updateLocElements() {
     document.querySelectorAll("[data-loc-placeholder]").forEach(elm => {
         elm.placeholder = loc(elm.getAttribute("data-loc-placeholder"));
     });
+    document.querySelectorAll("[data-loc-title]").forEach(elm => {
+        elm.title = loc(elm.getAttribute("data-loc-title"));
+    });
     document.querySelectorAll("[data-loc-inc]").forEach(elm => {
         const incWith = elm
             .getAttribute("data-loc-inc")
@@ -2640,6 +2643,7 @@ dictPromise.then(() => {
                         debounce(addMissingEquipment, [cardType]);
                     }
                 };
+                a.setAttribute("data-loc-title", "inventory_bulkAdd");
                 a.title = loc("inventory_bulkAdd");
                 a.innerHTML = icons.plus;
                 butDiv.appendChild(a);
@@ -2655,6 +2659,7 @@ dictPromise.then(() => {
                         debounce(maxRankAllEquipment, [cardType]);
                     }
                 };
+                a.setAttribute("data-loc-title", "inventory_bulkRankUp");
                 a.title = loc("inventory_bulkRankUp");
                 a.innerHTML = icons.arrowUp;
                 butDiv.appendChild(a);
@@ -2667,6 +2672,7 @@ dictPromise.then(() => {
                         event.preventDefault();
                         doBulkQuestUpdate("completeAll");
                     };
+                    a.setAttribute("data-loc-title", "inventory_bulkComplete");
                     a.title = loc("inventory_bulkComplete");
                     a.innerHTML = icons.check;
                     butDiv.appendChild(a);
@@ -2678,6 +2684,7 @@ dictPromise.then(() => {
                         event.preventDefault();
                         doBulkQuestUpdate("resetAll");
                     };
+                    a.setAttribute("data-loc-title", "inventory_bulkReset");
                     a.title = loc("inventory_bulkReset");
                     a.innerHTML = icons.arrowRotateRight;
                     butDiv.appendChild(a);
@@ -2690,6 +2697,7 @@ dictPromise.then(() => {
                     event.preventDefault();
                     removeItems(cardType);
                 };
+                a.setAttribute("data-loc-title", "inventory_bulkRemove");
                 a.title = loc("inventory_bulkRemove");
                 a.innerHTML = icons.trash;
                 butDiv.appendChild(a);
@@ -2730,6 +2738,7 @@ dictPromise.then(() => {
                         debounce(addMissingTechProjects);
                     }
                 };
+                a.setAttribute("data-loc-title", "inventory_bulkAdd");
                 a.title = loc("inventory_bulkAdd");
                 a.innerHTML = icons.plus;
                 a.id = `${cardType}-bulkAdd`;
@@ -2742,6 +2751,7 @@ dictPromise.then(() => {
                     event.preventDefault();
                     debounce(fundAllTechProjects);
                 };
+                a.setAttribute("data-loc-title", "guildView_bulkFund");
                 a.title = loc("guildView_bulkFund");
                 a.innerHTML = icons.arrowUp;
                 a.id = `${cardType}-bulkFund`;
@@ -2754,6 +2764,7 @@ dictPromise.then(() => {
                     event.preventDefault();
                     debounce(completeAllTechProjects);
                 };
+                a.setAttribute("data-loc-title", "guildView_bulkComplete");
                 a.title = loc("guildView_bulkComplete");
                 a.innerHTML = icons.forward;
                 a.id = `${cardType}-bulkComplete`;
@@ -2770,6 +2781,7 @@ dictPromise.then(() => {
                         debounce(bulkRemoveTechProjects);
                     }
                 };
+                a.setAttribute("data-loc-title", "inventory_bulkRemove");
                 a.title = loc("inventory_bulkRemove");
                 a.innerHTML = icons.trash;
                 a.id = `${cardType}-bulkRemove`;
