@@ -1071,10 +1071,6 @@ export const getSyndicate = (tag: string, buildLabel: string | undefined): ISynd
     return ExportSyndicates[tag];
 };
 
-export const getRecipeByResult = (resultType: string): IRecipe | undefined => {
-    return Object.values(ExportRecipes).find(x => x.resultType == resultType);
-};
-
 export const getItemCategoryByUniqueName = (uniqueName: string): string | undefined => {
     if (uniqueName in ExportCustoms) {
         return ExportCustoms[uniqueName].productCategory;
