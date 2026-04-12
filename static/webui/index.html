@@ -846,6 +846,26 @@
                     <h5 class="card-header" data-loc="detailedView_equipmentFeaturesLabel"></h5>
                     <div id="equipmentFeaturesButtons-card" class="card-body d-flex flex-wrap gap-2"></div>
                 </div>
+                <div id="u5ModEdit-card" class="card mb-3 d-none">
+                    <h5 class="card-header" data-loc="detailedView_u5ModEditLabel"></h5>
+                    <div class="card-body">
+                        <p id="u5ModEdit-Description" data-loc="detailedView_u5ModEditDescription"></p>
+                        <form class="mb-3" onsubmit="handleU5ModEdit(event)">
+                            <div class="d-flex gap-2 align-items-end">
+                                <div class="mb-2">
+                                    <label for="u5ModEdit-fits" class="form-label" data-loc="detailedView_u5ModEditFits"></label>
+                                    <select id="u5ModEdit-fits" class="form-control"></select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="u5ModEdit-reqLevel" class="form-label" data-loc="detailedView_u5ModEditReqLevel"></label>
+                                    <input type="number" id="u5ModEdit-reqLevel" min="0" max="30" step="1" class="form-control" style="max-width:100px" />
+                                </div>
+                            </div>
+                            <div id="u5ModEdit-upgradeFields" class="mb-2"></div>
+                            <button class="btn btn-primary" type="submit" value="set" data-loc="general_setButton"></button>
+                        </form>
+                    </div>
+                </div>
             </div>
             <div data-route="/webui/mods" data-title-tag="navbar_mods">
                 <p class="mb-3 inventory-update-note"></p>

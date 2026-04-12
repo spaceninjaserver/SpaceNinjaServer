@@ -1,6 +1,7 @@
 import type { RequestHandler } from "express";
-import { getDict, getItemName, getNormalizedString, getString } from "../../services/itemDataService.ts";
-import type { TRelicQuality } from "warframe-public-export-plus";
+import { getDict, getItemName, getNormalizedString, getString, U5Modules } from "../../services/itemDataService.ts";
+import type { IU5FingerprintUpgrade } from "../../services/itemDataService.ts";
+import type { TRarity, TRelicQuality } from "warframe-public-export-plus";
 import {
     ExportAbilities,
     ExportArcanes,
@@ -44,6 +45,8 @@ interface ListedItem {
     maxLevelCap?: number;
     eligibleForVault?: boolean;
     parentName?: string;
+    fits?: { type: string; rarity: TRarity; statAtten?: number }[];
+    upgrades?: IU5FingerprintUpgrade[];
 }
 
 interface ItemLists {
@@ -578,6 +581,16 @@ const getItemListsController: RequestHandler = (req, response) => {
         res.Nodes.push({
             uniqueName,
             name: getString(node.name || uniqueName, lang)
+        });
+    }
+
+    for (const [uniqueName, mod] of Object.entries(U5Modules)) {
+        res.mods.push({
+            uniqueName,
+            name: uniqueName,
+            fusionLimit: 0,
+            fits: mod.fits,
+            upgrades: mod.upgrades
         });
     }
 

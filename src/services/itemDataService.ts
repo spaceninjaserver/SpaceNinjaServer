@@ -475,142 +475,169 @@ export const supplementalRecipes: Record<string, IRecipe> = {
 };
 
 interface IU5FingerprintData {
-    fits: { Type: string; rarity: TRarity; StatAtten?: number }[];
+    fits: { type: string; rarity: TRarity; statAtten?: number }[];
     upgrades: IU5FingerprintUpgrade[];
+    numUpgrades: {
+        number: number;
+        rarity: TRarity;
+    }[];
 }
 
-interface IU5FingerprintUpgrade {
-    UpgradeType: string;
-    ValueRanges: Record<Exclude<TRarity, "LEGENDARY">, [number, number]>;
+export interface IU5FingerprintUpgrade {
+    type: string;
+    valueRarity: Record<Exclude<TRarity, "LEGENDARY">, [number, number]>;
     rarity: TRarity;
+    operation: "MULTIPLY" | "ADD";
+    displayAsPercent?: true;
 }
 
 const U5WeaponUpgrades: IU5FingerprintUpgrade[] = [
     {
-        UpgradeType: "WEAPON_DAMAGE_AMOUNT",
-        ValueRanges: {
+        type: "WEAPON_DAMAGE_AMOUNT",
+        valueRarity: {
             COMMON: [1.015, 1.15],
             UNCOMMON: [1.05, 1.25],
             RARE: [1.1, 1.5]
         },
-        rarity: "COMMON"
+        rarity: "COMMON",
+        operation: "MULTIPLY"
     },
     {
-        UpgradeType: "WEAPON_FIRE_DAMAGE",
-        ValueRanges: {
-            COMMON: [0.015, 0.15000001],
-            UNCOMMON: [0.050000001, 0.25],
+        type: "WEAPON_FIRE_DAMAGE",
+        valueRarity: {
+            COMMON: [0.015, 0.15],
+            UNCOMMON: [0.05, 0.25],
             RARE: [0.1, 0.5]
         },
-        rarity: "RARE"
+        rarity: "RARE",
+        operation: "ADD",
+        displayAsPercent: true
     },
     {
-        UpgradeType: "WEAPON_ELECTRICITY_DAMAGE",
-        ValueRanges: {
-            COMMON: [0.015, 0.15000001],
-            UNCOMMON: [0.050000001, 0.25],
+        type: "WEAPON_ELECTRICITY_DAMAGE",
+        valueRarity: {
+            COMMON: [0.015, 0.15],
+            UNCOMMON: [0.05, 0.25],
             RARE: [0.1, 0.5]
         },
-        rarity: "COMMON"
+        rarity: "COMMON",
+        operation: "ADD",
+        displayAsPercent: true
     },
     {
-        UpgradeType: "WEAPON_FREEZE_DAMAGE",
-        ValueRanges: {
-            COMMON: [0.015, 0.15000001],
-            UNCOMMON: [0.050000001, 0.25],
+        type: "WEAPON_FREEZE_DAMAGE",
+        valueRarity: {
+            COMMON: [0.015, 0.15],
+            UNCOMMON: [0.05, 0.25],
             RARE: [0.1, 0.5]
         },
-        rarity: "COMMON"
+        rarity: "COMMON",
+        operation: "ADD",
+        displayAsPercent: true
     },
     {
-        UpgradeType: "WEAPON_ARMOR_PIERCING_DAMAGE",
-        ValueRanges: {
-            COMMON: [0.015, 0.15000001],
-            UNCOMMON: [0.050000001, 0.25],
+        type: "WEAPON_ARMOR_PIERCING_DAMAGE",
+        valueRarity: {
+            COMMON: [0.015, 0.15],
+            UNCOMMON: [0.05, 0.25],
             RARE: [0.1, 0.5]
         },
-        rarity: "COMMON"
+        rarity: "COMMON",
+        operation: "ADD",
+        displayAsPercent: true
     },
     {
-        UpgradeType: "WEAPON_STUN_CHANCE",
-        ValueRanges: {
+        type: "WEAPON_STUN_CHANCE",
+        valueRarity: {
             COMMON: [0.025, 0.1],
-            UNCOMMON: [0.050000001, 0.2],
-            RARE: [0.1, 0.40000001]
+            UNCOMMON: [0.05, 0.2],
+            RARE: [0.1, 0.4]
         },
-        rarity: "UNCOMMON"
+        rarity: "UNCOMMON",
+        operation: "ADD",
+        displayAsPercent: true
     },
     {
-        UpgradeType: "WEAPON_CLIP_MAX",
-        ValueRanges: {
+        type: "WEAPON_CLIP_MAX",
+        valueRarity: {
             COMMON: [1.05, 1.35],
             UNCOMMON: [1.1, 1.5],
             RARE: [1.15, 2]
         },
-        rarity: "UNCOMMON"
+        rarity: "UNCOMMON",
+        operation: "MULTIPLY"
     },
     {
-        UpgradeType: "WEAPON_FIRE_ITERATIONS",
-        ValueRanges: {
+        type: "WEAPON_FIRE_ITERATIONS",
+        valueRarity: {
             COMMON: [1.25, 1.75],
             UNCOMMON: [1.5, 2],
             RARE: [2, 4]
         },
-        rarity: "RARE"
+        rarity: "RARE",
+        operation: "MULTIPLY"
     },
     {
-        UpgradeType: "WEAPON_PUNCTURE_DEPTH",
-        ValueRanges: {
+        type: "WEAPON_PUNCTURE_DEPTH",
+        valueRarity: {
             COMMON: [2, 5],
             UNCOMMON: [2, 10],
             RARE: [3, 15]
         },
-        rarity: "RARE"
+        rarity: "RARE",
+        operation: "ADD"
     },
     {
-        UpgradeType: "WEAPON_AMMO_MAX",
-        ValueRanges: {
+        type: "WEAPON_AMMO_MAX",
+        valueRarity: {
             COMMON: [1.05, 1.5],
             UNCOMMON: [1.1, 1.75],
             RARE: [1.15, 2]
         },
-        rarity: "UNCOMMON"
+        rarity: "UNCOMMON",
+        operation: "MULTIPLY"
     },
     {
-        UpgradeType: "WEAPON_RELOAD_SPEED",
-        ValueRanges: {
+        type: "WEAPON_RELOAD_SPEED",
+        valueRarity: {
             COMMON: [1.05, 1.5],
             UNCOMMON: [1.075, 1.75],
             RARE: [1.1, 2]
         },
-        rarity: "UNCOMMON"
+        rarity: "UNCOMMON",
+        operation: "MULTIPLY"
     },
     {
-        UpgradeType: "WEAPON_FIRE_RATE",
-        ValueRanges: {
+        type: "WEAPON_FIRE_RATE",
+        valueRarity: {
             COMMON: [1.01, 1.2],
             UNCOMMON: [1.05, 1.5],
             RARE: [1.1, 1.75]
         },
-        rarity: "UNCOMMON"
+        rarity: "UNCOMMON",
+        operation: "MULTIPLY"
     },
     {
-        UpgradeType: "WEAPON_CRIT_CHANCE",
-        ValueRanges: {
+        type: "WEAPON_CRIT_CHANCE",
+        valueRarity: {
             COMMON: [0.0099999998, 0.1],
-            UNCOMMON: [0.025, 0.15000001],
-            RARE: [0.050000001, 0.2]
+            UNCOMMON: [0.025, 0.15],
+            RARE: [0.05, 0.2]
         },
-        rarity: "COMMON"
+        rarity: "COMMON",
+        operation: "ADD",
+        displayAsPercent: true
     },
     {
-        UpgradeType: "WEAPON_CRIT_DAMAGE",
-        ValueRanges: {
+        type: "WEAPON_CRIT_DAMAGE",
+        valueRarity: {
             COMMON: [0.1, 0.5],
             UNCOMMON: [0.2, 1],
-            RARE: [0.30000001, 1.5]
+            RARE: [0.3, 1.5]
         },
-        rarity: "COMMON"
+        rarity: "COMMON",
+        operation: "ADD",
+        displayAsPercent: true
     }
 ];
 
@@ -626,399 +653,454 @@ export const U5Modules: Record<string, IU5FingerprintData> = {
     "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod": {
         fits: [
             {
-                Type: "/Lotus/Weapons/Tenno/Rifle/Rifle",
+                type: "/Lotus/Weapons/Tenno/Rifle/Rifle",
                 rarity: "COMMON"
             }
         ],
         upgrades: [
             {
-                UpgradeType: "WEAPON_FIRE_DAMAGE",
-                ValueRanges: {
-                    COMMON: [0.025, 0.30000001],
-                    UNCOMMON: [0.050000001, 0.40000001],
-                    RARE: [0.1, 0.69999999]
+                type: "WEAPON_FIRE_DAMAGE",
+                valueRarity: {
+                    COMMON: [0.025, 0.3],
+                    UNCOMMON: [0.05, 0.4],
+                    RARE: [0.1, 0.7]
                 },
-                rarity: "COMMON"
+                rarity: "COMMON",
+                operation: "ADD",
+                displayAsPercent: true
             }
-        ]
+        ],
+        numUpgrades: [{ number: 1, rarity: "COMMON" }]
     },
     "/Lotus/Upgrades/Modules/GrineerMeleeModule": {
         fits: [
             {
-                Type: "/Lotus/Weapons/Tenno/Melee/DualShortSword/DualShortSword",
+                type: "/Lotus/Weapons/Tenno/Melee/DualShortSword/DualShortSword",
                 rarity: "UNCOMMON"
             },
             {
-                Type: "/Lotus/Weapons/Tenno/Melee/LongSword/LongSword",
+                type: "/Lotus/Weapons/Tenno/Melee/LongSword/LongSword",
                 rarity: "UNCOMMON"
             },
             {
-                Type: "/Lotus/Weapons/Tenno/Melee/Staff/Staff",
+                type: "/Lotus/Weapons/Tenno/Melee/Staff/Staff",
                 rarity: "UNCOMMON"
             },
             {
-                Type: "/Lotus/Types/Game/LotusMeleeWeapon",
+                type: "/Lotus/Types/Game/LotusMeleeWeapon",
                 rarity: "COMMON"
             },
             {
-                Type: "/Lotus/Weapons/Tenno/Melee/Fist/Fist",
+                type: "/Lotus/Weapons/Tenno/Melee/Fist/Fist",
                 rarity: "UNCOMMON"
             },
             {
-                Type: "/Lotus/Weapons/Tenno/Melee/Dagger/Dagger",
+                type: "/Lotus/Weapons/Tenno/Melee/Dagger/Dagger",
                 rarity: "UNCOMMON"
             }
         ],
         upgrades: [
             {
-                UpgradeType: "WEAPON_MELEE_DAMAGE",
-                ValueRanges: {
+                type: "WEAPON_MELEE_DAMAGE",
+                valueRarity: {
                     COMMON: [1.05, 1.15],
                     UNCOMMON: [1.075, 1.25],
                     RARE: [1.15, 1.5]
                 },
-                rarity: "COMMON"
+                rarity: "COMMON",
+                operation: "MULTIPLY"
             },
             {
-                UpgradeType: "WEAPON_FIRE_DAMAGE",
-                ValueRanges: {
-                    COMMON: [0.050000001, 0.15000001],
-                    UNCOMMON: [0.075000003, 0.25],
+                type: "WEAPON_FIRE_DAMAGE",
+                valueRarity: {
+                    COMMON: [0.05, 0.15],
+                    UNCOMMON: [0.075, 0.25],
                     RARE: [0.1, 0.5]
                 },
-                rarity: "RARE"
+                rarity: "RARE",
+                operation: "ADD",
+                displayAsPercent: true
             },
             {
-                UpgradeType: "WEAPON_ELECTRICITY_DAMAGE",
-                ValueRanges: {
-                    COMMON: [0.050000001, 0.15000001],
-                    UNCOMMON: [0.075000003, 0.25],
+                type: "WEAPON_ELECTRICITY_DAMAGE",
+                valueRarity: {
+                    COMMON: [0.05, 0.15],
+                    UNCOMMON: [0.075, 0.25],
                     RARE: [0.1, 0.5]
                 },
-                rarity: "COMMON"
+                rarity: "COMMON",
+                operation: "ADD",
+                displayAsPercent: true
             },
             {
-                UpgradeType: "WEAPON_FREEZE_DAMAGE",
-                ValueRanges: {
-                    COMMON: [0.050000001, 0.15000001],
-                    UNCOMMON: [0.075000003, 0.25],
+                type: "WEAPON_FREEZE_DAMAGE",
+                valueRarity: {
+                    COMMON: [0.05, 0.15],
+                    UNCOMMON: [0.075, 0.25],
                     RARE: [0.1, 0.5]
                 },
-                rarity: "COMMON"
+                rarity: "COMMON",
+                operation: "ADD",
+                displayAsPercent: true
             },
             {
-                UpgradeType: "WEAPON_ARMOR_PIERCING_DAMAGE",
-                ValueRanges: {
-                    COMMON: [0.050000001, 0.15000001],
-                    UNCOMMON: [0.075000003, 0.25],
+                type: "WEAPON_ARMOR_PIERCING_DAMAGE",
+                valueRarity: {
+                    COMMON: [0.05, 0.15],
+                    UNCOMMON: [0.075, 0.25],
                     RARE: [0.1, 0.5]
                 },
-                rarity: "COMMON"
+                rarity: "COMMON",
+                operation: "ADD",
+                displayAsPercent: true
             },
             {
-                UpgradeType: "WEAPON_STUN_CHANCE",
-                ValueRanges: {
-                    COMMON: [0.050000001, 0.1],
+                type: "WEAPON_STUN_CHANCE",
+                valueRarity: {
+                    COMMON: [0.05, 0.1],
                     UNCOMMON: [0.1, 0.2],
-                    RARE: [0.2, 0.40000001]
+                    RARE: [0.2, 0.4]
                 },
-                rarity: "UNCOMMON"
+                rarity: "UNCOMMON",
+                operation: "ADD",
+                displayAsPercent: true
             },
             {
-                UpgradeType: "WEAPON_CRIT_CHANCE",
-                ValueRanges: {
-                    COMMON: [0.0099999998, 0.1],
-                    UNCOMMON: [0.02, 0.15000001],
-                    RARE: [0.050000001, 0.25]
+                type: "WEAPON_CRIT_CHANCE",
+                valueRarity: {
+                    COMMON: [0.01, 0.1],
+                    UNCOMMON: [0.02, 0.15],
+                    RARE: [0.05, 0.25]
                 },
-                rarity: "COMMON"
+                rarity: "COMMON",
+                operation: "ADD",
+                displayAsPercent: true
             },
             {
-                UpgradeType: "WEAPON_CRIT_DAMAGE",
-                ValueRanges: {
-                    COMMON: [0.050000001, 1],
+                type: "WEAPON_CRIT_DAMAGE",
+                valueRarity: {
+                    COMMON: [0.05, 1],
                     UNCOMMON: [0.1, 1.5],
                     RARE: [0.2, 2]
                 },
-                rarity: "COMMON"
+                rarity: "COMMON",
+                operation: "ADD",
+                displayAsPercent: true
             },
             {
-                UpgradeType: "WEAPON_MELEE_HEAVY_DAMAGE",
-                ValueRanges: {
+                type: "WEAPON_MELEE_HEAVY_DAMAGE",
+                valueRarity: {
                     COMMON: [1.025, 1.25],
                     UNCOMMON: [1.05, 1.5],
                     RARE: [1.15, 1.75]
                 },
-                rarity: "UNCOMMON"
+                rarity: "UNCOMMON",
+                operation: "MULTIPLY"
             },
             {
-                UpgradeType: "WEAPON_MELEE_CHARGE_RATE",
-                ValueRanges: {
-                    COMMON: [0.025, 0.30000001],
-                    UNCOMMON: [0.050000001, 0.40000001],
+                type: "WEAPON_MELEE_CHARGE_RATE",
+                valueRarity: {
+                    COMMON: [0.025, 0.3],
+                    UNCOMMON: [0.05, 0.4],
                     RARE: [0.1, 0.5]
                 },
-                rarity: "UNCOMMON"
+                rarity: "UNCOMMON",
+                operation: "ADD",
+                displayAsPercent: true
             },
             {
-                UpgradeType: "WEAPON_FIRE_RATE",
-                ValueRanges: {
+                type: "WEAPON_FIRE_RATE",
+                valueRarity: {
                     COMMON: [1.05, 1.15],
                     UNCOMMON: [1.075, 1.35],
                     RARE: [1.1, 1.5]
                 },
-                rarity: "UNCOMMON"
+                rarity: "UNCOMMON",
+                operation: "MULTIPLY"
             }
+        ],
+        numUpgrades: [
+            { number: 1, rarity: "COMMON" },
+            { number: 1, rarity: "RARE" }
         ]
     },
     "/Lotus/Upgrades/Modules/GrineerPistolModule": {
         fits: [
             {
-                Type: "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
+                type: "/Lotus/Weapons/Tenno/Pistol/LotusPistol",
                 rarity: "COMMON"
             },
             {
-                Type: "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
+                type: "/Lotus/Weapons/Tenno/Pistol/AutoPistol",
                 rarity: "RARE"
             },
             {
-                Type: "/Lotus/Weapons/Tenno/Pistol/BurstPistol",
+                type: "/Lotus/Weapons/Tenno/Pistol/BurstPistol",
                 rarity: "UNCOMMON"
             },
             {
-                Type: "/Lotus/Weapons/Tenno/Pistol/CrossBow",
+                type: "/Lotus/Weapons/Tenno/Pistol/CrossBow",
                 rarity: "UNCOMMON"
             },
             {
-                Type: "/Lotus/Weapons/Tenno/Pistol/HandShotGun",
+                type: "/Lotus/Weapons/Tenno/Pistol/HandShotGun",
                 rarity: "UNCOMMON"
             },
             {
-                Type: "/Lotus/Weapons/Tenno/Pistol/Pistol",
+                type: "/Lotus/Weapons/Tenno/Pistol/Pistol",
                 rarity: "UNCOMMON"
             }
         ],
-        upgrades: U5WeaponUpgrades
+        upgrades: U5WeaponUpgrades,
+        numUpgrades: [
+            { number: 1, rarity: "COMMON" },
+            { number: 1, rarity: "RARE" }
+        ]
     },
     "/Lotus/Upgrades/Modules/GrineerRifleModule": {
         fits: [
             {
-                Type: "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
+                type: "/Lotus/Weapons/Tenno/Rifle/LotusRifle",
                 rarity: "COMMON"
             },
             {
-                Type: "/Lotus/Weapons/Tenno/Rifle/BurstRifle",
+                type: "/Lotus/Weapons/Tenno/Rifle/BurstRifle",
                 rarity: "UNCOMMON",
-                StatAtten: 1.2
+                statAtten: 1.2
             },
             {
-                Type: "/Lotus/Weapons/Tenno/Rifle/SniperRifle",
+                type: "/Lotus/Weapons/Tenno/Rifle/SniperRifle",
                 rarity: "RARE",
-                StatAtten: 1.1
+                statAtten: 1.1
             },
             {
-                Type: "/Lotus/Weapons/Tenno/Rifle/HeavyRifle",
+                type: "/Lotus/Weapons/Tenno/Rifle/HeavyRifle",
                 rarity: "RARE",
-                StatAtten: 1.3
+                statAtten: 1.3
             },
             {
-                Type: "/Lotus/Weapons/Tenno/Rifle/Rifle",
+                type: "/Lotus/Weapons/Tenno/Rifle/Rifle",
                 rarity: "UNCOMMON",
-                StatAtten: 1.2
+                statAtten: 1.2
             },
             {
-                Type: "/Lotus/Weapons/Tenno/Rifle/SemiAutoRifle",
+                type: "/Lotus/Weapons/Tenno/Rifle/SemiAutoRifle",
                 rarity: "UNCOMMON",
-                StatAtten: 1.1
+                statAtten: 1.1
             }
         ],
-        upgrades: U5WeaponUpgrades
+        upgrades: U5WeaponUpgrades,
+        numUpgrades: [
+            { number: 1, rarity: "COMMON" },
+            { number: 1, rarity: "RARE" }
+        ]
     },
     "/Lotus/Upgrades/Modules/GrineerShotgunModule": {
         fits: [
             {
-                Type: "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun",
+                type: "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun",
                 rarity: "COMMON",
-                StatAtten: 1
+                statAtten: 1
             },
             {
-                Type: "/Lotus/Weapons/Tenno/Shotgun/Shotgun",
+                type: "/Lotus/Weapons/Tenno/Shotgun/Shotgun",
                 rarity: "UNCOMMON",
-                StatAtten: 1.2
+                statAtten: 1.2
             },
             {
-                Type: "/Lotus/Weapons/Tenno/Shotgun/FullAutoShotgun",
+                type: "/Lotus/Weapons/Tenno/Shotgun/FullAutoShotgun",
                 rarity: "RARE",
-                StatAtten: 1.1
+                statAtten: 1.1
             }
         ],
-        upgrades: U5WeaponUpgrades
+        upgrades: U5WeaponUpgrades,
+        numUpgrades: [
+            { number: 1, rarity: "COMMON" },
+            { number: 1, rarity: "RARE" }
+        ]
     },
     "/Lotus/Upgrades/Modules/OrokinWarframeModule": {
         fits: [
             {
-                Type: "/Lotus/Types/Game/PowerSuit",
+                type: "/Lotus/Types/Game/PowerSuit",
                 rarity: "COMMON"
             },
             {
-                Type: "/Lotus/Powersuits/Ember/Ember",
+                type: "/Lotus/Powersuits/Ember/Ember",
                 rarity: "UNCOMMON",
-                StatAtten: 1.2
+                statAtten: 1.2
             },
             {
-                Type: "/Lotus/Powersuits/Excalibur/Excalibur",
+                type: "/Lotus/Powersuits/Excalibur/Excalibur",
                 rarity: "UNCOMMON",
-                StatAtten: 1.1
+                statAtten: 1.1
             },
             {
-                Type: "/Lotus/Powersuits/Loki/Loki",
+                type: "/Lotus/Powersuits/Loki/Loki",
                 rarity: "UNCOMMON",
-                StatAtten: 1.1
+                statAtten: 1.1
             },
             {
-                Type: "/Lotus/Powersuits/Mag/Mag",
+                type: "/Lotus/Powersuits/Mag/Mag",
                 rarity: "UNCOMMON",
-                StatAtten: 1.1
+                statAtten: 1.1
             },
             {
-                Type: "/Lotus/Powersuits/Ninja/Ninja",
+                type: "/Lotus/Powersuits/Ninja/Ninja",
                 rarity: "UNCOMMON",
-                StatAtten: 1.1
+                statAtten: 1.1
             },
             {
-                Type: "/Lotus/Powersuits/Rhino/Rhino",
+                type: "/Lotus/Powersuits/Rhino/Rhino",
                 rarity: "UNCOMMON",
-                StatAtten: 1.1
+                statAtten: 1.1
             },
             {
-                Type: "/Lotus/Powersuits/Trinity/Trinity",
+                type: "/Lotus/Powersuits/Trinity/Trinity",
                 rarity: "UNCOMMON",
-                StatAtten: 1.1
+                statAtten: 1.1
             },
             {
-                Type: "/Lotus/Powersuits/Volt/Volt",
+                type: "/Lotus/Powersuits/Volt/Volt",
                 rarity: "UNCOMMON",
-                StatAtten: 1.1
+                statAtten: 1.1
             }
         ],
         upgrades: [
             {
-                UpgradeType: "AVATAR_SHIELD_MAX",
-                ValueRanges: {
+                type: "AVATAR_SHIELD_MAX",
+                valueRarity: {
                     COMMON: [1.05, 1.4],
                     UNCOMMON: [1.1, 1.7],
                     RARE: [1.2, 2]
                 },
-                rarity: "COMMON"
+                rarity: "COMMON",
+                operation: "MULTIPLY"
             },
             {
-                UpgradeType: "AVATAR_ARMOUR",
-                ValueRanges: {
+                type: "AVATAR_ARMOUR",
+                valueRarity: {
                     COMMON: [1.05, 1.4],
                     UNCOMMON: [1.1, 1.7],
                     RARE: [1.2, 2]
                 },
-                rarity: "COMMON"
+                rarity: "COMMON",
+                operation: "MULTIPLY"
             },
             {
-                UpgradeType: "AVATAR_HEALTH_MAX",
-                ValueRanges: {
+                type: "AVATAR_HEALTH_MAX",
+                valueRarity: {
                     COMMON: [1.1, 1.4],
                     UNCOMMON: [1.15, 1.8],
                     RARE: [1.2, 2]
                 },
-                rarity: "UNCOMMON"
+                rarity: "UNCOMMON",
+                operation: "MULTIPLY"
             },
             {
-                UpgradeType: "AVATAR_POWER_MAX",
-                ValueRanges: {
+                type: "AVATAR_POWER_MAX",
+                valueRarity: {
                     COMMON: [1.05, 1.4],
                     UNCOMMON: [1.1, 1.75],
                     RARE: [1.15, 2]
                 },
-                rarity: "RARE"
+                rarity: "RARE",
+                operation: "MULTIPLY"
             },
             {
-                UpgradeType: "AVATAR_SHIELD_RECHARGE_RATE",
-                ValueRanges: {
+                type: "AVATAR_SHIELD_RECHARGE_RATE",
+                valueRarity: {
                     COMMON: [1.05, 1.4],
                     UNCOMMON: [1.1, 1.75],
                     RARE: [1.15, 2]
                 },
-                rarity: "UNCOMMON"
+                rarity: "UNCOMMON",
+                operation: "MULTIPLY"
             },
             {
-                UpgradeType: "WEAPON_MELEE_DAMAGE",
-                ValueRanges: {
+                type: "WEAPON_MELEE_DAMAGE",
+                valueRarity: {
                     COMMON: [1.05, 1.4],
                     UNCOMMON: [1.1, 1.75],
                     RARE: [1.15, 2]
                 },
-                rarity: "UNCOMMON"
+                rarity: "UNCOMMON",
+                operation: "MULTIPLY"
             },
             {
-                UpgradeType: "AVATAR_SPRINT_SPEED",
-                ValueRanges: {
+                type: "AVATAR_SPRINT_SPEED",
+                valueRarity: {
                     COMMON: [1.03, 1.1],
                     UNCOMMON: [1.05, 1.25],
                     RARE: [1.1, 1.35]
                 },
-                rarity: "UNCOMMON"
+                rarity: "UNCOMMON",
+                operation: "MULTIPLY"
             },
             {
-                UpgradeType: "AVATAR_ENEMY_RADAR",
-                ValueRanges: {
+                type: "AVATAR_ENEMY_RADAR",
+                valueRarity: {
                     COMMON: [15, 20],
                     UNCOMMON: [20, 40],
                     RARE: [25, 60]
                 },
-                rarity: "RARE"
+                rarity: "RARE",
+                operation: "ADD"
             },
             {
-                UpgradeType: "AVATAR_LOOT_RADAR",
-                ValueRanges: {
+                type: "AVATAR_LOOT_RADAR",
+                valueRarity: {
                     COMMON: [15, 20],
                     UNCOMMON: [20, 40],
                     RARE: [25, 60]
                 },
-                rarity: "UNCOMMON"
+                rarity: "UNCOMMON",
+                operation: "ADD"
             },
             {
-                UpgradeType: "AVATAR_ABILITY_RANGE",
-                ValueRanges: {
+                type: "AVATAR_ABILITY_RANGE",
+                valueRarity: {
                     COMMON: [1.05, 1.4],
                     UNCOMMON: [1.1, 1.5],
                     RARE: [1.15, 1.8]
                 },
-                rarity: "UNCOMMON"
+                rarity: "UNCOMMON",
+                operation: "MULTIPLY"
             },
             {
-                UpgradeType: "AVATAR_ABILITY_DURATION",
-                ValueRanges: {
+                type: "AVATAR_ABILITY_DURATION",
+                valueRarity: {
                     COMMON: [1.02, 1.3],
                     UNCOMMON: [1.05, 1.4],
                     RARE: [1.05, 1.5]
                 },
-                rarity: "RARE"
+                rarity: "RARE",
+                operation: "MULTIPLY"
             },
             {
-                UpgradeType: "AVATAR_ABILITY_EFFICIENCY",
-                ValueRanges: {
+                type: "AVATAR_ABILITY_EFFICIENCY",
+                valueRarity: {
                     COMMON: [1.03, 1.3],
                     UNCOMMON: [1.05, 1.5],
                     RARE: [1.1, 1.7]
                 },
-                rarity: "RARE"
+                rarity: "RARE",
+                operation: "MULTIPLY"
             },
             {
-                UpgradeType: "AVATAR_ABILITY_STRENGTH",
-                ValueRanges: {
+                type: "AVATAR_ABILITY_STRENGTH",
+                valueRarity: {
                     COMMON: [1.03, 1.4],
                     UNCOMMON: [1.05, 1.5],
                     RARE: [1.1, 1.7]
                 },
-                rarity: "RARE"
+                rarity: "RARE",
+                operation: "MULTIPLY"
             }
+        ],
+        numUpgrades: [
+            { number: 1, rarity: "COMMON" },
+            { number: 1, rarity: "RARE" }
         ]
     }
 };

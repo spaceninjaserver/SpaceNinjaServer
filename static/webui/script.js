@@ -692,36 +692,6 @@ function fetchItemList() {
                 {
                     uniqueName: "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod",
                     name: loc("code_traumaticPeculiar")
-                },
-                {
-                    uniqueName: "/Lotus/Upgrades/Modules/GrineerMeleeModule",
-                    name: loc("code_U5Mod").replace("|TYPE|", loc("code_melee")),
-                    fusionLimit: 0
-                },
-                {
-                    uniqueName: "/Lotus/Upgrades/Modules/GrineerPistolModule",
-                    name: loc("code_U5Mod").replace("|TYPE|", loc("code_pistol")),
-                    fusionLimit: 0
-                },
-                {
-                    uniqueName: "/Lotus/Upgrades/Modules/GrineerRifleModule",
-                    name: loc("code_U5Mod").replace("|TYPE|", loc("code_rifle")),
-                    fusionLimit: 0
-                },
-                {
-                    uniqueName: "/Lotus/Upgrades/Modules/GrineerShotgunModule",
-                    name: loc("code_U5Mod").replace("|TYPE|", loc("code_shotgun")),
-                    fusionLimit: 0
-                },
-                {
-                    uniqueName: "/Lotus/Upgrades/Modules/OrokinWarframeModule",
-                    name: loc("code_U5Mod").replace("|TYPE|", loc("code_warframe")),
-                    fusionLimit: 0
-                },
-                {
-                    uniqueName: "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod",
-                    name: loc("code_infernoMod"),
-                    fusionLimit: 0
                 }
             );
 
@@ -991,7 +961,9 @@ function fetchItemList() {
                 "/Lotus/Language/Game/Rank_Utility": {
                     name: loc("guildView_rank_utility")
                 },
-                "/Lotus/Types/Game/PowerSuit": { name: loc("code_warframe") }
+                // U5
+                "/Lotus/Types/Game/PowerSuit": { name: loc("code_warframe") },
+                "/Lotus/Types/Game/LotusMeleeWeapon": { name: loc("code_melee") }
             };
             for (const [type, items] of Object.entries(data)) {
                 if (type == "archonCrystalUpgrades") {
@@ -1086,8 +1058,36 @@ function fetchItemList() {
                     const nameToItems = {};
                     items.forEach(item => {
                         item.name = item.name.replace(/<.+>/g, "").trim();
-                        if (item.name == "/Lotus/Language/Suits/RiftWalkAbilityName") {
-                            item.name = loc("code_RiftWalkAbilityName");
+                        const nameMap = {
+                            "/Lotus/Language/Suits/RiftWalkAbilityName": loc("code_RiftWalkAbilityName"),
+                            "/Lotus/Upgrades/Modules/GrineerMeleeModule": loc("code_U5Mod").replace(
+                                "|TYPE|",
+                                loc("code_melee")
+                            ),
+
+                            "/Lotus/Upgrades/Modules/GrineerPistolModule": loc("code_U5Mod").replace(
+                                "|TYPE|",
+                                loc("code_pistol")
+                            ),
+
+                            "/Lotus/Upgrades/Modules/GrineerRifleModule": loc("code_U5Mod").replace(
+                                "|TYPE|",
+                                loc("code_rifle")
+                            ),
+
+                            "/Lotus/Upgrades/Modules/GrineerShotgunModule": loc("code_U5Mod").replace(
+                                "|TYPE|",
+                                loc("code_shotgun")
+                            ),
+
+                            "/Lotus/Upgrades/Modules/OrokinWarframeModule": loc("code_U5Mod").replace(
+                                "|TYPE|",
+                                loc("code_warframe")
+                            ),
+                            "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod": loc("code_infernoMod")
+                        };
+                        if (nameMap[item.name]) {
+                            item.name = nameMap[item.name];
                         }
                         if ("badReason" in item) {
                             if (item.badReason == "starter") {
@@ -1224,6 +1224,15 @@ function translateInventoryDataToDom() {
                 "/Lotus/Types/Friendly/Pets/CreaturePets/VizierPredatorKubrowPetPowerSuit",
                 "/Lotus/Types/Friendly/Pets/CreaturePets/PharaohPredatorKubrowPetPowerSuit",
                 "/Lotus/Types/Friendly/Pets/CreaturePets/MedjayPredatorKubrowPetPowerSuit"
+            ];
+
+            const U5Mods = [
+                "/Lotus/Upgrades/Modules/GrineerMeleeModule",
+                "/Lotus/Upgrades/Modules/GrineerPistolModule",
+                "/Lotus/Upgrades/Modules/GrineerRifleModule",
+                "/Lotus/Upgrades/Modules/GrineerShotgunModule",
+                "/Lotus/Upgrades/Modules/OrokinWarframeModule",
+                "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod"
             ];
 
             // Populate inventory route
@@ -1866,13 +1875,8 @@ function translateInventoryDataToDom() {
                     const td = document.createElement("td");
                     td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
                     if (
-                        [
-                            "/Lotus/Upgrades/Modules/GrineerMeleeModule",
-                            "/Lotus/Upgrades/Modules/GrineerPistolModule",
-                            "/Lotus/Upgrades/Modules/GrineerRifleModule",
-                            "/Lotus/Upgrades/Modules/GrineerShotgunModule",
-                            "/Lotus/Upgrades/Modules/OrokinWarframeModule"
-                        ].includes(item.ItemType)
+                        U5Mods.includes(item.ItemType) &&
+                        item.ItemType != "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod"
                     ) {
                         if (item.UpgradeFingerprint) {
                             const fingerprint = JSON.parse(item.UpgradeFingerprint);
@@ -1903,6 +1907,12 @@ function translateInventoryDataToDom() {
                         };
                         a.title = loc("code_maxRank");
                         a.innerHTML = icons.arrowUp;
+                        td.appendChild(a);
+                    }
+                    if (U5Mods.includes(item.ItemType)) {
+                        const a = document.createElement("a");
+                        a.href = "/webui/detailedView?productCategory=Upgrades&itemId=" + item.ItemId.$oid;
+                        a.innerHTML = icons.feather;
                         td.appendChild(a);
                     }
                     {
@@ -1991,7 +2001,7 @@ function translateInventoryDataToDom() {
                         $("#detailedView-title").text(itemName);
                     }
 
-                    {
+                    if (category != "Upgrades") {
                         document.getElementById("equipmentFeatures-card").classList.remove("d-none");
                         const buttonsCard = document.getElementById("equipmentFeaturesButtons-card");
                         buttonsCard.innerHTML = "";
@@ -2239,10 +2249,45 @@ function translateInventoryDataToDom() {
 
                         if (item.UpgradeFingerprint) {
                             const buff = JSON.parse(item.UpgradeFingerprint).buffs[0];
-                            const buffValue = fromUpdradeFingerPrintVaule(buff.Value, 0.25);
+                            const buffValue = fromUpgradeFingerprintValue(buff.Value, 0.25);
                             document.getElementById("valenceBonus-innateDamage").value = buff.Tag ?? "";
                             document.getElementById("valenceBonus-procent").value = Math.round(buffValue * 1000) / 10;
                         }
+                    }
+                    if (U5Mods.includes(item.ItemType)) {
+                        document.getElementById("u5ModEdit-card").classList.remove("d-none");
+                        const oldFitsSelect = document.getElementById("u5ModEdit-fits");
+                        const fitsSelect = oldFitsSelect.cloneNode(false);
+                        oldFitsSelect.parentNode.replaceChild(fitsSelect, oldFitsSelect);
+                        const upgradeFields = document.getElementById("u5ModEdit-upgradeFields");
+                        upgradeFields.innerHTML = "";
+                        const fits = itemMap[item.ItemType].fits;
+                        const fp = JSON.parse(item.UpgradeFingerprint);
+                        const statAtten = fits.find(fit => fit.type == fp.fits).statAtten || 1;
+
+                        fits.forEach(fit => {
+                            const option = document.createElement("option");
+                            option.value = fit.type;
+                            option.textContent =
+                                (itemMap[fit.type]?.name ?? fit.type) +
+                                (fit.statAtten ? ` (${loc("code_statAtten")}: ${fit.statAtten || 1})` : "");
+                            fitsSelect.appendChild(option);
+                        });
+
+                        fitsSelect.addEventListener("change", () => {
+                            upgradeFields.querySelectorAll(".upgrade-group").forEach(group => {
+                                updateUpgradeInput(itemMap[item.ItemType], group);
+                            });
+                        });
+
+                        upgradeFields.setAttribute("data-stat-atten", statAtten);
+                        document.getElementById("u5ModEdit-reqLevel").value = fp.reqLevel ?? 0;
+                        document.getElementById("u5ModEdit-fits").value = fp.fits ?? fits[0].type;
+
+                        fp.upgrades.forEach(up => {
+                            createUpgradeInput(upgradeFields, itemMap, item.ItemType, up);
+                        });
+                        createUpgradeInput(upgradeFields, itemMap, item.ItemType, null);
                     }
                     if (modularWeapons.includes(item.ItemType)) {
                         document.getElementById("modularParts-card").classList.remove("d-none");
@@ -4307,6 +4352,7 @@ single.getRoute("#detailedView-route").on("beforeload", function () {
     document.getElementById("modularParts-card").classList.add("d-none");
     document.getElementById("modularParts-form").innerHTML = "";
     document.getElementById("valenceBonus-card").classList.add("d-none");
+    document.getElementById("u5ModEdit-card").classList.add("d-none");
     document.getElementById("equipmentFeatures-card").classList.add("d-none");
     document.getElementById("equipmentFeaturesButtons-card").innerHTML = "";
     if (window.didInitialInventoryUpdate) {
@@ -5046,14 +5092,24 @@ document.querySelectorAll(".tags-input").forEach(input => {
     input.oninput();
 });
 
-function fromUpdradeFingerPrintVaule(raw, min) {
+function fromUpgradeFingerprintValue(raw, min) {
     const range = 0.6 - min;
     return min + (raw * range) / 0x3fffffff;
 }
 
-function toUpdradeFingerPrintVaule(value, min) {
+function toUpgradeFingerprintValue(value, min) {
     const range = 0.6 - min;
     return Math.trunc(((value - min) * 0x3fffffff) / range);
+}
+
+function fromU5UpgradeFingerprintValue(raw, min, max) {
+    const range = max - min;
+    return min + range * raw;
+}
+
+function toU5UpgradeFingerprintValue(value, min, max) {
+    const range = max - min;
+    return (value - min) / range;
 }
 
 function handleValenceBonusChange(event) {
@@ -5061,7 +5117,7 @@ function handleValenceBonusChange(event) {
     const urlParams = new URLSearchParams(window.location.search);
     const action = event.submitter.value;
     const Tag = document.getElementById("valenceBonus-innateDamage").value;
-    const Value = toUpdradeFingerPrintVaule(document.getElementById("valenceBonus-procent").value / 100, 0.25);
+    const Value = toUpgradeFingerprintValue(document.getElementById("valenceBonus-procent").value / 100, 0.25);
     revalidateAuthz().then(() => {
         $.post({
             url: "/custom/updateFingerprint?" + window.authz,
@@ -5084,6 +5140,228 @@ function handleValenceBonusChange(event) {
             updateInventory();
         });
     });
+}
+
+function handleU5ModEdit(event) {
+    event.preventDefault();
+    const urlParams = new URLSearchParams(window.location.search);
+    const action = event.submitter.value;
+    revalidateAuthz().then(() => {
+        const upgradeFields = document.getElementById("u5ModEdit-upgradeFields");
+        const upgradeGroups = Array.from(upgradeFields.children);
+        const upgrades = upgradeGroups
+            .map(group => {
+                const upgradeSelect = group.querySelector("#u5ModEdit-upgradeType");
+                const raritySelect = group.querySelector("#u5ModEdit-upgradeRarity");
+                const valueInput = group.querySelector("#u5ModEdit-upgradeValue");
+                const statAtten = parseFloat(group.parentNode.getAttribute("data-stat-atten"));
+                const value =
+                    valueInput.valueAsNumber == valueInput.min
+                        ? valueInput.valueAsNumber + 0.001
+                        : valueInput.valueAsNumber;
+                return {
+                    upgrade: upgradeSelect.value,
+                    valueRarity: raritySelect.value,
+                    value: Math.min(
+                        toU5UpgradeFingerprintValue(
+                            value / statAtten,
+                            valueInput.min / statAtten,
+                            valueInput.max / statAtten
+                        ),
+                        1
+                    )
+                };
+            })
+            .filter(item => {
+                return item.upgrade != "" && item.value != 0;
+            });
+        $.post({
+            url: "/custom/updateFingerprint?" + window.authz,
+            contentType: "application/json",
+            data: JSON.stringify({
+                category: urlParams.get("productCategory"),
+                oid: urlParams.get("itemId"),
+                action,
+                upgradeFingerprint: {
+                    reqLevel: Number(document.getElementById("u5ModEdit-reqLevel").value),
+                    fits: document.getElementById("u5ModEdit-fits").value,
+                    upgrades
+                }
+            })
+        }).done(function () {
+            updateInventory();
+        });
+    });
+}
+
+function createUpgradeInput(targetDiv, itemMap, itemType, upgrade) {
+    const meta = itemMap[itemType];
+    const statAtten = targetDiv.getAttribute("data-stat-atten") || 1;
+
+    const group = document.createElement("div");
+    group.classList.add("upgrade-group", "mb-2", "d-flex", "gap-2");
+
+    {
+        const select = document.createElement("select");
+        select.classList.add("form-control");
+        select.id = "u5ModEdit-upgradeType";
+        const optionNone = document.createElement("option");
+        select.appendChild(optionNone);
+        meta.upgrades.forEach(up => {
+            const option = document.createElement("option");
+            option.value = up.type;
+            const locType =
+                itemType.endsWith("GrineerMeleeModule") && up.type == "WEAPON_FIRE_RATE"
+                    ? "WEAPON_MELEE_FIRE_RATE"
+                    : up.type;
+            option.textContent = loc(locType);
+            select.appendChild(option);
+        });
+        if (upgrade) {
+            select.value = upgrade.upgrade;
+        }
+        select.addEventListener("change", () => {
+            updateUpgradeInput(meta, group);
+            checkAddOrDeleteUpgradeInput(itemMap, itemType);
+        });
+        group.appendChild(select);
+    }
+    {
+        const select = document.createElement("select");
+        select.classList.add("form-control");
+        select.id = "u5ModEdit-upgradeRarity";
+        ["COMMON", "UNCOMMON", "RARE"].forEach(rarity => {
+            const option = document.createElement("option");
+            option.value = rarity;
+            const locKey = "code_rarity" + rarity.charAt(0) + rarity.slice(1).toLowerCase();
+            option.textContent = loc(locKey);
+            option.setAttribute("data-loc", locKey);
+            select.appendChild(option);
+        });
+        if (upgrade) {
+            select.value = upgrade.valueRarity ?? "COMMON";
+        } else {
+            select.value = "COMMON";
+        }
+        select.addEventListener("change", () => updateUpgradeInput(meta, group));
+        group.appendChild(select);
+    }
+    {
+        let valueRange = [0, 0];
+        let upgradeValue = 0;
+        let displayAsPercent = undefined;
+        if (upgrade) {
+            // U5.1 client just igrone Rare value ranges
+            const targetValueRarity = upgrade.valueRarity == "RARE" ? "UNCOMMON" : upgrade.valueRarity;
+            const upgradeMeta = meta.upgrades.find(up => up.type == upgrade.upgrade);
+            valueRange = [...(upgradeMeta.valueRarity[targetValueRarity] || [0, 0])];
+            const operation = upgradeMeta.operation;
+            displayAsPercent = upgradeMeta.displayAsPercent || operation == "MULTIPLY";
+            if (displayAsPercent) {
+                valueRange[0] = valueRange[0] * 100 - (operation == "MULTIPLY" ? 100 : 0);
+                valueRange[1] = valueRange[1] * 100 - (operation == "MULTIPLY" ? 100 : 0);
+            }
+            upgradeValue = +(
+                fromU5UpgradeFingerprintValue(upgrade.value, valueRange[0], valueRange[1]) * statAtten
+            ).toFixed(1);
+        }
+
+        const inputGroup = document.createElement("div");
+        inputGroup.classList.add("input-group", "d-flex", "flex-shrink-0");
+        inputGroup.style.flexBasis = "200px";
+
+        const input = document.createElement("input");
+        input.type = "number";
+        input.classList.add("form-control");
+        input.step = "0.1";
+        input.id = "u5ModEdit-upgradeValue";
+        input.min = valueRange[0] ? +(valueRange[0] * statAtten).toFixed(1) : 0;
+        input.max = valueRange[1] ? +(valueRange[1] * statAtten).toFixed(1) : 0;
+        input.value = upgradeValue;
+        input.title = loc("code_range").replace("|MIN|", input.min).replace("|MAX|", input.max);
+
+        const rangePrefix = document.createElement("span");
+        rangePrefix.textContent = "+";
+        rangePrefix.classList.add("input-group-text");
+
+        const rangeSuffix = document.createElement("span");
+        rangeSuffix.classList.add("input-group-text");
+        rangeSuffix.id = "u5ModEdit-upgradeValueSuffix";
+        rangeSuffix.textContent = displayAsPercent ? "%" : loc("code_metersShort");
+
+        inputGroup.appendChild(rangePrefix);
+        inputGroup.appendChild(input);
+
+        if (displayAsPercent != undefined) {
+            inputGroup.appendChild(rangeSuffix);
+        }
+
+        group.appendChild(inputGroup);
+    }
+    targetDiv.appendChild(group);
+}
+
+function updateUpgradeInput(meta, group) {
+    const fitsSelect = document.getElementById("u5ModEdit-fits");
+    const fit = meta.fits.find(f => f.type == fitsSelect.value);
+    const statAtten = fit?.statAtten || 1;
+
+    const upgradeSelect = group.querySelector("#u5ModEdit-upgradeType");
+    const raritySelect = group.querySelector("#u5ModEdit-upgradeRarity");
+    const input = group.querySelector("#u5ModEdit-upgradeValue");
+    let rangeSuffix = group.querySelector("#u5ModEdit-upgradeValueSuffix");
+
+    const upgradeMeta = meta.upgrades.find(up => up.type == upgradeSelect.value);
+    const targetValueRarity = raritySelect.value == "RARE" ? "UNCOMMON" : raritySelect.value;
+    let valueRange = [...(upgradeMeta?.valueRarity[targetValueRarity] || [0, 0])];
+    const operation = upgradeMeta?.operation;
+    const displayAsPercent = upgradeMeta?.displayAsPercent || operation == "MULTIPLY";
+    if (displayAsPercent) {
+        valueRange[0] = valueRange[0] * 100 - (operation == "MULTIPLY" ? 100 : 0);
+        valueRange[1] = valueRange[1] * 100 - (operation == "MULTIPLY" ? 100 : 0);
+    }
+    if (upgradeMeta && !rangeSuffix) {
+        rangeSuffix = document.createElement("span");
+        rangeSuffix.classList.add("input-group-text");
+        rangeSuffix.id = "u5ModEdit-upgradeValueSuffix";
+        input.parentNode.appendChild(rangeSuffix);
+    }
+    if (rangeSuffix) rangeSuffix.textContent = displayAsPercent ? "%" : "m";
+
+    const oldstatAtten = parseFloat(group.parentNode.getAttribute("data-stat-atten")) || 1;
+    const oldUpgradeValue = toU5UpgradeFingerprintValue(
+        input.valueAsNumber / oldstatAtten,
+        input.min / oldstatAtten,
+        input.max / oldstatAtten
+    );
+
+    input.min = valueRange[0] ? +(valueRange[0] * statAtten).toFixed(1) : 0;
+    input.max = valueRange[1] ? +(valueRange[1] * statAtten).toFixed(1) : 0;
+    input.title = loc("code_range").replace("|MIN|", input.min).replace("|MAX|", input.max);
+    group.parentNode.setAttribute("data-stat-atten", statAtten);
+
+    input.value =
+        +(fromU5UpgradeFingerprintValue(oldUpgradeValue, valueRange[0], valueRange[1]) * statAtten).toFixed(1) ||
+        input.max;
+    if (input.value < input.min) input.value = input.min;
+}
+
+function checkAddOrDeleteUpgradeInput(itemMap, itemType) {
+    const upgradeFields = document.getElementById("u5ModEdit-upgradeFields");
+    const upgradeGroups = Array.from(upgradeFields.children);
+
+    upgradeGroups.forEach((group, index) => {
+        const upgradeSelect = group.querySelector("#u5ModEdit-upgradeType");
+        if (!upgradeSelect.value && index !== upgradeGroups.length - 1) {
+            upgradeFields.removeChild(group);
+        }
+    });
+
+    const lastUpgradeSelect = upgradeGroups[upgradeGroups.length - 1].querySelector("#u5ModEdit-upgradeType");
+
+    if (lastUpgradeSelect.value) {
+        createUpgradeInput(upgradeFields, itemMap, itemType, null);
+    }
 }
 
 document.querySelectorAll("#sidebar .nav-link").forEach(function (elm) {

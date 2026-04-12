@@ -633,21 +633,23 @@ export const addItem = async (
             const equipment = getRandomWeightedReward(meta.fits, U5ModsWeights)!;
             const upgrades = [];
             {
-                const rolledUpgrade = getRandomWeightedReward(meta.upgrades, U5ModsWeights)!;
-                const rolledRarity = getRandomWeightedReward(
-                    (["COMMON", "UNCOMMON", "RARE"] as const).map(rarity => ({ rarity })),
-                    U5ModsWeights
-                )!.rarity;
-                const valueRange = rolledUpgrade.ValueRanges[rolledRarity];
-                upgrades.push({
-                    upgrade: rolledUpgrade.UpgradeType,
-                    valueRarity: rolledRarity,
-                    value: getRandomFloat(valueRange[0], valueRange[1]) * (equipment.StatAtten || 1)
-                });
+                const rolledCount = getRandomWeightedReward(meta.numUpgrades, U5ModsWeights)!.number;
+                for (let i = 0; i < rolledCount; i++) {
+                    const rolledUpgrade = getRandomWeightedReward(meta.upgrades, U5ModsWeights)!;
+                    const rolledRarity = getRandomWeightedReward(
+                        (["COMMON", "UNCOMMON", "RARE"] as const).map(rarity => ({ rarity })),
+                        U5ModsWeights
+                    )!.rarity;
+                    upgrades.push({
+                        upgrade: rolledUpgrade.type,
+                        valueRarity: rolledRarity,
+                        value: getRandomFloat(0, 1)
+                    });
+                }
             }
             targetFingerprint = JSON.stringify({
                 reqLevel: getRandomInt(0, 30),
-                fits: equipment.Type,
+                fits: equipment.type,
                 upgrades: upgrades
             });
         }

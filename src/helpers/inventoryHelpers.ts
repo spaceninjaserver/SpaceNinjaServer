@@ -109,14 +109,12 @@ export const convertIColorToLegacyColorsWithAtt = (
 export const convertFromLegacyFingerprint = (s: string): string => {
     let index = 0;
 
-    const parseBlock = (isArrayItem = false): Record<string, unknown> | Record<string, unknown>[] => {
+    const parseBlock = (): Record<string, unknown> | Record<string, unknown>[] => {
         const obj: Record<string, unknown> = {};
 
         while (index < s.length) {
-            if (s[index] === "|") {
-                index++;
-                continue;
-            }
+            while (s[index] === "|" || s[index] === ",") index++;
+            if (index >= s.length) break;
             if (s[index] === "}") {
                 index++;
                 break;
@@ -131,9 +129,12 @@ export const convertFromLegacyFingerprint = (s: string): string => {
                 index += 2;
                 const items: Record<string, unknown>[] = [];
                 while (index < s.length && !(s[index] === "|" && s[index + 1] === "}")) {
-                    if (s[index] === "{" && s[index + 1] === "|") index += 2;
-                    const item = parseBlock(true) as Record<string, unknown>;
-                    items.push(item);
+                    if (s[index] === "{" && s[index + 1] === "|") {
+                        index += 2;
+                        items.push(parseBlock() as Record<string, unknown>);
+                    } else {
+                        index++;
+                    }
                 }
                 index += 2;
                 obj[key] = items;
@@ -157,7 +158,7 @@ export const convertFromLegacyFingerprint = (s: string): string => {
             }
         }
 
-        return isArrayItem ? obj : obj;
+        return obj;
     };
 
     const result = parseBlock() as Record<string, unknown>;
@@ -169,7 +170,7 @@ export const convertToLegacyFingerprint = (s: string): string => {
     const obj: Record<string, unknown> = JSON.parse(s);
     const serialize = (o: unknown): string => {
         if (Array.isArray(o)) {
-            return o.map(item => `{|${serialize(item)}|}`).join("|");
+            return o.map(item => `{|${serialize(item)}|}`).join(",");
         } else if (typeof o === "object" && o !== null) {
             const parts: string[] = [];
             for (const k in o as Record<string, unknown>) {
