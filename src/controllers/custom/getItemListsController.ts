@@ -235,6 +235,9 @@ const getItemListsController: RequestHandler = (req, response) => {
         }
     }
     for (const [uniqueName, item] of Object.entries(ExportResources)) {
+        if (item.productCategory == "SupplyDrop") {
+            continue; // skip helminth resources
+        }
         let name = getNormalizedString(item.name, lang);
         if ("dissectionParts" in item) {
             name = getString("/Lotus/Language/Fish/FishDisplayName", lang).split("|FISH_NAME|").join(name);
