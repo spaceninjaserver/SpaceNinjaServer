@@ -14,7 +14,7 @@ import { Types } from "mongoose";
 import { isEmptyObject } from "../helpers/general.ts";
 import { convertLegacyColorsToIColor, fromOid, toObjectId, version_compare } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
-import type { TEquipmentKey } from "../types/inventoryTypes/inventoryTypes.ts";
+import type { ISketch, TEquipmentKey } from "../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IItemConfig, IItemConfigDatabase } from "../types/inventoryTypes/commonInventoryTypes.ts";
 import { importCrewShipMembers, importCrewShipWeapon, importLoadOutConfig } from "./importService.ts";
@@ -198,6 +198,10 @@ export const handleInventoryItemConfigChange = async (
             }
             case "UseAdultOperatorLoadout": {
                 inventory.UseAdultOperatorLoadout = equipment as boolean;
+                break;
+            }
+            case "Sketches": {
+                inventory.Sketches = equipment as ISketch[];
                 break;
             }
             case "FocusLoadouts": {

@@ -573,6 +573,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     if (client.Settings !== undefined) {
         db.Settings = client.Settings;
     }
+    if (client.Sketches !== undefined) {
+        db.Sketches = client.Sketches;
+    }
 
     // Final sanity check over data
     for (const pr of db.PendingRecipes) {

@@ -14,7 +14,7 @@ import type {
     IEquipmentSelectionClient,
     IEquipmentSelectionDatabase
 } from "./equipmentTypes.ts";
-import type { IFocusLoadoutClient } from "./inventoryTypes/inventoryTypes.ts";
+import type { IFocusLoadoutClient, ISketch } from "./inventoryTypes/inventoryTypes.ts";
 
 export interface ISaveLoadoutRequest {
     LoadOuts: ILoadoutClient | ILoadoutConfigClientLegacy;
@@ -58,6 +58,7 @@ export interface ISaveLoadoutRequest {
     WeaponSkins: IItemEntry;
     LotusCustomization: ILotusCustomization;
     FocusLoadouts?: IFocusLoadoutClient[];
+    Sketches?: ISketch[];
 }
 
 export type ISaveLoadoutRequestNoUpgradeVer = Omit<ISaveLoadoutRequest, "UpgradeVer">;

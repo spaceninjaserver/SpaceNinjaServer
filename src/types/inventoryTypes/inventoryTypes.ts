@@ -514,6 +514,7 @@ export interface IInventoryClient
     RetroFastTyping?: boolean;
     RetroPlayAllConvos?: boolean;
     RetroDisableKissInboxMessage?: boolean;
+    Sketches?: ISketch[];
 }
 
 export interface IAffiliation {
@@ -1356,4 +1357,25 @@ export interface IJournalEntry {
 export interface INokkoColony {
     FeedLevel: number;
     JournalEntries: IJournalEntry[];
+}
+
+export type TSketches =
+    | "ExplosiveBarrel"
+    | "ArcTrap"
+    | "RocketLauncher"
+    | "Amphor"
+    | "DeathOrb"
+    | "TetherTurret"
+    | "LohkSurge"
+    | "AmmoGenerator"
+    | "JumpPad"
+    | "TreasureHunt"
+    | "LifeSupport"
+    | "PowerCell"
+    | "DefenseObjective"
+    | "ConduitKey";
+
+export interface ISketch {
+    decoId: TSketches;
+    canvas?: string;
 }

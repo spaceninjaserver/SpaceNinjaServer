@@ -98,7 +98,8 @@ import type {
     IChallengeInstanceStateDatabase,
     IChallengeInstanceStateClient,
     IParam,
-    IDialogueCounter
+    IDialogueCounter,
+    ISketch
 } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IOid, ITypeCount } from "../../types/commonTypes.ts";
@@ -1551,6 +1552,14 @@ challengeInstanceStateSchema.set("toJSON", {
     }
 });
 
+const sketchSchema = new Schema<ISketch>(
+    {
+        decoId: { type: String, required: true },
+        canvas: { type: String, required: false }
+    },
+    { _id: false }
+);
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
@@ -2005,7 +2014,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         RetroWallpaperId: Number,
         RetroFastTyping: Boolean,
         RetroPlayAllConvos: Boolean,
-        RetroDisableKissInboxMessage: Boolean
+        RetroDisableKissInboxMessage: Boolean,
+
+        Sketches: { type: [sketchSchema], default: undefined }
     },
     { timestamps: { createdAt: "Created", updatedAt: false } }
 );
