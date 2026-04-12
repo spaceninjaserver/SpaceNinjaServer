@@ -186,6 +186,18 @@ function doLogin() {
     window.registerSubmit = false;
 }
 
+function awaitAuthz() {
+    return new Promise(resolve => {
+        let interval;
+        interval = setInterval(() => {
+            if (window.authz) {
+                clearInterval(interval);
+                resolve();
+            }
+        }, 10);
+    });
+}
+
 function revalidateAuthz() {
     return new Promise(resolve => {
         let interval;
@@ -4055,51 +4067,47 @@ function doSaveConfigStringArray(id) {
 }
 
 single.getRoute("/webui/cheats").on("beforeload", function () {
-    let interval;
-    interval = setInterval(() => {
-        if (window.authz) {
-            clearInterval(interval);
-            $.post({
-                url: "/custom/getConfig?" + window.authz,
-                contentType: "application/json",
-                data: JSON.stringify(uiConfigs)
-            })
-                .done(json => {
-                    //window.is_admin = true;
-                    $(".admin-hide").addClass("d-none");
-                    $(".admin-show").removeClass("d-none");
-                    Object.entries(json).forEach(entry => {
-                        const [key, value] = entry;
-                        const elm = document.getElementById(key);
-                        if (elm.type == "checkbox") {
-                            elm.checked = value;
-                        } else if (elm.classList.contains("tags-input")) {
-                            elm.value = (value ?? []).join(", ");
-                            elm.oninput();
-                        } else {
-                            elm.value = value ?? elm.getAttribute("data-default");
-                        }
-                    });
-                })
-                .fail(res => {
-                    if (res.responseText == "Log-in expired") {
-                        if (ws_is_open && !auth_pending) {
-                            console.warn("Credentials invalidated but the server didn't let us know");
-                            sendAuth();
-                        }
-                        revalidateAuthz().then(() => {
-                            if (single.getCurrentPath() == "/webui/cheats") {
-                                single.loadRoute("/webui/cheats");
-                            }
-                        });
+    awaitAuthz().then(() => {
+        $.post({
+            url: "/custom/getConfig?" + window.authz,
+            contentType: "application/json",
+            data: JSON.stringify(uiConfigs)
+        })
+            .done(json => {
+                //window.is_admin = true;
+                $(".admin-hide").addClass("d-none");
+                $(".admin-show").removeClass("d-none");
+                Object.entries(json).forEach(entry => {
+                    const [key, value] = entry;
+                    const elm = document.getElementById(key);
+                    if (elm.type == "checkbox") {
+                        elm.checked = value;
+                    } else if (elm.classList.contains("tags-input")) {
+                        elm.value = (value ?? []).join(", ");
+                        elm.oninput();
                     } else {
-                        //window.is_admin = false;
-                        $(".admin-hide").removeClass("d-none");
-                        $(".admin-show").addClass("d-none");
+                        elm.value = value ?? elm.getAttribute("data-default");
                     }
                 });
-        }
-    }, 10);
+            })
+            .fail(res => {
+                if (res.responseText == "Log-in expired") {
+                    if (ws_is_open && !auth_pending) {
+                        console.warn("Credentials invalidated but the server didn't let us know");
+                        sendAuth();
+                    }
+                    revalidateAuthz().then(() => {
+                        if (single.getCurrentPath() == "/webui/cheats") {
+                            single.loadRoute("/webui/cheats");
+                        }
+                    });
+                } else {
+                    //window.is_admin = false;
+                    $(".admin-hide").removeClass("d-none");
+                    $(".admin-show").addClass("d-none");
+                }
+            });
+    });
 });
 
 function doUnlockAllFocusSchools() {
@@ -5511,63 +5519,59 @@ function removeItems(category) {
 }
 
 single.getRoute("/webui/admin").on("beforeload", function () {
-    let interval;
-    interval = setInterval(() => {
-        if (window.authz) {
-            clearInterval(interval);
-            $.get("/custom/getRegisteredLosers?" + window.authz)
-                .done(users => {
-                    //window.is_admin = true;
-                    $(".admin-hide").addClass("d-none");
-                    $(".admin-show").removeClass("d-none");
-                    document.getElementById("registered-losers").innerHTML = "";
-                    for (const user of users) {
-                        const tr = document.createElement("tr");
-                        {
-                            const td = document.createElement("td");
-                            td.textContent = user.DisplayName;
-                            tr.appendChild(td);
-                        }
-                        {
-                            const td = document.createElement("td");
-                            td.innerHTML = `<code>${user.id}</code>`;
-                            tr.appendChild(td);
-                        }
-                        {
-                            const td = document.createElement("td");
-                            if (window.accountId != user.id) {
-                                const a = document.createElement("a");
-                                a.textContent = loc("admin_possess");
-                                a.setAttribute("data-loc", "admin_possess");
-                                a.href = "#";
-                                a.onclick = function () {
-                                    localStorage.setItem("possessing", user.id);
-                                    doAccountSwitch("/webui/inventory");
-                                };
-                                td.appendChild(a);
-                            }
-                            tr.appendChild(td);
-                        }
-                        document.getElementById("registered-losers").appendChild(tr);
+    awaitAuthz().then(() => {
+        $.get("/custom/getRegisteredLosers?" + window.authz)
+            .done(users => {
+                //window.is_admin = true;
+                $(".admin-hide").addClass("d-none");
+                $(".admin-show").removeClass("d-none");
+                document.getElementById("registered-losers").innerHTML = "";
+                for (const user of users) {
+                    const tr = document.createElement("tr");
+                    {
+                        const td = document.createElement("td");
+                        td.textContent = user.DisplayName;
+                        tr.appendChild(td);
                     }
-                })
-                .fail(res => {
-                    if (res.responseText == "Log-in expired") {
-                        if (ws_is_open && !auth_pending) {
-                            console.warn("Credentials invalidated but the server didn't let us know");
-                            sendAuth();
-                        }
-                        revalidateAuthz().then(() => {
-                            if (single.getCurrentPath() == "/webui/admin") {
-                                single.loadRoute("/webui/admin");
-                            }
-                        });
-                    } else {
-                        //window.is_admin = false;
-                        $(".admin-hide").removeClass("d-none");
-                        $(".admin-show").addClass("d-none");
+                    {
+                        const td = document.createElement("td");
+                        td.innerHTML = `<code>${user.id}</code>`;
+                        tr.appendChild(td);
                     }
-                });
-        }
-    }, 10);
+                    {
+                        const td = document.createElement("td");
+                        if (window.accountId != user.id) {
+                            const a = document.createElement("a");
+                            a.textContent = loc("admin_possess");
+                            a.setAttribute("data-loc", "admin_possess");
+                            a.href = "#";
+                            a.onclick = function () {
+                                localStorage.setItem("possessing", user.id);
+                                doAccountSwitch("/webui/inventory");
+                            };
+                            td.appendChild(a);
+                        }
+                        tr.appendChild(td);
+                    }
+                    document.getElementById("registered-losers").appendChild(tr);
+                }
+            })
+            .fail(res => {
+                if (res.responseText == "Log-in expired") {
+                    if (ws_is_open && !auth_pending) {
+                        console.warn("Credentials invalidated but the server didn't let us know");
+                        sendAuth();
+                    }
+                    revalidateAuthz().then(() => {
+                        if (single.getCurrentPath() == "/webui/admin") {
+                            single.loadRoute("/webui/admin");
+                        }
+                    });
+                } else {
+                    //window.is_admin = false;
+                    $(".admin-hide").removeClass("d-none");
+                    $(".admin-show").addClass("d-none");
+                }
+            });
+    });
 });
