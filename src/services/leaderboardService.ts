@@ -80,6 +80,9 @@ export const getLeaderboard = async (
     if (guildTier) {
         filter.guildTier = guildTier;
     }
+    if (!filter.leaderboard.includes(".")) {
+        filter.leaderboard = `events.${guildTier || guildId ? "guilds" : "accounts"}.${filter.leaderboard}`;
+    }
 
     let entries: TLeaderboardEntryDocument[];
     let r: number;

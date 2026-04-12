@@ -464,7 +464,7 @@ export const updateStats = async (
     if (
         playerStats.Enemies &&
         buildLabel &&
-        version_compare(buildLabel, gameToBuildVersion["10.3.3"]) <= 0 // Should be 11.7.1
+        version_compare(buildLabel, gameToBuildVersion["11.5.3"]) <= 0 // Should be 11.7.1
     ) {
         const totalKills = playerStats.Enemies.reduce((sum, e) => sum + (e.kills ?? 0), 0);
         if (totalKills > 0) {

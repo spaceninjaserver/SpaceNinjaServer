@@ -12,6 +12,8 @@ const statsRouter = express.Router();
 statsRouter.get("/view.php", viewController);
 statsRouter.get("/profileStats.php", viewController);
 statsRouter.get("/leaderboard.php", leaderboardGetController);
+statsRouter.get("/leaderboardArchived.php", leaderboardU10Controller);
+statsRouter.get("/leaderboardCurrent.php", leaderboardU10Controller);
 statsRouter.get("/leaderboardWeekly.php", leaderboardU10Controller);
 statsRouter.post("/upload.php", uploadController);
 statsRouter.post("/view.php", viewController);
