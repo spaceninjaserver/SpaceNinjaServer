@@ -46,14 +46,8 @@ const fileFormat = format.combine(
     format.json()
 );
 
-const errorLog = new transports.DailyRotateFile({
-    filename: "logs/error.log",
-    format: fileFormat,
-    level: "error",
-    datePattern: "YYYY-MM-DD"
-});
-const combinedLog = new transports.DailyRotateFile({
-    filename: "logs/combined.log",
+const fileLog = new transports.DailyRotateFile({
+    filename: `logs/${config.logger.level}.log`,
     format: fileFormat,
     datePattern: "YYYY-MM-DD"
 });
@@ -72,7 +66,7 @@ const consoleLog = new transports.Console({
     )
 });
 
-const transportOptions = config.logger.files ? [consoleLog, errorLog, combinedLog] : [consoleLog];
+const transportOptions = config.logger.files ? [consoleLog, fileLog] : [consoleLog];
 
 //possible log levels: { fatal: 0, error: 1, warn: 2, info: 3, http: 4, debug: 5, trace: 6 },
 const logLevels = {
@@ -105,10 +99,8 @@ export const logger = createLogger({
 
 addColors(logLevels.colors);
 
-errorLog.on("new", filename => logger.info(`Using error log file: ${filename}`));
-combinedLog.on("new", filename => logger.info(`Using combined log file: ${filename}`));
-errorLog.on("rotate", filename => logger.info(`Rotated error log file: ${filename}`));
-combinedLog.on("rotate", filename => logger.info(`Rotated combined log file: ${filename}`));
+fileLog.on("new", filename => logger.info(`Using log file: ${filename}`));
+fileLog.on("rotate", filename => logger.info(`Rotated log file: ${filename}`));
 
 export const logError = (err: Error, context: string): void => {
     if (err.stack) {
