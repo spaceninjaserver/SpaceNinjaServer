@@ -41,6 +41,7 @@ import {
     convertIColorToLegacyColors,
     convertIColorToLegacyColorsWithAtt,
     convertToLegacyFingerprint,
+    fromMongoDate,
     fromOid,
     modernToU5Recipes,
     toLegacyOid,
@@ -680,6 +681,9 @@ export const getInventoryResponse = async (
                         if (item.LastAdded) toLegacyOid(item.LastAdded);
                     }
                     // as well as a different date format
+                    for (const pr of inventoryResponse.PendingRecipes) {
+                        pr.CompletionDate = toMongoDate2(fromMongoDate(pr.CompletionDate), buildLabel);
+                    }
                     inventoryResponse.NextRefill = toMongoDate2(inventory.NextRefill!, buildLabel);
 
                     if (version_compare(buildLabel, "2014.02.05.00.00") < 0) {

@@ -961,7 +961,7 @@ export interface IPendingRecipeClient extends Omit<
     "CompletionDate" | "LongGuns" | "Pistols" | "Melee" | "SuitToUnbrand" | "KubrowPet"
 > {
     ItemId: IOid;
-    CompletionDate: IMongoDate;
+    CompletionDate: IMongoDateWithLegacySupport;
     TargetItemId?: string;
 }
 

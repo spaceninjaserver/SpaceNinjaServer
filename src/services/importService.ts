@@ -4,7 +4,7 @@ import type {
     IOperatorConfigClient,
     IOperatorConfigDatabase
 } from "../types/inventoryTypes/commonInventoryTypes.ts";
-import type { IMongoDate } from "../types/commonTypes.ts";
+import type { IMongoDateWithLegacySupport } from "../types/commonTypes.ts";
 import type {
     IBooster,
     IDialogueClient,
@@ -88,12 +88,8 @@ import { fromMongoDate, fromOid } from "../helpers/inventoryHelpers.ts";
 import { getRecipe } from "./itemDataService.ts";
 import { logger } from "../utils/logger.ts";
 
-const convertDate = (value: IMongoDate): Date => {
-    return new Date(parseInt(value.$date.$numberLong));
-};
-
-const convertOptionalDate = (value: IMongoDate | undefined): Date | undefined => {
-    return value ? convertDate(value) : undefined;
+const convertOptionalDate = (value: IMongoDateWithLegacySupport | undefined): Date | undefined => {
+    return value ? fromMongoDate(value) : undefined;
 };
 
 const convertEquipment = (client: IEquipmentClient): IEquipmentDatabase => {
@@ -218,10 +214,10 @@ const convertInfestedFoundry = (client: IInfestedFoundryClient): IInfestedFoundr
 const convertDialogue = (client: IDialogueClient): IDialogueDatabase => {
     return {
         ...client,
-        AvailableDate: convertDate(client.AvailableDate),
-        AvailableGiftDate: convertDate(client.AvailableGiftDate),
-        RankUpExpiry: convertDate(client.RankUpExpiry),
-        BountyChemExpiry: convertDate(client.BountyChemExpiry)
+        AvailableDate: fromMongoDate(client.AvailableDate),
+        AvailableGiftDate: fromMongoDate(client.AvailableGiftDate),
+        RankUpExpiry: fromMongoDate(client.RankUpExpiry),
+        BountyChemExpiry: fromMongoDate(client.BountyChemExpiry)
     };
 };
 
@@ -235,7 +231,7 @@ const convertDialogueHistory = (client: IDialogueHistoryClient): IDialogueHistor
 const convertKubrowDetails = (client: IKubrowPetDetailsClient): IKubrowPetDetailsDatabase => {
     return {
         ...client,
-        HatchDate: convertDate(client.HatchDate)
+        HatchDate: fromMongoDate(client.HatchDate)
     };
 };
 
@@ -256,14 +252,14 @@ const convertRecentVendorPurchases = (client: IRecentVendorPurchaseClient): IRec
 const convertPurchaseHistory = (client: IVendorPurchaseHistoryEntryClient): IVendorPurchaseHistoryEntryDatabase => {
     return {
         ...client,
-        Expiry: convertDate(client.Expiry)
+        Expiry: fromMongoDate(client.Expiry)
     };
 };
 
 const convertPendingRecipe = (client: IPendingRecipeClient): IPendingRecipeDatabase => {
     return {
         ...client,
-        CompletionDate: convertDate(client.CompletionDate),
+        CompletionDate: fromMongoDate(client.CompletionDate),
         KubrowPet: client.TargetItemId ? new Types.ObjectId(client.TargetItemId) : undefined
     };
 };
@@ -272,7 +268,7 @@ const convertNemesisBase = (client: INemesisBaseClient): INemesisBaseDatabase =>
     return {
         ...client,
         fp: BigInt(client.fp),
-        d: convertDate(client.d)
+        d: fromMongoDate(client.d)
     };
 };
 
@@ -280,7 +276,7 @@ const convertNemesis = (client: INemesisClient): INemesisDatabase => {
     return {
         ...client,
         fp: BigInt(client.fp),
-        d: convertDate(client.d)
+        d: fromMongoDate(client.d)
     };
 };
 
@@ -303,7 +299,7 @@ const convertPeriodicMissionCompletion = (
 ): IPeriodicMissionCompletionDatabase => {
     return {
         ...client,
-        date: convertDate(client.date)
+        date: fromMongoDate(client.date)
     };
 };
 
@@ -659,7 +655,7 @@ const convertShip = (client: IOrbiterClient): IOrbiterDatabase => {
 const convertPlant = (client: IPlantClient): IPlantDatabase => {
     return {
         ...client,
-        EndTime: convertDate(client.EndTime)
+        EndTime: fromMongoDate(client.EndTime)
     };
 };
 
