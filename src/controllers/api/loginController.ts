@@ -194,6 +194,10 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
     }
     if (version_compare(buildLabel, gameToBuildVersion["15.14.1"]) >= 0) {
         resp.NRS = (config.nrsAddresses ?? []).map(x => x.split("%THIS_MACHINE%").join(myAddress));
+        // U16 ~ U28 are known to show an "Internal error." popup with an empty array.
+        if (resp.NRS.length == 0 && version_compare(buildLabel, gameToBuildVersion["29.0.0"]) < 0) {
+            resp.NRS.push(myAddress);
+        }
     }
     if (version_compare(buildLabel, gameToBuildVersion["16.5.5"]) >= 0) {
         resp.IRC = [(config.ircAddress || "%THIS_MACHINE%").split("%THIS_MACHINE%").join(myAddress)];
