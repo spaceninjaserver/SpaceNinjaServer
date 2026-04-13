@@ -21,10 +21,12 @@
   "WelcomeScreen_Whispers",
   "WelcomeScreen_Dagath",
   "WelcomeScreen_Kullervo",
+  "EpisodeIntro_RadioLegionIntermission15Syndicate",
   "EpisodeIntro_RadioLegionIntermission14Syndicate",
   "EpisodeIntro_RadioLegionIntermission13Syndicate",
   "EpisodeIntro_RadioLegionIntermission12Syndicate",
   "EpisodeIntro_RadioLegionIntermission11Syndicate",
   "EpisodeIntro_RadioLegionIntermission10Syndicate",
-  "EpisodeIntro_RadioLegionIntermission9Syndicate"
+  "EpisodeIntro_RadioLegionIntermission9Syndicate",
+  "FTUEDamagePopupShownCompleted"
 ]
