@@ -297,7 +297,16 @@ export type TSolarMapRegion =
 
 export enum LoadoutIndex {
     NORMAL = 0,
-    DATAKNIFE = 7
+    SENTINEL = 1,
+    ARCHWING = 2,
+    NORMAL_PVP = 3,
+    LUNARO = 4,
+    OPERATOR = 5,
+    KDRIVE = 6,
+    DATAKNIFE = 7,
+    MECH = 8,
+    OPERATOR_ADULT = 9,
+    DRIFTER = 10
 }
 
 export interface IDailyAffiliations {

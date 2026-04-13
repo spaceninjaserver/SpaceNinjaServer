@@ -164,7 +164,7 @@ export const getUnicodeName = (account: TAccountDocument, buildLabel: string | u
 };
 
 export const stripUnicodeSuffix = (name: string): string => {
-    if (name.charCodeAt(name.length) >= 0xe000) {
+    if (name.charCodeAt(name.length - 1) >= 0xe000) {
         name = name.substring(0, name.length - 1);
     }
     return name;

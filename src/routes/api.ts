@@ -17,6 +17,7 @@ import { arcaneCommonController } from "../controllers/api/arcaneCommonControlle
 import { archonFusionController } from "../controllers/api/archonFusionController.ts";
 import { artifactsController } from "../controllers/api/artifactsController.ts";
 import { artifactTransmutationController } from "../controllers/api/artifactTransmutationController.ts";
+import { asyncMissionAssistController } from "../controllers/api/asyncMissionAssistController.ts";
 import { cancelGuildAdvertisementController } from "../controllers/api/cancelGuildAdvertisementController.ts";
 import { changeDojoRootController } from "../controllers/api/changeDojoRootController.ts";
 import { changeDojoSpawnRoomController } from "../controllers/api/changeDojoSpawnRoomController.ts";
@@ -283,6 +284,7 @@ apiRouter.post("/arcaneCommon.php", arcaneCommonController);
 apiRouter.post("/archonFusion.php", archonFusionController);
 apiRouter.post("/artifacts.php", artifactsController);
 apiRouter.post("/artifactTransmutation.php", artifactTransmutationController);
+apiRouter.post("/asyncMissionAssist.php", asyncMissionAssistController)
 apiRouter.post("/changeDojoRoot.php", changeDojoRootController);
 apiRouter.post("/changeDojoSpawnRoom.php", changeDojoSpawnRoomController);
 apiRouter.post("/claimCompletedRecipe.php", claimCompletedRecipeController);
