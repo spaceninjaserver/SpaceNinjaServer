@@ -2,7 +2,7 @@ import { logger } from "../utils/logger.ts";
 import type { /*NextFunction,*/ Request, Response } from "express";
 
 const unknownEndpointHandler = (request: Request, response: Response): void => {
-    logger.error(`unknown endpoint ${request.method} ${request.path}`);
+    logger.warn(`unknown endpoint ${request.method} ${request.path}`);
     if (request.body) {
         logger.debug(`data provided to ${request.path}: ${String(request.body)}`);
     }
