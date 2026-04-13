@@ -538,7 +538,6 @@ dict = {
     guildView_rank_warlord: `Воєвода`,
     guildView_currency_owned: `В сховищі |COUNT|.`,
     guildView_bulkFund: `[UNTRANSLATED] Fund All`,
-    guildView_bulkComplete: `[UNTRANSLATED] Complete All`,
     guildView_promote: `Підвищити звання`,
     guildView_demote: `Понизити звання`,
 

@@ -538,7 +538,6 @@ dict = {
     guildView_rank_warlord: `Kriegsherr`,
     guildView_currency_owned: `|COUNT| im Tresor.`,
     guildView_bulkFund: `Alle spenden`,
-    guildView_bulkComplete: `Alle abschließen`,
     guildView_promote: `Befördern`,
     guildView_demote: `Degradieren`,
 

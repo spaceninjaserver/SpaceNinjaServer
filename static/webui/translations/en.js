@@ -537,7 +537,6 @@ dict = {
     guildView_rank_warlord: `Warlord`,
     guildView_currency_owned: `|COUNT| in Vault.`,
     guildView_bulkFund: `Fund All`,
-    guildView_bulkComplete: `Complete All`,
     guildView_promote: `Promote`,
     guildView_demote: `Demote`,
 

@@ -9,7 +9,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 let auth_pending = false,
-    did_initial_auth = false,
     ws_is_open = false,
     wsid = 0,
     ws_reconnect = false;
@@ -79,10 +78,6 @@ function openWebSocket() {
             window.authz += data.id + "&nonce=" + data.Nonce + "&wsid=" + wsid;
             if (window.dict) {
                 updateLocElements();
-            }
-            if (!did_initial_auth) {
-                did_initial_auth = true;
-                updateInventory();
             }
             if (ws_reconnect) {
                 ws_reconnect = false;
@@ -157,7 +152,7 @@ function refreshServerConfig() {
 
 function doAccountSwitch(to_route) {
     window.authz = undefined;
-    did_initial_auth = false;
+    inventory_data = undefined;
     single.loadRoute(to_route);
     sendAuth();
 }
@@ -213,7 +208,6 @@ function revalidateAuthz() {
 function logout() {
     localStorage.removeItem("email");
     localStorage.removeItem("password");
-    did_initial_auth = false;
 }
 
 function doLogout() {
@@ -472,7 +466,7 @@ function setLanguage(lang) {
     if (window.authz) {
         // Not in prelogin state?
         fetchItemList();
-        updateInventory();
+        single.loadRoute(single.getCurrentPath());
     }
 }
 
@@ -1205,734 +1199,654 @@ function getInventoryData() {
 // Assumes that caller revalidates authz
 function updateInventory() {
     inventory_data = undefined;
-    translateInventoryDataToDom();
+    if (
+        single.getCurrentPath() == "/webui/inventory" ||
+        single.getCurrentPath().startsWith("/webui/detailedView") ||
+        single.getCurrentPath() == "/webui/mods" ||
+        single.getCurrentPath() == "/webui/cheats"
+    ) {
+        single.loadRoute(single.getCurrentPath());
+    }
 }
 
-function translateInventoryDataToDom() {
-    getInventoryData().then(data => {
-        window.itemListPromise.then(itemMap => {
-            window.didInitialInventoryUpdate = true;
-            window.guildId = data?.GuildId?.$oid;
+const modularWeapons = [
+    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
+    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam",
+    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryLauncher",
+    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryShotgun",
+    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimarySniper",
+    "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
+    "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam",
+    "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun",
+    "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
+    "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
+    "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit",
+    "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit",
+    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetAPowerSuit",
+    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetBPowerSuit",
+    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetCPowerSuit",
+    "/Lotus/Types/Friendly/Pets/CreaturePets/VulpineInfestedCatbrowPetPowerSuit",
+    "/Lotus/Types/Friendly/Pets/CreaturePets/HornedInfestedCatbrowPetPowerSuit",
+    "/Lotus/Types/Friendly/Pets/CreaturePets/ArmoredInfestedCatbrowPetPowerSuit",
+    "/Lotus/Types/Friendly/Pets/CreaturePets/VizierPredatorKubrowPetPowerSuit",
+    "/Lotus/Types/Friendly/Pets/CreaturePets/PharaohPredatorKubrowPetPowerSuit",
+    "/Lotus/Types/Friendly/Pets/CreaturePets/MedjayPredatorKubrowPetPowerSuit"
+];
 
-            const modularWeapons = [
-                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
-                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam",
-                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryLauncher",
-                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryShotgun",
-                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimarySniper",
-                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
-                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam",
-                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun",
-                "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
-                "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
-                "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit",
-                "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit",
-                "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetAPowerSuit",
-                "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetBPowerSuit",
-                "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetCPowerSuit",
-                "/Lotus/Types/Friendly/Pets/CreaturePets/VulpineInfestedCatbrowPetPowerSuit",
-                "/Lotus/Types/Friendly/Pets/CreaturePets/HornedInfestedCatbrowPetPowerSuit",
-                "/Lotus/Types/Friendly/Pets/CreaturePets/ArmoredInfestedCatbrowPetPowerSuit",
-                "/Lotus/Types/Friendly/Pets/CreaturePets/VizierPredatorKubrowPetPowerSuit",
-                "/Lotus/Types/Friendly/Pets/CreaturePets/PharaohPredatorKubrowPetPowerSuit",
-                "/Lotus/Types/Friendly/Pets/CreaturePets/MedjayPredatorKubrowPetPowerSuit"
-            ];
+const U5Mods = [
+    "/Lotus/Upgrades/Modules/GrineerMeleeModule",
+    "/Lotus/Upgrades/Modules/GrineerPistolModule",
+    "/Lotus/Upgrades/Modules/GrineerRifleModule",
+    "/Lotus/Upgrades/Modules/GrineerShotgunModule",
+    "/Lotus/Upgrades/Modules/OrokinWarframeModule",
+    "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod"
+];
 
-            const U5Mods = [
-                "/Lotus/Upgrades/Modules/GrineerMeleeModule",
-                "/Lotus/Upgrades/Modules/GrineerPistolModule",
-                "/Lotus/Upgrades/Modules/GrineerRifleModule",
-                "/Lotus/Upgrades/Modules/GrineerShotgunModule",
-                "/Lotus/Upgrades/Modules/OrokinWarframeModule",
-                "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod"
-            ];
+single.getRoute("/webui/inventory").on("beforeload", async function () {
+    const [data, itemMap] = await Promise.all([awaitAuthz().then(getInventoryData), window.itemListPromise]);
 
-            // Populate inventory route
+    document.getElementById("typeName-tab").classList.remove("active");
+    document.getElementById("typeName-tab-content").classList.remove("active", "show");
+    document.getElementById("typeName-type").value = "";
 
-            document.getElementById("typeName-tab").classList.remove("active");
-            document.getElementById("typeName-tab-content").classList.remove("active", "show");
-            document.getElementById("typeName-type").value = "";
+    document.getElementById("miscItems-tab").classList.add("active");
+    document.getElementById("miscItems-tab-content").classList.add("active", "show");
 
-            document.getElementById("miscItems-tab").classList.add("active");
-            document.getElementById("miscItems-tab-content").classList.add("active", "show");
+    ["RegularCredits", "PremiumCredits", "FusionPoints", "PrimeTokens"].forEach(currency => {
+        document.getElementById(currency + "-owned").textContent = loc("currency_owned")
+            .split("|COUNT|")
+            .join(data[currency].toLocaleString());
+    });
 
-            ["RegularCredits", "PremiumCredits", "FusionPoints", "PrimeTokens"].forEach(currency => {
-                document.getElementById(currency + "-owned").textContent = loc("currency_owned")
-                    .split("|COUNT|")
-                    .join(data[currency].toLocaleString());
-            });
-
-            [
-                "Suits",
-                "SpaceSuits",
-                "Sentinels",
-                "LongGuns",
-                "Pistols",
-                "Melee",
-                "SpaceGuns",
-                "SpaceMelee",
-                "SentinelWeapons",
-                "Hoverboards",
-                "OperatorAmps",
-                "MechSuits",
-                "MoaPets",
-                "KubrowPets"
-            ].forEach(category => {
-                document.getElementById(category + "-list").innerHTML = "";
-                data[category]
-                    .sort((a, b) => (b.Favorite ? 1 : 0) - (a.Favorite ? 1 : 0))
-                    .forEach(item => {
-                        const tr = document.createElement("tr");
-                        tr.setAttribute("data-item-oid", item.ItemId.$oid);
-                        tr.setAttribute("data-item-type", item.ItemType);
-                        {
-                            const td = document.createElement("td");
-                            td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
-                            if (item.ItemName) {
-                                const pipeIndex = item.ItemName.indexOf("|");
-                                if (pipeIndex != -1) {
-                                    td.textContent = item.ItemName.substr(1 + pipeIndex) + " " + td.textContent;
-                                } else {
-                                    td.textContent = item.ItemName + " (" + td.textContent + ")";
-                                }
-                            }
-                            if (item.Details?.Name) {
-                                td.textContent = item.Details.Name + " (" + td.textContent + ")";
-                            }
-                            if (item.ModularParts && item.ModularParts.length) {
-                                td.textContent += " [";
-                                item.ModularParts.forEach(part => {
-                                    td.textContent += " " + (itemMap[part]?.name ?? part) + ",";
-                                });
-                                td.textContent = td.textContent.slice(0, -1) + " ]";
-                            }
-                            tr.appendChild(td);
+    [
+        "Suits",
+        "SpaceSuits",
+        "Sentinels",
+        "LongGuns",
+        "Pistols",
+        "Melee",
+        "SpaceGuns",
+        "SpaceMelee",
+        "SentinelWeapons",
+        "Hoverboards",
+        "OperatorAmps",
+        "MechSuits",
+        "MoaPets",
+        "KubrowPets"
+    ].forEach(category => {
+        document.getElementById(category + "-list").innerHTML = "";
+        data[category]
+            .sort((a, b) => (b.Favorite ? 1 : 0) - (a.Favorite ? 1 : 0))
+            .forEach(item => {
+                const tr = document.createElement("tr");
+                tr.setAttribute("data-item-oid", item.ItemId.$oid);
+                tr.setAttribute("data-item-type", item.ItemType);
+                {
+                    const td = document.createElement("td");
+                    td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+                    if (item.ItemName) {
+                        const pipeIndex = item.ItemName.indexOf("|");
+                        if (pipeIndex != -1) {
+                            td.textContent = item.ItemName.substr(1 + pipeIndex) + " " + td.textContent;
+                        } else {
+                            td.textContent = item.ItemName + " (" + td.textContent + ")";
                         }
-                        {
-                            const td = document.createElement("td");
-                            td.classList = "text-end text-nowrap";
+                    }
+                    if (item.Details?.Name) {
+                        td.textContent = item.Details.Name + " (" + td.textContent + ")";
+                    }
+                    if (item.ModularParts && item.ModularParts.length) {
+                        td.textContent += " [";
+                        item.ModularParts.forEach(part => {
+                            td.textContent += " " + (itemMap[part]?.name ?? part) + ",";
+                        });
+                        td.textContent = td.textContent.slice(0, -1) + " ]";
+                    }
+                    tr.appendChild(td);
+                }
+                {
+                    const td = document.createElement("td");
+                    td.classList = "text-end text-nowrap";
 
-                            let maxXP = Math.pow(itemMap[item.ItemType]?.maxLevelCap ?? 30, 2) * 1000;
-                            if (
-                                ![
-                                    "Suits",
-                                    "SpaceSuits",
-                                    "Hoverboards",
-                                    "MechSuits",
-                                    "Sentinels",
-                                    "MoaPets",
-                                    "KubrowPets"
-                                ].includes(category)
-                            ) {
-                                maxXP /= 2;
-                            }
-                            let anyExaltedMissingXP = false;
-                            if (item.XP >= maxXP && item.ItemType in itemMap && "exalted" in itemMap[item.ItemType]) {
-                                for (const exaltedType of itemMap[item.ItemType].exalted) {
-                                    const exaltedItem = data.SpecialItems.find(x => x.ItemType == exaltedType);
-                                    if (exaltedItem) {
-                                        const exaltedCap =
-                                            itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
-                                        if (exaltedItem.XP < exaltedCap) {
-                                            anyExaltedMissingXP = true;
-                                            break;
-                                        }
-                                    }
+                    let maxXP = Math.pow(itemMap[item.ItemType]?.maxLevelCap ?? 30, 2) * 1000;
+                    if (
+                        ![
+                            "Suits",
+                            "SpaceSuits",
+                            "Hoverboards",
+                            "MechSuits",
+                            "Sentinels",
+                            "MoaPets",
+                            "KubrowPets"
+                        ].includes(category)
+                    ) {
+                        maxXP /= 2;
+                    }
+                    let anyExaltedMissingXP = false;
+                    if (item.XP >= maxXP && item.ItemType in itemMap && "exalted" in itemMap[item.ItemType]) {
+                        for (const exaltedType of itemMap[item.ItemType].exalted) {
+                            const exaltedItem = data.SpecialItems.find(x => x.ItemType == exaltedType);
+                            if (exaltedItem) {
+                                const exaltedCap = itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
+                                if (exaltedItem.XP < exaltedCap) {
+                                    anyExaltedMissingXP = true;
+                                    break;
                                 }
                             }
-                            if (
-                                itemMap[item.ItemType]?.maxLevelCap > 30 &&
-                                (item.Polarized ?? 0) < (itemMap[item.ItemType].maxLevelCap - 30) / 2
-                            ) {
-                                const a = document.createElement("a");
-                                a.href = "#";
-                                a.onclick = function (event) {
-                                    event.preventDefault();
-                                    unlockLevelCap(
-                                        category,
-                                        item.ItemId.$oid,
-                                        (itemMap[item.ItemType].maxLevelCap - 30) / 2
-                                    );
-                                };
-                                a.title = loc("code_unlockLevelCap");
-                                a.innerHTML = icons.graduationCap;
-                                td.appendChild(a);
-                            }
-                            if (item.XP < maxXP || anyExaltedMissingXP) {
-                                const a = document.createElement("a");
-                                a.href = "#";
-                                a.onclick = function (event) {
-                                    event.preventDefault();
-                                    revalidateAuthz().then(async () => {
-                                        if (item.XP < maxXP) {
-                                            await addGearExp(category, item.ItemId.$oid, maxXP - item.XP);
-                                        }
-                                        if ("exalted" in itemMap[item.ItemType]) {
-                                            for (const exaltedType of itemMap[item.ItemType].exalted) {
-                                                const exaltedItem = data.SpecialItems.find(
-                                                    x => x.ItemType == exaltedType
+                        }
+                    }
+                    if (
+                        itemMap[item.ItemType]?.maxLevelCap > 30 &&
+                        (item.Polarized ?? 0) < (itemMap[item.ItemType].maxLevelCap - 30) / 2
+                    ) {
+                        const a = document.createElement("a");
+                        a.href = "#";
+                        a.onclick = function (event) {
+                            event.preventDefault();
+                            unlockLevelCap(category, item.ItemId.$oid, (itemMap[item.ItemType].maxLevelCap - 30) / 2);
+                        };
+                        a.title = loc("code_unlockLevelCap");
+                        a.innerHTML = icons.graduationCap;
+                        td.appendChild(a);
+                    }
+                    if (item.XP < maxXP || anyExaltedMissingXP) {
+                        const a = document.createElement("a");
+                        a.href = "#";
+                        a.onclick = function (event) {
+                            event.preventDefault();
+                            revalidateAuthz().then(async () => {
+                                if (item.XP < maxXP) {
+                                    await addGearExp(category, item.ItemId.$oid, maxXP - item.XP);
+                                }
+                                if ("exalted" in itemMap[item.ItemType]) {
+                                    for (const exaltedType of itemMap[item.ItemType].exalted) {
+                                        const exaltedItem = data.SpecialItems.find(x => x.ItemType == exaltedType);
+                                        if (exaltedItem) {
+                                            const exaltedCap =
+                                                itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
+                                            if (exaltedItem.XP < exaltedCap) {
+                                                await addGearExp(
+                                                    "SpecialItems",
+                                                    exaltedItem.ItemId.$oid,
+                                                    exaltedCap - exaltedItem.XP
                                                 );
-                                                if (exaltedItem) {
-                                                    const exaltedCap =
-                                                        itemMap[exaltedType]?.type == "weapons" ? 800_000 : 1_600_000;
-                                                    if (exaltedItem.XP < exaltedCap) {
-                                                        await addGearExp(
-                                                            "SpecialItems",
-                                                            exaltedItem.ItemId.$oid,
-                                                            exaltedCap - exaltedItem.XP
-                                                        );
-                                                    }
-                                                }
                                             }
                                         }
-                                        updateInventory();
-                                    });
-                                };
-                                a.title = loc("code_maxRank");
-                                a.innerHTML = icons.arrowUp;
-                                td.appendChild(a);
-                            }
-
-                            {
-                                const a = document.createElement("a");
-                                a.href =
-                                    "/webui/detailedView?productCategory=" + category + "&itemId=" + item.ItemId.$oid;
-                                a.innerHTML = icons.feather;
-                                td.appendChild(a);
-                            }
-
-                            if (!(item.Features & 8) && modularWeapons.includes(item.ItemType)) {
-                                const a = document.createElement("a");
-                                a.href = "#";
-                                a.onclick = function (event) {
-                                    event.preventDefault();
-                                    equipmentFeatures(category, item.ItemId.$oid, 8);
-                                };
-                                a.title = loc("code_gild");
-                                a.innerHTML = icons.star;
-                                td.appendChild(a);
-                            }
-                            if (category == "KubrowPets") {
-                                const a = document.createElement("a");
-                                a.href = "#";
-                                a.onclick = function (event) {
-                                    event.preventDefault();
-                                    maturePet(item.ItemId.$oid, !item.Details.IsPuppy);
-                                };
-                                if (item.Details.IsPuppy) {
-                                    a.title = loc("code_mature");
-                                    a.innerHTML = icons.person;
-                                } else {
-                                    a.title = loc("code_unmature");
-                                    a.innerHTML = icons.childReaching;
+                                    }
                                 }
-                                td.appendChild(a);
-                            }
-                            {
-                                const a = document.createElement("a");
-                                a.href = "#";
-                                a.onclick = function (event) {
-                                    event.preventDefault();
-                                    const name = prompt(loc("code_renamePrompt"));
-                                    if (name !== null) {
-                                        renameGear(category, item.ItemId.$oid, name);
-                                    }
-                                };
-                                a.title = loc("code_rename");
-                                a.innerHTML = icons.tag;
-                                td.appendChild(a);
-                            }
-                            {
-                                const a = document.createElement("a");
-                                a.href = "#";
-                                a.onclick = function (event) {
-                                    event.preventDefault();
-                                    tr.parentNode.removeChild(tr);
-                                    disposeOfGear(category, item.ItemId.$oid);
-                                    if (item.AltWeaponModeId) {
-                                        const otherCategory = category == "Melee" ? "LongGuns" : "Melee";
-                                        const otherTr = document.querySelector(
-                                            `[data-item-oid="${item.AltWeaponModeId.$oid}"]`
-                                        );
-                                        if (otherTr) {
-                                            otherTr.parentNode.removeChild(otherTr);
-                                            disposeOfGear(otherCategory, item.AltWeaponModeId.$oid);
-                                        }
-                                    }
-                                };
-                                a.title = loc("code_remove");
-                                a.innerHTML = icons.trash;
-                                td.appendChild(a);
-                            }
-                            tr.appendChild(td);
-                        }
-                        document.getElementById(category + "-list").appendChild(tr);
-                    });
-            });
-
-            document.getElementById("EvolutionProgress-list").innerHTML = "";
-            data.EvolutionProgress?.forEach(item => {
-                const tr = document.createElement("tr");
-                tr.setAttribute("data-item-type", item.ItemType);
-                {
-                    const td = document.createElement("td");
-                    td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
-                    if (item.Rank != null) {
-                        td.textContent += " | " + loc("code_rank") + ": [" + item.Rank + "/5]";
-                    }
-                    tr.appendChild(td);
-                }
-                {
-                    const td = document.createElement("td");
-                    td.classList = "text-end text-nowrap";
-                    if (item.Rank < 5) {
-                        const a = document.createElement("a");
-                        a.href = "#";
-                        a.onclick = function (event) {
-                            event.preventDefault();
-                            setEvolutionProgress([{ ItemType: item.ItemType, Rank: 5 }]);
-                        };
-                        a.title = loc("code_maxRank");
-                        a.innerHTML = icons.arrowUp;
-
-                        td.appendChild(a);
-                    }
-                    if ((permanentEvolutionWeapons.has(item.ItemType) && item.Rank > 0) || item.Rank > 1) {
-                        const a = document.createElement("a");
-                        a.href = "#";
-                        a.onclick = function (event) {
-                            event.preventDefault();
-                            setEvolutionProgress([{ ItemType: item.ItemType, Rank: item.Rank - 1 }]);
-                        };
-                        a.title = loc("code_rankDown");
-                        a.innerHTML = icons.angleDown;
-
-                        td.appendChild(a);
-                    }
-                    if (item.Rank < 5) {
-                        const a = document.createElement("a");
-                        a.href = "#";
-                        a.onclick = function (event) {
-                            event.preventDefault();
-                            setEvolutionProgress([{ ItemType: item.ItemType, Rank: item.Rank + 1 }]);
-                        };
-                        a.title = loc("code_rankUp");
-                        a.innerHTML = icons.angleUp;
-
-                        td.appendChild(a);
-                    }
-
-                    tr.appendChild(td);
-                }
-
-                document.getElementById("EvolutionProgress-list").appendChild(tr);
-            });
-
-            document.getElementById("Boosters-list").innerHTML = "";
-            data.Boosters.forEach(item => {
-                if (item.ExpiryDate < Math.floor(Date.now() / 1000)) {
-                    // Booster has expired, skip it
-                    return;
-                }
-                const tr = document.createElement("tr");
-                {
-                    const td = document.createElement("td");
-                    td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
-                    tr.appendChild(td);
-                    if (item.ItemType == "/Lotus/Types/Boosters/ReviveBooster") {
-                        td.textContent += " ";
-                        const abbr = document.createElement("abbr");
-                        abbr.innerHTML = icons.note;
-                        abbr.title = loc("code_reviveBoosterDesc");
-                        td.appendChild(abbr);
-                    }
-                }
-                {
-                    const td = document.createElement("td");
-                    td.classList = "text-end text-nowrap";
-                    {
-                        const form = document.createElement("form");
-                        form.style.display = "inline-block";
-                        form.onsubmit = function (event) {
-                            event.preventDefault();
-                            const maxDate = new Date(input.max);
-                            const selectedDate = new Date(input.value);
-                            if (selectedDate > maxDate) {
-                                input.value = maxDate.toISOString().slice(0, 16);
-                            }
-                            doChangeBoosterExpiry(item.ItemType, input);
-                        };
-
-                        const input = document.createElement("input");
-                        input.type = "datetime-local";
-                        input.classList = "form-control form-control-sm";
-                        input.value = formatDatetime("%Y-%m-%d %H:%M:%s", item.ExpiryDate * 1000);
-                        input.max = "2038-01-19T03:14";
-                        input.onblur = function () {
-                            const maxDate = new Date(input.max);
-                            const selectedDate = new Date(input.value);
-                            if (selectedDate > maxDate) {
-                                input.value = maxDate.toISOString().slice(0, 16);
-                            }
-                            doChangeBoosterExpiry(item.ItemType, input);
-                        };
-
-                        form.appendChild(input);
-                        td.appendChild(form);
-                    }
-                    {
-                        const a = document.createElement("a");
-                        a.href = "#";
-                        a.onclick = function (event) {
-                            event.preventDefault();
-                            setBooster(item.ItemType, 0);
-                        };
-                        a.title = loc("code_remove");
-                        a.innerHTML = icons.trash;
-                        td.appendChild(a);
-                    }
-                    tr.appendChild(td);
-                }
-                document.getElementById("Boosters-list").appendChild(tr);
-            });
-
-            document.getElementById("FlavourItems-list").innerHTML = "";
-            data.FlavourItems.forEach(item => {
-                const tr = document.createElement("tr");
-                tr.setAttribute("data-item-type", item.ItemType);
-                {
-                    const td = document.createElement("td");
-                    td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
-                    tr.appendChild(td);
-                }
-                {
-                    const td = document.createElement("td");
-                    td.classList = "text-end text-nowrap";
-
-                    {
-                        const a = document.createElement("a");
-                        a.href = "#";
-                        a.onclick = function (event) {
-                            event.preventDefault();
-                            removeCustomization(item.ItemType);
-                        };
-                        a.title = loc("code_remove");
-                        a.innerHTML = icons.trash;
-                        td.appendChild(a);
-                    }
-                    tr.appendChild(td);
-                }
-
-                document.getElementById("FlavourItems-list").appendChild(tr);
-            });
-
-            document.getElementById("WeaponSkins-list").innerHTML = "";
-            data.WeaponSkins.forEach(item => {
-                if (item.ItemId.$oid.startsWith("ca70ca70ca70ca70")) return;
-                const tr = document.createElement("tr");
-                {
-                    const td = document.createElement("td");
-                    const name = itemMap[item.ItemType]?.name?.trim();
-                    td.textContent = name || item.ItemType;
-                    tr.appendChild(td);
-                }
-                {
-                    const td = document.createElement("td");
-                    td.classList = "text-end text-nowrap";
-                    {
-                        const a = document.createElement("a");
-                        a.href = "#";
-                        a.onclick = function (event) {
-                            event.preventDefault();
-                            document.getElementById("WeaponSkins-list").removeChild(tr);
-                            disposeOfGear("WeaponSkins", item.ItemId.$oid);
-                        };
-                        a.title = loc("code_remove");
-                        a.innerHTML = icons.trash;
-                        td.appendChild(a);
-                    }
-
-                    tr.appendChild(td);
-                }
-
-                document.getElementById("WeaponSkins-list").appendChild(tr);
-            });
-
-            if (data.CrewShipHarnesses?.length) {
-                window.plexus = {
-                    id: data.CrewShipHarnesses[0].ItemId.$oid,
-                    xp: data.CrewShipHarnesses[0].XP
-                };
-            }
-
-            document.getElementById("ShipDecorations-list").innerHTML = "";
-            data.ShipDecorations.forEach(item => {
-                if (item.ItemCount > 0) {
-                    const tr = document.createElement("tr");
-                    tr.setAttribute("data-item-type", item.ItemType);
-                    {
-                        const td = document.createElement("td");
-                        td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
-                        if (item.ItemCount > 1) {
-                            td.innerHTML +=
-                                " <span title='" + loc("code_count") + "'>🗍 " + parseInt(item.ItemCount) + "</span>";
-                        }
-                        tr.appendChild(td);
-                    }
-                    {
-                        const td = document.createElement("td");
-                        td.classList = "text-end text-nowrap";
-                        {
-                            const a = document.createElement("a");
-                            a.href = "#";
-                            a.onclick = function (event) {
-                                event.preventDefault();
-                                removeCountItems(item.ItemType, item.ItemCount);
-                            };
-                            a.title = loc("code_remove");
-                            a.innerHTML = icons.trash;
-                            td.appendChild(a);
-                        }
-                        tr.appendChild(td);
-                    }
-                    document.getElementById("ShipDecorations-list").appendChild(tr);
-                }
-            });
-
-            document.getElementById("QuestKeys-list").innerHTML = "";
-            data.QuestKeys.forEach(item => {
-                const tr = document.createElement("tr");
-                tr.setAttribute("data-item-type", item.ItemType);
-                const run = item.Progress[0]?.c ?? 0;
-                const stage = run == 0 ? item.Progress.length : item.Progress.map(p => p.c ?? 0).lastIndexOf(run);
-
-                {
-                    const td = document.createElement("td");
-                    td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
-                    if (!item.Completed) {
-                        td.textContent +=
-                            " | " + loc("code_stage") + ": [" + stage + "/" + itemMap[item.ItemType]?.chainLength + "]";
-                    } else {
-                        td.textContent += " | " + loc("code_completed");
-                    }
-
-                    if (run > 0) {
-                        td.textContent += " | " + loc("code_replays") + ": " + (run + 1);
-                    }
-
-                    if (data.ActiveQuest == item.ItemType) td.textContent += " | " + loc("code_active");
-                    tr.appendChild(td);
-                }
-                {
-                    const td = document.createElement("td");
-                    td.classList = "text-end text-nowrap";
-                    if (data.ActiveQuest == item.ItemType && !item.Completed) {
-                        console.log(data.ActiveQuest);
-
-                        const a = document.createElement("a");
-                        a.href = "#";
-                        a.onclick = function (event) {
-                            event.preventDefault();
-                            debounce(doQuestUpdate, "setInactive", item.ItemType);
-                        };
-                        a.title = loc("code_setInactive");
-                        a.innerHTML = icons.circleStop;
-                        td.appendChild(a);
-                    }
-                    if (stage > 0) {
-                        const a = document.createElement("a");
-                        a.href = "#";
-                        a.onclick = function (event) {
-                            event.preventDefault();
-                            debounce(doQuestUpdate, "resetKey", item.ItemType);
-                        };
-                        a.title = loc("code_reset");
-                        a.innerHTML = icons.arrowRotateRight;
-                        td.appendChild(a);
-                    }
-                    if (itemMap[item.ItemType]?.chainLength > stage && !item.Completed) {
-                        const a = document.createElement("a");
-                        a.href = "#";
-                        a.onclick = function (event) {
-                            event.preventDefault();
-                            debounce(doQuestUpdate, "completeKey", item.ItemType);
-                        };
-                        a.title = loc("code_complete");
-                        a.innerHTML = icons.check;
-                        td.appendChild(a);
-                    }
-                    if (stage > 0 && itemMap[item.ItemType]?.chainLength > 1) {
-                        const a = document.createElement("a");
-                        a.href = "#";
-                        a.onclick = function (event) {
-                            event.preventDefault();
-                            debounce(doQuestUpdate, "prevStage", item.ItemType);
-                        };
-                        a.title = loc("code_prevStage");
-                        a.innerHTML = icons.angleLeft;
-                        td.appendChild(a);
-                    }
-                    if (
-                        itemMap[item.ItemType]?.chainLength > stage &&
-                        !item.Completed &&
-                        itemMap[item.ItemType]?.chainLength > 1
-                    ) {
-                        const a = document.createElement("a");
-                        a.href = "#";
-                        a.onclick = function (event) {
-                            event.preventDefault();
-                            debounce(doQuestUpdate, "nextStage", item.ItemType);
-                        };
-                        a.title = loc("code_nextStage");
-                        a.innerHTML = icons.angleRight;
-                        td.appendChild(a);
-                    }
-                    {
-                        const a = document.createElement("a");
-                        a.href = "#";
-                        a.onclick = function (event) {
-                            event.preventDefault();
-                            debounce(doQuestUpdate, "deleteKey", item.ItemType);
-                        };
-                        a.title = loc("code_remove");
-                        a.innerHTML = icons.trash;
-                        td.appendChild(a);
-                    }
-                    tr.appendChild(td);
-                }
-                document.getElementById("QuestKeys-list").appendChild(tr);
-            });
-
-            // Populate mods route
-            document.getElementById("riven-list").innerHTML = "";
-            document.getElementById("mods-list").innerHTML = "";
-            data.Upgrades.forEach(item => {
-                if (item.ItemType.substr(0, 32) == "/Lotus/Upgrades/Mods/Randomized/") {
-                    const rivenType = item.ItemType.substr(32);
-                    const fingerprint = JSON.parse(item.UpgradeFingerprint);
-                    if ("buffs" in fingerprint) {
-                        // Riven has been revealed?
-                        const tr = document.createElement("tr");
-                        {
-                            const td = document.createElement("td");
-                            td.textContent = itemMap[fingerprint.compat]?.name ?? fingerprint.compat;
-                            td.textContent += " ";
-                            try {
-                                td.textContent += RivenParser.parseRiven(rivenType, fingerprint, 1).name;
-                            } catch (e) {
-                                console.warn("malformed riven", { rivenType, fingerprint });
-                                td.textContent += " [Malformed Riven]";
-                            }
-                            td.innerHTML +=
-                                " <span title='" +
-                                loc("code_buffsNumber") +
-                                "'>▲ " +
-                                fingerprint.buffs.length +
-                                "</span>";
-                            td.innerHTML +=
-                                " <span title='" +
-                                loc("code_cursesNumber") +
-                                "'>▼ " +
-                                fingerprint.curses.length +
-                                "</span>";
-                            td.innerHTML +=
-                                " <span title='" +
-                                loc("code_rerollsNumber") +
-                                "'>⟳ " +
-                                (fingerprint.rerolls ?? 0) +
-                                "</span>";
-                            tr.appendChild(td);
-                        }
-                        {
-                            const td = document.createElement("td");
-                            td.classList = "text-end text-nowrap";
-                            {
-                                const a = document.createElement("a");
-                                a.href =
-                                    "riven-tool/#" +
-                                    encodeURIComponent(
-                                        JSON.stringify({
-                                            rivenType: rivenType,
-                                            omegaAttenuation: 1,
-                                            fingerprint: fingerprint
-                                        })
-                                    );
-                                a.target = "_blank";
-                                a.title = loc("code_viewStats");
-                                a.innerHTML = icons.chartSimple;
-                                td.appendChild(a);
-                            }
-                            {
-                                const a = document.createElement("a");
-                                a.href = "#";
-                                a.onclick = function (event) {
-                                    event.preventDefault();
-                                    document.getElementById("riven-list").removeChild(tr);
-                                    disposeOfGear("Upgrades", item.ItemId.$oid);
-                                };
-                                a.title = loc("code_remove");
-                                a.innerHTML = icons.trash;
-                                td.appendChild(a);
-                            }
-                            tr.appendChild(td);
-                        }
-                        document.getElementById("riven-list").appendChild(tr);
-                        return;
-                    }
-                }
-                const tr = document.createElement("tr");
-                const rank = parseInt(JSON.parse(item.UpgradeFingerprint).lvl);
-                const maxRank = itemMap[item.ItemType]?.fusionLimit ?? 5;
-                {
-                    const td = document.createElement("td");
-                    td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
-                    if (
-                        U5Mods.includes(item.ItemType) &&
-                        item.ItemType != "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod"
-                    ) {
-                        if (item.UpgradeFingerprint) {
-                            const fingerprint = JSON.parse(item.UpgradeFingerprint);
-                            if (fingerprint.fits) {
-                                td.textContent = loc("code_U5Mod").replace(
-                                    "|TYPE|",
-                                    itemMap[fingerprint.fits]?.name ?? fingerprint.fits
-                                );
-                            }
-                        }
-                    }
-                    if (itemMap[item.ItemType]?.badReason == "notraw") {
-                        // Assuming this is a riven with a pending challenge, so rank would be N/A, but otherwise it's fine.
-                    } else if (!Number.isNaN(rank)) {
-                        td.innerHTML += " <span title='" + loc("code_rank") + "'>★ " + rank + "/" + maxRank + "</span>";
-                    }
-                    tr.appendChild(td);
-                }
-                {
-                    const td = document.createElement("td");
-                    td.classList = "text-end text-nowrap";
-                    if (rank < maxRank) {
-                        const a = document.createElement("a");
-                        a.href = "#";
-                        a.onclick = function (event) {
-                            event.preventDefault();
-                            setFingerprint(item.ItemType, item.ItemId, { lvl: maxRank });
+                                updateInventory();
+                            });
                         };
                         a.title = loc("code_maxRank");
                         a.innerHTML = icons.arrowUp;
                         td.appendChild(a);
                     }
-                    if (U5Mods.includes(item.ItemType)) {
+
+                    {
                         const a = document.createElement("a");
-                        a.href = "/webui/detailedView?productCategory=Upgrades&itemId=" + item.ItemId.$oid;
+                        a.href = "/webui/detailedView?productCategory=" + category + "&itemId=" + item.ItemId.$oid;
                         a.innerHTML = icons.feather;
                         td.appendChild(a);
                     }
+
+                    if (!(item.Features & 8) && modularWeapons.includes(item.ItemType)) {
+                        const a = document.createElement("a");
+                        a.href = "#";
+                        a.onclick = function (event) {
+                            event.preventDefault();
+                            equipmentFeatures(category, item.ItemId.$oid, 8);
+                        };
+                        a.title = loc("code_gild");
+                        a.innerHTML = icons.star;
+                        td.appendChild(a);
+                    }
+                    if (category == "KubrowPets") {
+                        const a = document.createElement("a");
+                        a.href = "#";
+                        a.onclick = function (event) {
+                            event.preventDefault();
+                            maturePet(item.ItemId.$oid, !item.Details.IsPuppy);
+                        };
+                        if (item.Details.IsPuppy) {
+                            a.title = loc("code_mature");
+                            a.innerHTML = icons.person;
+                        } else {
+                            a.title = loc("code_unmature");
+                            a.innerHTML = icons.childReaching;
+                        }
+                        td.appendChild(a);
+                    }
                     {
                         const a = document.createElement("a");
                         a.href = "#";
                         a.onclick = function (event) {
                             event.preventDefault();
-                            document.getElementById("mods-list").removeChild(tr);
+                            const name = prompt(loc("code_renamePrompt"));
+                            if (name !== null) {
+                                renameGear(category, item.ItemId.$oid, name);
+                            }
+                        };
+                        a.title = loc("code_rename");
+                        a.innerHTML = icons.tag;
+                        td.appendChild(a);
+                    }
+                    {
+                        const a = document.createElement("a");
+                        a.href = "#";
+                        a.onclick = function (event) {
+                            event.preventDefault();
+                            tr.parentNode.removeChild(tr);
+                            disposeOfGear(category, item.ItemId.$oid);
+                            if (item.AltWeaponModeId) {
+                                const otherCategory = category == "Melee" ? "LongGuns" : "Melee";
+                                const otherTr = document.querySelector(
+                                    `[data-item-oid="${item.AltWeaponModeId.$oid}"]`
+                                );
+                                if (otherTr) {
+                                    otherTr.parentNode.removeChild(otherTr);
+                                    disposeOfGear(otherCategory, item.AltWeaponModeId.$oid);
+                                }
+                            }
+                        };
+                        a.title = loc("code_remove");
+                        a.innerHTML = icons.trash;
+                        td.appendChild(a);
+                    }
+                    tr.appendChild(td);
+                }
+                document.getElementById(category + "-list").appendChild(tr);
+            });
+    });
+
+    document.getElementById("EvolutionProgress-list").innerHTML = "";
+    data.EvolutionProgress?.forEach(item => {
+        const tr = document.createElement("tr");
+        tr.setAttribute("data-item-type", item.ItemType);
+        {
+            const td = document.createElement("td");
+            td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+            if (item.Rank != null) {
+                td.textContent += " | " + loc("code_rank") + ": [" + item.Rank + "/5]";
+            }
+            tr.appendChild(td);
+        }
+        {
+            const td = document.createElement("td");
+            td.classList = "text-end text-nowrap";
+            if (item.Rank < 5) {
+                const a = document.createElement("a");
+                a.href = "#";
+                a.onclick = function (event) {
+                    event.preventDefault();
+                    setEvolutionProgress([{ ItemType: item.ItemType, Rank: 5 }]);
+                };
+                a.title = loc("code_maxRank");
+                a.innerHTML = icons.arrowUp;
+
+                td.appendChild(a);
+            }
+            if ((permanentEvolutionWeapons.has(item.ItemType) && item.Rank > 0) || item.Rank > 1) {
+                const a = document.createElement("a");
+                a.href = "#";
+                a.onclick = function (event) {
+                    event.preventDefault();
+                    setEvolutionProgress([{ ItemType: item.ItemType, Rank: item.Rank - 1 }]);
+                };
+                a.title = loc("code_rankDown");
+                a.innerHTML = icons.angleDown;
+
+                td.appendChild(a);
+            }
+            if (item.Rank < 5) {
+                const a = document.createElement("a");
+                a.href = "#";
+                a.onclick = function (event) {
+                    event.preventDefault();
+                    setEvolutionProgress([{ ItemType: item.ItemType, Rank: item.Rank + 1 }]);
+                };
+                a.title = loc("code_rankUp");
+                a.innerHTML = icons.angleUp;
+
+                td.appendChild(a);
+            }
+
+            tr.appendChild(td);
+        }
+
+        document.getElementById("EvolutionProgress-list").appendChild(tr);
+    });
+
+    document.getElementById("Boosters-list").innerHTML = "";
+    data.Boosters.forEach(item => {
+        if (item.ExpiryDate < Math.floor(Date.now() / 1000)) {
+            // Booster has expired, skip it
+            return;
+        }
+        const tr = document.createElement("tr");
+        {
+            const td = document.createElement("td");
+            td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+            tr.appendChild(td);
+            if (item.ItemType == "/Lotus/Types/Boosters/ReviveBooster") {
+                td.textContent += " ";
+                const abbr = document.createElement("abbr");
+                abbr.innerHTML = icons.note;
+                abbr.title = loc("code_reviveBoosterDesc");
+                td.appendChild(abbr);
+            }
+        }
+        {
+            const td = document.createElement("td");
+            td.classList = "text-end text-nowrap";
+            {
+                const form = document.createElement("form");
+                form.style.display = "inline-block";
+                form.onsubmit = function (event) {
+                    event.preventDefault();
+                    const maxDate = new Date(input.max);
+                    const selectedDate = new Date(input.value);
+                    if (selectedDate > maxDate) {
+                        input.value = maxDate.toISOString().slice(0, 16);
+                    }
+                    doChangeBoosterExpiry(item.ItemType, input);
+                };
+
+                const input = document.createElement("input");
+                input.type = "datetime-local";
+                input.classList = "form-control form-control-sm";
+                input.value = formatDatetime("%Y-%m-%d %H:%M:%s", item.ExpiryDate * 1000);
+                input.max = "2038-01-19T03:14";
+                input.onblur = function () {
+                    const maxDate = new Date(input.max);
+                    const selectedDate = new Date(input.value);
+                    if (selectedDate > maxDate) {
+                        input.value = maxDate.toISOString().slice(0, 16);
+                    }
+                    doChangeBoosterExpiry(item.ItemType, input);
+                };
+
+                form.appendChild(input);
+                td.appendChild(form);
+            }
+            {
+                const a = document.createElement("a");
+                a.href = "#";
+                a.onclick = function (event) {
+                    event.preventDefault();
+                    setBooster(item.ItemType, 0);
+                };
+                a.title = loc("code_remove");
+                a.innerHTML = icons.trash;
+                td.appendChild(a);
+            }
+            tr.appendChild(td);
+        }
+        document.getElementById("Boosters-list").appendChild(tr);
+    });
+
+    document.getElementById("FlavourItems-list").innerHTML = "";
+    data.FlavourItems.forEach(item => {
+        const tr = document.createElement("tr");
+        tr.setAttribute("data-item-type", item.ItemType);
+        {
+            const td = document.createElement("td");
+            td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+            tr.appendChild(td);
+        }
+        {
+            const td = document.createElement("td");
+            td.classList = "text-end text-nowrap";
+
+            {
+                const a = document.createElement("a");
+                a.href = "#";
+                a.onclick = function (event) {
+                    event.preventDefault();
+                    removeCustomization(item.ItemType);
+                };
+                a.title = loc("code_remove");
+                a.innerHTML = icons.trash;
+                td.appendChild(a);
+            }
+            tr.appendChild(td);
+        }
+
+        document.getElementById("FlavourItems-list").appendChild(tr);
+    });
+
+    document.getElementById("WeaponSkins-list").innerHTML = "";
+    data.WeaponSkins.forEach(item => {
+        if (item.ItemId.$oid.startsWith("ca70ca70ca70ca70")) return;
+        const tr = document.createElement("tr");
+        {
+            const td = document.createElement("td");
+            const name = itemMap[item.ItemType]?.name?.trim();
+            td.textContent = name || item.ItemType;
+            tr.appendChild(td);
+        }
+        {
+            const td = document.createElement("td");
+            td.classList = "text-end text-nowrap";
+            {
+                const a = document.createElement("a");
+                a.href = "#";
+                a.onclick = function (event) {
+                    event.preventDefault();
+                    document.getElementById("WeaponSkins-list").removeChild(tr);
+                    disposeOfGear("WeaponSkins", item.ItemId.$oid);
+                };
+                a.title = loc("code_remove");
+                a.innerHTML = icons.trash;
+                td.appendChild(a);
+            }
+
+            tr.appendChild(td);
+        }
+
+        document.getElementById("WeaponSkins-list").appendChild(tr);
+    });
+
+    if (data.CrewShipHarnesses?.length) {
+        window.plexus = {
+            id: data.CrewShipHarnesses[0].ItemId.$oid,
+            xp: data.CrewShipHarnesses[0].XP
+        };
+    }
+
+    document.getElementById("ShipDecorations-list").innerHTML = "";
+    data.ShipDecorations.forEach(item => {
+        if (item.ItemCount > 0) {
+            const tr = document.createElement("tr");
+            tr.setAttribute("data-item-type", item.ItemType);
+            {
+                const td = document.createElement("td");
+                td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+                if (item.ItemCount > 1) {
+                    td.innerHTML +=
+                        " <span title='" + loc("code_count") + "'>🗍 " + parseInt(item.ItemCount) + "</span>";
+                }
+                tr.appendChild(td);
+            }
+            {
+                const td = document.createElement("td");
+                td.classList = "text-end text-nowrap";
+                {
+                    const a = document.createElement("a");
+                    a.href = "#";
+                    a.onclick = function (event) {
+                        event.preventDefault();
+                        removeCountItems(item.ItemType, item.ItemCount);
+                    };
+                    a.title = loc("code_remove");
+                    a.innerHTML = icons.trash;
+                    td.appendChild(a);
+                }
+                tr.appendChild(td);
+            }
+            document.getElementById("ShipDecorations-list").appendChild(tr);
+        }
+    });
+
+    document.getElementById("QuestKeys-list").innerHTML = "";
+    data.QuestKeys.forEach(item => {
+        const tr = document.createElement("tr");
+        tr.setAttribute("data-item-type", item.ItemType);
+        const run = item.Progress[0]?.c ?? 0;
+        const stage = run == 0 ? item.Progress.length : item.Progress.map(p => p.c ?? 0).lastIndexOf(run);
+
+        {
+            const td = document.createElement("td");
+            td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+            if (!item.Completed) {
+                td.textContent +=
+                    " | " + loc("code_stage") + ": [" + stage + "/" + itemMap[item.ItemType]?.chainLength + "]";
+            } else {
+                td.textContent += " | " + loc("code_completed");
+            }
+
+            if (run > 0) {
+                td.textContent += " | " + loc("code_replays") + ": " + (run + 1);
+            }
+
+            if (data.ActiveQuest == item.ItemType) td.textContent += " | " + loc("code_active");
+            tr.appendChild(td);
+        }
+        {
+            const td = document.createElement("td");
+            td.classList = "text-end text-nowrap";
+            if (data.ActiveQuest == item.ItemType && !item.Completed) {
+                console.log(data.ActiveQuest);
+
+                const a = document.createElement("a");
+                a.href = "#";
+                a.onclick = function (event) {
+                    event.preventDefault();
+                    debounce(doQuestUpdate, "setInactive", item.ItemType);
+                };
+                a.title = loc("code_setInactive");
+                a.innerHTML = icons.circleStop;
+                td.appendChild(a);
+            }
+            if (stage > 0) {
+                const a = document.createElement("a");
+                a.href = "#";
+                a.onclick = function (event) {
+                    event.preventDefault();
+                    debounce(doQuestUpdate, "resetKey", item.ItemType);
+                };
+                a.title = loc("code_reset");
+                a.innerHTML = icons.arrowRotateRight;
+                td.appendChild(a);
+            }
+            if (itemMap[item.ItemType]?.chainLength > stage && !item.Completed) {
+                const a = document.createElement("a");
+                a.href = "#";
+                a.onclick = function (event) {
+                    event.preventDefault();
+                    debounce(doQuestUpdate, "completeKey", item.ItemType);
+                };
+                a.title = loc("code_complete");
+                a.innerHTML = icons.check;
+                td.appendChild(a);
+            }
+            if (stage > 0 && itemMap[item.ItemType]?.chainLength > 1) {
+                const a = document.createElement("a");
+                a.href = "#";
+                a.onclick = function (event) {
+                    event.preventDefault();
+                    debounce(doQuestUpdate, "prevStage", item.ItemType);
+                };
+                a.title = loc("code_prevStage");
+                a.innerHTML = icons.angleLeft;
+                td.appendChild(a);
+            }
+            if (
+                itemMap[item.ItemType]?.chainLength > stage &&
+                !item.Completed &&
+                itemMap[item.ItemType]?.chainLength > 1
+            ) {
+                const a = document.createElement("a");
+                a.href = "#";
+                a.onclick = function (event) {
+                    event.preventDefault();
+                    debounce(doQuestUpdate, "nextStage", item.ItemType);
+                };
+                a.title = loc("code_nextStage");
+                a.innerHTML = icons.angleRight;
+                td.appendChild(a);
+            }
+            {
+                const a = document.createElement("a");
+                a.href = "#";
+                a.onclick = function (event) {
+                    event.preventDefault();
+                    debounce(doQuestUpdate, "deleteKey", item.ItemType);
+                };
+                a.title = loc("code_remove");
+                a.innerHTML = icons.trash;
+                td.appendChild(a);
+            }
+            tr.appendChild(td);
+        }
+        document.getElementById("QuestKeys-list").appendChild(tr);
+    });
+});
+
+single.getRoute("/webui/mods").on("beforeload", async function () {
+    const [data, itemMap] = await Promise.all([awaitAuthz().then(getInventoryData), window.itemListPromise]);
+
+    document.getElementById("riven-list").innerHTML = "";
+    document.getElementById("mods-list").innerHTML = "";
+    data.Upgrades.forEach(item => {
+        if (item.ItemType.substr(0, 32) == "/Lotus/Upgrades/Mods/Randomized/") {
+            const rivenType = item.ItemType.substr(32);
+            const fingerprint = JSON.parse(item.UpgradeFingerprint);
+            if ("buffs" in fingerprint) {
+                // Riven has been revealed?
+                const tr = document.createElement("tr");
+                {
+                    const td = document.createElement("td");
+                    td.textContent = itemMap[fingerprint.compat]?.name ?? fingerprint.compat;
+                    td.textContent += " ";
+                    try {
+                        td.textContent += RivenParser.parseRiven(rivenType, fingerprint, 1).name;
+                    } catch (e) {
+                        console.warn("malformed riven", { rivenType, fingerprint });
+                        td.textContent += " [Malformed Riven]";
+                    }
+                    td.innerHTML +=
+                        " <span title='" + loc("code_buffsNumber") + "'>▲ " + fingerprint.buffs.length + "</span>";
+                    td.innerHTML +=
+                        " <span title='" + loc("code_cursesNumber") + "'>▼ " + fingerprint.curses.length + "</span>";
+                    td.innerHTML +=
+                        " <span title='" + loc("code_rerollsNumber") + "'>⟳ " + (fingerprint.rerolls ?? 0) + "</span>";
+                    tr.appendChild(td);
+                }
+                {
+                    const td = document.createElement("td");
+                    td.classList = "text-end text-nowrap";
+                    {
+                        const a = document.createElement("a");
+                        a.href =
+                            "riven-tool/#" +
+                            encodeURIComponent(
+                                JSON.stringify({
+                                    rivenType: rivenType,
+                                    omegaAttenuation: 1,
+                                    fingerprint: fingerprint
+                                })
+                            );
+                        a.target = "_blank";
+                        a.title = loc("code_viewStats");
+                        a.innerHTML = icons.chartSimple;
+                        td.appendChild(a);
+                    }
+                    {
+                        const a = document.createElement("a");
+                        a.href = "#";
+                        a.onclick = function (event) {
+                            event.preventDefault();
+                            document.getElementById("riven-list").removeChild(tr);
                             disposeOfGear("Upgrades", item.ItemId.$oid);
                         };
                         a.title = loc("code_remove");
@@ -1941,738 +1855,121 @@ function translateInventoryDataToDom() {
                     }
                     tr.appendChild(td);
                 }
-                document.getElementById("mods-list").appendChild(tr);
-            });
-            data.RawUpgrades.forEach(item => {
-                if (item.ItemCount > 0) {
-                    const maxRank = itemMap[item.ItemType]?.fusionLimit ?? 5;
-                    const tr = document.createElement("tr");
-                    {
-                        const td = document.createElement("td");
-                        td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
-                        if (maxRank > 0) {
-                            td.innerHTML += " <span title='" + loc("code_rank") + "'>★ 0/" + maxRank + "</span>";
-                        }
-                        if (item.ItemCount > 1) {
-                            td.innerHTML +=
-                                " <span title='" + loc("code_count") + "'>🗍 " + parseInt(item.ItemCount) + "</span>";
-                        }
-                        tr.appendChild(td);
+                document.getElementById("riven-list").appendChild(tr);
+                return;
+            }
+        }
+        const tr = document.createElement("tr");
+        const rank = parseInt(JSON.parse(item.UpgradeFingerprint).lvl);
+        const maxRank = itemMap[item.ItemType]?.fusionLimit ?? 5;
+        {
+            const td = document.createElement("td");
+            td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+            if (
+                U5Mods.includes(item.ItemType) &&
+                item.ItemType != "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod"
+            ) {
+                if (item.UpgradeFingerprint) {
+                    const fingerprint = JSON.parse(item.UpgradeFingerprint);
+                    if (fingerprint.fits) {
+                        td.textContent = loc("code_U5Mod").replace(
+                            "|TYPE|",
+                            itemMap[fingerprint.fits]?.name ?? fingerprint.fits
+                        );
                     }
-                    {
-                        const td = document.createElement("td");
-                        td.classList = "text-end text-nowrap";
-                        if (maxRank != 0) {
-                            const a = document.createElement("a");
-                            a.href = "#";
-                            a.onclick = function (event) {
-                                event.preventDefault();
-                                setFingerprint(item.ItemType, item.LastAdded, { lvl: maxRank });
-                            };
-                            a.title = loc("code_maxRank");
-                            a.innerHTML = icons.arrowUp;
-                            td.appendChild(a);
-                        }
-                        {
-                            const a = document.createElement("a");
-                            a.href = "#";
-                            a.onclick = function (event) {
-                                event.preventDefault();
-                                document.getElementById("mods-list").removeChild(tr);
-                                disposeOfItems("Upgrades", item.ItemType, item.ItemCount);
-                            };
-                            a.title = loc("code_remove");
-                            a.innerHTML = icons.trash;
-                            td.appendChild(a);
-                        }
-                        tr.appendChild(td);
-                    }
-                    document.getElementById("mods-list").appendChild(tr);
-                }
-            });
-
-            // Populate detailedView route
-            if (single.getCurrentPath().substr(0, 19) == "/webui/detailedView") {
-                const urlParams = new URLSearchParams(window.location.search);
-                const oid = urlParams.get("itemId");
-                const category = urlParams.get("productCategory");
-                const item = data[category].find(x => x.ItemId.$oid == oid);
-
-                if (item) {
-                    document.getElementById("detailedView-loading").classList.add("d-none");
-                    const itemName = itemMap[item.ItemType]?.name ?? item.ItemType;
-                    if (item.ItemName) {
-                        const pipeIndex = item.ItemName.indexOf("|");
-                        if (pipeIndex != -1) {
-                            $("#detailedView-title").text(item.ItemName.substr(1 + pipeIndex) + " " + itemName);
-                        } else {
-                            $("#detailedView-title").text(item.ItemName);
-                            $("#detailedView-route .text-body-secondary").text(itemName);
-                        }
-                    } else {
-                        $("#detailedView-title").text(itemName);
-                    }
-
-                    if (category != "Upgrades") {
-                        document.getElementById("equipmentFeatures-card").classList.remove("d-none");
-                        const buttonsCard = document.getElementById("equipmentFeaturesButtons-card");
-                        buttonsCard.innerHTML = "";
-                        item.Features ??= 0;
-                        const bits = [];
-                        const evolutionWeapons = Array.from(
-                            document.querySelectorAll("#datalist-EvolutionProgress option")
-                        ).map(option => option.dataset.key);
-
-                        if (category != "OperatorAmps") bits.push(1);
-                        if (["Suits", "LongGuns", "Pistols", "Melee"].includes(category)) bits.push(2);
-                        if (modularWeapons.includes(item.ItemType)) bits.push(8);
-                        if (["LongGuns", "Pistols", "Melee", "SpaceGuns", "OperatorAmps"].includes(category))
-                            bits.push(32);
-                        if (category == "SpaceGuns") bits.push(4, 64);
-                        if (
-                            [item.ItemType, itemMap[item.ItemType]?.parentName].some(
-                                type => type && evolutionWeapons.includes(type) && !permanentEvolutionWeapons.has(type)
-                            )
-                        )
-                            bits.push(512);
-                        if (
-                            ["LongGuns", "Pistols", "Melee", "SpaceGuns", "SpaceMelee"].includes(category) &&
-                            item.UpgradeFingerprint
-                        )
-                            bits.push(1024);
-                        for (const bit of bits.sort((a, b) => a - b)) {
-                            const wrapper = document.createElement("div");
-                            wrapper.classList = "form-check";
-
-                            const input = document.createElement("input");
-                            input.classList = "form-check-input";
-                            input.type = "checkbox";
-                            input.id = `detailedView-feature-${bit}`;
-                            input.checked = item.Features & bit;
-
-                            const label = document.createElement("label");
-                            label.classList = "form-check-label";
-                            label.htmlFor = input.id;
-                            let locString = `code_feature_${bit}`;
-                            if (
-                                ![
-                                    "Suits",
-                                    "SpaceSuits",
-                                    "Hoverboards",
-                                    "MechSuits",
-                                    "Sentinels",
-                                    "MoaPets",
-                                    "KubrowPets"
-                                ].includes(category) &&
-                                bit === 1
-                            ) {
-                                locString = `code_feature_${bit}_alt`;
-                            }
-                            label.innerHTML = loc(locString);
-                            label.setAttribute("data-loc", locString);
-
-                            input.onchange = function (event) {
-                                event.preventDefault();
-                                equipmentFeatures(category, oid, bit);
-                            };
-                            if (
-                                (data.unlockDoubleCapacityPotatoesEverywhere && bit === 1) ||
-                                (data.unlockExilusEverywhere && bit === 2) ||
-                                (data.unlockArcanesEverywhere && (bit === 32 || bit === 64))
-                            ) {
-                                input.disabled = true;
-                            }
-
-                            wrapper.appendChild(input);
-                            wrapper.appendChild(label);
-                            buttonsCard.appendChild(wrapper);
-                        }
-                    }
-
-                    if (category == "Suits") {
-                        document.getElementById("archonShards-card").classList.remove("d-none");
-
-                        const uniqueUpgrades = {};
-                        (item.ArchonCrystalUpgrades ?? []).forEach(upgrade => {
-                            if (upgrade && upgrade.UpgradeType) {
-                                uniqueUpgrades[upgrade.UpgradeType] ??= 0;
-                                uniqueUpgrades[upgrade.UpgradeType] += 1;
-                            }
-                        });
-
-                        document.getElementById("crystals-list").innerHTML = "";
-                        Object.entries(uniqueUpgrades).forEach(([upgradeType, count]) => {
-                            const tr = document.createElement("tr");
-                            {
-                                const td = document.createElement("td");
-                                td.textContent = count + "x " + (archonCrystalUpgrades[upgradeType] ?? upgradeType);
-                                tr.appendChild(td);
-                            }
-                            {
-                                const td = document.createElement("td");
-                                td.classList = "text-end text-nowrap";
-                                {
-                                    const a = document.createElement("a");
-                                    a.href = "#";
-                                    a.onclick = function (event) {
-                                        event.preventDefault();
-                                        doPopArchonCrystalUpgrade(upgradeType);
-                                    };
-                                    a.title = loc("code_remove");
-                                    a.innerHTML = icons.trash;
-                                    td.appendChild(a);
-                                }
-                                tr.appendChild(td);
-                            }
-                            document.getElementById("crystals-list").appendChild(tr);
-                        });
-
-                        {
-                            document.getElementById("edit-suit-invigorations-card").classList.remove("d-none");
-                            document.getElementById("invigoration-offensive").value = item.OffensiveUpgrade || "";
-                            document.getElementById("invigoration-defensive").value = item.DefensiveUpgrade || "";
-                            document.getElementById("invigoration-expiry").value =
-                                formatDatetime("%Y-%m-%d %H:%M", Number(item.UpgradesExpiry?.$date.$numberLong)) || "";
-                        }
-
-                        if (item.ItemType != "/Lotus/Powersuits/Excalibur/ExcaliburUmbra") {
-                            document.getElementById("umbraEchoes-card").classList.remove("d-none");
-                            document.getElementById("umbraEchoes-expiry").value =
-                                formatDatetime("%Y-%m-%d %H:%M", Number(item.UmbraDate?.$date.$numberLong)) || "";
-                        }
-
-                        {
-                            document.getElementById("loadout-card").classList.remove("d-none");
-                            const maxModConfigNum = Math.min(2 + (item.ModSlotPurchases ?? 0), 5);
-
-                            const configs = item.Configs ?? [];
-
-                            const loadoutTabs = document.getElementById("loadoutTabs");
-                            const loadoutTabsContent = document.getElementById("loadoutTabsContent");
-                            loadoutTabs.innerHTML = "";
-                            loadoutTabsContent.innerHTML = "";
-                            for (let i = 0; i <= maxModConfigNum; i++) {
-                                const config = configs[i] ?? {};
-
-                                {
-                                    const li = document.createElement("li");
-                                    li.classList.add("nav-item");
-
-                                    const button = document.createElement("button");
-                                    button.classList.add("nav-link");
-                                    if (i === 0) button.classList.add("active");
-                                    button.id = `config${i}-tab`;
-                                    button.setAttribute("data-bs-toggle", "tab");
-                                    button.setAttribute("data-bs-target", `#config${i}`);
-                                    button.innerHTML = config.Name?.trim() || String.fromCharCode(65 + i);
-
-                                    li.appendChild(button);
-                                    loadoutTabs.appendChild(li);
-                                }
-
-                                {
-                                    const tabDiv = document.createElement("div");
-                                    tabDiv.classList = "tab-pane";
-                                    if (i === 0) tabDiv.classList.add("show", "active");
-
-                                    tabDiv.id = `config${i}`;
-
-                                    {
-                                        const abilityOverrideForm = document.createElement("form");
-                                        abilityOverrideForm.classList = "form-group mt-2";
-                                        abilityOverrideForm.setAttribute(
-                                            "onsubmit",
-                                            `handleAbilityOverride(event, ${i});return false;`
-                                        );
-
-                                        const abilityOverrideFormLabel = document.createElement("label");
-                                        abilityOverrideFormLabel.setAttribute("data-loc", "abilityOverride_label");
-                                        abilityOverrideFormLabel.innerHTML = loc("abilityOverride_label");
-                                        abilityOverrideFormLabel.classList = "form-label";
-                                        abilityOverrideFormLabel.setAttribute(
-                                            "for",
-                                            `abilityOverride-ability-config-${i}`
-                                        );
-                                        abilityOverrideForm.appendChild(abilityOverrideFormLabel);
-
-                                        const abilityOverrideInputGroup = document.createElement("div");
-                                        abilityOverrideInputGroup.classList = "input-group";
-                                        abilityOverrideForm.appendChild(abilityOverrideInputGroup);
-
-                                        const abilityOverrideInput = document.createElement("input");
-                                        abilityOverrideInput.id = `abilityOverride-ability-config-${i}`;
-                                        abilityOverrideInput.classList = "form-control";
-                                        abilityOverrideInput.setAttribute("list", "datalist-Abilities");
-                                        if (config.AbilityOverride) {
-                                            const datalist = document.getElementById("datalist-Abilities");
-                                            const options = Array.from(datalist.options);
-                                            abilityOverrideInput.value = options.find(
-                                                option =>
-                                                    config.AbilityOverride.Ability == option.getAttribute("data-key")
-                                            )?.value;
-                                        }
-                                        abilityOverrideInputGroup.appendChild(abilityOverrideInput);
-
-                                        const abilityOverrideOnSlot = document.createElement("span");
-                                        abilityOverrideOnSlot.classList = "input-group-text";
-                                        abilityOverrideOnSlot.setAttribute("data-loc", "abilityOverride_onSlot");
-                                        abilityOverrideOnSlot.innerHTML = loc("abilityOverride_onSlot");
-                                        abilityOverrideInputGroup.appendChild(abilityOverrideOnSlot);
-
-                                        const abilityOverrideSecondInput = document.createElement("input");
-                                        abilityOverrideSecondInput.id = `abilityOverride-ability-index-config-${i}`;
-                                        abilityOverrideSecondInput.classList = "form-control";
-                                        abilityOverrideSecondInput.setAttribute("type", "number");
-                                        abilityOverrideSecondInput.setAttribute("min", "1");
-                                        abilityOverrideSecondInput.setAttribute("max", "4");
-                                        if (config.AbilityOverride)
-                                            abilityOverrideSecondInput.value = config.AbilityOverride.Index + 1;
-                                        abilityOverrideInputGroup.appendChild(abilityOverrideSecondInput);
-
-                                        const abilityOverrideSetButton = document.createElement("button");
-                                        abilityOverrideSetButton.classList = "btn btn-primary";
-                                        abilityOverrideSetButton.setAttribute("type", "submit");
-                                        abilityOverrideSetButton.setAttribute("value", "set");
-                                        abilityOverrideSetButton.setAttribute("data-loc", "general_setButton");
-                                        abilityOverrideSetButton.innerHTML = loc("general_setButton");
-                                        abilityOverrideInputGroup.appendChild(abilityOverrideSetButton);
-
-                                        const abilityOverrideRemoveButton = document.createElement("button");
-                                        abilityOverrideRemoveButton.classList = "btn btn-danger";
-                                        abilityOverrideRemoveButton.setAttribute("type", "submit");
-                                        abilityOverrideRemoveButton.setAttribute("value", "remove");
-                                        abilityOverrideRemoveButton.setAttribute("data-loc", "code_remove");
-                                        abilityOverrideRemoveButton.innerHTML = loc("code_remove");
-                                        abilityOverrideInputGroup.appendChild(abilityOverrideRemoveButton);
-
-                                        abilityOverrideForm.appendChild(abilityOverrideInputGroup);
-
-                                        tabDiv.appendChild(abilityOverrideForm);
-                                    }
-
-                                    loadoutTabsContent.appendChild(tabDiv);
-                                }
-                            }
-                        }
-                    } else if (["LongGuns", "Pistols", "Melee", "SpaceGuns", "SpaceMelee"].includes(category)) {
-                        document.getElementById("valenceBonus-card").classList.remove("d-none");
-                        document.getElementById("valenceBonus-innateDamage").value = "";
-                        document.getElementById("valenceBonus-procent").value = 25;
-
-                        if (item.UpgradeFingerprint) {
-                            const buff = JSON.parse(item.UpgradeFingerprint).buffs[0];
-                            const buffValue = fromUpgradeFingerprintValue(buff.Value, 0.25);
-                            document.getElementById("valenceBonus-innateDamage").value = buff.Tag ?? "";
-                            document.getElementById("valenceBonus-procent").value = Math.round(buffValue * 1000) / 10;
-                        }
-                    }
-                    if (U5Mods.includes(item.ItemType)) {
-                        document.getElementById("u5ModEdit-card").classList.remove("d-none");
-                        const oldFitsSelect = document.getElementById("u5ModEdit-fits");
-                        const fitsSelect = oldFitsSelect.cloneNode(false);
-                        oldFitsSelect.parentNode.replaceChild(fitsSelect, oldFitsSelect);
-                        const upgradeFields = document.getElementById("u5ModEdit-upgradeFields");
-                        upgradeFields.innerHTML = "";
-                        const fits = itemMap[item.ItemType].fits;
-                        const fp = JSON.parse(item.UpgradeFingerprint);
-                        const statAtten = fits.find(fit => fit.type == fp.fits).statAtten || 1;
-
-                        fits.forEach(fit => {
-                            const option = document.createElement("option");
-                            option.value = fit.type;
-                            option.textContent =
-                                (itemMap[fit.type]?.name ?? fit.type) +
-                                (fit.statAtten ? ` (${loc("code_statAtten")}: ${fit.statAtten || 1})` : "");
-                            fitsSelect.appendChild(option);
-                        });
-
-                        fitsSelect.addEventListener("change", () => {
-                            upgradeFields.querySelectorAll(".upgrade-group").forEach(group => {
-                                updateUpgradeInput(itemMap[item.ItemType], group);
-                            });
-                        });
-
-                        upgradeFields.setAttribute("data-stat-atten", statAtten);
-                        document.getElementById("u5ModEdit-reqLevel").value = fp.reqLevel ?? 0;
-                        document.getElementById("u5ModEdit-fits").value = fp.fits ?? fits[0].type;
-
-                        fp.upgrades.forEach(up => {
-                            createUpgradeInput(upgradeFields, itemMap, item.ItemType, up);
-                        });
-                        createUpgradeInput(upgradeFields, itemMap, item.ItemType, null);
-                    }
-                    if (modularWeapons.includes(item.ItemType)) {
-                        document.getElementById("modularParts-card").classList.remove("d-none");
-                        const form = document.getElementById("modularParts-form");
-                        form.innerHTML = "";
-                        const requiredParts = getRequiredParts(category, item.ItemType);
-
-                        requiredParts.forEach(modularPart => {
-                            const input = document.createElement("input");
-                            input.classList.add("form-control");
-                            input.id = "detailedView-modularPart-" + modularPart;
-                            input.setAttribute("list", "datalist-ModularParts-" + modularPart);
-
-                            const datalist = document.getElementById("datalist-ModularParts-" + modularPart);
-                            const options = Array.from(datalist.options);
-
-                            input.value =
-                                options.find(option => item.ModularParts.includes(option.getAttribute("data-key")))
-                                    ?.value || "";
-                            form.appendChild(input);
-                        });
-
-                        const changeButton = document.createElement("button");
-                        changeButton.classList.add("btn");
-                        changeButton.classList.add("btn-primary");
-                        changeButton.type = "submit";
-                        changeButton.setAttribute("data-loc", "cheats_changeButton");
-                        changeButton.innerHTML = loc("cheats_changeButton");
-                        form.appendChild(changeButton);
-                    }
-                } else {
-                    single.loadRoute("/webui/inventory");
                 }
             }
-            document.getElementById("changeSyndicate").value = data.SupportedSyndicate ?? "";
-
-            if (single.getCurrentPath().startsWith("/webui/guildView")) {
-                const guildReq = window.guildId
-                    ? $.get("/custom/getGuild?guildId=" + window.guildId)
-                    : { done: () => {}, fail: f => f() };
-                guildReq.done(guildData => {
-                    window.itemListPromise.then(itemMap => {
-                        document.getElementById("TechProjects-bulkAdd").classList.add("d-none");
-                        document.getElementById("TechProjects-bulkFund").classList.add("d-none");
-                        document.getElementById("TechProjects-bulkComplete").classList.add("d-none");
-                        document.getElementById("TechProjects-bulkRemove").classList.add("d-none");
-                        document.getElementById("VaultDecoRecipes-bulkAdd").classList.add("d-none");
-                        document.getElementById("VaultDecoRecipes-bulkRemove").classList.add("d-none");
-                        document.getElementById("VaultShipDecorations-bulkRemove").classList.add("d-none");
-                        document.getElementById("VaultShipDecorations-bulkAdd").classList.add("d-none");
-                        document.getElementById("VaultShipDecorations-bulkRemove").classList.add("d-none");
-                        document.getElementById("VaultMiscItems-bulkRemove").classList.add("d-none");
-                        document.getElementById("guildView-loading").classList.add("d-none");
-                        $("#guild-route > .row").removeClass("d-none");
-
-                        document.getElementById("guildView-title").textContent = guildData.Name;
-                        document.getElementById("guildView-tier").textContent = loc("guildView_tierDisplay")
-                            .split("|TIER|")
-                            .join(loc(`guildView_tier${guildData.Tier}`));
-                        document.getElementById("guildView-class").textContent = loc("guildView_classDisplay")
-                            .split("|CLASS|")
-                            .join(guildData.Class);
-
-                        ["VaultRegularCredits", "VaultPremiumCredits"].forEach(currency => {
-                            document.getElementById(currency + "-owned").textContent = loc("guildView_currency_owned")
-                                .split("|COUNT|")
-                                .join((guildData[currency] ?? 0).toLocaleString());
-                        });
-
-                        const userGuildMember = guildData.Members.find(m => m._id.$oid === window.accountId);
-                        let userGuildPermissions;
-                        if (userGuildMember) {
-                            userGuildPermissions = guildData.Ranks[userGuildMember.Rank].Permissions;
-                            // Ruler = 1, // Clan: Change hierarchy. Alliance (Creator only): Kick clans.
-                            // Advertiser = 8192,
-                            // Recruiter = 2, // Send invites (Clans & Alliances)
-                            // Regulator = 4, // Kick members
-                            // Promoter = 8, // Clan: Promote and demote members. Alliance (Creator only): Change clan permissions.
-                            // Architect = 16, // Create and destroy rooms
-                            // Host = 32, // No longer used in modern versions
-                            // Decorator = 1024, // Create and destroy decos
-                            // Treasurer = 64, // Clan: Contribute from vault and edit tax rate. Alliance: Divvy vault.
-                            // Tech = 128, // Queue research
-                            // ChatModerator = 512, // (Clans & Alliances)
-                            // Herald = 2048, // Change MOTD
-                            // Fabricator = 4096 // Replicate research
-                            if (userGuildPermissions & 128) {
-                                document.getElementById("techProjects-form").classList.remove("d-none");
-                            }
-                            if (userGuildPermissions & 16) {
-                                document.getElementById("vaultDecoRecipes-form").classList.remove("d-none");
-                            }
-                            if (userGuildPermissions & 64) {
-                                document.getElementById("vaultRegularCredits-form").classList.remove("d-none");
-                                document.getElementById("VaultRegularCredits-owned").classList.remove("mb-0");
-                                document.getElementById("vaultPremiumCredits-form").classList.remove("d-none");
-                                document.getElementById("VaultPremiumCredits-owned").classList.remove("mb-0");
-                                document.getElementById("vaultMiscItems-form").classList.remove("d-none");
-                                document.getElementById("vaultShipDecorations-form").classList.remove("d-none");
-                            }
-                            if (userGuildMember.Rank <= 1) {
-                                document.getElementById("TechProjects-bulkAdd").classList.remove("d-none");
-                                document.getElementById("TechProjects-bulkFund").classList.remove("d-none");
-                                document.getElementById("TechProjects-bulkComplete").classList.remove("d-none");
-                                document.getElementById("TechProjects-bulkRemove").classList.remove("d-none");
-                                document.getElementById("VaultDecoRecipes-bulkAdd").classList.remove("d-none");
-                                document.getElementById("VaultDecoRecipes-bulkRemove").classList.remove("d-none");
-                                document.getElementById("VaultShipDecorations-bulkRemove").classList.remove("d-none");
-                                document.getElementById("VaultShipDecorations-bulkAdd").classList.remove("d-none");
-                                document.getElementById("VaultShipDecorations-bulkRemove").classList.remove("d-none");
-                                document.getElementById("VaultMiscItems-bulkRemove").classList.remove("d-none");
-                            }
-                        }
-
-                        const guildCheats = document.querySelectorAll("#guild-cheats input[id]");
-                        for (const elm of guildCheats) {
-                            elm.checked = !!guildData[elm.id];
-                            if (!userGuildMember || userGuildMember.Rank > 1) {
-                                elm.disabled = true;
-                            } else {
-                                elm.disabled = false;
-                            }
-                        }
-
-                        document.getElementById("TechProjects-list").innerHTML = "";
-                        guildData.TechProjects ??= [];
-                        guildData.TechProjects.forEach(item => {
-                            const tr = document.createElement("tr");
-                            tr.setAttribute("data-item-type", item.ItemType);
-                            {
-                                const td = document.createElement("td");
-                                td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
-                                if (new Date(item.CompletionDate) < new Date()) {
-                                    td.textContent += " | " + loc("code_completed");
-                                } else if (item.State == 1) {
-                                    td.textContent += " | " + loc("code_funded");
-                                }
-                                tr.appendChild(td);
-                            }
-                            {
-                                const td = document.createElement("td");
-                                td.classList = "text-end text-nowrap";
-
-                                if (userGuildPermissions && userGuildPermissions & 128 && item.State != 1) {
-                                    const a = document.createElement("a");
-                                    a.href = "#";
-                                    a.onclick = function (event) {
-                                        event.preventDefault();
-                                        debounce(fundGuildTechProject, item.ItemType);
-                                    };
-                                    a.title = loc("code_fund");
-                                    a.innerHTML = icons.arrowUp;
-                                    td.appendChild(a);
-                                }
-
-                                if (
-                                    userGuildPermissions &&
-                                    userGuildPermissions & 128 &&
-                                    item.State == 1 &&
-                                    new Date(item.CompletionDate) > new Date()
-                                ) {
-                                    const a = document.createElement("a");
-                                    a.href = "#";
-                                    a.onclick = function (event) {
-                                        event.preventDefault();
-                                        debounce(completeGuildTechProject, item.ItemType);
-                                    };
-                                    a.title = loc("code_complete");
-                                    a.innerHTML = icons.forward;
-                                    td.appendChild(a);
-                                }
-
-                                if (userGuildMember && userGuildMember.Rank <= 1) {
-                                    const a = document.createElement("a");
-                                    a.href = "#";
-                                    a.onclick = function (event) {
-                                        event.preventDefault();
-                                        debounce(removeGuildTechProject, item.ItemType);
-                                    };
-                                    a.title = loc("code_remove");
-                                    a.innerHTML = icons.trash;
-                                    td.appendChild(a);
-                                }
-
-                                tr.appendChild(td);
-                            }
-
-                            document.getElementById("TechProjects-list").appendChild(tr);
-                        });
-
-                        ["VaultDecoRecipes", "VaultMiscItems", "VaultShipDecorations"].forEach(vaultKey => {
-                            document.getElementById(vaultKey + "-list").innerHTML = "";
-                            (guildData[vaultKey] ??= []).forEach(item => {
-                                const tr = document.createElement("tr");
-                                tr.setAttribute("data-item-type", item.ItemType);
-                                {
-                                    const td = document.createElement("td");
-                                    td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
-                                    if (item.ItemCount > 1) {
-                                        td.innerHTML += ` <span title='${loc("code_count")}'>🗍 ${parseInt(item.ItemCount)}</span>`;
-                                    }
-                                    tr.appendChild(td);
-                                }
-                                {
-                                    const td = document.createElement("td");
-                                    td.classList = "text-end text-nowrap";
-                                    const canRemove =
-                                        vaultKey === "VaultDecoRecipes"
-                                            ? userGuildMember && userGuildMember.Rank <= 1
-                                            : userGuildPermissions && userGuildPermissions & 64;
-                                    if (canRemove) {
-                                        const a = document.createElement("a");
-                                        a.href = "#";
-                                        a.title = loc("code_remove");
-                                        a.onclick = e => {
-                                            e.preventDefault();
-                                            removeVaultItem(vaultKey, item.ItemType, item.ItemCount * -1);
-                                        };
-                                        a.innerHTML = icons.trash;
-                                        td.appendChild(a);
-                                    }
-                                    tr.appendChild(td);
-                                }
-
-                                document.getElementById(vaultKey + "-list").appendChild(tr);
-                            });
-                        });
-
-                        document.getElementById("Members-list").innerHTML = "";
-                        guildData.Members.forEach(member => {
-                            const tr = document.createElement("tr");
-                            {
-                                const td = document.createElement("td");
-                                const memberRank = guildData.Ranks[member.Rank];
-                                td.textContent = member.DisplayName;
-                                td.textContent += " | " + itemMap[memberRank.Name]?.name ?? memberRank.Name;
-                                if (member.Status != 0) {
-                                    td.textContent += " | " + loc("guildView_pending");
-                                }
-                                tr.appendChild(td);
-                            }
-                            {
-                                const td = document.createElement("td");
-                                td.classList = "text-end text-nowrap";
-
-                                if (
-                                    userGuildMember &&
-                                    member.Rank < 8 &&
-                                    member.Rank > userGuildMember.Rank &&
-                                    userGuildPermissions &&
-                                    userGuildPermissions & 8
-                                ) {
-                                    const a = document.createElement("a");
-                                    a.href = "#";
-                                    a.onclick = function (event) {
-                                        event.preventDefault();
-                                        changeGuildRank(guildId, member._id.$oid, member.Rank + 1);
-                                    };
-                                    a.title = loc("guildView_demote");
-                                    a.innerHTML = icons.angleDown;
-                                    td.appendChild(a);
-                                }
-                                if (
-                                    userGuildMember &&
-                                    member.Rank > userGuildMember.Rank &&
-                                    userGuildPermissions &&
-                                    userGuildPermissions & 8
-                                ) {
-                                    const a = document.createElement("a");
-                                    a.href = "#";
-                                    a.onclick = function (event) {
-                                        event.preventDefault();
-                                        changeGuildRank(guildId, member._id.$oid, member.Rank - 1);
-                                    };
-                                    a.title = loc("guildView_promote");
-                                    a.innerHTML = icons.angleUp;
-                                    td.appendChild(a);
-                                }
-
-                                if (
-                                    (userGuildMember &&
-                                        member.Rank > userGuildMember.Rank &&
-                                        userGuildPermissions &&
-                                        userGuildPermissions & 4) ||
-                                    (userGuildMember && userGuildMember.Rank != 0 && userGuildMember._id == member._id)
-                                ) {
-                                    const a = document.createElement("a");
-                                    a.href = "#";
-                                    a.onclick = function (event) {
-                                        event.preventDefault();
-                                        kickFromGuild(member._id.$oid);
-                                    };
-                                    a.title = loc("code_remove");
-                                    a.innerHTML = icons.trash;
-                                    td.appendChild(a);
-                                }
-
-                                tr.appendChild(td);
-                            }
-
-                            document.getElementById("Members-list").appendChild(tr);
-                        });
-
-                        if (guildData.AllianceId) {
-                            const allianceReq = $.get("/custom/getAlliance?guildId=" + guildId);
-                            allianceReq.done(allianceData => {
-                                document.getElementById("guildView-alliance").textContent =
-                                    loc("guildView_alliance") + ": " + allianceData.Name;
-
-                                let userAlliancePermisssions;
-                                if (userGuildMember && userGuildMember.Rank <= 1) {
-                                    userAlliancePermisssions = allianceData.Clans.find(
-                                        c => c._id.$oid === guildId
-                                    ).Permissions;
-                                }
-                                document.getElementById("Alliance-list").innerHTML = "";
-                                allianceData.Clans.forEach(clan => {
-                                    const tr = document.createElement("tr");
-                                    {
-                                        const td = document.createElement("td");
-                                        td.textContent = clan.Name;
-                                        if (clan.Pending) {
-                                            td.textContent += " | " + loc("guildView_pending");
-                                        }
-                                        tr.appendChild(td);
-                                    }
-                                    {
-                                        const td = document.createElement("td");
-                                        td.classList = "text-end text-nowrap";
-
-                                        if (
-                                            !(clan.Permissions & 1) &&
-                                            userAlliancePermisssions &&
-                                            userAlliancePermisssions & 1
-                                        ) {
-                                            const a = document.createElement("a");
-                                            a.href = "#";
-                                            a.onclick = function (event) {
-                                                event.preventDefault();
-                                                kickFromAlliance(clan._id.$oid);
-                                            };
-                                            a.title = loc("code_remove");
-                                            a.innerHTML = icons.trash;
-                                            td.appendChild(a);
-                                        }
-
-                                        tr.appendChild(td);
-                                    }
-
-                                    document.getElementById("Alliance-list").appendChild(tr);
-                                });
-                            });
-                        }
-                    });
-                });
-
-                guildReq.fail(() => {
-                    document.getElementById("guildView-loading").classList.add("d-none");
-                    document.getElementById("guildView-na").classList.remove("d-none");
-                    document.getElementById("guildView-naDescription").classList.remove("d-none");
-                });
+            if (itemMap[item.ItemType]?.badReason == "notraw") {
+                // Assuming this is a riven with a pending challenge, so rank would be N/A, but otherwise it's fine.
+            } else if (!Number.isNaN(rank)) {
+                td.innerHTML += " <span title='" + loc("code_rank") + "'>★ " + rank + "/" + maxRank + "</span>";
             }
-
-            for (const elm of accountCheats) {
-                if (elm.type === "checkbox") {
-                    elm.checked = !!data[elm.id];
-                } else if (elm.type === "number") {
-                    elm.value = data[elm.id] !== undefined ? data[elm.id] : elm.getAttribute("data-default") || "";
-                }
+            tr.appendChild(td);
+        }
+        {
+            const td = document.createElement("td");
+            td.classList = "text-end text-nowrap";
+            if (rank < maxRank) {
+                const a = document.createElement("a");
+                a.href = "#";
+                a.onclick = function (event) {
+                    event.preventDefault();
+                    setFingerprint(item.ItemType, item.ItemId, { lvl: maxRank });
+                };
+                a.title = loc("code_maxRank");
+                a.innerHTML = icons.arrowUp;
+                td.appendChild(a);
             }
-        });
+            if (U5Mods.includes(item.ItemType)) {
+                const a = document.createElement("a");
+                a.href = "/webui/detailedView?productCategory=Upgrades&itemId=" + item.ItemId.$oid;
+                a.innerHTML = icons.feather;
+                td.appendChild(a);
+            }
+            {
+                const a = document.createElement("a");
+                a.href = "#";
+                a.onclick = function (event) {
+                    event.preventDefault();
+                    document.getElementById("mods-list").removeChild(tr);
+                    disposeOfGear("Upgrades", item.ItemId.$oid);
+                };
+                a.title = loc("code_remove");
+                a.innerHTML = icons.trash;
+                td.appendChild(a);
+            }
+            tr.appendChild(td);
+        }
+        document.getElementById("mods-list").appendChild(tr);
     });
-}
+    data.RawUpgrades.forEach(item => {
+        if (item.ItemCount > 0) {
+            const maxRank = itemMap[item.ItemType]?.fusionLimit ?? 5;
+            const tr = document.createElement("tr");
+            {
+                const td = document.createElement("td");
+                td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+                if (maxRank > 0) {
+                    td.innerHTML += " <span title='" + loc("code_rank") + "'>★ 0/" + maxRank + "</span>";
+                }
+                if (item.ItemCount > 1) {
+                    td.innerHTML +=
+                        " <span title='" + loc("code_count") + "'>🗍 " + parseInt(item.ItemCount) + "</span>";
+                }
+                tr.appendChild(td);
+            }
+            {
+                const td = document.createElement("td");
+                td.classList = "text-end text-nowrap";
+                if (maxRank != 0) {
+                    const a = document.createElement("a");
+                    a.href = "#";
+                    a.onclick = function (event) {
+                        event.preventDefault();
+                        setFingerprint(item.ItemType, item.LastAdded, { lvl: maxRank });
+                    };
+                    a.title = loc("code_maxRank");
+                    a.innerHTML = icons.arrowUp;
+                    td.appendChild(a);
+                }
+                {
+                    const a = document.createElement("a");
+                    a.href = "#";
+                    a.onclick = function (event) {
+                        event.preventDefault();
+                        document.getElementById("mods-list").removeChild(tr);
+                        disposeOfItems("Upgrades", item.ItemType, item.ItemCount);
+                    };
+                    a.title = loc("code_remove");
+                    a.innerHTML = icons.trash;
+                    td.appendChild(a);
+                }
+                tr.appendChild(td);
+            }
+            document.getElementById("mods-list").appendChild(tr);
+        }
+    });
+});
 
 dictPromise.then(() => {
     const invenotryHeaders = document.querySelectorAll(".card-header[data-cardtype]");
@@ -2828,8 +2125,8 @@ dictPromise.then(() => {
                     event.preventDefault();
                     debounce(completeAllTechProjects);
                 };
-                a.setAttribute("data-loc-title", "guildView_bulkComplete");
-                a.title = loc("guildView_bulkComplete");
+                a.setAttribute("data-loc-title", "inventory_bulkComplete");
+                a.title = loc("inventory_bulkComplete");
                 a.innerHTML = icons.forward;
                 a.id = `${cardType}-bulkComplete`;
                 butDiv.appendChild(a);
@@ -4068,6 +3365,17 @@ function doSaveConfigStringArray(id) {
 
 single.getRoute("/webui/cheats").on("beforeload", function () {
     awaitAuthz().then(() => {
+        getInventoryData().then(data => {
+            document.getElementById("changeSyndicate").value = data.SupportedSyndicate ?? "";
+            for (const elm of accountCheats) {
+                if (elm.type === "checkbox") {
+                    elm.checked = !!data[elm.id];
+                } else if (elm.type === "number") {
+                    elm.value = data[elm.id] !== undefined ? data[elm.id] : elm.getAttribute("data-default") || "";
+                }
+            }
+        });
+
         $.post({
             url: "/custom/getConfig?" + window.authz,
             contentType: "application/json",
@@ -4349,7 +3657,7 @@ function doAddMissingMaxRankMods() {
 
 // DetailedView Route
 
-single.getRoute("#detailedView-route").on("beforeload", function () {
+single.getRoute("#detailedView-route").on("beforeload", async function () {
     document.getElementById("detailedView-loading").classList.remove("d-none");
     document.getElementById("detailedView-title").textContent = "";
     document.querySelector("#detailedView-route .text-body-secondary").textContent = "";
@@ -4363,8 +3671,336 @@ single.getRoute("#detailedView-route").on("beforeload", function () {
     document.getElementById("u5ModEdit-card").classList.add("d-none");
     document.getElementById("equipmentFeatures-card").classList.add("d-none");
     document.getElementById("equipmentFeaturesButtons-card").innerHTML = "";
-    if (window.didInitialInventoryUpdate) {
-        updateInventory();
+
+    const [data, itemMap] = await Promise.all([awaitAuthz().then(getInventoryData), window.itemListPromise]);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const oid = urlParams.get("itemId");
+    const category = urlParams.get("productCategory");
+    const item = data[category].find(x => x.ItemId.$oid == oid);
+
+    if (item) {
+        document.getElementById("detailedView-loading").classList.add("d-none");
+        const itemName = itemMap[item.ItemType]?.name ?? item.ItemType;
+        if (item.ItemName) {
+            const pipeIndex = item.ItemName.indexOf("|");
+            if (pipeIndex != -1) {
+                $("#detailedView-title").text(item.ItemName.substr(1 + pipeIndex) + " " + itemName);
+            } else {
+                $("#detailedView-title").text(item.ItemName);
+                $("#detailedView-route .text-body-secondary").text(itemName);
+            }
+        } else {
+            $("#detailedView-title").text(itemName);
+        }
+
+        if (category != "Upgrades") {
+            document.getElementById("equipmentFeatures-card").classList.remove("d-none");
+            const buttonsCard = document.getElementById("equipmentFeaturesButtons-card");
+            buttonsCard.innerHTML = "";
+            item.Features ??= 0;
+            const bits = [];
+            const evolutionWeapons = Array.from(document.querySelectorAll("#datalist-EvolutionProgress option")).map(
+                option => option.dataset.key
+            );
+
+            if (category != "OperatorAmps") bits.push(1);
+            if (["Suits", "LongGuns", "Pistols", "Melee"].includes(category)) bits.push(2);
+            if (modularWeapons.includes(item.ItemType)) bits.push(8);
+            if (["LongGuns", "Pistols", "Melee", "SpaceGuns", "OperatorAmps"].includes(category)) bits.push(32);
+            if (category == "SpaceGuns") bits.push(4, 64);
+            if (
+                [item.ItemType, itemMap[item.ItemType]?.parentName].some(
+                    type => type && evolutionWeapons.includes(type) && !permanentEvolutionWeapons.has(type)
+                )
+            )
+                bits.push(512);
+            if (
+                ["LongGuns", "Pistols", "Melee", "SpaceGuns", "SpaceMelee"].includes(category) &&
+                item.UpgradeFingerprint
+            )
+                bits.push(1024);
+            for (const bit of bits.sort((a, b) => a - b)) {
+                const wrapper = document.createElement("div");
+                wrapper.classList = "form-check";
+
+                const input = document.createElement("input");
+                input.classList = "form-check-input";
+                input.type = "checkbox";
+                input.id = `detailedView-feature-${bit}`;
+                input.checked = item.Features & bit;
+
+                const label = document.createElement("label");
+                label.classList = "form-check-label";
+                label.htmlFor = input.id;
+                let locString = `code_feature_${bit}`;
+                if (
+                    !["Suits", "SpaceSuits", "Hoverboards", "MechSuits", "Sentinels", "MoaPets", "KubrowPets"].includes(
+                        category
+                    ) &&
+                    bit === 1
+                ) {
+                    locString = `code_feature_${bit}_alt`;
+                }
+                label.innerHTML = loc(locString);
+                label.setAttribute("data-loc", locString);
+
+                input.onchange = function (event) {
+                    event.preventDefault();
+                    equipmentFeatures(category, oid, bit);
+                };
+                if (
+                    (data.unlockDoubleCapacityPotatoesEverywhere && bit === 1) ||
+                    (data.unlockExilusEverywhere && bit === 2) ||
+                    (data.unlockArcanesEverywhere && (bit === 32 || bit === 64))
+                ) {
+                    input.disabled = true;
+                }
+
+                wrapper.appendChild(input);
+                wrapper.appendChild(label);
+                buttonsCard.appendChild(wrapper);
+            }
+        }
+
+        if (category == "Suits") {
+            document.getElementById("archonShards-card").classList.remove("d-none");
+
+            const uniqueUpgrades = {};
+            (item.ArchonCrystalUpgrades ?? []).forEach(upgrade => {
+                if (upgrade && upgrade.UpgradeType) {
+                    uniqueUpgrades[upgrade.UpgradeType] ??= 0;
+                    uniqueUpgrades[upgrade.UpgradeType] += 1;
+                }
+            });
+
+            document.getElementById("crystals-list").innerHTML = "";
+            Object.entries(uniqueUpgrades).forEach(([upgradeType, count]) => {
+                const tr = document.createElement("tr");
+                {
+                    const td = document.createElement("td");
+                    td.textContent = count + "x " + (archonCrystalUpgrades[upgradeType] ?? upgradeType);
+                    tr.appendChild(td);
+                }
+                {
+                    const td = document.createElement("td");
+                    td.classList = "text-end text-nowrap";
+                    {
+                        const a = document.createElement("a");
+                        a.href = "#";
+                        a.onclick = function (event) {
+                            event.preventDefault();
+                            doPopArchonCrystalUpgrade(upgradeType);
+                        };
+                        a.title = loc("code_remove");
+                        a.innerHTML = icons.trash;
+                        td.appendChild(a);
+                    }
+                    tr.appendChild(td);
+                }
+                document.getElementById("crystals-list").appendChild(tr);
+            });
+
+            {
+                document.getElementById("edit-suit-invigorations-card").classList.remove("d-none");
+                document.getElementById("invigoration-offensive").value = item.OffensiveUpgrade || "";
+                document.getElementById("invigoration-defensive").value = item.DefensiveUpgrade || "";
+                document.getElementById("invigoration-expiry").value =
+                    formatDatetime("%Y-%m-%d %H:%M", Number(item.UpgradesExpiry?.$date.$numberLong)) || "";
+            }
+
+            if (item.ItemType != "/Lotus/Powersuits/Excalibur/ExcaliburUmbra") {
+                document.getElementById("umbraEchoes-card").classList.remove("d-none");
+                document.getElementById("umbraEchoes-expiry").value =
+                    formatDatetime("%Y-%m-%d %H:%M", Number(item.UmbraDate?.$date.$numberLong)) || "";
+            }
+
+            {
+                document.getElementById("loadout-card").classList.remove("d-none");
+                const maxModConfigNum = Math.min(2 + (item.ModSlotPurchases ?? 0), 5);
+
+                const configs = item.Configs ?? [];
+
+                const loadoutTabs = document.getElementById("loadoutTabs");
+                const loadoutTabsContent = document.getElementById("loadoutTabsContent");
+                loadoutTabs.innerHTML = "";
+                loadoutTabsContent.innerHTML = "";
+                for (let i = 0; i <= maxModConfigNum; i++) {
+                    const config = configs[i] ?? {};
+
+                    {
+                        const li = document.createElement("li");
+                        li.classList.add("nav-item");
+
+                        const button = document.createElement("button");
+                        button.classList.add("nav-link");
+                        if (i === 0) button.classList.add("active");
+                        button.id = `config${i}-tab`;
+                        button.setAttribute("data-bs-toggle", "tab");
+                        button.setAttribute("data-bs-target", `#config${i}`);
+                        button.innerHTML = config.Name?.trim() || String.fromCharCode(65 + i);
+
+                        li.appendChild(button);
+                        loadoutTabs.appendChild(li);
+                    }
+
+                    {
+                        const tabDiv = document.createElement("div");
+                        tabDiv.classList = "tab-pane";
+                        if (i === 0) tabDiv.classList.add("show", "active");
+
+                        tabDiv.id = `config${i}`;
+
+                        {
+                            const abilityOverrideForm = document.createElement("form");
+                            abilityOverrideForm.classList = "form-group mt-2";
+                            abilityOverrideForm.setAttribute(
+                                "onsubmit",
+                                `handleAbilityOverride(event, ${i});return false;`
+                            );
+
+                            const abilityOverrideFormLabel = document.createElement("label");
+                            abilityOverrideFormLabel.setAttribute("data-loc", "abilityOverride_label");
+                            abilityOverrideFormLabel.innerHTML = loc("abilityOverride_label");
+                            abilityOverrideFormLabel.classList = "form-label";
+                            abilityOverrideFormLabel.setAttribute("for", `abilityOverride-ability-config-${i}`);
+                            abilityOverrideForm.appendChild(abilityOverrideFormLabel);
+
+                            const abilityOverrideInputGroup = document.createElement("div");
+                            abilityOverrideInputGroup.classList = "input-group";
+                            abilityOverrideForm.appendChild(abilityOverrideInputGroup);
+
+                            const abilityOverrideInput = document.createElement("input");
+                            abilityOverrideInput.id = `abilityOverride-ability-config-${i}`;
+                            abilityOverrideInput.classList = "form-control";
+                            abilityOverrideInput.setAttribute("list", "datalist-Abilities");
+                            if (config.AbilityOverride) {
+                                const datalist = document.getElementById("datalist-Abilities");
+                                const options = Array.from(datalist.options);
+                                abilityOverrideInput.value = options.find(
+                                    option => config.AbilityOverride.Ability == option.getAttribute("data-key")
+                                )?.value;
+                            }
+                            abilityOverrideInputGroup.appendChild(abilityOverrideInput);
+
+                            const abilityOverrideOnSlot = document.createElement("span");
+                            abilityOverrideOnSlot.classList = "input-group-text";
+                            abilityOverrideOnSlot.setAttribute("data-loc", "abilityOverride_onSlot");
+                            abilityOverrideOnSlot.innerHTML = loc("abilityOverride_onSlot");
+                            abilityOverrideInputGroup.appendChild(abilityOverrideOnSlot);
+
+                            const abilityOverrideSecondInput = document.createElement("input");
+                            abilityOverrideSecondInput.id = `abilityOverride-ability-index-config-${i}`;
+                            abilityOverrideSecondInput.classList = "form-control";
+                            abilityOverrideSecondInput.setAttribute("type", "number");
+                            abilityOverrideSecondInput.setAttribute("min", "1");
+                            abilityOverrideSecondInput.setAttribute("max", "4");
+                            if (config.AbilityOverride)
+                                abilityOverrideSecondInput.value = config.AbilityOverride.Index + 1;
+                            abilityOverrideInputGroup.appendChild(abilityOverrideSecondInput);
+
+                            const abilityOverrideSetButton = document.createElement("button");
+                            abilityOverrideSetButton.classList = "btn btn-primary";
+                            abilityOverrideSetButton.setAttribute("type", "submit");
+                            abilityOverrideSetButton.setAttribute("value", "set");
+                            abilityOverrideSetButton.setAttribute("data-loc", "general_setButton");
+                            abilityOverrideSetButton.innerHTML = loc("general_setButton");
+                            abilityOverrideInputGroup.appendChild(abilityOverrideSetButton);
+
+                            const abilityOverrideRemoveButton = document.createElement("button");
+                            abilityOverrideRemoveButton.classList = "btn btn-danger";
+                            abilityOverrideRemoveButton.setAttribute("type", "submit");
+                            abilityOverrideRemoveButton.setAttribute("value", "remove");
+                            abilityOverrideRemoveButton.setAttribute("data-loc", "code_remove");
+                            abilityOverrideRemoveButton.innerHTML = loc("code_remove");
+                            abilityOverrideInputGroup.appendChild(abilityOverrideRemoveButton);
+
+                            abilityOverrideForm.appendChild(abilityOverrideInputGroup);
+
+                            tabDiv.appendChild(abilityOverrideForm);
+                        }
+
+                        loadoutTabsContent.appendChild(tabDiv);
+                    }
+                }
+            }
+        } else if (["LongGuns", "Pistols", "Melee", "SpaceGuns", "SpaceMelee"].includes(category)) {
+            document.getElementById("valenceBonus-card").classList.remove("d-none");
+            document.getElementById("valenceBonus-innateDamage").value = "";
+            document.getElementById("valenceBonus-procent").value = 25;
+
+            if (item.UpgradeFingerprint) {
+                const buff = JSON.parse(item.UpgradeFingerprint).buffs[0];
+                const buffValue = fromUpgradeFingerprintValue(buff.Value, 0.25);
+                document.getElementById("valenceBonus-innateDamage").value = buff.Tag ?? "";
+                document.getElementById("valenceBonus-procent").value = Math.round(buffValue * 1000) / 10;
+            }
+        }
+        if (U5Mods.includes(item.ItemType)) {
+            document.getElementById("u5ModEdit-card").classList.remove("d-none");
+            const oldFitsSelect = document.getElementById("u5ModEdit-fits");
+            const fitsSelect = oldFitsSelect.cloneNode(false);
+            oldFitsSelect.parentNode.replaceChild(fitsSelect, oldFitsSelect);
+            const upgradeFields = document.getElementById("u5ModEdit-upgradeFields");
+            upgradeFields.innerHTML = "";
+            const fits = itemMap[item.ItemType].fits;
+            const fp = JSON.parse(item.UpgradeFingerprint);
+            const statAtten = fits.find(fit => fit.type == fp.fits).statAtten || 1;
+
+            fits.forEach(fit => {
+                const option = document.createElement("option");
+                option.value = fit.type;
+                option.textContent =
+                    (itemMap[fit.type]?.name ?? fit.type) +
+                    (fit.statAtten ? ` (${loc("code_statAtten")}: ${fit.statAtten || 1})` : "");
+                fitsSelect.appendChild(option);
+            });
+
+            fitsSelect.addEventListener("change", () => {
+                upgradeFields.querySelectorAll(".upgrade-group").forEach(group => {
+                    updateUpgradeInput(itemMap[item.ItemType], group);
+                });
+            });
+
+            upgradeFields.setAttribute("data-stat-atten", statAtten);
+            document.getElementById("u5ModEdit-reqLevel").value = fp.reqLevel ?? 0;
+            document.getElementById("u5ModEdit-fits").value = fp.fits ?? fits[0].type;
+
+            fp.upgrades.forEach(up => {
+                createUpgradeInput(upgradeFields, itemMap, item.ItemType, up);
+            });
+            createUpgradeInput(upgradeFields, itemMap, item.ItemType, null);
+        }
+        if (modularWeapons.includes(item.ItemType)) {
+            document.getElementById("modularParts-card").classList.remove("d-none");
+            const form = document.getElementById("modularParts-form");
+            form.innerHTML = "";
+            const requiredParts = getRequiredParts(category, item.ItemType);
+
+            requiredParts.forEach(modularPart => {
+                const input = document.createElement("input");
+                input.classList.add("form-control");
+                input.id = "detailedView-modularPart-" + modularPart;
+                input.setAttribute("list", "datalist-ModularParts-" + modularPart);
+
+                const datalist = document.getElementById("datalist-ModularParts-" + modularPart);
+                const options = Array.from(datalist.options);
+
+                input.value =
+                    options.find(option => item.ModularParts.includes(option.getAttribute("data-key")))?.value || "";
+                form.appendChild(input);
+            });
+
+            const changeButton = document.createElement("button");
+            changeButton.classList.add("btn");
+            changeButton.classList.add("btn-primary");
+            changeButton.type = "submit";
+            changeButton.setAttribute("data-loc", "cheats_changeButton");
+            changeButton.innerHTML = loc("cheats_changeButton");
+            form.appendChild(changeButton);
+        }
+    } else {
+        single.loadRoute("/webui/inventory");
     }
 });
 
@@ -4395,9 +4031,329 @@ single.getRoute("#guild-route").on("beforeload", function () {
     document.getElementById("guildView-alliance").textContent = "";
     document.getElementById("Members-list").innerHTML = "";
     $("#guild-route > .row").addClass("d-none");
-    if (window.didInitialInventoryUpdate) {
-        translateInventoryDataToDom();
-    }
+
+    awaitAuthz().then(() => {
+        const guildReq = $.get("/custom/getGuild?" + window.authz);
+        guildReq.done(guildData => {
+            window.guildId = guildData._id;
+            window.itemListPromise.then(itemMap => {
+                document.getElementById("TechProjects-bulkAdd").classList.add("d-none");
+                document.getElementById("TechProjects-bulkFund").classList.add("d-none");
+                document.getElementById("TechProjects-bulkComplete").classList.add("d-none");
+                document.getElementById("TechProjects-bulkRemove").classList.add("d-none");
+                document.getElementById("VaultDecoRecipes-bulkAdd").classList.add("d-none");
+                document.getElementById("VaultDecoRecipes-bulkRemove").classList.add("d-none");
+                document.getElementById("VaultShipDecorations-bulkRemove").classList.add("d-none");
+                document.getElementById("VaultShipDecorations-bulkAdd").classList.add("d-none");
+                document.getElementById("VaultShipDecorations-bulkRemove").classList.add("d-none");
+                document.getElementById("VaultMiscItems-bulkRemove").classList.add("d-none");
+                document.getElementById("guildView-loading").classList.add("d-none");
+                $("#guild-route > .row").removeClass("d-none");
+
+                document.getElementById("guildView-title").textContent = guildData.Name;
+                document.getElementById("guildView-tier").textContent = loc("guildView_tierDisplay")
+                    .split("|TIER|")
+                    .join(loc(`guildView_tier${guildData.Tier}`));
+                document.getElementById("guildView-class").textContent = loc("guildView_classDisplay")
+                    .split("|CLASS|")
+                    .join(guildData.Class);
+
+                ["VaultRegularCredits", "VaultPremiumCredits"].forEach(currency => {
+                    document.getElementById(currency + "-owned").textContent = loc("guildView_currency_owned")
+                        .split("|COUNT|")
+                        .join((guildData[currency] ?? 0).toLocaleString());
+                });
+
+                const userGuildMember = guildData.Members.find(m => m._id.$oid === window.accountId);
+                let userGuildPermissions;
+                if (userGuildMember) {
+                    userGuildPermissions = guildData.Ranks[userGuildMember.Rank].Permissions;
+                    // Ruler = 1, // Clan: Change hierarchy. Alliance (Creator only): Kick clans.
+                    // Advertiser = 8192,
+                    // Recruiter = 2, // Send invites (Clans & Alliances)
+                    // Regulator = 4, // Kick members
+                    // Promoter = 8, // Clan: Promote and demote members. Alliance (Creator only): Change clan permissions.
+                    // Architect = 16, // Create and destroy rooms
+                    // Host = 32, // No longer used in modern versions
+                    // Decorator = 1024, // Create and destroy decos
+                    // Treasurer = 64, // Clan: Contribute from vault and edit tax rate. Alliance: Divvy vault.
+                    // Tech = 128, // Queue research
+                    // ChatModerator = 512, // (Clans & Alliances)
+                    // Herald = 2048, // Change MOTD
+                    // Fabricator = 4096 // Replicate research
+                    if (userGuildPermissions & 128) {
+                        document.getElementById("techProjects-form").classList.remove("d-none");
+                    }
+                    if (userGuildPermissions & 16) {
+                        document.getElementById("vaultDecoRecipes-form").classList.remove("d-none");
+                    }
+                    if (userGuildPermissions & 64) {
+                        document.getElementById("vaultRegularCredits-form").classList.remove("d-none");
+                        document.getElementById("VaultRegularCredits-owned").classList.remove("mb-0");
+                        document.getElementById("vaultPremiumCredits-form").classList.remove("d-none");
+                        document.getElementById("VaultPremiumCredits-owned").classList.remove("mb-0");
+                        document.getElementById("vaultMiscItems-form").classList.remove("d-none");
+                        document.getElementById("vaultShipDecorations-form").classList.remove("d-none");
+                    }
+                    if (userGuildMember.Rank <= 1) {
+                        document.getElementById("TechProjects-bulkAdd").classList.remove("d-none");
+                        document.getElementById("TechProjects-bulkFund").classList.remove("d-none");
+                        document.getElementById("TechProjects-bulkComplete").classList.remove("d-none");
+                        document.getElementById("TechProjects-bulkRemove").classList.remove("d-none");
+                        document.getElementById("VaultDecoRecipes-bulkAdd").classList.remove("d-none");
+                        document.getElementById("VaultDecoRecipes-bulkRemove").classList.remove("d-none");
+                        document.getElementById("VaultShipDecorations-bulkRemove").classList.remove("d-none");
+                        document.getElementById("VaultShipDecorations-bulkAdd").classList.remove("d-none");
+                        document.getElementById("VaultShipDecorations-bulkRemove").classList.remove("d-none");
+                        document.getElementById("VaultMiscItems-bulkRemove").classList.remove("d-none");
+                    }
+                }
+
+                const guildCheats = document.querySelectorAll("#guild-cheats input[id]");
+                for (const elm of guildCheats) {
+                    elm.checked = !!guildData[elm.id];
+                    if (!userGuildMember || userGuildMember.Rank > 1) {
+                        elm.disabled = true;
+                    } else {
+                        elm.disabled = false;
+                    }
+                }
+
+                document.getElementById("TechProjects-list").innerHTML = "";
+                guildData.TechProjects ??= [];
+                guildData.TechProjects.forEach(item => {
+                    const tr = document.createElement("tr");
+                    tr.setAttribute("data-item-type", item.ItemType);
+                    {
+                        const td = document.createElement("td");
+                        td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+                        if (new Date(item.CompletionDate) < new Date()) {
+                            td.textContent += " | " + loc("code_completed");
+                        } else if (item.State == 1) {
+                            td.textContent += " | " + loc("code_funded");
+                        }
+                        tr.appendChild(td);
+                    }
+                    {
+                        const td = document.createElement("td");
+                        td.classList = "text-end text-nowrap";
+
+                        if (userGuildPermissions && userGuildPermissions & 128 && item.State != 1) {
+                            const a = document.createElement("a");
+                            a.href = "#";
+                            a.onclick = function (event) {
+                                event.preventDefault();
+                                debounce(fundGuildTechProject, item.ItemType);
+                            };
+                            a.title = loc("code_fund");
+                            a.innerHTML = icons.arrowUp;
+                            td.appendChild(a);
+                        }
+
+                        if (
+                            userGuildPermissions &&
+                            userGuildPermissions & 128 &&
+                            item.State == 1 &&
+                            new Date(item.CompletionDate) > new Date()
+                        ) {
+                            const a = document.createElement("a");
+                            a.href = "#";
+                            a.onclick = function (event) {
+                                event.preventDefault();
+                                debounce(completeGuildTechProject, item.ItemType);
+                            };
+                            a.title = loc("code_complete");
+                            a.innerHTML = icons.forward;
+                            td.appendChild(a);
+                        }
+
+                        if (userGuildMember && userGuildMember.Rank <= 1) {
+                            const a = document.createElement("a");
+                            a.href = "#";
+                            a.onclick = function (event) {
+                                event.preventDefault();
+                                debounce(removeGuildTechProject, item.ItemType);
+                            };
+                            a.title = loc("code_remove");
+                            a.innerHTML = icons.trash;
+                            td.appendChild(a);
+                        }
+
+                        tr.appendChild(td);
+                    }
+
+                    document.getElementById("TechProjects-list").appendChild(tr);
+                });
+
+                ["VaultDecoRecipes", "VaultMiscItems", "VaultShipDecorations"].forEach(vaultKey => {
+                    document.getElementById(vaultKey + "-list").innerHTML = "";
+                    (guildData[vaultKey] ??= []).forEach(item => {
+                        const tr = document.createElement("tr");
+                        tr.setAttribute("data-item-type", item.ItemType);
+                        {
+                            const td = document.createElement("td");
+                            td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
+                            if (item.ItemCount > 1) {
+                                td.innerHTML += ` <span title='${loc("code_count")}'>🗍 ${parseInt(item.ItemCount)}</span>`;
+                            }
+                            tr.appendChild(td);
+                        }
+                        {
+                            const td = document.createElement("td");
+                            td.classList = "text-end text-nowrap";
+                            const canRemove =
+                                vaultKey === "VaultDecoRecipes"
+                                    ? userGuildMember && userGuildMember.Rank <= 1
+                                    : userGuildPermissions && userGuildPermissions & 64;
+                            if (canRemove) {
+                                const a = document.createElement("a");
+                                a.href = "#";
+                                a.title = loc("code_remove");
+                                a.onclick = e => {
+                                    e.preventDefault();
+                                    removeVaultItem(vaultKey, item.ItemType, item.ItemCount * -1);
+                                };
+                                a.innerHTML = icons.trash;
+                                td.appendChild(a);
+                            }
+                            tr.appendChild(td);
+                        }
+
+                        document.getElementById(vaultKey + "-list").appendChild(tr);
+                    });
+                });
+
+                document.getElementById("Members-list").innerHTML = "";
+                guildData.Members.forEach(member => {
+                    const tr = document.createElement("tr");
+                    {
+                        const td = document.createElement("td");
+                        const memberRank = guildData.Ranks[member.Rank];
+                        td.textContent = member.DisplayName;
+                        td.textContent += " | " + itemMap[memberRank.Name]?.name ?? memberRank.Name;
+                        if (member.Status != 0) {
+                            td.textContent += " | " + loc("guildView_pending");
+                        }
+                        tr.appendChild(td);
+                    }
+                    {
+                        const td = document.createElement("td");
+                        td.classList = "text-end text-nowrap";
+
+                        if (
+                            userGuildMember &&
+                            member.Rank < 8 &&
+                            member.Rank > userGuildMember.Rank &&
+                            userGuildPermissions &&
+                            userGuildPermissions & 8
+                        ) {
+                            const a = document.createElement("a");
+                            a.href = "#";
+                            a.onclick = function (event) {
+                                event.preventDefault();
+                                changeGuildRank(guildId, member._id.$oid, member.Rank + 1);
+                            };
+                            a.title = loc("guildView_demote");
+                            a.innerHTML = icons.angleDown;
+                            td.appendChild(a);
+                        }
+                        if (
+                            userGuildMember &&
+                            member.Rank > userGuildMember.Rank &&
+                            userGuildPermissions &&
+                            userGuildPermissions & 8
+                        ) {
+                            const a = document.createElement("a");
+                            a.href = "#";
+                            a.onclick = function (event) {
+                                event.preventDefault();
+                                changeGuildRank(guildId, member._id.$oid, member.Rank - 1);
+                            };
+                            a.title = loc("guildView_promote");
+                            a.innerHTML = icons.angleUp;
+                            td.appendChild(a);
+                        }
+
+                        if (
+                            (userGuildMember &&
+                                member.Rank > userGuildMember.Rank &&
+                                userGuildPermissions &&
+                                userGuildPermissions & 4) ||
+                            (userGuildMember && userGuildMember.Rank != 0 && userGuildMember._id == member._id)
+                        ) {
+                            const a = document.createElement("a");
+                            a.href = "#";
+                            a.onclick = function (event) {
+                                event.preventDefault();
+                                kickFromGuild(member._id.$oid);
+                            };
+                            a.title = loc("code_remove");
+                            a.innerHTML = icons.trash;
+                            td.appendChild(a);
+                        }
+
+                        tr.appendChild(td);
+                    }
+
+                    document.getElementById("Members-list").appendChild(tr);
+                });
+
+                if (guildData.AllianceId) {
+                    const allianceReq = $.get("/custom/getAlliance?guildId=" + guildId);
+                    allianceReq.done(allianceData => {
+                        document.getElementById("guildView-alliance").textContent =
+                            loc("guildView_alliance") + ": " + allianceData.Name;
+
+                        let userAlliancePermisssions;
+                        if (userGuildMember && userGuildMember.Rank <= 1) {
+                            userAlliancePermisssions = allianceData.Clans.find(c => c._id.$oid === guildId).Permissions;
+                        }
+                        document.getElementById("Alliance-list").innerHTML = "";
+                        allianceData.Clans.forEach(clan => {
+                            const tr = document.createElement("tr");
+                            {
+                                const td = document.createElement("td");
+                                td.textContent = clan.Name;
+                                if (clan.Pending) {
+                                    td.textContent += " | " + loc("guildView_pending");
+                                }
+                                tr.appendChild(td);
+                            }
+                            {
+                                const td = document.createElement("td");
+                                td.classList = "text-end text-nowrap";
+
+                                if (
+                                    !(clan.Permissions & 1) &&
+                                    userAlliancePermisssions &&
+                                    userAlliancePermisssions & 1
+                                ) {
+                                    const a = document.createElement("a");
+                                    a.href = "#";
+                                    a.onclick = function (event) {
+                                        event.preventDefault();
+                                        kickFromAlliance(clan._id.$oid);
+                                    };
+                                    a.title = loc("code_remove");
+                                    a.innerHTML = icons.trash;
+                                    td.appendChild(a);
+                                }
+
+                                tr.appendChild(td);
+                            }
+
+                            document.getElementById("Alliance-list").appendChild(tr);
+                        });
+                    });
+                }
+            });
+        });
+        guildReq.fail(() => {
+            document.getElementById("guildView-loading").classList.add("d-none");
+            document.getElementById("guildView-na").classList.remove("d-none");
+            document.getElementById("guildView-naDescription").classList.remove("d-none");
+        });
+    });
 });
 
 function doPushArchonCrystalUpgrade() {

@@ -538,7 +538,6 @@ dict = {
     guildView_rank_warlord: `Señor de la guerra`,
     guildView_currency_owned: `|COUNT| en la Bóveda.`,
     guildView_bulkFund: `[UNTRANSLATED] Fund All`,
-    guildView_bulkComplete: `[UNTRANSLATED] Complete All`,
     guildView_promote: `Promover`,
     guildView_demote: `Degradar`,
 

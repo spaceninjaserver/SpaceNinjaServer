@@ -173,7 +173,7 @@ dict = {
     inventory_bulkAdd: `Ajouter manquant`,
     inventory_bulkRankUp: `Tout rang max`,
     inventory_bulkRemove: `Tout retirer`,
-    inventory_bulkComplete: `[UNTRANSLATED] Complete All`,
+    inventory_bulkComplete: `Tout compléter`,
     inventory_bulkReset: `[UNTRANSLATED] Reset All`,
     inventory_removeIsNew: `Supprimer "!" sur les nouveaux équipements`,
 
@@ -538,7 +538,6 @@ dict = {
     guildView_rank_warlord: `Seigneur de guerre`,
     guildView_currency_owned: `|COUNT| dans le coffre.`,
     guildView_bulkFund: `Tout financer`,
-    guildView_bulkComplete: `Tout compléter`,
     guildView_promote: `Promouvoir`,
     guildView_demote: `Rétrograder`,
 

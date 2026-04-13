@@ -538,7 +538,6 @@ dict = {
     guildView_rank_warlord: `军阀`,
     guildView_currency_owned: `金库中已有 |COUNT|.`,
     guildView_bulkFund: `全部捐献`,
-    guildView_bulkComplete: `全部完成`,
     guildView_promote: `升级`,
     guildView_demote: `降级`,
 
