@@ -755,6 +755,16 @@ export const getInventoryResponse = async (
                         }
                     }
 
+                    if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) < 0) {
+                        for (const skin of inventoryResponse.WeaponSkins) {
+                            if (skin.UpgradeType) {
+                                skin.UpgradeFingerprint = convertToLegacyFingerprint(
+                                    skin.UpgradeFingerprint || '{"lvl":0}'
+                                );
+                            }
+                        }
+                    }
+
                     if (version_compare(buildLabel, "2014.02.05.00.00") < 0) {
                         // Convert installed mods for pre-U12 builds
                         for (const category of equipmentKeys) {

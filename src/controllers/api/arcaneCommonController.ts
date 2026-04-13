@@ -4,20 +4,16 @@ import { getAccountForRequest } from "../../services/loginService.ts";
 import { getInventory, addMods, addMiscItem } from "../../services/inventoryService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import { logger } from "../../utils/logger.ts";
-import { JSONParse } from "json-with-bigint";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 import { version_compare } from "../../helpers/inventoryHelpers.ts";
 
 export const arcaneCommonController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const inventory = await getInventory(account._id.toString());
-    const body = String(req.body);
-
-    const parsed: unknown = JSONParse(body.substring(0, body.lastIndexOf("}") + 1));
-    if (typeof parsed === "object" && parsed !== null && !("newRank" in parsed) && "skinId" in parsed) {
-        const json = getJSONfromString<IArcaneLegacyRequest>(body);
+    const json = getJSONfromString<IArcaneCommonRequest | IArcaneLegacyRequest>(String(req.body));
+    if (!("newRank" in json) && "skinId" in json) {
+        //logger.debug(`legacy arcane request:`, json);
         const item = inventory.WeaponSkins.id(json.skinId);
-        const legacyArcaneLevelCounts = [1, 3, 6, 10];
         if (item) {
             if (json.operationType == "Install") {
                 const resp: IArcaneLegacyInstallResp = { newLevel: 0 };
@@ -69,7 +65,6 @@ export const arcaneCommonController: RequestHandler = async (req, res) => {
         await inventory.save();
         return;
     }
-    const json = getJSONfromString<IArcaneCommonRequest>(body);
     const upgrade = inventory.Upgrades.id(json.arcane.ItemId.$oid);
     if (json.newRank == -1) {
         // Break down request?
@@ -123,6 +118,7 @@ export const arcaneCommonController: RequestHandler = async (req, res) => {
 };
 
 const arcaneLevelCounts = [0, 3, 6, 10, 15, 21];
+const legacyArcaneLevelCounts = [1, 3, 6, 10];
 
 interface IArcaneCommonRequest {
     arcane: {
