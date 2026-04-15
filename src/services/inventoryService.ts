@@ -3064,3 +3064,41 @@ export const ensureUserHasFounderHonoria = async (inventory: TInventoryDatabaseD
         ]);
     }
 };
+
+export const handleTauMemories = async (inventory: TInventoryDatabaseDocument): Promise<void> => {
+    const oldPeace = inventory.QuestKeys.find(
+        x => x.ItemType == "/Lotus/Types/Keys/TauPrequel/TauPrequelQuestKeyChain"
+    );
+    if (oldPeace?.Completed) {
+        oldPeace.CustomData ||= `{"ChosenMemories":{"TauPrequelStage11_PoolA":{"Name":"cat0","Choice":1},"TauPrequelStage13_PoolA":{"Name":"cat1","Choice":1},"TauPrequelStage14_PoolA":{"Name":"cat2","Choice":1}}}`;
+        const customData = JSON.parse(oldPeace.CustomData) as {
+            ChosenMemories: { InboxMessageSent?: boolean } & Record<string, { Name: string; Choice: number }>;
+        };
+        if (!customData.ChosenMemories.InboxMessageSent) {
+            customData.ChosenMemories.InboxMessageSent = true;
+            oldPeace.CustomData = JSON.stringify(customData);
+            const playerNames = [];
+            for (const memory of Object.values(customData.ChosenMemories)) {
+                if (typeof memory == "object") {
+                    playerNames.push(memory.Name);
+                }
+            }
+            await createMessage(inventory.accountOwnerId, [
+                {
+                    sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender_PostWar",
+                    msg: "/Lotus/Language/TauPrequel/TauPrequelFinal/PostQuestSomaticBearersInboxBody",
+                    arg: [
+                        {
+                            Key: "PLAYER_NAMES",
+                            Tag: playerNames.join(",")
+                        }
+                    ],
+                    att: ["/Lotus/Types/Items/ShipDecos/Tau/LisetPropSomaticBearerFlowerPostQuestItem"],
+                    sub: "/Lotus/Language/TauPrequel/TauPrequelFinal/PostQuestSomaticBearersInboxTitle",
+                    icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+                    highPriority: true
+                }
+            ]);
+        }
+    }
+};

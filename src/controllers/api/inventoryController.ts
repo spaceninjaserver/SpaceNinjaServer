@@ -28,6 +28,7 @@ import {
     createLibraryDailyTask,
     ensureUserHasFounderHonoria,
     getCalendarProgress,
+    handleTauMemories,
     PRE_U40_MAX_KUBROW_EGGS
 } from "../../services/inventoryService.ts";
 import { logger } from "../../utils/logger.ts";
@@ -328,6 +329,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
     if (inventory.QuestKeys.some(x => x.ItemType.endsWith("KubrowQuestKeyChain") && x.Completed)) {
         inventory.KubrowPets.forEach(item => item.Details && (item.Details.HasCollar = true));
     }
+    await handleTauMemories(inventory);
     await inventory.save();
 
     response.json(
