@@ -217,7 +217,7 @@ export const getDojoClient = async (
                 pf:
                     dojoComponent.pf == "/Lotus/Levels/ClanDojo/DojoHall.level" &&
                     buildLabel &&
-                    version_compare(buildLabel, gameToBuildVersion["9.1.2"]) <= 0
+                    version_compare(buildLabel, gameToBuildVersion["9.1.0"]) <= 0
                         ? "/Lotus/Levels/ClanDojo/ClanHallA.level" // Pre-U9.5
                         : dojoComponent.pf,
                 ppf: dojoComponent.ppf,

@@ -1545,7 +1545,7 @@ export const getBoosterPack = async (
             if (version_compare(buildLabel, "2013.06.07.23.44") >= 0) {
                 boosterPack.rarityWeightsPerRoll[4] = { COMMON: 0, UNCOMMON: 0, RARE: 1, LEGENDARY: 0 };
             }
-            if (version_compare(buildLabel, gameToBuildVersion["9.1.2"]) >= 0) {
+            if (version_compare(buildLabel, gameToBuildVersion["9.1.0"]) >= 0) {
                 boosterPack.components.push(
                     { Item: "/Lotus/Types/Keys/OrokinCaptureKeyA", Rarity: "COMMON", Amount: 1 },
                     { Item: "/Lotus/Types/Keys/OrokinCaptureKeyB", Rarity: "COMMON", Amount: 1 },
