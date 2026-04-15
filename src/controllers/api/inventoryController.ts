@@ -1,4 +1,4 @@
-import type { RequestHandler } from "express";
+import type { Request, RequestHandler } from "express";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
 import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
@@ -339,6 +339,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
 
     response.json(
         await getInventoryResponse(
+            request,
             inventory,
             "xpBasedLevelCapDisabled" in request.query,
             "ignoreBuildLabel" in request.query ? undefined : account.BuildLabel,
@@ -348,6 +349,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
 };
 
 export const getInventoryResponse = async (
+    request: Request,
     inventory: TInventoryDatabaseDocument,
     xpBasedLevelCapDisabled: boolean,
     buildLabel: string | undefined,
@@ -934,6 +936,11 @@ export const getInventoryResponse = async (
         }
     }
 
+    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["8.0.0"]) < 0) {
+        // < U8 clients advertise gzip decompression support, but for inventory responses roughly >100k bytes, if we actually made use of that, it would buffer overrun.
+        request.headers["accept-encoding"] = "";
+    }
+    //(inventoryResponse as any).Deez = "a".repeat(100_000);
     return inventoryResponse;
 };
 

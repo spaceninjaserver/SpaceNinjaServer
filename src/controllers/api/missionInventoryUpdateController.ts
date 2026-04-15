@@ -82,7 +82,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
             inventory.RewardSeed = generateRewardSeed();
         }
         await inventory.save();
-        const inventoryResponse = await getInventoryResponse(inventory, true, account.BuildLabel);
+        const inventoryResponse = await getInventoryResponse(req, inventory, true, account.BuildLabel);
         res.json({
             InventoryJson: JSON.stringify(inventoryResponse),
             MissionRewards: []
@@ -135,6 +135,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     } else if (missionReport.RewardInfo) {
         logger.debug(`classic mission completion, sending everything`);
         const inventoryResponse = await getInventoryResponse(
+            req,
             inventory,
             "xpBasedLevelCapDisabled" in req.query,
             account.BuildLabel
@@ -150,6 +151,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     } else {
         logger.debug(`no reward info, assuming this wasn't a mission completion and we should just sync inventory`);
         const inventoryResponse = await getInventoryResponse(
+            req,
             inventory,
             "xpBasedLevelCapDisabled" in req.query,
             account.BuildLabel
