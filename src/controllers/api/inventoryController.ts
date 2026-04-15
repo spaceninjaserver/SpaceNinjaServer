@@ -695,6 +695,7 @@ export const getInventoryResponse = async (
                     for (const pr of inventoryResponse.PendingRecipes) {
                         pr.CompletionDate = toMongoDate2(fromMongoDate(pr.CompletionDate), buildLabel);
                     }
+                    inventoryResponse.TrainingDate = toMongoDate2(inventory.TrainingDate, buildLabel);
                     inventoryResponse.NextRefill = toMongoDate2(inventory.NextRefill!, buildLabel);
 
                     if (version_compare(buildLabel, "2014.02.05.00.00") < 0) {

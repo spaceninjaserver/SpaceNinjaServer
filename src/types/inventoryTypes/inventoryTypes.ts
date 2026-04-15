@@ -390,7 +390,7 @@ export interface IInventoryClient
     Recipes: ITypeCount[];
     WeaponSkins: IWeaponSkinClient[];
     PendingRecipes: IPendingRecipeClient[];
-    TrainingDate: IMongoDate;
+    TrainingDate: IMongoDateWithLegacySupport;
     PlayerLevel: number;
     Counselor?: boolean;
     Upgrades: IUpgradeClient[];
