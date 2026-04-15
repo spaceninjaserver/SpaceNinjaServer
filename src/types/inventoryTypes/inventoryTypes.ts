@@ -163,6 +163,7 @@ export interface IInventoryDatabase
     HarvesterPoints?: number;
     DeathSquadPoints?: number;
     NemesisTaxedCredits?: number;
+    duviriSeedRefresh?: Date;
 
     Created: Date;
     CurrentLoadOutIds: Types.ObjectId[];
@@ -200,7 +201,6 @@ export interface IInventoryDatabase
     LastLiteSortieReward?: ILastSortieRewardDatabase[];
     CrewMembers: ICrewMemberDatabase[];
     QualifyingInvasions: IInvasionProgressDatabase[];
-    LastInventorySync?: Types.ObjectId;
     EndlessXP?: IEndlessXpProgressDatabase[];
     DescentRewards?: IDescentCategoryRewardDatabase[];
     PersonalGoalProgress?: IGoalProgressDatabase[];

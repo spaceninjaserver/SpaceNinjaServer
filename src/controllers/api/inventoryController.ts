@@ -309,9 +309,10 @@ export const inventoryController: RequestHandler = async (request, response) => 
         ++i;
     }
 
-    if (inventory.LastInventorySync) {
-        const lastSyncDuviriMood = Math.trunc(inventory.LastInventorySync.getTimestamp().getTime() / 7200000);
-        const currentDuviriMood = Math.trunc(Date.now() / 7200000);
+    {
+        const now = Date.now();
+        const lastSyncDuviriMood = Math.trunc((inventory.duviriSeedRefresh?.getTime() ?? 0) / 7200000);
+        const currentDuviriMood = Math.trunc(now / 7200000);
         if (lastSyncDuviriMood != currentDuviriMood) {
             logger.debug(`refreshing duviri seed`);
             if (!inventory.DuviriInfo) {
@@ -319,18 +320,22 @@ export const inventoryController: RequestHandler = async (request, response) => 
                     Seed: generateRewardSeed(),
                     NumCompletions: 0
                 };
+                inventory.duviriSeedRefresh = new Date(now);
             } else {
                 inventory.DuviriInfo.Seed = generateRewardSeed();
+                inventory.duviriSeedRefresh = new Date(now);
             }
         }
     }
-    inventory.LastInventorySync = new Types.ObjectId();
 
     if (inventory.QuestKeys.some(x => x.ItemType.endsWith("KubrowQuestKeyChain") && x.Completed)) {
         inventory.KubrowPets.forEach(item => item.Details && (item.Details.HasCollar = true));
     }
     await handleTauMemories(inventory);
-    await inventory.save();
+
+    if (inventory.isModified()) {
+        await inventory.save();
+    }
 
     response.json(
         await getInventoryResponse(
@@ -364,6 +369,8 @@ export const getInventoryResponse = async (
             delete inventoryResponse[key as keyof typeof inventoryResponse];
         }
     }
+
+    inventoryResponse.LastInventorySync = toOid(new Types.ObjectId());
 
     // In case mission inventory update added an inbox message, we need to send the Mailbox part so the client knows to refresh it.
     if (latestMessage) {

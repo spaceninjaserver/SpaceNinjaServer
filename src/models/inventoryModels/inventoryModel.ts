@@ -1944,7 +1944,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         //Unknown and system
         DuviriInfo: DuviriInfoSchema,
-        LastInventorySync: Schema.Types.ObjectId,
+        duviriSeedRefresh: { type: Date, default: undefined }, // SNS specific field
         //Mailbox: MailboxSchema,
         HandlerPoints: Number,
         ChallengesFixVersion: Number,
@@ -2030,6 +2030,7 @@ inventorySchema.set("toJSON", {
         delete returnedObject.HarvesterPoints;
         delete returnedObject.DeathSquadPoints;
         delete returnedObject.NemesisTaxedCredits;
+        delete returnedObject.duviriSeedRefresh;
 
         const inventoryDatabase = returnedObject as Partial<IInventoryDatabase>;
         const inventoryResponse = returnedObject as IInventoryClient;
@@ -2069,9 +2070,6 @@ inventorySchema.set("toJSON", {
                 m: inventoryDatabase.LockedWeaponGroup.m ? toOid(inventoryDatabase.LockedWeaponGroup.m) : undefined,
                 sn: inventoryDatabase.LockedWeaponGroup.sn ? toOid(inventoryDatabase.LockedWeaponGroup.sn) : undefined
             };
-        }
-        if (inventoryDatabase.LastInventorySync) {
-            inventoryResponse.LastInventorySync = toOid(inventoryDatabase.LastInventorySync);
         }
     }
 });
