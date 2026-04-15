@@ -1,0 +1,159 @@
+{
+  "components": [
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionGaussPrimeEBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionGaussPrimeFBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionGaussPrimeCBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionGaussPrimeABronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionProteaPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionGaussPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionProteaPrimeABronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Items/MiscItems/SchismKey",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionProteaPrimeDBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionProteaPrimeABronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionGaussPrimeDBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionGaussPrimeABronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionProteaPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionGaussPrimeEBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionProteaPrimeCBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionProteaPrimeDBronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionGrendelPrimeABronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionGrendelPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionProteaPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionProteaPrimeCBronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionProteaPrimeABronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionGaussPrimeCBronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Items/MiscItems/SchismKey",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionGaussPrimeDBronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionGrendelPrimeABronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionProteaPrimeCBronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionProteaPrimeABronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionProteaPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionGrendelPrimeCBronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionGrendelPrimeDBronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Items/MiscItems/SchismKey",
+      "Amount": 1,
+      "Rarity": "RARE"
+    }
+  ]
+}

@@ -1,0 +1,174 @@
+{
+  "components": [
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionOctaviaPrimeABronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionOctaviaPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionOctaviaPrimeCBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionNezhaPrimeDBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionOctaviaPrimeDBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionOctaviaPrimeEBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionNezhaPrimeGBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionBansheeMirageVaultABronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionBansheeMirageVaultBBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionOctaviaPrimeABronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionNezhaPrimeABronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionInarosPrimeEBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionInarosPrimeABronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionInarosPrimeDBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionOctaviaPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionOctaviaPrimeCBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionBansheeMirageVaultABronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionAtlasPrimeABronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionOctaviaPrimeABronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionNezhaPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionOctaviaPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionOctaviaPrimeCBronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionOctaviaPrimeDBronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionOctaviaPrimeEBronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionBansheeMirageVaultABronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionOctaviaPrimeABronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionOctaviaPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionInarosPrimeABronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionNezhaPrimeABronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionOctaviaPrimeCBronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionOctaviaPrimeDBronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionOctaviaPrimeEBronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionBansheeMirageVaultABronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionBansheeMirageVaultBBronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    }
+  ]
+}

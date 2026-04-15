@@ -609,7 +609,7 @@ const handleBoosterPackPurchase = async (
     quantity: number,
     buildLabel?: string
 ): Promise<IPurchaseResponse> => {
-    const pack = getBoosterPack(typeName, buildLabel);
+    const pack = await getBoosterPack(typeName, buildLabel);
     if (!pack) {
         throw new Error(`unknown booster pack: ${typeName}`);
     }

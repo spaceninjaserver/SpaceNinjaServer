@@ -1,0 +1,159 @@
+{
+  "components": [
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionMesaPrimeABronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionMesaPrimeCBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionMesaPrimeDBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionEquinoxPrimeABronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionEquinoxPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionEquinoxPrimeCBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T1VoidProjectionLokiVoltVaultABronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionZephyrPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionChromaPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionChromaPrimeCBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionChromaPrimeDBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionEquinoxPrimeABronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionEquinoxPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionEquinoxPrimeCBronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T2VoidProjectionLokiVoltVaultABronze",
+      "Amount": 1,
+      "Rarity": "COMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionChromaPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionChromaPrimeCBronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionMesaPrimeABronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionMesaPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionEquinoxPrimeABronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionEquinoxPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionLokiVoltVaultABronze",
+      "Amount": 1,
+      "Rarity": "UNCOMMON"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T3VoidProjectionEquinoxPrimeCBronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionLimboPrimeCBronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionLimboPrimeDBronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionMesaPrimeABronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionMesaPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionMesaPrimeCBronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionEquinoxPrimeABronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionEquinoxPrimeBBronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    },
+    {
+      "Item": "/Lotus/Types/Game/Projections/T4VoidProjectionLokiVoltVaultABronze",
+      "Amount": 1,
+      "Rarity": "RARE"
+    }
+  ]
+}

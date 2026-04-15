@@ -56,6 +56,8 @@ import vorsPrizePreU40Rewards from "../../static/fixed_responses/vorsPrizePreU40
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import EntratiSyndicate_pre_U41 from "../../static/fixed_responses/data/EntratiSyndicate_pre_U41.json" with { type: "json" };
 import { getWorldState } from "./worldStateService.ts";
+import { promises as fs } from "fs";
+import path from "path";
 
 export type WeaponTypeInternal =
     | "LongGuns"
@@ -1105,6 +1107,40 @@ export const U5Modules: Record<string, IU5FingerprintData> = {
     }
 };
 
+const legacyBoosterPacksCache = new Map<string, Partial<IBoosterPack>>();
+
+const getLegacyDataIndex = async (target: string): Promise<string[]> => {
+    const filePath = path.join("./static/fixed_responses/data", target, "index.json");
+    const raw = await fs.readFile(filePath, "utf-8");
+    return JSON.parse(raw) as Promise<string[]>;
+};
+
+const getLegacyDataVersion = async (target: string, buildLabel: string): Promise<string | null> => {
+    const index = await getLegacyDataIndex(target);
+    let selected: string | null = null;
+    for (const v of index) {
+        if (version_compare(v, buildLabel) <= 0) {
+            selected = v;
+        } else {
+            break;
+        }
+    }
+    return selected;
+};
+
+const getLegacyBoosterPackData = async (target: string, buildLabel: string): Promise<Partial<IBoosterPack>> => {
+    const key = `${target}:${buildLabel}`;
+    const cached = legacyBoosterPacksCache.get(key);
+    if (cached) return cached;
+
+    const filePath = path.join("./static/fixed_responses/data", target, `${buildLabel}.json`);
+    const raw = await fs.readFile(filePath, "utf-8");
+    const json = JSON.parse(raw) as Partial<IBoosterPack>;
+    legacyBoosterPacksCache.set(key, json);
+
+    return json;
+};
+
 export const getRecipe = (uniqueName: string): IRecipe | undefined => {
     return ExportRecipes[uniqueName] ?? supplementalRecipes[uniqueName];
 };
@@ -1476,7 +1512,10 @@ export const getBundle = (uniqueName: string, buildLabel: string = ""): IBundle 
     return ExportBundles[uniqueName];
 };
 
-export const getBoosterPack = (uniqueName: string, buildLabel: string = ""): IBoosterPack | undefined => {
+export const getBoosterPack = async (
+    uniqueName: string,
+    buildLabel: string = ""
+): Promise<IBoosterPack | undefined> => {
     if (
         version_compare(buildLabel, gameToBuildVersion["18.16.0"]) < 0 &&
         uniqueName == "/Lotus/Types/BoosterPacks/RandomKey"
@@ -1588,6 +1627,43 @@ export const getBoosterPack = (uniqueName: string, buildLabel: string = ""): IBo
                     { Item: "/Lotus/Upgrades/Mods/Fusers/UncommonModFuser", Rarity: "UNCOMMON", Amount: 1 },
                     { Item: "/Lotus/Upgrades/Mods/Fusers/RareModFuser", Rarity: "RARE", Amount: 1 }
                 ]
+            };
+        }
+    }
+    if (
+        [
+            "/Lotus/Types/BoosterPacks/RandomProjection",
+            "/Lotus/Types/BoosterPacks/LoginRewardRandomProjection",
+            "/Lotus/Types/BoosterPacks/RandomSyndicateProjectionPack",
+            "/Lotus/Types/BoosterPacks/GreaterRandomProjection"
+        ].includes(uniqueName)
+    ) {
+        const target = "RandomProjection";
+        const version = await getLegacyDataVersion(target, buildLabel);
+        if (version) {
+            const legacyData = await getLegacyBoosterPackData(target, version);
+            return {
+                ...ExportBoosterPacks[uniqueName],
+                ...legacyData
+            };
+        }
+    }
+    if (
+        [
+            "/Lotus/Types/BoosterPacks/CommonArtifactPack", // 30p
+            "/Lotus/Types/BoosterPacks/UncommonArtifactPack", // 45p
+            "/Lotus/Types/BoosterPacks/RareArtifactPack", // 60p
+            "/Lotus/Types/BoosterPacks/PremiumUncommonArtifactPack", // 75p
+            "/Lotus/Types/BoosterPacks/PremiumRareArtifactPack" // 90p
+        ].includes(uniqueName)
+    ) {
+        const target = "LotusArtifactUpgradePackBase";
+        const version = await getLegacyDataVersion(target, buildLabel);
+        if (version) {
+            const legacyData = await getLegacyBoosterPackData(target, version);
+            return {
+                ...ExportBoosterPacks[uniqueName],
+                ...legacyData
             };
         }
     }
@@ -1826,10 +1902,8 @@ export const getPrice = (
             price = Math.round(sum * (1 - discount));
         }
     } else {
-        const boosterPack = getBoosterPack(internalName, buildLabel);
-        const isBoosterPack = boosterPack !== undefined;
-        if (isBoosterPack) {
-            if (usePremium) price = boosterPack.platinumCost;
+        if (internalName in ExportBoosterPacks) {
+            if (usePremium) price = ExportBoosterPacks[internalName].platinumCost;
         } else {
             const categories = [
                 ExportBundles,
