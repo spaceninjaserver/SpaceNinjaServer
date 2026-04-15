@@ -175,11 +175,11 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
     if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0) {
         resp.BuildLabel = buildLabel; // U5 no likey
     }
-    if (version_compare(buildLabel, gameToBuildVersion["13.0.0"]) >= 0) {
-        // U13 and up
+    if (version_compare(buildLabel, gameToBuildVersion["12.5.2"]) >= 0) {
+        // U12.5 and up
         resp.CountryCode = account.CountryCode;
     } else {
-        // U12 and down
+        // U12.4 and down
 
         // The NatHash is a 64 byte (128 hexit) value which was presumably used for NRS authentication.
         // (OpenWF-specific) We can use this to smuggle custom data like the username to NRS.
