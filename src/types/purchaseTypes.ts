@@ -49,6 +49,12 @@ export interface IPurchaseRequest {
     buildLabel: string;
 }
 
+export interface IPurchaseRequestU16 {
+    productName: string;
+    quantity: number;
+    usePremium: "1" | "0";
+}
+
 export interface IPurchaseParams {
     Source: PurchaseSource;
     SourceId?: string; // VoidTrader, Vendor, PrimeVaultTrader

@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import { PurchaseSource } from "../../types/purchaseTypes.ts";
-import type { IPurchaseRequest } from "../../types/purchaseTypes.ts";
+import type { IPurchaseRequest, IPurchaseRequestU16 } from "../../types/purchaseTypes.ts";
 import { handlePurchase } from "../../services/purchaseService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { sendWsBroadcastTo } from "../../services/wsService.ts";
@@ -9,23 +9,32 @@ import { toStoreItem } from "../../services/itemDataService.ts";
 import { ExportBundles } from "warframe-public-export-plus";
 import { version_compare } from "../../helpers/inventoryHelpers.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { logger } from "../../utils/logger.ts";
 
 export const purchasePostController: RequestHandler = async (req, res) => {
-    const purchaseRequest = JSON.parse(String(req.body)) as IPurchaseRequest;
-    const account = await getAccountForRequest(req);
-    if (!purchaseRequest.buildLabel && account.BuildLabel) purchaseRequest.buildLabel = account.BuildLabel;
-    if (purchaseRequest.buildLabel && account.BuildLabel && purchaseRequest.buildLabel != account.BuildLabel) {
-        throw new Error(
-            `account logged into ${account.BuildLabel} but is now attempting a purchase in ${purchaseRequest.buildLabel} ?!`
-        );
+    let purchaseRequest = JSON.parse(String(req.body)) as IPurchaseRequest | IPurchaseRequestU16;
+    if (!("PurchaseParams" in purchaseRequest)) {
+        logger.debug("converting legacy purchase request", purchaseRequest);
+        purchaseRequest = {
+            PurchaseParams: {
+                Source: PurchaseSource.Market,
+                StoreItem: toStoreItem(purchaseRequest.productName),
+                Quantity: purchaseRequest.quantity,
+                UsePremium: purchaseRequest.usePremium == "1"
+            },
+            buildLabel: ""
+        } satisfies IPurchaseRequest;
     }
-    const accountId = account._id.toString();
-    const inventory = await getInventory(accountId);
+    const account = await getAccountForRequest(req);
+    if (!purchaseRequest.buildLabel) {
+        purchaseRequest.buildLabel = account.BuildLabel!;
+    }
+    const inventory = await getInventory(account._id);
     const response = await handlePurchase(purchaseRequest, inventory);
     await inventory.save();
     //console.log(JSON.stringify(response, null, 2));
     res.json(response);
-    sendWsBroadcastTo(accountId, { update_inventory: true });
+    sendWsBroadcastTo(account._id.toString(), { update_inventory: true });
 };
 
 export const purchaseGetController: RequestHandler = async (req, res) => {
