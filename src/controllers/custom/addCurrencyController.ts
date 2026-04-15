@@ -19,6 +19,7 @@ export const addCurrencyController: RequestHandler = async (req, res) => {
             guild[request.currency] ??= 0;
             guild[request.currency]! += request.delta;
             await guild.save();
+            res.json(guild[request.currency]);
         }
     } else {
         inventory[request.currency] += request.delta;

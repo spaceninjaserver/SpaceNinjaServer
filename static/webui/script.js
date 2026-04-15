@@ -4427,8 +4427,14 @@ function doAddCurrency(currency) {
                 currency,
                 delta: document.getElementById(currency + "-delta").valueAsNumber
             })
-        }).then(function () {
-            updateInventory();
+        }).then(function (newValue) {
+            if (currency.startsWith("Vault")) {
+                document.getElementById(currency + "-owned").textContent = loc("guildView_currency_owned")
+                    .split("|COUNT|")
+                    .join((newValue ?? 0).toLocaleString());
+            } else {
+                updateInventory();
+            }
         });
     });
 }
