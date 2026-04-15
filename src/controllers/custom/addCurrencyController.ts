@@ -1,28 +1,30 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, hasPermission } from "../../services/loginService.ts";
 import { addFusionPoints, getInventory } from "../../services/inventoryService.ts";
 import { getGuildForRequestEx, hasGuildPermission } from "../../services/guildService.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 export const addCurrencyController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
     const request = req.body as IAddCurrencyRequest;
     let projection = request.currency as string;
     if (request.currency.startsWith("Vault")) projection = "GuildId";
-    const inventory = await getInventory(accountId, projection);
+    const inventory = await getInventory(account._id, projection);
     if (request.currency == "FusionPoints") {
         addFusionPoints(inventory, request.delta);
     } else if (request.currency == "VaultRegularCredits" || request.currency == "VaultPremiumCredits") {
         const guild = await getGuildForRequestEx(req, inventory);
-        if (await hasGuildPermission(guild, accountId, GuildPermission.Treasurer)) {
+        if (await hasGuildPermission(guild, account._id, GuildPermission.Treasurer)) {
             guild[request.currency] ??= 0;
             guild[request.currency]! += request.delta;
             await guild.save();
             res.json(guild[request.currency]);
         }
     } else {
-        inventory[request.currency] += request.delta;
+        if (hasPermission(account, currencyToPermission[request.currency])) {
+            inventory[request.currency] += request.delta;
+        }
     }
     if (!request.currency.startsWith("Vault")) {
         await inventory.save();
@@ -41,3 +43,10 @@ interface IAddCurrencyRequest {
         | "VaultPremiumCredits";
     delta: number;
 }
+
+const currencyToPermission: Record<string, string> = {
+    RegularCredits: "addCredits",
+    PremiumCredits: "addPlatinum",
+    FusionPoints: "addEndo",
+    PrimeTokens: "addRegalAya"
+};

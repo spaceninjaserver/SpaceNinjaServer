@@ -113,7 +113,7 @@
                                 <form class="card-body input-group" onsubmit="doAcquireCountItems('miscitems');return false;">
                                     <input class="form-control" id="miscitems-count" type="number" value="1" />
                                     <input class="form-control w-50" id="acquire-type-miscitems" list="datalist-miscitems" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                             </div>
                             <div class="tab-pane" id="typeName-tab-content">
@@ -122,7 +122,7 @@
                                     <div class="input-group">
                                         <input class="form-control" id="typeName-count" type="number" value="1" />
                                         <input class="form-control w-50" id="typeName-type" />
-                                        <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                        <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                     </div>
                                 </form>
                             </div>
@@ -137,7 +137,7 @@
                                 <p class="card-text" id="RegularCredits-owned"></p>
                                 <form class="input-group" onsubmit="doAddCurrency('RegularCredits');return false;">
                                     <input class="form-control" id="RegularCredits-delta" type="number" value="1000000" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addCredits"></button>
                                 </form>
                             </div>
                         </div>
@@ -149,7 +149,7 @@
                                 <p class="card-text" id="PremiumCredits-owned"></p>
                                 <form class="input-group" onsubmit="doAddCurrency('PremiumCredits');return false;">
                                     <input class="form-control" id="PremiumCredits-delta" type="number" value="100" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addPlatinum"></button>
                                 </form>
                             </div>
                         </div>
@@ -161,7 +161,7 @@
                                 <p class="card-text" id="FusionPoints-owned"></p>
                                 <form class="input-group" onsubmit="doAddCurrency('FusionPoints');return false;">
                                     <input class="form-control" id="FusionPoints-delta" type="number" value="1000" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addEndo"></button>
                                 </form>
                             </div>
                         </div>
@@ -173,7 +173,7 @@
                                 <p class="card-text" id="PrimeTokens-owned"></p>
                                 <form class="input-group" onsubmit="doAddCurrency('PrimeTokens');return false;">
                                     <input class="form-control" id="PrimeTokens-delta" type="number" value="1" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addRegalAya"></button>
                                 </form>
                             </div>
                         </div>
@@ -186,7 +186,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('Suits');return false;">
                                     <input class="form-control" id="acquire-type-Suits" list="datalist-Suits" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <div class="overflow-auto">
                                     <table class="table table-hover w-100">
@@ -202,7 +202,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="handleModularSelection('LongGuns');return false;">
                                     <input class="form-control" id="acquire-type-LongGuns" list="datalist-LongGuns" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <form class="input-group mb-3 d-none" id="modular-LongGuns">
                                     <input class="form-control" id="acquire-type-LongGuns-GUN_BARREL" list="datalist-ModularParts-GUN_BARREL" autocomplete="off" />
@@ -225,7 +225,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="handleModularSelection('Pistols');return false;">
                                     <input class="form-control" id="acquire-type-Pistols" list="datalist-Pistols" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <form class="input-group mb-3 d-none" id="modular-Pistols">
                                     <input class="form-control" id="acquire-type-Pistols-GUN_BARREL" list="datalist-ModularParts-GUN_BARREL" autocomplete="off" />
@@ -246,7 +246,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="handleModularSelection('Melee');return false;">
                                     <input class="form-control" id="acquire-type-Melee" list="datalist-Melee" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <form class="input-group mb-3 d-none" id="modular-Melee">
                                     <input class="form-control" id="acquire-type-Melee-BLADE" list="datalist-ModularParts-BLADE" autocomplete="off" />
@@ -269,7 +269,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('SpaceSuits');return false;">
                                     <input class="form-control" id="acquire-type-SpaceSuits" list="datalist-SpaceSuits" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <div class="overflow-auto">
                                     <table class="table table-hover w-100">
@@ -285,7 +285,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('SpaceGuns');return false;">
                                     <input class="form-control" id="acquire-type-SpaceGuns" list="datalist-SpaceGuns" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <div class="overflow-auto">
                                     <table class="table table-hover w-100">
@@ -303,7 +303,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('SpaceMelee');return false;">
                                     <input class="form-control" id="acquire-type-SpaceMelee" list="datalist-SpaceMelee" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <div class="overflow-auto">
                                     <table class="table table-hover w-100">
@@ -319,7 +319,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('MechSuits');return false;">
                                     <input class="form-control" id="acquire-type-MechSuits" list="datalist-MechSuits" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <div class="overflow-auto">
                                     <table class="table table-hover w-100">
@@ -337,7 +337,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('Sentinels');return false;">
                                     <input class="form-control" id="acquire-type-Sentinels" list="datalist-Sentinels" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <div class="overflow-auto">
                                     <table class="table table-hover w-100">
@@ -353,7 +353,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="handleModularSelection('MoaPets');return false;">
                                     <input class="form-control" id="acquire-type-MoaPets" list="datalist-MoaPets" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <form class="input-group mb-3 d-none" id="modular-MoaPets-Moa">
                                     <input class="form-control" id="acquire-type-MoaPets-MOA_ENGINE" list="datalist-ModularParts-MOA_ENGINE" autocomplete="off" />
@@ -383,7 +383,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="handleModularSelection('KubrowPets');return false;">
                                     <input class="form-control" id="acquire-type-KubrowPets" list="datalist-KubrowPets" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <form class="input-group mb-3 d-none" id="modular-KubrowPets-Catbrow">
                                     <input class="form-control" id="acquire-type-KubrowPets-CATBROW_ANTIGEN" list="datalist-ModularParts-CATBROW_ANTIGEN" autocomplete="off" />
@@ -407,7 +407,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('SentinelWeapons');return false;">
                                     <input class="form-control" id="acquire-type-SentinelWeapons" list="datalist-SentinelWeapons" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <div class="overflow-auto">
                                     <table class="table table-hover w-100">
@@ -425,7 +425,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="handleModularSelection('OperatorAmps');return false;">
                                     <input class="form-control" id="acquire-type-OperatorAmps" list="datalist-OperatorAmps" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <form class="input-group mb-3 d-none" id="modular-OperatorAmps">
                                     <input class="form-control" id="acquire-type-OperatorAmps-AMP_OCULUS" list="datalist-ModularParts-AMP_OCULUS" autocomplete="off" />
@@ -449,7 +449,7 @@
                                     <input class="form-control" id="acquire-type-Hoverboards-HB_ENGINE" list="datalist-ModularParts-HB_ENGINE" autocomplete="off" />
                                     <input class="form-control" id="acquire-type-Hoverboards-HB_FRONT" list="datalist-ModularParts-HB_FRONT" autocomplete="off" />
                                     <input class="form-control" id="acquire-type-Hoverboards-HB_JET" list="datalist-ModularParts-HB_JET" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <div class="overflow-auto">
                                     <table class="table table-hover w-100">
@@ -467,7 +467,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('QuestKeys');return false;">
                                     <input class="form-control" id="acquire-type-QuestKeys" list="datalist-QuestKeys" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <div class="overflow-auto">
                                     <table class="table table-hover w-100">
@@ -483,7 +483,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEvolution();return false;">
                                     <input class="form-control" id="acquire-type-EvolutionProgress" list="datalist-EvolutionProgress" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <div class="overflow-auto">
                                     <table class="table table-hover w-100">
@@ -501,7 +501,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireBooster();return false;">
                                     <input class="form-control" id="acquire-type-Boosters" list="datalist-Boosters" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <div class="overflow-auto">
                                     <table class="table table-hover w-100">
@@ -517,7 +517,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('FlavourItems');return false;">
                                     <input class="form-control" id="acquire-type-FlavourItems" list="datalist-FlavourItems" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <div class="overflow-auto">
                                     <table class="table table-hover w-100">
@@ -536,7 +536,7 @@
                                 <form class="input-group mb-3" onsubmit="doAcquireCountItems('ShipDecorations');return false;">
                                     <input class="form-control" id="ShipDecorations-count" type="number" value="1" />
                                     <input class="form-control w-50" id="acquire-type-ShipDecorations" list="datalist-ShipDecorations" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <div class="overflow-auto">
                                     <table class="table table-hover w-100">
@@ -552,7 +552,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form class="input-group mb-3" onsubmit="doAcquireEquipment('WeaponSkins');return false;">
                                     <input class="form-control" id="acquire-type-WeaponSkins" list="datalist-WeaponSkins" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <div class="overflow-auto">
                                     <table class="table table-hover w-100">
@@ -588,7 +588,7 @@
                                 <p class="card-text" id="VaultRegularCredits-owned"></p>
                                 <form id="vaultRegularCredits-form" class="input-group d-none" onsubmit="doAddCurrency('VaultRegularCredits');return false;">
                                     <input class="form-control" id="VaultRegularCredits-delta" type="number" value="1000000" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                             </div>
                         </div>
@@ -600,7 +600,7 @@
                                 <p class="card-text" id="VaultPremiumCredits-owned"></p>
                                 <form id="vaultPremiumCredits-form" class="input-group d-none" onsubmit="doAddCurrency('VaultPremiumCredits');return false;">
                                     <input class="form-control" id="VaultPremiumCredits-delta" type="number" value="100" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                             </div>
                         </div>
@@ -613,7 +613,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form id="techProjects-form" class="input-group mb-3 d-none" onsubmit="addGuildTechProject();return false;">
                                     <input class="form-control" id="acquire-type-TechProjects" list="datalist-TechProjects" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <div class="overflow-auto">
                                     <table class="table table-hover w-100">
@@ -629,7 +629,7 @@
                             <div class="card-body d-flex flex-column">
                                 <form id="vaultDecoRecipes-form" class="input-group mb-3 d-none" onsubmit="addVaultItem('VaultDecoRecipes');return false;">
                                     <input class="form-control" id="acquire-type-VaultDecoRecipes" list="datalist-VaultDecoRecipes" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <div class="overflow-auto">
                                     <table class="table table-hover w-100">
@@ -648,7 +648,7 @@
                                 <form id="vaultMiscItems-form" class="input-group mb-3 d-none" onsubmit="addVaultItem('VaultMiscItems');return false;">
                                     <input class="form-control" id="VaultMiscItems-count" type="number" value="1" />
                                     <input class="form-control w-50" id="acquire-type-VaultMiscItems" list="datalist-VaultMiscItems" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <div class="overflow-auto">
                                     <table class="table table-hover w-100">
@@ -665,7 +665,7 @@
                                 <form id="vaultShipDecorations-form" class="input-group mb-3 d-none" onsubmit="addVaultItem('VaultShipDecorations');return false;">
                                     <input class="form-control" id="VaultShipDecorations-count" type="number" value="1" />
                                     <input class="form-control w-50" id="acquire-type-VaultShipDecorations" list="datalist-ShipDecorations" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 </form>
                                 <div class="overflow-auto">
                                     <table class="table table-hover w-100">
@@ -704,27 +704,27 @@
                         <h5 class="card-header" data-loc="guildView_cheats"></h5>
                             <div class="card-body" id="guild-cheats">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="noDojoRoomBuildStage" />
+                                    <input class="form-check-input" type="checkbox" id="noDojoRoomBuildStage" data-enabling-permission="toggleCheat.noDojoRoomBuildStage" />
                                     <label class="form-check-label" for="noDojoRoomBuildStage" data-loc="cheats_noDojoRoomBuildStage"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="fastDojoRoomDestruction" />
+                                    <input class="form-check-input" type="checkbox" id="fastDojoRoomDestruction" data-enabling-permission="toggleCheat.fastDojoRoomDestruction" />
                                     <label class="form-check-label" for="fastDojoRoomDestruction" data-loc="cheats_fastDojoRoomDestruction"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="noDojoDecoBuildStage" />
+                                    <input class="form-check-input" type="checkbox" id="noDojoDecoBuildStage" data-enabling-permission="toggleCheat.noDojoDecoBuildStage" />
                                     <label class="form-check-label" for="noDojoDecoBuildStage" data-loc="cheats_noDojoDecoBuildStage"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="noDojoResearchCosts" />
+                                    <input class="form-check-input" type="checkbox" id="noDojoResearchCosts" data-enabling-permission="toggleCheat.noDojoResearchCosts" />
                                     <label class="form-check-label" for="noDojoResearchCosts" data-loc="cheats_noDojoResearchCosts"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="noDojoResearchTime" />
+                                    <input class="form-check-input" type="checkbox" id="noDojoResearchTime" data-enabling-permission="toggleCheat.noDojoResearchTime" />
                                     <label class="form-check-label" for="noDojoResearchTime" data-loc="cheats_noDojoResearchTime"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="fastClanAscension" />
+                                    <input class="form-check-input" type="checkbox" id="fastClanAscension" data-enabling-permission="toggleCheat.fastClanAscension" />
                                     <label class="form-check-label" for="fastClanAscension" data-loc="cheats_fastClanAscension"></label>
                                 </div>
                             </div>
@@ -754,7 +754,7 @@
                             <input type="number" id="archon-crystal-add-count" min="1" max="10000" value="1" class="form-control" style="max-width:100px" />
                             <span class="input-group-text">x</span>
                             <input class="form-control" list="datalist-archonCrystalUpgrades" autocomplete="off" />
-                            <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
+                            <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                         </form>
                         <table class="table table-hover w-100">
                             <tbody id="crystals-list"></tbody>
@@ -884,7 +884,7 @@
                                     <option value="PlayerMeleeWeaponRandomModRare">PlayerMeleeWeaponRandomModRare</option>
                                 </select>
                                 <textarea id="addriven-fingerprint" class="form-control mb-3" data-loc-placeholder="mods_fingerprint"></textarea>
-                                <button class="btn btn-primary" style="margin-right: 5px" type="submit" data-loc="general_addButton"></button>
+                                <button class="btn btn-primary" style="margin-right: 5px" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
                                 <a href="riven-tool/" target="_blank" data-loc="mods_fingerprintHelp"></a>
                             </form>
                         </div>
@@ -904,8 +904,8 @@
                                 <form class="input-group mb-3" onsubmit="doAcquireMod();return false;">
                                     <input class="form-control" id="mod-count" type="number" value="1"/>
                                     <input class="form-control w-50" id="mod-to-acquire" list="datalist-mods" autocomplete="off" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton"></button>
-                                    <button class="btn btn-success" onclick="window.maxed=true" data-loc="mods_addMax"></button>
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addItems"></button>
+                                    <button class="btn btn-success" onclick="window.maxed=true" data-loc="mods_addMax" data-enabling-permission="addItems"></button>
                                 </form>
                                 <table class="table table-hover w-100">
                                     <tbody id="mods-list"></tbody>
@@ -915,9 +915,9 @@
                         <div class="card">
                             <h5 class="card-header" data-loc="general_bulkActions"></h5>
                             <div class="card-body d-flex flex-wrap gap-2">
-                                <button class="btn btn-primary" onclick="doAddAllMods();" data-loc="mods_addMissingUnrankedMods"></button>
+                                <button class="btn btn-primary" onclick="doAddAllMods();" data-loc="mods_addMissingUnrankedMods" data-enabling-permission="addItems"></button>
                                 <button class="btn btn-danger" onclick="doRemoveUnrankedMods();" data-loc="mods_removeUnranked"></button>
-                                <button class="btn btn-primary" onclick="doAddMissingMaxRankMods();" data-loc="mods_addMissingMaxRankMods"></button>
+                                <button class="btn btn-primary" onclick="doAddMissingMaxRankMods();" data-loc="mods_addMissingMaxRankMods" data-enabling-permission="addItems"></button>
                             </div>
                         </div>
                     </div>
@@ -930,179 +930,179 @@
                             <h5 class="card-header" data-loc="cheats_account"></h5>
                             <div class="card-body" id="account-cheats">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="skipAllDialogue" />
+                                    <input class="form-check-input" type="checkbox" id="skipAllDialogue" data-enabling-permission="toggleCheat.skipAllDialogue" />
                                     <label class="form-check-label" for="skipAllDialogue" data-loc="cheats_skipAllDialogue"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="skipAllPopups" />
+                                    <input class="form-check-input" type="checkbox" id="skipAllPopups" data-enabling-permission="toggleCheat.skipAllPopups" />
                                     <label class="form-check-label" for="skipAllPopups" data-loc="cheats_skipAllPopups"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="dontSubtractPurchaseCreditCost" />
+                                    <input class="form-check-input" type="checkbox" id="dontSubtractPurchaseCreditCost" data-enabling-permission="toggleCheat.dontSubtractPurchaseCreditCost" />
                                     <label class="form-check-label" for="dontSubtractPurchaseCreditCost" data-loc="cheats_dontSubtractPurchaseCreditCost"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="dontSubtractPurchasePlatinumCost" />
+                                    <input class="form-check-input" type="checkbox" id="dontSubtractPurchasePlatinumCost" data-enabling-permission="toggleCheat.dontSubtractPurchasePlatinumCost" />
                                     <label class="form-check-label" for="dontSubtractPurchasePlatinumCost" data-loc="cheats_dontSubtractPurchasePlatinumCost"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="dontSubtractPurchaseItemCost" />
+                                    <input class="form-check-input" type="checkbox" id="dontSubtractPurchaseItemCost" data-enabling-permission="toggleCheat.dontSubtractPurchaseItemCost" />
                                     <label class="form-check-label" for="dontSubtractPurchaseItemCost" data-loc="cheats_dontSubtractPurchaseItemCost"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="dontSubtractPurchaseStandingCost" />
+                                    <input class="form-check-input" type="checkbox" id="dontSubtractPurchaseStandingCost" data-enabling-permission="toggleCheat.dontSubtractPurchaseStandingCost" />
                                     <label class="form-check-label" for="dontSubtractPurchaseStandingCost" data-loc="cheats_dontSubtractPurchaseStandingCost"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="dontSubtractKuvaForRivens" />
+                                    <input class="form-check-input" type="checkbox" id="dontSubtractKuvaForRivens" data-enabling-permission="toggleCheat.dontSubtractKuvaForRivens" />
                                     <label class="form-check-label" for="dontSubtractKuvaForRivens" data-loc="cheats_dontSubtractKuvaForRivens"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="dontSubtractVoidTraces" />
+                                    <input class="form-check-input" type="checkbox" id="dontSubtractVoidTraces" data-enabling-permission="toggleCheat.dontSubtractVoidTraces" />
                                     <label class="form-check-label" for="dontSubtractVoidTraces" data-loc="cheats_dontSubtractVoidTraces"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="dontSubtractConsumables" />
+                                    <input class="form-check-input" type="checkbox" id="dontSubtractConsumables" data-enabling-permission="toggleCheat.dontSubtractConsumables" />
                                     <label class="form-check-label" for="dontSubtractConsumables" data-loc="cheats_dontSubtractConsumables"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="dontSubtractKeys" />
+                                    <input class="form-check-input" type="checkbox" id="dontSubtractKeys" data-enabling-permission="toggleCheat.dontSubtractKeys" />
                                     <label class="form-check-label" for="dontSubtractKeys" data-loc="cheats_dontSubtractKeys"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="infiniteCredits" />
+                                    <input class="form-check-input" type="checkbox" id="infiniteCredits" data-enabling-permission="toggleCheat.infiniteCredits" />
                                     <label class="form-check-label" for="infiniteCredits" data-loc="cheats_infiniteCredits"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="infinitePlatinum" />
+                                    <input class="form-check-input" type="checkbox" id="infinitePlatinum" data-enabling-permission="toggleCheat.infinitePlatinum" />
                                     <label class="form-check-label" for="infinitePlatinum" data-loc="cheats_infinitePlatinum"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="infiniteEndo" />
+                                    <input class="form-check-input" type="checkbox" id="infiniteEndo" data-enabling-permission="toggleCheat.infiniteEndo" />
                                     <label class="form-check-label" for="infiniteEndo" data-loc="cheats_infiniteEndo"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="infiniteRegalAya" />
+                                    <input class="form-check-input" type="checkbox" id="infiniteRegalAya" data-enabling-permission="toggleCheat.infiniteRegalAya" />
                                     <label class="form-check-label" for="infiniteRegalAya" data-loc="cheats_infiniteRegalAya"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="infiniteTrades" />
+                                    <input class="form-check-input" type="checkbox" id="infiniteTrades" data-enabling-permission="toggleCheat.infiniteTrades" />
                                     <label class="form-check-label" for="infiniteTrades" data-loc="cheats_infiniteTrades"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="infiniteGifts" />
+                                    <input class="form-check-input" type="checkbox" id="infiniteGifts" data-enabling-permission="toggleCheat.infiniteGifts" />
                                     <label class="form-check-label" for="infiniteGifts" data-loc="cheats_infiniteGifts"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="infiniteHelminthMaterials" />
+                                    <input class="form-check-input" type="checkbox" id="infiniteHelminthMaterials" data-enabling-permission="toggleCheat.infiniteHelminthMaterials" />
                                     <label class="form-check-label" for="infiniteHelminthMaterials" data-loc="cheats_infiniteHelminthMaterials"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="universalPolarityEverywhere" />
+                                    <input class="form-check-input" type="checkbox" id="universalPolarityEverywhere" data-enabling-permission="toggleCheat.universalPolarityEverywhere" />
                                     <label class="form-check-label" for="universalPolarityEverywhere" data-loc="cheats_universalPolarityEverywhere"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="unlockDoubleCapacityPotatoesEverywhere" />
+                                    <input class="form-check-input" type="checkbox" id="unlockDoubleCapacityPotatoesEverywhere" data-enabling-permission="toggleCheat.unlockDoubleCapacityPotatoesEverywhere" />
                                     <label class="form-check-label" for="unlockDoubleCapacityPotatoesEverywhere" data-loc="cheats_unlockDoubleCapacityPotatoesEverywhere"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="unlockExilusEverywhere" />
+                                    <input class="form-check-input" type="checkbox" id="unlockExilusEverywhere" data-enabling-permission="toggleCheat.unlockExilusEverywhere" />
                                     <label class="form-check-label" for="unlockExilusEverywhere" data-loc="cheats_unlockExilusEverywhere"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="unlockArcanesEverywhere" />
+                                    <input class="form-check-input" type="checkbox" id="unlockArcanesEverywhere" data-enabling-permission="toggleCheat.unlockArcanesEverywhere" />
                                     <label class="form-check-label" for="unlockArcanesEverywhere" data-loc="cheats_unlockArcanesEverywhere"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="alertsRepeatable" />
+                                    <input class="form-check-input" type="checkbox" id="alertsRepeatable" data-enabling-permission="toggleCheat.alertsRepeatable" />
                                     <label class="form-check-label" for="alertsRepeatable" data-loc="cheats_alertsRepeatable"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="syndicateMissionsRepeatable" />
+                                    <input class="form-check-input" type="checkbox" id="syndicateMissionsRepeatable" data-enabling-permission="toggleCheat.syndicateMissionsRepeatable" />
                                     <label class="form-check-label" for="syndicateMissionsRepeatable" data-loc="cheats_syndicateMissionsRepeatable"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="instantFinishRivenChallenge" />
+                                    <input class="form-check-input" type="checkbox" id="instantFinishRivenChallenge" data-enabling-permission="toggleCheat.instantFinishRivenChallenge" />
                                     <label class="form-check-label" for="instantFinishRivenChallenge" data-loc="cheats_instantFinishRivenChallenge"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="noDailyStandingLimits" />
+                                    <input class="form-check-input" type="checkbox" id="noDailyStandingLimits" data-enabling-permission="toggleCheat.noDailyStandingLimits" />
                                     <label class="form-check-label" for="noDailyStandingLimits" data-loc="cheats_noDailyStandingLimits"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="noDailyFocusLimit" />
+                                    <input class="form-check-input" type="checkbox" id="noDailyFocusLimit" data-enabling-permission="toggleCheat.noDailyFocusLimit" />
                                     <label class="form-check-label" for="noDailyFocusLimit" data-loc="cheats_noDailyFocusLimit"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="noArgonCrystalDecay" />
+                                    <input class="form-check-input" type="checkbox" id="noArgonCrystalDecay" data-enabling-permission="toggleCheat.noArgonCrystalDecay" />
                                     <label class="form-check-label" for="noArgonCrystalDecay" data-loc="cheats_noArgonCrystalDecay"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="noMasteryRankUpCooldown" />
+                                    <input class="form-check-input" type="checkbox" id="noMasteryRankUpCooldown" data-enabling-permission="toggleCheat.noMasteryRankUpCooldown" />
                                     <label class="form-check-label" for="noMasteryRankUpCooldown" data-loc="cheats_noMasteryRankUpCooldown"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="noVendorPurchaseLimits" />
+                                    <input class="form-check-input" type="checkbox" id="noVendorPurchaseLimits" data-enabling-permission="toggleCheat.noVendorPurchaseLimits" />
                                     <label class="form-check-label" for="noVendorPurchaseLimits" data-loc="cheats_noVendorPurchaseLimits"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="noNodeEntryFees" />
+                                    <input class="form-check-input" type="checkbox" id="noNodeEntryFees" data-enabling-permission="toggleCheat.noNodeEntryFees" />
                                     <label class="form-check-label" for="noNodeEntryFees" data-loc="cheats_noNodeEntryFees"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="noDeathMarks" />
+                                    <input class="form-check-input" type="checkbox" id="noDeathMarks" data-enabling-permission="toggleCheat.noDeathMarks" />
                                     <label class="form-check-label" for="noDeathMarks" data-loc="cheats_noDeathMarks"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="noNemesis" />
+                                    <input class="form-check-input" type="checkbox" id="noNemesis" data-enabling-permission="toggleCheat.noNemesis" />
                                     <label class="form-check-label" for="noNemesis" data-loc="cheats_noNemesis"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="noKimCooldowns" />
+                                    <input class="form-check-input" type="checkbox" id="noKimCooldowns" data-enabling-permission="toggleCheat.noKimCooldowns" />
                                     <label class="form-check-label" for="noKimCooldowns" data-loc="cheats_noKimCooldowns"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="noBlessingCooldown" />
+                                    <input class="form-check-input" type="checkbox" id="noBlessingCooldown" data-enabling-permission="toggleCheat.noBlessingCooldown" />
                                     <label class="form-check-label" for="noBlessingCooldown" data-loc="cheats_noBlessingCooldown"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="noResourceExtractorDronesDamage" />
+                                    <input class="form-check-input" type="checkbox" id="noResourceExtractorDronesDamage" data-enabling-permission="toggleCheat.noResourceExtractorDronesDamage" />
                                     <label class="form-check-label" for="noResourceExtractorDronesDamage" data-loc="cheats_noResourceExtractorDronesDamage"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="instantResourceExtractorDrones" />
+                                    <input class="form-check-input" type="checkbox" id="instantResourceExtractorDrones" data-enabling-permission="toggleCheat.instantResourceExtractorDrones" />
                                     <label class="form-check-label" for="instantResourceExtractorDrones" data-loc="cheats_instantResourceExtractorDrones"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="claimingBlueprintRefundsIngredients" />
+                                    <input class="form-check-input" type="checkbox" id="claimingBlueprintRefundsIngredients" data-enabling-permission="toggleCheat.claimingBlueprintRefundsIngredients" />
                                     <label class="form-check-label" for="claimingBlueprintRefundsIngredients" data-loc="cheats_claimingBlueprintRefundsIngredients"></label>
                                 </div>
                                  <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="missionsCanGiveAllRelics" />
+                                    <input class="form-check-input" type="checkbox" id="missionsCanGiveAllRelics" data-enabling-permission="toggleCheat.missionsCanGiveAllRelics" />
                                     <label class="form-check-label" for="missionsCanGiveAllRelics" data-loc="cheats_missionsCanGiveAllRelics"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="exceptionalRelicsAlwaysGiveBronzeReward" />
+                                    <input class="form-check-input" type="checkbox" id="exceptionalRelicsAlwaysGiveBronzeReward" data-enabling-permission="toggleCheat.exceptionalRelicsAlwaysGiveBronzeReward" />
                                     <label class="form-check-label" for="exceptionalRelicsAlwaysGiveBronzeReward" data-loc="cheats_exceptionalRelicsAlwaysGiveBronzeReward"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="flawlessRelicsAlwaysGiveSilverReward" />
+                                    <input class="form-check-input" type="checkbox" id="flawlessRelicsAlwaysGiveSilverReward" data-enabling-permission="toggleCheat.flawlessRelicsAlwaysGiveSilverReward" />
                                     <label class="form-check-label" for="flawlessRelicsAlwaysGiveSilverReward" data-loc="cheats_flawlessRelicsAlwaysGiveSilverReward"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="radiantRelicsAlwaysGiveGoldReward" />
+                                    <input class="form-check-input" type="checkbox" id="radiantRelicsAlwaysGiveGoldReward" data-enabling-permission="toggleCheat.radiantRelicsAlwaysGiveGoldReward" />
                                     <label class="form-check-label" for="radiantRelicsAlwaysGiveGoldReward" data-loc="cheats_radiantRelicsAlwaysGiveGoldReward"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="disableDailyTribute" />
+                                    <input class="form-check-input" type="checkbox" id="disableDailyTribute" data-enabling-permission="toggleCheat.disableDailyTribute" />
                                     <label class="form-check-label" for="disableDailyTribute" data-loc="cheats_disableDailyTribute"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="incrementDailyTributeBy50" />
+                                    <input class="form-check-input" type="checkbox" id="incrementDailyTributeBy50" data-enabling-permission="toggleCheat.incrementDailyTributeBy50" />
                                     <label class="form-check-label" for="incrementDailyTributeBy50" data-loc="cheats_incrementDailyTributeBy50"></label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="finishInvasionsInOneMission" />
+                                    <input class="form-check-input" type="checkbox" id="finishInvasionsInOneMission" data-enabling-permission="toggleCheat.finishInvasionsInOneMission" />
                                     <label class="form-check-label" for="finishInvasionsInOneMission" data-loc="cheats_finishInvasionsInOneMission"></label>
                                 </div>
                                 <form class="form-group mt-2" onsubmit="doChangeSupportedSyndicate(); return false;">
@@ -1699,7 +1699,7 @@
                     <span data-loc="import_importNote2"></span>
                 </p>
                 <textarea class="form-control" id="import-inventory" style="height: calc(100vh - 300px)"></textarea>
-                <button class="btn btn-primary mt-3" onclick="doImport();" data-loc="import_submit"></button>
+                <button class="btn btn-primary mt-3" onclick="doImport();" data-loc="import_submit" data-enabling-permission="import"></button>
                 <p class="mt-3 mb-1" data-loc="import_samples"></p>
                 <ul>
                     <li><a href="#" onclick="event.preventDefault();setImportSample('maxFocus');" data-loc="import_samples_maxFocus"></a></li>

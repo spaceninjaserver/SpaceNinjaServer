@@ -31,6 +31,18 @@
   "webui": {
     "enabled": true,
     "adminOnly": false,
+    "nonAdminPermissions": {
+      "*": true,
+      "addCredits": true,
+      "addPlatinum": true,
+      "addEndo": true,
+      "addRegalAya": true,
+      "import": true,
+      "toggleCheat": {
+        "*": true,
+        "skipAllDialogue": true
+      }
+    },
     "defaultLanguage": "en"
   },
   "unfaithfulBugFixes": {

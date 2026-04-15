@@ -8,6 +8,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
+const allPermissions = [];
+document.querySelectorAll("[data-enabling-permission]").forEach(elm => {
+    const perm = elm.getAttribute("data-enabling-permission");
+    if (allPermissions.indexOf(perm) == -1) {
+        allPermissions.push(perm);
+    }
+});
+
 let auth_pending = false,
     ws_is_open = false,
     wsid = 0,
@@ -21,7 +29,8 @@ const sendAuth = isRegister => {
                     email: localStorage.getItem("email").toLowerCase(),
                     password: wp.encSync(localStorage.getItem("password")),
                     possessing: localStorage.getItem("possessing"),
-                    isRegister
+                    isRegister,
+                    allPermissions
                 }
             })
         );
@@ -83,6 +92,15 @@ function openWebSocket() {
                 ws_reconnect = false;
                 // Config may have changed during the time we were disconnected.
                 refreshServerConfig();
+            }
+        }
+        if ("permissions" in msg) {
+            for (const perm of allPermissions) {
+                const granted = msg.permissions.indexOf(perm) != -1;
+                //console.log(`Permission ${perm} was ${granted ? 'granted' : 'denied'}`);
+                document.querySelectorAll(`[data-enabling-permission='${perm}']`).forEach(elm => {
+                    elm.disabled = !granted;
+                });
             }
         }
         if ("auth_fail" in msg) {
@@ -148,6 +166,7 @@ function refreshServerConfig() {
     if (single.getCurrentPath() == "/webui/cheats" || single.getCurrentPath() == "/webui/admin") {
         single.loadRoute(single.getCurrentPath());
     }
+    ws.send(JSON.stringify({ allPermissions }));
 }
 
 function doAccountSwitch(to_route) {

@@ -8,6 +8,7 @@ import {
     createNonce,
     getAccountForQuery,
     getUsernameFromEmail,
+    hasPermission,
     isAdministrator,
     isCorrectPassword
 } from "./loginService.ts";
@@ -72,6 +73,7 @@ interface IWsMsgFromClient {
         password: string;
         possessing?: string;
         isRegister: boolean;
+        allPermissions: string[];
     };
     auth_game?:
         | {
@@ -84,6 +86,7 @@ interface IWsMsgFromClient {
           };
     logout?: boolean;
     sync_inventory?: boolean;
+    allPermissions?: string[];
 }
 
 export interface IWsMsgToClientCommon {
@@ -102,6 +105,7 @@ export interface IWsMsgToClientWebui extends IWsMsgToClientCommon {
         DisplayName: string;
         Nonce: number;
     };
+    permissions?: string[];
     auth_fail?: "bad login" | "bad register" | "admin only" | "registered but admin only";
     nonce_updated?: boolean;
     update_inventory?: boolean;
@@ -176,7 +180,10 @@ const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
                                     DisplayName: accessedAccount.DisplayName,
                                     Nonce: account.Nonce
                                 },
-                                have_game_ws: haveGameWs(accessedAccount.id)
+                                have_game_ws: haveGameWs(accessedAccount.id),
+                                permissions: data.auth.allPermissions.filter(perm =>
+                                    hasPermission(accessedAccount, perm)
+                                )
                             } satisfies IWsMsgToClient)
                         );
                     } else {
@@ -231,6 +238,17 @@ const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
                 const accountId = (ws as IWsCustomData).accountId;
                 if (accountId && !(ws as IWsCustomData).isGame) {
                     sendWsBroadcastToGame(accountId, { sync_inventory: true });
+                }
+            }
+            if (data.allPermissions) {
+                const accountId = (ws as IWsCustomData).accountId;
+                if (accountId && !(ws as IWsCustomData).isGame) {
+                    const account = (await Account.findById(accountId))!;
+                    ws.send(
+                        JSON.stringify({
+                            permissions: data.allPermissions.filter(perm => hasPermission(account, perm))
+                        } satisfies IWsMsgToClient)
+                    );
                 }
             }
         } catch (e) {

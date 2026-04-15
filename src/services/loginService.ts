@@ -6,7 +6,7 @@ import type { Document, Types } from "mongoose";
 import { Loadout, type TLoadoutDatabaseDocument } from "../models/inventoryModels/loadoutModel.ts";
 import { PersonalRooms } from "../models/personalRoomsModel.ts";
 import type { Request } from "express";
-import { config } from "./configService.ts";
+import { config, configIdToIndexable } from "./configService.ts";
 import { createStats } from "./statsService.ts";
 import { crc32 } from "node:zlib";
 import crypto from "node:crypto";
@@ -135,7 +135,36 @@ export const getAccountIdForRequest = async (req: Request): Promise<string> => {
 };
 
 export const isAdministrator = (account: Pick<TAccountDocument, "DisplayName">): boolean => {
-    return config.administratorNames?.indexOf(account.DisplayName) != -1;
+    return (config.administratorNames?.indexOf(account.DisplayName) ?? -1) != -1;
+};
+
+export const hasPermission = (account: Pick<TAccountDocument, "DisplayName">, perm: string): boolean => {
+    if (!isAdministrator(account)) {
+        {
+            const [obj, idx] = configIdToIndexable(`webui.nonAdminPermissions.${perm}`);
+            if (typeof obj[idx] == "boolean") {
+                return obj[idx];
+            }
+        }
+
+        const arr = perm.split(".");
+        arr.pop();
+        while (arr.length > 1) {
+            const [obj, idx] = configIdToIndexable(`webui.nonAdminPermissions.${arr.join(".")}.*`);
+            if (typeof obj[idx] == "boolean") {
+                return obj[idx];
+            }
+            arr.pop();
+        }
+
+        {
+            const [obj, idx] = configIdToIndexable(`webui.nonAdminPermissions.*`);
+            if (typeof obj[idx] == "boolean") {
+                return obj[idx];
+            }
+        }
+    }
+    return true;
 };
 
 export const getOriginalPlatform = (account: TAccountDocument): number => {

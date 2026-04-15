@@ -1,7 +1,7 @@
 import { importInventory, importLoadOutPresets, importPersonalRooms } from "../../services/importService.ts";
 import { ensureUserHasFounderHonoria, getInventory } from "../../services/inventoryService.ts";
 import { getLoadout } from "../../services/loadoutService.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, hasPermission } from "../../services/loginService.ts";
 import { getPersonalRooms } from "../../services/personalRoomsService.ts";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 import type { IInventoryClient } from "../../types/inventoryTypes/inventoryTypes.ts";
@@ -9,12 +9,16 @@ import type { IGetShipResponse } from "../../types/personalRoomsTypes.ts";
 import type { RequestHandler } from "express";
 
 export const importController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
+    if (!hasPermission(account, "import")) {
+        res.status(500).send(`Permission denied`).end();
+        return;
+    }
     const request = req.body as IImportRequest;
 
     let anyKnownKey = false;
     try {
-        const inventory = await getInventory(accountId);
+        const inventory = await getInventory(account._id);
         importInventory(inventory, request.inventory);
         if (inventory.isModified()) {
             anyKnownKey = true;
@@ -25,7 +29,7 @@ export const importController: RequestHandler = async (req, res) => {
         }
 
         if ("LoadOutPresets" in request.inventory && request.inventory.LoadOutPresets) {
-            const loadout = await getLoadout(accountId);
+            const loadout = await getLoadout(account._id);
             importLoadOutPresets(loadout, request.inventory.LoadOutPresets);
             if (loadout.isModified()) {
                 anyKnownKey = true;
@@ -38,7 +42,7 @@ export const importController: RequestHandler = async (req, res) => {
             "Apartment" in request.inventory ||
             "TailorShop" in request.inventory
         ) {
-            const personalRooms = await getPersonalRooms(accountId);
+            const personalRooms = await getPersonalRooms(account._id);
             importPersonalRooms(personalRooms, request.inventory);
             if (personalRooms.isModified()) {
                 anyKnownKey = true;

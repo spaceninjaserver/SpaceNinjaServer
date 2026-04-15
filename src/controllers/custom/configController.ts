@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { config } from "../../services/configService.ts";
+import { configIdToIndexable } from "../../services/configService.ts";
 import { syncConfigWithDatabase } from "../../services/configWatcherService.ts";
 import { getAccountForRequest, isAdministrator } from "../../services/loginService.ts";
 import { saveConfig } from "../../services/configWriterService.ts";
@@ -36,16 +36,4 @@ export const setConfigController: RequestHandler = async (req, res) => {
     } else {
         res.status(401).end();
     }
-};
-
-const configIdToIndexable = (id: string): [Record<string, boolean | string | number | undefined>, string] => {
-    let obj = config as unknown as Record<string, never>;
-    const arr = id.split(".");
-    while (arr.length > 1) {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        obj[arr[0]] ??= {} as never;
-        obj = obj[arr[0]];
-        arr.splice(0, 1);
-    }
-    return [obj, arr[0]];
 };

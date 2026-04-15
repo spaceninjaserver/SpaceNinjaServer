@@ -1,4 +1,4 @@
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, hasPermission } from "../../services/loginService.ts";
 import { getInventory, addItem } from "../../services/inventoryService.ts";
 import type { RequestHandler } from "express";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
@@ -6,6 +6,10 @@ import { logger } from "../../utils/logger.ts";
 
 export const addItemsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
+    if (!hasPermission(account, "addItems")) {
+        res.status(500).send(`Permission denied`).end();
+        return;
+    }
     const requests = req.body as IAddItemRequest[];
     const inventory = await getInventory(account._id);
     for (const request of requests) {

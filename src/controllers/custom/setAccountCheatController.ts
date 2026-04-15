@@ -1,5 +1,5 @@
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, hasPermission } from "../../services/loginService.ts";
 import { sendWsBroadcastEx, sendWsBroadcastTo } from "../../services/wsService.ts";
 import {
     accountCheatBooleans,
@@ -14,11 +14,14 @@ import { lockCheats } from "../../services/cheatsService.ts";
 import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
 
 export const setAccountCheatController: RequestHandler = async (req, res) => {
+    const account = await getAccountForRequest(req);
+
     const payload = req.body as ISetAccountCheatRequest;
-    if (
-        accountCheatBooleans.indexOf(payload.key as TAccountCheatBooleanKey) == -1 &&
-        accountCheatNumbers.indexOf(payload.key as TAccountCheatNumberKey) == -1
-    ) {
+    if (accountCheatBooleans.indexOf(payload.key as TAccountCheatBooleanKey) != -1) {
+        if (!hasPermission(account, `toggleCheat.${payload.key}`)) {
+            throw new Error(`Permission denied`);
+        }
+    } else if (accountCheatNumbers.indexOf(payload.key as TAccountCheatNumberKey) == -1) {
         throw new Error(`unexpected setAccountCheat key: ${payload.key}`);
     }
     if (payload.value == undefined) {
@@ -26,11 +29,10 @@ export const setAccountCheatController: RequestHandler = async (req, res) => {
         return;
     }
 
-    const accountId = await getAccountIdForRequest(req);
     const meta = payload.value ? lockCheats[payload.key] : undefined;
 
     if (meta) {
-        const inventory = await getInventory(accountId, `${payload.key} ${meta.projection}`);
+        const inventory = await getInventory(account._id, `${payload.key} ${meta.projection}`);
         inventory[payload.key] = payload.value as never;
         if (!meta.isInventoryInIdealState(inventory)) {
             res.send("retroactivable");
@@ -39,7 +41,7 @@ export const setAccountCheatController: RequestHandler = async (req, res) => {
     } else {
         await Inventory.updateOne(
             {
-                accountOwnerId: accountId
+                accountOwnerId: account._id
             },
             {
                 [payload.key]: payload.value
@@ -60,9 +62,9 @@ export const setAccountCheatController: RequestHandler = async (req, res) => {
             "skipAllPopups"
         ].indexOf(payload.key) != -1
     ) {
-        sendWsBroadcastTo(accountId, { update_inventory: true, sync_inventory: true });
+        sendWsBroadcastTo(account._id.toString(), { update_inventory: true, sync_inventory: true });
     } else {
-        sendWsBroadcastEx({ update_inventory: true }, accountId, parseInt(String(req.query.wsid)));
+        sendWsBroadcastEx({ update_inventory: true }, account._id.toString(), parseInt(String(req.query.wsid)));
     }
 };
 
