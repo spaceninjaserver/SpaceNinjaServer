@@ -246,6 +246,18 @@ export const updateStats = async (
                             playerStats.TimePlayedSec += data;
                             break;
 
+                        case "MISSION_TIME": {
+                            if (!("CURRENT_MISSION_TIME" in (actionData as IStatsTimers))) {
+                                let total = 0;
+                                for (const missionTime of Object.values(data as IUploadEntry)) {
+                                    total += missionTime;
+                                }
+                                playerStats.TimePlayedSec ??= 0;
+                                playerStats.TimePlayedSec += total;
+                            }
+                            break;
+                        }
+
                         case "CIPHER_TIME":
                             playerStats.CipherTime ??= 0;
                             playerStats.CipherTime += data;
@@ -538,7 +550,6 @@ const ignoredCategories = [
     "IN_SHIP_TIME",
     "IN_SHIP_VIEW_TIME",
     "MISSION_LOAD_TIME",
-    "MISSION_TIME",
     "REGION_TIME",
     "PLATFORM_TIME",
     "PRE_DIE_TIME",
