@@ -26,7 +26,8 @@ import type {
     IDialogueDatabase,
     IKubrowPetPrintClient,
     IWeeklyMissionChallengeInfo,
-    IKubrowPetEgg
+    IKubrowPetEgg,
+    ITauPrequelQuestCustomData
 } from "../types/inventoryTypes/inventoryTypes.ts";
 import { InventorySlot, equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate.ts";
@@ -3070,9 +3071,13 @@ export const handleTauMemories = async (inventory: TInventoryDatabaseDocument): 
         x => x.ItemType == "/Lotus/Types/Keys/TauPrequel/TauPrequelQuestKeyChain"
     );
     if (oldPeace?.Completed) {
-        oldPeace.CustomData ||= `{"ChosenMemories":{"TauPrequelStage11_PoolA":{"Name":"cat0","Choice":1},"TauPrequelStage13_PoolA":{"Name":"cat1","Choice":1},"TauPrequelStage14_PoolA":{"Name":"cat2","Choice":1}}}`;
-        const customData = JSON.parse(oldPeace.CustomData) as {
-            ChosenMemories: { InboxMessageSent?: boolean } & Record<string, { Name: string; Choice: number }>;
+        oldPeace.CustomData ||= `{}`;
+        const customData = JSON.parse(oldPeace.CustomData) as ITauPrequelQuestCustomData;
+        // If the user didn't pick any memories during the quest, ChosenMemories would not exist. TOVERIFY: What is the expected behaviour in that case?
+        customData.ChosenMemories ??= {
+            TauPrequelStage11_PoolA: { Name: "cat0", Choice: 1 },
+            TauPrequelStage13_PoolA: { Name: "cat1", Choice: 1 },
+            TauPrequelStage14_PoolA: { Name: "cat2", Choice: 1 }
         };
         if (!customData.ChosenMemories.InboxMessageSent) {
             customData.ChosenMemories.InboxMessageSent = true;

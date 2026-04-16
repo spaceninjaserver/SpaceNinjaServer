@@ -218,6 +218,27 @@ export interface IQuestKeyDatabase {
     CompletionDate?: Date;
 }
 
+export interface IQuestKeyClient extends Omit<IQuestKeyDatabase, "CompletionDate"> {
+    CompletionDate?: IMongoDate;
+}
+
+export interface IQuestStage {
+    c: number;
+    i: boolean;
+    m: boolean;
+    b: any[];
+}
+
+export interface ITauPrequelQuestCustomData {
+    ChosenMemories?: Record<string, { Name: string; Choice: number }> & { InboxMessageSent?: boolean };
+    AsyncMissionAssistDeploys?: {
+        MissionTag: string;
+        LoadOutSaveOption: number;
+        DeploymentType: string;
+        LocationTag: string;
+    }[]; // TODO: Should we maybe handle these deploys in some way (in asyncMissionAssistController)?
+}
+
 export const equipmentKeys = [
     "Suits",
     "LongGuns",
@@ -1076,17 +1097,6 @@ export interface IPlayerSkills {
     LPS_DRIFT_RIDING: number;
     LPS_DRIFT_OPPORTUNITY: number;
     LPS_DRIFT_ENDURANCE: number;
-}
-
-export interface IQuestKeyClient extends Omit<IQuestKeyDatabase, "CompletionDate"> {
-    CompletionDate?: IMongoDate;
-}
-
-export interface IQuestStage {
-    c: number;
-    i: boolean;
-    m: boolean;
-    b: any[];
 }
 
 export interface IRawUpgrade {
