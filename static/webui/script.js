@@ -392,14 +392,20 @@ single.on("route_load", function (event) {
             return single.loadRoute("/webui/"); // Show login screen
         }
         $("body").addClass("logged-in");
+
+        let navPath = event.route.paths[0];
+        if (navPath == "/webui/detailedView") {
+            navPath = "/webui/inventory";
+        }
+        $("#sidebar .nav-link").removeClass("active");
+        const navLink = document.querySelector(".nav-link[href='" + navPath + "']");
+        if (navLink) {
+            navLink.classList.add("active");
+        } else {
+            console.warn("No sidebar entry for current route!");
+        }
     } else {
         $("body").removeClass("logged-in");
-    }
-
-    $("#sidebar .nav-link").removeClass("active");
-    const navLink = document.querySelector(".nav-link[href='" + event.route.paths[0] + "']");
-    if (navLink) {
-        navLink.classList.add("active");
     }
 
     window.dictPromise.then(() => {
