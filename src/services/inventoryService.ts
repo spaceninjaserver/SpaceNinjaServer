@@ -1675,15 +1675,25 @@ export const updateCurrency = (
                 inventory.PremiumCreditsFree += premiumCreditsFreeDelta;
                 logger.debug(`spending ${-premiumCreditsFreeDelta} starter plat`);
             }
+            if (inventory.PremiumCredits - price < 0) {
+                throw new Error(
+                    `Cannot subtract ${price} platinum, would be left with ${inventory.PremiumCredits - price}`
+                );
+            }
             inventoryChanges.PremiumCredits ??= 0;
             inventoryChanges.PremiumCredits -= price;
             inventory.PremiumCredits -= price;
-            logger.debug(`currency changes `, { PremiumCredits: -price });
+            logger.debug(`currency changes`, { PremiumCredits: -price });
         } else {
+            if (inventory.RegularCredits - price < 0) {
+                throw new Error(
+                    `Cannot subtract ${price} credits, would be left with ${inventory.RegularCredits - price}`
+                );
+            }
             inventoryChanges.RegularCredits ??= 0;
             inventoryChanges.RegularCredits -= price;
             inventory.RegularCredits -= price;
-            logger.debug(`currency changes `, { RegularCredits: -price });
+            logger.debug(`currency changes`, { RegularCredits: -price });
         }
     }
     return inventoryChanges;
