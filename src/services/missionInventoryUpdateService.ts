@@ -2336,6 +2336,26 @@ function getRandomMissionDrops(
             }
         }
 
+        if (RewardInfo.voidStormTier) {
+            const systemIndexToVoidStormRewardTable: Record<number, string> = {
+                1: "/Lotus/Types/Game/MissionDecks/RailjackMissionRewards/VoidStormVenusRewards",
+                2: "/Lotus/Types/Game/MissionDecks/RailjackMissionRewards/VoidStormEarthRewards",
+                5: "/Lotus/Types/Game/MissionDecks/RailjackMissionRewards/VoidStormSaturnRewards",
+                7: "/Lotus/Types/Game/MissionDecks/RailjackMissionRewards/VoidStormNeptuneRewards",
+                8: "/Lotus/Types/Game/MissionDecks/RailjackMissionRewards/VoidStormPlutoRewards",
+                14: "/Lotus/Types/Game/MissionDecks/RailjackMissionRewards/VoidStormVeilRewards"
+            };
+            if (region.systemIndex in systemIndexToVoidStormRewardTable) {
+                const reward = getRandomRewardByChance(
+                    ExportRewards[systemIndexToVoidStormRewardTable[region.systemIndex]][0]
+                )!;
+                drops.push({
+                    StoreItem: reward.type,
+                    ItemCount: reward.itemCount
+                });
+            }
+        }
+
         if (region.cacheRewardManifest && RewardInfo.EnemyCachesFound && !RewardInfo.goalId) {
             const deck = ExportRewards[region.cacheRewardManifest];
             for (let rotation = 0; rotation != RewardInfo.EnemyCachesFound; ++rotation) {
