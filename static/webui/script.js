@@ -1261,7 +1261,7 @@ const U5Mods = [
     "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod"
 ];
 
-single.getRoute("/webui/inventory").on("beforeload", async function () {
+async function populateInventoryRoute() {
     const [data, itemMap] = await Promise.all([awaitAuthz().then(getInventoryData), window.itemListPromise]);
 
     document.getElementById("typeName-tab").classList.remove("active");
@@ -1479,28 +1479,41 @@ single.getRoute("/webui/inventory").on("beforeload", async function () {
 
     document.getElementById("EvolutionProgress-list").innerHTML = "";
     data.EvolutionProgress?.forEach(item => {
+        const maxRank = permanentEvolutionWeapons.has(item.ItemType) ? 5 : 4;
         const tr = document.createElement("tr");
         tr.setAttribute("data-item-type", item.ItemType);
         {
             const td = document.createElement("td");
             td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
             if (item.Rank != null) {
-                td.textContent += " | " + loc("code_rank") + ": [" + item.Rank + "/5]";
+                td.textContent += " | " + loc("code_rank") + ": [" + item.Rank + "/" + maxRank + "]";
             }
             tr.appendChild(td);
         }
         {
             const td = document.createElement("td");
             td.classList = "text-end text-nowrap";
-            if (item.Rank < 5) {
+            if (item.Rank < maxRank) {
                 const a = document.createElement("a");
                 a.href = "#";
                 a.onclick = function (event) {
                     event.preventDefault();
-                    setEvolutionProgress([{ ItemType: item.ItemType, Rank: 5 }]);
+                    setEvolutionProgress([{ ItemType: item.ItemType, Rank: maxRank }]);
                 };
                 a.title = loc("code_maxRank");
                 a.innerHTML = icons.arrowUp;
+
+                td.appendChild(a);
+            }
+            if (item.Rank < maxRank) {
+                const a = document.createElement("a");
+                a.href = "#";
+                a.onclick = function (event) {
+                    event.preventDefault();
+                    setEvolutionProgress([{ ItemType: item.ItemType, Rank: item.Rank + 1 }]);
+                };
+                a.title = loc("code_rankUp");
+                a.innerHTML = icons.angleUp;
 
                 td.appendChild(a);
             }
@@ -1516,15 +1529,15 @@ single.getRoute("/webui/inventory").on("beforeload", async function () {
 
                 td.appendChild(a);
             }
-            if (item.Rank < 5) {
+            {
                 const a = document.createElement("a");
                 a.href = "#";
                 a.onclick = function (event) {
                     event.preventDefault();
-                    setEvolutionProgress([{ ItemType: item.ItemType, Rank: item.Rank + 1 }]);
+                    setEvolutionProgress([{ ItemType: item.ItemType, Delete: true }]);
                 };
-                a.title = loc("code_rankUp");
-                a.innerHTML = icons.angleUp;
+                a.title = loc("code_remove");
+                a.innerHTML = icons.trash;
 
                 td.appendChild(a);
             }
@@ -1809,7 +1822,8 @@ single.getRoute("/webui/inventory").on("beforeload", async function () {
         }
         document.getElementById("QuestKeys-list").appendChild(tr);
     });
-});
+}
+single.getRoute("/webui/inventory").on("beforeload", populateInventoryRoute);
 
 single.getRoute("/webui/mods").on("beforeload", async function () {
     const [data, itemMap] = await Promise.all([awaitAuthz().then(getInventoryData), window.itemListPromise]);
@@ -2070,7 +2084,7 @@ dictPromise.then(() => {
                     butDiv.appendChild(a);
                 }
             }
-            if (!["EvolutionProgress", "Boosters"].includes(cardType)) {
+            if (cardType != "Boosters") {
                 const a = document.createElement("a");
                 a.href = "#";
                 a.onclick = function (event) {
@@ -2831,10 +2845,11 @@ function maxRankAllEvolutions() {
             const requests = [];
 
             data.EvolutionProgress.forEach(item => {
-                if (item.Rank < 5) {
+                const maxRank = permanentEvolutionWeapons.has(item.ItemType) ? 5 : 4;
+                if (item.Rank < maxRank) {
                     requests.push({
                         ItemType: item.ItemType,
-                        Rank: 5
+                        Rank: maxRank
                     });
                 }
             });
@@ -3027,7 +3042,8 @@ function equipmentFeatures(category, oid, bit) {
         $.get(
             "/custom/equipmentFeatures?" + window.authz + "&ItemId=" + oid + "&Category=" + category + "&bit=" + bit
         ).done(function () {
-            updateInventory();
+            inventory_data[category].find(x => x.ItemId.$oid == oid).Features ^= bit;
+            // toggle state was already updated when the user clicked on it
         });
     });
 }
@@ -3071,8 +3087,9 @@ function setEvolutionProgress(requests) {
                 contentType: "application/json",
                 data: JSON.stringify(requests)
             });
-            req.done(() => {
-                updateInventory();
+            req.done(newEvolutionProgress => {
+                inventory_data.EvolutionProgress = newEvolutionProgress;
+                populateInventoryRoute();
                 resolve();
             });
         });

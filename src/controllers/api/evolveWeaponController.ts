@@ -5,6 +5,7 @@ import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import type { WeaponTypeInternal } from "../../services/itemDataService.ts";
 import { getRecipe } from "../../services/itemDataService.ts";
 import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
+import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 export const evolveWeaponController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -48,6 +49,7 @@ export const evolveWeaponController: RequestHandler = async (req, res) => {
 
     await inventory.save();
     res.end();
+    broadcastInventoryUpdate(req); // let webui know that the feature flag has changed (for detailed view)
 };
 
 interface IEvolveWeaponRequest {
