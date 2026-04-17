@@ -12,7 +12,7 @@ export const popArchonCrystalUpgradeController: RequestHandler = async (req, res
             x => x.UpgradeType != (req.query.type as string)
         );
         await inventory.save();
-        res.end();
+        res.json(suit.toJSON());
         broadcastInventoryUpdate(req);
         return;
     }

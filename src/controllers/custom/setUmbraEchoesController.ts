@@ -11,6 +11,7 @@ export const setUmbraEchoesController: RequestHandler = async (req, res) => {
     if (suit) {
         suit.UmbraDate = request.UmbraDate ? new Date(request.UmbraDate) : undefined;
         await inventory.save();
+        res.json(suit.toJSON());
         broadcastInventoryUpdate(req);
     }
     res.end();

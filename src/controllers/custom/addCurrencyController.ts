@@ -11,9 +11,7 @@ export const addCurrencyController: RequestHandler = async (req, res) => {
     let projection = request.currency as string;
     if (request.currency.startsWith("Vault")) projection = "GuildId";
     const inventory = await getInventory(account._id, projection);
-    if (request.currency == "FusionPoints") {
-        addFusionPoints(inventory, request.delta);
-    } else if (request.currency == "VaultRegularCredits" || request.currency == "VaultPremiumCredits") {
+    if (request.currency == "VaultRegularCredits" || request.currency == "VaultPremiumCredits") {
         const guild = await getGuildForRequestEx(req, inventory);
         if (await hasGuildPermission(guild, account._id, GuildPermission.Treasurer)) {
             guild[request.currency] ??= 0;
@@ -23,8 +21,13 @@ export const addCurrencyController: RequestHandler = async (req, res) => {
         }
     } else {
         if (hasPermission(account, currencyToPermission[request.currency])) {
-            inventory[request.currency] += request.delta;
+            if (request.currency == "FusionPoints") {
+                addFusionPoints(inventory, request.delta);
+            } else {
+                inventory[request.currency] += request.delta;
+            }
         }
+        res.json(inventory[request.currency]);
     }
     if (!request.currency.startsWith("Vault")) {
         await inventory.save();

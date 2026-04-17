@@ -10,7 +10,6 @@ export const unlockLevelCapController: RequestHandler = async (req, res) => {
     const inventory = await getInventory(accountId, data.Category);
     const equipment = inventory[data.Category].id(data.ItemId)!;
 
-    equipment.Polarized ??= 0;
     equipment.Polarized = data.Polarized;
 
     await inventory.save();

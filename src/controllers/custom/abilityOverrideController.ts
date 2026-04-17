@@ -20,6 +20,7 @@ export const abilityOverrideController: RequestHandler = async (req, res) => {
                 item.Configs[request.configIndex].AbilityOverride = undefined;
             }
             await inventory.save();
+            res.json(item.toJSON());
         }
     }
     res.end();

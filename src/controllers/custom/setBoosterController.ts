@@ -17,6 +17,6 @@ export const setBoosterController: RequestHandler = async (req, res) => {
         }
     }
     await inventory.save();
-    res.end();
+    res.json(inventory.Boosters);
     broadcastInventoryUpdate(req);
 };

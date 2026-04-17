@@ -14,6 +14,7 @@ export const setInvigorationController: RequestHandler = async (req, res) => {
         suit.OffensiveUpgrade = hasUpgrades ? request.OffensiveUpgrade : undefined;
         suit.UpgradesExpiry = hasUpgrades ? new Date(request.UpgradesExpiry) : undefined;
         await inventory.save();
+        res.json(suit.toJSON());
         broadcastInventoryUpdate(req);
     }
     res.end();

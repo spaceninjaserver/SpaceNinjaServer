@@ -15,7 +15,7 @@ export const pushArchonCrystalUpgradeController: RequestHandler = async (req, re
                 suit.ArchonCrystalUpgrades.push({ UpgradeType: req.query.type as string });
             }
             await inventory.save();
-            res.end();
+            res.json(suit.toJSON());
             broadcastInventoryUpdate(req);
             return;
         }

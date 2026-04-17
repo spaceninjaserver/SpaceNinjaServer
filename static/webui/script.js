@@ -1368,6 +1368,7 @@ async function populateInventoryRoute() {
                         a.href = "#";
                         a.onclick = function (event) {
                             event.preventDefault();
+                            a.parentNode.removeChild(a);
                             unlockLevelCap(category, item.ItemId.$oid, (itemMap[item.ItemType].maxLevelCap - 30) / 2);
                         };
                         a.title = loc("code_unlockLevelCap");
@@ -1640,6 +1641,7 @@ async function populateInventoryRoute() {
                 a.href = "#";
                 a.onclick = function (event) {
                     event.preventDefault();
+                    tr.parentNode.removeChild(tr);
                     removeCustomization(item.ItemType);
                 };
                 a.title = loc("code_remove");
@@ -1713,7 +1715,8 @@ async function populateInventoryRoute() {
                     a.href = "#";
                     a.onclick = function (event) {
                         event.preventDefault();
-                        removeCountItems(item.ItemType, item.ItemCount);
+                        tr.parentNode.removeChild(tr);
+                        removeShipDecoration(item.ItemType, item.ItemCount);
                     };
                     a.title = loc("code_remove");
                     a.innerHTML = icons.trash;
@@ -2275,17 +2278,17 @@ function removeCustomization(uniqueName) {
     revalidateAuthz().then(() => {
         const req = $.get("/custom/removeCustomization?" + window.authz + "&itemType=" + uniqueName);
         req.done(() => {
-            updateInventory();
+            inventory_data.FlavourItems.splice(
+                inventory_data.FlavourItems.findIndex(x => x.ItemType == uniqueName),
+                1
+            );
         });
     });
 }
 
 function removeIsNew() {
     revalidateAuthz().then(() => {
-        const req = $.get("/custom/removeIsNew?" + window.authz);
-        req.done(() => {
-            updateInventory();
-        });
+        $.get("/custom/removeIsNew?" + window.authz);
     });
 }
 
@@ -2978,7 +2981,8 @@ function renameGear(category, oid, name) {
                     name: name
                 })
             }).done(function () {
-                updateInventory();
+                inventory_data.KubrowPets.find(x => x.ItemId.$oid == oid).Details.Name = name;
+                populateInventoryRoute();
             });
         } else {
             $.post({
@@ -2988,7 +2992,8 @@ function renameGear(category, oid, name) {
                     ItemName: name
                 })
             }).done(function () {
-                updateInventory();
+                inventory_data[category].find(x => x.ItemId.$oid == oid).ItemName = name;
+                populateInventoryRoute();
             });
         }
     });
@@ -3071,7 +3076,7 @@ function unlockLevelCap(category, oid, formas) {
                 Polarized: formas
             })
         }).done(function () {
-            updateInventory();
+            inventory_data[category].find(x => x.ItemId.$oid == oid).Polarized = formas;
         });
     });
 }
@@ -3086,7 +3091,8 @@ function maturePet(oid, revert) {
                 revert
             })
         }).done(function () {
-            updateInventory();
+            inventory_data.KubrowPets.find(x => x.ItemId.$oid == oid).Details.IsPuppy = revert;
+            populateInventoryRoute();
         });
     });
 }
@@ -3146,7 +3152,7 @@ function doAcquireCountItems(category) {
     }
 }
 
-function removeCountItems(uniqueName, count) {
+function removeShipDecoration(uniqueName, count) {
     revalidateAuthz().then(() => {
         $.post({
             url: "/custom/addItems?" + window.authz,
@@ -3158,8 +3164,11 @@ function removeCountItems(uniqueName, count) {
                 }
             ])
         }).done(function () {
+            inventory_data.ShipDecorations.splice(
+                inventory_data.ShipDecorations.findIndex(x => x.ItemType == uniqueName),
+                1
+            );
             toast(loc("code_succRemoved"));
-            updateInventory();
         });
     });
 }
@@ -3720,6 +3729,10 @@ single.getRoute("#detailedView-route").on("beforeload", async function () {
     document.getElementById("equipmentFeatures-card").classList.add("d-none");
     document.getElementById("equipmentFeaturesButtons-card").innerHTML = "";
 
+    populateDetailedViewRoute();
+});
+
+async function populateDetailedViewRoute() {
     const [data, itemMap] = await Promise.all([awaitAuthz().then(getInventoryData), window.itemListPromise]);
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -4050,7 +4063,7 @@ single.getRoute("#detailedView-route").on("beforeload", async function () {
     } else {
         single.loadRoute("/webui/inventory");
     }
-});
+}
 
 single.getRoute("#guild-route").on("beforeload", function () {
     document.getElementById("guildView-loading").classList.remove("d-none");
@@ -4414,9 +4427,12 @@ function doPushArchonCrystalUpgrade() {
     revalidateAuthz().then(() => {
         $.get(
             `/custom/pushArchonCrystalUpgrade?${window.authz}&oid=${urlParams.get("itemId")}&type=${uniqueName}&count=${$("#archon-crystal-add-count").val()}`
-        ).done(function () {
+        ).done(function (updatedSuit) {
             $("[list='datalist-archonCrystalUpgrades']").val("");
-            updateInventory();
+
+            const index = inventory_data.Suits.findIndex(x => x.ItemId.$oid == urlParams.get("itemId"));
+            inventory_data.Suits[index] = updatedSuit;
+            populateDetailedViewRoute();
         });
     });
 }
@@ -4426,8 +4442,10 @@ function doPopArchonCrystalUpgrade(type) {
     revalidateAuthz().then(() => {
         $.get(
             "/custom/popArchonCrystalUpgrade?" + window.authz + "&oid=" + urlParams.get("itemId") + "&type=" + type
-        ).done(function () {
-            updateInventory();
+        ).done(function (updatedSuit) {
+            const index = inventory_data.Suits.findIndex(x => x.ItemId.$oid == urlParams.get("itemId"));
+            inventory_data.Suits[index] = updatedSuit;
+            populateDetailedViewRoute();
         });
     });
 }
@@ -4461,7 +4479,7 @@ function doChangeSupportedSyndicate() {
 
     revalidateAuthz().then(() => {
         $.get("/api/setSupportedSyndicate.php?" + window.authz + "&syndicate=" + uniqueName).done(function () {
-            updateInventory();
+            inventory_data.SupportedSyndicate = uniqueName;
         });
     });
 }
@@ -4481,7 +4499,10 @@ function doAddCurrency(currency) {
                     .split("|COUNT|")
                     .join((newValue ?? 0).toLocaleString());
             } else {
-                updateInventory();
+                inventory_data[currency] = newValue;
+                document.getElementById(currency + "-owned").textContent = loc("currency_owned")
+                    .split("|COUNT|")
+                    .join((newValue ?? 0).toLocaleString());
             }
         });
     });
@@ -4603,8 +4624,9 @@ function setBooster(ItemType, ExpiryDate) {
                     ExpiryDate
                 }
             ])
-        }).done(function () {
-            updateInventory();
+        }).done(function (newBoosters) {
+            inventory_data.Boosters = newBoosters;
+            populateInventoryRoute();
         });
     });
 }
@@ -5155,7 +5177,7 @@ function handleValenceBonusChange(event) {
                 }
             })
         }).done(function () {
-            updateInventory();
+            inventory_data = undefined; // UI is up-to-date now, but subsequent updates will need to grab new data
         });
     });
 }
@@ -5428,7 +5450,7 @@ function handleModularPartsChange(event) {
                 })
             }).then(function () {
                 toast(loc("code_succChange"));
-                updateInventory();
+                inventory_data = undefined; // UI is up-to-date now, but subsequent updates will need to grab new data
             });
         });
     }
@@ -5458,8 +5480,10 @@ function setInvigoration(data) {
         url: "/custom/setInvigoration?" + window.authz,
         contentType: "application/json",
         data: JSON.stringify({ oid, ...data })
-    }).done(function () {
-        updateInventory();
+    }).done(function (updatedSuit) {
+        const index = inventory_data.Suits.findIndex(x => x.ItemId.$oid == oid);
+        inventory_data.Suits[index] = updatedSuit;
+        populateDetailedViewRoute();
     });
 }
 
@@ -5477,8 +5501,10 @@ function setUmbraEchoes(data) {
         url: "/custom/setUmbraEchoes?" + window.authz,
         contentType: "application/json",
         data: JSON.stringify({ oid, ...data })
-    }).done(function () {
-        updateInventory();
+    }).done(function (updatedSuit) {
+        const index = inventory_data.Suits.findIndex(x => x.ItemId.$oid == oid);
+        inventory_data.Suits[index] = updatedSuit;
+        populateDetailedViewRoute();
     });
 }
 
@@ -5493,14 +5519,16 @@ function handleAbilityOverride(event, configIndex) {
     }
     const input = document.getElementById(`abilityOverride-ability-index-config-${configIndex}`);
     if (!input.value) return;
+    const category = urlParams.get("productCategory");
+    const oid = urlParams.get("itemId");
     const Index = input.value - 1;
     revalidateAuthz().then(() => {
         $.post({
             url: "/custom/abilityOverride?" + window.authz,
             contentType: "application/json",
             data: JSON.stringify({
-                category: urlParams.get("productCategory"),
-                oid: urlParams.get("itemId"),
+                category,
+                oid,
                 configIndex,
                 action,
                 AbilityOverride: {
@@ -5508,9 +5536,14 @@ function handleAbilityOverride(event, configIndex) {
                     Index
                 }
             })
-        }).done(function () {
+        }).done(function (updatedItem) {
+            const index = inventory_data[category].findIndex(x => x.ItemId.$oid == oid);
+            inventory_data[category][index] = updatedItem;
+            if (action != "set") {
+                populateDetailedViewRoute();
+            }
+
             toast(loc("code_succChange"));
-            updateInventory();
         });
     });
 }
