@@ -172,6 +172,7 @@ function refreshServerConfig() {
 function doAccountSwitch(to_route) {
     window.authz = undefined;
     inventory_data = undefined;
+    guild_data = undefined;
     single.loadRoute(to_route);
     sendAuth();
 }
@@ -2778,8 +2779,7 @@ function dispatchFundTechProjectsBatch(requests) {
 
 function fundAllTechProjects() {
     revalidateAuthz().then(() => {
-        const req = $.get("/custom/getGuild?guildId=" + window.guildId);
-        req.done(data => {
+        getGuildData().done(data => {
             const requests = [];
             data.TechProjects ??= [];
             data.TechProjects.forEach(techProject => {
@@ -2815,8 +2815,7 @@ function dispatchCompleteTechProjectsBatch(requests) {
 
 function completeAllTechProjects() {
     revalidateAuthz().then(() => {
-        const req = $.get("/custom/getGuild?guildId=" + window.guildId);
-        req.done(data => {
+        getGuildData().done(data => {
             const requests = [];
             data.TechProjects ??= [];
             data.TechProjects.forEach(techProject => {
@@ -3715,20 +3714,21 @@ function doAddMissingMaxRankMods() {
 // DetailedView Route
 
 single.getRoute("#detailedView-route").on("beforeload", async function () {
-    document.getElementById("detailedView-loading").classList.remove("d-none");
-    document.getElementById("detailedView-title").textContent = "";
-    document.querySelector("#detailedView-route .text-body-secondary").textContent = "";
-    document.getElementById("loadout-card").classList.add("d-none");
-    document.getElementById("archonShards-card").classList.add("d-none");
-    document.getElementById("edit-suit-invigorations-card").classList.add("d-none");
-    document.getElementById("umbraEchoes-card").classList.add("d-none");
-    document.getElementById("modularParts-card").classList.add("d-none");
-    document.getElementById("modularParts-form").innerHTML = "";
-    document.getElementById("valenceBonus-card").classList.add("d-none");
-    document.getElementById("u5ModEdit-card").classList.add("d-none");
-    document.getElementById("equipmentFeatures-card").classList.add("d-none");
-    document.getElementById("equipmentFeaturesButtons-card").innerHTML = "";
-
+    if (!inventory_data) {
+        document.getElementById("detailedView-loading").classList.remove("d-none");
+        document.getElementById("detailedView-title").textContent = "";
+        document.querySelector("#detailedView-route .text-body-secondary").textContent = "";
+        document.getElementById("loadout-card").classList.add("d-none");
+        document.getElementById("archonShards-card").classList.add("d-none");
+        document.getElementById("edit-suit-invigorations-card").classList.add("d-none");
+        document.getElementById("umbraEchoes-card").classList.add("d-none");
+        document.getElementById("modularParts-card").classList.add("d-none");
+        document.getElementById("modularParts-form").innerHTML = "";
+        document.getElementById("valenceBonus-card").classList.add("d-none");
+        document.getElementById("u5ModEdit-card").classList.add("d-none");
+        document.getElementById("equipmentFeatures-card").classList.add("d-none");
+        document.getElementById("equipmentFeaturesButtons-card").innerHTML = "";
+    }
     populateDetailedViewRoute();
 });
 
@@ -4065,10 +4065,22 @@ async function populateDetailedViewRoute() {
     }
 }
 
-single.getRoute("#guild-route").on("beforeload", function () {
-    document.getElementById("guildView-loading").classList.remove("d-none");
-    document.getElementById("guildView-na").classList.add("d-none");
-    document.getElementById("guildView-naDescription").classList.add("d-none");
+let guild_data;
+// Assumes that caller revalidates authz
+function getGuildData() {
+    return new Promise(resolve => {
+        /*if (guild_data) { // TODO: Implement websocket events for guild changes, so we can be certain that cached data is okay to use.
+            resolve(guild_data);
+        } else*/ {
+            $.get("/custom/getGuild?" + window.authz).done(guildData => {
+                guild_data = guildData;
+                resolve(guild_data);
+            });
+        }
+    });
+}
+
+function guildView_clear() {
     document.getElementById("guildView-title").textContent = "";
     document.getElementById("guildView-tier").textContent = "";
     document.getElementById("guildView-class").textContent = "";
@@ -4092,10 +4104,24 @@ single.getRoute("#guild-route").on("beforeload", function () {
     document.getElementById("guildView-alliance").textContent = "";
     document.getElementById("Members-list").innerHTML = "";
     $("#guild-route > .row").addClass("d-none");
+}
 
+single.getRoute("#guild-route").on("beforeload", function () {
+    if (!guild_data) {
+        document.getElementById("guildView-loading").classList.remove("d-none");
+        document.getElementById("guildView-na").classList.add("d-none");
+        document.getElementById("guildView-naDescription").classList.add("d-none");
+        guildView_clear();
+    }
     awaitAuthz().then(() => {
-        const guildReq = $.get("/custom/getGuild?" + window.authz);
-        guildReq.done(guildData => {
+        getGuildData().then(guildData => {
+            if (!guildData) {
+                document.getElementById("guildView-loading").classList.add("d-none");
+                document.getElementById("guildView-na").classList.remove("d-none");
+                document.getElementById("guildView-naDescription").classList.remove("d-none");
+                guildView_clear();
+                return;
+            }
             window.guildId = guildData._id;
             window.itemListPromise.then(itemMap => {
                 document.getElementById("TechProjects-bulkAdd").classList.add("d-none");
@@ -4408,11 +4434,6 @@ single.getRoute("#guild-route").on("beforeload", function () {
                     });
                 }
             });
-        });
-        guildReq.fail(() => {
-            document.getElementById("guildView-loading").classList.add("d-none");
-            document.getElementById("guildView-na").classList.remove("d-none");
-            document.getElementById("guildView-naDescription").classList.remove("d-none");
         });
     });
 });
