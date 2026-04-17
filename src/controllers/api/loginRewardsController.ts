@@ -11,6 +11,7 @@ import { getInventory } from "../../services/inventoryService.ts";
 import { sendWsBroadcastTo } from "../../services/wsService.ts";
 import { version_compare } from "../../helpers/inventoryHelpers.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { ExportBoosters, ExportResources } from "warframe-public-export-plus";
 
 export const loginRewardsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -53,10 +54,18 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
                 sendWsBroadcastTo(account._id.toString(), { update_inventory: true });
             }
             if (is_pre_daily_tribute) {
-                // Ensure icon is something the client can display.
+                // Ensure the client has an icon it can display.
                 for (const reward of response.DailyTributeInfo.Rewards!) {
                     if (reward.Icon == "/Lotus/Interface/Icons/StoreIcons/Currency/CreditsLarge.png") {
                         reward.Icon = "/Lotus/Interface/Icons/Store/CreditBooster.png";
+                    } else if (reward.RewardType == "RT_RESOURCE") {
+                        reward.Icon = ExportResources[reward.ItemType].icon
+                            .split("/Lotus/Interface/Icons/StoreIcons/Resources/CraftingComponents/")
+                            .join("/Lotus/Interface/Icons/Store/");
+                    } else if (reward.RewardType == "RT_BOOSTER") {
+                        reward.Icon = ExportBoosters[reward.StoreItemType].icon
+                            .split("/Lotus/Interface/Icons/StoreIcons/Boosters/")
+                            .join("/Lotus/Interface/Icons/Store/");
                     }
                 }
                 res.json({ Rewards: response.DailyTributeInfo.Rewards });

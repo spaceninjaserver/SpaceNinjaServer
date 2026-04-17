@@ -12,7 +12,8 @@ import {
     ExportWarframes,
     ExportWeapons
 } from "warframe-public-export-plus";
-import { toStoreItem } from "./itemDataService.ts";
+import { fromStoreItem, toStoreItem } from "./itemDataService.ts";
+import { logger } from "../utils/logger.ts";
 
 export interface ILoginRewardsReponse {
     DailyTributeInfo: {
@@ -35,7 +36,7 @@ export interface ILoginReward {
     RewardType: string;
     //CouponType: "CPT_PLATINUM";
     Icon: string;
-    //ItemType: "";
+    ItemType: string; // pre-daily tribute
     StoreItemType: string; // uniquely identifies the reward
     //ProductCategory: "Pistols";
     Amount: number;
@@ -122,7 +123,7 @@ const getRandomLoginReward = (rng: SRng, day: number, inventory: TInventoryDatab
         RewardType: reward.RewardType,
         //CouponType: "CPT_PLATINUM",
         Icon: reward.Icon ?? "",
-        //ItemType: "",
+        ItemType: fromStoreItem(storeItemType),
         StoreItemType: storeItemType,
         //ProductCategory: "Pistols",
         Amount: reward.Duration
@@ -163,6 +164,7 @@ export const claimLoginReward = async (
             return updateCurrency(inventory, -reward.Amount, false);
 
         case "RT_BOOSTER": {
+            logger.debug(`claim login reward`, reward); // all other paths already log in some other way
             const ItemType = ExportBoosters[reward.StoreItemType].typeName;
             const ExpiryDate = 3600 * reward.Duration;
             addBooster(ItemType, ExpiryDate, inventory);
