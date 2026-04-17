@@ -1857,6 +1857,27 @@ export const getMissionDeck = (uniqueName: string): TMissionDeck | undefined => 
     return ExportRewards[uniqueName];
 };
 
+const u7WeaponCosts: Record<string, number> = {
+    "/Lotus/Weapons/Tenno/Pistol/HeavyPistol": 35_000,
+    "/Lotus/Weapons/Tenno/Akimbo/AkimboPistol": 12_000,
+    "/Lotus/Weapons/Tenno/Pistol/AutoPistol": 15_000,
+    "/Lotus/Weapons/Tenno/Pistol/HandShotGun": 35_000,
+    "/Lotus/Weapons/Tenno/Pistol/Pistol": 4_000,
+    "/Lotus/Weapons/Tenno/Pistol/BurstPistol": 12_000,
+    "/Lotus/Weapons/Tenno/Rifle/BurstRifle": 12_000,
+    "/Lotus/Weapons/Tenno/Rifle/StartingRifle": 8_000,
+    "/Lotus/Weapons/Tenno/Rifle/HeavyRifle": 50_000,
+    "/Lotus/Weapons/Tenno/Rifle/SemiAutoRifle": 50_000,
+    "/Lotus/Weapons/Tenno/Shotgun/FullAutoShotgun": 50_000,
+    "/Lotus/Weapons/Tenno/Rifle/SniperRifle": 50_000,
+    "/Lotus/Weapons/Tenno/Rifle/Rifle": 10_000,
+    "/Lotus/Weapons/Tenno/Shotgun/Shotgun": 17_500,
+    "/Lotus/Weapons/Tenno/Melee/LongSword/LongSword": 15_000,
+    "/Lotus/Weapons/Tenno/Melee/Fist/Fist": 30_000,
+    "/Lotus/Weapons/Tenno/Melee/DualShortSword/DualShortSword": 45_000,
+    "/Lotus/Weapons/Tenno/Melee/Staff/Staff": 15_000
+};
+
 export const getPrice = (
     storeItemName: string,
     quantity: number = 1,
@@ -1866,7 +1887,7 @@ export const getPrice = (
 ): number => {
     const isBundle = storeItemName in ExportBundles;
     const internalName = isBundle ? storeItemName : fromStoreItem(storeItemName);
-    let price: number | undefined;
+
     {
         const { FlashSales } = getWorldState(buildLabel);
         const flashSale = FlashSales.find(s => s.TypeName == internalName);
@@ -1878,10 +1899,17 @@ export const getPrice = (
             }
         }
     }
-    const isBooster = storeItemName in ExportBoosters;
-    if (isBooster) {
-        price = 40 * (durability + 1);
-    } else if (isBundle) {
+
+    if (storeItemName in ExportBoosters) {
+        return 40 * (durability + 1);
+    }
+
+    if (!usePremium && version_compare(buildLabel, gameToBuildVersion["8.0.0"]) < 0 && internalName in u7WeaponCosts) {
+        return u7WeaponCosts[internalName];
+    }
+
+    let price: number | undefined;
+    if (isBundle) {
         const bundle = getBundle(storeItemName, buildLabel)!;
         if (usePremium && bundle.platinumCost) {
             price = ExportBundles[storeItemName].platinumCost;
@@ -1901,56 +1929,54 @@ export const getPrice = (
             const discount = typeof bundle.packageDiscount === "number" ? bundle.packageDiscount : 0.25;
             price = Math.round(sum * (1 - discount));
         }
+    } else if (internalName in ExportBoosterPacks) {
+        if (usePremium) price = ExportBoosterPacks[internalName].platinumCost;
     } else {
-        if (internalName in ExportBoosterPacks) {
-            if (usePremium) price = ExportBoosterPacks[internalName].platinumCost;
+        const categories = [
+            ExportBundles,
+            ExportCreditBundles,
+            ExportCustoms,
+            ExportFlavour,
+            ExportGear,
+            ExportRecipes,
+            ExportResources,
+            ExportSentinels,
+            ExportWarframes,
+            ExportWeapons
+        ];
+        const category = categories.find(c => internalName in c);
+        if (category) {
+            const item = category[internalName];
+            if (usePremium && "platinumCost" in item) {
+                price = item.platinumCost;
+            } else if (!usePremium && "creditsCost" in item) {
+                price = item.creditsCost;
+            }
         } else {
-            const categories = [
-                ExportBundles,
-                ExportCreditBundles,
-                ExportCustoms,
-                ExportFlavour,
-                ExportGear,
-                ExportRecipes,
-                ExportResources,
-                ExportSentinels,
-                ExportWarframes,
-                ExportWeapons
-            ];
-            const category = categories.find(c => internalName in c);
-            if (category) {
-                const item = category[internalName];
-                if (usePremium && "platinumCost" in item) {
-                    price = item.platinumCost;
-                } else if (!usePremium && "creditsCost" in item) {
-                    price = item.creditsCost;
-                }
-            } else {
-                const recipe = getRecipe(internalName);
-                if (recipe) {
-                    if (usePremium && "platinumCost" in recipe) {
-                        price = recipe.platinumCost;
-                    } else if (!usePremium && "creditsCost" in recipe) {
-                        price = recipe.creditsCost;
-                    }
+            const recipe = getRecipe(internalName);
+            if (recipe) {
+                if (usePremium && "platinumCost" in recipe) {
+                    price = recipe.platinumCost;
+                } else if (!usePremium && "creditsCost" in recipe) {
+                    price = recipe.creditsCost;
                 }
             }
+        }
 
-            if (usePremium) {
-                if (version_compare(buildLabel, gameToBuildVersion["18.16.0"]) < 0) {
-                    if (internalName == "/Lotus/Powersuits/Mag/Mag") {
-                        price = ExportWarframes["/Lotus/Powersuits/Loki/Loki"].platinumCost;
-                    } else if (internalName == "/Lotus/Powersuits/Loki/Loki") {
-                        price = ExportWarframes["/Lotus/Powersuits/Mag/Mag"].platinumCost;
-                    }
+        if (usePremium) {
+            if (version_compare(buildLabel, gameToBuildVersion["18.16.0"]) < 0) {
+                if (internalName == "/Lotus/Powersuits/Mag/Mag") {
+                    price = ExportWarframes["/Lotus/Powersuits/Loki/Loki"].platinumCost;
+                } else if (internalName == "/Lotus/Powersuits/Loki/Loki") {
+                    price = ExportWarframes["/Lotus/Powersuits/Mag/Mag"].platinumCost;
                 }
-                if (version_compare(buildLabel, gameToBuildVersion["18.0.2"]) < 0) {
-                    if (internalName == "/Lotus/Upgrades/Skins/Dragon/DragonAltHelmet") price = 40;
-                }
-            } else {
-                // I'm not sure when they stopped selling it
-                if (storeItemName == "/Lotus/StoreItems/Types/Restoratives/Cipher") price = 250;
             }
+            if (version_compare(buildLabel, gameToBuildVersion["18.0.2"]) < 0) {
+                if (internalName == "/Lotus/Upgrades/Skins/Dragon/DragonAltHelmet") price = 40;
+            }
+        } else {
+            // I'm not sure when they stopped selling it
+            if (storeItemName == "/Lotus/StoreItems/Types/Restoratives/Cipher") price = 250;
         }
     }
 
