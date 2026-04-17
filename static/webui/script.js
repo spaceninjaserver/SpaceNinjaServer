@@ -2187,13 +2187,19 @@ dictPromise.then(() => {
     });
 });
 
+function updateGuild() {
+    if (single.getCurrentPath() == "/webui/guildView") {
+        single.loadRoute(single.getCurrentPath());
+    }
+}
+
 function changeGuildRank(guildId, targetId, rankChange) {
     revalidateAuthz().then(() => {
         const req = $.get(
             `/api/changeGuildRank.php?${window.authz}&guildId=${guildId}&targetId=${targetId}&rankChange=${rankChange}`
         );
         req.done(() => {
-            updateInventory();
+            updateGuild();
         });
     });
 }
@@ -2208,7 +2214,7 @@ function kickFromGuild(accountId) {
             })
         });
         req.done(() => {
-            updateInventory();
+            updateGuild();
         });
     });
 }
@@ -2217,7 +2223,7 @@ function kickFromAlliance(guildId) {
     revalidateAuthz().then(() => {
         const req = $.get("/api/removeFromAlliance.php?" + window.authz + "&guildId=" + guildId);
         req.done(() => {
-            updateInventory();
+            updateGuild();
         });
     });
 }
@@ -2521,7 +2527,7 @@ function addVaultItem(vaultType) {
             });
             req.done(() => {
                 document.getElementById(`acquire-type-${vaultType}`).value = "";
-                updateInventory();
+                updateGuild();
             });
         });
     }
@@ -2543,7 +2549,7 @@ function removeVaultItem(vaultType, ItemType, ItemCount) {
             })
         });
         req.done(() => {
-            updateInventory();
+            updateGuild();
         });
     });
 }
@@ -2566,7 +2572,7 @@ function addGuildTechProject() {
         });
         req.done(() => {
             document.getElementById("acquire-type-TechProjects").value = "";
-            updateInventory();
+            updateGuild();
         });
     });
 }
@@ -2583,7 +2589,7 @@ function removeGuildTechProject(uniqueName) {
             ])
         });
         req.done(() => {
-            updateInventory();
+            updateGuild();
         });
     });
 }
@@ -2600,7 +2606,7 @@ function completeGuildTechProject(uniqueName) {
             ])
         });
         req.done(() => {
-            updateInventory();
+            updateGuild();
         });
     });
 }
@@ -2617,7 +2623,7 @@ function fundGuildTechProject(uniqueName) {
             ])
         });
         req.done(() => {
-            updateInventory();
+            updateGuild();
         });
     });
 }
@@ -2634,7 +2640,7 @@ function dispatchAddVaultItemsBatch(requests, vaultType) {
                 })
             });
             req.done(() => {
-                updateInventory();
+                updateGuild();
                 resolve();
             });
         });
@@ -2669,7 +2675,7 @@ function dispatchAddTechProjectsBatch(requests) {
                 data: JSON.stringify(requests)
             });
             req.done(() => {
-                updateInventory();
+                updateGuild();
                 resolve();
             });
         });
@@ -2721,7 +2727,7 @@ function dispatchRemoveTechProjectsBatch(requests) {
                 data: JSON.stringify(requests)
             });
             req.done(() => {
-                updateInventory();
+                updateGuild();
                 resolve();
             });
         });
@@ -2754,7 +2760,7 @@ function dispatchFundTechProjectsBatch(requests) {
                 data: JSON.stringify(requests)
             });
             req.done(() => {
-                updateInventory();
+                updateGuild();
                 resolve();
             });
         });
@@ -2791,7 +2797,7 @@ function dispatchCompleteTechProjectsBatch(requests) {
                 data: JSON.stringify(requests)
             });
             req.done(() => {
-                updateInventory();
+                updateGuild();
                 resolve();
             });
         });
