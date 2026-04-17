@@ -314,7 +314,7 @@ export const handleInventoryItemConfigChange = async (
                                     if (legacySkins) {
                                         c.Skins = legacySkins;
                                     }
-                                    if (version_compare(buildLabel, gameToBuildVersion["13.0.0"]) < 0) {
+                                    if (version_compare(buildLabel, gameToBuildVersion["12.1.2"]) < 0) {
                                         if (c.Upgrades) {
                                             // U10-U11 store mods in the item config as $id instead of a string, need to convert that here
                                             const convertedUpgrades: string[] = [];
