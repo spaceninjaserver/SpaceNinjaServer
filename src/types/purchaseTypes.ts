@@ -17,31 +17,31 @@ import type {
 } from "./inventoryTypes/inventoryTypes.ts";
 
 export enum PurchaseSource {
-    Market = 0,
-    VoidTrader = 1,
-    SyndicateFavor = 2,
-    DailyDeal = 3,
-    Arsenal = 4,
-    Profile = 5,
-    Hub = 6,
-    Vendor = 7,
-    AppearancePreview = 8,
-    Museum = 9,
-    Operator = 10,
-    PlayerShip = 11,
-    Crewship = 12,
-    MenuStyle = 13,
-    MenuHud = 14,
-    Chat = 15,
-    Inventory = 16,
-    StarChart = 17,
-    PrimeVaultTrader = 18,
-    Incubator = 19,
-    Prompt = 20,
-    Kaithe = 21,
-    DuviriWeapon = 22,
-    UpdateScreen = 23,
-    Motorcycle = 24
+    Market = 0, // platinum, from metadata
+    VoidTrader = 1, // ducat + credits
+    SyndicateFavor = 2, // standing
+    DailyDeal = 3, // platinum, from server
+    Arsenal = 4, // platinum, from metadata
+    Profile = 5, // ???
+    Hub = 6, // ???
+    Vendor = 7, // variable, from manifest
+    AppearancePreview = 8, // platinum?
+    Museum = 9, // credits
+    Operator = 10, // ???
+    PlayerShip = 11, // ???
+    Crewship = 12, // ???
+    MenuStyle = 13, // platinum?
+    MenuHud = 14, // platinum?
+    Chat = 15, // ???
+    Inventory = 16, // ???
+    StarChart = 17, // ???
+    PrimeVaultTrader = 18, // aya + regal aya, from server
+    Incubator = 19, // ???
+    Prompt = 20, // ???
+    Kaithe = 21, // ???
+    DuviriWeapon = 22, // ???
+    UpdateScreen = 23, // ???
+    Motorcycle = 24 // ???
 }
 
 export interface IPurchaseRequest {

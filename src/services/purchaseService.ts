@@ -217,6 +217,7 @@ export const handlePurchase = async (
 
     switch (purchaseRequest.PurchaseParams.Source) {
         case PurchaseSource.Market:
+        case PurchaseSource.Arsenal:
             if (!purchaseRequest.PurchaseParams.ExpectedPrice) {
                 logger.debug(`client didn't provide ExpectedPrice`);
                 purchaseRequest.PurchaseParams.ExpectedPrice = getPrice(
