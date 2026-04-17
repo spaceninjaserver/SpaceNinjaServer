@@ -4278,6 +4278,22 @@ single.getRoute("#guild-route").on("beforeload", function () {
 
                         if (
                             userGuildMember &&
+                            member.Rank > userGuildMember.Rank &&
+                            userGuildPermissions &&
+                            userGuildPermissions & 8
+                        ) {
+                            const a = document.createElement("a");
+                            a.href = "#";
+                            a.onclick = function (event) {
+                                event.preventDefault();
+                                changeGuildRank(guildId, member._id.$oid, member.Rank - 1);
+                            };
+                            a.title = loc("guildView_promote");
+                            a.innerHTML = icons.angleUp;
+                            td.appendChild(a);
+                        }
+                        if (
+                            userGuildMember &&
                             member.Rank < 8 &&
                             member.Rank > userGuildMember.Rank &&
                             userGuildPermissions &&
@@ -4291,22 +4307,6 @@ single.getRoute("#guild-route").on("beforeload", function () {
                             };
                             a.title = loc("guildView_demote");
                             a.innerHTML = icons.angleDown;
-                            td.appendChild(a);
-                        }
-                        if (
-                            userGuildMember &&
-                            member.Rank > userGuildMember.Rank &&
-                            userGuildPermissions &&
-                            userGuildPermissions & 8
-                        ) {
-                            const a = document.createElement("a");
-                            a.href = "#";
-                            a.onclick = function (event) {
-                                event.preventDefault();
-                                changeGuildRank(guildId, member._id.$oid, member.Rank - 1);
-                            };
-                            a.title = loc("guildView_promote");
-                            a.innerHTML = icons.angleUp;
                             td.appendChild(a);
                         }
 
