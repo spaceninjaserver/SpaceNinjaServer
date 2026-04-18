@@ -3,6 +3,12 @@ import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 
 export const creditsController: RequestHandler = async (req, res) => {
+    // U9 and below are known to sometimes send this request without credentials, so just handle it more gracefully.
+    if (!req.query.accountId) {
+        res.sendStatus(400);
+        return;
+    }
+
     const inventory = (
         await Promise.all([
             getAccountIdForRequest(req),
