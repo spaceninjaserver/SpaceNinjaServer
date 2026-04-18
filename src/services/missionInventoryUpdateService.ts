@@ -563,7 +563,7 @@ export const addMissionInventoryUpdates = async (
                             addMods(inventory, [
                                 {
                                     ItemType: clientUpgrade.ItemType,
-                                    ItemCount: clientUpgrade.ItemCount
+                                    ItemCount: Math.abs(clientUpgrade.ItemCount) // U12 seems to provide a negative quantity for mods picked up during missions (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/3863)
                                 }
                             ]);
                         } else {
