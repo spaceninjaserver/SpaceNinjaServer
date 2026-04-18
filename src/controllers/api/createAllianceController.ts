@@ -3,6 +3,7 @@ import { Alliance, AllianceMember, Guild, GuildMember } from "../../models/guild
 import { getAllianceClient } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
+import { broadcastGuildUpdate } from "../../services/wsService.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
@@ -45,6 +46,7 @@ export const createAllianceController: RequestHandler = async (req, res) => {
         })
     ]);
     res.json(await getAllianceClient(alliance, guild, account.BuildLabel));
+    broadcastGuildUpdate(req, guild._id.toString());
 };
 
 interface ICreateAllianceRequest {

@@ -34,6 +34,7 @@ import { GuildMember } from "../../models/guildModel.ts";
 import { toMongoDate, toMongoDate2, toOid } from "../../helpers/inventoryHelpers.ts";
 import { logger } from "../../utils/logger.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
+import { broadcastGuildUpdate } from "../../services/wsService.ts";
 
 export const guildTechController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -106,6 +107,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
             }
             await guild.save();
             res.end();
+            broadcastGuildUpdate(req, guild._id.toString());
         } else {
             const recipe = ExportDojoRecipes.research[data.RecipeType!];
             if (data.TechProductCategory) {
@@ -252,6 +254,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
                 InventoryChanges: inventoryChanges,
                 Vault: getGuildVault(guild)
             });
+            broadcastGuildUpdate(req, guild._id.toString());
         }
     } else if (data.Action.split(",")[0] == "Buy") {
         const purchase = data as IGuildTechBuyRequest;

@@ -65,6 +65,7 @@ interface IWsCustomData extends WebSocket {
     accountId?: string;
     realAccountId?: string;
     isGame?: boolean;
+    guildId?: string;
 }
 
 interface IWsMsgFromClient {
@@ -87,6 +88,7 @@ interface IWsMsgFromClient {
     logout?: boolean;
     sync_inventory?: boolean;
     allPermissions?: string[];
+    guildId?: string;
 }
 
 export interface IWsMsgToClientCommon {
@@ -109,6 +111,7 @@ export interface IWsMsgToClientWebui extends IWsMsgToClientCommon {
     auth_fail?: "bad login" | "bad register" | "admin only" | "registered but admin only";
     nonce_updated?: boolean;
     update_inventory?: boolean;
+    update_guild?: boolean;
     logged_out?: boolean;
     have_game_ws?: boolean;
 }
@@ -251,6 +254,9 @@ const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
                     );
                 }
             }
+            if (data.guildId) {
+                (ws as IWsCustomData).guildId = data.guildId;
+            }
         } catch (e) {
             logError(e as Error, `processing websocket message`);
         }
@@ -351,6 +357,17 @@ export const broadcastInventoryUpdate = (req: Request): void => {
         // for game requests, let all webui tabs know
         sendWsBroadcastToWebui({ update_inventory: true }, accountId, parseInt(String(req.query.wsid)));
     }
+};
+
+export const broadcastGuildUpdate = (req: Request, guildId: string): void => {
+    // only webui tabs will receive this event. if the request already came from the webui, the requesting tab will not get this event.
+    const msg = JSON.stringify({ update_guild: true } satisfies IWsMsgToClientWebui);
+    const wsid = parseInt(String(req.query.wsid));
+    forEachWsClient(client => {
+        if (!client.isGame && client.guildId == guildId && client.id != wsid) {
+            client.send(msg);
+        }
+    });
 };
 
 export const handleNonceInvalidation = (accountId: string): void => {

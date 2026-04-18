@@ -16,6 +16,7 @@ import {
     updateCurrency
 } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { broadcastGuildUpdate } from "../../services/wsService.ts";
 import type { ITypeCount } from "../../types/commonTypes.ts";
 import type { IFusionTreasure, IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
@@ -96,6 +97,7 @@ export const contributeToVaultController: RequestHandler = async (req, res) => {
     await Promise.all(promises);
 
     res.end();
+    broadcastGuildUpdate(req, guild._id.toString());
 };
 
 interface IContributeToVaultRequest {

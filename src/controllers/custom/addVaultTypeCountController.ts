@@ -3,6 +3,7 @@ import type { RequestHandler } from "express";
 import { getGuildForRequest, hasGuildPermission } from "../../services/guildService.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import type { ITypeCount } from "../../types/commonTypes.ts";
+import { broadcastGuildUpdate } from "../../services/wsService.ts";
 
 export const addVaultTypeCountController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -33,6 +34,7 @@ export const addVaultTypeCountController: RequestHandler = async (req, res) => {
 
     await guild.save();
     res.end();
+    broadcastGuildUpdate(req, guild._id.toString());
 };
 const vaultConfig = {
     VaultShipDecorations: GuildPermission.Treasurer,

@@ -1,6 +1,7 @@
 import { AllianceMember, Guild, GuildMember } from "../../models/guildModel.ts";
 import { deleteAlliance } from "../../services/guildService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
+import { broadcastGuildUpdate } from "../../services/wsService.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
@@ -35,4 +36,5 @@ export const removeFromAllianceController: RequestHandler = async (req, res) => 
     }
 
     res.end();
+    broadcastGuildUpdate(req, allianceMember._id.toString());
 };

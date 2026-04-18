@@ -6,6 +6,7 @@ import { getAccountForRequest } from "../../services/loginService.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 import { logger } from "../../utils/logger.ts";
+import { broadcastGuildUpdate } from "../../services/wsService.ts";
 
 export const changeGuildRankController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -48,4 +49,6 @@ export const changeGuildRankController: RequestHandler = async (req, res) => {
         _id: req.query.targetId as string,
         Rank: getGuildRankBase(account.BuildLabel) + newRank
     });
+
+    broadcastGuildUpdate(req, guild._id.toString());
 };

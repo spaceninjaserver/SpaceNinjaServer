@@ -5,7 +5,13 @@ import { addInventoryDataToFriendInfo, areFriends } from "../../services/friendS
 import { hasGuildPermission } from "../../services/guildService.ts";
 import { createMessage } from "../../services/inboxService.ts";
 import { getEffectiveAvatarImageType, getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getAccountIdForRequest, getSuffixedName } from "../../services/loginService.ts";
+import {
+    getAccountForRequest,
+    getAccountIdForRequest,
+    getSuffixedName,
+    getUnicodeName
+} from "../../services/loginService.ts";
+import { broadcastGuildUpdate } from "../../services/wsService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import type { IGuildMemberClient } from "../../types/guildTypes.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
@@ -27,13 +33,15 @@ export const addToGuildPostController: RequestHandler = async (req, res) => {
         // Player applying to join a clan
         const accountId = await getAccountIdForRequest(req);
         try {
+            const guildId = payload.GuildId!.$oid;
             await GuildMember.insertOne({
                 accountId,
-                guildId: payload.GuildId!.$oid,
+                guildId,
                 status: 1, // incoming invite
                 RequestMsg: payload.RequestMsg,
                 RequestExpiry: new Date(Date.now() + 14 * 86400 * 1000) // TOVERIFY: I can't find any good information about this with regards to live, but 2 weeks seem reasonable.
             });
+            broadcastGuildUpdate(req, guildId);
         } catch (e) {
             logger.debug(`guild invite failed due to ${String(e)}`);
             res.status(400).send("Already requested");
@@ -107,13 +115,15 @@ const inviteToGuild = async (req: Request, res: Response, userName: string): Pro
 
     const member: IGuildMemberClient = {
         _id: { $oid: account._id.toString() },
-        DisplayName: account.DisplayName,
+        DisplayName: getUnicodeName(account, senderAccount.BuildLabel),
         LastLogin: toMongoDate(account.LastLogin),
         Rank: 7,
         Status: 2
     };
     await addInventoryDataToFriendInfo(member);
     res.json({ NewMember: member });
+
+    broadcastGuildUpdate(req, guild._id.toString());
 };
 
 interface IAddToGuildRequest {

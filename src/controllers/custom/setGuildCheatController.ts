@@ -2,6 +2,7 @@ import { GuildMember } from "../../models/guildModel.ts";
 import { clanLockCheats } from "../../services/clanCheatsService.ts";
 import { getGuildForRequest } from "../../services/guildService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { broadcastGuildUpdate } from "../../services/wsService.ts";
 import type { IGuildCheats } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
@@ -16,6 +17,7 @@ export const setGuildCheatController: RequestHandler = async (req, res) => {
 
         guild[payload.key] = payload.value;
         await guild.save();
+        broadcastGuildUpdate(req, guild._id.toString());
 
         if (meta && !meta.isGuildInIdealState(guild)) {
             res.send("retroactivable");

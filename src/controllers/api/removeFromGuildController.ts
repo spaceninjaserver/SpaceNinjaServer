@@ -15,7 +15,7 @@ import {
     getUnicodeName,
     type TAccountDocument
 } from "../../services/loginService.ts";
-import { sendWsBroadcastTo } from "../../services/wsService.ts";
+import { broadcastGuildUpdate, sendWsBroadcastToWebui } from "../../services/wsService.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler, Response } from "express";
 
@@ -24,6 +24,7 @@ export const removeFromGuildGetController: RequestHandler = async (req, res) => 
     const guild = await getGuildForRequest(req, account._id);
     const userName = req.query.userName as string;
     await processRemoveFromGuildRequest(account, guild, { userName }, res);
+    broadcastGuildUpdate(req, guild._id.toString());
 };
 
 export const removeFromGuildPostController: RequestHandler = async (req, res) => {
@@ -31,6 +32,7 @@ export const removeFromGuildPostController: RequestHandler = async (req, res) =>
     const guild = await getGuildForRequest(req, account._id);
     const payload = JSON.parse(String(req.body)) as IRemoveFromGuildRequest;
     await processRemoveFromGuildRequest(account, guild, payload, res);
+    broadcastGuildUpdate(req, guild._id.toString());
 };
 
 const processRemoveFromGuildRequest = async (
@@ -118,7 +120,7 @@ const processRemoveFromGuildRequest = async (
         ItemToRemove: "/Lotus/Types/Keys/DojoKey",
         RecipeToRemove: "/Lotus/Types/Keys/DojoKeyBlueprint"
     });
-    sendWsBroadcastTo(payload.userId, { update_inventory: true });
+    sendWsBroadcastToWebui({ update_guild: true }, payload.userId);
 };
 
 interface IRemoveFromGuildRequest {

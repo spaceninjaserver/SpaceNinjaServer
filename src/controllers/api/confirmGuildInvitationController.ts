@@ -10,6 +10,7 @@ import {
 } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest, getAccountIdForRequest, getSuffixedName } from "../../services/loginService.ts";
+import { broadcastGuildUpdate, sendWsBroadcastToWebui } from "../../services/wsService.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
@@ -65,6 +66,8 @@ export const confirmGuildInvitationGetController: RequestHandler = async (req, r
             ...(await getGuildClient(guild, account)),
             InventoryChanges: inventoryChanges
         });
+        sendWsBroadcastToWebui({ update_guild: true }, account._id.toString());
+        broadcastGuildUpdate(req, guild._id.toString());
     } else {
         res.end();
     }
@@ -110,9 +113,11 @@ export const confirmGuildInvitationPostController: RequestHandler = async (req, 
         });
 
         newMembers.push(account._id.toString());
+        sendWsBroadcastToWebui({ update_guild: true }, account._id.toString());
     }
     await guild.save();
     res.json({
         NewMembers: newMembers
     });
+    broadcastGuildUpdate(req, guild._id.toString());
 };

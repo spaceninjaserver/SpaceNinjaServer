@@ -13,6 +13,7 @@ import {
 import { ExportDojoRecipes } from "warframe-public-export-plus";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import { GuildMember } from "../../models/guildModel.ts";
+import { broadcastGuildUpdate } from "../../services/wsService.ts";
 
 export const addTechProjectController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -46,6 +47,7 @@ export const addTechProjectController: RequestHandler = async (req, res) => {
     }
     await guild.save();
     res.end();
+    broadcastGuildUpdate(req, guild._id.toString());
 };
 
 export const removeTechProjectController: RequestHandler = async (req, res) => {
@@ -65,6 +67,7 @@ export const removeTechProjectController: RequestHandler = async (req, res) => {
     }
     await guild.save();
     res.end();
+    broadcastGuildUpdate(req, guild._id.toString());
 };
 
 export const fundTechProjectController: RequestHandler = async (req, res) => {
@@ -95,6 +98,7 @@ export const fundTechProjectController: RequestHandler = async (req, res) => {
     }
     await Promise.all([guild.save(), guildMember.save()]);
     res.end();
+    broadcastGuildUpdate(req, guild._id.toString());
 };
 
 export const completeTechProjectsController: RequestHandler = async (req, res) => {
@@ -115,6 +119,7 @@ export const completeTechProjectsController: RequestHandler = async (req, res) =
     }
     await guild.save();
     res.end();
+    broadcastGuildUpdate(req, guild._id.toString());
 };
 
 interface ITechProjectRequest {

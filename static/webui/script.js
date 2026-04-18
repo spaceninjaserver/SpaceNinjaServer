@@ -90,8 +90,11 @@ function openWebSocket() {
             }
             if (ws_reconnect) {
                 ws_reconnect = false;
-                // Config may have changed during the time we were disconnected.
-                refreshServerConfig();
+                // Anything could've happened during the time we were disconnected and not getting events.
+                if (!refreshServerConfig()) {
+                    updateInventory();
+                    updateGuild();
+                }
             }
         }
         if ("permissions" in msg) {
@@ -135,6 +138,9 @@ function openWebSocket() {
         if ("update_inventory" in msg) {
             updateInventory();
         }
+        if ("update_guild" in msg) {
+            updateGuild();
+        }
         if ("logged_out" in msg) {
             if (localStorage.getItem("possessing")) {
                 localStorage.removeItem("possessing");
@@ -156,6 +162,7 @@ function openWebSocket() {
     window.ws.onclose = function () {
         ws_is_open = false;
         ws_reconnect = true;
+        window.subscribedToGuildId = undefined;
         setTimeout(openWebSocket, 3000);
     };
 }
@@ -163,10 +170,12 @@ openWebSocket();
 
 function refreshServerConfig() {
     //window.is_admin = undefined;
+    ws.send(JSON.stringify({ allPermissions }));
     if (single.getCurrentPath() == "/webui/cheats" || single.getCurrentPath() == "/webui/admin") {
         single.loadRoute(single.getCurrentPath());
+        return true;
     }
-    ws.send(JSON.stringify({ allPermissions }));
+    return false;
 }
 
 function doAccountSwitch(to_route) {
@@ -4069,11 +4078,16 @@ let guild_data;
 // Assumes that caller revalidates authz
 function getGuildData() {
     return new Promise(resolve => {
-        /*if (guild_data) { // TODO: Implement websocket events for guild changes, so we can be certain that cached data is okay to use.
+        if (guild_data !== undefined) {
             resolve(guild_data);
-        } else*/ {
+        } else {
             $.get("/custom/getGuild?" + window.authz).done(guildData => {
                 guild_data = guildData;
+                window.guildId = guildData?._id ?? null;
+                if (window.subscribedToGuildId != guildId) {
+                    window.subscribedToGuildId = guildId;
+                    ws.send(JSON.stringify({ guildId }));
+                }
                 resolve(guild_data);
             });
         }
@@ -4107,7 +4121,7 @@ function guildView_clear() {
 }
 
 single.getRoute("#guild-route").on("beforeload", function () {
-    if (!guild_data) {
+    if (guild_data === undefined) {
         document.getElementById("guildView-loading").classList.remove("d-none");
         document.getElementById("guildView-na").classList.add("d-none");
         document.getElementById("guildView-naDescription").classList.add("d-none");
@@ -4122,7 +4136,6 @@ single.getRoute("#guild-route").on("beforeload", function () {
                 guildView_clear();
                 return;
             }
-            window.guildId = guildData._id;
             window.itemListPromise.then(itemMap => {
                 document.getElementById("TechProjects-bulkAdd").classList.add("d-none");
                 document.getElementById("TechProjects-bulkFund").classList.add("d-none");

@@ -3,7 +3,7 @@ import { getAccountForRequest, hasPermission } from "../../services/loginService
 import { addFusionPoints, getInventory } from "../../services/inventoryService.ts";
 import { getGuildForRequestEx, hasGuildPermission } from "../../services/guildService.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
-import { broadcastInventoryUpdate } from "../../services/wsService.ts";
+import { broadcastGuildUpdate, broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 export const addCurrencyController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -18,6 +18,7 @@ export const addCurrencyController: RequestHandler = async (req, res) => {
             guild[request.currency]! += request.delta;
             await guild.save();
             res.json(guild[request.currency]);
+            broadcastGuildUpdate(req, guild._id.toString());
         }
     } else {
         if (hasPermission(account, currencyToPermission[request.currency])) {
