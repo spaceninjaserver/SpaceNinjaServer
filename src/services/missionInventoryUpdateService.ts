@@ -9,7 +9,6 @@ import {
     ExportAnimals,
     ExportEnemies,
     ExportFusionBundles,
-    ExportRegions,
     ExportRelics,
     ExportRewards
 } from "warframe-public-export-plus";
@@ -61,6 +60,7 @@ import {
     getKey,
     getLevelKeyRewards,
     getMissionDeck,
+    getRegion,
     isStoreItem,
     toStoreItem
 } from "./itemDataService.ts";
@@ -113,7 +113,11 @@ import { importLoadOutConfig } from "./importService.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import { corpusDeathSquadInfo, grineerDeathSquadInfo } from "./invasionService.ts";
 
-const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] => {
+const getRotations = async (
+    rewardInfo: IRewardInfo,
+    buildLabel: string | undefined,
+    tierOverride?: number
+): Promise<number[]> => {
     // For Spy missions, e.g. 3 vaults cracked = A, B, C
     if (rewardInfo.VaultsCracked) {
         const rotations: number[] = [];
@@ -128,7 +132,7 @@ const getRotations = (rewardInfo: IRewardInfo, tierOverride?: number): number[] 
         return [0, 1];
     }
 
-    const region = ExportRegions[rewardInfo.node] as IRegion | undefined;
+    const region = await getRegion(rewardInfo.node, buildLabel);
     const missionType: TMissionType | undefined = region?.missionType;
 
     // Disruption uses 'rewardTierOverrides' to tell us (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2599)
@@ -218,9 +222,9 @@ export const addMissionInventoryUpdates = async (
 ): Promise<IInventoryChanges> => {
     const inventoryChanges: IInventoryChanges = {};
     if (inventoryUpdates.EndOfMatchUpload) {
-        if (inventoryUpdates.Missions && inventoryUpdates.Missions.Tag in ExportRegions) {
-            const node = ExportRegions[inventoryUpdates.Missions.Tag];
-            if (node.miscItemFee && !inventory.noNodeEntryFees) {
+        if (inventoryUpdates.Missions) {
+            const node = await getRegion(inventoryUpdates.Missions.Tag, account.BuildLabel);
+            if (node && node.miscItemFee && !inventory.noNodeEntryFees) {
                 addMiscItems(inventory, [
                     {
                         ItemType: node.miscItemFee.ItemType,
@@ -1230,9 +1234,14 @@ const droptableAliases: Record<string, string> = {
         "/Lotus/Types/DropTables/WF1999DropTables/LasrianTankHardModeDropTable"
 };
 
-const isEligibleForCreditReward = (rewardInfo: IRewardInfo, missions: IMission, node: IRegion): boolean => {
+const isEligibleForCreditReward = async (
+    rewardInfo: IRewardInfo,
+    missions: IMission,
+    node: IRegion,
+    buildLabel: string | undefined
+): Promise<boolean> => {
     // (E)SO should not give credits for only completing zone 1, in which case it has no rewardQualifications (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1823)
-    if (getRotations(rewardInfo).length == 0) {
+    if ((await getRotations(rewardInfo, buildLabel)).length == 0) {
         return missions.Tag == "SolNode720"; // Netracells don't use rewardQualifications but probably should give credits anyway
     }
     // The rest here might not be needed anymore, but just to be sure we don't give undue credits...
@@ -1280,7 +1289,7 @@ export const addMissionRewards = async (
     }
 
     //TODO: check double reward merging
-    const MissionRewards: IMissionReward[] = getRandomMissionDrops(
+    const MissionRewards: IMissionReward[] = await getRandomMissionDrops(
         account,
         inventory,
         rewardInfo,
@@ -1316,9 +1325,10 @@ export const addMissionRewards = async (
                             });
                         }
                     }
-                    missionCompletionCredits += addFixedLevelRewards(
+                    missionCompletionCredits += await addFixedLevelRewards(
                         alert.MissionInfo.missionReward,
                         MissionRewards,
+                        account.BuildLabel,
                         rewardInfo
                     );
                 }
@@ -1400,9 +1410,10 @@ export const addMissionRewards = async (
         const fixedLevelRewards = getLevelKeyRewards(levelKeyName, account.BuildLabel);
         //logger.debug(`fixedLevelRewards ${fixedLevelRewards}`);
         if (fixedLevelRewards.levelKeyRewards) {
-            missionCompletionCredits += addFixedLevelRewards(
+            missionCompletionCredits += await addFixedLevelRewards(
                 fixedLevelRewards.levelKeyRewards,
                 MissionRewards,
+                account.BuildLabel,
                 rewardInfo
             );
         }
@@ -1431,41 +1442,47 @@ export const addMissionRewards = async (
     // ignoring tags not in ExportRegions, because it can just be garbage:
     // - https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1013
     // - https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1365
-    if (missions && missions.Tag in ExportRegions) {
-        const node = ExportRegions[missions.Tag];
-
-        //node based credit rewards for mission completion
-        if (isEligibleForCreditReward(rewardInfo, missions, node)) {
-            const levelCreditReward = getLevelCreditRewards(node);
-            if (levelCreditReward) {
-                missionCompletionCredits += levelCreditReward;
-                logger.debug(`levelCreditReward ${levelCreditReward}`);
-            }
-        }
-
-        if (node.missionReward) {
-            missionCompletionCredits += addFixedLevelRewards(node.missionReward, MissionRewards, rewardInfo);
-        }
-
-        if (rewardInfo.sortieTag == "Mission1") {
-            missionCompletionCredits += 20_000;
-        } else if (rewardInfo.sortieTag == "Mission2") {
-            missionCompletionCredits += 30_000;
-        } else if (rewardInfo.sortieTag == "Final") {
-            missionCompletionCredits += 50_000;
-        }
-
-        if (missions.Tag == "PlutoToErisJunction") {
-            await createMessage(inventory.accountOwnerId, [
-                {
-                    sndr: "/Lotus/Language/G1Quests/GolemQuestJordasName",
-                    msg: "/Lotus/Language/G1Quests/GolemQuestIntroBody",
-                    att: ["/Lotus/Types/Keys/GolemQuest/GolemQuestKeyChainItem"],
-                    sub: "/Lotus/Language/G1Quests/GolemQuestIntroTitle",
-                    icon: "/Lotus/Interface/Icons/Npcs/JordasPortrait.png",
-                    highPriority: true
+    if (missions) {
+        const node = await getRegion(missions.Tag, account.BuildLabel);
+        if (node) {
+            if (await isEligibleForCreditReward(rewardInfo, missions, node, account.BuildLabel)) {
+                //node based credit rewards for mission completion
+                const levelCreditReward = getLevelCreditRewards(node);
+                if (levelCreditReward) {
+                    missionCompletionCredits += levelCreditReward;
+                    logger.debug(`levelCreditReward ${levelCreditReward}`);
                 }
-            ]);
+            }
+
+            if (node.missionReward) {
+                missionCompletionCredits += await addFixedLevelRewards(
+                    node.missionReward,
+                    MissionRewards,
+                    account.BuildLabel,
+                    rewardInfo
+                );
+            }
+
+            if (rewardInfo.sortieTag == "Mission1") {
+                missionCompletionCredits += 20_000;
+            } else if (rewardInfo.sortieTag == "Mission2") {
+                missionCompletionCredits += 30_000;
+            } else if (rewardInfo.sortieTag == "Final") {
+                missionCompletionCredits += 50_000;
+            }
+
+            if (missions.Tag == "PlutoToErisJunction") {
+                await createMessage(inventory.accountOwnerId, [
+                    {
+                        sndr: "/Lotus/Language/G1Quests/GolemQuestJordasName",
+                        msg: "/Lotus/Language/G1Quests/GolemQuestIntroBody",
+                        att: ["/Lotus/Types/Keys/GolemQuest/GolemQuestKeyChainItem"],
+                        sub: "/Lotus/Language/G1Quests/GolemQuestIntroTitle",
+                        icon: "/Lotus/Interface/Icons/Npcs/JordasPortrait.png",
+                        highPriority: true
+                    }
+                ]);
+            }
         }
     }
 
@@ -1913,11 +1930,12 @@ export const addCredits = async (
     return finalCredits;
 };
 
-export const addFixedLevelRewards = (
+export const addFixedLevelRewards = async (
     rewards: IMissionRewardExternal,
     MissionRewards: IMissionReward[],
+    buildLabel: string | undefined,
     rewardInfo?: IRewardInfo
-): number => {
+): Promise<number> => {
     let missionBonusCredits = 0;
     if (rewards.credits) {
         missionBonusCredits += rewards.credits;
@@ -1946,7 +1964,7 @@ export const addFixedLevelRewards = (
     if (rewards.droptable) {
         const droptable = getMissionDeck(rewards.droptable);
         if (droptable) {
-            const rotations: number[] = rewardInfo ? getRotations(rewardInfo) : [0];
+            const rotations: number[] = rewardInfo ? await getRotations(rewardInfo, buildLabel) : [0];
             if (rewards.droptable.startsWith("/Lotus/Types/Game/MissionDecks/VoidKeyMissionRewards/")) {
                 logger.debug(`rolling ${rewards.droptable} for ${rotations.length} void tower rewards`);
                 const RARITY_TO_PROBABILITY: Record<TRarity, number> = {
@@ -1996,7 +2014,7 @@ function getLevelCreditRewards(node: Partial<IRegion>): number | undefined {
     //TODO: get dark sektor fixed credit rewards and railjack bonus
 }
 
-function getRandomMissionDrops(
+async function getRandomMissionDrops(
     account: TAccountDocument,
     inventory: TInventoryDatabaseDocument,
     RewardInfo: IRewardInfo,
@@ -2004,7 +2022,7 @@ function getRandomMissionDrops(
     mission: IMission | undefined,
     tierOverride: number | undefined,
     firstCompletion: boolean
-): IMissionReward[] {
+): Promise<IMissionReward[]> {
     const drops: IMissionReward[] = [];
     if (RewardInfo.sortieTag == "Final" && firstCompletion) {
         const arr = RewardInfo.sortieId!.split("_");
@@ -2074,8 +2092,8 @@ function getRandomMissionDrops(
             ItemCount: 5
         });
     }
-    if (RewardInfo.node in ExportRegions) {
-        const region = ExportRegions[RewardInfo.node];
+    const region = await getRegion(RewardInfo.node, account.BuildLabel);
+    if (region) {
         let rewardManifests: string[];
         if (RewardInfo.periodicMissionTag == "EliteAlert" || RewardInfo.periodicMissionTag == "EliteAlertB") {
             rewardManifests = ["/Lotus/Types/Game/MissionDecks/EliteAlertMissionRewards/EliteAlertMissionRewards"];
@@ -2278,7 +2296,7 @@ function getRandomMissionDrops(
                 }
                 tierOverride = 0;
             }
-            rotations = getRotations(RewardInfo, tierOverride);
+            rotations = await getRotations(RewardInfo, account.BuildLabel, tierOverride);
         }
         if (rewardManifests.length != 0) {
             logger.debug(`generating random mission rewards`, { rewardManifests, rotations });

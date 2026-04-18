@@ -42,6 +42,7 @@ import {
     ExportKeys,
     ExportRailjackWeapons,
     ExportRecipes,
+    ExportRegions,
     ExportResources,
     ExportRewards,
     ExportSentinels,
@@ -1108,6 +1109,7 @@ export const U5Modules: Record<string, IU5FingerprintData> = {
 };
 
 const legacyBoosterPacksCache = new Map<string, Partial<IBoosterPack>>();
+const legacySolarMapCache = new Map<string, Record<string, IRegion>>();
 
 const getLegacyDataIndex = async (target: string): Promise<string[]> => {
     const filePath = path.join("./static/fixed_responses/data", target, "index.json");
@@ -1137,6 +1139,19 @@ const getLegacyBoosterPackData = async (target: string, buildLabel: string): Pro
     const raw = await fs.readFile(filePath, "utf-8");
     const json = JSON.parse(raw) as Partial<IBoosterPack>;
     legacyBoosterPacksCache.set(key, json);
+
+    return json;
+};
+
+const getLegacySolarMapData = async (target: string, buildLabel: string): Promise<Record<string, IRegion>> => {
+    const key = `${target}:${buildLabel}`;
+    const cached = legacySolarMapCache.get(key);
+    if (cached) return cached;
+
+    const filePath = path.join("./static/fixed_responses/data", target, `${buildLabel}.json`);
+    const raw = await fs.readFile(filePath, "utf-8");
+    const json = JSON.parse(raw) as Record<string, IRegion>;
+    legacySolarMapCache.set(key, json);
 
     return json;
 };
@@ -1985,4 +2000,16 @@ export const getPrice = (
     }
 
     return price * quantity;
+};
+
+export const getRegion = async (uniqueName: string, buildLabel: string | undefined): Promise<IRegion | undefined> => {
+    if (buildLabel && version_compare(buildLabel, "2020.03.05.16.06") <= 0) {
+        const target = version_compare(buildLabel, "2016.07.08.16.56") < 0 ? "OriginSloarMap" : "OriginSolarMapRedux";
+        const version = await getLegacyDataVersion(target, buildLabel);
+        if (version) {
+            const legacyData = await getLegacySolarMapData(target, version);
+            return legacyData[uniqueName];
+        }
+    }
+    return ExportRegions[uniqueName];
 };

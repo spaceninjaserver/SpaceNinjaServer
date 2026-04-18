@@ -433,7 +433,11 @@ export const giveKeyChainMissionReward = async (
             const run = questKey.Progress?.[0]?.c ?? 0;
             if (fixedLevelRewards.levelKeyRewards) {
                 const missionRewards: { StoreItem: string; ItemCount: number }[] = [];
-                inventory.RegularCredits += addFixedLevelRewards(fixedLevelRewards.levelKeyRewards, missionRewards);
+                inventory.RegularCredits += await addFixedLevelRewards(
+                    fixedLevelRewards.levelKeyRewards,
+                    missionRewards,
+                    buildLabel
+                );
 
                 for (const reward of missionRewards) {
                     await addItem(inventory, fromStoreItem(reward.StoreItem), reward.ItemCount);

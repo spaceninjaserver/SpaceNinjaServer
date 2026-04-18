@@ -27,7 +27,7 @@ export const completeAllMissionsController: RequestHandler = async (req, res) =>
         if (mission.Completes == 0) {
             mission.Completes++;
             if (node.missionReward) {
-                addFixedLevelRewards(node.missionReward, MissionRewards);
+                await addFixedLevelRewards(node.missionReward, MissionRewards, account.BuildLabel);
             }
         }
         mission.Tier = 1;
