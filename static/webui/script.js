@@ -63,6 +63,8 @@ function openWebSocket() {
         }
         if ("config_reloaded" in msg) {
             refreshServerConfig();
+            // Our permissions may have changed, so resync them with the server.
+            ws.send(JSON.stringify({ allPermissions }));
         }
         if ("auth_succ" in msg) {
             auth_pending = false;
@@ -170,7 +172,6 @@ openWebSocket();
 
 function refreshServerConfig() {
     //window.is_admin = undefined;
-    ws.send(JSON.stringify({ allPermissions }));
     if (single.getCurrentPath() == "/webui/cheats" || single.getCurrentPath() == "/webui/admin") {
         single.loadRoute(single.getCurrentPath());
         return true;
