@@ -601,7 +601,9 @@ const pushTilesetModifiers = (modifiers: string[], tileset: TSortieTileset): voi
 };
 
 export const getSortie = (day: number): ISortie => {
-    const rng = new SRng(new SRng(day).randomInt(0, 100_000));
+    const seed = new SRng(day).randomInt(0, 100_000);
+    //logger.debug(`sortie seed: ${seed}`);
+    const rng = new SRng(seed);
 
     const boss = rng.randomElement(sortieBosses)!;
     const enemyFaction = sortieBossToFaction[boss];
@@ -765,8 +767,14 @@ const validateSortieSeed = (seed: number, variants: ISortieMission[]): boolean =
             }
             rng.randomFloat(); // difficulty
         }
-        if (variant.missionType != "MT_ARENA" && variant.missionType != "MT_JUNCTION") {
-            const locationTextureIndex = rng.randomInt(0, 1); // In general, each tileset has 2 texture options (there are exceptions of course, like MT_ARENA and MT_JUNCTION).
+        if (
+            variant.missionType != "MT_ARENA" &&
+            variant.missionType != "MT_JUNCTION" &&
+            variant.tileset.indexOf("GasCity") == -1 &&
+            variant.tileset.indexOf("Forest") == -1 &&
+            variant.tileset.indexOf("Settlement") == -1
+        ) {
+            const locationTextureIndex = rng.randomInt(0, 1);
             if (variant.tileset == "CorpusIcePlanetTileset" || variant.tileset == "CorpusIcePlanetTilesetCaves") {
                 if (locationTextureIndex != 0) {
                     return false; // For the corpus ice planet tileset, index 1 is an infested corpus ship image, which we don't want.
