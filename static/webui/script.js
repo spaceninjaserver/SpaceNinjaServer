@@ -3562,6 +3562,7 @@ document.querySelectorAll("#account-cheats input[type=checkbox]").forEach(elm =>
                 })
             }).done(res => {
                 elm.checked = value;
+                inventory_data[elm.id] = value;
                 if (res == "retroactivable") {
                     if (window.confirm(loc("cheats_retroactivePrompt"))) {
                         $.get("/custom/retroactivelyApplyCheat?" + window.authz + "&cheat=" + elm.id);
@@ -3604,6 +3605,7 @@ document.querySelectorAll("#account-cheats .input-group").forEach(grp => {
                 })
             }).done(() => {
                 input.value = value;
+                inventory_data[elm.id] = value;
             });
         });
     };

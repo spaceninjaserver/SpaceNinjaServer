@@ -1,6 +1,6 @@
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest, hasPermission } from "../../services/loginService.ts";
-import { sendWsBroadcastEx, sendWsBroadcastTo } from "../../services/wsService.ts";
+import { sendWsBroadcastEx, sendWsBroadcastTo, sendWsBroadcastToWebui } from "../../services/wsService.ts";
 import {
     accountCheatBooleans,
     accountCheatNumbers,
@@ -50,21 +50,20 @@ export const setAccountCheatController: RequestHandler = async (req, res) => {
     }
 
     res.end();
-    if (
-        [
-            "infiniteCredits",
-            "infinitePlatinum",
-            "infiniteEndo",
-            "infiniteRegalAya",
-            "infiniteTrades",
-            "infiniteGifts",
-            "skipAllDialogue",
-            "skipAllPopups"
-        ].indexOf(payload.key) != -1
-    ) {
+
+    if (["infiniteCredits", "infinitePlatinum", "infiniteEndo", "infiniteRegalAya"].indexOf(payload.key) != -1) {
+        // Game and all webui tabs need to refresh the inventory
         sendWsBroadcastTo(account._id.toString(), { update_inventory: true, sync_inventory: true });
+    } else if (["infiniteTrades", "infiniteGifts", "skipAllDialogue", "skipAllPopups"].indexOf(payload.key) != -1) {
+        // Only game and other webui tabs need to refresh the inventory
+        sendWsBroadcastEx(
+            { update_inventory: true, sync_inventory: true },
+            account._id.toString(),
+            parseInt(String(req.query.wsid))
+        );
     } else {
-        sendWsBroadcastEx({ update_inventory: true }, account._id.toString(), parseInt(String(req.query.wsid)));
+        // Only other webui tabs need to refresh the inventory
+        sendWsBroadcastToWebui({ update_inventory: true }, account._id.toString(), parseInt(String(req.query.wsid)));
     }
 };
 
