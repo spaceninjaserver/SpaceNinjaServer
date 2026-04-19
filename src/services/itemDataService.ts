@@ -1653,14 +1653,17 @@ export const getBoosterPack = async (
             "/Lotus/Types/BoosterPacks/GreaterRandomProjection"
         ].includes(uniqueName)
     ) {
-        const target = "RandomProjection";
-        const version = await getLegacyDataVersion(target, buildLabel);
-        if (version) {
-            const legacyData = await getLegacyBoosterPackData(target, version);
-            return {
-                ...ExportBoosterPacks[uniqueName],
-                ...legacyData
-            };
+        // PE+ already have latest data - so there is no need to do anything
+        if (buildLabel && version_compare(buildLabel, gameToBuildVersion["42.0.6"]) < 0) {
+            const target = "RandomProjection";
+            const version = await getLegacyDataVersion(target, buildLabel);
+            if (version) {
+                const legacyData = await getLegacyBoosterPackData(target, version);
+                return {
+                    ...ExportBoosterPacks[uniqueName],
+                    ...legacyData
+                };
+            }
         }
     }
     if (
@@ -1672,14 +1675,17 @@ export const getBoosterPack = async (
             "/Lotus/Types/BoosterPacks/PremiumRareArtifactPack" // 90p
         ].includes(uniqueName)
     ) {
-        const target = "LotusArtifactUpgradePackBase";
-        const version = await getLegacyDataVersion(target, buildLabel);
-        if (version) {
-            const legacyData = await getLegacyBoosterPackData(target, version);
-            return {
-                ...ExportBoosterPacks[uniqueName],
-                ...legacyData
-            };
+        // Mod packs retired in U25
+        if (buildLabel && version_compare(buildLabel, gameToBuildVersion["25.0.0"]) < 0) {
+            const target = "LotusArtifactUpgradePackBase";
+            const version = await getLegacyDataVersion(target, buildLabel);
+            if (version) {
+                const legacyData = await getLegacyBoosterPackData(target, version);
+                return {
+                    ...ExportBoosterPacks[uniqueName],
+                    ...legacyData
+                };
+            }
         }
     }
 
@@ -2003,8 +2009,9 @@ export const getPrice = (
 };
 
 export const getRegion = async (uniqueName: string, buildLabel: string | undefined): Promise<IRegion | undefined> => {
-    if (buildLabel && version_compare(buildLabel, "2020.03.05.16.06") <= 0) {
-        const target = version_compare(buildLabel, "2016.07.08.16.56") < 0 ? "OriginSloarMap" : "OriginSolarMapRedux";
+    // after U27.2.0 OriginSolarMapRedux moved to binary format, so we don't have data for it
+    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["27.2.0"]) <= 0) {
+        const target = version_compare(buildLabel, "2016.07.08.16.56") < 0 ? "OriginSolarMap" : "OriginSolarMapRedux";
         const version = await getLegacyDataVersion(target, buildLabel);
         if (version) {
             const legacyData = await getLegacySolarMapData(target, version);
