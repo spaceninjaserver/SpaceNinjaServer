@@ -123,7 +123,7 @@ const getRandomLoginReward = (rng: SRng, day: number, inventory: TInventoryDatab
         RewardType: reward.RewardType,
         //CouponType: "CPT_PLATINUM",
         Icon: reward.Icon ?? "",
-        ItemType: fromStoreItem(storeItemType),
+        ItemType: storeItemType ? fromStoreItem(storeItemType) : "",
         StoreItemType: storeItemType,
         //ProductCategory: "Pistols",
         Amount: reward.Duration
