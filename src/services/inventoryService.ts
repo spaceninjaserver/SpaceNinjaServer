@@ -27,7 +27,8 @@ import type {
     IKubrowPetPrintClient,
     IWeeklyMissionChallengeInfo,
     IKubrowPetEgg,
-    ITauPrequelQuestCustomData
+    ITauPrequelQuestCustomData,
+    ICollectibleEntry
 } from "../types/inventoryTypes/inventoryTypes.ts";
 import { InventorySlot, equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate.ts";
@@ -115,6 +116,9 @@ import type { ITypeCount } from "../types/commonTypes.ts";
 import type { TLoadoutDatabaseDocument } from "../models/inventoryModels/loadoutModel.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import suitDefaultUpgrades from "../constants/suitDefaultUpgrades.ts";
+import kuriaMessage50 from "../../static/fixed_responses/kuriaMessages/fiftyPercent.json" with { type: "json" };
+import kuriaMessage75 from "../../static/fixed_responses/kuriaMessages/seventyFivePercent.json" with { type: "json" };
+import kuriaMessage100 from "../../static/fixed_responses/kuriaMessages/oneHundredPercent.json" with { type: "json" };
 
 type OperatorAntiqueMeta = {
     focusAbility: string;
@@ -3114,6 +3118,29 @@ export const handleTauMemories = async (inventory: TInventoryDatabaseDocument): 
                     highPriority: true
                 }
             ]);
+        }
+    }
+};
+
+export const updateIncentiveStates = async (
+    accountId: string | Types.ObjectId,
+    entry: ICollectibleEntry
+): Promise<void> => {
+    if (entry.CollectibleType == "/Lotus/Objects/Orokin/Props/CollectibleSeriesOne") {
+        const progress = entry.Count / entry.ReqScans;
+        for (const gate of entry.IncentiveStates) {
+            gate.complete = progress >= gate.threshold;
+            if (gate.complete && !gate.sent) {
+                gate.sent = true;
+                if (gate.threshold == 0.5) {
+                    await createMessage(accountId, [kuriaMessage50]);
+                } else {
+                    await createMessage(accountId, [kuriaMessage75]);
+                }
+            }
+        }
+        if (progress >= 1.0) {
+            await createMessage(accountId, [kuriaMessage100]);
         }
     }
 };

@@ -50,6 +50,7 @@ import {
     giveNemesisWeaponRecipe,
     updateCurrency,
     updateEntratiVault,
+    updateIncentiveStates,
     updateSyndicate
 } from "./inventoryService.ts";
 import { updateQuestKey } from "./questService.ts";
@@ -71,9 +72,6 @@ import type { IMissionCredits, IMissionReward, INemesisTaxInfo, IRecoveredItemIn
 import { crackRelic, ensureRelicRewardIsCorrect } from "../helpers/relicHelper.ts";
 import type { IMessageCreationTemplate } from "./inboxService.ts";
 import { createMessage } from "./inboxService.ts";
-import kuriaMessage50 from "../../static/fixed_responses/kuriaMessages/fiftyPercent.json" with { type: "json" };
-import kuriaMessage75 from "../../static/fixed_responses/kuriaMessages/seventyFivePercent.json" with { type: "json" };
-import kuriaMessage100 from "../../static/fixed_responses/kuriaMessages/oneHundredPercent.json" with { type: "json" };
 import {
     generateNemesisProfile,
     getInfestedLichItemRewards,
@@ -512,23 +510,7 @@ export const addMissionInventoryUpdates = async (
                     if (entry) {
                         entry.Count = scan.Count;
                         entry.Tracking = scan.Tracking;
-                        if (entry.CollectibleType == "/Lotus/Objects/Orokin/Props/CollectibleSeriesOne") {
-                            const progress = entry.Count / entry.ReqScans;
-                            for (const gate of entry.IncentiveStates) {
-                                gate.complete = progress >= gate.threshold;
-                                if (gate.complete && !gate.sent) {
-                                    gate.sent = true;
-                                    if (gate.threshold == 0.5) {
-                                        await createMessage(inventory.accountOwnerId, [kuriaMessage50]);
-                                    } else {
-                                        await createMessage(inventory.accountOwnerId, [kuriaMessage75]);
-                                    }
-                                }
-                            }
-                            if (progress >= 1.0) {
-                                await createMessage(inventory.accountOwnerId, [kuriaMessage100]);
-                            }
-                        }
+                        await updateIncentiveStates(inventory.accountOwnerId, entry);
                     } else {
                         logger.warn(`${scan.CollectibleType} was not found in inventory, ignoring scans`);
                     }
