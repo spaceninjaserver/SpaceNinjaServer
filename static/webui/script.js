@@ -93,10 +93,7 @@ function openWebSocket() {
             if (ws_reconnect) {
                 ws_reconnect = false;
                 // Anything could've happened during the time we were disconnected and not getting events.
-                if (!refreshServerConfig()) {
-                    updateInventory();
-                    updateGuild();
-                }
+                single.loadRoute(single.getCurrentPath());
             }
         }
         if ("permissions" in msg) {
@@ -164,6 +161,7 @@ function openWebSocket() {
     window.ws.onclose = function () {
         ws_is_open = false;
         ws_reconnect = true;
+        invalidateCachedData();
         window.subscribedToGuildId = undefined;
         setTimeout(openWebSocket, 3000);
     };
@@ -171,18 +169,23 @@ function openWebSocket() {
 openWebSocket();
 
 function refreshServerConfig() {
-    //window.is_admin = undefined;
+    window.is_admin = undefined;
+    config_data = undefined;
     if (single.getCurrentPath() == "/webui/cheats" || single.getCurrentPath() == "/webui/admin") {
         single.loadRoute(single.getCurrentPath());
-        return true;
     }
-    return false;
+}
+
+function invalidateCachedData() {
+    inventory_data = undefined;
+    guild_data = undefined;
+    window.is_admin = undefined;
+    config_data = undefined;
 }
 
 function doAccountSwitch(to_route) {
     window.authz = undefined;
-    inventory_data = undefined;
-    guild_data = undefined;
+    invalidateCachedData();
     single.loadRoute(to_route);
     sendAuth();
 }
@@ -3429,6 +3432,31 @@ function doSaveConfigStringArray(id) {
     });
 }
 
+let config_data;
+// Assumes that caller revalidates authz
+function getServerConfig() {
+    return new Promise((resolve, reject) => {
+        if (window.is_admin === false) {
+            config_data = null;
+        }
+        if (config_data !== undefined) {
+            resolve(config_data);
+        } else {
+            $.post({
+                url: "/custom/getConfig?" + window.authz,
+                contentType: "application/json",
+                data: JSON.stringify(uiConfigs)
+            })
+                .done(json => {
+                    window.is_admin = !!json;
+                    config_data = json;
+                    resolve(config_data);
+                })
+                .fail(res => reject(res.responseText));
+        }
+    });
+}
+
 single.getRoute("/webui/cheats").on("beforeload", function () {
     awaitAuthz().then(() => {
         getInventoryData().then(data => {
@@ -3441,14 +3469,8 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
                 }
             }
         });
-
-        $.post({
-            url: "/custom/getConfig?" + window.authz,
-            contentType: "application/json",
-            data: JSON.stringify(uiConfigs)
-        })
-            .done(json => {
-                //window.is_admin = true;
+        getServerConfig().then(json => {
+            if (json) {
                 $(".admin-hide").addClass("d-none");
                 $(".admin-show").removeClass("d-none");
                 Object.entries(json).forEach(entry => {
@@ -3463,24 +3485,11 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
                         elm.value = value ?? elm.getAttribute("data-default");
                     }
                 });
-            })
-            .fail(res => {
-                if (res.responseText == "Log-in expired") {
-                    if (ws_is_open && !auth_pending) {
-                        console.warn("Credentials invalidated but the server didn't let us know");
-                        sendAuth();
-                    }
-                    revalidateAuthz().then(() => {
-                        if (single.getCurrentPath() == "/webui/cheats") {
-                            single.loadRoute("/webui/cheats");
-                        }
-                    });
-                } else {
-                    //window.is_admin = false;
-                    $(".admin-hide").removeClass("d-none");
-                    $(".admin-show").addClass("d-none");
-                }
-            });
+            } else {
+                $(".admin-hide").removeClass("d-none");
+                $(".admin-show").addClass("d-none");
+            }
+        });
     });
 });
 
@@ -5600,9 +5609,14 @@ function removeItems(category) {
 
 single.getRoute("/webui/admin").on("beforeload", function () {
     awaitAuthz().then(() => {
+        if (window.is_admin === false) {
+            $(".admin-hide").removeClass("d-none");
+            $(".admin-show").addClass("d-none");
+            return;
+        }
         $.get("/custom/getRegisteredLosers?" + window.authz)
             .done(users => {
-                //window.is_admin = true;
+                window.is_admin = true;
                 $(".admin-hide").addClass("d-none");
                 $(".admin-show").removeClass("d-none");
                 document.getElementById("registered-losers").innerHTML = "";
@@ -5648,7 +5662,7 @@ single.getRoute("/webui/admin").on("beforeload", function () {
                         }
                     });
                 } else {
-                    //window.is_admin = false;
+                    window.is_admin = false;
                     $(".admin-hide").removeClass("d-none");
                     $(".admin-show").addClass("d-none");
                 }

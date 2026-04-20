@@ -15,7 +15,7 @@ export const getConfigController: RequestHandler = async (req, res) => {
         }
         res.json(responseData);
     } else {
-        res.status(401).end();
+        res.json(null);
     }
 };
 
