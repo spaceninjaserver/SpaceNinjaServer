@@ -49,9 +49,13 @@ export const sellController: RequestHandler = async (req, res) => {
         requiredFields.add("MiscItems");
     }
     for (const key of Object.keys(payload.Items)) {
-        requiredFields.add(key as keyof TInventoryDatabaseDocument);
-        if (key == "LongGuns") {
-            requiredFields.add("Melee");
+        if (key == "FusionTreasures") {
+            requiredFields.add("HybridFusionTreasures");
+        } else {
+            requiredFields.add(key as keyof TInventoryDatabaseDocument);
+            if (key == "LongGuns") {
+                requiredFields.add("Melee");
+            }
         }
     }
     if (requiredFields.has("Upgrades")) {
@@ -336,7 +340,11 @@ export const sellController: RequestHandler = async (req, res) => {
                 break;
             case "FusionTreasures":
                 payload.Items.FusionTreasures.forEach(sellItem => {
-                    addFusionTreasures(inventory, [parseFusionTreasure(sellItem.String, sellItem.Count * -1)]);
+                    if (sellItem.String.length == 24 && !sellItem.String.includes("/")) {
+                        inventory.HybridFusionTreasures.pull({ _id: sellItem.String });
+                    } else {
+                        addFusionTreasures(inventory, [parseFusionTreasure(sellItem.String, sellItem.Count * -1)]);
+                    }
                 });
                 break;
             case "WeaponSkins": // SNS specific field, only used by webui

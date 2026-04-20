@@ -153,6 +153,7 @@ export interface IInventoryDatabase
             | "FocusLoadouts"
             | "ChallengeInstanceStates"
             | "PeriodicMissionCompletions"
+            | "FusionTreasures"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment,
@@ -207,6 +208,8 @@ export interface IInventoryDatabase
     FocusLoadouts?: IFocusLoadoutDatabase[];
     ChallengeInstanceStates?: IChallengeInstanceStateDatabase[];
     PeriodicMissionCompletions: IPeriodicMissionCompletionDatabase[];
+    FusionTreasures?: IFusionTreasure[];
+    HybridFusionTreasures: IHybridFusionTreasure[]; // SNS-specific in-database format to support both modern & legacy clients
 }
 
 export interface IQuestKeyDatabase {
@@ -418,7 +421,7 @@ export interface IInventoryClient
     Cards?: IUpgradeClient[]; // U8
     EquippedGear: string[];
     DeathMarks: string[];
-    FusionTreasures: IFusionTreasure[];
+    FusionTreasures: IFusionTreasure[] | IFusionTreasureClientLegacy[];
     //WebFlags: IWebFlags;
     CompletedAlerts: string[];
     Consumables: ITypeCount[];
@@ -787,10 +790,25 @@ export interface IFocusXP {
 
 export type TFocusPolarity = keyof IFocusXP;
 
+// SNS-specific in-database format to support both modern & legacy clients
+export interface IHybridFusionTreasure {
+    _id: Types.ObjectId;
+    ItemType: string;
+    Sockets: number;
+}
+
+// >= U25.7
 export interface IFusionTreasure {
     ItemCount: number;
     ItemType: string;
     Sockets: number;
+}
+
+// < U25.7
+export interface IFusionTreasureClientLegacy {
+    ItemId: IOidWithLegacySupport;
+    ItemType: string;
+    Sockets: Record<string, string>; // Record<"a" | "b" | "c" | "d", "/Lotus/Types/Items/FusionTreasures/OroFusexOrnamentA" | "/Lotus/Types/Items/FusionTreasures/OroFusexOrnamentB">;
 }
 
 export interface IHelminthFoodRecord {

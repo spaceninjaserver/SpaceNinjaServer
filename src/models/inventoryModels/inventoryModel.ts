@@ -99,7 +99,8 @@ import type {
     IChallengeInstanceStateClient,
     IParam,
     IDialogueCounter,
-    ISketch
+    ISketch,
+    IHybridFusionTreasure
 } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IOid, ITypeCount } from "../../types/commonTypes.ts";
@@ -709,6 +710,11 @@ questKeysSchema.set("toJSON", {
 });
 
 export const fusionTreasuresSchema = new Schema<IFusionTreasure>().add(typeCountSchema).add({ Sockets: Number });
+
+const hybridFusionTreasuresSchema = new Schema<IHybridFusionTreasure>({
+    ItemType: String,
+    Sockets: Number
+});
 
 const invasionProgressSchema = new Schema<IInvasionProgressDatabase>(
     {
@@ -1805,7 +1811,8 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         WeaponSkins: [weaponSkinsSchema],
 
         //Ayatan Item
-        FusionTreasures: [fusionTreasuresSchema],
+        FusionTreasures: { type: [fusionTreasuresSchema], default: undefined },
+        HybridFusionTreasures: [hybridFusionTreasuresSchema],
         //only used for Maroo apparently - { "node": "TreasureTutorial", "state": "TS_COMPLETED" }
         TauntHistory: { type: [tauntSchema], default: undefined },
 
@@ -2031,6 +2038,7 @@ inventorySchema.set("toJSON", {
         delete returnedObject.DeathSquadPoints;
         delete returnedObject.NemesisTaxedCredits;
         delete returnedObject.duviriSeedRefresh;
+        delete returnedObject.HybridFusionTreasures;
 
         const inventoryDatabase = returnedObject as Partial<IInventoryDatabase>;
         const inventoryResponse = returnedObject as IInventoryClient;
@@ -2096,6 +2104,7 @@ export type InventoryDocumentProps = {
     PersonalTechProjects: Types.DocumentArray<IPersonalTechProjectDatabase>;
     CrewMembers: Types.DocumentArray<ICrewMemberDatabase>;
     KubrowPetPrints: Types.DocumentArray<IKubrowPetPrintDatabase>;
+    HybridFusionTreasures: Types.DocumentArray<IHybridFusionTreasure>;
 } & { [K in TEquipmentKey]: Types.DocumentArray<IEquipmentDatabase> };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

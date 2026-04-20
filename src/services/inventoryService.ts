@@ -2405,24 +2405,34 @@ export const addMods = (inventory: TInventoryDatabaseDocument, itemsArray: IRawU
     });
 };
 
-export const addFusionTreasures = (inventory: TInventoryDatabaseDocument, itemsArray: IFusionTreasure[]): void => {
-    const { FusionTreasures } = inventory;
-    itemsArray.forEach(({ ItemType, ItemCount, Sockets }) => {
-        const itemIndex = FusionTreasures.findIndex(i => i.ItemType == ItemType && (i.Sockets || 0) == (Sockets || 0));
-
-        if (itemIndex !== -1) {
-            FusionTreasures[itemIndex].ItemCount += ItemCount;
-            if (FusionTreasures[itemIndex].ItemCount == 0) {
-                FusionTreasures.splice(itemIndex, 1);
-            } else if (FusionTreasures[itemIndex].ItemCount <= 0) {
-                throw new Error(
-                    `Cannot remove ${ItemCount * -1}x ${ItemType} from FusionTreasures, would be left with ${FusionTreasures[itemIndex].ItemCount}`
-                );
+export const addFusionTreasures = (inventory: TInventoryDatabaseDocument, changes: IFusionTreasure[]): void => {
+    for (const change of changes) {
+        if (change.ItemCount != 0) {
+            if (change.ItemCount > 0) {
+                if (change.ItemCount > 100) {
+                    throw new Error(
+                        `unexpected acquisition quantity of FusionTreasures: got ${change.ItemCount}, expected 0..100`
+                    );
+                }
+                for (let i = 0; i != change.ItemCount; ++i) {
+                    inventory.HybridFusionTreasures.push({
+                        ItemType: change.ItemType,
+                        Sockets: change.Sockets || 0
+                    });
+                }
+            } else {
+                for (let i = 0; i != change.ItemCount; --i) {
+                    const fusex = inventory.HybridFusionTreasures.find(
+                        x => x.ItemType == change.ItemType && (x.Sockets || 0) == (change.Sockets || 0)
+                    );
+                    if (!fusex) {
+                        throw new Error(`Not enough ${change.ItemType} with Sockets=${change.Sockets || 0} to remove`);
+                    }
+                    inventory.HybridFusionTreasures.pull({ _id: fusex._id });
+                }
             }
-        } else {
-            FusionTreasures.push({ ItemCount, ItemType, Sockets });
         }
-    });
+    }
 };
 
 export const addFocusXpIncreases = (inventory: TInventoryDatabaseDocument, focusXpPlus: number[]): void => {
@@ -2862,6 +2872,26 @@ export const cleanupInventory = (inventory: TInventoryDatabaseDocument): void =>
         addMiscItem(inventory, "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg", inventory.KubrowPetEggs.length);
         logger.debug(`migrated ${inventory.KubrowPetEggs.length} KubrowPetEggs to MiscItems`);
         inventory.KubrowPetEggs = undefined;
+    }
+
+    // Migrate fusion treasures to hybrid format
+    if (inventory.FusionTreasures) {
+        prepareFusionTreasuresForMigration(inventory.FusionTreasures);
+        addFusionTreasures(inventory, inventory.FusionTreasures);
+        inventory.FusionTreasures = undefined;
+    }
+};
+
+export const prepareFusionTreasuresForMigration = (fusionTreasures: IFusionTreasure[]): void => {
+    for (const treasure of fusionTreasures) {
+        if (treasure.ItemCount < 0) {
+            treasure.ItemCount = 0;
+        } else if (treasure.ItemCount > 100) {
+            logger.debug(
+                `reducing ${treasure.ItemCount} owned ${treasure.ItemType} to 100 for migration to hybrid format`
+            );
+            treasure.ItemCount = 100;
+        }
     }
 };
 

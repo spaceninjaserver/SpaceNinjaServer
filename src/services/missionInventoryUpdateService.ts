@@ -28,7 +28,6 @@ import {
     addEmailItem,
     addFocusXpIncreases,
     addFusionPoints,
-    addFusionTreasures,
     addItem,
     addKahlProgress,
     addLevelKeys,
@@ -400,7 +399,24 @@ export const addMissionInventoryUpdates = async (
                 );
                 break;
             case "FusionTreasures":
-                addFusionTreasures(inventory, value);
+                for (const treasure of value) {
+                    if ("ItemId" in treasure) {
+                        inventory.HybridFusionTreasures.push({
+                            ItemType: treasure.ItemType,
+                            Sockets: 0
+                        });
+                    } else {
+                        if (treasure.Sockets) {
+                            throw new Error(`Filled ayatan treasures do not spawn in missions`);
+                        }
+                        for (let i = 0; i < treasure.ItemCount; ++i) {
+                            inventory.HybridFusionTreasures.push({
+                                ItemType: treasure.ItemType,
+                                Sockets: 0
+                            });
+                        }
+                    }
+                }
                 break;
             case "CrewShipRawSalvage":
                 addCrewShipRawSalvage(inventory, value);

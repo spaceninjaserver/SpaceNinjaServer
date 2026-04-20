@@ -6,7 +6,13 @@ import { config } from "../../services/configService.ts";
 import allDialogue from "../../../static/fixed_responses/allDialogue.json" with { type: "json" };
 import allPopups from "../../../static/fixed_responses/allPopups.json" with { type: "json" };
 import type { ILoadoutConfigClientLegacy, ILoadoutDatabase, ILoadOutPresets } from "../../types/saveLoadoutTypes.ts";
-import type { IInventoryClient, IShipInventory, IUpgradeClient } from "../../types/inventoryTypes/inventoryTypes.ts";
+import type {
+    IFusionTreasure,
+    IFusionTreasureClientLegacy,
+    IInventoryClient,
+    IShipInventory,
+    IUpgradeClient
+} from "../../types/inventoryTypes/inventoryTypes.ts";
 import {
     accountCheatBooleans,
     accountCheatNumbers,
@@ -16,7 +22,7 @@ import {
 import type { IPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import { ArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import type { ICountedItem } from "warframe-public-export-plus";
-import { ExportArcanes, ExportWarframes, ExportWeapons } from "warframe-public-export-plus";
+import { ExportArcanes, ExportResources, ExportWarframes, ExportWeapons } from "warframe-public-export-plus";
 import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "../../services/infestedFoundryService.ts";
 import {
     addEmailItem,
@@ -549,6 +555,40 @@ export const getInventoryResponse = async (
             } else if (obj.ItemCount < -999_999_999) {
                 obj.ItemCount = -999_999_999;
             }
+        }
+    }
+
+    // Convert fusion treasures to client format
+    inventoryResponse.FusionTreasures = [];
+    if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["25.7.0"]) >= 0) {
+        for (const treasure of inventory.HybridFusionTreasures) {
+            const entry = (inventoryResponse.FusionTreasures as IFusionTreasure[]).find(
+                x => x.ItemType == treasure.ItemType && x.Sockets == treasure.Sockets
+            );
+            if (entry) {
+                ++entry.ItemCount;
+            } else {
+                (inventoryResponse.FusionTreasures as IFusionTreasure[]).push({
+                    ItemType: treasure.ItemType,
+                    ItemCount: 1,
+                    Sockets: treasure.Sockets
+                });
+            }
+        }
+    } else {
+        for (const treasure of inventory.HybridFusionTreasures) {
+            const meta = ExportResources[treasure.ItemType];
+            const sockets: Record<string, string> = {};
+            for (let i = 0; i != meta.sockets!.length; ++i) {
+                if ((treasure.Sockets >> i) & 1) {
+                    sockets[String.fromCharCode(0x61 + i)] = meta.sockets![i];
+                }
+            }
+            (inventoryResponse.FusionTreasures as IFusionTreasureClientLegacy[]).push({
+                ItemId: toOid2(treasure._id, buildLabel),
+                ItemType: treasure.ItemType,
+                Sockets: sockets
+            });
         }
     }
 

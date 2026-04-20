@@ -10,6 +10,7 @@ import type {
     TSolarMapRegion,
     TEquipmentKey,
     IFusionTreasure,
+    IFusionTreasureClientLegacy,
     ICustomMarkers,
     IPlayerSkills,
     IQuestKeyDatabase,
@@ -73,7 +74,7 @@ export type IMissionInventoryUpdateRequest = {
     KeyToRemove?: string;
     ActiveBoosters?: IBooster[];
     RawUpgrades?: IRawUpgrade[];
-    FusionTreasures?: IFusionTreasure[];
+    FusionTreasures?: IFusionTreasure[] | IFusionTreasureClientLegacy[];
     QuestKeys?: Omit<IQuestKeyDatabase, "CompletionDate">[];
     RegularCredits?: number;
     MissionFailed: boolean;
