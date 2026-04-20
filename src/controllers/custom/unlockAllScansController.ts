@@ -3,13 +3,15 @@ import allScans from "../../../static/fixed_responses/allScans.json" with { type
 import { ExportCodex, ExportEnemies } from "warframe-public-export-plus";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getStats } from "../../services/statsService.ts";
-import { getInventory, updateIncentiveStates } from "../../services/inventoryService.ts";
+import { addShipDecorations, getInventory, updateIncentiveStates } from "../../services/inventoryService.ts";
+import { getShipDecoByNameTag } from "../../services/itemDataService.ts";
+import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 export const unlockAllScansController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const [stats, inventory] = await Promise.all([
         getStats(accountId),
-        getInventory(accountId, "ChallengeProgress CollectibleSeries")
+        getInventory(accountId, "ChallengeProgress CollectibleSeries LoreFragmentScans ShipDecorations")
     ]);
 
     // Unlock all enemy & object scans
@@ -95,6 +97,45 @@ export const unlockAllScansController: RequestHandler = async (req, res) => {
             "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
     }
 
+    // Unlock all lore fragment scans
+    const existingPrex = new Set<string>();
+    for (const lfs of inventory.LoreFragmentScans) {
+        if (lfs.ItemType.startsWith("/Lotus/Types/Lore/Fragments/LoreCardFragments/")) {
+            existingPrex.add(lfs.ItemType);
+        }
+    }
+    inventory.LoreFragmentScans = [];
+    for (const [ItemType, data] of Object.entries(ExportCodex.loreFragments)) {
+        inventory.LoreFragmentScans.push({
+            Progress: data.reqScans,
+            Region: "",
+            ItemType
+        });
+        if (ItemType.startsWith("/Lotus/Types/Lore/Fragments/LoreCardFragments/") && !existingPrex.has(ItemType)) {
+            addShipDecorations(inventory, [
+                {
+                    ItemType: getShipDecoByNameTag(data.name),
+                    ItemCount: 1
+                }
+            ]);
+        }
+    }
+    for (const [ItemType, data] of Object.entries(ExportCodex.songs)) {
+        inventory.LoreFragmentScans.push({
+            Progress: data.reqScans,
+            Region: "",
+            ItemType
+        });
+    }
+    for (const [ItemType, data] of Object.entries(ExportCodex.fighterFrames)) {
+        inventory.LoreFragmentScans.push({
+            Progress: data.reqScans,
+            Region: "",
+            ItemType
+        });
+    }
+
     await Promise.all([stats.save(), inventory.save()]);
     res.end();
+    broadcastInventoryUpdate(req);
 };

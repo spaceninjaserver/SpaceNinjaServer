@@ -2020,3 +2020,13 @@ export const getRegion = async (uniqueName: string, buildLabel: string | undefin
     }
     return ExportRegions[uniqueName];
 };
+
+// For prex cards
+export const getShipDecoByNameTag = (name: string): string => {
+    for (const [uniqueName, data] of Object.entries(ExportResources)) {
+        if (data.productCategory == "ShipDecorations" && data.name == name) {
+            return uniqueName;
+        }
+    }
+    throw new Error(`No ship deco with name tag ${name}`);
+};
