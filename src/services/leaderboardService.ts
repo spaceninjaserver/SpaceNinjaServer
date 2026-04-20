@@ -52,7 +52,7 @@ export const submitLeaderboardScore = async (
             await Leaderboard.findOneAndUpdate(
                 { leaderboard: `${schedule}.guilds.${leaderboard}`, ownerId: guildId },
                 { $max: { score }, $set: { displayName: guild.Name, guildTier: guild.Tier, expiry } },
-                { upsert: true, new: true }
+                { upsert: true }
             );
         }
     }
