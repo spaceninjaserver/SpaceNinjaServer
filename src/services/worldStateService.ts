@@ -794,17 +794,18 @@ interface IRotatingSeasonChallengePools {
 
 export const getSeasonChallengePools = (syndicateTag: string): IRotatingSeasonChallengePools => {
     const syndicate = ExportSyndicates[syndicateTag];
+    if (!syndicate.dailyChallenges || !syndicate.weeklyChallenges) {
+        throw new Error(`invalid syndicate tag for nightwave: ${syndicateTag}`);
+    }
     return {
-        daily: syndicate.dailyChallenges!,
-        weekly: syndicate.weeklyChallenges!.filter(
+        daily: syndicate.dailyChallenges,
+        weekly: syndicate.weeklyChallenges.filter(
             x =>
                 x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/") &&
                 !x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanent")
         ),
-        hardWeekly: syndicate.weeklyChallenges!.filter(x =>
-            x.startsWith("/Lotus/Types/Challenges/Seasons/WeeklyHard/")
-        ),
-        weeklyPermanent: syndicate.weeklyChallenges!.filter(x =>
+        hardWeekly: syndicate.weeklyChallenges.filter(x => x.startsWith("/Lotus/Types/Challenges/Seasons/WeeklyHard/")),
+        weeklyPermanent: syndicate.weeklyChallenges.filter(x =>
             x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanent")
         )
     };
