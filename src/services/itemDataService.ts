@@ -1348,7 +1348,7 @@ export const getLevelKeyRewards = (
     levelKey: string,
     buildLabel: string | undefined
 ): { levelKeyRewards?: IMissionReward; levelKeyRewards2?: TReward[]; levelMission?: Partial<IRegion> } => {
-    const key = getKey(levelKey);
+    const key = getKey(levelKey, buildLabel);
 
     const levelKeyRewards = key?.missionReward;
     let levelKeyRewards2 = key?.rewards;
@@ -1392,9 +1392,11 @@ export const getLevelKeyRewards = (
     };
 };
 
-export const getKeyChainMessage = ({ KeyChain, ChainStage }: IKeyChainRequest): IMessage => {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    const chainStages = ExportKeys[KeyChain]?.chainStages;
+export const getKeyChainMessage = (
+    { KeyChain, ChainStage }: IKeyChainRequest,
+    buildLabel: string | undefined
+): IMessage => {
+    const chainStages = getKey(KeyChain, buildLabel)?.chainStages;
     if (!chainStages) {
         throw new Error(`KeyChain ${KeyChain} does not contain chain stages`);
     }
@@ -1840,7 +1842,7 @@ export const getKey = (uniqueName: string, buildLabel?: string): IKey | undefine
     } else if (uniqueName == "/Lotus/Types/Keys/DragonQuest/DragonQuestKeyChain") {
         // Before U19 (Hotfix: Specters of the Rail 0.12, 2016-07-20), The New Strange gave Chroma component blueprints more directly.
         if (buildLabel && version_compare(buildLabel, "2016.07.20.00.00") < 0) {
-            const latestData = ExportKeys["/Lotus/Types/Keys/DragonQuest/DragonQuestKeyChain"];
+            const latestData = ExportKeys[uniqueName];
             return {
                 ...latestData,
                 chainStages: latestData.chainStages!.map(chainStage => {
@@ -1867,6 +1869,31 @@ export const getKey = (uniqueName: string, buildLabel?: string): IKey | undefine
                     }
                     return chainStage;
                 })
+            };
+        }
+    } else if (uniqueName == "/Lotus/Types/Keys/InfestedIntroQuest/InfestedIntroQuestKeyChain") {
+        if (buildLabel && version_compare(buildLabel, gameToBuildVersion["37.0.0"]) < 0) {
+            const latestData = ExportKeys[uniqueName];
+            return {
+                ...latestData,
+                chainStages: [
+                    latestData.chainStages![0],
+                    latestData.chainStages![1],
+                    latestData.chainStages![2],
+                    latestData.chainStages![3],
+                    latestData.chainStages![4],
+                    {
+                        itemsToGiveWhenTriggered: [],
+                        messageToSendWhenTriggered: {
+                            sender: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+                            title: "/Lotus/Language/G1Quests/IIQCompleteMessageTitle",
+                            body: "/Lotus/Language/G1Quests/IIQCompleteMessageBody",
+                            attachments: [],
+                            countedAttachments: []
+                        }
+                    },
+                    latestData.chainStages![5]
+                ]
             };
         }
     }

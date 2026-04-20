@@ -394,9 +394,10 @@ export const giveKeyChainMessage = async (
     inventory: TInventoryDatabaseDocument,
     keyChainInfo: IKeyChainRequest,
     questKey: IQuestKeyDatabase,
-    sendMessage: boolean = true
+    sendMessage: boolean = true,
+    buildLabel?: string
 ): Promise<void> => {
-    const keyChainMessage = getKeyChainMessage(keyChainInfo);
+    const keyChainMessage = getKeyChainMessage(keyChainInfo, buildLabel);
 
     if ((questKey.Progress?.[0]?.c ?? 0) > 0) {
         keyChainMessage.att = [];
