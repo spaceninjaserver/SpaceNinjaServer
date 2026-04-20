@@ -1230,9 +1230,13 @@ const isEligibleForCreditReward = async (
     return (
         node.missionType != "MT_JUNCTION" &&
         node.missionType != "MT_LANDSCAPE" &&
+        missions.Tag != "EventNode761" && // the index
+        missions.Tag != "EventNode762" && // the index
+        missions.Tag != "EventNode763" && // the index
         missions.Tag != "SolNode761" && // the index
         missions.Tag != "SolNode762" && // the index
         missions.Tag != "SolNode763" && // the index
+        missions.Tag != "CrewBattleNode56" && // free flight pre 2019.12.13.15.04
         missions.Tag != "CrewBattleNode556" // free flight
     );
 };
