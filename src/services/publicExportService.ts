@@ -91,6 +91,12 @@ export const getExportDrones = (lang: string): IExportDrones => {
             ...data,
             name: getString(data.name, dict),
             description: getString(data.description, dict),
+            capacityMultiplier: [
+                data.capacityMultipliers.COMMON,
+                data.capacityMultipliers.UNCOMMON,
+                data.capacityMultipliers.RARE,
+                data.capacityMultipliers.LEGENDARY
+            ],
             specialities: []
         });
     }
@@ -119,7 +125,8 @@ export const getExportFusionBundles = (lang: string): IExportFusionBundles => {
         res.push({
             uniqueName,
             ...data,
-            description: getString(data.description, dict)
+            description: getString(data.description, dict),
+            codexSecret: false
         });
     }
     return { ExportFusionBundles: res };
