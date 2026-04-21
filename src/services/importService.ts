@@ -88,7 +88,7 @@ import type {
 import { fromMongoDate, fromOid } from "../helpers/inventoryHelpers.ts";
 import { getRecipe } from "./itemDataService.ts";
 import { logger } from "../utils/logger.ts";
-import { addFusionTreasures, prepareFusionTreasuresForMigration } from "./inventoryService.ts";
+import { migrateFusionTreasures } from "./inventoryService.ts";
 
 const convertOptionalDate = (value: IMongoDateWithLegacySupport | undefined): Date | undefined => {
     return value ? fromMongoDate(value) : undefined;
@@ -466,8 +466,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     if (client.FusionTreasures !== undefined) {
         db.HybridFusionTreasures.splice(0, db.HybridFusionTreasures.length);
-        prepareFusionTreasuresForMigration(client.FusionTreasures as IFusionTreasure[]);
-        addFusionTreasures(db, client.FusionTreasures as IFusionTreasure[]);
+        migrateFusionTreasures(db, client.FusionTreasures as IFusionTreasure[]);
     }
     if (client.FocusUpgrades !== undefined) {
         db.FocusUpgrades = client.FocusUpgrades;

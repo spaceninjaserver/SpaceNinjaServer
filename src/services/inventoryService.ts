@@ -2876,23 +2876,27 @@ export const cleanupInventory = (inventory: TInventoryDatabaseDocument): void =>
 
     // Migrate fusion treasures to hybrid format
     if (inventory.FusionTreasures) {
-        prepareFusionTreasuresForMigration(inventory.FusionTreasures);
-        addFusionTreasures(inventory, inventory.FusionTreasures);
+        migrateFusionTreasures(inventory, inventory.FusionTreasures);
         inventory.FusionTreasures = undefined;
     }
 };
 
-export const prepareFusionTreasuresForMigration = (fusionTreasures: IFusionTreasure[]): void => {
+export const migrateFusionTreasures = (
+    inventory: TInventoryDatabaseDocument,
+    fusionTreasures: IFusionTreasure[]
+): void => {
+    const arr: IFusionTreasure[] = [];
     for (const treasure of fusionTreasures) {
-        if (treasure.ItemCount < 0) {
-            treasure.ItemCount = 0;
-        } else if (treasure.ItemCount > 100) {
+        if (treasure.ItemCount > 100) {
             logger.debug(
-                `reducing ${treasure.ItemCount} owned ${treasure.ItemType} to 100 for migration to hybrid format`
+                `reducing ${treasure.ItemCount} owned ${treasure.ItemType}_${treasure.Sockets} to 100 for migration to hybrid format`
             );
-            treasure.ItemCount = 100;
+            arr.push({ ItemType: treasure.ItemType, ItemCount: 100, Sockets: treasure.Sockets });
+        } else if (treasure.ItemCount > 0) {
+            arr.push(treasure);
         }
     }
+    addFusionTreasures(inventory, arr);
 };
 
 export const getDialogue = (inventory: TInventoryDatabaseDocument, dialogueName: string): IDialogueDatabase => {
