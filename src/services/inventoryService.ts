@@ -2256,7 +2256,7 @@ export const applyClientEquipmentUpdates = (
         }
 
         if (ExtraRemaining) {
-            if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["9.1.0"]) >= 0) {
+            if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["10.3.3"]) >= 0) {
                 if (ExtraRemaining > 0) {
                     throw new Error(
                         `unexpected value for ExtraRemaining (${ExtraRemaining}); expected a delta from this client`
