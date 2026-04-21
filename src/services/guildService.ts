@@ -720,10 +720,15 @@ const setGuildTier = async (guild: TGuildDatabaseDocument, newTier: number): Pro
 };
 
 export const checkClanAscensionHasRequiredContributors = async (guild: TGuildDatabaseDocument): Promise<void> => {
+    if (!guild.CeremonyClass) {
+        // Required contributors have already been hit.
+        return;
+    }
+
     const requiredContributors = [1, 5, 15, 30, 50][guild.Tier - 1];
     // Once required contributor count is hit, the class is committed and there's 72 hours to claim endo.
     if (guild.CeremonyContributors!.length >= requiredContributors) {
-        guild.Class = guild.CeremonyClass!;
+        guild.Class = guild.CeremonyClass;
         guild.CeremonyClass = undefined;
         guild.CeremonyResetDate = new Date(
             Math.trunc(Date.now() / 1000) * 1000 + (guild.fastClanAscension ? 5_000 : 72 * 3600_000)
