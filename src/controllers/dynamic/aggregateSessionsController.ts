@@ -1,9 +1,9 @@
 import type { RequestHandler } from "express";
-import { aggregateSessions } from "../../managers/sessionManager.ts";
+import { aggregateSessions } from "../../services/sessionService.ts";
 
-export const aggregateSessionsController: RequestHandler = (_req, res) => {
+export const aggregateSessionsController: RequestHandler = async (_req, res) => {
     res.json({
-        Results: aggregateSessions()
+        Results: await aggregateSessions()
     } satisfies IAggregateSessionsResponse);
 };
 

@@ -1,13 +1,13 @@
 import type { RequestHandler } from "express";
-import { getSession } from "../../managers/sessionManager.ts";
+import { getSession } from "../../services/sessionService.ts";
 import { logger } from "../../utils/logger.ts";
-import type { IFindSessionRequest } from "../../types/session.ts";
+import type { IFindSessionRequest } from "../../types/sessionTypes.ts";
 import { getNrsAddresses } from "../../services/configService.ts";
 
 export const findSessionsController: RequestHandler = async (_req, res) => {
     const req = JSON.parse(String(_req.body)) as IFindSessionRequest;
     logger.debug("FindSession Request:", req);
-    const sessions = getSession(req);
+    const sessions = await getSession(req);
 
     if (!sessions.length && "id" in req) {
         // (OpenWF-specific) Maybe NRS can tell us who the host of this session is...

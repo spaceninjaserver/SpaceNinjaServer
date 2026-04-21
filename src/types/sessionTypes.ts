@@ -28,11 +28,15 @@ export interface IHostSessionRequest {
 }
 
 export interface ISession extends Omit<IHostSessionRequest, "rewardSeed" | "platform" | "xplatform"> {
-    sessionId: Types.ObjectId;
+    _id: Types.ObjectId;
     creatorId: Types.ObjectId;
     rewardSeed: number | bigint;
     platform: Platform;
     xplatform: boolean;
+}
+
+export interface ISessionDatabase extends ISession {
+    lastUpdate: Date;
 }
 
 export type IFindSessionRequest = { queryId: number } & (

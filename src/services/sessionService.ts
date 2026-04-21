@@ -1,21 +1,25 @@
-import { generateRewardSeed } from "../services/rngService.ts";
+import { Session } from "../models/sessionModel.ts";
+import { generateRewardSeed } from "./rngService.ts";
 import { Platform } from "../types/loginTypes.ts";
 import type {
     ISession,
     IFindSessionRequest,
     IFindSessionResponseSession,
-    IHostSessionRequest
-} from "../types/session.ts";
+    IHostSessionRequest,
+    ISessionDatabase
+} from "../types/sessionTypes.ts";
 import { logger } from "../utils/logger.ts";
 import { JSONParse } from "json-with-bigint";
-import { Types } from "mongoose";
+import { Types, type QueryFilter } from "mongoose";
 
-const sessions: ISession[] = [];
+//const sessions: ISession[] = [];
 
-function createNewSession(sessionData: IHostSessionRequest, Creator: Types.ObjectId): ISession {
-    const sessionId = new Types.ObjectId();
-    const newSession: ISession = {
-        sessionId,
+export const createNewSession = async (
+    sessionData: IHostSessionRequest,
+    Creator: Types.ObjectId
+): Promise<ISession> => {
+    const newSession: ISessionDatabase = {
+        _id: new Types.ObjectId(),
         creatorId: Creator,
         maxPlayers: sessionData.maxPlayers, // || 4
         minPlayers: sessionData.minPlayers, // || 1
@@ -39,30 +43,57 @@ function createNewSession(sessionData: IHostSessionRequest, Creator: Types.Objec
         xplatform: sessionData.xplatform ?? false,
         freePublic: sessionData.freePublic, // || 3
         freePrivate: sessionData.freePrivate, // || 0
-        fullReset: 0
+        fullReset: 0,
+
+        lastUpdate: new Date()
     };
     if (newSession.rewardSeed == -1) {
         newSession.rewardSeed = generateRewardSeed();
     }
-    sessions.push(newSession);
+
+    await Session.create(newSession);
+    //sessions.push(newSession);
+
     return newSession;
-}
+};
 
-function getAllSessions(): ISession[] {
-    return sessions;
-}
+export const getSessionByID = async (sessionId: string | Types.ObjectId): Promise<ISessionDatabase | null> => {
+    return await Session.findById(sessionId);
+};
 
-function getSessionByID(sessionId: string | Types.ObjectId): ISession | undefined {
-    return sessions.find(session => session.sessionId.equals(sessionId));
-}
+export const getSession = async (request: IFindSessionRequest): Promise<IFindSessionResponseSession[]> => {
+    const query: QueryFilter<ISessionDatabase> = {};
+    if ("id" in request) {
+        query._id = request.id;
+    } else if ("originalSessionId" in request) {
+        query.originalSessionId = request.originalSessionId;
+    } else {
+        query.hasStarted = false;
+        query.buildId = request.buildId;
+        query.gameModeId = request.gameModeId;
+        if (request.freePublic) {
+            query.freePublic = { $gte: 1 };
+        }
+        query.regionId = request.regionId;
+        query.eloRating = {
+            $gte: request.eloRating - request.maxEloDifference,
+            $lte: request.eloRating + request.maxEloDifference
+        };
+        if (request.maps) {
+            query.maps = request.maps;
+        }
+    }
+    return (await Session.find(query, "creatorId")).map(session => ({
+        createdBy: session.creatorId.toString(),
+        id: session._id.toString()
+    }));
 
-function getSession(request: IFindSessionRequest): IFindSessionResponseSession[] {
-    return sessions
+    /*return sessions
         .filter(session => {
             if ("id" in request) {
-                return session.sessionId.equals(request.id);
+                return session._id.equals(request.id);
             } else if ("originalSessionId" in request) {
-                return session.sessionId.equals(request.originalSessionId);
+                return session._id.equals(request.originalSessionId);
             } else {
                 return (
                     !session.hasStarted &&
@@ -77,17 +108,16 @@ function getSession(request: IFindSessionRequest): IFindSessionResponseSession[]
         })
         .map(session => ({
             createdBy: session.creatorId.toString(),
-            id: session.sessionId.toString()
-        }));
-}
+            id: session._id.toString()
+        }));*/
+};
 
-function getSessionByCreatorID(creatorId: string | Types.ObjectId): ISession | undefined {
-    return sessions.find(session => session.creatorId.equals(creatorId));
-}
-
-function updateSession(sessionId: string | Types.ObjectId, updateData: string): boolean {
+export const updateSession = async (sessionId: string | Types.ObjectId, updateData: string): Promise<boolean> => {
     logger.debug(`session update: ${updateData}`);
-    const session = sessions.find(session => session.sessionId.equals(sessionId));
+
+    //const session = sessions.find(session => session._id.equals(sessionId));
+    const session = await Session.findById(sessionId);
+
     if (!session) {
         return false;
     }
@@ -127,20 +157,45 @@ function updateSession(sessionId: string | Types.ObjectId, updateData: string): 
         }
     }
     //logger.debug(`session after update:`, session);
-    return true;
-}
 
-function deleteSession(sessionId: string | Types.ObjectId): boolean {
-    const index = sessions.findIndex(session => session.sessionId.equals(sessionId));
+    session.lastUpdate = new Date();
+    await session.save();
+
+    return true;
+};
+
+export const deleteSession = async (sessionId: string | Types.ObjectId): Promise<void> => {
+    await Session.deleteOne({ _id: sessionId });
+
+    /*const index = sessions.findIndex(session => session._id.equals(sessionId));
     if (index !== -1) {
         sessions.splice(index, 1);
-        return true;
-    }
-    return false;
-}
+    }*/
+};
 
-function aggregateSessions(): { gameModeId: number; count: number }[] {
-    const result: { gameModeId: number; count: number }[] = [];
+export const aggregateSessions = (): Promise<{ gameModeId: number; count: number }[]> => {
+    return Session.aggregate([
+        {
+            $match: {
+                freePublic: { $ne: 0 }
+            }
+        },
+        {
+            $group: {
+                _id: "$gameModeId",
+                count: { $sum: 1 }
+            }
+        },
+        {
+            $project: {
+                _id: 0,
+                gameModeId: "$_id",
+                count: 1
+            }
+        }
+    ]);
+
+    /*const result: { gameModeId: number; count: number }[] = [];
     for (const session of sessions) {
         if (session.freePublic != 0) {
             const obj = result.find(x => x.gameModeId == session.gameModeId);
@@ -151,16 +206,5 @@ function aggregateSessions(): { gameModeId: number; count: number }[] {
             }
         }
     }
-    return result;
-}
-
-export {
-    createNewSession,
-    getAllSessions,
-    getSessionByID,
-    getSessionByCreatorID,
-    updateSession,
-    deleteSession,
-    getSession,
-    aggregateSessions
+    return result;*/
 };
