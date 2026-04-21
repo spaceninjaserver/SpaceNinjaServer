@@ -45,7 +45,13 @@ export const startRecipeController: RequestHandler = async (req, res) => {
     }
 
     const inventory = await getInventory(account._id);
-    updateCurrency(inventory, recipe.buildPrice, false);
+    try {
+        updateCurrency(inventory, recipe.buildPrice, false);
+    } catch (e) {
+        logger.error((e as Error).message);
+        res.status(400).json(1); // "Insufficient credits"
+        return;
+    }
 
     const pr =
         inventory.PendingRecipes[
