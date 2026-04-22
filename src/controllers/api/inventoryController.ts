@@ -643,6 +643,13 @@ export const getInventoryResponse = async (
             inventoryResponse.CollectibleSeries = inventoryResponse.CollectibleSeries.filter(
                 x => x.CollectibleType != "/Lotus/Types/Lore/Fragments/DuviriFragments/DuviriCollectibleDeco"
             );
+
+            // U22.13.4 crashes if there's more than 64 characters + a '1' here.
+            for (const cs of inventoryResponse.CollectibleSeries) {
+                if (cs.Tracking.length > 64) {
+                    cs.Tracking = cs.Tracking.substring(cs.Tracking.length - 64);
+                }
+            }
         }
 
         // U28.1 introduced Steel Path
