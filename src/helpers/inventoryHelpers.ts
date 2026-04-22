@@ -53,9 +53,18 @@ export function toMongoDate2(value: Date | number, buildLabel: string | undefine
 }
 
 export const toLegacyOid = (oid: IOidWithLegacySupport): void => {
-    if (!("$id" in oid)) {
+    if ("$oid" in oid) {
         oid.$id = oid.$oid;
         delete oid.$oid;
+    }
+};
+
+export const toLegacyDate = (date: IMongoDateWithLegacySupport): void => {
+    if ("$date" in date) {
+        const ms = parseInt(date.$date.$numberLong);
+        delete (date as unknown as { $date?: never }).$date;
+        (date as { sec?: number }).sec = Math.floor(ms / 1000);
+        (date as { usec?: number }).usec = (ms % 1000) * 1000;
     }
 };
 

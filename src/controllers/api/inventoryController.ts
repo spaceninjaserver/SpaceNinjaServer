@@ -48,9 +48,9 @@ import {
     convertIColorToLegacyColors,
     convertIColorToLegacyColorsWithAtt,
     convertToLegacyFingerprint,
-    fromMongoDate,
     fromOid,
     modernToU5Recipes,
+    toLegacyDate,
     toLegacyOid,
     toMongoDate2,
     toOid,
@@ -740,10 +740,10 @@ export const getInventoryResponse = async (
                     }
                     // as well as a different date format
                     for (const pr of inventoryResponse.PendingRecipes) {
-                        pr.CompletionDate = toMongoDate2(fromMongoDate(pr.CompletionDate), buildLabel);
+                        toLegacyDate(pr.CompletionDate);
                     }
-                    inventoryResponse.TrainingDate = toMongoDate2(inventory.TrainingDate, buildLabel);
-                    inventoryResponse.NextRefill = toMongoDate2(inventory.NextRefill!, buildLabel);
+                    toLegacyDate(inventoryResponse.TrainingDate);
+                    toLegacyDate(inventoryResponse.NextRefill!);
 
                     if (version_compare(buildLabel, "2014.02.05.00.00") < 0) {
                         // Pre-U12 builds store mods in an array called Cards, and have no concept of RawUpgrades
