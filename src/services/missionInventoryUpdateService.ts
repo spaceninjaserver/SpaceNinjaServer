@@ -218,27 +218,29 @@ export const addMissionInventoryUpdates = async (
     inventoryUpdates: IMissionInventoryUpdateRequest
 ): Promise<IInventoryChanges> => {
     const inventoryChanges: IInventoryChanges = {};
-    if (inventoryUpdates.EndOfMatchUpload) {
-        if (inventoryUpdates.Missions) {
-            const node = await getRegion(inventoryUpdates.Missions.Tag, account.BuildLabel);
-            if (node && node.miscItemFee && !inventory.noNodeEntryFees) {
-                addMiscItems(inventory, [
-                    {
-                        ItemType: node.miscItemFee.ItemType,
-                        ItemCount: node.miscItemFee.ItemCount * -1
-                    }
-                ]);
-            }
+    if (inventoryUpdates.Missions && inventoryUpdates.EndOfMatchUpload) {
+        const node = await getRegion(inventoryUpdates.Missions.Tag, account.BuildLabel);
+        if (node && node.miscItemFee && !inventory.noNodeEntryFees) {
+            addMiscItems(inventory, [
+                {
+                    ItemType: node.miscItemFee.ItemType,
+                    ItemCount: node.miscItemFee.ItemCount * -1
+                }
+            ]);
         }
-        if (inventoryUpdates.KeyToRemove && !inventory.dontSubtractKeys) {
-            if (!inventoryUpdates.KeyOwner || inventory.accountOwnerId.equals(inventoryUpdates.KeyOwner)) {
-                addLevelKeys(inventory, [
-                    {
-                        ItemType: inventoryUpdates.KeyToRemove,
-                        ItemCount: -1
-                    }
-                ]);
-            }
+    }
+    if (
+        inventoryUpdates.KeyToRemove &&
+        !inventory.dontSubtractKeys &&
+        (inventoryUpdates.EndOfMatchUpload || !("EndOfMatchUpload" in inventoryUpdates)) // https://onlyg.it/OpenWF/SpaceNinjaServer/issues/3910
+    ) {
+        if (!inventoryUpdates.KeyOwner || inventory.accountOwnerId.equals(inventoryUpdates.KeyOwner)) {
+            addLevelKeys(inventory, [
+                {
+                    ItemType: inventoryUpdates.KeyToRemove,
+                    ItemCount: -1
+                }
+            ]);
         }
     }
     if (inventoryUpdates.RewardInfo) {

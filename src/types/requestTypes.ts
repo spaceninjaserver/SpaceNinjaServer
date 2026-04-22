@@ -104,7 +104,7 @@ export type IMissionInventoryUpdateRequest = {
     LastCeremonyResetDate: number;
     MissionPTS: number;
     RepHash: string;
-    EndOfMatchUpload: boolean;
+    EndOfMatchUpload?: boolean;
     ObjectiveReached: boolean;
     sharedSessionId: string;
     FpsAvg: number;
