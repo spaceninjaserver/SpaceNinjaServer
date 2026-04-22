@@ -3021,6 +3021,8 @@ function disposeOfGear(category, oid) {
                     Recipe: "webui",
                     petId: oid
                 })
+            }).done(function () {
+                inventory_data = undefined; // UI is up-to-date now, but subsequent updates will need to grab new data
             });
         });
     } else {
@@ -3040,6 +3042,8 @@ function disposeOfGear(category, oid) {
                 url: "/api/sell.php?" + window.authz,
                 contentType: "text/plain",
                 data: JSON.stringify(data)
+            }).done(function () {
+                inventory_data = undefined; // UI is up-to-date now, but subsequent updates will need to grab new data
             });
         });
     }
@@ -3062,6 +3066,8 @@ function disposeOfItems(category, type, count) {
             url: "/api/sell.php?" + window.authz,
             contentType: "text/plain",
             data: JSON.stringify(data)
+        }).done(function () {
+            inventory_data = undefined; // UI is up-to-date now, but subsequent updates will need to grab new data
         });
     });
 }
