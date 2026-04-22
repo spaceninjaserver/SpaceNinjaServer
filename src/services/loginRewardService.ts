@@ -47,6 +47,7 @@ export interface ILoginReward {
     //CouponSku: number;
     //Rarity: number;
     Transmission: string;
+    HiddenSetIndex?: number; // pre-U23.10, unsure what for
 }
 
 const scaleAmount = (day: number, amount: number, scalingMultiplier: number): number => {

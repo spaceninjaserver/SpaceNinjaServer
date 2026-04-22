@@ -40,10 +40,12 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
             // https://wiki.warframe.com/w/Login_Rewards
             const is_pre_daily_tribute =
                 account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["18.0.2"]) < 0;
+            const is_pre_milestones =
+                account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["23.10.0"]) < 0;
 
             if (
                 (!isMilestoneDay && randomRewards.length == 1) || // A choice is not needed?
-                is_pre_daily_tribute // Or client is unable to make a choice?
+                is_pre_milestones // Or client is unable to make a choice?
             ) {
                 response.DailyTributeInfo.HasChosenReward = true;
                 response.DailyTributeInfo.ChosenReward = randomRewards[0];
