@@ -8,31 +8,31 @@ export interface IHostSessionRequest {
     scoreLimit: number;
     timeLimit: number;
     gameModeId: number;
-    eloRating: number;
+    eloRating?: number;
     regionId: number;
     difficulty: number;
-    hasStarted: boolean;
-    enableVoice: boolean;
+    hasStarted?: boolean;
+    enableVoice?: boolean;
     matchType: string;
     maps: string[];
     originalSessionId: string;
-    customSettings: string;
+    customSettings?: string;
     rewardSeed?: number | bigint;
-    guildId: string;
+    guildId?: string;
     buildId: number | bigint;
     platform?: Platform;
     xplatform?: boolean;
     freePublic: number;
     freePrivate: number;
-    fullReset: number;
+    fullReset?: number;
 }
 
-export interface ISession extends Omit<IHostSessionRequest, "rewardSeed" | "platform" | "xplatform"> {
+export interface ISession extends Omit<IHostSessionRequest, "hasStarted" | "rewardSeed"> {
     _id: Types.ObjectId;
     creatorId: Types.ObjectId;
+
+    hasStarted: boolean;
     rewardSeed: number | bigint;
-    platform: Platform;
-    xplatform: boolean;
 }
 
 export interface ISessionDatabase extends ISession {
@@ -52,12 +52,12 @@ export type IFindSessionRequest = { queryId: number } & (
           freePublic?: { $gte: 1 };
           maps?: string;
           regionId: number;
-          maxEloDifference: number;
-          eloRating: number;
-          enforceElo: boolean;
+          maxEloDifference?: number;
+          eloRating?: number;
+          enforceElo?: boolean;
           allowLobby?: boolean; // for conclave
-          platform: Platform;
-          xplatform: boolean;
+          platform?: Platform;
+          xplatform?: boolean;
       }
 );
 

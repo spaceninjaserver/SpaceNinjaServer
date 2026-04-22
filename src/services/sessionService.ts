@@ -1,6 +1,5 @@
 import { Session } from "../models/sessionModel.ts";
 import { generateRewardSeed } from "./rngService.ts";
-import { Platform } from "../types/loginTypes.ts";
 import type {
     ISession,
     IFindSessionRequest,
@@ -20,29 +19,30 @@ export const createNewSession = async (
 ): Promise<ISession> => {
     const newSession: ISessionDatabase = {
         _id: new Types.ObjectId(),
+        ...sessionData,
         creatorId: Creator,
-        maxPlayers: sessionData.maxPlayers, // || 4
-        minPlayers: sessionData.minPlayers, // || 1
-        privateSlots: sessionData.privateSlots, // || 0
-        scoreLimit: sessionData.scoreLimit, // || 15
-        timeLimit: sessionData.timeLimit, // || 900
-        gameModeId: sessionData.gameModeId, // || 0
-        eloRating: sessionData.eloRating, // || 3
-        regionId: sessionData.regionId, // || 3
-        difficulty: sessionData.difficulty, // || 0
-        hasStarted: sessionData.hasStarted, // || false
-        enableVoice: sessionData.enableVoice, // || true
-        matchType: sessionData.matchType, // || "NORMAL"
-        maps: sessionData.maps, // || []
-        originalSessionId: sessionData.originalSessionId, // || ""
-        customSettings: sessionData.customSettings, // || ""
+        //maxPlayers: sessionData.maxPlayers ?? 4,
+        //minPlayers: sessionData.minPlayers ?? 1,
+        //privateSlots: sessionData.privateSlots ?? 0,
+        //scoreLimit: sessionData.scoreLimit ?? 15,
+        //timeLimit: sessionData.timeLimit ?? 900,
+        //gameModeId: sessionData.gameModeId ?? 0,
+        //eloRating: sessionData.eloRating ?? 3,
+        //regionId: sessionData.regionId ?? 3,
+        //difficulty: sessionData.difficulty ?? 0,
+        hasStarted: sessionData.hasStarted ?? false,
+        //enableVoice: sessionData.enableVoice ?? true,
+        //matchType: sessionData.matchType ?? "NORMAL",
+        //maps: sessionData.maps ?? [],
+        //originalSessionId: sessionData.originalSessionId ?? "",
+        //customSettings: sessionData.customSettings ?? "",
         rewardSeed: sessionData.rewardSeed || -1,
-        guildId: sessionData.guildId, // || ""
-        buildId: sessionData.buildId, // || 4920386201513015989n
-        platform: sessionData.platform ?? Platform.Windows,
-        xplatform: sessionData.xplatform ?? false,
-        freePublic: sessionData.freePublic, // || 3
-        freePrivate: sessionData.freePrivate, // || 0
+        //guildId: sessionData.guildId ?? "",
+        //buildId: sessionData.buildId ?? 4920386201513015989n,
+        //platform: sessionData.platform ?? Platform.Windows,
+        //xplatform: sessionData.xplatform ?? false,
+        //freePublic: sessionData.freePublic ?? 3,
+        //freePrivate: sessionData.freePrivate ?? 0,
         fullReset: 0,
 
         lastUpdate: new Date()
@@ -75,10 +75,12 @@ export const getSession = async (request: IFindSessionRequest): Promise<IFindSes
             query.freePublic = { $gte: 1 };
         }
         query.regionId = request.regionId;
-        query.eloRating = {
-            $gte: request.eloRating - request.maxEloDifference,
-            $lte: request.eloRating + request.maxEloDifference
-        };
+        if (request.eloRating !== undefined && request.maxEloDifference !== undefined) {
+            query.eloRating = {
+                $gte: request.eloRating - request.maxEloDifference,
+                $lte: request.eloRating + request.maxEloDifference
+            };
+        }
         if (request.maps) {
             query.maps = request.maps;
         }
