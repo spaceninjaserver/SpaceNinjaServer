@@ -889,25 +889,17 @@ export const getInventoryResponse = async (
                         if (category in inventoryResponse.LoadOutPresets) {
                             for (const item of inventoryResponse.LoadOutPresets[category]) {
                                 toLegacyOid(item.ItemId);
-                                if (item.s) {
-                                    if (item.s.ItemId) {
-                                        toLegacyOid(item.s.ItemId);
-                                    }
+                                if (item.s?.ItemId) {
+                                    toLegacyOid(item.s.ItemId);
                                 }
-                                if (item.l) {
-                                    if (item.l.ItemId) {
-                                        toLegacyOid(item.l.ItemId);
-                                    }
+                                if (item.l?.ItemId) {
+                                    toLegacyOid(item.l.ItemId);
                                 }
-                                if (item.p) {
-                                    if (item.p.ItemId) {
-                                        toLegacyOid(item.p.ItemId);
-                                    }
+                                if (item.p?.ItemId) {
+                                    toLegacyOid(item.p.ItemId);
                                 }
-                                if (item.m) {
-                                    if (item.m.ItemId) {
-                                        toLegacyOid(item.m.ItemId);
-                                    }
+                                if (item.m?.ItemId) {
+                                    toLegacyOid(item.m.ItemId);
                                 }
                             }
                         }
