@@ -1671,8 +1671,6 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         TradesRemaining: { type: Number, default: 0 },
         //How many gifts do you have left
         GiftsRemaining: { type: Number, default: 8 },
-        //Current trade info Giving or Getting items
-        //PendingTrades: [Schema.Types.Mixed],
 
         //Syndicate currently being pledged to.
         SupportedSyndicate: String,

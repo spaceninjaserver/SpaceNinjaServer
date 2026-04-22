@@ -28,6 +28,7 @@ import type {
 import type { ILoadoutConfigClientLegacy, ILoadOutPresets } from "../saveLoadoutTypes.ts";
 import type { CalendarSeasonType } from "../worldStateTypes.ts";
 import type { SlotNames } from "../purchaseTypes.ts";
+import type { IPendingTradeClient } from "../tradingTypes.ts";
 
 export type InventoryDatabaseEquipment = {
     [_ in TEquipmentKey]: IEquipmentDatabase[];
@@ -154,6 +155,7 @@ export interface IInventoryDatabase
             | "ChallengeInstanceStates"
             | "PeriodicMissionCompletions"
             | "FusionTreasures"
+            | "PendingTrades"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment,
@@ -432,7 +434,7 @@ export interface IInventoryClient
     KubrowPetEggs?: IKubrowPetEgg[];
     LoreFragmentScans: ILoreFragmentScan[];
     EquippedEmotes: string[];
-    //PendingTrades: IPendingTrade[];
+    PendingTrades: IPendingTradeClient[];
     Boosters: IBooster[];
     ActiveDojoColorResearch: string;
     //SentientSpawnChanceBoosters: ISentientSpawnChanceBoosters;
@@ -1015,29 +1017,6 @@ export interface IPendingRecipeClient extends Omit<
 
 export interface IAccolades {
     Heirloom?: boolean;
-}
-
-export interface IPendingTrade {
-    State: number;
-    SelfReady: boolean;
-    BuddyReady: boolean;
-    Giving?: ITradeOffer;
-    Revision: number;
-    Getting: ITradeOffer;
-    ItemId: IOid;
-    ClanTax?: number;
-}
-
-export interface ITradeOffer {
-    RandomUpgrades?: IUpgradeClient[];
-    Upgrades?: IUpgradeClient[];
-    RawUpgrades?: IRawUpgrade[];
-    MiscItems?: IMiscItem[];
-    Recipes?: ITypeCount[];
-    FusionTreasures?: IFusionTreasure[];
-    NemesisHistory?: INemesisClient;
-    PremiumCredits?: number;
-    _SlotOrderInfo: string[];
 }
 
 export interface IInnateDamageFingerprint {

@@ -14,6 +14,7 @@ import { Friendship } from "../../models/friendModel.ts";
 import { sendWsBroadcastTo } from "../../services/wsService.ts";
 import { config } from "../../services/configService.ts";
 import { saveConfig } from "../../services/configWriterService.ts";
+import { PendingTrade } from "../../models/tradingModel.ts";
 
 export const deleteAccountController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -44,6 +45,8 @@ export const deleteAccountController: RequestHandler = async (req, res) => {
         Inventory.deleteOne({ accountOwnerId: account._id }),
         Leaderboard.deleteMany({ ownerId: account._id }),
         Loadout.deleteOne({ loadoutOwnerId: account._id }),
+        PendingTrade.deleteMany({ a: account._id }),
+        PendingTrade.deleteMany({ b: account._id }),
         PersonalRooms.deleteOne({ personalRoomsOwnerId: account._id }),
         Ship.deleteMany({ ShipOwnerId: account._id }),
         Stats.deleteOne({ accountOwnerId: account._id })

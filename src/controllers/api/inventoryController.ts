@@ -66,6 +66,8 @@ import { generateRewardSeed } from "../../services/rngService.ts";
 import { getInvasionByOid, getWorldState } from "../../services/worldStateService.ts";
 import { createMessage } from "../../services/inboxService.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { PendingTrade } from "../../models/tradingModel.ts";
+import { exportTrade } from "../../services/tradingService.ts";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);
@@ -361,13 +363,18 @@ export const getInventoryResponse = async (
     buildLabel: string | undefined,
     forWebui: boolean = false
 ): Promise<IInventoryClient> => {
-    const [inventoryWithLoadOutPresets, ships, latestMessage] = await Promise.all([
+    const [inventoryWithLoadOutPresets, ships, latestMessage, pendingTrades] = await Promise.all([
         inventory.populate<{ LoadOutPresets: ILoadoutDatabase }>("LoadOutPresets"),
         Ship.find({ ShipOwnerId: inventory.accountOwnerId }),
-        Inbox.findOne({ ownerId: inventory.accountOwnerId }, "_id").sort({ date: -1 })
+        Inbox.findOne({ ownerId: inventory.accountOwnerId }, "_id").sort({ date: -1 }),
+        PendingTrade.find({ $or: [{ a: inventory.accountOwnerId }, { b: inventory.accountOwnerId }] })
     ]);
     const inventoryResponse = inventoryWithLoadOutPresets.toJSON<IInventoryClient>();
     inventoryResponse.Ships = ships.map(x => x.toJSON<IShipInventory>());
+    inventoryResponse.PendingTrades = pendingTrades.map(trade => {
+        const us = trade.a.equals(inventory.accountOwnerId) ? "a" : "b";
+        return exportTrade(trade, us);
+    });
 
     if (!forWebui) {
         for (const key of accountCheatBooleans) {

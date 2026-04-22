@@ -11,7 +11,7 @@ import {
 import { getAccountForRequest } from "../../services/loginService.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
-import type { IPendingTrade, ITradeOffer } from "../../types/inventoryTypes/inventoryTypes.ts";
+import type { IPendingTradeDatabase, ITradeOffer } from "../../types/tradingTypes.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { logger } from "../../utils/logger.ts";
 import { fromMongoDate, version_compare } from "../../helpers/inventoryHelpers.ts";
@@ -21,112 +21,100 @@ import { importUpgrade } from "../../services/importService.ts";
 import { Guild } from "../../models/guildModel.ts";
 import { ExportArcanes, ExportResources, ExportUpgrades, type TRarity } from "warframe-public-export-plus";
 import { getInfNodes, getNemesisManifest } from "../../helpers/nemesisHelpers.ts";
+import { PendingTrade } from "../../models/tradingModel.ts";
+import type { HydratedDocument, QueryFilter } from "mongoose";
+import { exportTrade } from "../../services/tradingService.ts";
 
 export const tradingController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const accountId = account._id.toString();
-    const op = req.query.op as string;
-    if (op == "0" || op == "1") {
+    const op = req.query.op as string as TradingOperation;
+    if (op == TradingOperation.InitialOffer) {
         const buddyId = req.query.buddyId as string;
-        const tradeId = getTradeId(accountId, buddyId);
         const offer = getJSONfromString<ITradeOffer>(String(req.body));
-        pendingTrades[tradeId] ??= {
-            trader: accountId,
-            tradee: buddyId,
-            traderOffer: { _SlotOrderInfo: ["", "", "", "", "", ""] },
-            tradeeOffer: { _SlotOrderInfo: ["", "", "", "", "", ""] },
-            traderReady: false,
-            tradeeReady: false,
-            traderAccepted: false,
-            tradeeAccepted: false,
-            revision: -1,
-            clanTax: (req.query.guildId ? await Guild.findById(req.query.guildId as string) : undefined)?.TradeTax ?? 10 // When trading in Maroo's Bazaar, a 10% "Hub Tax" applies.
-        };
-        const us = accountId == pendingTrades[tradeId].trader ? "trader" : "tradee";
-        logger.debug(`${us} offer:`, offer);
-        {
-            const tax = calcuateTax(offer);
-            const clanTaxRate = pendingTrades[tradeId].clanTax ? 1 / pendingTrades[tradeId].clanTax : 0;
-            const clanTax = clanTaxRate * tax;
-            logger.debug(`calculated tax: ${tax} + ${clanTax}`);
-        }
-        pendingTrades[tradeId][`${us}Offer`] = offer;
-        pendingTrades[tradeId].traderReady = false;
-        pendingTrades[tradeId].tradeeReady = false;
-        pendingTrades[tradeId].traderAccepted = false;
-        pendingTrades[tradeId].tradeeAccepted = false;
-        pendingTrades[tradeId].revision += 1;
-        res.json({
-            PendingTrades: [exportTrade(pendingTrades[tradeId], us)]
+        const us = getSide(accountId, buddyId);
+        const them = us == "a" ? "b" : "a";
+        const trade = await PendingTrade.create({
+            [us]: accountId,
+            [them]: buddyId,
+            [`${us}Offer`]: offer,
+            clanTax:
+                (req.query.guildId ? await Guild.findById(req.query.guildId as string, "TradeTax") : undefined)
+                    ?.TradeTax ?? 10 // When trading in Maroo's Bazaar, a 10% "Hub Tax" applies.
         });
-    } else if (op == "2") {
+        res.json({
+            PendingTrades: [exportTrade(trade, us)]
+        });
+    } else if (op == TradingOperation.CounterOffer) {
         const buddyId = req.query.buddyId as string;
-        const tradeId = getTradeId(accountId, buddyId);
-        if (parseInt(req.query.revision as string) != pendingTrades[tradeId].revision) {
+        const offer = getJSONfromString<ITradeOffer>(String(req.body));
+        const us = getSide(accountId, buddyId);
+        const trade = (await PendingTrade.findOneAndUpdate(
+            getTradeFilter(accountId, buddyId),
+            {
+                $set: {
+                    [`${us}Offer`]: offer
+                },
+                $inc: {
+                    revision: 1
+                }
+            },
+            { returnDocument: "after" }
+        ))!;
+        res.json({
+            PendingTrades: [exportTrade(trade, us)]
+        });
+    } else if (op == TradingOperation.AcceptTrade) {
+        const buddyId = req.query.buddyId as string;
+        const trade = (await getPendingTrade(accountId, buddyId))!;
+        if (parseInt(req.query.revision as string) != trade.revision) {
             throw new Error(`can't accept trade because it was unexpectedly revised`);
         }
-        const us = accountId == pendingTrades[tradeId].trader ? "trader" : "tradee";
-        pendingTrades[tradeId][`${us}Accepted`] = true;
-        const them = us == "trader" ? "tradee" : "trader";
-        if (pendingTrades[tradeId][`${them}Accepted`]) {
-            const [traderInventory, tradeeInventory] = await Promise.all([
-                getInventory(pendingTrades[tradeId].trader),
-                getInventory(pendingTrades[tradeId].tradee)
-            ]);
+        const us = trade.a.equals(accountId) ? "a" : "b";
+        trade[`${us}Accepted`] = true;
+        const them = us == "a" ? "b" : "a";
+        if (trade[`${them}Accepted`]) {
+            const [aInventory, bInventory] = await Promise.all([getInventory(trade.a), getInventory(trade.b)]);
 
-            if (!traderInventory.tradesDontTouchInventory) {
-                applyOfferToInventory(traderInventory, pendingTrades[tradeId].traderOffer, -1); // Traders gives up their items
-                applyOfferToInventory(traderInventory, pendingTrades[tradeId].tradeeOffer, +1); // to get what tradee offered
-                // and pays tax for it
-                await chargeTax(
-                    traderInventory,
-                    pendingTrades[tradeId].tradeeOffer,
-                    pendingTrades[tradeId].clanTax,
-                    req.query.guildId as string | undefined
-                );
-                if (!traderInventory.infiniteTrades) {
-                    traderInventory.TradesRemaining -= 1;
+            if (!aInventory.tradesDontTouchInventory) {
+                applyOfferToInventory(aInventory, trade.aOffer, -1); // A gives up their items
+                applyOfferToInventory(aInventory, trade.bOffer, +1); // to get what B offered
+                await chargeTax(aInventory, trade.bOffer, trade.clanTax, req.query.guildId as string | undefined); // and pays tax for it
+                if (!aInventory.infiniteTrades) {
+                    aInventory.TradesRemaining -= 1;
                 }
             }
-            if (!tradeeInventory.tradesDontTouchInventory) {
-                applyOfferToInventory(tradeeInventory, pendingTrades[tradeId].tradeeOffer, -1); // Conversely, tradee gives up their items
-                applyOfferToInventory(tradeeInventory, pendingTrades[tradeId].traderOffer, +1); // to get what trader offered
-                // and pays tax for it
-                await chargeTax(
-                    tradeeInventory,
-                    pendingTrades[tradeId].traderOffer,
-                    pendingTrades[tradeId].clanTax,
-                    req.query.guildId as string | undefined
-                );
-                if (!tradeeInventory.infiniteTrades) {
-                    tradeeInventory.TradesRemaining -= 1;
+            if (!bInventory.tradesDontTouchInventory) {
+                applyOfferToInventory(bInventory, trade.bOffer, -1); // Conversely, B gives up their items
+                applyOfferToInventory(bInventory, trade.aOffer, +1); // to get what A offered
+                await chargeTax(bInventory, trade.aOffer, trade.clanTax, req.query.guildId as string | undefined); // and pays tax for it
+                if (!bInventory.infiniteTrades) {
+                    bInventory.TradesRemaining -= 1;
                 }
             }
 
-            await Promise.all([traderInventory.save(), tradeeInventory.save()]);
-            delete pendingTrades[tradeId];
+            await Promise.all([aInventory.save(), bInventory.save(), trade.deleteOne()]);
             res.send(
                 account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["40.0.0"]) < 0 ? "9" : "12"
             ).end();
         } else {
+            await trade.save();
             res.send(
                 account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["40.0.0"]) < 0 ? "8" : "11"
             ).end();
         }
-    } else if (op == "3") {
+    } else if (op == TradingOperation.CancelTrade) {
         const buddyId = req.query.buddyId as string;
-        const tradeId = getTradeId(accountId, buddyId);
-        delete pendingTrades[tradeId];
+        await PendingTrade.deleteOne(getTradeFilter(accountId, buddyId));
+        res.end();
+    } else if (op == TradingOperation.RefreshTradeInfo) {
+        const buddyId = req.query.buddyId as string;
+        const trade = (await getPendingTrade(accountId, buddyId))!;
+        const us = trade.a.equals(accountId) ? "a" : "b";
         res.json({
-            pendingTrades: []
+            PendingTrades: [exportTrade(trade, us)]
         });
-    } else if (op == "4") {
-        const tradeId = getTradeId(accountId, req.query.buddyId as string);
-        const us = accountId == pendingTrades[tradeId].trader ? "trader" : "tradee";
-        res.json({
-            PendingTrades: [exportTrade(pendingTrades[tradeId], us)]
-        });
-    } else if (op == "5") {
+    } else if (op == TradingOperation.SetClanTax) {
         const inventory = await getInventory(accountId, "GuildId LevelKeys");
         const guild = await getGuildForRequestEx(req, inventory);
         if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Treasurer))) {
@@ -136,25 +124,27 @@ export const tradingController: RequestHandler = async (req, res) => {
         guild.TradeTax = parseInt(req.query.tax as string);
         await guild.save();
         res.send(guild.TradeTax).end();
-    } else if (op == "6") {
+    } else if (op == TradingOperation.SetReady) {
         const buddyId = req.query.buddyId as string;
-        const tradeId = getTradeId(accountId, buddyId);
-        const us = accountId == pendingTrades[tradeId].trader ? "trader" : "tradee";
-        if (parseInt(req.query.revision as string) == pendingTrades[tradeId].revision) {
-            pendingTrades[tradeId][`${us}Ready`] = true;
+        const us = getSide(accountId, buddyId);
+        const trade = (await getPendingTrade(accountId, buddyId))!;
+        if (trade.revision == parseInt(req.query.revision as string)) {
+            trade[`${us}Ready`] = true;
+            await trade.save();
         }
         res.json({
-            PendingTrades: [exportTrade(pendingTrades[tradeId], us)]
+            PendingTrades: [exportTrade(trade, us)]
         });
-    } else if (op == "7") {
+    } else if (op == TradingOperation.UnsetReady) {
         const buddyId = req.query.buddyId as string;
-        const tradeId = getTradeId(accountId, buddyId);
-        const us = accountId == pendingTrades[tradeId].trader ? "trader" : "tradee";
-        pendingTrades[tradeId][`${us}Ready`] = false;
-        pendingTrades[tradeId].tradeeAccepted = false;
-        pendingTrades[tradeId].traderAccepted = false;
+        const us = getSide(accountId, buddyId);
+        const trade = (await PendingTrade.findOneAndUpdate(
+            getTradeFilter(accountId, buddyId),
+            { [`${us}Ready`]: false, aAccepted: false, bAccepted: false },
+            { returnDocument: "after" }
+        ))!;
         res.json({
-            PendingTrades: [exportTrade(pendingTrades[tradeId], us)]
+            PendingTrades: [exportTrade(trade, us)]
         });
     } else {
         if (req.body) {
@@ -164,37 +154,31 @@ export const tradingController: RequestHandler = async (req, res) => {
     }
 };
 
-interface IPendingTradeMem {
-    trader: string;
-    tradee: string;
-    traderOffer: ITradeOffer;
-    tradeeOffer: ITradeOffer;
-    traderReady: boolean;
-    tradeeReady: boolean;
-    traderAccepted: boolean;
-    tradeeAccepted: boolean;
-    revision: number;
-    clanTax: number;
+enum TradingOperation {
+    InitialOffer = "0",
+    CounterOffer = "1",
+    AcceptTrade = "2",
+    CancelTrade = "3",
+    RefreshTradeInfo = "4",
+    SetClanTax = "5",
+    SetReady = "6",
+    UnsetReady = "7",
+    NeverSayNever = "01189998819991197253"
 }
 
-const pendingTrades: Record<string, IPendingTradeMem> = {};
-
-const getTradeId = (accountId: string, buddyId: string): string => {
-    return accountId.localeCompare(buddyId) < 0 ? accountId + buddyId : buddyId + accountId;
+const getSide = (accountId: string, buddyId: string): "a" | "b" => {
+    return accountId.localeCompare(buddyId) < 0 ? "a" : "b";
 };
 
-const exportTrade = (mem: IPendingTradeMem, us: "trader" | "tradee"): IPendingTrade => {
-    const them = us == "trader" ? "tradee" : "trader";
-    return {
-        ItemId: { $oid: mem[them] },
-        Giving: mem[`${us}Offer`],
-        Getting: mem[`${them}Offer`],
-        SelfReady: mem[`${us}Ready`],
-        BuddyReady: mem[`${them}Ready`],
-        State: mem[`${us}Accepted`] ? (mem[`${them}Accepted`] ? 4 : 3) : 2,
-        Revision: mem.revision,
-        ClanTax: mem.clanTax
-    };
+const getTradeFilter = (accountId: string, buddyId: string): QueryFilter<IPendingTradeDatabase> => {
+    return accountId.localeCompare(buddyId) < 0 ? { a: accountId, b: buddyId } : { a: buddyId, b: accountId };
+};
+
+const getPendingTrade = (
+    accountId: string,
+    buddyId: string
+): Promise<HydratedDocument<IPendingTradeDatabase> | null> => {
+    return PendingTrade.findOne(getTradeFilter(accountId, buddyId));
 };
 
 const applyOfferToInventory = (inventory: TInventoryDatabaseDocument, offer: ITradeOffer, factor: 1 | -1): void => {
