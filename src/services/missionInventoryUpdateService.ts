@@ -428,6 +428,10 @@ export const addMissionInventoryUpdates = async (
                 // e.g. when getting a 50+ score in happy zephyr, this is how the poster is given.
                 addShipDecorations(inventory, value);
                 break;
+            case "LevelKeys":
+                // Void keys are given this way in the relevant versions.
+                addLevelKeys(inventory, value);
+                break;
             case "FusionBundles": {
                 let fusionPointsDelta = 0;
                 for (const fusionBundle of value) {

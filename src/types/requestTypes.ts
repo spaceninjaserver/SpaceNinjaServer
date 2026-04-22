@@ -49,6 +49,7 @@ export type IMissionInventoryUpdateRequest = {
     BonusMiscItems?: ITypeCount[];
     EmailItems?: ITypeCount[];
     ShipDecorations?: ITypeCount[];
+    LevelKeys?: ITypeCount[];
 
     // flags for interstitial requests
     BMI?: boolean;
