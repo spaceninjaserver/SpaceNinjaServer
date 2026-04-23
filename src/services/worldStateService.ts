@@ -9,7 +9,6 @@ import darvoDeals from "../constants/darvoDeals.ts";
 import invasionNodes from "../../static/fixed_responses/worldState/invasionNodes.json" with { type: "json" };
 import invasionRewards from "../../static/fixed_responses/worldState/invasionRewards.json" with { type: "json" };
 import pvpChallenges from "../../static/fixed_responses/worldState/pvpChallenges.json" with { type: "json" };
-import { buildConfig } from "./buildConfigService.ts";
 import { EPOCH, unixTimesInMs } from "../constants/timeConstants.ts";
 import { config } from "./configService.ts";
 import { getRandomElement, getRandomInt, sequentiallyUniqueRandomElement, SRng } from "./rngService.ts";
@@ -1879,7 +1878,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     const defenseWavesPerRotation = buildLabel && version_compare(buildLabel, gameToBuildVersion["38.5.0"]) < 0 ? 5 : 3;
 
     const worldState: IWorldState = {
-        BuildLabel: typeof buildLabel == "string" ? buildLabel.split(" ").join("+") : buildConfig.buildLabel,
+        BuildLabel: buildLabel ?? "",
         Time: timeSecs,
         Goals: [],
         Alerts: [],
