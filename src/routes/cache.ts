@@ -1,15 +1,10 @@
 import express from "express";
-import { buildConfig } from "../services/buildConfigService.ts";
 import fs from "fs/promises";
 
 const cacheRouter = express.Router();
 
-cacheRouter.get(/^\/origin\/[a-zA-Z0-9]+\/[0-9]+\/H\.Cache\.bin.*$/, (req, res) => {
-    if (typeof req.query.version == "string" && req.query.version.match(/^\d\d\d\d\.\d\d\.\d\d\.\d\d\.\d\d$/)) {
-        res.sendFile(`static/data/H.Cache_${req.query.version}.bin`, { root: "./" });
-    } else {
-        res.sendFile(`static/data/H.Cache_${buildConfig.version}.bin`, { root: "./" });
-    }
+cacheRouter.get(/^\/origin\/[a-zA-Z0-9]+\/[0-9]+\/H\.Cache\.bin.*$/, (_req, res) => {
+    res.sendFile(`static/data/H.Cache.bin`, { root: "./" });
 });
 
 cacheRouter.get(/^\/0\/.+!.+$/, async (req, res) => {
@@ -33,12 +28,8 @@ cacheRouter.get(/^\/origin\/[a-zA-Z0-9]+\/index\.txt\.lzma.*$/, (_, res) => {
     res.sendFile(`static/data/content/index.txt.lzma`, { root: "./" });
 });
 
-cacheRouter.get(/^\/[0-9]+\/H\.Cache\.bin.*$/, (req, res) => {
-    if (typeof req.query.version == "string" && req.query.version.match(/^\d\d\d\d\.\d\d\.\d\d\.\d\d\.\d\d$/)) {
-        res.sendFile(`static/data/H.Cache_${req.query.version}.bin`, { root: "./" });
-    } else {
-        res.sendFile(`static/data/H.Cache_${buildConfig.version}.bin`, { root: "./" });
-    }
+cacheRouter.get(/^\/[0-9]+\/H\.Cache\.bin.*$/, (_req, res) => {
+    res.sendFile(`static/data/H.Cache.bin`, { root: "./" });
 });
 
 cacheRouter.get(/^(\/\/|\/)(SplitCaches|Lotus|Tools|7|7_en)\/.*$/, async (req, res) => {

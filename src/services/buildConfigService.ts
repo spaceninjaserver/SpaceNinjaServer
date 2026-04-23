@@ -3,12 +3,10 @@ import fs from "fs";
 import { repoDir } from "../helpers/pathHelper.ts";
 
 interface IBuildConfig {
-    version: string;
     buildLabel: string;
 }
 
 export const buildConfig: IBuildConfig = {
-    version: "",
     buildLabel: ""
 };
 
