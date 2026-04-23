@@ -167,6 +167,8 @@ export interface IInventoryDatabase
     DeathSquadPoints?: number;
     NemesisTaxedCredits?: number;
     duviriSeedRefresh?: Date;
+    HybridFusionTreasures: IHybridFusionTreasure[]; // SNS-specific in-database format to support both modern & legacy clients
+    receivedThousandYearFishDeco?: true; // placed decos are not in inventory, hence this boolean
 
     Created: Date;
     CurrentLoadOutIds: Types.ObjectId[];
@@ -211,7 +213,6 @@ export interface IInventoryDatabase
     ChallengeInstanceStates?: IChallengeInstanceStateDatabase[];
     PeriodicMissionCompletions: IPeriodicMissionCompletionDatabase[];
     FusionTreasures?: IFusionTreasure[];
-    HybridFusionTreasures: IHybridFusionTreasure[]; // SNS-specific in-database format to support both modern & legacy clients
 }
 
 export interface IQuestKeyDatabase {

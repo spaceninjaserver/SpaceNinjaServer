@@ -1753,6 +1753,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         Ships: { type: [Schema.Types.ObjectId], ref: "Ships" },
         // /Lotus/Types/Items/ShipDecos/
         ShipDecorations: [typeCountSchema],
+        receivedThousandYearFishDeco: Boolean,
 
         //Railjack/Components(https://warframe.fandom.com/wiki/Railjack/Components)
         CrewShipRawSalvage: [typeCountSchema],
@@ -2037,6 +2038,7 @@ inventorySchema.set("toJSON", {
         delete returnedObject.NemesisTaxedCredits;
         delete returnedObject.duviriSeedRefresh;
         delete returnedObject.HybridFusionTreasures;
+        delete returnedObject.receivedThousandYearFishDeco;
 
         const inventoryDatabase = returnedObject as Partial<IInventoryDatabase>;
         const inventoryResponse = returnedObject as IInventoryClient;

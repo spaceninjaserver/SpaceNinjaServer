@@ -88,7 +88,7 @@ import type {
 import { fromMongoDate, fromOid } from "../helpers/inventoryHelpers.ts";
 import { getRecipe } from "./itemDataService.ts";
 import { logger } from "../utils/logger.ts";
-import { migrateFusionTreasures } from "./inventoryService.ts";
+import { isEligibleForThousandYearFishDeco, migrateFusionTreasures } from "./inventoryService.ts";
 
 const convertOptionalDate = (value: IMongoDateWithLegacySupport | undefined): Date | undefined => {
     return value ? fromMongoDate(value) : undefined;
@@ -506,6 +506,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     if (client.LoreFragmentScans !== undefined) {
         db.LoreFragmentScans = client.LoreFragmentScans;
+        if (!db.receivedThousandYearFishDeco && isEligibleForThousandYearFishDeco(db)) {
+            db.receivedThousandYearFishDeco = true;
+        }
     }
     for (const key of ["PendingSpectreLoadouts", "SpectreLoadouts"] as const) {
         if (client[key] !== undefined) {

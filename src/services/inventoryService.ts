@@ -3099,6 +3099,46 @@ export const updateEntratiVault = (inventory: TInventoryDatabaseDocument): void 
     }
 };
 
+export const isEligibleForThousandYearFishDeco = (inventory: TInventoryDatabaseDocument): boolean => {
+    const lfsTypes = new Set<string>(inventory.LoreFragmentScans.map(x => x.ItemType));
+    return (
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentA") &&
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentB") &&
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentC") &&
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentD") &&
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentE") &&
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentF") &&
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentG") &&
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentH") &&
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentI") &&
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentJ") &&
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentK") &&
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentL") &&
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentM") &&
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentN") &&
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentO") &&
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentP") &&
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentQ") &&
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentR") &&
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentS") &&
+        lfsTypes.has("/Lotus/Types/Lore/Fragments/EidolonFragments/EidolonFragmentT")
+    );
+};
+
+export const giveThousandYearFishDeco = async (inventory: TInventoryDatabaseDocument): Promise<void> => {
+    inventory.receivedThousandYearFishDeco = true;
+    await createMessage(inventory.accountOwnerId, [
+        {
+            sndr: "/Lotus/Language/Npcs/Onkko",
+            icon: "/Lotus/Interface/Icons/Npcs/Ostron/Onkko.png",
+            sub: "/Lotus/Language/Messages/EidolonCollectibleRewardTitle",
+            msg: "/Lotus/Language/Messages/EidolonCollectibleRewardBody",
+            att: ["/Lotus/Types/Items/ShipDecos/LisetPropOstStoneFish"],
+            highPriority: true
+        }
+    ]);
+};
+
 export const ensureUserHasFounderHonoria = async (inventory: TInventoryDatabaseDocument): Promise<void> => {
     if (!inventory.FlavourItems.some(x => x.ItemType == "/Lotus/Types/Items/Titles/FounderLvl1Title")) {
         const eligibleItems = [

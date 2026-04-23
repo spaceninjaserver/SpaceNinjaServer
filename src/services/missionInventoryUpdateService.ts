@@ -47,6 +47,8 @@ import {
     getDialogue,
     giveNemesisPetRecipe,
     giveNemesisWeaponRecipe,
+    giveThousandYearFishDeco,
+    isEligibleForThousandYearFishDeco,
     updateCurrency,
     updateEntratiVault,
     updateIncentiveStates,
@@ -476,6 +478,9 @@ export const addMissionInventoryUpdates = async (
             }
             case "LoreFragmentScans":
                 addLoreFragmentScans(inventory, value);
+                if (!inventory.receivedThousandYearFishDeco && isEligibleForThousandYearFishDeco(inventory)) {
+                    await giveThousandYearFishDeco(inventory);
+                }
                 break;
             case "LibraryScans":
                 value.forEach(scan => {

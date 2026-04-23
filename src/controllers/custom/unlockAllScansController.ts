@@ -3,7 +3,12 @@ import allScans from "../../../static/fixed_responses/allScans.json" with { type
 import { ExportCodex, ExportEnemies } from "warframe-public-export-plus";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getStats } from "../../services/statsService.ts";
-import { addShipDecorations, getInventory, updateIncentiveStates } from "../../services/inventoryService.ts";
+import {
+    addShipDecorations,
+    getInventory,
+    giveThousandYearFishDeco,
+    updateIncentiveStates
+} from "../../services/inventoryService.ts";
 import { getShipDecoByNameTag } from "../../services/itemDataService.ts";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 
@@ -11,7 +16,10 @@ export const unlockAllScansController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const [stats, inventory] = await Promise.all([
         getStats(accountId),
-        getInventory(accountId, "ChallengeProgress CollectibleSeries LoreFragmentScans ShipDecorations")
+        getInventory(
+            accountId,
+            "ChallengeProgress CollectibleSeries LoreFragmentScans ShipDecorations receivedThousandYearFishDeco accountOwnerId"
+        )
     ]);
 
     // Unlock all enemy & object scans
@@ -157,6 +165,9 @@ export const unlockAllScansController: RequestHandler = async (req, res) => {
             Region: "",
             ItemType
         });
+    }
+    if (!inventory.receivedThousandYearFishDeco) {
+        await giveThousandYearFishDeco(inventory); // needs accountOwnerId
     }
 
     await Promise.all([stats.save(), inventory.save()]);
