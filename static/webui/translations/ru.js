@@ -338,6 +338,7 @@ dict = {
     worldState_baroTennoConRelay: `Реле Баро TennoCon`,
     worldState_starDays: `Звёздные дни`,
     worldState_saintPatrick: `День Святого Патрика`,
+    worldState_xmas: `[UNTRANSLATED] Tennobaum`,
     worldState_lunarNewYear: `Лунный Новый Год`,
     worldState_lunarNewYearEntry: `|VAL|: Год |ANIMAL|`,
     worldState_lunarNewYearAnimal1: `Крысы`,

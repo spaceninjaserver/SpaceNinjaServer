@@ -2084,9 +2084,9 @@ export const getPrice = (
         const { FlashSales } = getWorldState(buildLabel);
         const flashSale = FlashSales.find(s => s.TypeName == internalName);
         if (flashSale) {
-            if (usePremium && flashSale.PremiumOverride > 0) {
+            if (usePremium && flashSale.PremiumOverride) {
                 return flashSale.PremiumOverride * quantity;
-            } else if (!usePremium && flashSale.RegularOverride > 0) {
+            } else if (!usePremium && flashSale.RegularOverride) {
                 return flashSale.RegularOverride * quantity;
             }
         }

@@ -38,10 +38,16 @@
             "/Lotus/StoreItems/Types/StoreItems/SlotItems/TwoWeaponSlotItem",
             "/Lotus/StoreItems/Powersuits/Wisp/Wisp",
             "/Lotus/StoreItems/Weapons/Tenno/Shotgun/Shotgun",
+            "/Lotus/StoreItems/Powersuits/Rhino/Rhino",
             "/Lotus/StoreItems/Weapons/Corpus/Pistols/CrpAirPistol/CrpAirPistolArray",
-            "/Lotus/StoreItems/Upgrades/Skins/Scarves/FlameScarf",
             "/Lotus/Types/StoreItems/Boosters/AffinityBooster3DayStoreItem"
           ]
+        },
+        {
+          "CategoryName": "NEW",
+          "Name": "/Lotus/Language/Menu/Store_New",
+          "Icon": "new",
+          "Items": []
         },
         {
           "CategoryName": "POPULAR",
@@ -66,12 +72,31 @@
           ]
         },
         {
+          "CategoryName": "SEASONAL",
+          "Name": "/Lotus/Language/Store/SeasonalCategoryTitle",
+          "Icon": "seasonal",
+          "AddToMenu": true,
+          "Items": []
+        },
+        {
+          "CategoryName": "COMMUNITY",
+          "Name": "/Lotus/Language/Store/CommunityCategoryTitle",
+          "Icon": "community",
+          "AddToMenu": true,
+          "Items": []
+        },
+        {
           "CategoryName": "HEIRLOOM",
           "Name": "/Lotus/Language/Store/HeirloomCategoryTitle",
           "Icon": "heirloom",
           "AddToMenu": true,
           "Items": [
-            "/Lotus/Types/StoreItems/Packages/2025Bundles/RhinoHeirloomPack",
+            "/Lotus/StoreItems/Upgrades/Skins/Berserker/ValkyrHeirloomSkin",
+            "/Lotus/StoreItems/Upgrades/Skins/Crowns/HeirloomValkyrCrown",
+            "/Lotus/StoreItems/Types/StoreItems/SuitCustomizations/ColourPickerValkyrHeirloom",
+            "/Lotus/StoreItems/Types/Items/ShipDecos/TarotCardValkyrHeirloom",
+            "/Lotus/StoreItems/Types/StoreItems/AvatarImages/HeirloomValkyrGlyph",
+            "/Lotus/StoreItems/Upgrades/Skins/Sigils/HeirloomValkyrSigil",
             "/Lotus/Types/StoreItems/Packages/HeirloomPackRhino",
             "/Lotus/StoreItems/Upgrades/Skins/Rhino/RhinoHeirloomSkin",
             "/Lotus/StoreItems/Upgrades/Skins/Crowns/HeirloomRhinoCrown",
@@ -113,6 +138,12 @@
           "Name": "/Lotus/Language/Menu/Store_Wishlist",
           "Icon": "wishlist",
           "Items": []
+        },
+        {
+          "CategoryName": "QUICK_BUY",
+          "Name": "/Lotus/Language/Store/TopSeller_Title",
+          "Icon": "quickbuy",
+          "Items": ["/Lotus/Types/StoreItems/Packages/FormaPack", "/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst", "/Lotus/StoreItems/Types/Items/MiscItems/WeaponUtilityUnlocker"]
         }
       ]
     }

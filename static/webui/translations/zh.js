@@ -338,6 +338,7 @@ dict = {
     worldState_baroTennoConRelay: `Baro的TennoCon中继站`,
     worldState_starDays: `活动:星日`,
     worldState_saintPatrick: `圣帕特里克节`,
+    worldState_xmas: `[UNTRANSLATED] Tennobaum`,
     worldState_lunarNewYear: `新春活动`,
     worldState_lunarNewYearEntry: `|VAL|:|ANIMAL|年`,
     worldState_lunarNewYearAnimal1: `鼠`,

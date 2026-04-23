@@ -453,14 +453,14 @@ export type TCircuitGameMode =
 
 export interface IFlashSale {
     TypeName: string;
-    ShowInMarket: boolean;
-    HideFromMarket: boolean;
-    SupporterPack: boolean;
-    Discount: number;
-    BogoBuy: number;
-    BogoGet: number;
-    PremiumOverride: number;
-    RegularOverride: number;
+    ShowInMarket?: boolean;
+    HideFromMarket?: boolean;
+    SupporterPack?: boolean;
+    Discount?: number;
+    BogoBuy?: number;
+    BogoGet?: number;
+    PremiumOverride?: number;
+    RegularOverride?: number;
     ProductExpiryOverride?: IMongoDateWithLegacySupport;
     StartDate: IMongoDateWithLegacySupport;
     EndDate: IMongoDateWithLegacySupport;

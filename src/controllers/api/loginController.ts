@@ -210,7 +210,18 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
         resp.ForceLogoutVersion = 0;
     }
     if (version_compare(buildLabel, gameToBuildVersion["26.0.0"]) >= 0) {
-        resp.Groups = [];
+        // Example values from live:
+        // - [{"experiment":"landingPageAB2368","experimentGroup":"control"},{"experiment":"InGameMarketRelatedItemsData","experimentGroup":"related_items_priority_control"},{"experiment":"GamesightAB","experimentGroup":"b"}]
+        // - [{"experiment":"LandingPageAB2368","experimentGroup":"control"},{"experiment":"GamesightAB","experimentGroup":"b"},{"experiment":"InGameMarketRelatedItemsData","experimentGroup":"related_items_priority_control"},{"experiment":"InGameMarketRelatedItemsDisplay","experimentGroup":"related_items_preview_control"},{"experiment":"ConsoleBonusPlatLowGDP","experimentGroup":"LowGDP_FewerLargerBonuses"}]
+        // - [{"experiment":"LandingPageAB2368","experimentGroup":"control"},{"experiment":"LandingPageAB9364","experimentGroup":"control"},{"experiment":"GamesightAB","experimentGroup":"b"},{"experiment":"InGameMarketRelatedItemsData","experimentGroup":"related_items_priority_control"},{"experiment":"InGameMarketRelatedItemsDisplay","experimentGroup":"related_items_preview_control"},{"experiment":"MarketDualPack","experimentGroup":"dual_packs_enabled"},{"experiment":"ConsoleBonusPlatLowGDP","experimentGroup":"LowGDP_FewerLargerBonuses"},{"experiment":"ConsoleBonusPlatV2LowGDP","experimentGroup":"LowGDP_LargerBonuses"}]
+        // - [{"experiment":"ConsoleBonusPlatV2LowGDP","experimentGroup":"LowGDP_LargerBonuses"}]
+        resp.Groups = [
+            //{ experiment: "matchmaking_vp_4", experimentGroup: "matchmaking_vp_4" }, // Matchmaking for VorsPrize MissionFour
+            //{ experiment: "matchmaking_vp_all", experimentGroup: "matchmaking_vp_all" }, // Matchmaking for VorsPrize MissionSix
+            //{ experiment: "arsenal_auto_open", experimentGroup: "arsenal_auto_open" }, // Automatically opens the arsenal after installing the ship feature
+            //{ experiment: "igm_new_player_recommended_title", experimentGroup: "igm_new_player_recommended_title" }, // Shows "new players" market section for MR 0-3 players
+            //{ experiment: "quick_buy_visible", experimentGroup: "quick_buy_visible" } // Shows "quick buy" market section for MR 4+ players
+        ];
     }
     if (version_compare(buildLabel, gameToBuildVersion["30.0.0"]) >= 0) {
         resp.DTLS = config.dtls ?? 0; // bit 0 enables DTLS. if enabled, additional bits can be set, e.g. bit 2 to enable logging. on live, the value is 99.

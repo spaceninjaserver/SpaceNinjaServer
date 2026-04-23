@@ -2505,6 +2505,77 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
         pushFlashSales(worldState, storeItems, activation, expiry, "SEASONAL", buildLabel);
     }
+
+    const xmasStart = Date.UTC(date.getUTCFullYear(), 11, 1);
+    const xmasEnd = Date.UTC(date.getUTCFullYear() + 1, 1, 1);
+    const isXmas = timeMs >= xmasStart && timeMs < xmasEnd;
+    if (
+        (config.worldState?.xmasOverride ?? isXmas) &&
+        (!buildLabel || version_compare(buildLabel, gameToBuildVersion["13.0.0"]) >= 0)
+    ) {
+        const activation = config.worldState?.xmasOverride ? 1772467200000 : xmasStart;
+        const expiry = config.worldState?.xmasOverride ? 2000000000000 : xmasEnd;
+
+        // On live, these FlashSales only have TypeName, PremiumOverride, StartDate, EndDate, & ProductExpiryOverride.
+        const storeItems: (Partial<IFlashSale> & { TypeName: string })[] = [
+            { TypeName: "/Lotus/Types/StoreItems/Packages/Winter2017GlyphBundle", PremiumOverride: 100 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/Winter2018GlyphBundle", PremiumOverride: 80 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/Winter2016Bundle", PremiumOverride: 350 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/Winter2019GlyphBundle", PremiumOverride: 90 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/WinterBundle", PremiumOverride: 600 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/WinterGlyphBundle", PremiumOverride: 65 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/KavatColorPackXmas", PremiumOverride: 40 },
+            { TypeName: "/Lotus/Upgrades/Skins/Festivities/XmasSonicor", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/WinterAccessoriesBundle", PremiumOverride: 280 },
+            { TypeName: "/Lotus/Upgrades/Skins/Harlequin/MirageXmasSkin", PremiumOverride: 40 },
+            { TypeName: "/Lotus/Upgrades/Skins/Armor/SetThreeWinged/SolsticeSetThreeArmArmor", PremiumOverride: 50 },
+            { TypeName: "/Lotus/Upgrades/Skins/Archer/WinterSolsticeSalix", PremiumOverride: 95 },
+            { TypeName: "/Lotus/Upgrades/Skins/Armor/SetThreeWinged/SolsticeSetThreeChestArmor", PremiumOverride: 45 },
+            { TypeName: "/Lotus/Upgrades/Skins/Frost/FrostXmasSkin", PremiumOverride: 40 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/KubrowColorPackCandyCane", PremiumOverride: 50 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/WinterGlyphBundleB", PremiumOverride: 110 },
+            { TypeName: "/Lotus/Upgrades/Skins/Scarves/HolidayTurtleNeckScarf", PremiumOverride: 50 },
+            { TypeName: "/Lotus/Upgrades/Skins/Hammer/SolsticeHeliocor", PremiumOverride: 30 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/KubrowColorPackReindeer", PremiumOverride: 50 },
+            { TypeName: "/Lotus/Upgrades/Skins/Fairy/SolsticeFairySkin", PremiumOverride: 40 },
+            { TypeName: "/Lotus/Types/StoreItems/Packages/SolsticeSetThreeArmorPack", PremiumOverride: 100 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017D", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2016B", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Catbrows/SolsticeCatbrowFur", PremiumOverride: 40 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2016C", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Kubrows/Fur/SolsticeKubrowFur", PremiumOverride: 40 },
+            { TypeName: "/Lotus/Upgrades/Skins/Armor/SetThreeWinged/SolsticeSetThreeLegArmor", PremiumOverride: 35 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016D", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2016D", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016E", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016A", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016B", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016C", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016G", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016F", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017B", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017A", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017E", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2016A", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017C", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018E", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018B", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018A", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018C", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017F", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018D", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphJingleKavat", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphCarolingOctavia", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphSurpriseIvara", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphJollyGrendel", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphFestiveFloof", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphSkiGauss", PremiumOverride: 20 },
+            { TypeName: "/Lotus/Upgrades/Skins/Festivities/XmasGlaxion", PremiumOverride: 20 }
+        ];
+
+        pushFlashSales(worldState, storeItems, activation, expiry, "SEASONAL", buildLabel);
+    }
+
     if (config.worldState?.anniversary != undefined) {
         // Incompatible with: Use Tag from Warframe Anniversary for old Events, Wolf Hunt, Galleon Of Ghouls, Hallowed Flame, Hallowed Nightmares, Dog Days, Proxy Rebellion, Long Shadow
         const goalsByWeek: Partial<IGoal>[][] = [
@@ -5007,17 +5078,6 @@ export const populateFeaturedGuilds = async (worldState: IWorldState): Promise<v
     }
 };
 
-const storeCategories: Record<string, { Name: string; Icon: string; AddToMenu?: boolean }> = {
-    NEW_PLAYER: { Name: "/Lotus/Language/Store/NewPlayerCategoryTitle", Icon: "newplayer", AddToMenu: true },
-    POPULAR: { Name: "/Lotus/Language/Menu/StorePopular", Icon: "popular", AddToMenu: true },
-    HEIRLOOM: { Name: "/Lotus/Language/Store/HeirloomCategoryTitle", Icon: "heirloom", AddToMenu: true },
-    SEASONAL: { Name: "/Lotus/Language/Store/SeasonalCategoryTitle", Icon: "seasonal", AddToMenu: true },
-    SALE: { Name: "/Lotus/Language/Menu/Store_Sale", Icon: "sale", AddToMenu: true },
-    WISH_LIST: { Name: "/Lotus/Language/Menu/Store_Wishlist", Icon: "wishlist" },
-    PREMIUM_BUNDLES: { Name: "/Lotus/Language/Store/Store_PremiumBundles", Icon: "premiumbundles" },
-    QUICK_BUY: { Name: "/Lotus/Language/Store/TopSeller_Title", Icon: "quickbuy" }
-};
-
 const pushFlashSales = (
     ws: IWorldState,
     storeItems: (Partial<IFlashSale> & { TypeName: string })[],
@@ -5028,42 +5088,28 @@ const pushFlashSales = (
 ): void => {
     ws.FlashSales.push(
         ...storeItems.map(item => ({
-            ...{
-                StartDate: toMongoDate2(startDate, buildLabel),
-                EndDate: toMongoDate2(endDate, buildLabel),
-                ProductExpiryOverride: toMongoDate2(endDate, buildLabel),
-                ShowInMarket: item.ShowInMarket ?? true,
-                HideFromMarket: item.HideFromMarket ?? false,
-                SupporterPack: item.SupporterPack ?? false,
-                Discount: item.Discount ?? 0,
-                BogoBuy: item.BogoBuy ?? 0,
-                BogoGet: item.BogoGet ?? 0,
-                RegularOverride: item.RegularOverride ?? 0,
-                PremiumOverride: item.PremiumOverride ?? 0,
-                Featured: item.Featured ?? category != "POPULAR",
-                Popular: item.Popular ?? category == "POPULAR",
-                BannerIndex: item.BannerIndex ?? 10
-            },
-            ...item
+            ...item,
+            StartDate: toMongoDate2(startDate, buildLabel),
+            EndDate: toMongoDate2(endDate, buildLabel),
+            ProductExpiryOverride: toMongoDate2(endDate, buildLabel),
+            // The following fields are not needed nowadays, but might be needed for Market 2.0 (pre-U25):
+            ShowInMarket: item.ShowInMarket ?? true,
+            HideFromMarket: item.HideFromMarket ?? false,
+            SupporterPack: item.SupporterPack ?? false,
+            Discount: item.Discount ?? 0,
+            BogoBuy: item.BogoBuy ?? 0,
+            BogoGet: item.BogoGet ?? 0,
+            RegularOverride: item.RegularOverride ?? 0,
+            PremiumOverride: item.PremiumOverride ?? 0,
+            Featured: item.Featured ?? category != "POPULAR",
+            Popular: item.Popular ?? category == "POPULAR",
+            BannerIndex: item.BannerIndex ?? 10
         }))
     );
 
-    if (category in storeCategories) {
-        const categoryData = storeCategories[category];
-        const seasonalCategory = ws.InGameMarket.LandingPage.Categories.find(c => c.CategoryName == category);
-        const seasonalItems = storeItems.map(item => item.TypeName);
-
-        if (seasonalCategory) {
-            seasonalCategory.Items ??= [];
-            seasonalCategory.Items.push(...seasonalItems);
-        } else {
-            ws.InGameMarket.LandingPage.Categories.push({
-                ...{
-                    CategoryName: category,
-                    Items: seasonalItems
-                },
-                ...categoryData
-            });
-        }
+    const seasonalCategory = ws.InGameMarket.LandingPage.Categories.find(c => c.CategoryName == category);
+    if (!seasonalCategory) {
+        throw new Error(`No market category ${seasonalCategory} in static worldState data`);
     }
+    seasonalCategory.Items!.push(...storeItems.map(x => x.TypeName));
 };
