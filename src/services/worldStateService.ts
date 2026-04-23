@@ -1897,6 +1897,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         KnownCalendarSeasons: [],
         PVPChallengeInstances: [],
         FeaturedGuilds: [],
+        NodeOverrides: [],
         ...staticWorldState,
         SyndicateMissions: [...staticWorldState.SyndicateMissions],
         InGameMarket: {
@@ -3891,8 +3892,39 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         }
     }
 
-    // Elite Sanctuary Onslaught cycling every week
-    worldState.NodeOverrides.find(x => x.Node == "SolNode802")!.Seed = new SRng(week).randomInt(0, 0xff_ffff);
+    {
+        worldState.NodeOverrides.push(
+            { _id: { $oid: "549b18e9b029cef5991d6aec" }, Node: "EuropaHUB", Hide: true },
+            { _id: { $oid: "54a1737aeb658f6cbccf70ff" }, Node: "ErisHUB", Hide: true },
+            { _id: { $oid: "54a736ddec12f80bd6e9e326" }, Node: "VenusHUB", Hide: true }
+        );
+        if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["22.18.0"]) >= 0) {
+            worldState.NodeOverrides.push({
+                _id: { $oid: "5ad9f9bb6df82a56eabf3d44" },
+                Node: "SolNode802",
+                // Elite Sanctuary Onslaught cycling every week
+                Seed: new SRng(week).randomInt(0, 0xff_ffff)
+            });
+        }
+        if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["25.7.0"]) >= 0) {
+            worldState.NodeOverrides.push({
+                _id: { $oid: "5d24d1f674491d51f8d44473" },
+                Node: "MercuryHUB",
+                Hide: true,
+                LevelOverride: "/Lotus/Levels/Proc/Hub/RelayStationHubHydroid",
+                Activation: { $date: { $numberLong: "1563030000000" } }
+            });
+        }
+        if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["21.0.0"]) >= 0) {
+            worldState.NodeOverrides.push({
+                _id: { $oid: "5b8817c2bd4f253264d6aa91" },
+                Node: "EarthHUB",
+                Hide: false,
+                LevelOverride: "/Lotus/Levels/Proc/Hub/RelayStationHubTwoB",
+                Activation: { $date: { $numberLong: "1535646600000" } }
+            });
+        }
+    }
 
     // Holdfast, Cavia, & Hex bounties cycling every 2.5 hours; unfaithful implementation
     let bountyCycle = Math.trunc((timeSecs - bountyEpoch) / eidolonCycleDuration);
