@@ -1933,6 +1933,16 @@ export const addSkin = (
         inventory.BountyScore ??= 0;
         inventory.BountyScore += 1;
     }
+
+    // https://onlyg.it/OpenWF/SpaceNinjaServer/issues/3941
+    if (typeName.endsWith("LeftArmor")) {
+        addSkin(
+            inventory,
+            typeName.substring(0, typeName.length - "LeftArmor".length) + "RightArmor",
+            inventoryChanges
+        );
+    }
+
     if (inventory.WeaponSkins.some(x => x.ItemType == typeName)) {
         logger.debug(`refusing to add WeaponSkin ${typeName} because account already owns it`);
     } else {

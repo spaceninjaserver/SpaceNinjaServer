@@ -1934,7 +1934,7 @@ export const getPrice = (
     buildLabel: string
 ): number => {
     const isBundle = storeItemName in ExportBundles;
-    const internalName = isBundle ? storeItemName : fromStoreItem(storeItemName);
+    let internalName = isBundle ? storeItemName : fromStoreItem(storeItemName);
 
     {
         const { FlashSales } = getWorldState(buildLabel);
@@ -1980,6 +1980,11 @@ export const getPrice = (
     } else if (internalName in ExportBoosterPacks) {
         if (usePremium) price = ExportBoosterPacks[internalName].platinumCost;
     } else {
+        // https://onlyg.it/OpenWF/SpaceNinjaServer/issues/3941
+        if (internalName.endsWith("LeftArmor")) {
+            internalName = internalName.substring(0, internalName.length - "LeftArmor".length) + "Armor";
+        }
+
         const categories = [
             ExportBundles,
             ExportCreditBundles,
