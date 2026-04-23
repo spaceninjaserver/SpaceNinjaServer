@@ -2,53 +2,18 @@ import type { LeveledLogMethod } from "winston";
 import { createLogger, format, transports, addColors } from "winston";
 import "winston-daily-rotate-file";
 import { config } from "../services/configService.ts";
-import * as util from "util";
-import { isEmptyObject } from "../helpers/general.ts";
 
-// const combineMessageAndSplat = () => {
-//     return {
-//         transform: (info: any, _opts: any) => {
-//             //combine message and args if any
-//             info.message = util.format(info.message, ...(info[Symbol.for("splat")] || []));
-//             return info;
-//         }
-//     };
-// };
-
-// const alwaysAddMetadata = () => {
-//     return {
-//         transform(info: any) {
-//             if (info[Symbol.for("splat")] === undefined) return info;
-//             info.meta = info[Symbol.for("splat")]; //[0].meta;
-//             return info;
-//         }
-//     };
-// };
-
-//TODO: in production utils.inspect might be slowing down requests see utils.inspect
-const consolelogFormat = format.printf(info => {
-    if (!isEmptyObject(info.metadata)) {
-        const metadataString = util.inspect(info.metadata, {
-            showHidden: false,
-            depth: null,
-            colors: true
-        });
-
-        return `${info.timestamp as string} [${info.version as string}] ${info.level}: ${info.message as string} ${metadataString}`;
-    }
-    return `${info.timestamp as string} [${info.version as string}] ${info.level}: ${info.message as string}`;
+const printf = format.printf(info => {
+    return `${info.timestamp as string} [${info.level}] ${info.message as string}`;
 });
-
-const fileFormat = format.combine(
-    format.uncolorize(),
-    //combineMessageAndSplat(),
-    format.timestamp(),
-    format.json()
-);
 
 const fileLog = new transports.DailyRotateFile({
     filename: `logs/${config.logger.level}.log`,
-    format: fileFormat,
+    format: format.combine(
+        format.uncolorize(),
+        format.timestamp(), // zulu time
+        printf
+    ),
     datePattern: "YYYY-MM-DD"
 });
 
@@ -57,12 +22,8 @@ const consoleLog = new transports.Console({
     format: format.combine(
         format.colorize(),
         format.timestamp({ format: "YYYY-MM-DDTHH:mm:ss:SSS" }), // uses local timezone
-        //combineMessageAndSplat(),
-        //alwaysAddMetadata(),
         format.errors({ stack: true }),
-        format.align(),
-        format.metadata({ fillExcept: ["message", "level", "timestamp", "version"] }),
-        consolelogFormat
+        printf
     )
 });
 
