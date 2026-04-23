@@ -1105,6 +1105,150 @@ export const U5Modules: Record<string, IU5FingerprintData> = {
             { number: 1, rarity: "COMMON" },
             { number: 1, rarity: "RARE" }
         ]
+    },
+    "/Lotus/Upgrades/Modules/TennoSwordModule": {
+        fits: [
+            {
+                type: "/Lotus/Weapons/Tenno/Melee/DualShortSword/DualShortSword",
+                rarity: "UNCOMMON"
+            },
+            {
+                type: "/Lotus/Weapons/Tenno/Melee/LongSword/LongSword",
+                rarity: "UNCOMMON"
+            },
+            {
+                type: "/Lotus/Weapons/Tenno/Melee/Staff/Staff",
+                rarity: "UNCOMMON"
+            },
+            {
+                type: "/Lotus/Types/Game/LotusMeleeWeapon",
+                rarity: "COMMON"
+            }
+        ],
+        upgrades: [
+            {
+                type: "WEAPON_MELEE_DAMAGE",
+                operation: "MULTIPLY",
+                valueRarity: {
+                    COMMON: [1.05, 1.15],
+                    UNCOMMON: [1.075, 1.25],
+                    RARE: [1.15, 1.5]
+                },
+                rarity: "COMMON"
+            },
+            {
+                type: "WEAPON_FIRE_DAMAGE",
+                operation: "ADD",
+                valueRarity: {
+                    COMMON: [0.05, 0.15],
+                    UNCOMMON: [0.075, 0.25],
+                    RARE: [0.1, 0.5]
+                },
+                rarity: "RARE",
+                displayAsPercent: true
+            },
+            {
+                type: "WEAPON_ELECTRICITY_DAMAGE",
+                operation: "ADD",
+                valueRarity: {
+                    COMMON: [0.05, 0.15],
+                    UNCOMMON: [0.075, 0.25],
+                    RARE: [0.1, 0.5]
+                },
+                rarity: "COMMON",
+                displayAsPercent: true
+            },
+            {
+                type: "WEAPON_FREEZE_DAMAGE",
+                operation: "ADD",
+                valueRarity: {
+                    COMMON: [0.05, 0.15],
+                    UNCOMMON: [0.075, 0.25],
+                    RARE: [0.1, 0.5]
+                },
+                rarity: "COMMON",
+                displayAsPercent: true
+            },
+            {
+                type: "WEAPON_ARMOR_PIERCING_DAMAGE",
+                operation: "ADD",
+                valueRarity: {
+                    COMMON: [0.05, 0.15],
+                    UNCOMMON: [0.075, 0.25],
+                    RARE: [0.1, 0.5]
+                },
+                rarity: "COMMON",
+                displayAsPercent: true
+            },
+            {
+                type: "WEAPON_STUN_CHANCE",
+                operation: "ADD",
+                valueRarity: {
+                    COMMON: [0.05, 0.1],
+                    UNCOMMON: [0.1, 0.2],
+                    RARE: [0.2, 0.4]
+                },
+                rarity: "UNCOMMON",
+                displayAsPercent: true
+            },
+            {
+                type: "WEAPON_CRIT_CHANCE",
+                operation: "ADD",
+                valueRarity: {
+                    COMMON: [0.01, 0.1],
+                    UNCOMMON: [0.02, 0.15],
+                    RARE: [0.05, 0.25]
+                },
+                rarity: "COMMON",
+                displayAsPercent: true
+            },
+            {
+                type: "WEAPON_CRIT_DAMAGE",
+                operation: "ADD",
+                valueRarity: {
+                    COMMON: [0.05, 1],
+                    UNCOMMON: [0.1, 1.5],
+                    RARE: [0.2, 2]
+                },
+                rarity: "COMMON",
+                displayAsPercent: true
+            },
+            {
+                type: "WEAPON_MELEE_HEAVY_DAMAGE",
+                operation: "MULTIPLY",
+                valueRarity: {
+                    COMMON: [1.025, 1.25],
+                    UNCOMMON: [1.05, 1.5],
+                    RARE: [1.15, 1.75]
+                },
+                rarity: "UNCOMMON"
+            },
+            {
+                type: "WEAPON_MELEE_CHARGE_RATE",
+                operation: "ADD",
+                valueRarity: {
+                    COMMON: [0.025, 0.3],
+                    UNCOMMON: [0.05, 0.4],
+                    RARE: [0.1, 0.5]
+                },
+                rarity: "UNCOMMON",
+                displayAsPercent: true
+            },
+            {
+                type: "WEAPON_FIRE_RATE",
+                operation: "MULTIPLY",
+                valueRarity: {
+                    COMMON: [1.05, 1.15],
+                    UNCOMMON: [1.075, 1.35],
+                    RARE: [1.1, 1.5]
+                },
+                rarity: "UNCOMMON"
+            }
+        ],
+        numUpgrades: [
+            { number: 1, rarity: "COMMON" },
+            { number: 1, rarity: "RARE" }
+        ]
     }
 };
 
@@ -1549,10 +1693,10 @@ export const getBoosterPack = async (
                 { Item: "/Lotus/Types/Keys/OrokinKeyE", Rarity: "RARE", Amount: 1 }
             ],
             rarityWeightsPerRoll: [
-                { COMMON: 1, UNCOMMON: 0.050000001, RARE: 0.0099999998, LEGENDARY: 0 },
-                { COMMON: 1, UNCOMMON: 0.25, RARE: 0.050000001, LEGENDARY: 0 },
-                { COMMON: 1, UNCOMMON: 0.25, RARE: 0.050000001, LEGENDARY: 0 },
-                { COMMON: 1, UNCOMMON: 0.25, RARE: 0.050000001, LEGENDARY: 0 },
+                { COMMON: 1, UNCOMMON: 0.05, RARE: 0.01, LEGENDARY: 0 },
+                { COMMON: 1, UNCOMMON: 0.25, RARE: 0.05, LEGENDARY: 0 },
+                { COMMON: 1, UNCOMMON: 0.25, RARE: 0.05, LEGENDARY: 0 },
+                { COMMON: 1, UNCOMMON: 0.25, RARE: 0.05, LEGENDARY: 0 },
                 { COMMON: 1, UNCOMMON: 0.25, RARE: 0.1, LEGENDARY: 0 }
             ],
             canGiveDuplicates: true,

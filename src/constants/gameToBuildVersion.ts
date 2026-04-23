@@ -68,6 +68,8 @@ const gameToBuildVersion = {
     "9.1.0": "2013.07.13.03.21",
     "8.3.0": "2013.07.04.20.17",
     "8.0.0": "2013.05.23.16.06",
-    "7.3.0": "2013.03.25.11.45"
+    "7.3.0": "2013.03.25.11.45",
+    "5.2.0": "2013.01.04.10.41",
+    "5.1.0": "2012.12.31.16.20"
 } as const;
 export default gameToBuildVersion as Record<keyof typeof gameToBuildVersion, string>;

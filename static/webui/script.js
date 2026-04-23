@@ -1110,7 +1110,11 @@ function fetchItemList() {
                             "/Lotus/Language/Suits/RiftWalkAbilityName": loc("code_RiftWalkAbilityName"),
                             "/Lotus/Upgrades/Modules/GrineerMeleeModule": loc("code_U5Mod").replace(
                                 "|TYPE|",
-                                loc("code_melee")
+                                loc("code_melee") + " [GrineerMeleeModule]"
+                            ),
+                            "/Lotus/Upgrades/Modules/TennoSwordModule": loc("code_U5Mod").replace(
+                                "|TYPE|",
+                                loc("code_melee") + " [TennoSwordModule]"
                             ),
 
                             "/Lotus/Upgrades/Modules/GrineerPistolModule": loc("code_U5Mod").replace(
@@ -1281,6 +1285,7 @@ const U5Mods = [
     "/Lotus/Upgrades/Modules/GrineerRifleModule",
     "/Lotus/Upgrades/Modules/GrineerShotgunModule",
     "/Lotus/Upgrades/Modules/OrokinWarframeModule",
+    "/Lotus/Upgrades/Modules/TennoSwordModule",
     "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod"
 ];
 
@@ -1935,6 +1940,9 @@ single.getRoute("/webui/mods").on("beforeload", async function () {
                             "|TYPE|",
                             itemMap[fingerprint.fits]?.name ?? fingerprint.fits
                         );
+                    }
+                    if (item.ItemType.endsWith("GrineerMeleeModule") || item.ItemType.endsWith("TennoSwordModule")) {
+                        td.textContent += " [" + item.ItemType.split("/").pop() + "]";
                     }
                 }
             }
@@ -5330,7 +5338,8 @@ function createUpgradeInput(targetDiv, itemMap, itemType, upgrade) {
             const option = document.createElement("option");
             option.value = up.type;
             const locType =
-                itemType.endsWith("GrineerMeleeModule") && up.type == "WEAPON_FIRE_RATE"
+                (itemType.endsWith("GrineerMeleeModule") || itemType.endsWith("TennoSwordModule")) &&
+                up.type == "WEAPON_FIRE_RATE"
                     ? "WEAPON_MELEE_FIRE_RATE"
                     : up.type;
             option.textContent = loc(locType);

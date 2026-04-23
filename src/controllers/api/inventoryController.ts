@@ -933,6 +933,11 @@ export const getInventoryResponse = async (
                             "/Lotus/Upgrades/Modules/OrokinWarframeModule",
                             "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod"
                         ];
+
+                        if (version_compare(buildLabel, gameToBuildVersion["5.2.0"]) >= 0) {
+                            allowedMods.push("/Lotus/Upgrades/Modules/TennoSwordModule");
+                        }
+
                         inventoryResponse.RawUpgrades = inventoryResponse.RawUpgrades.filter(x =>
                             allowedMods.includes(x.ItemType)
                         );
