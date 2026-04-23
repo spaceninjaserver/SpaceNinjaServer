@@ -641,7 +641,7 @@ export const getInventoryResponse = async (
         // Old versions crash when faced with an unrecognised CollectibleType, so filter this array.
         if (inventoryResponse.CollectibleSeries && version_compare(buildLabel, gameToBuildVersion["33.0.0"]) < 0) {
             inventoryResponse.CollectibleSeries = inventoryResponse.CollectibleSeries.filter(
-                x => x.CollectibleType != "/Lotus/Types/Lore/Fragments/DuviriFragments/DuviriCollectibleDeco"
+                x => x.CollectibleType == "/Lotus/Objects/Orokin/Props/CollectibleSeriesOne"
             );
 
             // U22.13.4 crashes if there's more than 64 characters + a '1' here.

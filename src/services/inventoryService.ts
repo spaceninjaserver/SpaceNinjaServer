@@ -3176,5 +3176,21 @@ export const updateIncentiveStates = async (
         if (progress >= 1.0) {
             await createMessage(accountId, [kuriaMessage100]);
         }
+    } else if (entry.CollectibleType == "/Lotus/Types/Lore/Fragments/DuviriMITWFragments/DuviriMITWCollectibleDeco") {
+        if (entry.Count == entry.ReqScans) {
+            await createMessage(accountId, [
+                {
+                    sub: "/Lotus/Language/Isleweaver/IsleweaverFragmentInboxMessageSender",
+                    sndr: "/Lotus/Language/Isleweaver/IsleweaverFragmentInboxMessageSubject",
+                    msg: "/Lotus/Language/Isleweaver/IsleweaverFragmentInboxMessageBody",
+                    icon: "/Lotus/Interface/Icons/Npcs/UnknownSource.png",
+                    att: [
+                        "/Lotus/Types/Items/ShipDecos/Duviri/Mitw/RusalkaHat",
+                        "/Lotus/Types/Items/ShipDecos/Duviri/Mitw/RusalkaMedals"
+                    ],
+                    highPriority: true
+                }
+            ]);
+        }
     }
 };

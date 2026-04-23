@@ -97,6 +97,30 @@ export const unlockAllScansController: RequestHandler = async (req, res) => {
             "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
     }
 
+    // Unlock all isleweaver fragments
+    let spiderSeries = inventory.CollectibleSeries.find(
+        x => x.CollectibleType == "/Lotus/Types/Lore/Fragments/DuviriMITWFragments/DuviriMITWCollectibleDeco"
+    );
+    if (!spiderSeries) {
+        spiderSeries =
+            inventory.CollectibleSeries[
+                inventory.CollectibleSeries.push({
+                    CollectibleType: "/Lotus/Types/Lore/Fragments/DuviriMITWFragments/DuviriMITWCollectibleDeco",
+                    Count: 0,
+                    Tracking:
+                        "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+                    ReqScans: 15,
+                    IncentiveStates: []
+                }) - 1
+            ];
+    }
+    if (spiderSeries.Count != spiderSeries.ReqScans) {
+        spiderSeries.Count = spiderSeries.ReqScans;
+        spiderSeries.Tracking =
+            "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
+        await updateIncentiveStates(accountId, spiderSeries);
+    }
+
     // Unlock all lore fragment scans
     const existingPrex = new Set<string>();
     for (const lfs of inventory.LoreFragmentScans) {
