@@ -3763,7 +3763,10 @@ single.getRoute("#detailedView-route").on("beforeload", async function () {
 });
 
 async function populateDetailedViewRoute() {
-    const [data, itemMap] = await Promise.all([awaitAuthz().then(getInventoryData), window.itemListPromise]);
+    const [data, itemMap] = await Promise.all([
+        inventory_data ? Promise.resolve(inventory_data) : awaitAuthz().then(getInventoryData),
+        window.itemListPromise
+    ]);
 
     const urlParams = new URLSearchParams(window.location.search);
     const oid = urlParams.get("itemId");
@@ -3777,12 +3780,14 @@ async function populateDetailedViewRoute() {
             const pipeIndex = item.ItemName.indexOf("|");
             if (pipeIndex != -1) {
                 $("#detailedView-title").text(item.ItemName.substr(1 + pipeIndex) + " " + itemName);
+                document.querySelector("#detailedView-route .text-body-secondary").textContent = "";
             } else {
                 $("#detailedView-title").text(item.ItemName);
                 $("#detailedView-route .text-body-secondary").text(itemName);
             }
         } else {
             $("#detailedView-title").text(itemName);
+            document.querySelector("#detailedView-route .text-body-secondary").textContent = "";
         }
 
         if (category != "Upgrades") {
@@ -3852,6 +3857,9 @@ async function populateDetailedViewRoute() {
                 wrapper.appendChild(label);
                 buttonsCard.appendChild(wrapper);
             }
+        } else {
+            document.getElementById("equipmentFeatures-card").classList.add("d-none");
+            document.getElementById("equipmentFeaturesButtons-card").innerHTML = "";
         }
 
         if (category == "Suits") {
@@ -4015,7 +4023,14 @@ async function populateDetailedViewRoute() {
                     }
                 }
             }
-        } else if (["LongGuns", "Pistols", "Melee", "SpaceGuns", "SpaceMelee"].includes(category)) {
+        } else {
+            document.getElementById("loadout-card").classList.add("d-none");
+            document.getElementById("archonShards-card").classList.add("d-none");
+            document.getElementById("edit-suit-invigorations-card").classList.add("d-none");
+            document.getElementById("umbraEchoes-card").classList.add("d-none");
+        }
+
+        if (["LongGuns", "Pistols", "Melee", "SpaceGuns", "SpaceMelee"].includes(category)) {
             document.getElementById("valenceBonus-card").classList.remove("d-none");
             document.getElementById("valenceBonus-innateDamage").value = "";
             document.getElementById("valenceBonus-procent").value = 25;
@@ -4026,7 +4041,10 @@ async function populateDetailedViewRoute() {
                 document.getElementById("valenceBonus-innateDamage").value = buff.Tag ?? "";
                 document.getElementById("valenceBonus-procent").value = Math.round(buffValue * 1000) / 10;
             }
+        } else {
+            document.getElementById("valenceBonus-card").classList.add("d-none");
         }
+
         if (U5Mods.includes(item.ItemType)) {
             document.getElementById("u5ModEdit-card").classList.remove("d-none");
             const oldFitsSelect = document.getElementById("u5ModEdit-fits");
@@ -4061,7 +4079,10 @@ async function populateDetailedViewRoute() {
                 createUpgradeInput(upgradeFields, itemMap, item.ItemType, up);
             });
             createUpgradeInput(upgradeFields, itemMap, item.ItemType, null);
+        } else {
+            document.getElementById("u5ModEdit-card").classList.add("d-none");
         }
+
         if (modularWeapons.includes(item.ItemType)) {
             document.getElementById("modularParts-card").classList.remove("d-none");
             const form = document.getElementById("modularParts-form");
@@ -4089,6 +4110,9 @@ async function populateDetailedViewRoute() {
             changeButton.setAttribute("data-loc", "cheats_changeButton");
             changeButton.innerHTML = loc("cheats_changeButton");
             form.appendChild(changeButton);
+        } else {
+            document.getElementById("modularParts-card").classList.add("d-none");
+            document.getElementById("modularParts-form").innerHTML = "";
         }
     } else {
         single.loadRoute("/webui/inventory");
