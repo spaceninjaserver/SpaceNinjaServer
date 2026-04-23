@@ -409,7 +409,10 @@ single.on("route_load", function (event) {
 
         let navPath = event.route.paths[0];
         if (navPath == "/webui/detailedView") {
-            navPath = "/webui/inventory";
+            const params = new URLSearchParams(window.location.search);
+            const category = params.get("productCategory");
+
+            navPath = category == "Upgrades" ? "/webui/mods" : "/webui/inventory";
         }
         $("#sidebar .nav-link").removeClass("active");
         const navLink = document.querySelector(".nav-link[href='" + navPath + "']");
