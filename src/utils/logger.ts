@@ -4,7 +4,10 @@ import "winston-daily-rotate-file";
 import { config } from "../services/configService.ts";
 
 const printf = format.printf(info => {
-    return `${info.timestamp as string} [${info.level}] ${info.message as string}`;
+    return (config.logger.format ?? "%timestamp% [%level%] %message%")
+        .replaceAll("%timestamp%", info.timestamp as string)
+        .replaceAll("%level%", info.level)
+        .replaceAll("%message%", info.message as string);
 });
 
 const fileLog = new transports.DailyRotateFile({

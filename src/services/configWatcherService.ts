@@ -26,6 +26,7 @@ import { createMessage } from "./inboxService.ts";
 
 chokidar.watch(configPath).on("change", () => {
     if (shouldReloadConfig()) {
+        const prevLogFormat = config.logger.format ?? "%timestamp% [%level%] %message%";
         const prevTunables = JSON.stringify(config.tunables);
         const prevWebParams = JSON.stringify(getWebServerParams());
 
@@ -38,6 +39,11 @@ chokidar.watch(configPath).on("change", () => {
         }
         validateConfig();
         syncConfigWithDatabase();
+
+        if ((config.logger.format ?? "%timestamp% [%level%] %message%") != prevLogFormat) {
+            logger.info("Log format changed.");
+            logger.debug("Here's some text to feast your eyes upon.");
+        }
 
         if (JSON.stringify(config.tunables) != prevTunables) {
             logger.debug(`tunables changed, informing clients`);

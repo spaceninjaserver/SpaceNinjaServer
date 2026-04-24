@@ -2,7 +2,8 @@
   "mongodbUrl": "mongodb://127.0.0.1:27017/openWF",
   "logger": {
     "files": true,
-    "level": "trace"
+    "level": "trace",
+    "format": "%timestamp% [%level%] %message%"
   },
   "myAddress": "localhost",
   "bindAddress": "0.0.0.0",

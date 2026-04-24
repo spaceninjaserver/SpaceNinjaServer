@@ -17,6 +17,7 @@ export interface IConfig {
     logger: {
         files: boolean;
         level: string; // "fatal" | "error" | "warn" | "info" | "http" | "debug" | "trace";
+        format?: string;
     };
     myAddress: string;
     bindAddress?: string;
