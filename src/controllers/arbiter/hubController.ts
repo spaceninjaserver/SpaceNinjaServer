@@ -21,7 +21,7 @@ export const hubController: RequestHandler = (req, res) => {
         };
     }
     const needToUseUdpProxy = (config.dtls ?? 0) & 1 && hubServer.dtlsUnsupported;
-    const addr = hubServer.address.split("%THIS_MACHINE%").join(getReflexiveAddress(req).myAddress);
+    const addr = hubServer.address.replaceAll("%THIS_MACHINE%", getReflexiveAddress(req).myAddress);
 
     if (`${level}_${instanceId}` == req.query.level) {
         res.json(`${needToUseUdpProxy ? "udp_proxy_upstream" : "hub"} ${addr}`);

@@ -10,7 +10,7 @@ import { getAccountForRequest } from "../../services/loginService.ts";
 export const worldStateController: RequestHandler = async (req, res) => {
     let buildLabel = req.query.buildLabel as string | undefined;
     if (buildLabel) {
-        buildLabel = buildLabel.split(" ").join("+");
+        buildLabel = buildLabel.replaceAll(" ", "+");
     } else if (req.query.accountId) {
         const account = await getAccountForRequest(req);
         buildLabel = account.BuildLabel;

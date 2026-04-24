@@ -243,28 +243,31 @@ const getItemListsController: RequestHandler = (req, response) => {
         }
         let name = getNormalizedString(item.name, lang);
         if ("dissectionParts" in item) {
-            name = getString("/Lotus/Language/Fish/FishDisplayName", lang).split("|FISH_NAME|").join(name);
+            name = getString("/Lotus/Language/Fish/FishDisplayName", lang).replaceAll("|FISH_NAME|", name);
             if (item.syndicateTag == "CetusSyndicate") {
                 if (uniqueName.indexOf("Large") != -1) {
-                    name = name.split("|FISH_SIZE|").join(getString("/Lotus/Language/Fish/FishSizeLargeAbbrev", lang));
+                    name = name.replaceAll("|FISH_SIZE|", getString("/Lotus/Language/Fish/FishSizeLargeAbbrev", lang));
                 } else if (uniqueName.indexOf("Medium") != -1) {
-                    name = name.split("|FISH_SIZE|").join(getString("/Lotus/Language/Fish/FishSizeMediumAbbrev", lang));
+                    name = name.replaceAll("|FISH_SIZE|", getString("/Lotus/Language/Fish/FishSizeMediumAbbrev", lang));
                 } else {
-                    name = name.split("|FISH_SIZE|").join(getString("/Lotus/Language/Fish/FishSizeSmallAbbrev", lang));
+                    name = name.replaceAll("|FISH_SIZE|", getString("/Lotus/Language/Fish/FishSizeSmallAbbrev", lang));
                 }
             } else {
                 if (uniqueName.indexOf("Large") != -1) {
-                    name = name
-                        .split("|FISH_SIZE|")
-                        .join(getString("/Lotus/Language/SolarisVenus/RobofishAgeCategoryElderAbbrev", lang));
+                    name = name.replaceAll(
+                        "|FISH_SIZE|",
+                        getString("/Lotus/Language/SolarisVenus/RobofishAgeCategoryElderAbbrev", lang)
+                    );
                 } else if (uniqueName.indexOf("Medium") != -1) {
-                    name = name
-                        .split("|FISH_SIZE|")
-                        .join(getString("/Lotus/Language/SolarisVenus/RobofishAgeCategoryMatureAbbrev", lang));
+                    name = name.replaceAll(
+                        "|FISH_SIZE|",
+                        getString("/Lotus/Language/SolarisVenus/RobofishAgeCategoryMatureAbbrev", lang)
+                    );
                 } else {
-                    name = name
-                        .split("|FISH_SIZE|")
-                        .join(getString("/Lotus/Language/SolarisVenus/RobofishAgeCategoryYoungAbbrev", lang));
+                    name = name.replaceAll(
+                        "|FISH_SIZE|",
+                        getString("/Lotus/Language/SolarisVenus/RobofishAgeCategoryYoungAbbrev", lang)
+                    );
                 }
             }
         }
@@ -298,10 +301,8 @@ const getItemListsController: RequestHandler = (req, response) => {
             uniqueName: uniqueName,
             name:
                 getString("/Lotus/Language/Relics/VoidProjectionName", lang)
-                    .split("|ERA|")
-                    .join(getString(`/Lotus/Language/Relics/Era_${item.era.toUpperCase()}`, lang))
-                    .split("|CATEGORY|")
-                    .join(item.category) + qualitySuffix
+                    .replaceAll("|ERA|", getString(`/Lotus/Language/Relics/Era_${item.era.toUpperCase()}`, lang))
+                    .replaceAll("|CATEGORY|", item.category) + qualitySuffix
         });
     }
     for (const [uniqueName, item] of Object.entries(ExportGear)) {

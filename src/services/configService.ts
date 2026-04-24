@@ -282,7 +282,7 @@ export const getWebServerParams = (): IWebServerParams => {
 
 export const getNrsAddresses = (): [string, number][] => {
     return (config.nrsAddresses ?? []).map(nrsAddr => {
-        nrsAddr = nrsAddr.split("%THIS_MACHINE%").join("127.0.0.1");
+        nrsAddr = nrsAddr.replaceAll("%THIS_MACHINE%", "127.0.0.1");
         let nrsPort = 4950;
         const colon = nrsAddr.indexOf(":");
         if (colon != -1) {

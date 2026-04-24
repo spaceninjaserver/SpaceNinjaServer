@@ -1461,7 +1461,7 @@ export const getString = (key: string, dict: Record<string, string>): string => 
 };
 
 export const getNormalizedString = (key: string, dict: Record<string, string>): string => {
-    return getString(key, dict).split("‘").join("'").split("’").join("'").split("\r\n").join(" ");
+    return getString(key, dict).replaceAll("‘", "'").replaceAll("’", "'").replaceAll("\r\n", " ");
 };
 
 export const getKeyChainItems = (

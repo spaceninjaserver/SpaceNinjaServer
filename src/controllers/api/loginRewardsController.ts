@@ -61,13 +61,15 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
                     if (reward.Icon == "/Lotus/Interface/Icons/StoreIcons/Currency/CreditsLarge.png") {
                         reward.Icon = "/Lotus/Interface/Icons/Store/CreditBooster.png";
                     } else if (reward.RewardType == "RT_RESOURCE") {
-                        reward.Icon = ExportResources[reward.ItemType].icon
-                            .split("/Lotus/Interface/Icons/StoreIcons/Resources/CraftingComponents/")
-                            .join("/Lotus/Interface/Icons/Store/");
+                        reward.Icon = ExportResources[reward.ItemType].icon.replaceAll(
+                            "/Lotus/Interface/Icons/StoreIcons/Resources/CraftingComponents/",
+                            "/Lotus/Interface/Icons/Store/"
+                        );
                     } else if (reward.RewardType == "RT_BOOSTER") {
-                        reward.Icon = ExportBoosters[reward.StoreItemType].icon
-                            .split("/Lotus/Interface/Icons/StoreIcons/Boosters/")
-                            .join("/Lotus/Interface/Icons/Store/");
+                        reward.Icon = ExportBoosters[reward.StoreItemType].icon.replaceAll(
+                            "/Lotus/Interface/Icons/StoreIcons/Boosters/",
+                            "/Lotus/Interface/Icons/Store/"
+                        );
                     }
                 }
                 res.json({ Rewards: response.DailyTributeInfo.Rewards });

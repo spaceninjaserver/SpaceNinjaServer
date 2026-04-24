@@ -38,20 +38,20 @@ export const catBreadHash = (name: string): number => {
 };
 
 export const regexEscape = (str: string): string => {
-    str = str.split(".").join("\\.");
-    str = str.split("\\").join("\\\\");
-    str = str.split("[").join("\\[");
-    str = str.split("]").join("\\]");
-    str = str.split("+").join("\\+");
-    str = str.split("*").join("\\*");
-    str = str.split("$").join("\\$");
-    str = str.split("^").join("\\^");
-    str = str.split("?").join("\\?");
-    str = str.split("|").join("\\|");
-    str = str.split("(").join("\\(");
-    str = str.split(")").join("\\)");
-    str = str.split("{").join("\\{");
-    str = str.split("}").join("\\}");
+    str = str.replaceAll(".", "\\.");
+    str = str.replaceAll("\\", "\\\\");
+    str = str.replaceAll("[", "\\[");
+    str = str.replaceAll("]", "\\]");
+    str = str.replaceAll("+", "\\+");
+    str = str.replaceAll("*", "\\*");
+    str = str.replaceAll("$", "\\$");
+    str = str.replaceAll("^", "\\^");
+    str = str.replaceAll("?", "\\?");
+    str = str.replaceAll("|", "\\|");
+    str = str.replaceAll("(", "\\(");
+    str = str.replaceAll(")", "\\)");
+    str = str.replaceAll("{", "\\{");
+    str = str.replaceAll("}", "\\}");
     return str;
 };
 

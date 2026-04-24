@@ -61,7 +61,7 @@ export const loginController: RequestHandler = async (request, response) => {
 
     const buildLabel: string =
         typeof request.query.buildLabel == "string"
-            ? request.query.buildLabel.split(" ").join("+")
+            ? request.query.buildLabel.replaceAll(" ", "+")
             : buildConfig.buildLabel;
 
     if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0) {
@@ -193,14 +193,14 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
         }
     }
     if (version_compare(buildLabel, gameToBuildVersion["15.14.1"]) >= 0) {
-        resp.NRS = (config.nrsAddresses ?? []).map(x => x.split("%THIS_MACHINE%").join(myAddress));
+        resp.NRS = (config.nrsAddresses ?? []).map(x => x.replaceAll("%THIS_MACHINE%", myAddress));
         // U16 ~ U28 are known to show an "Internal error." popup with an empty array.
         if (resp.NRS.length == 0 && version_compare(buildLabel, gameToBuildVersion["29.0.0"]) < 0) {
             resp.NRS.push(myAddress);
         }
     }
     if (version_compare(buildLabel, gameToBuildVersion["16.5.5"]) >= 0) {
-        resp.IRC = [(config.ircAddress || "%THIS_MACHINE%").split("%THIS_MACHINE%").join(myAddress)];
+        resp.IRC = [(config.ircAddress || "%THIS_MACHINE%").replaceAll("%THIS_MACHINE%", myAddress)];
     }
     if (version_compare(buildLabel, gameToBuildVersion["24.0.0"]) >= 0) {
         resp.ConsentNeeded = false;

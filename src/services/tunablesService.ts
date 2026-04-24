@@ -20,10 +20,10 @@ export const getTokenForClient = (clientAddress: string): string => {
 export const getTunablesForClient = (clientAddress: string, reflexiveAddress: string): ITunables => {
     const tunables: ITunables = {
         // To successfully update the NRS address for pre-U15.14 clients, this needs to be set before login.
-        nrs: ((config.nrsAddresses ?? [])[0] || "%THIS_MACHINE%").split("%THIS_MACHINE%").join(reflexiveAddress),
+        nrs: ((config.nrsAddresses ?? [])[0] || "%THIS_MACHINE%").replaceAll("%THIS_MACHINE%", reflexiveAddress),
 
         // if (version_compare(buildLabel, gameToBuildVersion["16.5.5"]) < 0) {
-        irc: (config.ircAddress || "%THIS_MACHINE%").split("%THIS_MACHINE%").join(reflexiveAddress)
+        irc: (config.ircAddress || "%THIS_MACHINE%").replaceAll("%THIS_MACHINE%", reflexiveAddress)
     };
     if (config.tunables?.useLoginToken) {
         tunables.token = getTokenForClient(clientAddress);
@@ -50,7 +50,7 @@ export const getTunablesForClient = (clientAddress: string, reflexiveAddress: st
         tunables.motd = config.tunables.motd;
     }
     if (config.tunables?.udpProxyUpstream) {
-        tunables.udp_proxy_upstream = config.tunables.udpProxyUpstream.split("%THIS_MACHINE%").join(reflexiveAddress);
+        tunables.udp_proxy_upstream = config.tunables.udpProxyUpstream.replaceAll("%THIS_MACHINE%", reflexiveAddress);
     }
     return tunables;
 };

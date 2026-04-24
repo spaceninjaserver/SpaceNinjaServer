@@ -44,7 +44,7 @@ export const broadcastControlMessages = (level: string, msgs: string[]): void =>
     if (instance) {
         instance.Players += 1; // to account for the hubDropped that we will cause here
 
-        const [host, port] = instance.Hub.split("%THIS_MACHINE%").join("127.0.0.1").split(":");
+        const [host, port] = instance.Hub.replaceAll("%THIS_MACHINE%", "127.0.0.1").split(":");
         const socket = dgram.createSocket("udp4");
 
         socket.send(

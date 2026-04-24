@@ -432,10 +432,8 @@ single.on("route_load", function (event) {
 
 function loc(tag) {
     return ((window.dict ?? {})[tag] ?? tag)
-        .split("|DISPLAYNAME|")
-        .join(document.querySelector(".displayname").textContent)
-        .split("|EMAIL|")
-        .join(localStorage.getItem("email"));
+        .replaceAll("|DISPLAYNAME|", document.querySelector(".displayname").textContent)
+        .replaceAll("|EMAIL|", localStorage.getItem("email"));
 }
 
 function updateLocElements() {
@@ -610,60 +608,60 @@ function fetchItemList() {
 
             // prettier-ignore
             data.archonCrystalUpgrades = {
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeEquilibrium": loc("upgrade_Equilibrium").split("|VAL|").join("20"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeEquilibriumMythic": loc("upgrade_Equilibrium").split("|VAL|").join("30"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeMeleeCritDamage": loc("upgrade_MeleeCritDamage").split("|VAL|").join("25"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeMeleeCritDamageMythic": loc("upgrade_MeleeCritDamage").split("|VAL|").join("37.5"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradePrimaryStatusChance": loc("upgrade_PrimaryStatusChance").split("|VAL|").join("25"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradePrimaryStatusChanceMythic": loc("upgrade_PrimaryStatusChance").split("|VAL|").join("37.5"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeSecondaryCritChance": loc("upgrade_SecondaryCritChance").split("|VAL|").join("25"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeSecondaryCritChanceMythic": loc("upgrade_SecondaryCritChance").split("|VAL|").join("37.5"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeAbilityDuration": loc("upgrade_WarframeAbilityDuration").split("|VAL|").join("10"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeAbilityDurationMythic": loc("upgrade_WarframeAbilityDuration").split("|VAL|").join("15"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeAbilityStrength": loc("upgrade_WarframeAbilityStrength").split("|VAL|").join("10"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeAbilityStrengthMythic": loc("upgrade_WarframeAbilityStrength").split("|VAL|").join("15"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeArmourMax": loc("upgrade_WarframeArmorMax").split("|VAL|").join("150"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeArmourMaxMythic": loc("upgrade_WarframeArmorMax").split("|VAL|").join("225"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeBlastProc": loc("upgrade_WarframeBlastProc").split("|VAL|").join("5"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeBlastProcMythic": loc("upgrade_WarframeBlastProc").split("|VAL|").join("7.5"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCastingSpeed": loc("upgrade_WarframeCastingSpeed").split("|VAL|").join("25"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCastingSpeedMythic": loc("upgrade_WarframeCastingSpeed").split("|VAL|").join("37.5"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCorrosiveDamageBoost": loc("upgrade_WarframeCorrosiveDamageBoost").split("|VAL|").join("10"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCorrosiveDamageBoostMythic": loc("upgrade_WarframeCorrosiveDamageBoost").split("|VAL|").join("15"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCorrosiveStack": loc("upgrade_WarframeCorrosiveStack").split("|VAL|").join("2"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCorrosiveStackMythic": loc("upgrade_WarframeCorrosiveStack").split("|VAL|").join("3"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCritDamageBoost": loc("upgrade_WarframeCritDamageBoost").split("|VAL|").join("25"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCritDamageBoostMythic": loc("upgrade_WarframeCritDamageBoost").split("|VAL|").join("37"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeElectricDamage": loc("upgrade_WarframeElectricDamage").split("|VAL1|").join("30").split("|VAL2|").join("10"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeElectricDamageMythic": loc("upgrade_WarframeElectricDamage").split("|VAL1|").join("45").split("|VAL2|").join("15"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeElectricDamageBoost": loc("upgrade_WarframeElectricDamageBoost").split("|VAL|").join("10"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeElectricDamageBoostMythic": loc("upgrade_WarframeElectricDamageBoost").split("|VAL|").join("15"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeEnergyMax": loc("upgrade_WarframeEnergyMax").split("|VAL|").join("50"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeEnergyMaxMythic": loc("upgrade_WarframeEnergyMax").split("|VAL|").join("75"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeGlobeEffectEnergy": loc("upgrade_WarframeGlobeEffectEnergy").split("|VAL|").join("50"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeGlobeEffectEnergyMythic": loc("upgrade_WarframeGlobeEffectEnergy").split("|VAL|").join("75"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeGlobeEffectHealth": loc("upgrade_WarframeGlobeEffectHealth").split("|VAL|").join("100"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeGlobeEffectHealthMythic": loc("upgrade_WarframeGlobeEffectHealth").split("|VAL|").join("150"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeHealthMax": loc("upgrade_WarframeHealthMax").split("|VAL|").join("150"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeHealthMaxMythic": loc("upgrade_WarframeHealthMax").split("|VAL|").join("225"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeHPBoostFromImpact": loc("upgrade_WarframeHPBoostFromImpact").split("|VAL1|").join("1").split("|VAL2|").join("300"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeHPBoostFromImpactMythic": loc("upgrade_WarframeHPBoostFromImpact").split("|VAL1|").join("2").split("|VAL2|").join("450"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeParkourVelocity": loc("upgrade_WarframeParkourVelocity").split("|VAL|").join("15"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeParkourVelocityMythic": loc("upgrade_WarframeParkourVelocity").split("|VAL|").join("22.5"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRadiationDamageBoost": loc("upgrade_WarframeRadiationDamageBoost").split("|VAL|").join("10"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRadiationDamageBoostMythic": loc("upgrade_WarframeRadiationDamageBoost").split("|VAL|").join("15"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRegen": loc("upgrade_WarframeHealthRegen").split("|VAL|").join("5"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRegenMythic": loc("upgrade_WarframeHealthRegen").split("|VAL|").join("7.5"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeShieldMax": loc("upgrade_WarframeShieldMax").split("|VAL|").join("150"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeShieldMaxMythic": loc("upgrade_WarframeShieldMax").split("|VAL|").join("225"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeStartingEnergy": loc("upgrade_WarframeStartingEnergy").split("|VAL|").join("30"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeStartingEnergyMythic": loc("upgrade_WarframeStartingEnergy").split("|VAL|").join("45"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeToxinDamage": loc("upgrade_WarframeToxinDamage").split("|VAL|").join("30"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeToxinDamageMythic": loc("upgrade_WarframeToxinDamage").split("|VAL|").join("45"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeToxinHeal": loc("upgrade_WarframeToxinHeal").split("|VAL|").join("2"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeToxinHealMythic": loc("upgrade_WarframeToxinHeal").split("|VAL|").join("3"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWeaponCritBoostFromHeat": loc("upgrade_WeaponCritBoostFromHeat").split("|VAL1|").join("1").split("|VAL2|").join("50"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWeaponCritBoostFromHeatMythic": loc("upgrade_WeaponCritBoostFromHeat").split("|VAL1|").join("1.5").split("|VAL2|").join("75"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeEquilibrium": loc("upgrade_Equilibrium").replaceAll("|VAL|", "20"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeEquilibriumMythic": loc("upgrade_Equilibrium").replaceAll("|VAL|", "30"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeMeleeCritDamage": loc("upgrade_MeleeCritDamage").replaceAll("|VAL|", "25"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeMeleeCritDamageMythic": loc("upgrade_MeleeCritDamage").replaceAll("|VAL|", "37.5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradePrimaryStatusChance": loc("upgrade_PrimaryStatusChance").replaceAll("|VAL|", "25"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradePrimaryStatusChanceMythic": loc("upgrade_PrimaryStatusChance").replaceAll("|VAL|", "37.5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeSecondaryCritChance": loc("upgrade_SecondaryCritChance").replaceAll("|VAL|", "25"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeSecondaryCritChanceMythic": loc("upgrade_SecondaryCritChance").replaceAll("|VAL|", "37.5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeAbilityDuration": loc("upgrade_WarframeAbilityDuration").replaceAll("|VAL|", "10"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeAbilityDurationMythic": loc("upgrade_WarframeAbilityDuration").replaceAll("|VAL|", "15"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeAbilityStrength": loc("upgrade_WarframeAbilityStrength").replaceAll("|VAL|", "10"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeAbilityStrengthMythic": loc("upgrade_WarframeAbilityStrength").replaceAll("|VAL|", "15"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeArmourMax": loc("upgrade_WarframeArmorMax").replaceAll("|VAL|", "150"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeArmourMaxMythic": loc("upgrade_WarframeArmorMax").replaceAll("|VAL|", "225"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeBlastProc": loc("upgrade_WarframeBlastProc").replaceAll("|VAL|", "5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeBlastProcMythic": loc("upgrade_WarframeBlastProc").replaceAll("|VAL|", "7.5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCastingSpeed": loc("upgrade_WarframeCastingSpeed").replaceAll("|VAL|", "25"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCastingSpeedMythic": loc("upgrade_WarframeCastingSpeed").replaceAll("|VAL|", "37.5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCorrosiveDamageBoost": loc("upgrade_WarframeCorrosiveDamageBoost").replaceAll("|VAL|", "10"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCorrosiveDamageBoostMythic": loc("upgrade_WarframeCorrosiveDamageBoost").replaceAll("|VAL|", "15"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCorrosiveStack": loc("upgrade_WarframeCorrosiveStack").replaceAll("|VAL|", "2"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCorrosiveStackMythic": loc("upgrade_WarframeCorrosiveStack").replaceAll("|VAL|", "3"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCritDamageBoost": loc("upgrade_WarframeCritDamageBoost").replaceAll("|VAL|", "25"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCritDamageBoostMythic": loc("upgrade_WarframeCritDamageBoost").replaceAll("|VAL|", "37"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeElectricDamage": loc("upgrade_WarframeElectricDamage").replaceAll("|VAL1|", "30").replaceAll("|VAL2|", "10"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeElectricDamageMythic": loc("upgrade_WarframeElectricDamage").replaceAll("|VAL1|", "45").replaceAll("|VAL2|", "15"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeElectricDamageBoost": loc("upgrade_WarframeElectricDamageBoost").replaceAll("|VAL|", "10"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeElectricDamageBoostMythic": loc("upgrade_WarframeElectricDamageBoost").replaceAll("|VAL|", "15"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeEnergyMax": loc("upgrade_WarframeEnergyMax").replaceAll("|VAL|", "50"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeEnergyMaxMythic": loc("upgrade_WarframeEnergyMax").replaceAll("|VAL|", "75"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeGlobeEffectEnergy": loc("upgrade_WarframeGlobeEffectEnergy").replaceAll("|VAL|", "50"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeGlobeEffectEnergyMythic": loc("upgrade_WarframeGlobeEffectEnergy").replaceAll("|VAL|", "75"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeGlobeEffectHealth": loc("upgrade_WarframeGlobeEffectHealth").replaceAll("|VAL|", "100"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeGlobeEffectHealthMythic": loc("upgrade_WarframeGlobeEffectHealth").replaceAll("|VAL|", "150"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeHealthMax": loc("upgrade_WarframeHealthMax").replaceAll("|VAL|", "150"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeHealthMaxMythic": loc("upgrade_WarframeHealthMax").replaceAll("|VAL|", "225"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeHPBoostFromImpact": loc("upgrade_WarframeHPBoostFromImpact").replaceAll("|VAL1|", "1").replaceAll("|VAL2|", "300"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeHPBoostFromImpactMythic": loc("upgrade_WarframeHPBoostFromImpact").replaceAll("|VAL1|", "2").replaceAll("|VAL2|", "450"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeParkourVelocity": loc("upgrade_WarframeParkourVelocity").replaceAll("|VAL|", "15"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeParkourVelocityMythic": loc("upgrade_WarframeParkourVelocity").replaceAll("|VAL|", "22.5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRadiationDamageBoost": loc("upgrade_WarframeRadiationDamageBoost").replaceAll("|VAL|", "10"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRadiationDamageBoostMythic": loc("upgrade_WarframeRadiationDamageBoost").replaceAll("|VAL|", "15"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRegen": loc("upgrade_WarframeHealthRegen").replaceAll("|VAL|", "5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRegenMythic": loc("upgrade_WarframeHealthRegen").replaceAll("|VAL|", "7.5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeShieldMax": loc("upgrade_WarframeShieldMax").replaceAll("|VAL|", "150"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeShieldMaxMythic": loc("upgrade_WarframeShieldMax").replaceAll("|VAL|", "225"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeStartingEnergy": loc("upgrade_WarframeStartingEnergy").replaceAll("|VAL|", "30"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeStartingEnergyMythic": loc("upgrade_WarframeStartingEnergy").replaceAll("|VAL|", "45"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeToxinDamage": loc("upgrade_WarframeToxinDamage").replaceAll("|VAL|", "30"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeToxinDamageMythic": loc("upgrade_WarframeToxinDamage").replaceAll("|VAL|", "45"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeToxinHeal": loc("upgrade_WarframeToxinHeal").replaceAll("|VAL|", "2"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeToxinHealMythic": loc("upgrade_WarframeToxinHeal").replaceAll("|VAL|", "3"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWeaponCritBoostFromHeat": loc("upgrade_WeaponCritBoostFromHeat").replaceAll("|VAL1|", "1").replaceAll("|VAL2|", "50"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWeaponCritBoostFromHeatMythic": loc("upgrade_WeaponCritBoostFromHeat").replaceAll("|VAL1|", "1.5").replaceAll("|VAL2|", "75"),
                 "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityRangeMod": loc("upgrade_AvatarAbilityRange"),
                 "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityEfficiencyMod": loc("upgrade_AvatarAbilityEfficiency"),
                 "/Lotus/Upgrades/Mods/Warframe/AvatarEnergyRegenMod": loc("upgrade_AvatarEnergyRegen"),
@@ -1067,7 +1065,7 @@ function fetchItemList() {
                                 }
                             }
                         } else if (item.uniqueName.includes("ColourPicker")) {
-                            item.name = loc("code_itemColorPalette").split("|ITEM|").join(item.name);
+                            item.name = loc("code_itemColorPalette").replaceAll("|ITEM|", item.name);
                         }
                         if (!item.alwaysAvailable) {
                             const option = document.createElement("option");
@@ -1082,9 +1080,10 @@ function fetchItemList() {
                     items.forEach(item => {
                         if (item.name == "") {
                             if (item.uniqueName.includes("/Beards/")) {
-                                item.name = loc("code_drifterBeardName")
-                                    .split("|INDEX|")
-                                    .join(beardNumber.toString().padStart(3, "0"));
+                                item.name = loc("code_drifterBeardName").replaceAll(
+                                    "|INDEX|",
+                                    beardNumber.toString().padStart(3, "0")
+                                );
                                 beardNumber++;
                             } else {
                                 item.name = item.uniqueName;
@@ -1143,7 +1142,7 @@ function fetchItemList() {
                         }
                         if ("badReason" in item) {
                             if (item.badReason == "starter") {
-                                item.name = loc("code_starter").split("|MOD|").join(item.name);
+                                item.name = loc("code_starter").replaceAll("|MOD|", item.name);
                             } else if (item.badReason != "notraw") {
                                 item.name += " " + loc("code_badItem");
                             }
@@ -1300,9 +1299,10 @@ async function populateInventoryRoute() {
     document.getElementById("miscItems-tab-content").classList.add("active", "show");
 
     ["RegularCredits", "PremiumCredits", "FusionPoints", "PrimeTokens"].forEach(currency => {
-        document.getElementById(currency + "-owned").textContent = loc("currency_owned")
-            .split("|COUNT|")
-            .join(data[currency].toLocaleString());
+        document.getElementById(currency + "-owned").textContent = loc("currency_owned").replaceAll(
+            "|COUNT|",
+            data[currency].toLocaleString()
+        );
     });
 
     [
@@ -2265,7 +2265,7 @@ function kickFromAlliance(guildId) {
 function getKey(input) {
     return document
         .getElementById(input.getAttribute("list"))
-        .querySelector("[value='" + input.value.split("'").join("\\'") + "']")
+        .querySelector("[value='" + input.value.replaceAll("'", "\\'") + "']")
         ?.getAttribute("data-key");
 }
 
@@ -2503,7 +2503,7 @@ function addMissingEquipment(categories) {
             }
         });
     });
-    if (requests.length != 0 && window.confirm(loc("code_addItemsConfirm").split("|COUNT|").join(requests.length))) {
+    if (requests.length != 0 && window.confirm(loc("code_addItemsConfirm").replaceAll("|COUNT|", requests.length))) {
         return dispatchAddItemsRequestsBatch(requests);
     }
 }
@@ -2527,7 +2527,7 @@ function addMissingDangerRooms() {
                 });
                 if (requests.length == 0) {
                     toast(loc("code_nothingToDo"));
-                } else if (window.confirm(loc("code_addItemsConfirm").split("|COUNT|").join(requests.length))) {
+                } else if (window.confirm(loc("code_addItemsConfirm").replaceAll("|COUNT|", requests.length))) {
                     return dispatchAddItemsRequestsBatch(requests);
                 }
             });
@@ -2694,7 +2694,7 @@ function addMissingVaultItems(vaultType) {
 
     if (
         requests.length != 0 &&
-        window.confirm(loc("code_addVaultItemsConfirm").split("|COUNT|").join(requests.length))
+        window.confirm(loc("code_addVaultItemsConfirm").replaceAll("|COUNT|", requests.length))
     ) {
         return dispatchAddVaultItemsBatch(requests, vaultType);
     }
@@ -2727,7 +2727,7 @@ function addMissingTechProjects() {
 
     if (
         requests.length != 0 &&
-        window.confirm(loc("code_addTechProjectsConfirm").split("|COUNT|").join(requests.length))
+        window.confirm(loc("code_addTechProjectsConfirm").replaceAll("|COUNT|", requests.length))
     ) {
         return dispatchAddTechProjectsBatch(requests);
     }
@@ -2746,7 +2746,7 @@ function bulkRemoveVaultItems(vaultType) {
 
     if (
         requests.length != 0 &&
-        window.confirm(loc("code_removeVaultItemsConfirm").split("|COUNT|").join(requests.length))
+        window.confirm(loc("code_removeVaultItemsConfirm").replaceAll("|COUNT|", requests.length))
     ) {
         return dispatchAddVaultItemsBatch(requests, vaultType);
     }
@@ -2779,7 +2779,7 @@ function bulkRemoveTechProjects() {
 
     if (
         requests.length != 0 &&
-        window.confirm(loc("code_removeTechProjectsConfirm").split("|COUNT|").join(requests.length))
+        window.confirm(loc("code_removeTechProjectsConfirm").replaceAll("|COUNT|", requests.length))
     ) {
         return dispatchRemoveTechProjectsBatch(requests);
     }
@@ -2872,7 +2872,7 @@ function addMissingEvolutionProgress() {
     });
     if (requests.length == 0) {
         toast(loc("code_nothingToDo"));
-    } else if (window.confirm(loc("code_addItemsConfirm").split("|COUNT|").join(requests.length))) {
+    } else if (window.confirm(loc("code_addItemsConfirm").replaceAll("|COUNT|", requests.length))) {
         setEvolutionProgress(requests);
     }
 }
@@ -3533,7 +3533,7 @@ function doUnlockAllFocusSchools() {
             if (Object.keys(missingFocusUpgrades).length == 0) {
                 toast(loc("code_focusAllUnlocked"));
             } else {
-                toast(loc("code_focusUnlocked").split("|COUNT|").join(Object.keys(missingFocusUpgrades).length));
+                toast(loc("code_focusUnlocked").replaceAll("|COUNT|", Object.keys(missingFocusUpgrades).length));
                 if (ws_is_open) {
                     window.ws.send(JSON.stringify({ sync_inventory: true }));
                 }
@@ -3698,7 +3698,7 @@ function doAddAllMods() {
             modsAll = Array.from(modsAll);
             if (
                 modsAll.length != 0 &&
-                window.confirm(loc("code_addModsConfirm").split("|COUNT|").join(modsAll.length))
+                window.confirm(loc("code_addModsConfirm").replaceAll("|COUNT|", modsAll.length))
             ) {
                 $.post({
                     url: "/custom/addItems?" + window.authz,
@@ -4204,17 +4204,19 @@ single.getRoute("#guild-route").on("beforeload", function () {
                 $("#guild-route > .row").removeClass("d-none");
 
                 document.getElementById("guildView-title").textContent = guildData.Name;
-                document.getElementById("guildView-tier").textContent = loc("guildView_tierDisplay")
-                    .split("|TIER|")
-                    .join(loc(`guildView_tier${guildData.Tier}`));
-                document.getElementById("guildView-class").textContent = loc("guildView_classDisplay")
-                    .split("|CLASS|")
-                    .join(guildData.Class);
+                document.getElementById("guildView-tier").textContent = loc("guildView_tierDisplay").replaceAll(
+                    "|TIER|",
+                    loc(`guildView_tier${guildData.Tier}`)
+                );
+                document.getElementById("guildView-class").textContent = loc("guildView_classDisplay").replaceAll(
+                    "|CLASS|",
+                    guildData.Class
+                );
 
                 ["VaultRegularCredits", "VaultPremiumCredits"].forEach(currency => {
-                    document.getElementById(currency + "-owned").textContent = loc("guildView_currency_owned")
-                        .split("|COUNT|")
-                        .join((guildData[currency] ?? 0).toLocaleString());
+                    document.getElementById(currency + "-owned").textContent = loc(
+                        "guildView_currency_owned"
+                    ).replaceAll("|COUNT|", (guildData[currency] ?? 0).toLocaleString());
                 });
 
                 const userGuildMember = guildData.Members.find(m => m._id.$oid === window.accountId);
@@ -4582,14 +4584,16 @@ function doAddCurrency(currency) {
             })
         }).then(function (newValue) {
             if (currency.startsWith("Vault")) {
-                document.getElementById(currency + "-owned").textContent = loc("guildView_currency_owned")
-                    .split("|COUNT|")
-                    .join((newValue ?? 0).toLocaleString());
+                document.getElementById(currency + "-owned").textContent = loc("guildView_currency_owned").replaceAll(
+                    "|COUNT|",
+                    (newValue ?? 0).toLocaleString()
+                );
             } else {
                 inventory_data[currency] = newValue;
-                document.getElementById(currency + "-owned").textContent = loc("currency_owned")
-                    .split("|COUNT|")
-                    .join((newValue ?? 0).toLocaleString());
+                document.getElementById(currency + "-owned").textContent = loc("currency_owned").replaceAll(
+                    "|COUNT|",
+                    (newValue ?? 0).toLocaleString()
+                );
             }
         });
     });
@@ -5639,7 +5643,7 @@ function handleAbilityOverride(event, configIndex) {
 function removeItems(category) {
     revalidateAuthz().then(() => {
         const count = document.getElementById(category + "-list").getElementsByTagName("tr").length;
-        let message = loc("code_bulkRemoveConfirm").split("|COUNT|").join(count);
+        let message = loc("code_bulkRemoveConfirm").replaceAll("|COUNT|", count);
         if (category === "Suits") message += "\n" + loc("code_bulkRemoveNote");
         if (count != 0 && window.confirm(message)) {
             $.get("/custom/removeItems?" + window.authz + "&category=" + category).done(function () {
