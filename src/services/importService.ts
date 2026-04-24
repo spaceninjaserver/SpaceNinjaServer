@@ -367,7 +367,10 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "Partner",
         "Counselor",
         "Harvestable",
-        "DeathSquadable"
+        "DeathSquadable",
+        "RetroFastTyping",
+        "RetroPlayAllConvos",
+        "RetroDisableKissInboxMessage"
     ] as const) {
         if (client[key] !== undefined) {
             db[key] = client[key];
@@ -393,7 +396,8 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "EntratiLabConquestCacheScoreMission",
         "EchoesHexConquestUnlocked",
         "EchoesHexConquestHardModeStatus",
-        "EchoesHexConquestCacheScoreMission"
+        "EchoesHexConquestCacheScoreMission",
+        "RetroWallpaperId"
     ] as const) {
         if (client[key] !== undefined) {
             db[key] = client[key];
@@ -574,6 +578,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     if (client.Settings !== undefined) {
         db.Settings = client.Settings;
+    }
+    if (client.NokkoColony !== undefined) {
+        db.NokkoColony = client.NokkoColony;
     }
     if (client.Sketches !== undefined) {
         db.Sketches = client.Sketches;
