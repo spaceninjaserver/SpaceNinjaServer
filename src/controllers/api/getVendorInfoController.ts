@@ -3,6 +3,8 @@ import { applyStandingToVendorManifest, getVendorManifestByTypeName } from "../.
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import { config } from "../../services/configService.ts";
+import { toMongoDate, version_compare } from "../../helpers/inventoryHelpers.ts";
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const getVendorInfoController: RequestHandler = async (req, res) => {
     let buildLabel: string | undefined;
@@ -27,9 +29,18 @@ export const getVendorInfoController: RequestHandler = async (req, res) => {
             manifest = {
                 VendorInfo: {
                     ...manifest.VendorInfo,
-                    Expiry: { $date: { $numberLong: "0" } }
+                    Expiry: toMongoDate(new Date(Date.now() + 5000)) // Giving 5 seconds because tenet/coda shop boots you with "Shopping session expired" at expiry
                 }
             };
+        }
+
+        if (buildLabel && version_compare(buildLabel, gameToBuildVersion["42.0.0"]) < 0) {
+            // Coda shop breaks if an item is unknown.
+            manifest.VendorInfo.ItemManifest = manifest.VendorInfo.ItemManifest.filter(
+                item =>
+                    item.StoreItem !=
+                    "/Lotus/StoreItems/Weapons/Infested/InfestedLich/LongGuns/CodaBubonico/CodaBubonicoCannon"
+            );
         }
     }
 
