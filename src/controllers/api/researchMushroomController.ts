@@ -85,35 +85,37 @@ interface IResearchMushroom {
     Convert: boolean;
 }
 
-const journalEntriesRank: Record<string, number> = {
-    "/Lotus/Types/Items/MushroomJournal/PlainMushroomJournalItem": 1,
-    "/Lotus/Types/Items/MushroomJournal/GasMushroomJournalItem": 4,
-    "/Lotus/Types/Items/MushroomJournal/ToxinMushroomJournalItem": 3,
-    "/Lotus/Types/Items/MushroomJournal/ViralMushroomJournalItem": 4,
-    "/Lotus/Types/Items/MushroomJournal/MagneticMushroomJournalItem": 4,
-    "/Lotus/Types/Items/MushroomJournal/ElectricMushroomJournalItem": 3,
-    "/Lotus/Types/Items/MushroomJournal/TauMushroomJournalItem": 5,
-    "/Lotus/Types/Items/MushroomJournal/SlashMushroomJournalItem": 3,
-    "/Lotus/Types/Items/MushroomJournal/BlastMushroomJournalItem": 4,
-    "/Lotus/Types/Items/MushroomJournal/ImpactMushroomJournalItem": 3,
-    "/Lotus/Types/Items/MushroomJournal/ColdMushroomJournalItem": 3,
-    "/Lotus/Types/Items/MushroomJournal/CorrosiveMushroomJournalItem": 4,
-    "/Lotus/Types/Items/MushroomJournal/PunctureMushroomJournalItem": 3,
-    "/Lotus/Types/Items/MushroomJournal/HeatMushroomJournalItem": 3,
-    "/Lotus/Types/Items/MushroomJournal/RadiationMushroomJournalItem": 4,
-    "/Lotus/Types/Items/MushroomJournal/VoidMushroomJournalItem": 5
+const journalEntryRankUpRequirements: Record<string, [number, number, number]> = {
+    "/Lotus/Types/Items/MushroomJournal/HeatMushroomJournalItem": [3, 6, 9],
+    "/Lotus/Types/Items/MushroomJournal/CorrosiveMushroomJournalItem": [4, 8, 12],
+    "/Lotus/Types/Items/MushroomJournal/SlashMushroomJournalItem": [3, 6, 9],
+    "/Lotus/Types/Items/MushroomJournal/PlainMushroomJournalItem": [1, 1, 2], // Stinky
+    "/Lotus/Types/Items/MushroomJournal/MagneticMushroomJournalItem": [4, 8, 12],
+    "/Lotus/Types/Items/MushroomJournal/RadiationMushroomJournalItem": [4, 8, 12],
+    "/Lotus/Types/Items/MushroomJournal/ImpactMushroomJournalItem": [3, 6, 9],
+    "/Lotus/Types/Items/MushroomJournal/ToxinMushroomJournalItem": [3, 6, 9],
+    "/Lotus/Types/Items/MushroomJournal/VoidMushroomJournalItem": [5, 10, 15],
+    "/Lotus/Types/Items/MushroomJournal/GasMushroomJournalItem": [4, 8, 12],
+    "/Lotus/Types/Items/MushroomJournal/BlastMushroomJournalItem": [4, 8, 12],
+    "/Lotus/Types/Items/MushroomJournal/PunctureMushroomJournalItem": [3, 6, 9],
+    "/Lotus/Types/Items/MushroomJournal/ElectricMushroomJournalItem": [3, 6, 9],
+    "/Lotus/Types/Items/MushroomJournal/ViralMushroomJournalItem": [4, 8, 12],
+    "/Lotus/Types/Items/MushroomJournal/TauMushroomJournalItem": [5, 10, 15],
+    "/Lotus/Types/Items/MushroomJournal/ColdMushroomJournalItem": [3, 6, 9]
 };
 
 const syndicateTitleThresholds = [0, 1, 2, 6, 12, 16];
 
 const getJournalRank = (journalEntry: IJournalEntry): number => {
-    const k = journalEntriesRank[journalEntry.EntryType];
-    if (!k) return 0;
+    const requirements = journalEntryRankUpRequirements[journalEntry.EntryType] as [number, number, number] | undefined;
+    if (requirements) {
+        const rankOneThreshold = requirements[0];
+        const rankTwoThreshold = rankOneThreshold + requirements[1];
+        const rankThreeThreshold = rankTwoThreshold + requirements[2];
 
-    const thresholds = [k * 1, k * 3, k * 6];
-
-    if (journalEntry.Progress >= thresholds[2]) return 3;
-    if (journalEntry.Progress >= thresholds[1]) return 2;
-    if (journalEntry.Progress >= thresholds[0]) return 1;
+        if (journalEntry.Progress >= rankThreeThreshold) return 3;
+        if (journalEntry.Progress >= rankTwoThreshold) return 2;
+        if (journalEntry.Progress >= rankOneThreshold) return 1;
+    }
     return 0;
 };
