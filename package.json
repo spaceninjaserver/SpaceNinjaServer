@@ -33,7 +33,6 @@
     "mongodb-memory-server-core": "^11.0.1",
     "mongoose": "^9.4.1",
     "morgan": "^1.10.0",
-    "ncp": "^2.0.0",
     "undici": "^7.10.0",
     "warframe-public-export-plus": "^0.6.0",
     "warframe-riven-info": "^0.1.2",
@@ -47,7 +46,8 @@
     "@types/morgan": "^1.9.9",
     "@types/websocket": "^1.0.10",
     "@types/ws": "^8.18.1",
-    "@typescript/native-preview": "^7.0.0-dev.20260308.1"
+    "@typescript/native-preview": "^7.0.0-dev.20260308.1",
+    "ncp": "^2.0.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.28.0",
