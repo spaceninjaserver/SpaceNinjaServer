@@ -5109,7 +5109,7 @@ const pushFlashSales = (
 
     const seasonalCategory = ws.InGameMarket.LandingPage.Categories.find(c => c.CategoryName == category);
     if (!seasonalCategory) {
-        throw new Error(`No market category ${seasonalCategory} in static worldState data`);
+        throw new Error(`No market category ${category} in static worldState data`);
     }
     seasonalCategory.Items!.push(...storeItems.map(x => x.TypeName));
 };
