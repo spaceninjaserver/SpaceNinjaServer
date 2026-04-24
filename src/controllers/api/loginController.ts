@@ -1,7 +1,6 @@
 import type { Request, RequestHandler } from "express";
 
 import { config, getReflexiveAddress } from "../../services/configService.ts";
-import { buildConfig } from "../../services/buildConfigService.ts";
 
 import { Account } from "../../models/loginModel.ts";
 import {
@@ -62,7 +61,7 @@ export const loginController: RequestHandler = async (request, response) => {
     const buildLabel: string =
         typeof request.query.buildLabel == "string"
             ? request.query.buildLabel.replaceAll(" ", "+")
-            : buildConfig.buildLabel;
+            : (config.fallbackBuildLabel ?? "");
 
     if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0) {
         if (args.dev) {

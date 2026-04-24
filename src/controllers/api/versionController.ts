@@ -1,11 +1,11 @@
 import type { RequestHandler } from "express";
-import { buildConfig } from "../../services/buildConfigService.ts";
+import { config } from "../../services/configService.ts";
 
 export const versionController: RequestHandler = (request, res) => {
     const buildLabel: string =
         typeof request.query.buildLabel == "string"
             ? request.query.buildLabel.replaceAll(" ", "+")
-            : buildConfig.buildLabel;
+            : (config.fallbackBuildLabel ?? "");
 
     res.send(buildLabel);
 };

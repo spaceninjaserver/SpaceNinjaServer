@@ -27,6 +27,7 @@
   "administratorNames": [],
   "autoCreateAccount": true,
   "skipTutorial": false,
+  "fallbackBuildLabel": "2013.01.04.10.41/",
   "fullyStockedVendors": false,
   "skipClanKeyCrafting": false,
   "webui": {

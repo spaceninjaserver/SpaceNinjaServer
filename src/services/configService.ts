@@ -36,6 +36,7 @@ export interface IConfig {
     dtls?: number;
     administratorNames?: string[];
     autoCreateAccount?: boolean;
+    fallbackBuildLabel?: string;
     skipTutorial?: boolean;
     fullyStockedVendors?: boolean;
     skipClanKeyCrafting?: boolean;
