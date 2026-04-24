@@ -1,33 +1,44 @@
 import type { LeveledLogMethod } from "winston";
+import type { Format } from "logform";
 import { createLogger, format, transports, addColors } from "winston";
 import "winston-daily-rotate-file";
+import * as util from "node:util";
+import { isEmptyObject } from "../helpers/general.ts";
 import { config } from "../services/configService.ts";
 
-const printf = format.printf(info => {
-    return (config.logger.format ?? "%timestamp% [%level%] %message%")
-        .replaceAll("%timestamp%", info.timestamp as string)
-        .replaceAll("%level%", info.level)
-        .replaceAll("%message%", info.message as string);
-});
+const createFormat = (colors: boolean, localTime: boolean): Format =>
+    format.combine(
+        colors ? format.colorize() : format.uncolorize(),
+        localTime ? format.timestamp({ format: "YYYY-MM-DDTHH:mm:ss:SSS" }) : format.timestamp(),
+        format.metadata({ fillExcept: ["message", "level", "timestamp", "version"] }),
+        format.printf(info =>
+            (config.logger.format ?? "%timestamp% [%level%] %message%")
+                .replaceAll("%timestamp%", info.timestamp as string)
+                .replaceAll("%level%", info.level)
+                .replaceAll(
+                    "%message%",
+                    (info.message as string) +
+                        (isEmptyObject(info.metadata)
+                            ? ""
+                            : " " +
+                              util.inspect(info.metadata, {
+                                  showHidden: false,
+                                  depth: null,
+                                  colors
+                              }))
+                )
+        )
+    );
 
 const fileLog = new transports.DailyRotateFile({
     filename: `logs/${config.logger.level}.log`,
-    format: format.combine(
-        format.uncolorize(),
-        format.timestamp(), // zulu time
-        printf
-    ),
+    format: createFormat(false, false),
     datePattern: "YYYY-MM-DD"
 });
 
 const consoleLog = new transports.Console({
     forceConsole: false,
-    format: format.combine(
-        format.colorize(),
-        format.timestamp({ format: "YYYY-MM-DDTHH:mm:ss:SSS" }), // uses local timezone
-        format.errors({ stack: true }),
-        printf
-    )
+    format: createFormat(true, true)
 });
 
 const transportOptions = config.logger.files ? [consoleLog, fileLog] : [consoleLog];
@@ -75,3 +86,8 @@ export const logError = (err: Error, context: string): void => {
         logger.error(`uncaught error while ${context}: ${err.message}`);
     }
 };
+
+/*logger.debug(`guess what it's called when you put an object after a message:`, {
+    thatsRight: "it's called metadata (:"
+});
+logError(new Error("I'm not feeling so good"), "starting up");*/
