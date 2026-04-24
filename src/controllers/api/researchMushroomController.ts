@@ -27,8 +27,10 @@ export const researchMushroomController: RequestHandler = async (req, res) => {
 
             let journalEntry = inventory.NokkoColony.JournalEntries.find(x => x.EntryType == payload.MushroomItem);
             if (!journalEntry) {
-                journalEntry = { EntryType: payload.MushroomItem, Progress: 0 };
-                inventory.NokkoColony.JournalEntries.push(journalEntry);
+                journalEntry =
+                    inventory.NokkoColony.JournalEntries[
+                        inventory.NokkoColony.JournalEntries.push({ EntryType: payload.MushroomItem, Progress: 0 }) - 1
+                    ];
             }
 
             let syndicate = inventory.Affiliations.find(x => x.Tag == "NightcapJournalSyndicate");
