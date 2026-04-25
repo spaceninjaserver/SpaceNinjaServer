@@ -241,6 +241,7 @@ function revalidateAuthz() {
 function logout() {
     localStorage.removeItem("email");
     localStorage.removeItem("password");
+    invalidateCachedData();
 }
 
 function doLogout() {
