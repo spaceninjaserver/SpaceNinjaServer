@@ -68,7 +68,7 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
 
                 inventory.PendingRecipes.pull(pendingRecipe._id);
 
-                const recipe = getRecipe(pendingRecipe.ItemType);
+                const recipe = getRecipe(pendingRecipe.ItemType, account.BuildLabel);
                 if (!recipe) {
                     throw new Error(`no completed item found for recipe ${pendingRecipe._id.toString()}`);
                 }
