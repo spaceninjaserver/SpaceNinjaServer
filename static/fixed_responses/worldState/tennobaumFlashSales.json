@@ -1,0 +1,506 @@
+[
+  {
+    "TypeName": "/Lotus/Types/StoreItems/Packages/Winter2017GlyphBundle",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 100,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/Packages/Winter2018GlyphBundle",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 80,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/Packages/Winter2016Bundle",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 350,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/Packages/Winter2019GlyphBundle",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 90,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/Packages/WinterBundle",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 600,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/Packages/WinterGlyphBundle",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 65,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/Packages/KavatColorPackXmas",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 40,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Upgrades/Skins/Festivities/XmasSonicor",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/Packages/WinterAccessoriesBundle",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 280,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Upgrades/Skins/Harlequin/MirageXmasSkin",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 40,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Upgrades/Skins/Armor/SetThreeWinged/SolsticeSetThreeArmArmor",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 50,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Upgrades/Skins/Archer/WinterSolsticeSalix",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 95,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Upgrades/Skins/Armor/SetThreeWinged/SolsticeSetThreeChestArmor",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 45,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Upgrades/Skins/Frost/FrostXmasSkin",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 40,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/Packages/KubrowColorPackCandyCane",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 50,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/Packages/WinterGlyphBundleB",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 110,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Upgrades/Skins/Scarves/HolidayTurtleNeckScarf",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 50,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Upgrades/Skins/Hammer/SolsticeHeliocor",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 30,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/Packages/KubrowColorPackReindeer",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 50,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Upgrades/Skins/Fairy/SolsticeFairySkin",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 40,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/Packages/SolsticeSetThreeArmorPack",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 100,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Upgrades/Skins/Kubrows/Collars/KubrowCollarXmas",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 0,
+    "RegularOverride": 1
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017D",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/Game/KubrowPet/Patterns/KubrowPetPatternXmasC",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 0,
+    "RegularOverride": 1
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/Packages/CandyCaneScythePack",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 0,
+    "RegularOverride": 1
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2016B",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Upgrades/Skins/Catbrows/SolsticeCatbrowFur",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 40,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2016C",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Upgrades/Skins/Kubrows/Fur/SolsticeKubrowFur",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 40,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Upgrades/Skins/Festivities/JingleKnuckles",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 0,
+    "RegularOverride": 1
+  },
+  {
+    "TypeName": "/Lotus/Upgrades/Skins/Armor/SetThreeWinged/SolsticeSetThreeLegArmor",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 35,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016D",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2016D",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016E",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016A",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016B",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016C",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016G",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016F",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017B",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017A",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017E",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2016A",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017C",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018E",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018B",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018A",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018C",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017F",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018D",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphJingleKavat",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphCarolingOctavia",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphSurpriseIvara",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphJollyGrendel",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphFestiveFloof",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  },
+  {
+    "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphSkiGauss",
+    "ShowInMarket": true,
+    "HideFromMarket": false,
+    "SupporterPack": false,
+    "Discount": 0,
+    "PremiumOverride": 20,
+    "RegularOverride": 0
+  }
+]

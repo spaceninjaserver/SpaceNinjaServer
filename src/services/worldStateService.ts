@@ -9,6 +9,7 @@ import darvoDeals from "../constants/darvoDeals.ts";
 import invasionNodes from "../../static/fixed_responses/worldState/invasionNodes.json" with { type: "json" };
 import invasionRewards from "../../static/fixed_responses/worldState/invasionRewards.json" with { type: "json" };
 import pvpChallenges from "../../static/fixed_responses/worldState/pvpChallenges.json" with { type: "json" };
+import tennobaumFlashSales from "../../static/fixed_responses/worldState/tennobaumFlashSales.json" with { type: "json" };
 import { EPOCH, unixTimesInMs } from "../constants/timeConstants.ts";
 import { config } from "./configService.ts";
 import { getRandomElement, getRandomInt, sequentiallyUniqueRandomElement, SRng } from "./rngService.ts";
@@ -2515,65 +2516,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     ) {
         const activation = config.worldState?.xmasOverride ? 1772467200000 : xmasStart;
         const expiry = config.worldState?.xmasOverride ? 2000000000000 : xmasEnd;
-
-        // On live, these FlashSales only have TypeName, PremiumOverride, StartDate, EndDate, & ProductExpiryOverride.
-        const storeItems: (Partial<IFlashSale> & { TypeName: string })[] = [
-            { TypeName: "/Lotus/Types/StoreItems/Packages/Winter2017GlyphBundle", PremiumOverride: 100 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/Winter2018GlyphBundle", PremiumOverride: 80 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/Winter2016Bundle", PremiumOverride: 350 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/Winter2019GlyphBundle", PremiumOverride: 90 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/WinterBundle", PremiumOverride: 600 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/WinterGlyphBundle", PremiumOverride: 65 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/KavatColorPackXmas", PremiumOverride: 40 },
-            { TypeName: "/Lotus/Upgrades/Skins/Festivities/XmasSonicor", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/WinterAccessoriesBundle", PremiumOverride: 280 },
-            { TypeName: "/Lotus/Upgrades/Skins/Harlequin/MirageXmasSkin", PremiumOverride: 40 },
-            { TypeName: "/Lotus/Upgrades/Skins/Armor/SetThreeWinged/SolsticeSetThreeArmArmor", PremiumOverride: 50 },
-            { TypeName: "/Lotus/Upgrades/Skins/Archer/WinterSolsticeSalix", PremiumOverride: 95 },
-            { TypeName: "/Lotus/Upgrades/Skins/Armor/SetThreeWinged/SolsticeSetThreeChestArmor", PremiumOverride: 45 },
-            { TypeName: "/Lotus/Upgrades/Skins/Frost/FrostXmasSkin", PremiumOverride: 40 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/KubrowColorPackCandyCane", PremiumOverride: 50 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/WinterGlyphBundleB", PremiumOverride: 110 },
-            { TypeName: "/Lotus/Upgrades/Skins/Scarves/HolidayTurtleNeckScarf", PremiumOverride: 50 },
-            { TypeName: "/Lotus/Upgrades/Skins/Hammer/SolsticeHeliocor", PremiumOverride: 30 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/KubrowColorPackReindeer", PremiumOverride: 50 },
-            { TypeName: "/Lotus/Upgrades/Skins/Fairy/SolsticeFairySkin", PremiumOverride: 40 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/SolsticeSetThreeArmorPack", PremiumOverride: 100 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017D", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2016B", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Catbrows/SolsticeCatbrowFur", PremiumOverride: 40 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2016C", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Kubrows/Fur/SolsticeKubrowFur", PremiumOverride: 40 },
-            { TypeName: "/Lotus/Upgrades/Skins/Armor/SetThreeWinged/SolsticeSetThreeLegArmor", PremiumOverride: 35 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016D", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2016D", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016E", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016A", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016B", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016C", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016G", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016F", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017B", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017A", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017E", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2016A", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017C", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018E", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018B", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018A", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018C", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017F", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018D", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphJingleKavat", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphCarolingOctavia", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphSurpriseIvara", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphJollyGrendel", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphFestiveFloof", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphSkiGauss", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Festivities/XmasGlaxion", PremiumOverride: 20 }
-        ];
-
-        pushFlashSales(worldState, storeItems, activation, expiry, "SEASONAL", buildLabel);
+        pushFlashSales(worldState, tennobaumFlashSales, activation, expiry, "SEASONAL", buildLabel);
     }
 
     if (config.worldState?.anniversary != undefined) {
@@ -5092,7 +5035,7 @@ const pushFlashSales = (
             StartDate: toMongoDate2(startDate, buildLabel),
             EndDate: toMongoDate2(endDate, buildLabel),
             ProductExpiryOverride: toMongoDate2(endDate, buildLabel),
-            // The following fields are not needed nowadays, but might be needed for Market 2.0 (pre-U25):
+            // Defaulting all of this is probably not needed, but might be needed for Market 2.0 (pre-U25):
             ShowInMarket: item.ShowInMarket ?? true,
             HideFromMarket: item.HideFromMarket ?? false,
             SupporterPack: item.SupporterPack ?? false,
