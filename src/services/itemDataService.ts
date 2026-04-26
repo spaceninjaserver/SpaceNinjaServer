@@ -2274,7 +2274,12 @@ export const getPrice = (
 export const getRegion = async (uniqueName: string, buildLabel: string | undefined): Promise<IRegion | undefined> => {
     // after U27.2.0 OriginSolarMapRedux moved to binary format, so we don't have data for it
     if (buildLabel && version_compare(buildLabel, gameToBuildVersion["27.2.0"]) <= 0) {
-        const target = version_compare(buildLabel, "2016.07.08.16.56") < 0 ? "OriginSolarMap" : "OriginSolarMapRedux";
+        const target =
+            version_compare(buildLabel, gameToBuildVersion["14.0.0"]) < 0
+                ? "SolStarChart"
+                : version_compare(buildLabel, gameToBuildVersion["18.16.0"]) < 0
+                  ? "OriginSolarMap"
+                  : "OriginSolarMapRedux";
         const version = await getLegacyDataVersion(target, buildLabel);
         if (version) {
             const legacyData = await getLegacySolarMapData(target, version);
