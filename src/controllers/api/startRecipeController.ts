@@ -38,7 +38,7 @@ export const startRecipeController: RequestHandler = async (req, res) => {
         const modernItemType = U5ToModernRecipes[recipeName];
         if (modernItemType) recipeName = modernItemType;
     }
-    const recipe = getRecipe(recipeName);
+    const recipe = getRecipe(recipeName, account.BuildLabel);
 
     if (!recipe) {
         throw new Error(`unknown recipe ${recipeName}`);

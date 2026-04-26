@@ -1300,8 +1300,95 @@ const getLegacySolarMapData = async (target: string, buildLabel: string): Promis
     return json;
 };
 
-export const getRecipe = (uniqueName: string): IRecipe | undefined => {
-    return ExportRecipes[uniqueName] ?? supplementalRecipes[uniqueName];
+export const getRecipe = (uniqueName: string, buildLabel?: string): IRecipe | undefined => {
+    let data = ExportRecipes[uniqueName] ?? supplementalRecipes[uniqueName];
+    if (buildLabel) {
+        if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/RhinoBlueprint") {
+            if (version_compare(buildLabel, gameToBuildVersion["39.0.0"]) < 0) {
+                data = {
+                    ...data,
+                    ingredients: [
+                        data.ingredients[0],
+                        data.ingredients[1],
+                        data.ingredients[2],
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/Gallium",
+                            ItemCount: 1
+                        }
+                    ]
+                };
+                if (version_compare(buildLabel, gameToBuildVersion["38.5.0"]) < 0) {
+                    data.buildTime = 259200;
+                    // Update 19.13 (2017-03-09)
+                    if (version_compare(buildLabel, "2017.03.09.00.00") < 0) {
+                        data.ingredients[3].ItemType = "/Lotus/Types/Items/MiscItems/OrokinCell";
+                    }
+                }
+            }
+        } else if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/RhinoChassisBlueprint") {
+            if (version_compare(buildLabel, gameToBuildVersion["39.0.0"]) < 0) {
+                data = {
+                    ...data,
+                    ingredients: [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/Morphic",
+                            ItemCount: 1
+                        },
+                        data.ingredients[1],
+                        data.ingredients[2]
+                    ]
+                };
+            }
+        } else if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/RhinoHelmetBlueprint") {
+            if (version_compare(buildLabel, gameToBuildVersion["39.0.0"]) < 0) {
+                data = {
+                    ...data,
+                    ingredients: [
+                        data.ingredients[0],
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/Morphic",
+                            ItemCount: 1
+                        },
+                        data.ingredients[2],
+                        data.ingredients[3]
+                    ]
+                };
+                // Update 19.13 (2017-03-09)
+                if (version_compare(buildLabel, "2017.03.09.00.00") < 0) {
+                    data.ingredients[1].ItemType = "/Lotus/Types/Items/MiscItems/NeuralSensor";
+                }
+            }
+        } else if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/RhinoSystemsBlueprint") {
+            if (version_compare(buildLabel, gameToBuildVersion["39.0.0"]) < 0) {
+                data = {
+                    ...data,
+                    ingredients: [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/Gallium",
+                            ItemCount: 1
+                        },
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/Morphic",
+                            ItemCount: 1
+                        },
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/Salvage",
+                            ItemCount: 500
+                        },
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/Plastids",
+                            ItemCount: 600
+                        }
+                    ]
+                };
+                // Hotfix 30.0.6 (2021-04-20) Swapped the crafting requirement of Control Module for Gallium in Rhino Systems Blueprint to ease early player acquisition.
+                if (version_compare(buildLabel, "2021.04.20.00.00") < 0) {
+                    data.ingredients[0].ItemType = "/Lotus/Types/Items/MiscItems/ControlModule";
+                }
+            }
+        }
+    }
+    return data;
 };
 
 export const getSyndicate = (tag: string, buildLabel: string | undefined): ISyndicate | undefined => {
