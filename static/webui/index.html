@@ -1731,6 +1731,53 @@
                             </table>
                         </div>
                     </div>
+                    <div class="card mt-3">
+                        <h5 class="card-header" data-loc="admin_broadcastInbox"></h5>
+                        <div class="card-body">
+                            <div class="row g-2 mb-2">
+                                <div class="col-md-4">
+                                    <label class="form-label" for="admin-message-target-mode" data-loc="admin_messageTargetMode"></label>
+                                    <select class="form-select" id="admin-message-target-mode" onchange="onAdminMessageTargetModeChange();">
+                                        <option value="all" data-loc="admin_messageTargetAll"></option>
+                                        <option value="specific" data-loc="admin_messageTargetSpecific"></option>
+                                    </select>
+                                </div>
+                                <div class="col-md-8 d-none" id="admin-message-target-value-group">
+                                    <label class="form-label" for="admin-message-target-value" data-loc="admin_messageTargetValue"></label>
+                                    <input class="form-control" id="admin-message-target-value" />
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label" for="admin-message-sender" data-loc="admin_messageSender"></label>
+                                <input class="form-control" id="admin-message-sender" value="/Lotus/Language/Bosses/Ordis" />
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label" for="admin-message-subject" data-loc="admin_messageSubject"></label>
+                                <input class="form-control" id="admin-message-subject" />
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label" for="admin-message-body" data-loc="admin_messageBody"></label>
+                                <textarea class="form-control" id="admin-message-body" rows="4"></textarea>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label" for="admin-message-icon" data-loc="admin_messageIcon"></label>
+                                <input class="form-control" id="admin-message-icon" placeholder="/Lotus/Interface/Icons/Npcs/Ordis.png" />
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label" for="admin-message-att" data-loc="admin_messageAtt"></label>
+                                <textarea class="form-control" id="admin-message-att" rows="3" placeholder="/Lotus/Powersuits/Excalibur/ExcaliburPrime&#10;/Lotus/Weapons/Tenno/Melee/LongSword/SkanaPrime&#10;/Lotus/Weapons/Tenno/Pistol/LatoPrime"></textarea>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label" for="admin-message-counted-att" data-loc="admin_messageCountedAtt"></label>
+                                <textarea class="form-control" id="admin-message-counted-att" rows="5" placeholder="[&#10;    { &quot;ItemType&quot;: &quot;/Lotus/Types/Items/MiscItems/OxiumAlloy&quot;, &quot;ItemCount&quot;: 1200 },&#10;    { &quot;ItemType&quot;: &quot;/Lotus/Types/Items/MiscItems/OxiumAlloy&quot;, &quot;ItemCount&quot;: 1200 }&#10;]"></textarea>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="admin-message-high-priority" checked />
+                                <label class="form-check-label" for="admin-message-high-priority"><abbr data-loc="admin_messageHighPriority" data-loc-title="admin_messageHighPriorityHelp"></abbr></label>
+                            </div>
+                            <button class="btn btn-primary" id="admin-broadcast-submit" onclick="doAdminBroadcastInbox();" data-loc="admin_sendInboxMessage"></button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

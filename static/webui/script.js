@@ -5666,6 +5666,7 @@ single.getRoute("/webui/admin").on("beforeload", function () {
                 window.is_admin = true;
                 $(".admin-hide").addClass("d-none");
                 $(".admin-show").removeClass("d-none");
+                onAdminMessageTargetModeChange();
                 document.getElementById("registered-losers").innerHTML = "";
                 for (const user of users) {
                     const tr = document.createElement("tr");
@@ -5716,3 +5717,138 @@ single.getRoute("/webui/admin").on("beforeload", function () {
             });
     });
 });
+
+function onAdminMessageTargetModeChange() {
+    const targetMode = document.getElementById("admin-message-target-mode").value;
+    document.getElementById("admin-message-target-value-group").classList.toggle("d-none", targetMode !== "specific");
+}
+
+function resolveAdminBroadcastTargets(users, targetMode, targetValue) {
+    if (targetMode === "all") {
+        return users;
+    }
+    const normalizedTargetValue = targetValue.toLowerCase();
+    const idMatches = users.filter(user => user.id === targetValue);
+    return idMatches.length > 0
+        ? idMatches
+        : users.filter(user => user.DisplayName.toLowerCase() === normalizedTargetValue);
+}
+
+function buildAdminBroadcastConfirmMessage(targetMode, targetUsers) {
+    if (targetMode === "all") {
+        return loc("admin_sendToAllConfirm");
+    }
+    if (targetUsers.length === 1) {
+        return loc("admin_sendToSpecificConfirmOne")
+            .replaceAll("|NAME|", targetUsers[0].DisplayName)
+            .replaceAll("|ID|", targetUsers[0].id);
+    }
+    return loc("admin_sendToSpecificConfirmMany").replaceAll("|COUNT|", String(targetUsers.length));
+}
+
+function buildAdminInboxPayload(user, fields) {
+    const payload = [
+        {
+            ownerId: user.id,
+            sndr: fields.sender,
+            sub: fields.subject,
+            msg: fields.body,
+            highPriority: fields.highPriority
+        }
+    ];
+    if (fields.icon) {
+        payload[0].icon = fields.icon;
+    }
+    if (fields.attachments.length > 0) {
+        payload[0].att = fields.attachments;
+    }
+    if (fields.countedAttachments && fields.countedAttachments.length > 0) {
+        payload[0].countedAtt = fields.countedAttachments;
+    }
+    return payload;
+}
+
+async function sendAdminInboxMessage(payload) {
+    await $.ajax({
+        url: "/custom/createMessage?" + window.authz,
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(payload)
+    });
+}
+
+async function doAdminBroadcastInbox() {
+    await revalidateAuthz();
+    const targetMode = document.getElementById("admin-message-target-mode").value;
+    const targetValue = document.getElementById("admin-message-target-value").value.trim();
+    const sender = document.getElementById("admin-message-sender").value.trim();
+    const subject = document.getElementById("admin-message-subject").value.trim();
+    const body = document.getElementById("admin-message-body").value.trim();
+    const icon = document.getElementById("admin-message-icon").value.trim();
+    const attRaw = document.getElementById("admin-message-att").value;
+    const countedAttRaw = document.getElementById("admin-message-counted-att").value.trim();
+    const highPriority = document.getElementById("admin-message-high-priority").checked;
+    const submitButton = document.getElementById("admin-broadcast-submit");
+
+    if (!sender || !subject || !body) {
+        alert(loc("admin_messageRequiredFields"));
+        return;
+    }
+    if (targetMode === "specific" && !targetValue) {
+        alert(loc("admin_messageTargetRequired"));
+        return;
+    }
+
+    let countedAttachments;
+    if (countedAttRaw) {
+        try {
+            countedAttachments = JSON.parse(countedAttRaw);
+        } catch (_error) {
+            alert(loc("admin_messageCountedAttInvalid"));
+            return;
+        }
+        if (!Array.isArray(countedAttachments)) {
+            alert(loc("admin_messageCountedAttInvalid"));
+            return;
+        }
+    }
+
+    const attachments = attRaw
+        .split("\n")
+        .map(x => x.trim())
+        .filter(x => x);
+
+    submitButton.disabled = true;
+    try {
+        const users = await $.get("/custom/getRegisteredLosers?" + window.authz);
+        const targetUsers = resolveAdminBroadcastTargets(users, targetMode, targetValue);
+        if (targetUsers.length === 0) {
+            alert(loc("admin_messageTargetNotFound"));
+            return;
+        }
+
+        const confirmMsg = buildAdminBroadcastConfirmMessage(targetMode, targetUsers);
+        if (!window.confirm(confirmMsg)) {
+            return;
+        }
+
+        const payloadFields = {
+            sender,
+            subject,
+            body,
+            highPriority,
+            icon,
+            attachments,
+            countedAttachments
+        };
+        for (const user of targetUsers) {
+            const payload = buildAdminInboxPayload(user, payloadFields);
+            await sendAdminInboxMessage(payload);
+        }
+        toast(loc("admin_sendToAllSuccess").replaceAll("|COUNT|", targetUsers.length));
+    } catch (_error) {
+        alert(loc("settings_changeFailed"));
+    } finally {
+        submitButton.disabled = false;
+    }
+}
