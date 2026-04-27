@@ -296,17 +296,20 @@ export const updateStats = async (
                         case "MISSION_SCORE":
                             playerStats.Missions ??= [];
                             for (const [type, highScore] of Object.entries(data as IUploadEntry)) {
-                                const mission = playerStats.Missions.find(element => element.type === type);
+                                const cType = type.startsWith("/Lotus/Types/Keys/")
+                                    ? type.replace("/Lotus/Types/Keys/", "")
+                                    : type;
+                                const mission = playerStats.Missions.find(element => element.type === cType);
                                 if (mission) {
                                     if (highScore > mission.highScore) {
                                         mission.highScore = highScore;
                                     }
                                 } else {
-                                    playerStats.Missions.push({ type: type, highScore });
+                                    playerStats.Missions.push({ type: cType, highScore });
                                 }
                                 await submitLeaderboardScore(
                                     "weekly",
-                                    type,
+                                    cType,
                                     accountOwnerId,
                                     payload.displayName,
                                     highScore,
