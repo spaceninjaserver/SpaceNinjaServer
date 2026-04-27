@@ -38,7 +38,7 @@ import {
     PRE_U40_MAX_KUBROW_EGGS
 } from "../../services/inventoryService.ts";
 import { logger } from "../../utils/logger.ts";
-import { addString } from "../../helpers/stringHelpers.ts";
+import { addString, catBreadHash } from "../../helpers/stringHelpers.ts";
 import { Types, type FlattenMaps } from "mongoose";
 import { getNemesisManifest } from "../../helpers/nemesisHelpers.ts";
 import { getPersonalRooms } from "../../services/personalRoomsService.ts";
@@ -751,6 +751,24 @@ export const getInventoryResponse = async (
                     }
                     toLegacyDate(inventoryResponse.TrainingDate);
                     toLegacyDate(inventoryResponse.NextRefill!);
+
+                    if (version_compare(buildLabel, gameToBuildVersion["18.16.0"]) < 0) {
+                        const rightSkins = [];
+                        for (const item of inventoryResponse.WeaponSkins) {
+                            if (item.ItemType.startsWith("/Lotus/Upgrades/Skins/Sentinels/Wings/")) {
+                                rightSkins.push(item.ItemType + "Right");
+                            }
+                        }
+                        for (const itemType of rightSkins) {
+                            inventoryResponse.WeaponSkins.push({
+                                ItemType: itemType,
+                                ItemId: toOid2(
+                                    "ca70ca70ca70ca70" + catBreadHash(itemType).toString(16).padStart(8, "0"),
+                                    buildLabel
+                                )
+                            });
+                        }
+                    }
 
                     if (version_compare(buildLabel, "2014.02.05.00.00") < 0) {
                         // Pre-U12 builds store mods in an array called Cards, and have no concept of RawUpgrades
