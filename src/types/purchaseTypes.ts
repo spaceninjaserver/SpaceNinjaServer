@@ -53,6 +53,7 @@ export interface IPurchaseRequestU16 {
     productName: string;
     quantity: number;
     usePremium: "1" | "0";
+    voidTraderId?: string;
 }
 
 export interface IPurchaseParams {

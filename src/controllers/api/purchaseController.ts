@@ -17,7 +17,8 @@ export const purchasePostController: RequestHandler = async (req, res) => {
         logger.debug("converting legacy purchase request", purchaseRequest);
         purchaseRequest = {
             PurchaseParams: {
-                Source: PurchaseSource.Market,
+                Source: purchaseRequest.voidTraderId ? PurchaseSource.VoidTrader : PurchaseSource.Market,
+                SourceId: purchaseRequest.voidTraderId,
                 StoreItem: toStoreItem(purchaseRequest.productName),
                 Quantity: purchaseRequest.quantity,
                 UsePremium: purchaseRequest.usePremium == "1"

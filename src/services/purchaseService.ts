@@ -33,7 +33,7 @@ import {
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 import { fromStoreItem, getBoosterPack, getBundle, getPrice, toStoreItem } from "./itemDataService.ts";
 import { DailyDeal } from "../models/worldStateModel.ts";
-import { fromMongoDate, toMongoDate } from "../helpers/inventoryHelpers.ts";
+import { fromMongoDate, fromOid, toMongoDate } from "../helpers/inventoryHelpers.ts";
 import { Guild } from "../models/guildModel.ts";
 import { handleGuildGoalProgress } from "./guildService.ts";
 import { Types } from "mongoose";
@@ -231,7 +231,9 @@ export const handlePurchase = async (
             break;
         case PurchaseSource.VoidTrader: {
             const worldState = getWorldState(purchaseRequest.buildLabel);
-            const voidTrader = worldState.VoidTraders.find(x => x._id.$oid == purchaseRequest.PurchaseParams.SourceId!);
+            const voidTrader = worldState.VoidTraders.find(
+                x => fromOid(x._id) == purchaseRequest.PurchaseParams.SourceId!
+            );
             if (!voidTrader) {
                 throw new Error("invalid request source");
             }
