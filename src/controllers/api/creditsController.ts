@@ -1,6 +1,8 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
+import { version_compare } from "../../helpers/inventoryHelpers.ts";
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const creditsController: RequestHandler = async (req, res) => {
     // U9 and below are known to sometimes send this request without credentials, so just handle it more gracefully.
@@ -9,33 +11,28 @@ export const creditsController: RequestHandler = async (req, res) => {
         return;
     }
 
-    const inventory = (
-        await Promise.all([
-            getAccountIdForRequest(req),
-            getInventory(
-                req.query.accountId as string,
-                "RegularCredits TradesRemaining PremiumCreditsFree PremiumCredits infiniteCredits infinitePlatinum infiniteTrades"
-            )
-        ])
-    )[1];
+    const account = await getAccountForRequest(req);
+    const inventory = await getInventory(
+        account._id,
+        "RegularCredits TradesRemaining PremiumCreditsFree PremiumCredits infiniteCredits infinitePlatinum infiniteTrades"
+    );
 
-    const response = {
-        RegularCredits: inventory.RegularCredits,
-        TradesRemaining: inventory.TradesRemaining,
-        PremiumCreditsFree: inventory.PremiumCreditsFree,
-        PremiumCredits: inventory.PremiumCredits
+    const response: ICreditsResponse = {
+        RegularCredits: inventory.infiniteCredits ? 999999999 : inventory.RegularCredits,
+        PremiumCredits: inventory.infinitePlatinum ? 999999999 : inventory.PremiumCredits
     };
-
-    if (inventory.infiniteCredits) {
-        response.RegularCredits = 999999999;
+    if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["10.8.0"]) > 0) {
+        response.PremiumCreditsFree = inventory.infinitePlatinum ? 0 : inventory.PremiumCreditsFree;
+        if (version_compare(account.BuildLabel, gameToBuildVersion["15.0.0"]) >= 0) {
+            response.TradesRemaining = inventory.TradesRemaining;
+        }
     }
-    if (inventory.infinitePlatinum) {
-        response.PremiumCreditsFree = 0;
-        response.PremiumCredits = 999999999;
-    }
-    if (inventory.infiniteTrades) {
-        response.TradesRemaining = 9999;
-    }
-
     res.json(response);
 };
+
+interface ICreditsResponse {
+    RegularCredits: number;
+    PremiumCredits: number;
+    PremiumCreditsFree?: number;
+    TradesRemaining?: number;
+}
