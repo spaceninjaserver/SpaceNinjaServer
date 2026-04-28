@@ -5023,14 +5023,18 @@ export const populateFeaturedGuilds = async (worldState: IWorldState): Promise<v
 
 const pushFlashSales = (
     ws: IWorldState,
-    storeItems: (Partial<IFlashSale> & { TypeName: string })[],
+    storeItems: (Partial<IFlashSale> & { TypeName: string; minBuildLabel?: string })[],
     startDate: number | Date,
     endDate: number | Date,
     category: string,
     buildLabel?: string
 ): void => {
+    const filteredItems = storeItems.filter(
+        item => !item.minBuildLabel || !buildLabel || version_compare(buildLabel, item.minBuildLabel) >= 0
+    );
+
     ws.FlashSales.push(
-        ...storeItems.map(item => ({
+        ...filteredItems.map(item => ({
             ...item,
             StartDate: toMongoDate2(startDate, buildLabel),
             EndDate: toMongoDate2(endDate, buildLabel),
@@ -5054,5 +5058,5 @@ const pushFlashSales = (
     if (!seasonalCategory) {
         throw new Error(`No market category ${category} in static worldState data`);
     }
-    seasonalCategory.Items!.push(...storeItems.map(x => x.TypeName));
+    seasonalCategory.Items!.push(...filteredItems.map(x => x.TypeName));
 };

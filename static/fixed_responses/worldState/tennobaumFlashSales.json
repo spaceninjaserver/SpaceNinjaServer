@@ -6,7 +6,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 100,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2017.12.08.15.29"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/Packages/Winter2018GlyphBundle",
@@ -15,7 +16,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 80,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2018.12.18.12.43"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/Packages/Winter2016Bundle",
@@ -24,7 +26,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 350,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.16.14.33"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/Packages/Winter2019GlyphBundle",
@@ -33,7 +36,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 90,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2019.11.22.21.24"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/Packages/WinterBundle",
@@ -42,7 +46,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 600,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2014.11.27.14.35"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/Packages/WinterGlyphBundle",
@@ -51,7 +56,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 65,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.16.14.33"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/Packages/KavatColorPackXmas",
@@ -60,7 +66,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 40,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.16.14.33"
   },
   {
     "TypeName": "/Lotus/Upgrades/Skins/Festivities/XmasSonicor",
@@ -69,7 +76,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2015.12.09.17.09"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/Packages/WinterAccessoriesBundle",
@@ -78,7 +86,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 280,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2014.11.27.14.35"
   },
   {
     "TypeName": "/Lotus/Upgrades/Skins/Harlequin/MirageXmasSkin",
@@ -87,7 +96,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 40,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2014.11.27.14.35"
   },
   {
     "TypeName": "/Lotus/Upgrades/Skins/Armor/SetThreeWinged/SolsticeSetThreeArmArmor",
@@ -96,7 +106,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 50,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.11.11.17.46"
   },
   {
     "TypeName": "/Lotus/Upgrades/Skins/Archer/WinterSolsticeSalix",
@@ -105,7 +116,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 95,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.16.14.33"
   },
   {
     "TypeName": "/Lotus/Upgrades/Skins/Armor/SetThreeWinged/SolsticeSetThreeChestArmor",
@@ -114,7 +126,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 45,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.11.11.17.46"
   },
   {
     "TypeName": "/Lotus/Upgrades/Skins/Frost/FrostXmasSkin",
@@ -123,7 +136,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 40,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2014.11.27.14.35"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/Packages/KubrowColorPackCandyCane",
@@ -132,7 +146,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 50,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2014.11.27.14.35"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/Packages/WinterGlyphBundleB",
@@ -141,7 +156,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 110,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.21.19.13"
   },
   {
     "TypeName": "/Lotus/Upgrades/Skins/Scarves/HolidayTurtleNeckScarf",
@@ -150,7 +166,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 50,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2014.11.27.14.35"
   },
   {
     "TypeName": "/Lotus/Upgrades/Skins/Hammer/SolsticeHeliocor",
@@ -159,7 +176,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 30,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.16.14.33"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/Packages/KubrowColorPackReindeer",
@@ -168,7 +186,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 50,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2014.11.27.14.35"
   },
   {
     "TypeName": "/Lotus/Upgrades/Skins/Fairy/SolsticeFairySkin",
@@ -177,7 +196,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 40,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.16.14.33"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/Packages/SolsticeSetThreeArmorPack",
@@ -186,7 +206,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 100,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.16.14.33"
   },
   {
     "TypeName": "/Lotus/Upgrades/Skins/Kubrows/Collars/KubrowCollarXmas",
@@ -195,7 +216,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 0,
-    "RegularOverride": 1
+    "RegularOverride": 1,
+    "minBuildLabel": "2015.12.09.17.09"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017D",
@@ -204,7 +226,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2017.12.08.15.29"
   },
   {
     "TypeName": "/Lotus/Types/Game/KubrowPet/Patterns/KubrowPetPatternXmasC",
@@ -213,7 +236,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 0,
-    "RegularOverride": 1
+    "RegularOverride": 1,
+    "minBuildLabel": "2016.03.04.10.06"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/Packages/CandyCaneScythePack",
@@ -222,7 +246,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 0,
-    "RegularOverride": 1
+    "RegularOverride": 1,
+    "minBuildLabel": "2014.03.05.20.45"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2016B",
@@ -231,7 +256,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.16.14.33"
   },
   {
     "TypeName": "/Lotus/Upgrades/Skins/Catbrows/SolsticeCatbrowFur",
@@ -240,7 +266,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 40,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.16.14.33"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2016C",
@@ -249,7 +276,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.16.14.33"
   },
   {
     "TypeName": "/Lotus/Upgrades/Skins/Kubrows/Fur/SolsticeKubrowFur",
@@ -258,7 +286,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 40,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.16.14.33"
   },
   {
     "TypeName": "/Lotus/Upgrades/Skins/Festivities/JingleKnuckles",
@@ -267,7 +296,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 0,
-    "RegularOverride": 1
+    "RegularOverride": 1,
+    "minBuildLabel": "2015.12.09.17.09"
   },
   {
     "TypeName": "/Lotus/Upgrades/Skins/Armor/SetThreeWinged/SolsticeSetThreeLegArmor",
@@ -276,7 +306,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 35,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.11.11.17.46"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016D",
@@ -285,7 +316,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.21.19.13"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2016D",
@@ -294,7 +326,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.16.14.33"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016E",
@@ -303,7 +336,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.21.19.13"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016A",
@@ -312,7 +346,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.21.19.13"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016B",
@@ -321,7 +356,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.21.19.13"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016C",
@@ -330,7 +366,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.21.19.13"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016G",
@@ -339,7 +376,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.21.19.13"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinterB2016F",
@@ -348,7 +386,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.21.19.13"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017B",
@@ -357,7 +396,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2017.12.08.15.29"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017A",
@@ -366,7 +406,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2017.12.08.15.29"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017E",
@@ -375,7 +416,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2017.12.08.15.29"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2016A",
@@ -384,7 +426,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2016.12.16.14.33"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017C",
@@ -393,7 +436,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2017.12.08.15.29"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018E",
@@ -402,7 +446,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2018.12.18.12.43"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018B",
@@ -411,7 +456,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2018.12.18.12.43"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018A",
@@ -420,7 +466,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2018.12.18.12.43"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018C",
@@ -429,7 +476,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2018.12.18.12.43"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2017F",
@@ -438,7 +486,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2017.12.08.15.29"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageWinter2018D",
@@ -447,7 +496,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2018.12.18.12.43"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphJingleKavat",
@@ -456,7 +506,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2019.11.22.21.24"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphCarolingOctavia",
@@ -465,7 +516,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2019.11.22.21.24"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphSurpriseIvara",
@@ -474,7 +526,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2019.11.22.21.24"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphJollyGrendel",
@@ -483,7 +536,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2019.11.22.21.24"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphFestiveFloof",
@@ -492,7 +546,8 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2019.11.22.21.24"
   },
   {
     "TypeName": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageGlyphSkiGauss",
@@ -501,6 +556,7 @@
     "SupporterPack": false,
     "Discount": 0,
     "PremiumOverride": 20,
-    "RegularOverride": 0
+    "RegularOverride": 0,
+    "minBuildLabel": "2019.11.22.21.24"
   }
 ]
