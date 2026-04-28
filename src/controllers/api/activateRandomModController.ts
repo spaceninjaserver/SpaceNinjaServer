@@ -22,9 +22,11 @@ export const activateRandomModController: RequestHandler = async (req, res) => {
         }
     ]);
     const rivenType = getRandomElement(rivenRawToRealWeighted[request.ItemType])!;
+    const IsSentinel =
+        request.ItemType == "/Lotus/Upgrades/Mods/Randomized/RawSentinelWeaponRandomMod" ? true : undefined;
     const fingerprint = inventory.instantFinishRivenChallenge
-        ? createUnveiledRivenFingerprint(ExportUpgrades[rivenType])
-        : createVeiledRivenFingerprint(ExportUpgrades[rivenType]);
+        ? createUnveiledRivenFingerprint(ExportUpgrades[rivenType], IsSentinel)
+        : createVeiledRivenFingerprint(ExportUpgrades[rivenType], IsSentinel);
     const upgradeIndex =
         inventory.Upgrades.push({
             ItemType: rivenType,

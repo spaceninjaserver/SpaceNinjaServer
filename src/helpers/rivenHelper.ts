@@ -1,10 +1,11 @@
-import type { IUpgrade } from "warframe-public-export-plus";
+import { ExportWeapons, type IUpgrade } from "warframe-public-export-plus";
 import { getRandomElement, getRandomInt, getRandomReward } from "../services/rngService.ts";
 
 export type RivenFingerprint = IVeiledRivenFingerprint | IUnveiledRivenFingerprint;
 
 export interface IVeiledRivenFingerprint {
     challenge: IRivenChallenge;
+    IsSentinel?: true;
 }
 
 export interface IRivenChallenge {
@@ -23,6 +24,7 @@ export interface IUnveiledRivenFingerprint {
     pol: string;
     buffs: IFingerprintStat[];
     curses: IFingerprintStat[];
+    IsSentinel?: true;
 }
 
 export interface IFingerprintStat {
@@ -30,7 +32,7 @@ export interface IFingerprintStat {
     Value: number;
 }
 
-export const createVeiledRivenFingerprint = (meta: IUpgrade): IVeiledRivenFingerprint => {
+export const createVeiledRivenFingerprint = (meta: IUpgrade, IsSentinel: true | undefined): IVeiledRivenFingerprint => {
     const challenge = getRandomElement(meta.availableChallenges!)!;
     const fingerprintChallenge: IRivenChallenge = {
         Type: challenge.fullName,
@@ -49,18 +51,30 @@ export const createVeiledRivenFingerprint = (meta: IUpgrade): IVeiledRivenFinger
         const complication = challenge.complications.find(x => x.fullName == fingerprintChallenge.Complication)!;
         fingerprintChallenge.Required *= complication.countMultiplier;
     }
-    return { challenge: fingerprintChallenge };
+    return { challenge: fingerprintChallenge, IsSentinel };
 };
 
-export const createUnveiledRivenFingerprint = (meta: IUpgrade): IUnveiledRivenFingerprint => {
+export const createUnveiledRivenFingerprint = (
+    meta: IUpgrade,
+    IsSentinel: true | undefined
+): IUnveiledRivenFingerprint => {
     const fingerprint: IUnveiledRivenFingerprint = {
-        compat: getRandomElement(meta.compatibleItems!)!,
+        compat: getRandomElement(
+            meta.compatibleItems!.filter(weaponType => {
+                // "Although Beast Companions had their weapons separated in Update 37.0, Veiled Companion Riven mods can still only become mods for Robotic Weapons." (https://wiki.warframe.com/w/Riven%20Mods)
+                // ^ To be faithful to this, we're checking for the SENTINEL_WEAPON compatibility tag instead of the "SentinelWeapons" productCategory.
+                const isSentinelWeapon =
+                    (ExportWeapons[weaponType].compatibilityTags?.indexOf("SENTINEL_WEAPON") ?? -1) != -1;
+                return IsSentinel ? isSentinelWeapon : !isSentinelWeapon;
+            })
+        )!,
         lim: 0,
         lvl: 0,
         lvlReq: getRandomInt(8, 16),
         pol: getRandomElement(["AP_ATTACK", "AP_DEFENSE", "AP_TACTIC"])!,
         buffs: [],
-        curses: []
+        curses: [],
+        IsSentinel
     };
     randomiseRivenStats(meta, fingerprint);
     return fingerprint;

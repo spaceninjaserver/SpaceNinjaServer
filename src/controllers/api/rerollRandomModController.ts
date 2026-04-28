@@ -20,7 +20,7 @@ export const rerollRandomModController: RequestHandler = async (req, res) => {
             const fingerprint = JSON.parse(upgrade.UpgradeFingerprint!) as RivenFingerprint;
             if ("challenge" in fingerprint) {
                 upgrade.UpgradeFingerprint = JSON.stringify(
-                    createUnveiledRivenFingerprint(ExportUpgrades[upgrade.ItemType])
+                    createUnveiledRivenFingerprint(ExportUpgrades[upgrade.ItemType], fingerprint.IsSentinel)
                 );
             } else {
                 fingerprint.rerolls ??= 0;

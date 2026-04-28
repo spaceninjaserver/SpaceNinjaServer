@@ -39,7 +39,9 @@ export const artifactTransmutationController: RequestHandler = async (req, res) 
 
         const rawRivenType = getRandomRawRivenType();
         const rivenType = getRandomElement(rivenRawToRealWeighted[rawRivenType])!;
-        const fingerprint = createVeiledRivenFingerprint(ExportUpgrades[rivenType]);
+        const IsSentinel =
+            rawRivenType == "/Lotus/Upgrades/Mods/Randomized/RawSentinelWeaponRandomMod" ? true : undefined;
+        const fingerprint = createVeiledRivenFingerprint(ExportUpgrades[rivenType], IsSentinel);
 
         const upgradeIndex =
             inventory.Upgrades.push({
