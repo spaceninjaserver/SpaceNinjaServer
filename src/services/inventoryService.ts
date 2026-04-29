@@ -60,9 +60,11 @@ import {
     ExportKeys,
     ExportRailjackWeapons,
     ExportRecipes,
+    ExportRegions,
     ExportResources,
     ExportSentinels,
     ExportSyndicates,
+    ExportSystems,
     ExportUpgrades,
     ExportWarframes,
     ExportWeapons
@@ -2528,8 +2530,8 @@ export const addChallenges = async (
     account: TAccountDocument,
     inventory: TInventoryDatabaseDocument,
     ChallengeProgress: IChallengeProgress[],
-    SeasonChallengeCompletions: ISeasonChallenge[] | undefined,
-    inventoryChanges: IInventoryChanges
+    SeasonChallengeCompletions?: ISeasonChallenge[],
+    inventoryChanges: IInventoryChanges = {}
 ): Promise<IAffiliationMods[]> => {
     for (const { Name, Progress, Completed } of ChallengeProgress) {
         let dbChallenge = inventory.ChallengeProgress.find(x => x.Name == Name);
@@ -3261,6 +3263,114 @@ export const updateIncentiveStates = async (
                     highPriority: true
                 }
             ]);
+        }
+    }
+};
+
+const steelPathSystems: [number, string][] = [
+    [0, "Mercury"],
+    [1, "Venus"],
+    [2, "Earth"],
+    [3, "Mars"],
+    [4, "Jupiter"],
+    [5, "Saturn"],
+    [6, "Uranus"],
+    [7, "Neptune"],
+    [8, "Pluto"],
+    [9, "Ceres"],
+    [10, "Eris"],
+    [11, "Sedna"],
+    [12, "Europa"],
+    [14, "Void"],
+    [15, "Phobos"],
+    [16, "Deimos"],
+    [17, "Lua"],
+    [18, "KuvaFortress"],
+    [21, "Zariman"],
+    [22, "Duviri"],
+    [23, "1999"],
+    [24, "Perita"]
+];
+
+export const ensureUserHasSteelPathRewards = async (
+    inventory: TInventoryDatabaseDocument,
+    silent?: true
+): Promise<void> => {
+    const completedNodes = new Set<string>();
+    for (const mission of inventory.Missions) {
+        if (mission.Tier) {
+            completedNodes.add(mission.Tag);
+        }
+    }
+
+    const eligibleSystems = new Set<number>(steelPathSystems.map(x => x[0]));
+    for (const [tag, region] of Object.entries(ExportRegions)) {
+        if (!completedNodes.has(tag)) {
+            eligibleSystems.delete(region.systemIndex);
+        }
+    }
+
+    for (const systemIndex of eligibleSystems) {
+        const systemShortName = steelPathSystems.find(x => x[0] == systemIndex)![1];
+        const emoteItem = `/Lotus/Types/Items/Emotes/Hardmode${systemShortName}Emote`;
+        if (!inventory.FlavourItems.some(x => x.ItemType == emoteItem)) {
+            const countedAtt: ITypeCount[] = [];
+
+            const trophyItem: ITypeCount = {
+                ItemType: `/Lotus/Types/Items/ShipDecos/PlanetTrophies/PlanetTrophy${systemShortName}Bronze`,
+                ItemCount: 1
+            };
+            addShipDecorations(inventory, [trophyItem]);
+            countedAtt.push(trophyItem);
+
+            if (systemIndex == 16) {
+                const otherTropyItem: ITypeCount = {
+                    ItemType: `/Lotus/Types/Items/ShipDecos/PlanetTrophies/PlanetTrophyDerelictBronze`,
+                    ItemCount: 1
+                };
+                addShipDecorations(inventory, [otherTropyItem]);
+                countedAtt.push(otherTropyItem);
+            }
+
+            inventory.FlavourItems.push({ ItemType: emoteItem });
+            countedAtt.push({
+                ItemType: emoteItem,
+                ItemCount: 1
+            });
+
+            if (systemIndex == 16) {
+                addCustomization(inventory, "/Lotus/Types/Items/Emotes/HardmodeDerelictEmote");
+                countedAtt.push({
+                    ItemType: "/Lotus/Types/Items/Emotes/HardmodeDerelictEmote",
+                    ItemCount: 1
+                });
+            }
+
+            addMiscItem(inventory, "/Lotus/Types/Items/MiscItems/SteelEssence", 25);
+            countedAtt.push({
+                ItemType: "/Lotus/Types/Items/MiscItems/SteelEssence",
+                ItemCount: 25
+            });
+
+            if (!silent) {
+                await createMessage(inventory.accountOwnerId, [
+                    {
+                        sndr: "/Lotus/Language/Bosses/Teshin",
+                        msg: "/Lotus/Language/Inbox/HardModeRewardMsgBody",
+                        arg: [
+                            {
+                                Key: "PLANET_NAME",
+                                Tag: ExportSystems[systemIndex].name
+                            }
+                        ],
+                        countedAtt,
+                        attVisualOnly: true,
+                        sub: "/Lotus/Language/Inbox/HardModeRewardMsgTitle",
+                        icon: "/Lotus/Interface/Icons/Npcs/Teshin.png",
+                        highPriority: true
+                    }
+                ]);
+            }
         }
     }
 };

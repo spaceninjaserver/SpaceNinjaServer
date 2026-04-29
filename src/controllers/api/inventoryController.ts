@@ -33,6 +33,7 @@ import {
     cleanupInventory,
     createLibraryDailyTask,
     ensureUserHasFounderHonoria,
+    ensureUserHasSteelPathRewards,
     getCalendarProgress,
     handleTauMemories,
     PRE_U40_MAX_KUBROW_EGGS
@@ -251,7 +252,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
         if (inventory.Founder) {
             await ensureUserHasFounderHonoria(inventory);
         }
-
+        await ensureUserHasSteelPathRewards(inventory);
         cleanupInventory(inventory);
 
         inventory.NextRefill = new Date((today + 1) * 86400000); // tomorrow at 0 UTC

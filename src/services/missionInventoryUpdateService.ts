@@ -44,6 +44,7 @@ import {
     applyClientEquipmentUpdates,
     combineInventoryChanges,
     CurrencyType,
+    ensureUserHasSteelPathRewards,
     getDialogue,
     giveNemesisPetRecipe,
     giveNemesisWeaponRecipe,
@@ -367,6 +368,9 @@ export const addMissionInventoryUpdates = async (
             }
             case "Missions":
                 addMissionComplete(inventory, value);
+                if (value.Tier) {
+                    await ensureUserHasSteelPathRewards(inventory);
+                }
                 break;
             case "LastRegionPlayed":
                 if (!(config.unfaithfulBugFixes?.ignore1999LastRegionPlayed && value === "1999MapName")) {

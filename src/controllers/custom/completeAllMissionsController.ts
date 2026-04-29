@@ -1,5 +1,5 @@
 import { addString } from "../../helpers/stringHelpers.ts";
-import { addChallenges, getInventory } from "../../services/inventoryService.ts";
+import { addChallenges, ensureUserHasSteelPathRewards, getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest, getAccountIdForRequest } from "../../services/loginService.ts";
 import { addFixedLevelRewards } from "../../services/missionInventoryUpdateService.ts";
 import { handleStoreItemAcquisition } from "../../services/purchaseService.ts";
@@ -35,70 +35,65 @@ export const completeAllMissionsController: RequestHandler = async (req, res) =>
     for (const reward of MissionRewards) {
         await handleStoreItemAcquisition(reward.StoreItem, inventory, reward.ItemCount, undefined, true);
     }
-    await addChallenges(
-        account,
-        inventory,
-        [
-            {
-                Progress: 1,
-                Name: `KillPhorid`
-            },
-            {
-                Progress: 1,
-                Name: `SaviourOfCeres`
-            },
-            {
-                Progress: 1,
-                Name: `SaviourOfEarth`
-            },
-            {
-                Progress: 1,
-                Name: `SaviourOfEuropa`
-            },
-            {
-                Progress: 1,
-                Name: `SaviourOfJupiter`
-            },
-            {
-                Progress: 1,
-                Name: `SaviourOfMars`
-            },
-            {
-                Progress: 1,
-                Name: `SaviourOfMercury`
-            },
-            {
-                Progress: 1,
-                Name: `SaviourOfNeptune`
-            },
-            {
-                Progress: 1,
-                Name: `SaviourOfPhobos`
-            },
-            {
-                Progress: 1,
-                Name: `SaviourOfPluto`
-            },
-            {
-                Progress: 1,
-                Name: `SaviourOfSaturn`
-            },
-            {
-                Progress: 1,
-                Name: `SaviourOfSedna`
-            },
-            {
-                Progress: 1,
-                Name: `SaviourOfUranus`
-            },
-            {
-                Progress: 1,
-                Name: `SaviourOfVenus`
-            }
-        ],
-        [],
-        {}
-    );
+    await addChallenges(account, inventory, [
+        {
+            Progress: 1,
+            Name: `KillPhorid`
+        },
+        {
+            Progress: 1,
+            Name: `SaviourOfCeres`
+        },
+        {
+            Progress: 1,
+            Name: `SaviourOfEarth`
+        },
+        {
+            Progress: 1,
+            Name: `SaviourOfEuropa`
+        },
+        {
+            Progress: 1,
+            Name: `SaviourOfJupiter`
+        },
+        {
+            Progress: 1,
+            Name: `SaviourOfMars`
+        },
+        {
+            Progress: 1,
+            Name: `SaviourOfMercury`
+        },
+        {
+            Progress: 1,
+            Name: `SaviourOfNeptune`
+        },
+        {
+            Progress: 1,
+            Name: `SaviourOfPhobos`
+        },
+        {
+            Progress: 1,
+            Name: `SaviourOfPluto`
+        },
+        {
+            Progress: 1,
+            Name: `SaviourOfSaturn`
+        },
+        {
+            Progress: 1,
+            Name: `SaviourOfSedna`
+        },
+        {
+            Progress: 1,
+            Name: `SaviourOfUranus`
+        },
+        {
+            Progress: 1,
+            Name: `SaviourOfVenus`
+        }
+    ]);
+    await ensureUserHasSteelPathRewards(inventory, true);
     addString(inventory.NodeIntrosCompleted, "TeshinHardModeUnlocked");
     addString(inventory.NodeIntrosCompleted, "CetusInvasionNodeIntro");
     addString(inventory.NodeIntrosCompleted, "CetusSyndicate_IntroJob");
