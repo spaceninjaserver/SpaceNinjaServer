@@ -19,7 +19,7 @@ import { modularWeaponTypes } from "../../helpers/modularWeaponHelper.ts";
 import { getRandomInt } from "../../services/rngService.ts";
 import type { IDefaultUpgrade } from "warframe-public-export-plus";
 import { ExportSentinels, ExportWeapons } from "warframe-public-export-plus";
-import type { IEquipmentDatabase } from "../../types/equipmentTypes.ts";
+import type { IKubrowPetDatabase } from "../../types/equipmentTypes.ts";
 import { Status } from "../../types/equipmentTypes.ts";
 
 interface IModularCraftRequest {
@@ -38,7 +38,7 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
     const inventory = await getInventory(accountId);
 
     let defaultUpgrades: IDefaultUpgrade[] | undefined;
-    const defaultOverwrites: Partial<IEquipmentDatabase> = {
+    const defaultOverwrites: Partial<IKubrowPetDatabase> = {
         ModularParts: data.Parts
     };
     const inventoryChanges: IInventoryChanges = {};

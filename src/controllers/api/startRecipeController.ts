@@ -110,7 +110,7 @@ export const startRecipeController: RequestHandler = async (req, res) => {
     } else if (recipe.secretIngredientAction == "SIA_DISTILL_PRINT") {
         pr.KubrowPet = new Types.ObjectId(startRecipeRequest.Ids[recipe.ingredients.length]);
         const pet = inventory.KubrowPets.id(pr.KubrowPet)!;
-        pet.Details!.PrintsRemaining -= 1;
+        pet.Details.PrintsRemaining -= 1;
     } else if (recipe.secretIngredientAction == "SIA_SPECTRE_LOADOUT_COPY") {
         const spectreLoadout: ISpectreLoadout = {
             ItemType: recipe.resultType,

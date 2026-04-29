@@ -11,14 +11,14 @@ export const retrievePetFromStasisController: RequestHandler = async (req, res) 
 
     let oldPetId: string | undefined;
     for (const pet of inventory.KubrowPets) {
-        if (pet.Details!.Status == Status.StatusAvailable) {
-            pet.Details!.Status = Status.StatusStasis;
+        if (pet.Details.Status == Status.StatusAvailable) {
+            pet.Details.Status = Status.StatusStasis;
             oldPetId = pet._id.toString();
             break;
         }
     }
 
-    inventory.KubrowPets.id(data.petId)!.Details!.Status = Status.StatusAvailable;
+    inventory.KubrowPets.id(data.petId)!.Details.Status = Status.StatusAvailable;
 
     await inventory.save();
     res.json({

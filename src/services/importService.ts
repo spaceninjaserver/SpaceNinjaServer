@@ -60,6 +60,7 @@ import {
     type IEquipmentDatabase,
     type IEquipmentSelectionClient,
     type IEquipmentSelectionDatabase,
+    type IKubrowPetDatabase,
     type IKubrowPetDetailsClient,
     type IKubrowPetDetailsDatabase
 } from "../types/equipmentTypes.ts";
@@ -94,7 +95,7 @@ const convertOptionalDate = (value: IMongoDateWithLegacySupport | undefined): Da
     return value ? fromMongoDate(value) : undefined;
 };
 
-const convertEquipment = (client: IEquipmentClient): IEquipmentDatabase => {
+const convertEquipment = (client: IEquipmentClient): IEquipmentDatabase | IKubrowPetDatabase => {
     const { ItemId, ...rest } = client;
     return {
         ...rest,
@@ -590,7 +591,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     for (const pr of db.PendingRecipes) {
         const recipe = getRecipe(pr.ItemType);
         if (recipe?.secretIngredientAction == "SIA_CREATE_KUBROW" && !pr.KubrowPet) {
-            pr.KubrowPet = db.KubrowPets.find(x => x.Details!.Status == Status.StatusIncubating)?._id;
+            pr.KubrowPet = db.KubrowPets.find(x => x.Details.Status == Status.StatusIncubating)?._id;
             logger.warn(
                 `imported recipe ${pr._id.toString()} (${pr.ItemType}) had no TargetItemId; best guess fixup is ${pr.KubrowPet?.toString()}`
             );

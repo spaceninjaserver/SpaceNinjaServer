@@ -185,13 +185,13 @@ const claimCompletedRecipe = async (
     if (recipe.secretIngredientAction == "SIA_CREATE_KUBROW") {
         // This request is sent automatically once the pending recipe is completed.
         const pet = inventory.KubrowPets.id(pendingRecipe.KubrowPet!)!;
-        pet.Details!.Status = Status.StatusIncubated;
+        pet.Details.Status = Status.StatusIncubated;
     } else if (recipe.secretIngredientAction == "SIA_DISTILL_PRINT") {
         const pet = inventory.KubrowPets.id(pendingRecipe.KubrowPet!)!;
         addKubrowPetPrint(
             inventory,
             "/Lotus/Types/Game/KubrowPet/ImprintedTraitPrint",
-            pet.Details!,
+            pet.Details,
             resp.InventoryChanges
         );
     } else if (recipe.secretIngredientAction != "SIA_UNBRAND") {

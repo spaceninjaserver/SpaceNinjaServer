@@ -337,7 +337,9 @@ export const inventoryController: RequestHandler = async (request, response) => 
     }
 
     if (inventory.QuestKeys.some(x => x.ItemType.endsWith("KubrowQuestKeyChain") && x.Completed)) {
-        inventory.KubrowPets.forEach(item => item.Details && (item.Details.HasCollar = true));
+        for (const item of inventory.KubrowPets) {
+            item.Details.HasCollar = true;
+        }
     }
     await handleTauMemories(inventory);
 

@@ -23,6 +23,7 @@ import type {
     IEquipmentDatabase,
     IEquipmentSelectionClient,
     IEquipmentSelectionDatabase,
+    IKubrowPetDatabase,
     ITraits
 } from "../equipmentTypes.ts";
 import type { ILoadoutConfigClientLegacy, ILoadOutPresets } from "../saveLoadoutTypes.ts";
@@ -31,6 +32,8 @@ import type { SlotNames } from "../purchaseTypes.ts";
 import type { IPendingTradeClient } from "../tradingTypes.ts";
 
 export type InventoryDatabaseEquipment = {
+    KubrowPets: IKubrowPetDatabase[];
+} & {
     [_ in TEquipmentKey]: IEquipmentDatabase[];
 };
 

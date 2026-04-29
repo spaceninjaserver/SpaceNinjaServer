@@ -8,7 +8,7 @@ export const maturePetController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId, "KubrowPets");
     const data = getJSONfromString<IMaturePetRequest>(String(req.body));
-    const details = inventory.KubrowPets.id(data.petId)!.Details!;
+    const details = inventory.KubrowPets.id(data.petId)!.Details;
     details.IsPuppy = data.revert;
     await inventory.save();
     res.json({

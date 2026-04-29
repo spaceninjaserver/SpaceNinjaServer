@@ -126,6 +126,7 @@ import type {
     ICrewShipWeaponEmplacementsDatabase,
     IEquipmentClient,
     IEquipmentDatabase,
+    IKubrowPetDatabase,
     IKubrowPetDetailsClient,
     IKubrowPetDetailsDatabase,
     ITraits
@@ -1149,7 +1150,6 @@ const EquipmentSchema = new Schema<IEquipmentDatabase>(
         Customization: crewShipCustomizationSchema,
         RailjackImage: FlavourItemSchema,
         CrewMembers: crewShipMembersSchema,
-        Details: detailsSchema,
         Favorite: Boolean,
         IsNew: Boolean,
         AltWeaponModeId: Types.ObjectId,
@@ -1192,10 +1192,18 @@ EquipmentSchema.set("toJSON", {
     }
 });
 
-const equipmentFields: Record<string, { type: (typeof EquipmentSchema)[] }> = {};
+const kubrowPetSchema = new Schema<IKubrowPetDatabase>().add(EquipmentSchema).add({
+    Details: { type: detailsSchema, required: true }
+});
+
+const equipmentFields: Record<string, { type: [Schema]; required: true }> = {
+    KubrowPets: { type: [kubrowPetSchema], required: true }
+};
 
 equipmentKeys.forEach(key => {
-    equipmentFields[key] = { type: [EquipmentSchema] };
+    if (key != "KubrowPets") {
+        equipmentFields[key] = { type: [EquipmentSchema], required: true };
+    }
 });
 
 const pendingRecipeSchema = new Schema<IPendingRecipeDatabase>(
@@ -2103,6 +2111,7 @@ export type InventoryDocumentProps = {
     CrewShipSalvagedWeaponSkins: Types.DocumentArray<IUpgradeDatabase>;
     PersonalTechProjects: Types.DocumentArray<IPersonalTechProjectDatabase>;
     CrewMembers: Types.DocumentArray<ICrewMemberDatabase>;
+    KubrowPets: Types.DocumentArray<IKubrowPetDatabase>;
     KubrowPetPrints: Types.DocumentArray<IKubrowPetPrintDatabase>;
     HybridFusionTreasures: Types.DocumentArray<IHybridFusionTreasure>;
 } & { [K in TEquipmentKey]: Types.DocumentArray<IEquipmentDatabase> };

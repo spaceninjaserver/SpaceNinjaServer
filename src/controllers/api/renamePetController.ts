@@ -9,7 +9,7 @@ export const renamePetController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId, "KubrowPets PremiumCredits PremiumCreditsFree");
     const data = getJSONfromString<IRenamePetRequest>(String(req.body));
-    const details = inventory.KubrowPets.id(data.petId)!.Details!;
+    const details = inventory.KubrowPets.id(data.petId)!.Details;
 
     details.Name = data.name;
 

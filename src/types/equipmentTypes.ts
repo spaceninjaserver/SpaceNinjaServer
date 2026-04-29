@@ -60,13 +60,16 @@ export interface IEquipmentDatabase {
     Customization?: ICrewShipCustomization;
     RailjackImage?: IFlavourItem;
     CrewMembers?: ICrewShipMembersDatabase;
-    Details?: IKubrowPetDetailsDatabase;
     Favorite?: boolean;
     IsNew?: boolean;
     AltWeaponModeId?: Types.ObjectId;
     UpgradeNodes?: number;
     ExtraRemaining?: number; // Revives remaining
     _id: Types.ObjectId;
+}
+
+export interface IKubrowPetDatabase extends IEquipmentDatabase {
+    Details: IKubrowPetDetailsDatabase;
 }
 
 export interface IEquipmentClient extends Omit<

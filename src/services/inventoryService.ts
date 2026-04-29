@@ -2893,13 +2893,6 @@ export const cleanupInventory = (inventory: TInventoryDatabaseDocument): void =>
         }
     }
 
-    for (const pet of inventory.KubrowPets) {
-        if (!pet.Details) {
-            logger.debug(`removing invalid pet ${pet.ItemType} (${pet._id.toString()})`);
-            inventory.KubrowPets.pull({ _id: pet._id });
-        }
-    }
-
     if (inventory.KubrowPetEggs) {
         addMiscItem(inventory, "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg", inventory.KubrowPetEggs.length);
         logger.debug(`migrated ${inventory.KubrowPetEggs.length} KubrowPetEggs to MiscItems`);
