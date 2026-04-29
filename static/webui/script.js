@@ -63,8 +63,10 @@ function openWebSocket() {
         }
         if ("config_reloaded" in msg) {
             refreshServerConfig();
-            // Our permissions may have changed, so resync them with the server.
-            ws.send(JSON.stringify({ allPermissions }));
+            if (window.authz) {
+                // Our permissions may have changed, so resync them with the server.
+                ws.send(JSON.stringify({ allPermissions }));
+            }
         }
         if ("auth_succ" in msg) {
             auth_pending = false;
@@ -241,6 +243,7 @@ function revalidateAuthz() {
 function logout() {
     localStorage.removeItem("email");
     localStorage.removeItem("password");
+    window.authz = undefined;
     invalidateCachedData();
 }
 
