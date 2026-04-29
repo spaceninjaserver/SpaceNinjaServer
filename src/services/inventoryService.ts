@@ -2931,6 +2931,23 @@ export const migrateFusionTreasures = (
     addFusionTreasures(inventory, arr);
 };
 
+export const createDefaultDialogue = (dialogueName: string): IDialogueDatabase => {
+    return {
+        Rank: 1,
+        Chemistry: 0,
+        AvailableDate: new Date(0),
+        AvailableGiftDate: new Date(0),
+        RankUpExpiry: new Date(0),
+        BountyChemExpiry: new Date(0),
+        QueuedDialogues: [],
+        Gifts: [],
+        Booleans: [],
+        Completed: [],
+        Counters: [],
+        DialogueName: dialogueName
+    };
+};
+
 export const getDialogue = (inventory: TInventoryDatabaseDocument, dialogueName: string): IDialogueDatabase => {
     inventory.DialogueHistory ??= {};
     inventory.DialogueHistory.Dialogues ??= [];
@@ -2938,19 +2955,7 @@ export const getDialogue = (inventory: TInventoryDatabaseDocument, dialogueName:
     if (!dialogue) {
         dialogue =
             inventory.DialogueHistory.Dialogues[
-                inventory.DialogueHistory.Dialogues.push({
-                    Rank: 0,
-                    Chemistry: 0,
-                    AvailableDate: new Date(0),
-                    AvailableGiftDate: new Date(0),
-                    RankUpExpiry: new Date(0),
-                    BountyChemExpiry: new Date(0),
-                    QueuedDialogues: [],
-                    Gifts: [],
-                    Booleans: [],
-                    Completed: [],
-                    DialogueName: dialogueName
-                }) - 1
+                inventory.DialogueHistory.Dialogues.push(createDefaultDialogue(dialogueName)) - 1
             ];
     }
     return dialogue;

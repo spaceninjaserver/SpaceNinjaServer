@@ -1,4 +1,4 @@
-import { getInventory } from "../../services/inventoryService.ts";
+import { createDefaultDialogue, getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 import type { IInventoryClient, IDialogueResetDateClient } from "../../types/inventoryTypes/inventoryTypes.ts";
@@ -36,11 +36,10 @@ export const clearDialogueHistoryController: RequestHandler = async (req, res) =
                 if (request.ClearPersist) {
                     inventory.DialogueHistory.Dialogues.splice(index, 1);
                 } else {
-                    inventory.DialogueHistory.Dialogues[index] = {
-                        ...inventory.DialogueHistory.Dialogues[index],
-                        Counters: inventory.DialogueHistory.Dialogues[index].Counters?.filter(x => x.Persist),
-                        Completed: inventory.DialogueHistory.Dialogues[index].Completed.filter(x => x.Persist)
-                    };
+                    const newObject = createDefaultDialogue(dialogueName);
+                    newObject.Counters = inventory.DialogueHistory.Dialogues[index].Counters?.filter(x => x.Persist);
+                    newObject.Completed = inventory.DialogueHistory.Dialogues[index].Completed.filter(x => x.Persist);
+                    inventory.DialogueHistory.Dialogues[index] = newObject;
                 }
             }
         }
