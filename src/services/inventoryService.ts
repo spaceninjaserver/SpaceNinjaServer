@@ -31,7 +31,7 @@ import type {
     ICollectibleEntry
 } from "../types/inventoryTypes/inventoryTypes.ts";
 import { InventorySlot, equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
-import type { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdate.ts";
+import type { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdateTypes.ts";
 import type { IKeyChainRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes.ts";
 import { logger } from "../utils/logger.ts";
 import {
@@ -1820,8 +1820,8 @@ export const addStanding = (
 
 // TODO: AffiliationMods support (Nightwave).
 export const updateGeneric = async (
-    data: IGenericUpdate,
-    accountId: string | Types.ObjectId
+    accountId: string | Types.ObjectId,
+    data: IGenericUpdate
 ): Promise<IUpdateNodeIntrosResponse> => {
     const inventory = await getInventory(
         accountId,
@@ -1841,7 +1841,29 @@ export const updateGeneric = async (
         inventory.NodeIntrosCompleted.push(node);
         logger.debug(`completed popup/dialogue/cutscene for ${node}`);
 
-        if (node == "TC2025") {
+        if (node == "TL21Start") {
+            await createMessage(accountId, [
+                {
+                    sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+                    msg: "",
+                    sub: "/Lotus/Language/Alerts/LotusGiftDesc",
+                    icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+                    highPriority: true,
+                    att: ["/Lotus/Upgrades/Skins/Weapons/Staff/TnRibbonStaffSkin"]
+                }
+            ]);
+        } else if (node == "TL21End") {
+            await createMessage(accountId, [
+                {
+                    sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+                    msg: "",
+                    sub: "/Lotus/Language/Alerts/LotusGiftDesc",
+                    icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+                    highPriority: true,
+                    att: ["/Lotus/Types/StoreItems/Packages/TannukaiBundle"]
+                }
+            ]);
+        } else if (node == "TC2025") {
             inventoryChanges.ShipDecorations = [
                 {
                     ItemType: "/Lotus/Types/Items/ShipDecos/TauGrineerLancerBobbleHead",
