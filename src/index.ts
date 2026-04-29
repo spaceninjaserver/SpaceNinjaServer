@@ -21,7 +21,7 @@ import mongoose from "mongoose";
 import path from "path";
 import child_process from "child_process";
 import { JSONStringify } from "json-with-bigint";
-import { startWebServer } from "./services/webService.ts";
+import { startWebServer, type IListenError } from "./services/webService.ts";
 import { syncConfigWithDatabase, validateConfig } from "./services/configWatcherService.ts";
 import { updateWorldStateCollections } from "./services/worldStateService.ts";
 import { repoDir } from "./helpers/pathHelper.ts";
@@ -60,7 +60,19 @@ mongoose
         logger.info("Connected to MongoDB");
         syncConfigWithDatabase();
 
-        startWebServer();
+        startWebServer().catch((err: IListenError) => {
+            if (err.port) {
+                logger.error(`Failed to bind port ${err.port}`);
+                if (process.platform == "win32") {
+                    logger.error(
+                        `You can check who has that port via powershell: Get-Process -Id (Get-NetTCPConnection -LocalPort ${err.port}).OwningProcess`
+                    );
+                }
+            } else {
+                logger.error(err.message);
+            }
+            process.exit(1);
+        });
 
         for (const [what, key] of [
             ["IRC", "ircExecutable"],

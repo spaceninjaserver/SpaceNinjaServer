@@ -65,11 +65,9 @@ chokidar.watch(configPath).on("change", () => {
             sendWsBroadcast({ ports: { http: config.httpPort, https: config.httpsPort } });
 
             void stopWebServer().then(() => {
-                try {
-                    startWebServer();
-                } catch (e) {
-                    logger.error(`Could not start up web server again: ${(e as Error).message}`);
-                }
+                startWebServer().catch((e: Error) => {
+                    logger.error(`Could not start up web server again: ${e.message}`);
+                });
             });
         } else {
             sendWsBroadcastToWebui({ config_reloaded: true });
