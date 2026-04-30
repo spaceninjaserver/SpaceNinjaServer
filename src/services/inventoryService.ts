@@ -103,7 +103,7 @@ import { getNightwaveSyndicateTag, getWorldState } from "./worldStateService.ts"
 import type { ICalendarSeason } from "../types/worldStateTypes.ts";
 import type { INemesisProfile } from "../helpers/nemesisHelpers.ts";
 import { generateNemesisProfile } from "../helpers/nemesisHelpers.ts";
-import type { TAccountDocument } from "./loginService.ts";
+import { buildVersionToInt, type TAccountDocument } from "./loginService.ts";
 import { KAHL_EPOCH, unixTimesInMs } from "../constants/timeConstants.ts";
 import { addString } from "../helpers/stringHelpers.ts";
 import type {
@@ -3367,7 +3367,8 @@ export const ensureUserHasSteelPathRewards = async (
                         attVisualOnly: true,
                         sub: "/Lotus/Language/Inbox/HardModeRewardMsgTitle",
                         icon: "/Lotus/Interface/Icons/Npcs/Teshin.png",
-                        highPriority: true
+                        highPriority: true,
+                        minBuildVersion: buildVersionToInt("2020.07.08.00.00") // U28.1 introduced Steel Path
                     }
                 ]);
             }
