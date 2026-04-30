@@ -195,7 +195,7 @@ dict = {
     detailedView_umbraEchoesLabel: `Umbra回响`,
 
     detailedView_u5ModEditLabel: `U5 Mod 编辑器`,
-    detailedView_u5ModEditDescription: `升级数值的范围会根据稀有度和所选装备变化.`,
+    detailedView_u5ModEditDescription: `[UNTRANSLATED] Range for upgrade values changes with rarity.`,
     detailedView_u5ModEditFits: `适配:`,
     detailedView_u5ModEditReqLevel: `所需等级:`,
 

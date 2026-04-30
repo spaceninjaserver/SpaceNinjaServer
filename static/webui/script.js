@@ -1111,14 +1111,10 @@ function fetchItemList() {
                         item.name = item.name.replace(/<.+>/g, "").trim();
                         const nameMap = {
                             "/Lotus/Language/Suits/RiftWalkAbilityName": loc("code_RiftWalkAbilityName"),
-                            "/Lotus/Upgrades/Modules/GrineerMeleeModule": loc("code_U5Mod").replace(
-                                "|TYPE|",
-                                loc("code_melee") + " [GrineerMeleeModule]"
-                            ),
-                            "/Lotus/Upgrades/Modules/TennoSwordModule": loc("code_U5Mod").replace(
-                                "|TYPE|",
-                                loc("code_melee") + " [TennoSwordModule]"
-                            ),
+                            "/Lotus/Upgrades/Modules/GrineerMeleeModule":
+                                loc("code_U5Mod").replace("|TYPE|", loc("code_melee")) + " [GrineerMeleeModule]",
+                            "/Lotus/Upgrades/Modules/TennoSwordModule":
+                                loc("code_U5Mod").replace("|TYPE|", loc("code_melee")) + " [TennoSwordModule]",
 
                             "/Lotus/Upgrades/Modules/GrineerPistolModule": loc("code_U5Mod").replace(
                                 "|TYPE|",
@@ -4066,14 +4062,14 @@ async function populateDetailedViewRoute() {
             upgradeFields.innerHTML = "";
             const fits = itemMap[item.ItemType].fits;
             const fp = JSON.parse(item.UpgradeFingerprint);
-            const statAtten = fits.find(fit => fit.type == fp.fits).statAtten || 1;
+            // const statAtten = fits.find(fit => fit.type == fp.fits).statAtten || 1;
+            const statAtten = 1;
 
             fits.forEach(fit => {
                 const option = document.createElement("option");
                 option.value = fit.type;
-                option.textContent =
-                    (itemMap[fit.type]?.name ?? fit.type) +
-                    (fit.statAtten ? ` (${loc("code_statAtten")}: ${fit.statAtten || 1})` : "");
+                option.textContent = itemMap[fit.type]?.name ?? fit.type;
+                // + (fit.statAtten ? ` (${loc("code_statAtten")}: ${fit.statAtten || 1})` : "");
                 fitsSelect.appendChild(option);
             });
 

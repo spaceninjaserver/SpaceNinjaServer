@@ -195,7 +195,7 @@ dict = {
     detailedView_umbraEchoesLabel: `Эхо Умбры`,
 
     detailedView_u5ModEditLabel: `Редакор модов из Обновления 5`,
-    detailedView_u5ModEditDescription: `Диапазон значений улучшения зависит от редкости и выбранного снаряжения.`,
+    detailedView_u5ModEditDescription: `Диапазон значений улучшения зависит от редкости.`,
     detailedView_u5ModEditFits: `Подходит:`,
     detailedView_u5ModEditReqLevel: `Требуемый уровень:`,
 
