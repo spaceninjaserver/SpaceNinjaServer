@@ -4,11 +4,10 @@ import { Inbox } from "../models/inboxModel.ts";
 import type { QueryFilter, Types } from "mongoose";
 import { buildVersionToInt } from "./loginService.ts";
 
-export const getMessagesSorted = async (
+export const getInboxFilter = (
     accountId: string | Types.ObjectId,
-    buildLabel: string | undefined,
-    afterId?: string | Types.ObjectId
-): Promise<TMessageDocument[]> => {
+    buildLabel: string | undefined
+): QueryFilter<IMessageDatabase> => {
     const query: QueryFilter<IMessageDatabase> = { ownerId: accountId };
     if (buildLabel) {
         query.$or = [
@@ -16,6 +15,15 @@ export const getMessagesSorted = async (
             { minBuildVersion: { $lte: buildVersionToInt(buildLabel) } }
         ];
     }
+    return query;
+};
+
+export const getMessagesSorted = async (
+    accountId: string | Types.ObjectId,
+    buildLabel: string | undefined,
+    afterId?: string | Types.ObjectId
+): Promise<TMessageDocument[]> => {
+    const query = getInboxFilter(accountId, buildLabel);
     if (afterId) {
         query._id = { $gt: afterId };
     }

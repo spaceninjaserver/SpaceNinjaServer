@@ -65,7 +65,7 @@ import { DailyDeal } from "../../models/worldStateModel.ts";
 import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { generateRewardSeed } from "../../services/rngService.ts";
 import { getInvasionByOid, getWorldState } from "../../services/worldStateService.ts";
-import { createMessage } from "../../services/inboxService.ts";
+import { createMessage, getInboxFilter } from "../../services/inboxService.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 import { PendingTrade } from "../../models/tradingModel.ts";
 import { exportTrade } from "../../services/tradingService.ts";
@@ -369,7 +369,7 @@ export const getInventoryResponse = async (
     const [inventoryWithLoadOutPresets, ships, latestMessage, pendingTrades] = await Promise.all([
         inventory.populate<{ LoadOutPresets: ILoadoutDatabase }>("LoadOutPresets"),
         Ship.find({ ShipOwnerId: inventory.accountOwnerId }),
-        Inbox.findOne({ ownerId: inventory.accountOwnerId }, "_id").sort({ date: -1 }),
+        Inbox.findOne(getInboxFilter(inventory.accountOwnerId, buildLabel), "_id").sort({ date: -1 }),
         PendingTrade.find({ $or: [{ a: inventory.accountOwnerId }, { b: inventory.accountOwnerId }] })
     ]);
     const inventoryResponse = inventoryWithLoadOutPresets.toJSON<IInventoryClient>();
