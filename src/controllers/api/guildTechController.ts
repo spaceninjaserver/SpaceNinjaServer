@@ -252,7 +252,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
             await Promise.all([guild.save(), inventory.save(), guildMember.save()]);
             res.json({
                 InventoryChanges: inventoryChanges,
-                Vault: getGuildVault(guild)
+                Vault: await getGuildVault(guild, account.BuildLabel)
             });
             broadcastGuildUpdate(req, guild._id.toString());
         }

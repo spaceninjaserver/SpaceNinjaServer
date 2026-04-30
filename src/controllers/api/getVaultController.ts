@@ -11,14 +11,14 @@ export const getVaultController: RequestHandler = async (req, res) => {
 
     const allianceId = req.query.allianceId as string;
     if (!allianceId) {
-        res.json({ Vault: getGuildVault(guild) });
+        res.json({ Vault: await getGuildVault(guild, account.BuildLabel) });
         return;
     }
 
     if (guild.AllianceId?.toString() === allianceId) {
         const alliance = await Alliance.findById(allianceId);
         if (alliance) {
-            res.json({ AllianceVault: getAllianceVault(alliance) });
+            res.json({ AllianceVault: await getAllianceVault(alliance, account.BuildLabel) });
             return;
         }
     }

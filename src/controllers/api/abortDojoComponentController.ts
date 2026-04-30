@@ -5,6 +5,7 @@ import {
     hasGuildPermission,
     hasPermissionToDecorateComponent,
     removeDojoDeco,
+    removeVaultPendingRecipe,
     removeDojoRoom
 } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
@@ -18,20 +19,29 @@ export const abortDojoComponentGetController: RequestHandler = async (req, res) 
 
 export const abortDojoComponentPostController: RequestHandler = async (req, res) => {
     const request = JSON.parse(String(req.body)) as IAbortDojoComponentRequest;
-    res.json(await abortDojoComponent(req, request.ComponentId, request.DecoId));
+    res.json(await abortDojoComponent(req, request.ComponentId, request.DecoId, request.ResultType));
 };
 
 const abortDojoComponent = async (
     req: Request,
     componentId: string,
-    decoId?: string
+    decoId?: string,
+    resultType?: string
 ): Promise<{ DojoRequestStatus: number } | IDojoClient> => {
     const account = await getAccountForRequest(req);
     const accountId = account._id.toString();
     const inventory = await getInventory(accountId, "GuildId LevelKeys");
     const guild = await getGuildForRequestEx(req, inventory);
 
-    if (decoId) {
+    if (resultType) {
+        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Tactician))) {
+            return { DojoRequestStatus: -1 };
+        }
+
+        removeVaultPendingRecipe(guild, componentId, resultType);
+        await guild.save();
+        return await getDojoClient(guild, 0, undefined, account.BuildLabel);
+    } else if (decoId) {
         if (!hasAccessToDojo(inventory) || !(await hasPermissionToDecorateComponent(guild, accountId, componentId))) {
             return { DojoRequestStatus: -1 };
         }
@@ -54,4 +64,5 @@ interface IAbortDojoComponentRequest {
     DecoType?: string;
     ComponentId: string;
     DecoId?: string;
+    ResultType?: string;
 }

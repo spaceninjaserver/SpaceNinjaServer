@@ -42,7 +42,8 @@ export const createAllianceController: RequestHandler = async (req, res) => {
                 GuildPermission.Promoter |
                 GuildPermission.Recruiter |
                 GuildPermission.Treasurer |
-                GuildPermission.ChatModerator
+                GuildPermission.ChatModerator |
+                GuildPermission.Tactician
         })
     ]);
     res.json(await getAllianceClient(alliance, guild, account.BuildLabel));

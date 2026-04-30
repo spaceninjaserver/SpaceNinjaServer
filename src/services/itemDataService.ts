@@ -474,6 +474,34 @@ export const supplementalRecipes: Record<string, IRecipe> = {
             }
         ],
         tradable: false
+    },
+    "/Lotus/Types/Game/SolarRails/BasicSolarRailBlueprint": {
+        resultType: "/Lotus/Types/Game/SolarRails/BasicSolarRail",
+        buildPrice: 500000,
+        buildTime: 86400,
+        skipBuildTimePrice: 0,
+        consumeOnUse: false,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Gallium",
+                ItemCount: 25
+            },
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Rubedo",
+                ItemCount: 15000
+            },
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Plastids",
+                ItemCount: 15000
+            },
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/ControlModule",
+                ItemCount: 25
+            }
+        ],
+        tradable: false
     }
 };
 
@@ -1459,6 +1487,9 @@ export const getItemCategoryByUniqueName = (uniqueName: string): string | undefi
     }
     if (uniqueName in ExportWeapons) {
         return ExportWeapons[uniqueName].productCategory;
+    }
+    if (uniqueName == "/Lotus/Types/Game/SolarRails/BasicSolarRail") {
+        return "SolarRails";
     }
     return undefined;
 };

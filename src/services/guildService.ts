@@ -1,12 +1,11 @@
 import type { Request } from "express";
 import type { TAccountDocument } from "./loginService.ts";
 import { addLevelKeys, addRecipes, combineInventoryChanges, getInventory } from "./inventoryService.ts";
-import type { TGuildDatabaseDocument } from "../models/guildModel.ts";
+import type { TAllianceDatabaseDocument, TGuildDatabaseDocument } from "../models/guildModel.ts";
 import { Alliance, AllianceMember, Guild, GuildAd, GuildMember } from "../models/guildModel.ts";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 import type {
     IAllianceClient,
-    IAllianceDatabase,
     IAllianceMemberClient,
     IDojoClient,
     IDojoComponentClient,
@@ -18,8 +17,10 @@ import type {
     IGuildClient,
     IGuildMemberClient,
     IGuildMemberDatabase,
-    IGuildVault,
-    ITechProjectDatabase
+    IGuildVaultClient,
+    ITechProjectDatabase,
+    IVaultDatabase,
+    IVaultPendingRecipeClient
 } from "../types/guildTypes.ts";
 import { GuildPermission } from "../types/guildTypes.ts";
 import { toMongoDate, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
@@ -37,6 +38,7 @@ import { createMessage } from "./inboxService.ts";
 import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "./friendService.ts";
 import type { ITypeCount } from "../types/commonTypes.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
+import { getItemCategoryByUniqueName } from "./itemDataService.ts";
 
 export const getGuildForRequest = async (
     req: Request,
@@ -142,7 +144,7 @@ export const getGuildClient = async (
         Ranks: ranks,
         Tier: guild.Tier,
         Emblem: guild.Emblem,
-        Vault: getGuildVault(guild),
+        Vault: await getGuildVault(guild, account.BuildLabel),
         ActiveDojoColorResearch: guild.ActiveDojoColorResearch,
         Class: guild.Class,
         XP: guild.XP,
@@ -161,8 +163,18 @@ export const getGuildClient = async (
     };
 };
 
-export const getGuildVault = (guild: TGuildDatabaseDocument): IGuildVault => {
-    return {
+export const getGuildVault = async (guild: TGuildDatabaseDocument, buildLabel?: string): Promise<IGuildVaultClient> => {
+    const { vault, needsSave } = getGuildVaultEx(guild, buildLabel);
+    if (needsSave) await guild.save();
+    return vault;
+};
+
+export const getGuildVaultEx = (
+    guild: TGuildDatabaseDocument,
+    buildLabel?: string,
+    needsSave: boolean = false
+): { vault: IGuildVaultClient; needsSave: boolean } => {
+    const vault: IGuildVaultClient = {
         DojoRefundRegularCredits: guild.VaultRegularCredits,
         DojoRefundMiscItems: guild.VaultMiscItems,
         DojoRefundPremiumCredits: guild.VaultPremiumCredits,
@@ -175,12 +187,150 @@ export const getGuildVault = (guild: TGuildDatabaseDocument): IGuildVault => {
         MaxMissionBattlePay: guild.MaxMissionBattlePay,
         MinMissionBattlePay: guild.MinMissionBattlePay
     };
+
+    {
+        const pendingRecipes: Record<string, IVaultPendingRecipeClient[]> = {};
+        const toRemove: Map<string, Set<string>> = new Map();
+        guild.VaultPendingRecipes ??= [];
+        guild.VaultPendingRecipes.forEach(recipe => {
+            const category = getItemCategoryByUniqueName(recipe.Type);
+            if (!category) return;
+
+            if (recipe.CompletionTime && Date.now() >= recipe.CompletionTime.getTime()) {
+                addVaultInventoryItems(guild, [{ ItemType: recipe.Type, ItemCount: 1 }]);
+                const key = recipe.ParentRoom.toString();
+                if (!toRemove.has(key)) toRemove.set(key, new Set());
+                toRemove.get(key)!.add(recipe.Type);
+                return;
+            }
+
+            pendingRecipes[category] ??= [];
+            pendingRecipes[category].push({
+                ParentGuildId: toOid2(recipe.ParentGuildId, buildLabel),
+                ParentRoom: toOid2(recipe.ParentRoom, buildLabel),
+                MiscItems: recipe.MiscItems,
+                RegularCredits: recipe.RegularCredits,
+                RushPlatinum: recipe.RushPlatinum,
+                Type: recipe.Type,
+                ...(recipe.CompletionTime && {
+                    CompletionTime: toMongoDate(recipe.CompletionTime),
+                    TimeRemaining: Math.trunc((recipe.CompletionTime.getTime() - Date.now()) / 1000)
+                })
+            });
+        });
+
+        toRemove.forEach((recipeSet, key) => {
+            recipeSet.forEach(type => {
+                logger.debug(`removing completed recipe ${type} in ${key}`);
+                guild.VaultPendingRecipes ??= [];
+                guild.VaultPendingRecipes.splice(
+                    guild.VaultPendingRecipes.findIndex(x => x.Type == type && x.ParentRoom.equals(key)),
+                    1
+                );
+            });
+            needsSave = true;
+        });
+
+        if (Object.keys(pendingRecipes).length > 0) vault.PendingRecipes = pendingRecipes;
+    }
+
+    {
+        const inventoryItems: Record<string, ITypeCount[]> = {};
+        for (const item of guild.VaultInventoryItems ?? []) {
+            const productCategory = getItemCategoryByUniqueName(item.ItemType);
+            if (!productCategory) continue;
+            inventoryItems[productCategory] ??= [];
+            inventoryItems[productCategory].push(item);
+        }
+        if (Object.keys(inventoryItems).length > 0) vault.InventoryItems = inventoryItems;
+    }
+
+    return { vault, needsSave };
 };
 
-export const getAllianceVault = (alliance: IAllianceDatabase): IGuildVault => {
-    return {
-        DojoRefundRegularCredits: alliance.VaultRegularCredits
+export const getAllianceVault = async (
+    alliance: TAllianceDatabaseDocument,
+    buildLabel?: string
+): Promise<IGuildVaultClient> => {
+    const { vault, needsSave } = getAllianceVaultEx(alliance, buildLabel);
+    if (needsSave) await alliance.save();
+    return vault;
+};
+
+export const getAllianceVaultEx = (
+    alliance: TAllianceDatabaseDocument,
+    buildLabel?: string,
+    needsSave: boolean = false
+): { vault: IGuildVaultClient; needsSave: boolean } => {
+    const vault: IGuildVaultClient = {
+        DojoRefundRegularCredits: alliance.VaultRegularCredits,
+        DojoRefundMiscItems: alliance.VaultMiscItems,
+        DojoRefundPremiumCredits: alliance.VaultPremiumCredits,
+
+        MaxBattlePayReserve: alliance.MaxBattlePayReserve,
+        MaxMissionBattlePay: alliance.MaxMissionBattlePay,
+        MinMissionBattlePay: alliance.MinMissionBattlePay
     };
+
+    // it just softlocks game for some reason
+    {
+        const pendingRecipes: Record<string, IVaultPendingRecipeClient[]> = {};
+        const toRemove: Map<string, Set<string>> = new Map();
+        alliance.VaultPendingRecipes ??= [];
+        alliance.VaultPendingRecipes.forEach(recipe => {
+            const category = getItemCategoryByUniqueName(recipe.Type);
+            if (!category) return;
+
+            if (recipe.CompletionTime && Date.now() >= recipe.CompletionTime.getTime()) {
+                addVaultInventoryItems(alliance, [{ ItemType: recipe.Type, ItemCount: 1 }]);
+                const key = recipe.ParentRoom.toString();
+                if (!toRemove.has(key)) toRemove.set(key, new Set());
+                toRemove.get(key)!.add(recipe.Type);
+                return;
+            }
+
+            pendingRecipes[category] ??= [];
+            pendingRecipes[category].push({
+                ParentGuildId: toOid2(recipe.ParentGuildId, buildLabel),
+                ParentRoom: toOid2(recipe.ParentRoom, buildLabel),
+                MiscItems: recipe.MiscItems,
+                RegularCredits: recipe.RegularCredits,
+                RushPlatinum: recipe.RushPlatinum,
+                Type: recipe.Type,
+                ...(recipe.CompletionTime && {
+                    CompletionTime: toMongoDate(recipe.CompletionTime),
+                    TimeRemaining: Math.trunc((recipe.CompletionTime.getTime() - Date.now()) / 1000)
+                })
+            });
+        });
+
+        toRemove.forEach((recipeSet, key) => {
+            recipeSet.forEach(type => {
+                logger.debug(`removing completed recipe ${type} in ${key}`);
+                alliance.VaultPendingRecipes ??= [];
+                alliance.VaultPendingRecipes.splice(
+                    alliance.VaultPendingRecipes.findIndex(x => x.Type == type && x.ParentRoom.equals(key)),
+                    1
+                );
+            });
+            needsSave = true;
+        });
+
+        if (Object.keys(pendingRecipes).length > 0) vault.PendingRecipes = pendingRecipes;
+    }
+
+    {
+        const inventoryItems: Record<string, ITypeCount[]> = {};
+        for (const item of alliance.VaultInventoryItems ?? []) {
+            const productCategory = getItemCategoryByUniqueName(item.ItemType);
+            if (!productCategory) continue;
+            inventoryItems[productCategory] ??= [];
+            inventoryItems[productCategory].push(item);
+        }
+        if (Object.keys(inventoryItems).length > 0) vault.InventoryItems = inventoryItems;
+    }
+
+    return { vault, needsSave };
 };
 
 export const getDojoClient = async (
@@ -189,6 +339,8 @@ export const getDojoClient = async (
     componentId?: Types.ObjectId | string,
     buildLabel?: string
 ): Promise<IDojoClient> => {
+    const v = getGuildVaultEx(guild, buildLabel);
+    let needSave = v.needsSave;
     const dojo: IDojoClient = {
         _id: toOid2(guild._id, buildLabel),
         Name: guild.Name,
@@ -199,7 +351,7 @@ export const getDojoClient = async (
         CeremonyResetDate: guild.CeremonyResetDate ? toMongoDate(guild.CeremonyResetDate) : undefined,
         FixedContributions: true,
         DojoRevision: 1,
-        Vault: getGuildVault(guild),
+        Vault: v.vault,
         RevisionTime: Math.round(Date.now() / 1000),
         Energy: guild.DojoEnergy,
         Capacity: guild.DojoCapacity,
@@ -208,7 +360,6 @@ export const getDojoClient = async (
     };
     const roomsToRemove: Types.ObjectId[] = [];
     const decosToRemoveNoRefund: { componentId: Types.ObjectId; decoId: Types.ObjectId }[] = [];
-    let needSave = false;
     for (const dojoComponent of guild.DojoComponents) {
         if (!componentId || dojoComponent._id.equals(componentId)) {
             const clientComponent: IDojoComponentClient = {
@@ -346,7 +497,11 @@ export const getDojoClient = async (
 };
 
 const guildTierScalingFactors = [0.01, 0.03, 0.1, 0.3, 1];
-export const scaleRequiredCount = (tier: number, count: number): number => {
+export const scaleRequiredCount = (tier: number, count: number, disableScaling?: boolean): number => {
+    if (disableScaling) {
+        return count;
+    }
+
     return Math.max(1, Math.trunc(count * guildTierScalingFactors[tier - 1]));
 };
 
@@ -402,6 +557,19 @@ export const removeDojoDeco = (
     refundDojoDeco(guild, component, deco);
 };
 
+export const removeVaultPendingRecipe = (
+    vault: IVaultDatabase,
+    componentId: Types.ObjectId | string,
+    recipeType: string
+): void => {
+    vault.VaultPendingRecipes ??= [];
+    const recipe = vault.VaultPendingRecipes.splice(
+        vault.VaultPendingRecipes.findIndex(x => x.Type == recipeType && x.ParentRoom.equals(componentId)),
+        1
+    )[0];
+    moveResourcesToVault(vault, recipe);
+};
+
 export const refundDojoDeco = (
     guild: TGuildDatabaseDocument,
     component: IDojoComponentDatabase,
@@ -435,32 +603,32 @@ export const refundDojoDeco = (
     moveResourcesToVault(guild, deco); // Refund resources spent on construction
 };
 
-const moveResourcesToVault = (guild: TGuildDatabaseDocument, component: IDojoContributable): void => {
+const moveResourcesToVault = (vault: IVaultDatabase, component: IDojoContributable): void => {
     if (component.RegularCredits) {
-        guild.VaultRegularCredits ??= 0;
-        guild.VaultRegularCredits += component.RegularCredits;
+        vault.VaultRegularCredits ??= 0;
+        vault.VaultRegularCredits += component.RegularCredits;
     }
     if (component.MiscItems) {
-        addVaultMiscItems(guild, component.MiscItems);
+        addVaultMiscItems(vault, component.MiscItems);
     }
     if (component.RushPlatinum) {
-        guild.VaultPremiumCredits ??= 0;
-        guild.VaultPremiumCredits += component.RushPlatinum;
+        vault.VaultPremiumCredits ??= 0;
+        vault.VaultPremiumCredits += component.RushPlatinum;
     }
 };
 
-export const getVaultMiscItemCount = (guild: TGuildDatabaseDocument, itemType: string): number => {
-    return guild.VaultMiscItems?.find(x => x.ItemType == itemType)?.ItemCount ?? 0;
+export const getVaultMiscItemCount = (vault: IVaultDatabase, itemType: string): number => {
+    return vault.VaultMiscItems?.find(x => x.ItemType == itemType)?.ItemCount ?? 0;
 };
 
-export const addVaultMiscItems = (guild: TGuildDatabaseDocument, miscItems: ITypeCount[]): void => {
-    guild.VaultMiscItems ??= [];
+export const addVaultMiscItems = (vault: IVaultDatabase, miscItems: ITypeCount[]): void => {
+    vault.VaultMiscItems ??= [];
     for (const item of miscItems) {
-        const vaultItem = guild.VaultMiscItems.find(x => x.ItemType == item.ItemType);
+        const vaultItem = vault.VaultMiscItems.find(x => x.ItemType == item.ItemType);
         if (vaultItem) {
             vaultItem.ItemCount += item.ItemCount;
         } else {
-            guild.VaultMiscItems.push(item);
+            vault.VaultMiscItems.push(item);
         }
     }
 };
@@ -487,6 +655,18 @@ export const addVaultFusionTreasures = (guild: TGuildDatabaseDocument, fusionTre
             vaultItem.ItemCount += item.ItemCount;
         } else {
             guild.VaultFusionTreasures.push(item);
+        }
+    }
+};
+
+export const addVaultInventoryItems = (vault: IVaultDatabase, miscItems: ITypeCount[]): void => {
+    vault.VaultInventoryItems ??= [];
+    for (const item of miscItems) {
+        const vaultItem = vault.VaultInventoryItems.find(x => x.ItemType == item.ItemType);
+        if (vaultItem) {
+            vaultItem.ItemCount += item.ItemCount;
+        } else {
+            vault.VaultInventoryItems.push(item);
         }
     }
 };
@@ -865,7 +1045,7 @@ export const deleteAlliance = async (allianceId: Types.ObjectId): Promise<void> 
 };
 
 export const getAllianceClient = async (
-    alliance: IAllianceDatabase,
+    alliance: TAllianceDatabaseDocument,
     guild: TGuildDatabaseDocument,
     buildLabel: string | undefined
 ): Promise<IAllianceClient> => {
@@ -890,7 +1070,7 @@ export const getAllianceClient = async (
         MOTD: alliance.MOTD,
         LongMOTD: alliance.LongMOTD,
         Clans: clans,
-        AllianceVault: getAllianceVault(alliance)
+        AllianceVault: await getAllianceVault(alliance, buildLabel)
     };
 };
 

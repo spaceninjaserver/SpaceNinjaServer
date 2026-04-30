@@ -18,6 +18,7 @@ import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
 import type { IDojoBuild } from "warframe-public-export-plus";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
+import { getRecipe } from "../../services/itemDataService.ts";
 
 interface IContributeToDojoComponentRequest {
     ComponentId?: string; // req.query.componentId in U10
@@ -33,6 +34,8 @@ interface IContributeToDojoComponentRequest {
     VaultMiscItems?: IMiscItem[];
     IngredientContributions?: IMiscItem[];
     VaultIngredientContributions?: IMiscItem[];
+
+    ResultType?: string;
 }
 
 export const contributeToDojoComponentController: RequestHandler = async (req, res) => {
@@ -56,9 +59,27 @@ export const contributeToDojoComponentController: RequestHandler = async (req, r
     request.IngredientContributions ??= request.MiscItems;
     request.VaultIngredientContributions ??= request.VaultMiscItems;
     const component = guild.DojoComponents.id(request.ComponentId)!;
-
     const inventoryChanges: IInventoryChanges = {};
-    if (!component.CompletionTime) {
+    if (request.ResultType) {
+        guild.VaultPendingRecipes ??= [];
+        if (!guild.VaultPendingRecipes.find(r => String(r.ParentRoom) == request.ComponentId)) {
+            throw new Error("attempt to contribute to non-existent vault recipe?!");
+        }
+
+        const cRecipe = guild.VaultPendingRecipes.find(r => String(r.ParentRoom) == request.ComponentId)!;
+        const recipe = getRecipe(cRecipe.RecipeType)!;
+        const meta: IDojoBuild = {
+            name: "",
+            description: "",
+            icon: "",
+            time: recipe.buildTime,
+            price: recipe.buildPrice,
+            ingredients: recipe.ingredients,
+            resultType: recipe.resultType,
+            skipTimePrice: recipe.skipBuildTimePrice
+        };
+        processContribution(guild, guildMember, request, inventory, inventoryChanges, meta, cRecipe, true);
+    } else if (!component.CompletionTime) {
         // Room is in "Collecting Materials" state
         if (request.DecoId) {
             throw new Error("attempt to contribute to a deco in an unfinished room?!");
@@ -92,7 +113,8 @@ const processContribution = (
     inventory: TInventoryDatabaseDocument,
     inventoryChanges: IInventoryChanges,
     meta: IDojoBuild,
-    component: IDojoContributable
+    component: IDojoContributable,
+    disableScaling?: boolean
 ): void => {
     component.RegularCredits ??= 0;
     if (request.RegularCredits) {
@@ -107,10 +129,11 @@ const processContribution = (
         component.RegularCredits += request.VaultCredits;
         guild.VaultRegularCredits! -= request.VaultCredits;
     }
-    if (component.RegularCredits > scaleRequiredCount(guild.Tier, meta.price)) {
+    if (component.RegularCredits > scaleRequiredCount(guild.Tier, meta.price, disableScaling)) {
         guild.VaultRegularCredits ??= 0;
-        guild.VaultRegularCredits += component.RegularCredits - scaleRequiredCount(guild.Tier, meta.price);
-        component.RegularCredits = scaleRequiredCount(guild.Tier, meta.price);
+        guild.VaultRegularCredits +=
+            component.RegularCredits - scaleRequiredCount(guild.Tier, meta.price, disableScaling);
+        component.RegularCredits = scaleRequiredCount(guild.Tier, meta.price, disableScaling);
     }
 
     component.MiscItems ??= [];
@@ -121,10 +144,11 @@ const processContribution = (
                 const ingredientMeta = meta.ingredients.find(x => x.ItemType == ingredientContribution.ItemType)!;
                 if (
                     componentMiscItem.ItemCount + ingredientContribution.ItemCount >
-                    scaleRequiredCount(guild.Tier, ingredientMeta.ItemCount)
+                    scaleRequiredCount(guild.Tier, ingredientMeta.ItemCount, disableScaling)
                 ) {
                     ingredientContribution.ItemCount =
-                        scaleRequiredCount(guild.Tier, ingredientMeta.ItemCount) - componentMiscItem.ItemCount;
+                        scaleRequiredCount(guild.Tier, ingredientMeta.ItemCount, disableScaling) -
+                        componentMiscItem.ItemCount;
                 }
                 componentMiscItem.ItemCount += ingredientContribution.ItemCount;
             } else {
@@ -142,10 +166,11 @@ const processContribution = (
                 const ingredientMeta = meta.ingredients.find(x => x.ItemType == ingredientContribution.ItemType)!;
                 if (
                     componentMiscItem.ItemCount + ingredientContribution.ItemCount >
-                    scaleRequiredCount(guild.Tier, ingredientMeta.ItemCount)
+                    scaleRequiredCount(guild.Tier, ingredientMeta.ItemCount, disableScaling)
                 ) {
                     ingredientContribution.ItemCount =
-                        scaleRequiredCount(guild.Tier, ingredientMeta.ItemCount) - componentMiscItem.ItemCount;
+                        scaleRequiredCount(guild.Tier, ingredientMeta.ItemCount, disableScaling) -
+                        componentMiscItem.ItemCount;
                 }
                 componentMiscItem.ItemCount += ingredientContribution.ItemCount;
             } else {
@@ -162,13 +187,13 @@ const processContribution = (
         inventoryChanges.MiscItems = miscItemChanges;
     }
 
-    if (component.RegularCredits >= scaleRequiredCount(guild.Tier, meta.price)) {
+    if (component.RegularCredits >= scaleRequiredCount(guild.Tier, meta.price, disableScaling)) {
         let fullyFunded = true;
         for (const ingredient of meta.ingredients) {
             const componentMiscItem = component.MiscItems.find(x => x.ItemType == ingredient.ItemType);
             if (
                 !componentMiscItem ||
-                componentMiscItem.ItemCount < scaleRequiredCount(guild.Tier, ingredient.ItemCount)
+                componentMiscItem.ItemCount < scaleRequiredCount(guild.Tier, ingredient.ItemCount, disableScaling)
             ) {
                 fullyFunded = false;
                 break;

@@ -13,7 +13,8 @@ import type {
     IDojoLeaderboardEntry,
     IGuildAdDatabase,
     IAllianceDatabase,
-    IAllianceMemberDatabase
+    IAllianceMemberDatabase,
+    IVaultPendingRecipeDatabase
 } from "../types/guildTypes.ts";
 import { GuildPermission } from "../types/guildTypes.ts";
 import type { Document, Model } from "mongoose";
@@ -104,11 +105,11 @@ const guildRankSchema = new Schema<IGuildRank>(
 const defaultRanks: IGuildRank[] = [
     {
         Name: "/Lotus/Language/Game/Rank_Creator",
-        Permissions: GuildPermission.Host | 16351
+        Permissions: GuildPermission.Tactician | GuildPermission.Host | 16351
     },
     {
         Name: "/Lotus/Language/Game/Rank_Warlord",
-        Permissions: GuildPermission.Host | 16351
+        Permissions: GuildPermission.Tactician | GuildPermission.Host | 16351
     },
     {
         Name: "/Lotus/Language/Game/Rank_General",
@@ -199,6 +200,20 @@ goalProgressSchema.set("toJSON", {
     }
 });
 
+const pendingRecipeSchema = new Schema<IVaultPendingRecipeDatabase>(
+    {
+        ParentRoom: Types.ObjectId,
+        ParentGuildId: Types.ObjectId,
+        MiscItems: { type: [typeCountSchema], default: undefined },
+        RegularCredits: Number,
+        RushPlatinum: Number,
+        CompletionTime: Date,
+        Type: String,
+        RecipeType: String
+    },
+    { _id: false }
+);
+
 const guildSchema = new Schema<IGuildDatabase>(
     {
         // SNS guild cheats
@@ -230,6 +245,8 @@ const guildSchema = new Schema<IGuildDatabase>(
         VaultFusionTreasures: { type: [fusionTreasuresSchema], default: undefined },
         VaultDecoRecipes: { type: [typeCountSchema], default: undefined },
         VaultRecipes: { type: [typeCountSchema], default: undefined },
+        VaultInventoryItems: { type: [typeCountSchema], default: undefined },
+        VaultPendingRecipes: { type: [pendingRecipeSchema], default: undefined },
         MaxBattlePayReserve: Number,
         MaxMissionBattlePay: Number,
         MinMissionBattlePay: Number,
@@ -318,12 +335,29 @@ const allianceSchema = new Schema<IAllianceDatabase>({
     MOTD: longMOTDSchema,
     LongMOTD: longMOTDSchema,
     Emblem: Boolean,
-    VaultRegularCredits: Number
+    VaultRegularCredits: Number,
+    VaultPremiumCredits: Number,
+    VaultRecipes: { type: [typeCountSchema], default: undefined },
+    VaultMiscItems: { type: [typeCountSchema], default: undefined },
+    VaultInventoryItems: { type: [typeCountSchema], default: undefined },
+    VaultPendingRecipes: { type: [pendingRecipeSchema], default: undefined },
+    MaxBattlePayReserve: Number,
+    MaxMissionBattlePay: Number,
+    MinMissionBattlePay: Number
 });
 
 allianceSchema.index({ Name: 1 }, { unique: true });
 
-export const Alliance = model<IAllianceDatabase>("Alliance", allianceSchema);
+type AllianceModel = Model<IAllianceDatabase>;
+
+export const Alliance = model<IAllianceDatabase, AllianceModel>("Alliance", allianceSchema);
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export type TAllianceDatabaseDocument = Document<unknown, {}, IAllianceDatabase> &
+    IAllianceDatabase & {
+        _id: Types.ObjectId;
+        __v: number;
+    };
 
 const allianceMemberSchema = new Schema<IAllianceMemberDatabase>({
     allianceId: { type: Schema.Types.ObjectId, required: true },

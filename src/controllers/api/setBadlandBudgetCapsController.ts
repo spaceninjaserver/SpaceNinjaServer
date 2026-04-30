@@ -4,7 +4,7 @@ import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
-import { Guild } from "../../models/guildModel.ts";
+import { Alliance, Guild } from "../../models/guildModel.ts";
 
 export const setBadlandBudgetCapsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -15,10 +15,18 @@ export const setBadlandBudgetCapsController: RequestHandler = async (req, res) =
         return;
     }
     const payload = getJSONfromString<ISetBadlandBudgetCapsRequest>(String(req.body));
-    guild.MaxBattlePayReserve = payload.MaxBattlePayReserve;
-    guild.MaxMissionBattlePay = payload.MaxMissionBattlePay;
-    guild.MinMissionBattlePay = payload.MinMissionBattlePay;
-    await guild.save();
+    if (payload.Alliance) {
+        const alliance = (await Alliance.findById(guild.AllianceId))!;
+        alliance.MaxBattlePayReserve = payload.MaxBattlePayReserve;
+        alliance.MaxMissionBattlePay = payload.MaxMissionBattlePay;
+        alliance.MinMissionBattlePay = payload.MinMissionBattlePay;
+        await alliance.save();
+    } else {
+        guild.MaxBattlePayReserve = payload.MaxBattlePayReserve;
+        guild.MaxMissionBattlePay = payload.MaxMissionBattlePay;
+        guild.MinMissionBattlePay = payload.MinMissionBattlePay;
+        await guild.save();
+    }
     res.json(payload);
 };
 
@@ -26,4 +34,5 @@ interface ISetBadlandBudgetCapsRequest {
     MaxBattlePayReserve: number;
     MaxMissionBattlePay: number;
     MinMissionBattlePay: number;
+    Alliance?: true;
 }

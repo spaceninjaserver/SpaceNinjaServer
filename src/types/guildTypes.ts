@@ -24,7 +24,7 @@ export interface IGuildClient {
     Ranks: IGuildRank[];
     Tier: number;
     Emblem?: boolean;
-    Vault: IGuildVault;
+    Vault: IGuildVaultClient;
     ActiveDojoColorResearch: string;
     Class: number;
     XP: number;
@@ -48,7 +48,7 @@ export interface IGuildCheats {
     fastClanAscension?: boolean;
 }
 
-export interface IGuildDatabase extends IGuildCheats {
+export interface IGuildDatabase extends IGuildCheats, IVaultDatabase {
     _id: Types.ObjectId;
     Name: string;
     MOTD: string;
@@ -64,18 +64,6 @@ export interface IGuildDatabase extends IGuildCheats {
     DojoComponents: IDojoComponentDatabase[];
     DojoCapacity: number;
     DojoEnergy: number;
-
-    VaultRegularCredits?: number;
-    VaultPremiumCredits?: number;
-    VaultMiscItems?: IMiscItem[];
-    VaultShipDecorations?: ITypeCount[];
-    VaultFusionTreasures?: IFusionTreasure[];
-    VaultDecoRecipes?: ITypeCount[];
-    VaultRecipes?: ITypeCount[];
-
-    MaxBattlePayReserve?: number;
-    MaxMissionBattlePay?: number;
-    MinMissionBattlePay?: number;
 
     TechProjects?: ITechProjectDatabase[];
     ActiveDojoColorResearch: string;
@@ -113,6 +101,7 @@ export enum GuildPermission {
     Decorator = 1024, // Create and destroy decos
     Treasurer = 64, // Clan: Contribute from vault and edit tax rate. Alliance: Divvy vault.
     Tech = 128, // Queue research
+    Tactician = 256, // Start Solar Rail Craft & Deploy Solar Rails
     ChatModerator = 512, // (Clans & Alliances)
     Herald = 2048, // Change MOTD
     Fabricator = 4096 // Replicate research
@@ -148,7 +137,22 @@ export interface IGuildMemberClient extends IFriendInfo {
     ShipDecorationsContributed?: ITypeCount[];
 }
 
-export interface IGuildVault {
+export interface IVaultDatabase {
+    VaultRegularCredits?: number;
+    VaultPremiumCredits?: number;
+    VaultMiscItems?: IMiscItem[];
+    VaultShipDecorations?: ITypeCount[];
+    VaultFusionTreasures?: IFusionTreasure[];
+    VaultDecoRecipes?: ITypeCount[];
+    VaultRecipes?: ITypeCount[];
+    VaultInventoryItems?: ITypeCount[];
+    VaultPendingRecipes?: IVaultPendingRecipeDatabase[];
+
+    MaxBattlePayReserve?: number;
+    MaxMissionBattlePay?: number;
+    MinMissionBattlePay?: number;
+}
+export interface IGuildVaultClient {
     DojoRefundRegularCredits?: number;
     DojoRefundMiscItems?: IMiscItem[];
     DojoRefundPremiumCredits?: number;
@@ -160,7 +164,29 @@ export interface IGuildVault {
     MaxBattlePayReserve?: number;
     MaxMissionBattlePay?: number;
     MinMissionBattlePay?: number;
-    // InventoryItems?: Record<"SolarRails", ITypeCount[]>;
+    InventoryItems?: Record<string, ITypeCount[]>;
+    PendingRecipes?: Record<string, IVaultPendingRecipeClient[]>;
+}
+
+export interface IVaultPendingRecipeDatabase {
+    ParentRoom: Types.ObjectId;
+    ParentGuildId: Types.ObjectId;
+    MiscItems?: IMiscItem[];
+    RegularCredits?: number;
+    RushPlatinum?: number;
+    CompletionTime?: Date;
+    Type: string;
+    RecipeType: string;
+    TimeRemaining?: number;
+}
+
+export interface IVaultPendingRecipeClient extends Omit<
+    IVaultPendingRecipeDatabase,
+    "CompletionTime" | "ParentRoom" | "ParentGuildId" | "RecipeType"
+> {
+    ParentRoom: IOidWithLegacySupport;
+    ParentGuildId: IOidWithLegacySupport;
+    CompletionTime?: IMongoDate;
 }
 
 export interface IDojoClient {
@@ -171,7 +197,7 @@ export interface IDojoClient {
     FixedContributions: boolean;
     DojoRevision: number;
     AllianceId?: IOidWithLegacySupport;
-    Vault?: IGuildVault;
+    Vault?: IGuildVaultClient;
     Class?: number; // Level
     RevisionTime: number;
     Energy: number;
@@ -341,16 +367,15 @@ export interface IAllianceClient {
     CrossPlatformEnabled?: boolean;
     Clans: IAllianceMemberClient[];
     OriginalPlatform?: number;
-    AllianceVault?: IGuildVault;
+    AllianceVault?: IGuildVaultClient;
 }
 
-export interface IAllianceDatabase {
+export interface IAllianceDatabase extends IVaultDatabase {
     _id: Types.ObjectId;
     Name: string;
     MOTD?: ILongMOTD;
     LongMOTD?: ILongMOTD;
     Emblem?: boolean;
-    VaultRegularCredits?: number;
 }
 
 export interface IAllianceMemberClient {

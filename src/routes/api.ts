@@ -161,6 +161,7 @@ import { shipDecorationsController } from "../controllers/api/shipDecorationsCon
 import { signupAndroidController } from "../controllers/api/signupAndroidController.ts";
 import { startCollectibleEntryController } from "../controllers/api/startCollectibleEntryController.ts";
 import { startDojoRecipeController } from "../controllers/api/startDojoRecipeController.ts";
+import { startGuildRecipeController } from "../controllers/api/startGuildRecipeController.ts";
 import { startLibraryDailyTaskController } from "../controllers/api/startLibraryDailyTaskController.ts";
 import { startLibraryPersonalTargetController } from "../controllers/api/startLibraryPersonalTargetController.ts";
 import { startRecipeController } from "../controllers/api/startRecipeController.ts";
@@ -396,6 +397,7 @@ apiRouter.post("/setWeaponSkillTree.php", setWeaponSkillTreeController);
 apiRouter.post("/shipDecorations.php", shipDecorationsController);
 apiRouter.post("/startCollectibleEntry.php", startCollectibleEntryController);
 apiRouter.post("/startDojoRecipe.php", startDojoRecipeController);
+apiRouter.post("/startGuildRecipe.php", startGuildRecipeController);
 apiRouter.post("/startRecipe.php", startRecipeController);
 apiRouter.post("/stepSequencers.php", stepSequencersController);
 apiRouter.post("/syncRetroSettings.php", syncRetroSettingsController);
