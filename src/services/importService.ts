@@ -398,7 +398,8 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "EchoesHexConquestUnlocked",
         "EchoesHexConquestHardModeStatus",
         "EchoesHexConquestCacheScoreMission",
-        "RetroWallpaperId"
+        "RetroWallpaperId",
+        "FocusCapacity"
     ] as const) {
         if (client[key] !== undefined) {
             db[key] = client[key];
