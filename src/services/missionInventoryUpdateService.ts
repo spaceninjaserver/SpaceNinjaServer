@@ -10,7 +10,8 @@ import {
     ExportEnemies,
     ExportFusionBundles,
     ExportRelics,
-    ExportRewards
+    ExportRewards,
+    ExportRecipes
 } from "warframe-public-export-plus";
 import type { IMissionInventoryUpdateRequest, IRewardInfo } from "../types/requestTypes.ts";
 import { logger } from "../utils/logger.ts";
@@ -65,6 +66,7 @@ import {
     getMissionDeck,
     getRegion,
     isStoreItem,
+    supplementalRecipes,
     toStoreItem
 } from "./itemDataService.ts";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
@@ -381,9 +383,26 @@ export const addMissionInventoryUpdates = async (
                 addMods(inventory, value);
                 break;
             case "MiscItems":
-            case "BonusMiscItems":
-                addMiscItems(inventory, value);
+            case "BonusMiscItems": {
+                const miscItems: ITypeCount[] = [];
+                const recipes: ITypeCount[] = [];
+                // Some old versions puts Recipes into MiscItems, so we need to separate them out to add them to the correct place
+                // https://onlyg.it/OpenWF/SpaceNinjaServer/issues/4019
+                for (const item of value) {
+                    if (item.ItemType in ExportRecipes || item.ItemType in supplementalRecipes) {
+                        recipes.push(item);
+                    } else {
+                        miscItems.push(item);
+                    }
+                }
+                if (miscItems.length > 0) {
+                    addMiscItems(inventory, miscItems);
+                }
+                if (recipes.length > 0) {
+                    addRecipes(inventory, recipes);
+                }
                 break;
+            }
             case "Consumables":
                 if (inventory.dontSubtractConsumables) {
                     addConsumables(
