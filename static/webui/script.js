@@ -499,6 +499,9 @@ function setActiveLanguage(lang) {
             updateTitle();
             resolve(window.dict);
         };
+        script.onerror = function () {
+            location.reload();
+        };
         document.documentElement.appendChild(script);
     });
 }
