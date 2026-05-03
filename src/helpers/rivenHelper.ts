@@ -64,7 +64,8 @@ export const createUnveiledRivenFingerprint = (
                 // "Although Beast Companions had their weapons separated in Update 37.0, Veiled Companion Riven mods can still only become mods for Robotic Weapons." (https://wiki.warframe.com/w/Riven%20Mods)
                 // ^ To be faithful to this, we're checking for the SENTINEL_WEAPON compatibility tag instead of the "SentinelWeapons" productCategory.
                 const isSentinelWeapon =
-                    (ExportWeapons[weaponType].compatibilityTags?.indexOf("SENTINEL_WEAPON") ?? -1) != -1;
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                    (ExportWeapons[weaponType]?.compatibilityTags?.indexOf("SENTINEL_WEAPON") ?? -1) != -1;
                 return IsSentinel ? isSentinelWeapon : !isSentinelWeapon;
             })
         )!,
