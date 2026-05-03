@@ -870,13 +870,6 @@ function fetchItemList() {
                         "|MISSION_TYPE|",
                         data.MissionTypes.find(i => i.uniqueName === "MT_SURVIVAL").name
                     )
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/VeyHekKeyBlueprint",
-                    name: data.blueprintAndItem.replace(
-                        "|ITEM|",
-                        data.miscitems.find(i => i.uniqueName === "/Lotus/Types/Keys/VeyHekKey").name
-                    )
                 }
             );
 

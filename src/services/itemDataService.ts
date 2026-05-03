@@ -502,6 +502,594 @@ export const supplementalRecipes: Record<string, IRecipe> = {
             }
         ],
         tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Quills/ArmourOnOperatorModeBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/ArmourOnOperatorMode",
+        buildPrice: 15000,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/EidolonFishScalesItem",
+                ItemCount: 40
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemBCutAItem",
+                ItemCount: 3
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/BothRareFishAPartItem",
+                ItemCount: 2
+            },
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Eidolonium",
+                ItemCount: 10
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Quills/AttackSpeedOnKillBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/OperatorAmps/AttackSpeedOnKill",
+        buildPrice: 15000,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/EidolonFishScalesItem",
+                ItemCount: 40
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemACutAItem",
+                ItemCount: 3
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/BothRareFishAPartItem",
+                ItemCount: 2
+            },
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Eidolonium",
+                ItemCount: 10
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Quills/CriticalChanceOnHeadshotBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/OperatorAmps/CriticalChanceOnHeadshot",
+        buildPrice: 15000,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/SentientShards/SentientShardCommonItem",
+                ItemCount: 40
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemACutAItem",
+                ItemCount: 3
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/NightLegendaryFishAPartItem",
+                ItemCount: 1
+            },
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Eidolonium",
+                ItemCount: 10
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Quills/HealOnTransferenceInBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/HealOnTransferenceIn",
+        buildPrice: 15000,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/SentientShards/SentientShardCommonItem",
+                ItemCount: 5
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemACutAItem",
+                ItemCount: 5
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/NightLegendaryFishAPartItem",
+                ItemCount: 1
+            },
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Eidolonium",
+                ItemCount: 10
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Quills/HealOnTransferenceOutBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/HealOnTransferenceOut",
+        buildPrice: 15000,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/SentientShards/SentientShardCommonItem",
+                ItemCount: 5
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemBCutAItem",
+                ItemCount: 5
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/NightLegendaryFishAPartItem",
+                ItemCount: 1
+            },
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Eidolonium",
+                ItemCount: 10
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Quills/HealOnVoidDashBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/HealOnVoidDash",
+        buildPrice: 15000,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/SentientShards/SentientShardCommonItem",
+                ItemCount: 5
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemACutAItem",
+                ItemCount: 5
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/NightLegendaryFishAPartItem",
+                ItemCount: 1
+            },
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Eidolonium",
+                ItemCount: 10
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Quills/HealthOnOperatorModeBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/HealthOnOperatorMode",
+        buildPrice: 15000,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/EidolonFishScalesItem",
+                ItemCount: 40
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemACutAItem",
+                ItemCount: 3
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/BothRareFishAPartItem",
+                ItemCount: 2
+            },
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Eidolonium",
+                ItemCount: 10
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Quills/ImmunityFallDamageOnVoidDashBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/ImmunityFallDamageOnVoidDash",
+        buildPrice: 15000,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/SentientShards/SentientShardCommonItem",
+                ItemCount: 5
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemACutAItem",
+                ItemCount: 3
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/NightRareFishBPartItem",
+                ItemCount: 2
+            },
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Eidolonium",
+                ItemCount: 10
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Quills/IncreasedCriticalDamageOnCriticalStrikeBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/OperatorAmps/IncreasedCriticalDamageOnCriticalStrike",
+        buildPrice: 15000,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/SentientShards/SentientShardCommonItem",
+                ItemCount: 5
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemBCutAItem",
+                ItemCount: 3
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/NightRareFishAPartItem",
+                ItemCount: 2
+            },
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Eidolonium",
+                ItemCount: 10
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Quills/IncreasedDamageOnStatusProcBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/OperatorAmps/IncreasedDamageOnStatusProc",
+        buildPrice: 15000,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/SentientShards/SentientShardCommonItem",
+                ItemCount: 5
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemACutAItem",
+                ItemCount: 3
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/NightRareFishBPartItem",
+                ItemCount: 2
+            },
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Eidolonium",
+                ItemCount: 10
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Quills/OperatorAmmoRegenOnKillBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/OperatorAmps/OperatorAmmoRegenOnKill",
+        buildPrice: 15000,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/EidolonFishScalesItem",
+                ItemCount: 40
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemACutAItem",
+                ItemCount: 3
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/BothRareFishAPartItem",
+                ItemCount: 2
+            },
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Eidolonium",
+                ItemCount: 10
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Quills/SpeedOnVoidDashBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/OperatorArmour/SpeedOnVoidDash",
+        buildPrice: 15000,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/SentientShards/SentientShardCommonItem",
+                ItemCount: 5
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemBCutAItem",
+                ItemCount: 5
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/NightRareFishAPartItem",
+                ItemCount: 2
+            },
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Eidolonium",
+                ItemCount: 10
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Quills/StatusChanceOnHeadshotBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/OperatorAmps/StatusChanceOnHeadshot",
+        buildPrice: 15000,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/SentientShards/SentientShardCommonItem",
+                ItemCount: 5
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemBCutAItem",
+                ItemCount: 3
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/NightLegendaryFishAPartItem",
+                ItemCount: 1
+            },
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Eidolonium",
+                ItemCount: 10
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Weaponsmith/ChannelKillEnergyRateBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/Offensive/ChannelKillEnergyRate",
+        buildPrice: 7500,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Eidolonium",
+                ItemCount: 20
+            },
+            {
+                ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/CetusWispItem",
+                ItemCount: 10
+            },
+            {
+                ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/ForestRodentPartItem",
+                ItemCount: 10
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemBCutAItem",
+                ItemCount: 3
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Weaponsmith/CritChannelingDamageBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/Offensive/CritChannelingDamage",
+        buildPrice: 7500,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Eidolonium",
+                ItemCount: 20
+            },
+            {
+                ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/CetusWispItem",
+                ItemCount: 10
+            },
+            {
+                ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/BirdOfPreyPartItem",
+                ItemCount: 10
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemBCutAItem",
+                ItemCount: 3
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Weaponsmith/FinisherLifestealBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/Offensive/FinisherLifesteal",
+        buildPrice: 7500,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Eidolonium",
+                ItemCount: 20
+            },
+            {
+                ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/CetusWispItem",
+                ItemCount: 10
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/DayUncommonFishAPartItem",
+                ItemCount: 40
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemBCutAItem",
+                ItemCount: 3
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Weaponsmith/GroundSlamPullBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/Offensive/GroundSlamPull",
+        buildPrice: 7500,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Eidolonium",
+                ItemCount: 20
+            },
+            {
+                ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/CetusWispItem",
+                ItemCount: 10
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/BothUncommonFishAPartItem",
+                ItemCount: 10
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemBCutAItem",
+                ItemCount: 3
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Weaponsmith/MeleeArcaneProjectileOnJumpBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/Offensive/MeleeArcaneProjectileOnJump",
+        buildPrice: 7500,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Neurode",
+                ItemCount: 5
+            },
+            {
+                ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/CetusWispItem",
+                ItemCount: 10
+            },
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Plastids",
+                ItemCount: 800
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemACutAItem",
+                ItemCount: 3
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Weaponsmith/MeleeArcaneShockwaveOnJumpBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/Offensive/MeleeArcaneShockwaveOnJump",
+        buildPrice: 7500,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Neurode",
+                ItemCount: 5
+            },
+            {
+                ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/CetusWispItem",
+                ItemCount: 10
+            },
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Plastids",
+                ItemCount: 800
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemBCutAItem",
+                ItemCount: 3
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Weaponsmith/StatusChannelingDamageBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusChannelingDamage",
+        buildPrice: 7500,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Eidolonium",
+                ItemCount: 20
+            },
+            {
+                ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/CetusWispItem",
+                ItemCount: 10
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/DayUncommonFishBPartItem",
+                ItemCount: 10
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemBCutAItem",
+                ItemCount: 3
+            }
+        ],
+        tradable: false
+    },
+    "/Lotus/Types/Recipes/EidolonRecipes/Arcanes/Weaponsmith/StatusTriggerRadialDamageBlueprint": {
+        resultType: "/Lotus/Upgrades/CosmeticEnhancers/Offensive/StatusTriggerRadialDamage",
+        buildPrice: 7500,
+        buildTime: 3600,
+        skipBuildTimePrice: 10,
+        consumeOnUse: true,
+        num: 1,
+        codexSecret: false,
+        ingredients: [
+            {
+                ItemType: "/Lotus/Types/Items/MiscItems/Eidolonium",
+                ItemCount: 20
+            },
+            {
+                ItemType: "/Lotus/Types/Gameplay/Eidolon/Resources/CetusWispItem",
+                ItemCount: 10
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Fish/Eidolon/FishParts/BothUncommonFishBPartItem",
+                ItemCount: 10
+            },
+            {
+                ItemType: "/Lotus/Types/Items/Gems/Eidolon/EidolonGemBCutAItem",
+                ItemCount: 3
+            }
+        ],
+        tradable: false
     }
 };
 
@@ -1412,6 +2000,115 @@ export const getRecipe = (uniqueName: string, buildLabel?: string): IRecipe | un
                 // Hotfix 30.0.6 (2021-04-20) Swapped the crafting requirement of Control Module for Gallium in Rhino Systems Blueprint to ease early player acquisition.
                 if (version_compare(buildLabel, "2021.04.20.00.00") < 0) {
                     data.ingredients[0].ItemType = "/Lotus/Types/Items/MiscItems/ControlModule";
+                }
+            }
+        }
+        if (uniqueName.startsWith("/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/")) {
+            if (version_compare(buildLabel, gameToBuildVersion["22.2.4"]) >= 0) {
+                if (uniqueName.endsWith("ArmourOnOperatorModeBlueprint")) {
+                    data.ingredients[0].ItemCount = 20;
+                    data.ingredients[3] = {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Cryotic",
+                        ItemCount: 7100
+                    };
+                } else if (uniqueName.endsWith("AttackSpeedOnKillBlueprint")) {
+                    data.ingredients[0].ItemCount = 20;
+                    data.ingredients[3] = {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Plastids",
+                        ItemCount: 3500
+                    };
+                } else if (uniqueName.endsWith("CriticalChanceOnHeadshotBlueprint")) {
+                    data.ingredients[0].ItemCount = 3;
+                    data.ingredients[3] = {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Rubedo",
+                        ItemCount: 5200
+                    };
+                } else if (uniqueName.endsWith("HealOnTransferenceInBlueprint")) {
+                    data.ingredients[0].ItemCount = 3;
+                    data.ingredients[1].ItemCount = 3;
+                    data.ingredients[3] = {
+                        ItemType: "/Lotus/Types/Items/MiscItems/OxiumAlloy",
+                        ItemCount: 2300
+                    };
+                } else if (uniqueName.endsWith("HealOnTransferenceOutBlueprint")) {
+                    data.ingredients[0].ItemCount = 3;
+                    data.ingredients[1].ItemCount = 3;
+                    data.ingredients[3] = {
+                        ItemType: "/Lotus/Types/Items/MiscItems/PolymerBundle",
+                        ItemCount: 8700
+                    };
+                } else if (uniqueName.endsWith("HealOnVoidDashBlueprint")) {
+                    data.ingredients[0].ItemCount = 3;
+                    data.ingredients[1].ItemCount = 3;
+                    data.ingredients[3] = {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Salvage",
+                        ItemCount: 9200
+                    };
+                } else if (uniqueName.endsWith("HealthOnOperatorModeBlueprint")) {
+                    data.ingredients[0].ItemCount = 20;
+                    data.ingredients[3] = {
+                        ItemType: "/Lotus/Types/Items/MiscItems/AlloyPlate",
+                        ItemCount: 6400
+                    };
+                } else if (uniqueName.endsWith("ImmunityFallDamageOnVoidDashBlueprint")) {
+                    data.ingredients[0].ItemCount = 3;
+                    data.ingredients[3] = {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Ferrite",
+                        ItemCount: 7600
+                    };
+                } else if (uniqueName.endsWith("IncreasedCriticalDamageOnCriticalStrikeBlueprint")) {
+                    data.ingredients[0].ItemCount = 3;
+                    data.ingredients[3] = {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Circuits",
+                        ItemCount: 4400
+                    };
+                } else if (uniqueName.endsWith("IncreasedDamageOnStatusProcBlueprint")) {
+                    data.ingredients[0].ItemCount = 3;
+                    data.ingredients[3] = {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Rubedo",
+                        ItemCount: 4100
+                    };
+                } else if (uniqueName.endsWith("OperatorAmmoRegenOnKillBlueprint")) {
+                    data.ingredients[0].ItemCount = 20;
+                    data.ingredients[3] = {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Circuits",
+                        ItemCount: 3200
+                    };
+                } else if (uniqueName.endsWith("SpeedOnVoidDashBlueprint")) {
+                    data.ingredients[0].ItemCount = 3;
+                    data.ingredients[1].ItemCount = 3;
+                    data.ingredients[3] = {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Nanospores",
+                        ItemCount: 8100
+                    };
+                } else if (uniqueName.endsWith("StatusChanceOnHeadshotBlueprint")) {
+                    data.ingredients[0].ItemCount = 3;
+                    data.ingredients[3] = {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Plastids",
+                        ItemCount: 4800
+                    };
+                } else if (
+                    uniqueName.endsWith("ChannelKillEnergyRateBlueprint") ||
+                    uniqueName.endsWith("CritChannelingDamageBlueprint")
+                ) {
+                    data.ingredients[0].ItemCount = 10;
+                } else if (
+                    uniqueName.endsWith("FinisherLifestealBlueprint") ||
+                    uniqueName.endsWith("GroundSlamPullBlueprint") ||
+                    uniqueName.endsWith("StatusChannelingDamageBlueprint") ||
+                    uniqueName.endsWith("StatusTriggerRadialDamageBlueprint")
+                ) {
+                    data.ingredients[0].ItemCount = 10;
+                    data.ingredients[2].ItemCount = 5;
+                }
+            }
+            if (version_compare(buildLabel, "2017.12.08.15.29") >= 0) {
+                // Should be 22.3.4 - 2017-11-16
+                if (
+                    uniqueName.endsWith("ArmourOnOperatorModeBlueprint") ||
+                    uniqueName.endsWith("HealOnTransferenceInBlueprint")
+                ) {
+                    data.ingredients[3].ItemCount = data.ingredients[3].ItemCount / 10;
                 }
             }
         }

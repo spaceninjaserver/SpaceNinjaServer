@@ -1,5 +1,12 @@
 import type { RequestHandler } from "express";
-import { getDict, getItemName, getNormalizedString, getString, U5Modules } from "../../services/itemDataService.ts";
+import {
+    getDict,
+    getItemName,
+    getNormalizedString,
+    getString,
+    supplementalRecipes,
+    U5Modules
+} from "../../services/itemDataService.ts";
 import type { IU5FingerprintUpgrade } from "../../services/itemDataService.ts";
 import type { TRarity, TRelicQuality } from "warframe-public-export-plus";
 import {
@@ -314,7 +321,7 @@ const getItemListsController: RequestHandler = (req, response) => {
         });
     }
     const recipeNameTemplate = getString("/Lotus/Language/Items/BlueprintAndItem", lang);
-    for (const [uniqueName, item] of Object.entries(ExportRecipes)) {
+    for (const [uniqueName, item] of Object.entries({ ...ExportRecipes, ...supplementalRecipes })) {
         if (!item.hidden && !(uniqueName in pseudoRecipeToOwnedRecipeMap)) {
             const resultName = getItemName(item.resultType);
             if (resultName) {
