@@ -1,4 +1,4 @@
-import { getAccountForRequest, type TAccountDocument } from "../../services/loginService.ts";
+import { buildVersionToInt, getAccountForRequest, type TAccountDocument } from "../../services/loginService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import type { IMongoDateWithLegacySupport } from "../../types/commonTypes.ts";
@@ -7,6 +7,7 @@ import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import { createMessage } from "../../services/inboxService.ts";
 import { toMongoDate2 } from "../../helpers/inventoryHelpers.ts";
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 interface ITrainingResultsRequest {
     numLevelsGained: number;
@@ -63,7 +64,8 @@ const handleTrainingProgress = async (
                 ],
                 sub: "/Lotus/Language/Inbox/MasteryRewardTitle",
                 icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
-                highPriority: true
+                highPriority: true,
+                minBuildVersion: buildVersionToInt(gameToBuildVersion["29.5.0"])
             }
         ]);
     }
