@@ -181,6 +181,5 @@ messageSchema.index({ endDate: 1 }, { expireAfterSeconds: 0 });
 
 export const Inbox = model<IMessageDatabase>("Inbox", messageSchema, "inbox");
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type TMessageDocument = Document<unknown, {}, IMessageDatabase> &
     IMessageDatabase & { _id: Types.ObjectId; __v: number };

@@ -272,12 +272,10 @@ type GuildDocumentProps = {
     DojoComponents: Types.DocumentArray<IDojoComponentDatabase>;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type GuildModel = Model<IGuildDatabase, {}, GuildDocumentProps>;
 
 export const Guild = model<IGuildDatabase, GuildModel>("Guild", guildSchema);
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type TGuildDatabaseDocument = Document<unknown, {}, IGuildDatabase> &
     Omit<
         IGuildDatabase & {
@@ -307,7 +305,6 @@ guildMemberSchema.index({ RequestExpiry: 1 }, { expireAfterSeconds: 0 });
 
 export const GuildMember = model<IGuildMemberDatabase>("GuildMember", guildMemberSchema);
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type TGuildMemberDatabaseDocument = Document<unknown, {}, IGuildMemberDatabase> &
     IGuildMemberDatabase & {
         _id: Types.ObjectId;
@@ -352,7 +349,6 @@ type AllianceModel = Model<IAllianceDatabase>;
 
 export const Alliance = model<IAllianceDatabase, AllianceModel>("Alliance", allianceSchema);
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type TAllianceDatabaseDocument = Document<unknown, {}, IAllianceDatabase> &
     IAllianceDatabase & {
         _id: Types.ObjectId;

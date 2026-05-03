@@ -254,10 +254,8 @@ export type PersonalRoomsDocumentProps = {
     };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type PersonalRoomsModelType = Model<IPersonalRoomsDatabase, {}, PersonalRoomsDocumentProps>;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type TPersonalRoomsDatabaseDocument = Document<unknown, {}, IPersonalRoomsDatabase> &
     Omit<
         IPersonalRoomsDatabase & {

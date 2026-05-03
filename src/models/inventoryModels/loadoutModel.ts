@@ -101,12 +101,10 @@ type loadoutDocumentProps = {
     DRIFTER: Types.DocumentArray<ILoadoutConfigDatabase>;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type loadoutModelType = Model<ILoadoutDatabase, {}, loadoutDocumentProps>;
 
 export const Loadout = model<ILoadoutDatabase, loadoutModelType>("Loadout", loadoutSchema);
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type TLoadoutDatabaseDocument = Document<unknown, {}, ILoadoutDatabase> &
     Omit<
         ILoadoutDatabase & {

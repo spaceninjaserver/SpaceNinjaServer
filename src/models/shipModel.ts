@@ -47,7 +47,6 @@ shipSchema.set("toObject", {
 
 export const Ship = model("Ships", shipSchema);
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type TShipDatabaseDocument = Document<unknown, {}, IShipDatabase> &
     IShipDatabase & {
         _id: Types.ObjectId;

@@ -2116,12 +2116,10 @@ export type InventoryDocumentProps = {
     HybridFusionTreasures: Types.DocumentArray<IHybridFusionTreasure>;
 } & { [K in TEquipmentKey]: Types.DocumentArray<IEquipmentDatabase> };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type InventoryModelType = Model<IInventoryDatabase, {}, InventoryDocumentProps>;
 
 export const Inventory = model<IInventoryDatabase, InventoryModelType>("Inventory", inventorySchema);
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type TInventoryDatabaseDocument = Document<unknown, {}, IInventoryDatabase> &
     Omit<
         IInventoryDatabase & {

@@ -71,7 +71,6 @@ export const createPersonalRooms = async (accountId: Types.ObjectId, shipId: Typ
     await personalRooms.save();
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type TAccountDocument = Document<unknown, {}, IDatabaseAccountJson> &
     IDatabaseAccountJson & { _id: Types.ObjectId; __v: number };
 
