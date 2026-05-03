@@ -1975,11 +1975,8 @@ export const addSkin = (
                 ItemType: typeName,
                 IsNew: typeName.startsWith("/Lotus/Upgrades/Skins/RailJack/") ? undefined : true // railjack skins are incompatible with this flag
             }) - 1;
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         inventoryChanges.WeaponSkins ??= [];
-        (inventoryChanges.WeaponSkins as IWeaponSkinClient[]).push(
-            inventory.WeaponSkins[index].toJSON<IWeaponSkinClient>()
-        );
+        inventoryChanges.WeaponSkins.push(inventory.WeaponSkins[index].toJSON<IWeaponSkinClient>());
     }
     return inventoryChanges;
 };

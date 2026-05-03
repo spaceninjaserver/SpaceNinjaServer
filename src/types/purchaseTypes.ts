@@ -13,7 +13,8 @@ import type {
     IQuestKeyClient,
     IRawUpgrade,
     IFocusUpgrade,
-    IFocusLoadoutClient
+    IFocusLoadoutClient,
+    IWeaponSkinClient
 } from "./inventoryTypes/inventoryTypes.ts";
 
 export enum PurchaseSource {
@@ -101,6 +102,7 @@ export type IInventoryChanges = {
     OneTimePurchases?: string[];
     FocusUpgrades?: IFocusUpgrade[];
     FocusLoadouts?: IFocusLoadoutClient[];
+    WeaponSkins?: IWeaponSkinClient[];
 } & Record<
         Exclude<
             string,

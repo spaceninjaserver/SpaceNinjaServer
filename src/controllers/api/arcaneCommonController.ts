@@ -1,19 +1,29 @@
 import type { RequestHandler } from "express";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
-import { getInventory, addMods, addMiscItem } from "../../services/inventoryService.ts";
+import { getInventory, addMods, addMiscItem, addSkin } from "../../services/inventoryService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import { logger } from "../../utils/logger.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
-import { version_compare } from "../../helpers/inventoryHelpers.ts";
+import { fromOid, version_compare } from "../../helpers/inventoryHelpers.ts";
 
 export const arcaneCommonController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const inventory = await getInventory(account._id.toString());
     const json = getJSONfromString<IArcaneCommonRequest | IArcaneLegacyRequest>(String(req.body));
     if (!("newRank" in json) && "skinId" in json) {
-        //logger.debug(`legacy arcane request:`, json);
-        const item = inventory.WeaponSkins.id(json.skinId);
+        // logger.debug(`legacy arcane request:`, json);
+        let skinId = json.skinId;
+        if (json.giveItem && json.itemTypeName && json.modType == 6) {
+            const inventoryChanges = addSkin(inventory, json.itemTypeName);
+            skinId = fromOid(inventoryChanges.WeaponSkins![0].ItemId);
+        }
+        const item =
+            json.modType == 6
+                ? inventory.WeaponSkins.id(skinId)
+                : json.modType == 5
+                  ? inventory.OperatorAmps.id(skinId)
+                  : null;
         if (item) {
             if (json.operationType == "Install") {
                 const resp: IArcaneLegacyInstallResp = { newLevel: 0 };
@@ -42,6 +52,10 @@ export const arcaneCommonController: RequestHandler = async (req, res) => {
                 item.UpgradeFingerprint = JSON.stringify({ lvl: newLevel });
                 item.UpgradeType = json.arcaneType!;
                 addMods(inventory, [{ ItemType: json.arcaneType!, ItemCount: numConsumed * -1 }]);
+                if (json.giveItem) {
+                    resp.AddedSkinId = skinId;
+                }
+                // logger.debug(`legacy arcane resp:`, resp);
                 res.json(resp);
             } else if (json.operationType == "Distill") {
                 const currentLevel = (JSON.parse(item.UpgradeFingerprint!) as { lvl: number }).lvl;
@@ -60,7 +74,7 @@ export const arcaneCommonController: RequestHandler = async (req, res) => {
             }
         } else {
             logger.debug(`data provided to ${req.path}: ${String(req.body)}`);
-            throw new Error(`Failed to find item with OID ${json.skinId}`);
+            throw new Error(`Failed to find item with OID ${json.skinId}, modType ${json.modType}`);
         }
         await inventory.save();
         return;
@@ -137,8 +151,9 @@ interface IArcaneLegacyRequest {
     arcaneType?: string;
     skinId: string;
     operationType: "Install" | "Distill" | "idk";
-    modType: number; // 6
+    modType: number; // 6 for WeaponSkins, 5 for Amps
     giveItem?: boolean;
+    itemTypeName?: string;
 }
 
 interface IArcaneLegacyInstallResp {
