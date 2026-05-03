@@ -2158,6 +2158,37 @@ export const getKey = (uniqueName: string, buildLabel?: string): IKey | undefine
                 ]
             };
         }
+    } else if (uniqueName == "/Lotus/Types/Keys/ArchwingQuest/ArchwingQuestKeyChain") {
+        if (buildLabel && version_compare(buildLabel, gameToBuildVersion["18.5.0"]) < 0) {
+            const latestData = ExportKeys[uniqueName];
+            return {
+                ...latestData,
+                chainStages: [
+                    latestData.chainStages![0], // Give BP
+                    latestData.chainStages![1], // Mission 1
+                    latestData.chainStages![2], // Mission 2
+                    {
+                        itemsToGiveWhenTriggered: []
+                    },
+                    {
+                        itemsToGiveWhenTriggered: []
+                    },
+                    {
+                        itemsToGiveWhenTriggered: [
+                            "/Lotus/StoreItems/Weapons/Tenno/Archwing/Primary/FoldingMachineGun/ArchMachineGun",
+                            "/Lotus/StoreItems/Weapons/Tenno/Archwing/Melee/Archsword/ArchSwordWeapon"
+                        ]
+                    },
+                    {
+                        itemsToGiveWhenTriggered: []
+                    },
+                    latestData.chainStages![4], // Mission 4
+                    {
+                        itemsToGiveWhenTriggered: []
+                    }
+                ]
+            };
+        }
     }
 
     return ExportKeys[uniqueName];
