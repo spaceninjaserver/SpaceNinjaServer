@@ -4,19 +4,21 @@ import { getAccountForRequest, isAdministrator } from "../../services/loginServi
 import type { RequestHandler } from "express";
 
 export const createMessageController: RequestHandler = async (req, res) => {
-    const message = req.body as (IMessageCreationTemplate & { ownerId: string })[] | undefined;
-
     const account = await getAccountForRequest(req);
     if (!isAdministrator(account)) {
         res.status(401).end();
         return;
     }
 
-    if (!Array.isArray(message) || message.length === 0) {
-        res.status(400).send("No message provided");
-        return;
+    const data = req.body as ICreateMessageRequest;
+    for (const targetId of data.targetIds) {
+        await createMessage(targetId, data.messages);
     }
-    await createMessage(message[0].ownerId, message);
 
     res.status(204).end();
 };
+
+interface ICreateMessageRequest {
+    targetIds: string[];
+    messages: IMessageCreationTemplate[];
+}

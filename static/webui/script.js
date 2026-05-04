@@ -601,7 +601,9 @@ function fetchItemList() {
             await dictPromise;
 
             document.querySelectorAll('[id^="datalist-"]').forEach(datalist => {
-                datalist.innerHTML = "";
+                if (datalist.id != "datalist-circuitGameModes" && datalist.id != "datalist-usernames") {
+                    datalist.innerHTML = "";
+                }
             });
 
             const syndicateNone = document.createElement("option");
@@ -2462,7 +2464,7 @@ function doAcquireEvolution() {
     }
 }
 
-$(document).on("input", "input", function () {
+$(document).on("input", "input, textarea", function () {
     $(this).removeClass("is-invalid");
 });
 
@@ -3292,10 +3294,6 @@ function doAcquireRiven() {
         });
     });
 }
-
-$("#addriven-fingerprint").on("input", () => {
-    $("#addriven-fingerprint").removeClass("is-invalid");
-});
 
 function setFingerprint(ItemType, ItemId, fingerprint) {
     revalidateAuthz().then(() => {
@@ -5197,8 +5195,18 @@ function setImportSample(key) {
 
 document.querySelectorAll(".tags-input").forEach(input => {
     const datalist = document.getElementById(input.getAttribute("list"));
-    const options = [...datalist.querySelectorAll("option")].map(x => x.textContent);
+    let shadowDatalist;
+    const optionsAreUnique = input.classList.contains("tags-input-unique");
     input.oninput = function () {
+        const options = [...datalist.querySelectorAll("option")].map(x => x.textContent);
+
+        if (!shadowDatalist) {
+            shadowDatalist = document.createElement("datalist");
+            shadowDatalist.setAttribute("id", "shadow-" + datalist.id);
+            input.setAttribute("list", "shadow-" + datalist.id);
+            shadowDatalist = document.documentElement.appendChild(shadowDatalist);
+        }
+
         const value = [];
         for (const tag of this.value.split(",")) {
             const index = options.map(x => x.toLowerCase()).indexOf(tag.trim().toLowerCase());
@@ -5209,11 +5217,21 @@ document.querySelectorAll(".tags-input").forEach(input => {
 
         this.setAttribute("data-tags-value", value.join(", "));
 
-        datalist.innerHTML = "";
-        for (const option of options) {
-            const elm = document.createElement("option");
-            elm.textContent = [...value, option, ""].join(", ");
-            datalist.appendChild(elm);
+        if (value[0] == "all") {
+            shadowDatalist.innerHTML = "<option>all</option>";
+        } else {
+            shadowDatalist.innerHTML = "";
+            for (const option of options) {
+                if (!optionsAreUnique || value.indexOf(option) == -1) {
+                    const elm = document.createElement("option");
+                    if (option == "all") {
+                        elm.textContent = "all";
+                    } else {
+                        elm.textContent = [...value, option, ""].join(", ");
+                    }
+                    shadowDatalist.appendChild(elm);
+                }
+            }
         }
     };
     input.oninput();
@@ -5661,8 +5679,8 @@ single.getRoute("/webui/admin").on("beforeload", function () {
                 window.is_admin = true;
                 $(".admin-hide").addClass("d-none");
                 $(".admin-show").removeClass("d-none");
-                onAdminMessageTargetModeChange();
                 document.getElementById("registered-losers").innerHTML = "";
+                document.getElementById("datalist-usernames").innerHTML = "<option>all</option>";
                 for (const user of users) {
                     const tr = document.createElement("tr");
                     {
@@ -5691,6 +5709,10 @@ single.getRoute("/webui/admin").on("beforeload", function () {
                         tr.appendChild(td);
                     }
                     document.getElementById("registered-losers").appendChild(tr);
+
+                    const option = document.createElement("option");
+                    option.textContent = user.DisplayName;
+                    document.getElementById("datalist-usernames").appendChild(option);
                 }
             })
             .fail(res => {
@@ -5713,69 +5735,8 @@ single.getRoute("/webui/admin").on("beforeload", function () {
     });
 });
 
-function onAdminMessageTargetModeChange() {
-    const targetMode = document.getElementById("admin-message-target-mode").value;
-    document.getElementById("admin-message-target-value-group").classList.toggle("d-none", targetMode !== "specific");
-}
-
-function resolveAdminBroadcastTargets(users, targetMode, targetValue) {
-    if (targetMode === "all") {
-        return users;
-    }
-    const normalizedTargetValue = targetValue.toLowerCase();
-    const idMatches = users.filter(user => user.id === targetValue);
-    return idMatches.length > 0
-        ? idMatches
-        : users.filter(user => user.DisplayName.toLowerCase() === normalizedTargetValue);
-}
-
-function buildAdminBroadcastConfirmMessage(targetMode, targetUsers) {
-    if (targetMode === "all") {
-        return loc("admin_sendToAllConfirm");
-    }
-    if (targetUsers.length === 1) {
-        return loc("admin_sendToSpecificConfirmOne")
-            .replaceAll("|NAME|", targetUsers[0].DisplayName)
-            .replaceAll("|ID|", targetUsers[0].id);
-    }
-    return loc("admin_sendToSpecificConfirmMany").replaceAll("|COUNT|", String(targetUsers.length));
-}
-
-function buildAdminInboxPayload(user, fields) {
-    const payload = [
-        {
-            ownerId: user.id,
-            sndr: fields.sender,
-            sub: fields.subject,
-            msg: fields.body,
-            highPriority: fields.highPriority
-        }
-    ];
-    if (fields.icon) {
-        payload[0].icon = fields.icon;
-    }
-    if (fields.attachments.length > 0) {
-        payload[0].att = fields.attachments;
-    }
-    if (fields.countedAttachments && fields.countedAttachments.length > 0) {
-        payload[0].countedAtt = fields.countedAttachments;
-    }
-    return payload;
-}
-
-async function sendAdminInboxMessage(payload) {
-    await $.ajax({
-        url: "/custom/createMessage?" + window.authz,
-        method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify(payload)
-    });
-}
-
 async function doAdminBroadcastInbox() {
     await revalidateAuthz();
-    const targetMode = document.getElementById("admin-message-target-mode").value;
-    const targetValue = document.getElementById("admin-message-target-value").value.trim();
     const sender = document.getElementById("admin-message-sender").value.trim();
     const subject = document.getElementById("admin-message-subject").value.trim();
     const body = document.getElementById("admin-message-body").value.trim();
@@ -5786,11 +5747,15 @@ async function doAdminBroadcastInbox() {
     const submitButton = document.getElementById("admin-broadcast-submit");
 
     if (!sender || !subject || !body) {
-        alert(loc("admin_messageRequiredFields"));
-        return;
-    }
-    if (targetMode === "specific" && !targetValue) {
-        alert(loc("admin_messageTargetRequired"));
+        if (!sender) {
+            document.getElementById("admin-message-sender").classList.add("is-invalid");
+        }
+        if (!subject) {
+            document.getElementById("admin-message-subject").classList.add("is-invalid");
+        }
+        if (!body) {
+            document.getElementById("admin-message-body").classList.add("is-invalid");
+        }
         return;
     }
 
@@ -5798,12 +5763,10 @@ async function doAdminBroadcastInbox() {
     if (countedAttRaw) {
         try {
             countedAttachments = JSON.parse(countedAttRaw);
-        } catch (_error) {
-            alert(loc("admin_messageCountedAttInvalid"));
-            return;
-        }
+        } catch (_) {}
         if (!Array.isArray(countedAttachments)) {
-            alert(loc("admin_messageCountedAttInvalid"));
+            document.getElementById("admin-message-counted-att").classList.add("is-invalid");
+            document.getElementById("admin-message-counted-att").focus();
             return;
         }
     }
@@ -5816,33 +5779,55 @@ async function doAdminBroadcastInbox() {
     submitButton.disabled = true;
     try {
         const users = await $.get("/custom/getRegisteredLosers?" + window.authz);
-        const targetUsers = resolveAdminBroadcastTargets(users, targetMode, targetValue);
-        if (targetUsers.length === 0) {
-            alert(loc("admin_messageTargetNotFound"));
+        document.getElementById("admin-message-target").oninput();
+        const targets = document
+            .getElementById("admin-message-target")
+            .getAttribute("data-tags-value")
+            .split(", ")
+            .filter(x => x);
+        let targetIds;
+        if (targets[0] == "all") {
+            targetIds = users.map(user => user.id);
+        } else {
+            targetIds = users.filter(user => targets.indexOf(user.DisplayName) != -1).map(user => user.id);
+        }
+        if (targetIds.length == 0) {
+            toast(loc("code_nothingToDo"));
             return;
         }
 
-        const confirmMsg = buildAdminBroadcastConfirmMessage(targetMode, targetUsers);
-        if (!window.confirm(confirmMsg)) {
+        if (!window.confirm(loc("admin_sendConfirm").replaceAll("|COUNT|", String(targetIds.length)))) {
             return;
         }
 
-        const payloadFields = {
-            sender,
-            subject,
-            body,
-            highPriority,
-            icon,
-            attachments,
-            countedAttachments
-        };
-        for (const user of targetUsers) {
-            const payload = buildAdminInboxPayload(user, payloadFields);
-            await sendAdminInboxMessage(payload);
+        const messages = [
+            {
+                sndr: sender,
+                sub: subject,
+                msg: body,
+                highPriority: highPriority
+            }
+        ];
+        if (icon) {
+            messages[0].icon = icon;
         }
-        toast(loc("admin_sendToAllSuccess").replaceAll("|COUNT|", targetUsers.length));
-    } catch (_error) {
-        alert(loc("settings_changeFailed"));
+        if (attachments.length > 0) {
+            messages[0].att = attachments;
+        }
+        if (countedAttachments && countedAttachments.length > 0) {
+            messages[0].countedAtt = countedAttachments;
+        }
+
+        await $.ajax({
+            url: "/custom/createMessage?" + window.authz,
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ targetIds, messages })
+        });
+
+        toast(loc("admin_sendToAllSuccess").replaceAll("|COUNT|", targetIds.length));
+    } catch (error) {
+        alert(error);
     } finally {
         submitButton.disabled = false;
     }

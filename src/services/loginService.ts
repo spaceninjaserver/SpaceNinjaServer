@@ -40,6 +40,10 @@ export const getUsernameFromEmail = async (email: string): Promise<string> => {
 };
 
 export const createAccount = async (accountData: IDatabaseAccountRequiredFields): Promise<IDatabaseAccountJson> => {
+    if (accountData.DisplayName == "all") {
+        throw new Error(`"${accountData.DisplayName}" is reserved and may not be used as a username`);
+    }
+
     const account = new Account(accountData);
     try {
         await account.save();

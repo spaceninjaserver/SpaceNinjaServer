@@ -1734,18 +1734,9 @@
                     <div class="card mt-3">
                         <h5 class="card-header" data-loc="admin_broadcastInbox"></h5>
                         <div class="card-body">
-                            <div class="row g-2 mb-2">
-                                <div class="col-md-4">
-                                    <label class="form-label" for="admin-message-target-mode" data-loc="admin_messageTargetMode"></label>
-                                    <select class="form-select" id="admin-message-target-mode" onchange="onAdminMessageTargetModeChange();">
-                                        <option value="all" data-loc="admin_messageTargetAll"></option>
-                                        <option value="specific" data-loc="admin_messageTargetSpecific"></option>
-                                    </select>
-                                </div>
-                                <div class="col-md-8 d-none" id="admin-message-target-value-group">
-                                    <label class="form-label" for="admin-message-target-value" data-loc="admin_messageTargetValue"></label>
-                                    <input class="form-control" id="admin-message-target-value" />
-                                </div>
+                            <div class="mb-2">
+                                <label class="form-label" for="admin-message-target" data-loc="admin_messageTarget"></label>
+                                <input class="form-control tags-input tags-input-unique" id="admin-message-target" list="datalist-usernames" />
                             </div>
                             <div class="mb-2">
                                 <label class="form-label" for="admin-message-sender" data-loc="admin_messageSender"></label>
@@ -1845,6 +1836,7 @@
         <option>Assassination</option>
         <option>Alchemy</option>
     </datalist>
+    <datalist id="datalist-usernames"></datalist>
     <script src="/webui/libs/jquery-3.6.0.min.js"></script>
     <script src="/webui/libs/whirlpool-js.min.js"></script>
     <script src="/webui/libs/single.js"></script>
