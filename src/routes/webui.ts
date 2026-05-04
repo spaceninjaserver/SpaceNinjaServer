@@ -37,11 +37,15 @@ const virtualRouteController: RequestHandler = async (_req, res) => {
 };
 webuiRouter.get("/webui/", virtualRouteController); // can be handled by express.static, but would not check webui.enabled config.
 webuiRouter.get("/webui/inventory", virtualRouteController);
+webuiRouter.get("/webui/details", virtualRouteController);
 webuiRouter.get("/webui/detailedView", virtualRouteController);
 webuiRouter.get("/webui/mods", virtualRouteController);
 webuiRouter.get("/webui/cheats", virtualRouteController);
+webuiRouter.get("/webui/settings", virtualRouteController);
 webuiRouter.get("/webui/import", virtualRouteController);
+webuiRouter.get("/webui/clan", virtualRouteController);
 webuiRouter.get("/webui/guildView", virtualRouteController);
+webuiRouter.get("/webui/users", virtualRouteController);
 webuiRouter.get("/webui/admin", virtualRouteController);
 
 // Serve static files

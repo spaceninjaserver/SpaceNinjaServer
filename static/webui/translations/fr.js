@@ -542,7 +542,6 @@ dict = {
     guildView_promote: `Promouvoir`,
     guildView_demote: `Rétrograder`,
 
-    navbar_admin: `Administrateur`,
     admin_users: `Utilisateurs`,
     admin_possess: `[UNTRANSLATED] Impersonate`,
     admin_broadcastInbox: `[UNTRANSLATED] Broadcast Inbox Message`,

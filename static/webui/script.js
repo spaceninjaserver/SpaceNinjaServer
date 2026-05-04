@@ -111,7 +111,7 @@ function openWebSocket() {
             auth_pending = false;
             if (localStorage.getItem("possessing")) {
                 localStorage.removeItem("possessing");
-                doAccountSwitch("/webui/admin");
+                doAccountSwitch("/webui/users");
             } else {
                 logout();
                 if (single.getCurrentPath() == "/webui/") {
@@ -145,7 +145,7 @@ function openWebSocket() {
         if ("logged_out" in msg) {
             if (localStorage.getItem("possessing")) {
                 localStorage.removeItem("possessing");
-                doAccountSwitch("/webui/admin");
+                doAccountSwitch("/webui/users");
             } else {
                 logout();
                 single.loadRoute("/webui/"); // Show login screen
@@ -173,7 +173,7 @@ openWebSocket();
 function refreshServerConfig() {
     window.is_admin = undefined;
     config_data = undefined;
-    if (single.getCurrentPath() == "/webui/cheats" || single.getCurrentPath() == "/webui/admin") {
+    if (single.getCurrentPath() == "/webui/cheats" || single.getCurrentPath() == "/webui/users") {
         single.loadRoute(single.getCurrentPath());
     }
 }
@@ -250,7 +250,7 @@ function logout() {
 function doLogout() {
     if (localStorage.getItem("possessing")) {
         localStorage.removeItem("possessing");
-        doAccountSwitch("/webui/admin");
+        doAccountSwitch("/webui/users");
     } else {
         logout();
         if (ws_is_open) {
@@ -412,7 +412,7 @@ single.on("route_load", function (event) {
         $("body").addClass("logged-in");
 
         let navPath = event.route.paths[0];
-        if (navPath == "/webui/detailedView") {
+        if (navPath == "/webui/details") {
             const params = new URLSearchParams(window.location.search);
             const category = params.get("productCategory");
 
@@ -1244,7 +1244,7 @@ function updateInventory() {
     inventory_data = undefined;
     if (
         single.getCurrentPath() == "/webui/inventory" ||
-        single.getCurrentPath().startsWith("/webui/detailedView") ||
+        single.getCurrentPath().startsWith("/webui/details") ||
         single.getCurrentPath() == "/webui/mods" ||
         single.getCurrentPath() == "/webui/cheats"
     ) {
@@ -1430,7 +1430,7 @@ async function populateInventoryRoute() {
 
                     {
                         const a = document.createElement("a");
-                        a.href = "/webui/detailedView?productCategory=" + category + "&itemId=" + item.ItemId.$oid;
+                        a.href = "/webui/details?productCategory=" + category + "&itemId=" + item.ItemId.$oid;
                         a.innerHTML = icons.feather;
                         td.appendChild(a);
                     }
@@ -1967,7 +1967,7 @@ single.getRoute("/webui/mods").on("beforeload", async function () {
             }
             if (U5Mods.includes(item.ItemType)) {
                 const a = document.createElement("a");
-                a.href = "/webui/detailedView?productCategory=Upgrades&itemId=" + item.ItemId.$oid;
+                a.href = "/webui/details?productCategory=Upgrades&itemId=" + item.ItemId.$oid;
                 a.innerHTML = icons.feather;
                 td.appendChild(a);
             }
@@ -2220,7 +2220,7 @@ dictPromise.then(() => {
 });
 
 function updateGuild() {
-    if (single.getCurrentPath() == "/webui/guildView") {
+    if (single.getCurrentPath() == "/webui/clan") {
         single.loadRoute(single.getCurrentPath());
     }
 }
@@ -5667,7 +5667,7 @@ function removeItems(category) {
     });
 }
 
-single.getRoute("/webui/admin").on("beforeload", function () {
+single.getRoute("/webui/users").on("beforeload", function () {
     awaitAuthz().then(() => {
         if (window.is_admin === false) {
             $(".admin-hide").removeClass("d-none");
@@ -5722,8 +5722,8 @@ single.getRoute("/webui/admin").on("beforeload", function () {
                         sendAuth();
                     }
                     revalidateAuthz().then(() => {
-                        if (single.getCurrentPath() == "/webui/admin") {
-                            single.loadRoute("/webui/admin");
+                        if (single.getCurrentPath() == "/webui/users") {
+                            single.loadRoute("/webui/users");
                         }
                     });
                 } else {

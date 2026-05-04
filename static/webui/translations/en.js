@@ -541,7 +541,6 @@ dict = {
     guildView_promote: `Promote`,
     guildView_demote: `Demote`,
 
-    navbar_admin: `Admin`,
     admin_users: `Users`,
     admin_possess: `Impersonate`,
     admin_broadcastInbox: `Broadcast Inbox Message`,

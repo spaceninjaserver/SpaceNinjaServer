@@ -71,10 +71,10 @@
                             <a class="nav-link" href="/webui/import" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_import"></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/webui/guildView" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_guildView"></a>
+                            <a class="nav-link" href="/webui/clan" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_guildView"></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/webui/admin" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_admin"></a>
+                            <a class="nav-link" href="/webui/users" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="admin_users"></a>
                         </li>
                     </ul>
                 </div>
@@ -572,7 +572,7 @@
                     </div>
                 </div>
             </div>
-            <div id="guild-route" data-route="/webui/guildView" data-title-tag="navbar_guildView">
+            <div id="guild-route" data-route="/webui/clan, /webui/guildView" data-title-tag="navbar_guildView">
                 <h3 id="guildView-loading" data-loc="general_loading"></h3>
                 <h3 id="guildView-na" class="d-none" data-loc="guildView_na"></h3>
                 <h5 id="guildView-naDescription" class="d-none" data-loc="guildView_naDescription"></h5>
@@ -732,7 +732,7 @@
                     </div>
                 </div>
             </div>
-            <div id="detailedView-route" data-route="/webui/detailedView" data-title-tag="navbar_inventory">
+            <div id="detailedView-route" data-route="/webui/details, /webui/detailedView" data-title-tag="navbar_inventory">
                 <h3 id="detailedView-loading" class="mb-0" data-loc="general_loading"></h3>
                 <h3 id="detailedView-title" class="mb-0"></h3>
                 <p class="text-body-secondary"></p>
@@ -923,7 +923,7 @@
                     </div>
                 </div>
             </div>
-            <div data-route="/webui/cheats" data-title-tag="navbar_cheats">
+            <div data-route="/webui/cheats, /webui/settings" data-title-tag="navbar_cheats">
                 <div class="row g-3">
                     <div class="col-md-6">
                         <div class="card">
@@ -1718,7 +1718,7 @@
                     <li><a href="#" onclick="event.preventDefault();setImportSample('eidolonLocPins');" data-loc="import_samples_eidolonLocPins"></a></li>
                 </ul>
             </div>
-            <div data-route="/webui/admin" data-title-tag="navbar_admin">
+            <div data-route="/webui/users, /webui/admin" data-title-tag="admin_users">
                 <div class="d-none admin-hide">
                     <p class="card-text" data-loc="cheats_administratorRequirement"></p>
                 </div>

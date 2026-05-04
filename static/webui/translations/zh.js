@@ -542,7 +542,6 @@ dict = {
     guildView_promote: `升级`,
     guildView_demote: `降级`,
 
-    navbar_admin: `管理员`,
     admin_users: `用户`,
     admin_possess: `管理此账户`,
     admin_broadcastInbox: `广播收件箱消息`,
