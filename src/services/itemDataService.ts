@@ -2946,6 +2946,15 @@ export const getPrice = (
         return u7WeaponCosts[internalName];
     }
 
+    // Hardcoded sale in this version
+    if (
+        usePremium &&
+        buildLabel == "2014.05.23.12.12/" &&
+        storeItemName == "/Lotus/StoreItems/Types/Sentinels/SentinelPowersuits/CarrierPowerSuit"
+    ) {
+        return 60;
+    }
+
     let price: number | undefined;
     if (isBundle) {
         const bundle = getBundle(storeItemName, buildLabel)!;
