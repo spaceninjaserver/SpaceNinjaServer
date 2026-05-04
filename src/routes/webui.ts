@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs/promises";
 import { repoDir, rootDir } from "../helpers/pathHelper.ts";
 import { args } from "../helpers/commandLineArguments.ts";
-import { config } from "../services/configService.ts";
+import { config, type IWebuiConfig } from "../services/configService.ts";
 
 const baseDir = args.dev ? repoDir : rootDir;
 
@@ -59,8 +59,11 @@ webuiRouter.get("/favicon.ico", async (_req, res) => {
 
 // Serve config
 webuiRouter.get("/webui/config.js", (_req, res) => {
+    const client_config: Pick<IWebuiConfig, "defaultLanguage"> = {
+        defaultLanguage: config.webui?.defaultLanguage
+    };
     res.set("Content-Type", "text/javascript;charset=utf8");
-    res.send("webui_conf=" + JSON.stringify(config.webui ?? {}));
+    res.send("webui_conf=" + JSON.stringify(client_config));
 });
 
 // Serve warframe-riven-info

@@ -12,6 +12,13 @@ export interface IHubServer {
     dtlsUnsupported?: boolean;
 }
 
+export interface IWebuiConfig {
+    enabled?: boolean;
+    adminOnly?: boolean;
+    defaultLanguage?: string;
+    nonAdminPermissions?: Record<string, boolean | Record<string, boolean>>;
+}
+
 export interface IConfig {
     mongodbUrl: string;
     logger: {
@@ -40,11 +47,7 @@ export interface IConfig {
     skipTutorial?: boolean;
     fullyStockedVendors?: boolean;
     skipClanKeyCrafting?: boolean;
-    webui?: {
-        enabled?: boolean;
-        adminOnly?: boolean;
-        defaultLanguage?: string;
-    };
+    webui?: IWebuiConfig;
     unfaithfulBugFixes?: {
         ignore1999LastRegionPlayed?: boolean;
         fixXtraCheeseTimer?: boolean;
