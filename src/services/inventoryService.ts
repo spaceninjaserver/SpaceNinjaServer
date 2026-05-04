@@ -43,7 +43,7 @@ import {
     U5Modules
 } from "./itemDataService.ts";
 import type { IFlavourItem, IItemConfig, IItemConfigDatabase } from "../types/inventoryTypes/commonInventoryTypes.ts";
-import type { IDefaultUpgrade, IPowersuit, ISentinel, TStandingLimitBin } from "warframe-public-export-plus";
+import type { IDefaultUpgrade, IPowersuit, IRegion, ISentinel, TStandingLimitBin } from "warframe-public-export-plus";
 import {
     ExportArcanes,
     ExportBoosters,
@@ -3289,6 +3289,10 @@ const steelPathSystems: [number, string][] = [
     [24, "Perita"]
 ];
 
+const isRequiredForSteelPathTrophy = (region: IRegion): boolean => {
+    return region.missionType != "MT_RAILJACK" && region.missionType != "MT_PVP";
+};
+
 export const ensureUserHasSteelPathRewards = async (
     inventory: TInventoryDatabaseDocument,
     silent?: true
@@ -3302,7 +3306,7 @@ export const ensureUserHasSteelPathRewards = async (
 
     const eligibleSystems = new Set<number>(steelPathSystems.map(x => x[0]));
     for (const [tag, region] of Object.entries(ExportRegions)) {
-        if (!completedNodes.has(tag)) {
+        if (!completedNodes.has(tag) && isRequiredForSteelPathTrophy(region)) {
             eligibleSystems.delete(region.systemIndex);
         }
     }
