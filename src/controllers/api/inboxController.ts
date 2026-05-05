@@ -191,7 +191,11 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
                     Tag: baroNode
                 }
             ],
-            date: new Date(baroActualStart)
+            date: new Date(baroActualStart),
+            minBuildVersion:
+                evilBaroStage > 0
+                    ? buildVersionToInt(gameToBuildVersion["40.0.0"])
+                    : buildVersionToInt(gameToBuildVersion["18.18.0"]) // Baro was introduced in U15.6. Unclear when exactly this inbox message was introduced, tho.
         });
     }
     if (Date.now() >= prevBaroEnd && account.LatestEventMessageDate.getTime() < prevBaroEnd && evilBaroStage == 4) {
@@ -205,7 +209,8 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
             endDate: new Date(baroActualStart),
             att: ["/Lotus/Types/StoreItems/AvatarImages/ImageBaroKiteerEvil"],
             CrossPlatform: true,
-            date: new Date(prevBaroEnd)
+            date: new Date(prevBaroEnd),
+            minBuildVersion: buildVersionToInt(gameToBuildVersion["40.0.0"])
         });
     }
 
@@ -255,7 +260,8 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
             transmission: "/Lotus/Sounds/Dialog/GalleonOfGhouls/DGhoulsWeekOneInbox0010VayHek",
             att: ["/Lotus/Upgrades/Skins/Events/OgrisOldSchool"],
             startDate: new Date(),
-            goalTag: "GalleonRobbery"
+            goalTag: "GalleonRobbery",
+            minBuildVersion: buildVersionToInt(gameToBuildVersion["38.5.11"])
         });
     }
     if (config.worldState?.bloodOfPerita && !account.receivedEventMessage_bloodOfPerita) {
@@ -267,7 +273,8 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
             icon: "/Lotus/Interface/Icons/Npcs/Roathe.png",
             startDate: new Date(),
             transmission: "/Lotus/Sounds/Dialog/Tau/RoatheEventOutroInbox/DRoatheEventIntroInbox0010Roathe",
-            QuestReq: "/Lotus/Types/Keys/TauPrequel/TauPrequelQuestKeyChain"
+            QuestReq: "/Lotus/Types/Keys/TauPrequel/TauPrequelQuestKeyChain",
+            minBuildVersion: buildVersionToInt(gameToBuildVersion["41.0.0"])
         });
     }
     if (config.worldState?.longShadow && !account.receivedEventMessage_longShadow) {
