@@ -24,6 +24,7 @@ export interface IAccountAndLoginResponseCommons {
 export interface IDatabaseAccountRequiredFields extends IAccountAndLoginResponseCommons {
     email: string;
     password: string;
+    Language?: string;
     BuildLabel?: string;
     LastLogin: Date;
 }
@@ -54,7 +55,7 @@ export interface ILoginRequest {
     password: string;
     time: number;
     s?: string;
-    lang?: string;
+    lang?: string; // >= U17
     date: number;
     ClientType?: string;
     PS?: string;

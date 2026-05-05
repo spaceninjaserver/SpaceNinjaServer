@@ -82,7 +82,7 @@ export const loginController: RequestHandler = async (request, response) => {
             email: loginRequest.email,
             password: loginRequest.password,
             DisplayName: name,
-            CountryCode: loginRequest.lang?.toUpperCase() ?? "EN",
+            Language: loginRequest.lang,
             ClientType: loginRequest.ClientType,
             GoogleTokenId: loginRequest.GoogleTokenId,
             Nonce: createNonce(),
@@ -125,13 +125,16 @@ export const loginController: RequestHandler = async (request, response) => {
 
     account.ClientType = loginRequest.ClientType;
     account.Nonce = createNonce();
-    account.CountryCode = loginRequest.lang?.toUpperCase() ?? "EN";
+    if (loginRequest.lang) {
+        account.Language = loginRequest.lang;
+    }
     account.BuildLabel = buildLabel;
     account.LastLogin = new Date();
     account.LastPlatform = isAndroid ? Platform.Android : Platform.Windows;
     account.Dropped = undefined;
 
     // These fields used to be set by default but are really not needed
+    account.CountryCode = undefined;
     account.ConsentNeeded = undefined;
     account.TrackedSettings = undefined;
     account.ForceLogoutVersion = undefined;
@@ -176,7 +179,10 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
     }
     if (version_compare(buildLabel, gameToBuildVersion["12.5.2"]) >= 0) {
         // U12.5 and up
-        resp.CountryCode = account.CountryCode;
+
+        // CountryCode should be based on the IP address so the client can pick a good matchmaking region automatically.
+        // An IP-country database might be a bit overkill, so we just let the client pick based on system language, instead.
+        resp.CountryCode = "";
     } else {
         // U12.4 and down
 
