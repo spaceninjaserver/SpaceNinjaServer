@@ -286,7 +286,8 @@ const getItemListsController: RequestHandler = (req, response) => {
             });
         } else if (
             name &&
-            uniqueName.substring(0, 30) != "/Lotus/Types/Game/Projections/" &&
+            !uniqueName.startsWith("/Lotus/Types/Game/Projections/") &&
+            !uniqueName.startsWith("/Lotus/Types/Gameplay/Duviri/Resource/Fish/") && // Duviri fish seem to be present twice, but only the ones under /Lotus/Types/Items/Fish/Duviri/ can be used for the fish tank/vignette.
             uniqueName != "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLanthornBundle"
         ) {
             res.miscitems.push({
