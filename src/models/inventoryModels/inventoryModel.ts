@@ -14,7 +14,7 @@ import type {
     IFocusUpgrade,
     ITypeXPItem,
     IChallengeProgress,
-    IStepSequencer,
+    IStepSequencerDatabase,
     IAffiliation,
     INotePacks,
     ICompletedJobChain,
@@ -515,7 +515,7 @@ const notePacksSchema = new Schema<INotePacks>(
     { _id: false }
 );
 
-const StepSequencersSchema = new Schema<IStepSequencer>(
+const StepSequencersSchema = new Schema<IStepSequencerDatabase>(
     {
         NotePacks: notePacksSchema,
         FingerPrint: String,
@@ -2114,6 +2114,7 @@ export type InventoryDocumentProps = {
     KubrowPets: Types.DocumentArray<IKubrowPetDatabase>;
     KubrowPetPrints: Types.DocumentArray<IKubrowPetPrintDatabase>;
     HybridFusionTreasures: Types.DocumentArray<IHybridFusionTreasure>;
+    StepSequencers: Types.DocumentArray<IStepSequencerDatabase>;
 } & { [K in TEquipmentKey]: Types.DocumentArray<IEquipmentDatabase> };
 
 type InventoryModelType = Model<IInventoryDatabase, {}, InventoryDocumentProps>;

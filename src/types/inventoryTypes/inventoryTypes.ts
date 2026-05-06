@@ -159,6 +159,7 @@ export interface IInventoryDatabase
             | "PeriodicMissionCompletions"
             | "FusionTreasures"
             | "PendingTrades"
+            | "StepSequencers"
             | TEquipmentKey
         >,
         InventoryDatabaseEquipment,
@@ -216,6 +217,7 @@ export interface IInventoryDatabase
     ChallengeInstanceStates?: IChallengeInstanceStateDatabase[];
     PeriodicMissionCompletions: IPeriodicMissionCompletionDatabase[];
     FusionTreasures?: IFusionTreasure[];
+    StepSequencers: IStepSequencerDatabase[];
 }
 
 export interface IQuestKeyDatabase {
@@ -461,7 +463,7 @@ export interface IInventoryClient
     LastLiteSortieReward?: ILastSortieRewardClient[];
     SortieRewardAttenuation?: IRewardAttenuation[];
     Drones: IDroneClient[];
-    StepSequencers: IStepSequencer[];
+    StepSequencers: IStepSequencerClient[];
     ActiveAvatarImageType?: string;
     TitleType?: string;
     ShipDecorations: ITypeCount[];
@@ -1142,11 +1144,15 @@ export interface ISpectreLoadout {
     MeleeModularParts?: string[];
 }
 
-export interface IStepSequencer {
+export interface IStepSequencerClient {
     NotePacks: INotePacks;
     FingerPrint: string;
     Name: string;
-    ItemId?: IOid;
+    ItemId: IOid; // Octavia was introduced in U20, which is after the oid format change in U19.5.
+}
+
+export interface IStepSequencerDatabase extends Omit<IStepSequencerClient, "ItemId"> {
+    _id: Types.ObjectId;
 }
 
 export interface INotePacks {

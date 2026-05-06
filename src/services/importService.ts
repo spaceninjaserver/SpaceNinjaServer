@@ -37,7 +37,7 @@ import type {
     INemesisBaseDatabase,
     IFusionTreasure
 } from "../types/inventoryTypes/inventoryTypes.ts";
-import { equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
+import { equipmentKeys, type IStepSequencerDatabase } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 import type {
     ILoadoutConfigClient,
@@ -530,7 +530,16 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         }
     }
     if (client.StepSequencers !== undefined) {
-        db.StepSequencers = client.StepSequencers;
+        replaceArray<IStepSequencerDatabase>(
+            db.StepSequencers,
+            client.StepSequencers.map(stepSequencer => {
+                const { ItemId, ...rest } = stepSequencer;
+                return {
+                    ...rest,
+                    _id: new Types.ObjectId(ItemId.$oid)
+                };
+            })
+        );
     }
     if (client.CompletedJobChains !== undefined) {
         db.CompletedJobChains = client.CompletedJobChains;
