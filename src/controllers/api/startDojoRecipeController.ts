@@ -4,6 +4,7 @@ import { GuildPermission } from "../../types/guildTypes.ts";
 import {
     getDojoClient,
     getGuildForRequestEx,
+    getNewTierFromPrefab,
     hasAccessToDojo,
     hasGuildPermission,
     processDojoBuildMaterialsGathered,
@@ -29,6 +30,15 @@ export const startDojoRecipeController: RequestHandler = async (req, res) => {
         return;
     }
     const request = JSON.parse(String(req.body)) as IStartDojoRecipeRequest;
+
+    if (
+        getNewTierFromPrefab(request.PlacedComponent.pf) &&
+        guild.GuildTierIncMoratorium &&
+        guild.GuildTierIncMoratorium.getTime() > Date.now()
+    ) {
+        res.json({ DojoRequestStatus: -7 });
+        return;
+    }
 
     const room = Object.values(ExportDojoRecipes.rooms).find(x => x.resultType == request.PlacedComponent.pf);
     if (room) {

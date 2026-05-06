@@ -54,7 +54,7 @@ const abortDojoComponent = async (
             return { DojoRequestStatus: -1 };
         }
 
-        await removeDojoRoom(guild, componentId);
+        removeDojoRoom(guild, componentId);
         await guild.save();
         return await getDojoClient(guild, 0, undefined, account.BuildLabel);
     }

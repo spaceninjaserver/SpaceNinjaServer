@@ -23,6 +23,7 @@ export interface IGuildClient {
     Members: IGuildMemberClient[];
     Ranks: IGuildRank[];
     Tier: number;
+    GuildTierIncMoratorium?: IMongoDateWithLegacySupport;
     Emblem?: boolean;
     Vault: IGuildVaultClient;
     ActiveDojoColorResearch: string;
@@ -31,7 +32,7 @@ export interface IGuildClient {
     IsContributor: boolean;
     NumContributors: number;
     FixedContributions?: boolean;
-    CeremonyResetDate?: IMongoDate;
+    CeremonyResetDate?: IMongoDateWithLegacySupport;
     CrossPlatformEnabled?: boolean;
     AutoContributeFromVault?: boolean;
     AllianceId?: IOidWithLegacySupport;
@@ -56,6 +57,7 @@ export interface IGuildDatabase extends IGuildCheats, IVaultDatabase {
     Ranks: IGuildRank[];
     TradeTax: number;
     Tier: number;
+    GuildTierIncMoratorium?: Date;
     Emblem?: boolean;
     AutoContributeFromVault?: boolean;
     AllianceId?: Types.ObjectId;

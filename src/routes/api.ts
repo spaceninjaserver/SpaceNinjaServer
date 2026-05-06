@@ -120,6 +120,7 @@ import { purchaseGetController, purchasePostController } from "../controllers/ap
 import { questControlController } from "../controllers/api/questControlController.ts";
 import { queueDojoComponentDestructionController } from "../controllers/api/queueDojoComponentDestructionController.ts";
 import { redeemPromoCodeController } from "../controllers/api/redeemPromoCodeController.ts";
+import { reduceGuildTierController } from "../controllers/api/reduceGuildTierController.ts";
 import { refillRevivesController } from "../controllers/api/refillRevivesController.ts";
 import { releasePetController } from "../controllers/api/releasePetController.ts";
 import { removeFriendGetController, removeFriendPostController } from "../controllers/api/removeFriendController.ts";
@@ -248,6 +249,7 @@ apiRouter.get("/playedParkourTutorial.php", playedParkourTutorialController);
 apiRouter.get("/purchase.php", purchaseGetController); // U8
 apiRouter.get("/questControl.php", questControlController);
 apiRouter.get("/queueDojoComponentDestruction.php", queueDojoComponentDestructionController);
+apiRouter.get("/reduceGuildTier.php", reduceGuildTierController);
 apiRouter.get("/removeFriend.php", removeFriendGetController);
 apiRouter.get("/removeFromAlliance.php", removeFromAllianceController);
 apiRouter.get("/removeFromGuild.php", removeFromGuildGetController);

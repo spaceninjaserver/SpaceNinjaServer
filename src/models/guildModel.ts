@@ -230,6 +230,7 @@ const guildSchema = new Schema<IGuildDatabase>(
         Ranks: { type: [guildRankSchema], default: defaultRanks },
         TradeTax: { type: Number, default: 0 },
         Tier: { type: Number, default: 1 },
+        GuildTierIncMoratorium: Date,
         Emblem: Boolean,
         AutoContributeFromVault: Boolean,
         AllianceId: Types.ObjectId,

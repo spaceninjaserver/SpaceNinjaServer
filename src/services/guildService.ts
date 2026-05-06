@@ -23,7 +23,7 @@ import type {
     IVaultPendingRecipeClient
 } from "../types/guildTypes.ts";
 import { GuildPermission } from "../types/guildTypes.ts";
-import { toMongoDate, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
+import { toMongoDate, toMongoDate2, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
 import type { Types } from "mongoose";
 import type { IDojoBuild, IDojoResearch } from "warframe-public-export-plus";
 import { ExportDojoRecipes, ExportResources } from "warframe-public-export-plus";
@@ -143,6 +143,9 @@ export const getGuildClient = async (
         Members: members,
         Ranks: ranks,
         Tier: guild.Tier,
+        GuildTierIncMoratorium: guild.GuildTierIncMoratorium
+            ? toMongoDate2(guild.GuildTierIncMoratorium, account.BuildLabel)
+            : undefined,
         Emblem: guild.Emblem,
         Vault: await getGuildVault(guild, account.BuildLabel),
         ActiveDojoColorResearch: guild.ActiveDojoColorResearch,
@@ -150,7 +153,9 @@ export const getGuildClient = async (
         XP: guild.XP,
         IsContributor: !!guild.CeremonyContributors?.find(x => x.equals(account._id)),
         NumContributors: guild.CeremonyContributors?.length ?? 0,
-        CeremonyResetDate: guild.CeremonyResetDate ? toMongoDate(guild.CeremonyResetDate) : undefined,
+        CeremonyResetDate: guild.CeremonyResetDate
+            ? toMongoDate2(guild.CeremonyResetDate, account.BuildLabel)
+            : undefined,
         AutoContributeFromVault: guild.AutoContributeFromVault,
         AllianceId: guild.AllianceId ? toOid2(guild.AllianceId, account.BuildLabel) : undefined,
         GoalProgress: guild.GoalProgress
@@ -394,21 +399,7 @@ export const getDojoClient = async (
                         needSave = true;
                     }
 
-                    let newTier: number | undefined;
-                    switch (dojoComponent.pf) {
-                        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksShadow.level":
-                            newTier = 2;
-                            break;
-                        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksStorm.level":
-                            newTier = 3;
-                            break;
-                        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksMountain.level":
-                            newTier = 4;
-                            break;
-                        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksMoon.level":
-                            newTier = 5;
-                            break;
-                    }
+                    const newTier = getNewTierFromPrefab(dojoComponent.pf);
                     if (newTier) {
                         logger.debug(`clan finished building barracks, updating to tier ${newTier}`);
                         await setGuildTier(guild, newTier);
@@ -476,7 +467,7 @@ export const getDojoClient = async (
     if (roomsToRemove.length) {
         logger.debug(`removing now-destroyed rooms`, roomsToRemove);
         for (const id of roomsToRemove) {
-            await removeDojoRoom(guild, id);
+            removeDojoRoom(guild, id);
         }
         needSave = true;
     }
@@ -496,6 +487,20 @@ export const getDojoClient = async (
     return dojo;
 };
 
+export const getNewTierFromPrefab = (pf: string): number | null => {
+    switch (pf) {
+        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksShadow.level":
+            return 2;
+        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksStorm.level":
+            return 3;
+        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksMountain.level":
+            return 4;
+        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksMoon.level":
+            return 5;
+    }
+    return null;
+};
+
 const guildTierScalingFactors = [0.01, 0.03, 0.1, 0.3, 1];
 export const scaleRequiredCount = (tier: number, count: number, disableScaling?: boolean): number => {
     if (disableScaling) {
@@ -505,10 +510,7 @@ export const scaleRequiredCount = (tier: number, count: number, disableScaling?:
     return Math.max(1, Math.trunc(count * guildTierScalingFactors[tier - 1]));
 };
 
-export const removeDojoRoom = async (
-    guild: TGuildDatabaseDocument,
-    componentId: Types.ObjectId | string
-): Promise<void> => {
+export const removeDojoRoom = (guild: TGuildDatabaseDocument, componentId: Types.ObjectId | string): void => {
     const component = guild.DojoComponents.splice(
         guild.DojoComponents.findIndex(x => x._id.equals(componentId)),
         1
@@ -526,21 +528,6 @@ export const removeDojoRoom = async (
         if (index != -1) {
             guild.RoomChanges.splice(index, 1);
         }
-    }
-
-    switch (component.pf) {
-        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksShadow.level":
-            await setGuildTier(guild, 1);
-            break;
-        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksStorm.level":
-            await setGuildTier(guild, 2);
-            break;
-        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksMountain.level":
-            await setGuildTier(guild, 3);
-            break;
-        case "/Lotus/Levels/ClanDojo/ClanDojoBarracksMoon.level":
-            await setGuildTier(guild, 4);
-            break;
     }
 };
 
@@ -857,7 +844,7 @@ export const setGuildTechLogState = (
     return true;
 };
 
-const setGuildTier = async (guild: TGuildDatabaseDocument, newTier: number): Promise<void> => {
+export const setGuildTier = async (guild: TGuildDatabaseDocument, newTier: number): Promise<void> => {
     const oldTier = guild.Tier;
     guild.Tier = newTier;
     if (guild.TechProjects) {
