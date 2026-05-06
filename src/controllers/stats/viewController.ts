@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getInventory } from "../../services/inventoryService.ts";
+import { getInventory2 } from "../../services/inventoryService.ts";
 import { getStats } from "../../services/statsService.ts";
 import type { IStatsClient } from "../../types/statTypes.ts";
 import { getProfileViewingDataByGuildId } from "../dynamic/getProfileViewingDataController.ts";
@@ -17,7 +17,7 @@ const viewController: RequestHandler = async (req, res) => {
         return;
     }
 
-    const inventory = await getInventory(lookupId, "XPInfo");
+    const inventory = await getInventory2(lookupId, "XPInfo");
     const playerStats = await getStats(lookupId);
 
     const responseJson = playerStats.toJSON<IStatsClient>();

@@ -4,9 +4,9 @@ import {
     addMiscItem,
     addMods,
     addRecipes,
-    CurrencyType,
-    getInventory,
-    updateCurrency
+    getInventory2,
+    updateCredits,
+    updatePlatinum
 } from "../../services/inventoryService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import { GuildPermission } from "../../types/guildTypes.ts";
@@ -74,7 +74,44 @@ export const tradingController: RequestHandler = async (req, res) => {
         trade[`${us}Accepted`] = true;
         const them = us == "a" ? "b" : "a";
         if (trade[`${them}Accepted`]) {
-            const [aInventory, bInventory] = await Promise.all([getInventory(trade.a), getInventory(trade.b)]);
+            const [aInventory, bInventory] = await Promise.all([
+                getInventory2(
+                    trade.a,
+                    "tradesDontTouchInventory",
+                    "Upgrades",
+                    "RawUpgrades",
+                    "MiscItems",
+                    "Recipes",
+                    "HybridFusionTreasures",
+                    "NemesisHistory",
+                    "Nemesis",
+                    "infinitePlatinum",
+                    "PremiumCreditsFree",
+                    "PremiumCredits",
+                    "infiniteCredits",
+                    "RegularCredits",
+                    "infiniteTrades",
+                    "TradesRemaining"
+                ),
+                getInventory2(
+                    trade.b,
+                    "tradesDontTouchInventory",
+                    "Upgrades",
+                    "RawUpgrades",
+                    "MiscItems",
+                    "Recipes",
+                    "HybridFusionTreasures",
+                    "NemesisHistory",
+                    "Nemesis",
+                    "infinitePlatinum",
+                    "PremiumCreditsFree",
+                    "PremiumCredits",
+                    "infiniteCredits",
+                    "RegularCredits",
+                    "infiniteTrades",
+                    "TradesRemaining"
+                )
+            ]);
 
             if (!aInventory.tradesDontTouchInventory) {
                 applyOfferToInventory(aInventory, trade.aOffer, -1); // A gives up their items
@@ -115,7 +152,7 @@ export const tradingController: RequestHandler = async (req, res) => {
             PendingTrades: [exportTrade(trade, us)]
         });
     } else if (op == TradingOperation.SetClanTax) {
-        const inventory = await getInventory(accountId, "GuildId LevelKeys");
+        const inventory = await getInventory2(accountId, "GuildId", "LevelKeys");
         const guild = await getGuildForRequestEx(req, inventory);
         if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Treasurer))) {
             res.status(400).send("-1").end();
@@ -181,7 +218,23 @@ const getPendingTrade = (
     return PendingTrade.findOne(getTradeFilter(accountId, buddyId));
 };
 
-const applyOfferToInventory = (inventory: TInventoryDatabaseDocument, offer: ITradeOffer, factor: 1 | -1): void => {
+const applyOfferToInventory = (
+    inventory: Pick<
+        TInventoryDatabaseDocument,
+        | "Upgrades"
+        | "RawUpgrades"
+        | "MiscItems"
+        | "Recipes"
+        | "HybridFusionTreasures"
+        | "NemesisHistory"
+        | "Nemesis"
+        | "infinitePlatinum"
+        | "PremiumCreditsFree"
+        | "PremiumCredits"
+    >,
+    offer: ITradeOffer,
+    factor: 1 | -1
+): void => {
     if (offer.RandomUpgrades) {
         for (const item of offer.RandomUpgrades) {
             if (factor == -1) {
@@ -287,7 +340,7 @@ const applyOfferToInventory = (inventory: TInventoryDatabaseDocument, offer: ITr
         if (offer.PremiumCredits < 0) {
             throw new Error(`negative quantity in trade offer`);
         }
-        updateCurrency(inventory, offer.PremiumCredits * factor * -1, CurrencyType.PAID_PLATINUM);
+        updatePlatinum(inventory, offer.PremiumCredits * factor * -1, true);
     }
 };
 
@@ -349,7 +402,7 @@ const calcuateTax = (offer: ITradeOffer): number => {
 };
 
 const chargeTax = async (
-    inventory: TInventoryDatabaseDocument,
+    inventory: Pick<TInventoryDatabaseDocument, "infiniteCredits" | "RegularCredits">,
     offer: ITradeOffer,
     clanTaxInt: number,
     guildId: string | undefined
@@ -357,7 +410,7 @@ const chargeTax = async (
     const tax = calcuateTax(offer);
     const clanTaxRate = clanTaxInt ? 1 / clanTaxInt : 0;
     const clanTax = clanTaxRate * tax;
-    updateCurrency(inventory, tax + clanTax, false);
+    updateCredits(inventory, tax + clanTax);
     if (guildId && clanTax) {
         const guild = await Guild.findById(guildId);
         if (guild) {

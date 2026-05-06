@@ -1,12 +1,12 @@
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
-import { addShipDecorations, getInventory } from "../../services/inventoryService.ts";
+import { addShipDecorations, getInventory2 } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
 
 export const updateSongChallengeController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory2(accountId, "SongChallenges", "ShipDecorations");
     const request = getJSONfromString<IUpdateSongChallengeRequest>(String(req.body));
     inventory.SongChallenges ??= [];
     let songChallenge = inventory.SongChallenges.find(x => x.Song == request.Song);

@@ -4,9 +4,8 @@ import {
     addFusionPoints,
     addMiscItems,
     addMods,
-    CurrencyType,
-    getInventory,
-    updateCurrency
+    getInventory2,
+    updateCredits
 } from "../../services/inventoryService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import { getRandomElement, getRandomWeightedRewardUc } from "../../services/rngService.ts";
@@ -17,10 +16,19 @@ import { ExportBoosterPacks, ExportUpgrades } from "warframe-public-export-plus"
 
 export const artifactTransmutationController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const inventory = await getInventory(account._id);
+    const inventory = await getInventory2(
+        account._id,
+        "infiniteCredits",
+        "RegularCredits",
+        "infiniteEndo",
+        "FusionPoints",
+        "MiscItems",
+        "Upgrades",
+        "RawUpgrades"
+    );
     const payload = JSON.parse(String(req.body)) as IArtifactTransmutationRequest;
 
-    updateCurrency(inventory, payload.Cost, CurrencyType.CREDITS);
+    updateCredits(inventory, payload.Cost);
     if (payload.FusionPointCost) {
         addFusionPoints(inventory, -payload.FusionPointCost);
     }
@@ -33,9 +41,9 @@ export const artifactTransmutationController: RequestHandler = async (req, res) 
             }
         ]);
 
-        payload.Consumed.forEach(upgrade => {
+        for (const upgrade of payload.Consumed) {
             inventory.Upgrades.pull({ _id: fromOid(upgrade.ItemId) });
-        });
+        }
 
         const rawRivenType = getRandomRawRivenType();
         const rivenType = getRandomElement(rivenRawToRealWeighted[rawRivenType])!;

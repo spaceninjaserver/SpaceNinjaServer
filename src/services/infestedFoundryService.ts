@@ -82,7 +82,9 @@ export const addInfestedFoundryXP = (infestedFoundry: IInfestedFoundryDatabase, 
     return recipeChanges;
 };
 
-export const handleSubsumeCompletion = (inventory: TInventoryDatabaseDocument): ITypeCount[] => {
+export const handleSubsumeCompletion = (
+    inventory: Pick<TInventoryDatabaseDocument, "InfestedFoundry" | "Recipes">
+): ITypeCount[] => {
     const [recipeType] = Object.entries(ExportRecipes).find(
         ([_recipeType, recipe]) =>
             recipe.secretIngredientAction == "SIA_WARFRAME_ABILITY" &&
@@ -100,7 +102,10 @@ export const handleSubsumeCompletion = (inventory: TInventoryDatabaseDocument): 
     return recipeChanges;
 };
 
-export const applyCheatsToInfestedFoundry = (cheats: IAccountCheats, infestedFoundry: IInfestedFoundryClient): void => {
+export const applyCheatsToInfestedFoundry = (
+    cheats: Pick<IAccountCheats, "infiniteHelminthMaterials">,
+    infestedFoundry: IInfestedFoundryClient
+): void => {
     if (cheats.infiniteHelminthMaterials) {
         infestedFoundry.Resources = [
             { ItemType: "/Lotus/Types/Items/InfestedFoundry/HelminthCalx", Count: 1000 },

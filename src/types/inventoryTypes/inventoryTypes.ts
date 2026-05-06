@@ -179,7 +179,7 @@ export interface IInventoryDatabase
     TrainingDate: Date;
     LoadOutPresets: Types.ObjectId; // LoadOutPresets changed from ILoadOutPresets to Types.ObjectId for population
     //Mailbox?: IMailboxDatabase;
-    GuildId?: Types.ObjectId;
+    GuildId: Types.ObjectId | undefined;
     PendingRecipes: IPendingRecipeDatabase[];
     QuestKeys: IQuestKeyDatabase[];
     BlessingCooldown?: Date;

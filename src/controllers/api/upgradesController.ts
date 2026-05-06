@@ -4,7 +4,14 @@ import type { IUpgradesRequest, IUpgradesRequestLegacy } from "../../types/reque
 import type { ArtifactPolarity, IAbilityOverride } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import type { IInventoryClient, IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
-import { addMiscItems, addMods, addRecipes, getInventory, updateCurrency } from "../../services/inventoryService.ts";
+import {
+    addMiscItems,
+    addMods,
+    addRecipes,
+    getInventory2,
+    updateCredits,
+    updatePlatinum
+} from "../../services/inventoryService.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import { addInfestedFoundryXP, applyCheatsToInfestedFoundry } from "../../services/infestedFoundryService.ts";
 import { sendWsBroadcastTo } from "../../services/wsService.ts";
@@ -17,7 +24,6 @@ import { ExportRecipes } from "warframe-public-export-plus";
 export const upgradesController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const accountId = account._id.toString();
-    const inventory = await getInventory(accountId);
     const inventoryChanges: IInventoryChanges = {};
 
     if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["24.4.0"]) < 0) {
@@ -25,6 +31,19 @@ export const upgradesController: RequestHandler = async (req, res) => {
         const payload = JSON.parse(String(req.body)) as IUpgradesRequestLegacy;
         const itemId = fromOid(payload.Weapon.ItemId);
         if (itemId) {
+            const inventory = await getInventory2(
+                accountId,
+                payload.Category,
+                "MiscItems",
+                "RawUpgrades",
+                "Upgrades",
+                "infiniteCredits",
+                "RegularCredits",
+                "infinitePlatinum",
+                "PremiumCredits",
+                "PremiumCreditsFree"
+            );
+
             if (payload.IsSwappingOperation === true) {
                 const item = inventory[payload.Category].id(itemId)!;
                 for (let i = 0; i != payload.PolarityRemap.length; ++i) {
@@ -150,24 +169,37 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 const item = inventory[payload.Category].id(itemId)!;
                 item.Features ??= 0;
                 item.Features |= EquipmentFeatures.DOUBLE_CAPACITY;
-                updateCurrency(inventory, 20, true);
+                updatePlatinum(inventory, 20);
             }
             if (payload.Weapon.UpgradeNodes != undefined) {
                 const item = inventory[payload.Category].id(itemId)!;
                 item.UpgradeNodes = payload.Weapon.UpgradeNodes;
             }
             if (payload.Cost) {
-                updateCurrency(inventory, payload.Cost, false);
+                updateCredits(inventory, payload.Cost);
             }
+
+            await inventory.save();
         }
     } else {
         const payload = JSON.parse(String(req.body)) as IUpgradesRequest;
+        const inventory = await getInventory2(
+            accountId,
+            payload.ItemCategory,
+            "MiscItems",
+            "infinitePlatinum",
+            "PremiumCredits",
+            "PremiumCreditsFree",
+            "infiniteHelminthMaterials",
+            "InfestedFoundry",
+            "Recipes"
+        );
         for (const operation of payload.Operations) {
             if (
                 operation.UpgradeRequirement == "/Lotus/Types/Items/MiscItems/ModSlotUnlocker" ||
                 operation.UpgradeRequirement == "/Lotus/Types/Items/MiscItems/CustomizationSlotUnlocker"
             ) {
-                updateCurrency(inventory, 10, true);
+                updatePlatinum(inventory, 10);
             } else if (
                 operation.OperationType != "UOT_SWAP_POLARITY" &&
                 operation.OperationType != "UOT_ABILITY_OVERRIDE"
@@ -313,8 +345,8 @@ export const upgradesController: RequestHandler = async (req, res) => {
                         throw new Error("Unsupported upgrade: " + operation.UpgradeRequirement);
                 }
         }
+        await inventory.save();
     }
-    await inventory.save();
     res.json({ InventoryChanges: inventoryChanges });
 };
 

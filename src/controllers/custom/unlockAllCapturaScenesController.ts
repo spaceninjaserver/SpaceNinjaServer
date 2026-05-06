@@ -1,17 +1,19 @@
 import type { RequestHandler } from "express";
 import { ExportResources, ExportVirtuals } from "warframe-public-export-plus";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
-import { addItem, getInventory } from "../../services/inventoryService.ts";
+import { addMiscItem, getInventory } from "../../services/inventoryService.ts";
 import { sendWsBroadcastToGame } from "../../services/wsService.ts";
 
 export const unlockAllCapturaScenesController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, "MiscItems");
 
     let needSync = false;
     for (const uniqueName of Object.keys(ExportResources)) {
         if (resourceInheritsFrom(uniqueName, "/Lotus/Types/Items/MiscItems/PhotoboothTile")) {
-            await addItem(inventory, uniqueName, 1);
+            if (!inventory.MiscItems.some(x => x.ItemType == uniqueName)) {
+                addMiscItem(inventory, uniqueName, 1);
+            }
             needSync = true;
         }
     }

@@ -2,7 +2,7 @@ import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getPersonalRooms } from "../../services/personalRoomsService.ts";
 import type { TBootLocation } from "../../types/personalRoomsTypes.ts";
-import { getInventory } from "../../services/inventoryService.ts";
+import { getInventory2 } from "../../services/inventoryService.ts";
 
 export const setBootLocationController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -13,7 +13,7 @@ export const setBootLocationController: RequestHandler = async (req, res) => {
     if (personalRooms.Ship.BootLocation == "SHOP") {
         // Temp fix so the motorcycle in the backroom doesn't appear broken.
         // This code may be removed when quests are fully implemented.
-        const inventory = await getInventory(accountId);
+        const inventory = await getInventory2(accountId, "Motorcycles");
         if (inventory.Motorcycles.length == 0) {
             inventory.Motorcycles.push({ ItemType: "/Lotus/Types/Vehicles/Motorcycle/MotorcyclePowerSuit" });
             await inventory.save();

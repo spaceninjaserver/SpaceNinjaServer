@@ -1,7 +1,13 @@
 import type { RequestHandler } from "express";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
-import { getInventory, addMiscItems, updateCurrency, addRecipes, freeUpSlot } from "../../services/inventoryService.ts";
+import {
+    getInventory2,
+    addMiscItems,
+    addRecipes,
+    freeUpSlot,
+    updatePlatinum
+} from "../../services/inventoryService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import type {
     IConsumedSuit,
@@ -29,7 +35,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         case "s": {
             // shard installation
             const request = getJSONfromString<IShardInstallRequest>(String(req.body));
-            const inventory = await getInventory(account._id);
+            const inventory = await getInventory2(account._id, "Suits", "MiscItems");
             const suit = inventory.Suits.id(request.SuitId.$oid)!;
             suit.ArchonCrystalUpgrades ??= [];
             while (suit.ArchonCrystalUpgrades.length < request.Slot) {
@@ -58,7 +64,13 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         case "x": {
             // shard removal
             const request = getJSONfromString<IShardUninstallRequest>(String(req.body));
-            const inventory = await getInventory(account._id);
+            const inventory = await getInventory2(
+                account._id,
+                "Suits",
+                "MiscItems",
+                "infiniteHelminthMaterials",
+                "InfestedFoundry"
+            );
             const suit = inventory.Suits.id(request.SuitId.$oid)!;
 
             const miscItemChanges: IMiscItem[] = [];
@@ -111,7 +123,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         case "n": {
             // name the beast
             const request = getJSONfromString<IHelminthNameRequest>(String(req.body));
-            const inventory = await getInventory(account._id);
+            const inventory = await getInventory2(account._id, "InfestedFoundry");
             inventory.InfestedFoundry ??= {};
             inventory.InfestedFoundry.Name = request.newName;
             await inventory.save();
@@ -128,7 +140,13 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         case "c": {
             // consume items
 
-            const inventory = await getInventory(account._id);
+            const inventory = await getInventory2(
+                account._id,
+                "infiniteHelminthMaterials",
+                "InfestedFoundry",
+                "Recipes",
+                "MiscItems"
+            );
 
             if (inventory.infiniteHelminthMaterials) {
                 res.status(400).end();
@@ -231,7 +249,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         case "o": {
             // offerings update
             const request = getJSONfromString<IHelminthOfferingsUpdate>(String(req.body));
-            const inventory = await getInventory(account._id);
+            const inventory = await getInventory2(account._id, "InfestedFoundry", "infiniteHelminthMaterials");
             inventory.InfestedFoundry ??= {};
             inventory.InfestedFoundry.InvigorationIndex = request.OfferingsIndex;
             inventory.InfestedFoundry.InvigorationSuitOfferings = request.SuitTypes;
@@ -252,7 +270,14 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         case "a": {
             // subsume warframe
             const request = getJSONfromString<IHelminthSubsumeRequest>(String(req.body));
-            const inventory = await getInventory(account._id);
+            const inventory = await getInventory2(
+                account._id,
+                "infiniteHelminthMaterials",
+                "InfestedFoundry",
+                "Suits",
+                "Recipes",
+                "SuitBin"
+            );
             const recipe = getRecipe(request.Recipe)!;
             if (!inventory.infiniteHelminthMaterials) {
                 for (const ingredient of recipe.secretIngredients!) {
@@ -302,8 +327,16 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
 
         case "r": {
             // rush subsume
-            const inventory = await getInventory(account._id);
-            const currencyChanges = updateCurrency(inventory, 50, true);
+            const inventory = await getInventory2(
+                account._id,
+                "infinitePlatinum",
+                "PremiumCreditsFree",
+                "PremiumCredits",
+                "InfestedFoundry",
+                "Recipes",
+                "infiniteHelminthMaterials"
+            );
+            const currencyChanges = updatePlatinum(inventory, 50);
             const recipeChanges = handleSubsumeCompletion(inventory);
             await inventory.save();
             const infestedFoundry = inventory.toJSON<IInventoryClient>().InfestedFoundry!;
@@ -320,7 +353,13 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
 
         case "u": {
             const request = getJSONfromString<IHelminthInvigorationRequest>(String(req.body));
-            const inventory = await getInventory(account._id);
+            const inventory = await getInventory2(
+                account._id,
+                "Suits",
+                "InfestedFoundry",
+                "Recipes",
+                "infiniteHelminthMaterials"
+            );
             const suit = inventory.Suits.id(request.SuitId.$oid)!;
             const upgradesExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
             suit.OffensiveUpgrade = request.OffensiveUpgradeType;
@@ -353,7 +392,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
         }
 
         case "custom_unlockall": {
-            const inventory = await getInventory(account._id);
+            const inventory = await getInventory2(account._id, "InfestedFoundry", "Recipes");
             inventory.InfestedFoundry ??= {};
             inventory.InfestedFoundry.XP ??= 0;
             if (151875_00 > inventory.InfestedFoundry.XP) {

@@ -432,6 +432,24 @@ export const getInventory = async (
     return inventory;
 };
 
+export const getInventory2 = async <K extends keyof TInventoryDatabaseDocument>(
+    accountOwnerId: string | Types.ObjectId,
+    ...projection: readonly K[]
+): Promise<
+    Pick<
+        TInventoryDatabaseDocument,
+        K | "save" | "toObject" | "toJSON" | "populate" | "isModified" | "get" | "set" | "validate" | "validateSync"
+    >
+> => {
+    const inventory = await Inventory.findOne({ accountOwnerId: accountOwnerId }, projection);
+
+    if (!inventory) {
+        throw new Error(`Didn't find an inventory for ${String(accountOwnerId)}`);
+    }
+
+    return inventory;
+};
+
 export const productCategoryToInventoryBin = (productCategory: string): InventorySlot | undefined => {
     switch (productCategory) {
         case "Suits":
@@ -465,9 +483,9 @@ export const productCategoryToInventoryBin = (productCategory: string): Inventor
     return undefined;
 };
 
-export const occupySlot = (
-    inventory: TInventoryDatabaseDocument,
-    bin: InventorySlot,
+export const occupySlot = <ST extends InventorySlot>(
+    inventory: Pick<TInventoryDatabaseDocument, ST>,
+    bin: ST,
     premiumPurchase: boolean
 ): IInventoryChanges => {
     const slotChanges = {
@@ -486,7 +504,10 @@ export const occupySlot = (
     return inventoryChanges;
 };
 
-export const freeUpSlot = (inventory: TInventoryDatabaseDocument, bin: InventorySlot): void => {
+export const freeUpSlot = <ST extends InventorySlot>(
+    inventory: Pick<TInventoryDatabaseDocument, ST>,
+    bin: ST
+): void => {
     // { count: -1, platinum: 0, Slots: 1 }
     updateSlots(inventory, bin, 1, 0);
 };
@@ -1458,7 +1479,7 @@ export const addMechSuit = async (
 };
 
 export const addSpecialItem = (
-    inventory: TInventoryDatabaseDocument,
+    inventory: Pick<TInventoryDatabaseDocument, "SpecialItems">,
     itemName: string,
     inventoryChanges: IInventoryChanges
 ): void => {
@@ -1641,9 +1662,9 @@ export const addKubrowPetPrint = (
     );
 };
 
-export const updateSlots = (
-    inventory: TInventoryDatabaseDocument,
-    slotName: SlotNames,
+export const updateSlots = <ST extends SlotNames>(
+    inventory: Pick<TInventoryDatabaseDocument, ST>,
+    slotName: ST,
     slotAmount: number,
     extraAmount: number
 ): void => {
@@ -1662,50 +1683,65 @@ export const CurrencyType = {
 
 type TCurrencyType = (typeof CurrencyType)[keyof typeof CurrencyType];
 
-const isCurrencyTracked = (inventory: TInventoryDatabaseDocument, usePremium: TCurrencyType): boolean => {
-    return usePremium ? !inventory.infinitePlatinum : !inventory.infiniteCredits;
-};
-
 export const updateCurrency = (
     inventory: TInventoryDatabaseDocument,
     price: number,
     currencyType: TCurrencyType,
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
-    if (price != 0 && isCurrencyTracked(inventory, currencyType)) {
-        if (currencyType != CurrencyType.CREDITS) {
-            if (price > 0 && inventory.PremiumCreditsFree > 0 && currencyType != CurrencyType.PAID_PLATINUM) {
-                const premiumCreditsFreeDelta = Math.min(price, inventory.PremiumCreditsFree) * -1;
-                inventoryChanges.PremiumCreditsFree ??= 0;
-                inventoryChanges.PremiumCreditsFree += premiumCreditsFreeDelta;
-                inventory.PremiumCreditsFree += premiumCreditsFreeDelta;
-                logger.debug(`spending ${-premiumCreditsFreeDelta} starter plat`);
-            }
-            if (inventory.PremiumCredits - price < 0) {
-                throw new Error(
-                    `Cannot subtract ${price} platinum, would be left with ${inventory.PremiumCredits - price}`
-                );
-            }
-            inventoryChanges.PremiumCredits ??= 0;
-            inventoryChanges.PremiumCredits -= price;
-            inventory.PremiumCredits -= price;
-            logger.debug(`currency changes`, { PremiumCredits: -price });
-        } else {
-            if (inventory.RegularCredits - price < 0) {
-                throw new Error(
-                    `Cannot subtract ${price} credits, would be left with ${inventory.RegularCredits - price}`
-                );
-            }
-            inventoryChanges.RegularCredits ??= 0;
-            inventoryChanges.RegularCredits -= price;
-            inventory.RegularCredits -= price;
-            logger.debug(`currency changes`, { RegularCredits: -price });
+    return currencyType == CurrencyType.CREDITS
+        ? updateCredits(inventory, price, inventoryChanges)
+        : updatePlatinum(inventory, price, currencyType == CurrencyType.PAID_PLATINUM, inventoryChanges);
+};
+
+export const updateCredits = (
+    inventory: Pick<TInventoryDatabaseDocument, "infiniteCredits" | "RegularCredits">,
+    price: number,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
+    if (price != 0 && !inventory.infiniteCredits) {
+        if (inventory.RegularCredits - price < 0) {
+            throw new Error(`Cannot subtract ${price} credits, would be left with ${inventory.RegularCredits - price}`);
         }
+        inventoryChanges.RegularCredits ??= 0;
+        inventoryChanges.RegularCredits -= price;
+        inventory.RegularCredits -= price;
+        logger.debug(`currency changes`, { RegularCredits: -price });
     }
     return inventoryChanges;
 };
 
-export const addFusionPoints = (inventory: TInventoryDatabaseDocument, add: number): number => {
+export const updatePlatinum = (
+    inventory: Pick<TInventoryDatabaseDocument, "infinitePlatinum" | "PremiumCreditsFree" | "PremiumCredits">,
+    price: number,
+    mustBePaidPlatinum?: boolean,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
+    if (price != 0 && !inventory.infinitePlatinum) {
+        if (price > 0 && inventory.PremiumCreditsFree > 0 && !mustBePaidPlatinum) {
+            const premiumCreditsFreeDelta = Math.min(price, inventory.PremiumCreditsFree) * -1;
+            inventoryChanges.PremiumCreditsFree ??= 0;
+            inventoryChanges.PremiumCreditsFree += premiumCreditsFreeDelta;
+            inventory.PremiumCreditsFree += premiumCreditsFreeDelta;
+            logger.debug(`spending ${-premiumCreditsFreeDelta} starter plat`);
+        }
+        if (inventory.PremiumCredits - price < 0) {
+            throw new Error(
+                `Cannot subtract ${price} platinum, would be left with ${inventory.PremiumCredits - price}`
+            );
+        }
+        inventoryChanges.PremiumCredits ??= 0;
+        inventoryChanges.PremiumCredits -= price;
+        inventory.PremiumCredits -= price;
+        logger.debug(`currency changes`, { PremiumCredits: -price });
+    }
+    return inventoryChanges;
+};
+
+export const addFusionPoints = (
+    inventory: Pick<TInventoryDatabaseDocument, "infiniteEndo" | "FusionPoints">,
+    add: number
+): number => {
     if (inventory.infiniteEndo) {
         add = 0;
     } else {
@@ -1902,9 +1938,9 @@ export const updateGeneric = async (
     };
 };
 
-export const addEquipment = (
-    inventory: TInventoryDatabaseDocument,
-    category: TEquipmentKey,
+export const addEquipment = <K extends TEquipmentKey>(
+    inventory: Pick<TInventoryDatabaseDocument, K>,
+    category: K,
     type: string,
     defaultOverwrites?: Partial<IEquipmentDatabase>,
     inventoryChanges: IInventoryChanges = {}
@@ -1948,7 +1984,7 @@ export const addCustomization = (
 };
 
 export const addSkin = (
-    inventory: TInventoryDatabaseDocument,
+    inventory: Pick<TInventoryDatabaseDocument, "WeaponSkins" | "BountyScore">,
     typeName: string,
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
@@ -1982,7 +2018,7 @@ export const addSkin = (
 };
 
 export const addCrewShipWeaponSkin = (
-    inventory: TInventoryDatabaseDocument,
+    inventory: Pick<TInventoryDatabaseDocument, "CrewShipWeaponSkins">,
     typeName: string,
     upgradeFingerprint: string | undefined,
     inventoryChanges: IInventoryChanges = {}
@@ -2161,7 +2197,10 @@ const addCrewMember = (
 };
 
 export const addEmailItem = async (
-    inventory: TInventoryDatabaseDocument,
+    inventory: Pick<
+        TInventoryDatabaseDocument,
+        "accountOwnerId" | "EmailItems" | "AdultOperatorLoadOuts" | "OperatorSuits"
+    >,
     typeName: string,
     inventoryChanges: IInventoryChanges = {},
     buildLabel?: string
@@ -2230,10 +2269,10 @@ const xpEarningParts: readonly string[] = [
     "LWPT_HB_DECK"
 ];
 
-export const applyClientEquipmentUpdates = (
-    inventory: TInventoryDatabaseDocument,
+export const applyClientEquipmentUpdates = <K extends TEquipmentKey>(
+    inventory: Pick<TInventoryDatabaseDocument, K | "XPInfo">,
     gearArray: IEquipmentClient[],
-    categoryName: TEquipmentKey,
+    categoryName: K,
     buildLabel: string | undefined
 ): void => {
     const category = inventory[categoryName];
@@ -2308,7 +2347,7 @@ export const applyClientEquipmentUpdates = (
 };
 
 export const addMiscItem = (
-    inventory: TInventoryDatabaseDocument,
+    inventory: Pick<TInventoryDatabaseDocument, "MiscItems" | "FoundToday">,
     type: string,
     count: number,
     inventoryChanges: IInventoryChanges = {}
@@ -2323,7 +2362,10 @@ export const addMiscItem = (
     combineInventoryChanges(inventoryChanges, { MiscItems: miscItemChanges });
 };
 
-export const addMiscItems = (inventory: TInventoryDatabaseDocument, itemsArray: IMiscItem[]): void => {
+export const addMiscItems = (
+    inventory: Pick<TInventoryDatabaseDocument, "MiscItems" | "FoundToday">,
+    itemsArray: IMiscItem[]
+): void => {
     const { MiscItems } = inventory;
 
     itemsArray.forEach(({ ItemCount, ItemType }) => {
@@ -2363,9 +2405,11 @@ export const addMiscItems = (inventory: TInventoryDatabaseDocument, itemsArray: 
     });
 };
 
-const applyArrayChanges = (
-    inventory: TInventoryDatabaseDocument,
-    key: "ShipDecorations" | "Consumables" | "CrewShipRawSalvage" | "CrewShipAmmo" | "Recipes" | "LevelKeys",
+const applyArrayChanges = <
+    K extends "ShipDecorations" | "Consumables" | "CrewShipRawSalvage" | "CrewShipAmmo" | "Recipes" | "LevelKeys"
+>(
+    inventory: Pick<TInventoryDatabaseDocument, K>,
+    key: K,
     changes: ITypeCount[]
 ): void => {
     const arr: ITypeCount[] = inventory[key];
@@ -2388,31 +2432,49 @@ const applyArrayChanges = (
     }
 };
 
-export const addShipDecorations = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
+export const addShipDecorations = (
+    inventory: Pick<TInventoryDatabaseDocument, "ShipDecorations">,
+    itemsArray: ITypeCount[]
+): void => {
     applyArrayChanges(inventory, "ShipDecorations", itemsArray);
 };
 
-export const addConsumables = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
+export const addConsumables = (
+    inventory: Pick<TInventoryDatabaseDocument, "Consumables">,
+    itemsArray: ITypeCount[]
+): void => {
     applyArrayChanges(inventory, "Consumables", itemsArray);
 };
 
-export const addCrewShipRawSalvage = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
+export const addCrewShipRawSalvage = (
+    inventory: Pick<TInventoryDatabaseDocument, "CrewShipRawSalvage">,
+    itemsArray: ITypeCount[]
+): void => {
     applyArrayChanges(inventory, "CrewShipRawSalvage", itemsArray);
 };
 
-export const addCrewShipAmmo = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
+export const addCrewShipAmmo = (
+    inventory: Pick<TInventoryDatabaseDocument, "CrewShipAmmo">,
+    itemsArray: ITypeCount[]
+): void => {
     applyArrayChanges(inventory, "CrewShipAmmo", itemsArray);
 };
 
-export const addRecipes = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
+export const addRecipes = (inventory: Pick<TInventoryDatabaseDocument, "Recipes">, itemsArray: ITypeCount[]): void => {
     applyArrayChanges(inventory, "Recipes", itemsArray);
 };
 
-export const addLevelKeys = (inventory: TInventoryDatabaseDocument, itemsArray: ITypeCount[]): void => {
+export const addLevelKeys = (
+    inventory: Pick<TInventoryDatabaseDocument, "LevelKeys">,
+    itemsArray: ITypeCount[]
+): void => {
     applyArrayChanges(inventory, "LevelKeys", itemsArray);
 };
 
-export const addMods = (inventory: TInventoryDatabaseDocument, itemsArray: IRawUpgrade[]): void => {
+export const addMods = (
+    inventory: Pick<TInventoryDatabaseDocument, "RawUpgrades">,
+    itemsArray: IRawUpgrade[]
+): void => {
     const { RawUpgrades } = inventory;
 
     itemsArray.forEach(({ ItemType, ItemCount }) => {
@@ -2436,7 +2498,10 @@ export const addMods = (inventory: TInventoryDatabaseDocument, itemsArray: IRawU
     });
 };
 
-export const addFusionTreasures = (inventory: TInventoryDatabaseDocument, changes: IFusionTreasure[]): void => {
+export const addFusionTreasures = (
+    inventory: Pick<TInventoryDatabaseDocument, "HybridFusionTreasures">,
+    changes: IFusionTreasure[]
+): void => {
     for (const change of changes) {
         if (change.ItemCount != 0) {
             if (change.ItemCount > 0) {
@@ -2940,7 +3005,10 @@ export const createDefaultDialogue = (dialogueName: string): IDialogueDatabase =
     };
 };
 
-export const getDialogue = (inventory: TInventoryDatabaseDocument, dialogueName: string): IDialogueDatabase => {
+export const getDialogue = (
+    inventory: Pick<TInventoryDatabaseDocument, "DialogueHistory">,
+    dialogueName: string
+): IDialogueDatabase => {
     inventory.DialogueHistory ??= {};
     inventory.DialogueHistory.Dialogues ??= [];
     let dialogue = inventory.DialogueHistory.Dialogues.find(x => x.DialogueName == dialogueName);

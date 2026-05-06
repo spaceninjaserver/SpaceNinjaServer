@@ -6,7 +6,7 @@ import {
     hasAccessToDojo,
     scaleRequiredCount
 } from "../../services/guildService.ts";
-import { getInventory, updateCurrency } from "../../services/inventoryService.ts";
+import { getInventory2, updatePlatinum } from "../../services/inventoryService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import type { IDojoContributable } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
@@ -31,7 +31,14 @@ type IDojoComponentRushRequest =
 
 export const dojoComponentRushController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const inventory = await getInventory(account._id.toString());
+    const inventory = await getInventory2(
+        account._id,
+        "LevelKeys",
+        "GuildId",
+        "infinitePlatinum",
+        "PremiumCredits",
+        "PremiumCreditsFree"
+    );
     if (!hasAccessToDojo(inventory)) {
         res.json({ DojoRequestStatus: -1 });
         return;
@@ -42,7 +49,7 @@ export const dojoComponentRushController: RequestHandler = async (req, res) => {
 
     const amount = "Amount" in request ? request.Amount : request.amount;
     let platinumDonated = amount;
-    const inventoryChanges = updateCurrency(inventory, amount, true);
+    const inventoryChanges = updatePlatinum(inventory, amount);
 
     const vaultAmount = "VaultAmount" in request ? request.VaultAmount : request.vaultAmount;
     if (vaultAmount) {

@@ -1,5 +1,5 @@
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
-import { addMiscItems, freeUpSlot, getInventory, updateCurrency } from "../../services/inventoryService.ts";
+import { addMiscItems, freeUpSlot, getInventory2, updateCredits } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import type { ICrewShipComponentFingerprint } from "../../types/inventoryTypes/inventoryTypes.ts";
@@ -10,7 +10,17 @@ import { ExportCustoms, ExportDojoRecipes } from "warframe-public-export-plus";
 
 export const crewShipFusionController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory2(
+        accountId,
+        "CrewShipWeapons",
+        "CrewShipWeaponSkins",
+        "CrewShipSalvagedWeapons",
+        "CrewShipSalvagedWeaponSkins",
+        "infiniteCredits",
+        "RegularCredits",
+        "MiscItems",
+        "CrewShipSalvageBin"
+    );
     const payload = getJSONfromString<ICrewShipFusionRequest>(String(req.body));
 
     const isWeapon = inventory.CrewShipWeapons.id(payload.PartA.$oid);
@@ -26,7 +36,7 @@ export const crewShipFusionController: RequestHandler = async (req, res) => {
     // Charge partial repair cost if fusing with an identified but unrepaired part
     if (payload.SourceRecipe) {
         const recipe = ExportDojoRecipes.research[payload.SourceRecipe];
-        updateCurrency(inventory, Math.round(recipe.price * 0.4), false, inventoryChanges);
+        updateCredits(inventory, Math.round(recipe.price * 0.4), inventoryChanges);
         const miscItemChanges = recipe.ingredients.map(x => ({ ...x, ItemCount: Math.round(x.ItemCount * -0.4) }));
         addMiscItems(inventory, miscItemChanges);
         inventoryChanges.MiscItems = miscItemChanges;

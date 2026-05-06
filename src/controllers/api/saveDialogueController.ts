@@ -1,4 +1,4 @@
-import { addEmailItem, getDialogue, getInventory, updateCurrency } from "../../services/inventoryService.ts";
+import { addEmailItem, getDialogue, getInventory2, updateCredits } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { ICompletedDialogue, IDialogueCounter } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
@@ -9,13 +9,23 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
     const request = JSON.parse(String(req.body)) as SaveDialogueRequest;
     //logger.debug(`saveDialogue:`, request);
     if ("YearIteration" in request) {
-        const inventory = await getInventory(accountId, "DialogueHistory noKimCooldowns");
+        const inventory = await getInventory2(accountId, "DialogueHistory");
         inventory.DialogueHistory ??= {};
         inventory.DialogueHistory.YearIteration = request.YearIteration;
         await inventory.save();
         res.end();
     } else {
-        const inventory = await getInventory(accountId);
+        const inventory = await getInventory2(
+            accountId,
+            "noKimCooldowns",
+            "DialogueHistory",
+            "accountOwnerId",
+            "EmailItems",
+            "AdultOperatorLoadOuts",
+            "OperatorSuits",
+            "infiniteCredits",
+            "RegularCredits"
+        );
         const inventoryChanges: IInventoryChanges = {};
         const tomorrowAt0Utc = inventory.noKimCooldowns
             ? Date.now()
@@ -67,7 +77,7 @@ export const saveDialogueController: RequestHandler = async (req, res) => {
                 AvailableDate: { $date: { $numberLong: tomorrowAt0Utc.toString() } }
             });
         } else if (request.Gift) {
-            const inventoryChanges = updateCurrency(inventory, request.Gift.Cost, false);
+            const inventoryChanges = updateCredits(inventory, request.Gift.Cost);
             const gift = dialogue.Gifts.find(x => x.Item == request.Gift!.Item);
             if (gift) {
                 gift.GiftedQuantity += 1;

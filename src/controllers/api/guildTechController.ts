@@ -22,8 +22,10 @@ import {
     addRecipes,
     combineInventoryChanges,
     getInventory,
+    getInventory2,
     occupySlot,
-    updateCurrency
+    updateCredits,
+    updatePlatinum
 } from "../../services/inventoryService.ts";
 import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
@@ -39,12 +41,12 @@ import { broadcastGuildUpdate } from "../../services/wsService.ts";
 export const guildTechController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const accountId = account._id.toString();
-    const inventory = await getInventory(accountId);
     const data = JSON.parse(String(req.body)) as TGuildTechRequest;
     //logger.debug(`guildTech:`, data);
     if (data.Action == "Sync") {
         let needSave = false;
         const techProjects: ITechProjectClient[] = [];
+        const inventory = await getInventory2(accountId, "GuildId");
         const guild = await getGuildForRequestEx(req, inventory);
         if (guild.TechProjects) {
             for (const project of guild.TechProjects) {
@@ -73,6 +75,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
         res.json({ TechProjects: techProjects });
     } else if (data.Action == "Start") {
         if (data.Mode != "Personal") {
+            const inventory = await getInventory2(accountId, "GuildId", "LevelKeys");
             const guild = await getGuildForRequestEx(req, inventory);
             if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
                 res.status(400).send("-1").end();
@@ -109,6 +112,14 @@ export const guildTechController: RequestHandler = async (req, res) => {
             res.end();
             broadcastGuildUpdate(req, guild._id.toString());
         } else {
+            const inventory = await getInventory2(
+                accountId,
+                "GuildId",
+                "LevelKeys",
+                "CrewShipSalvagedWeapons",
+                "CrewShipSalvagedWeaponSkins",
+                "PersonalTechProjects"
+            );
             const recipe = ExportDojoRecipes.research[data.RecipeType!];
             if (data.TechProductCategory) {
                 if (
@@ -143,10 +154,17 @@ export const guildTechController: RequestHandler = async (req, res) => {
         }
     } else if (data.Action == "Contribute") {
         if ("guildId" in req.query && (req.query.guildId as string) == "000000000000000000000000") {
+            const inventory = await getInventory2(
+                accountId,
+                "PersonalTechProjects",
+                "infiniteCredits",
+                "RegularCredits",
+                "MiscItems"
+            );
             const techProject = inventory.PersonalTechProjects.id(data.ResearchId!)!;
 
             techProject.ReqCredits -= data.RegularCredits;
-            const inventoryChanges: IInventoryChanges = updateCurrency(inventory, data.RegularCredits, false);
+            const inventoryChanges: IInventoryChanges = updateCredits(inventory, data.RegularCredits);
 
             const miscItemChanges = [];
             for (const miscItem of data.MiscItems) {
@@ -180,6 +198,14 @@ export const guildTechController: RequestHandler = async (req, res) => {
                 PersonalResearchDate: techProject.CompletionDate ? toMongoDate(techProject.CompletionDate) : undefined
             });
         } else {
+            const inventory = await getInventory2(
+                accountId,
+                "LevelKeys",
+                "GuildId",
+                "MiscItems",
+                "infiniteCredits",
+                "RegularCredits"
+            );
             if (!hasAccessToDojo(inventory)) {
                 res.status(400).send("-1").end();
                 return;
@@ -243,7 +269,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
                 }
             }
             addMiscItems(inventory, miscItemChanges);
-            const inventoryChanges: IInventoryChanges = updateCurrency(inventory, data.RegularCredits, false);
+            const inventoryChanges: IInventoryChanges = updateCredits(inventory, data.RegularCredits);
             inventoryChanges.MiscItems = miscItemChanges;
 
             // Check if research is fully funded now.
@@ -262,6 +288,14 @@ export const guildTechController: RequestHandler = async (req, res) => {
             const recipeType: string = (purchase.RecipeType ??
                 purchase.ResearchId ??
                 (req.query.researchId as string | undefined))!;
+            const inventory = await getInventory2(
+                accountId,
+                "LevelKeys",
+                "GuildId",
+                "Recipes",
+                "infiniteCredits",
+                "RegularCredits"
+            );
             const guild = await getGuildForRequestEx(req, inventory);
             if (
                 !hasAccessToDojo(inventory) ||
@@ -278,11 +312,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
                 }
             ];
             addRecipes(inventory, recipeChanges);
-            const currencyChanges = updateCurrency(
-                inventory,
-                ExportDojoRecipes.research[recipeType].replicatePrice,
-                false
-            );
+            const currencyChanges = updateCredits(inventory, ExportDojoRecipes.research[recipeType].replicatePrice);
             await inventory.save();
             // Not a mistake: This response uses `inventoryChanges` instead of `InventoryChanges`.
             res.json({
@@ -292,6 +322,15 @@ export const guildTechController: RequestHandler = async (req, res) => {
                 }
             });
         } else {
+            const inventory = await getInventory2(
+                accountId,
+                "PersonalTechProjects",
+                "CrewShipWeapons",
+                "CrewShipWeaponSkins",
+                "CrewShipSalvagedWeapons",
+                "CrewShipSalvagedWeaponSkins",
+                "CrewShipSalvageBin"
+            );
             const inventoryChanges = claimSalvagedComponent(inventory, purchase.CategoryItemId!);
             await inventory.save();
             res.json({
@@ -299,13 +338,14 @@ export const guildTechController: RequestHandler = async (req, res) => {
             });
         }
     } else if (data.Action == "Fabricate") {
+        const inventory = await getInventory(accountId, undefined);
         const guild = await getGuildForRequestEx(req, inventory);
         if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Fabricator))) {
             res.status(400).send("-1").end();
             return;
         }
         const recipe = ExportDojoRecipes.fabrications[data.RecipeType!];
-        const inventoryChanges: IInventoryChanges = updateCurrency(inventory, recipe.price, false);
+        const inventoryChanges: IInventoryChanges = updateCredits(inventory, recipe.price);
         inventoryChanges.MiscItems = recipe.ingredients.map(x => ({
             ItemType: x.ItemType,
             ItemCount: x.ItemCount * -1
@@ -316,6 +356,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
         // Not a mistake: This response uses `inventoryChanges` instead of `InventoryChanges`.
         res.json({ inventoryChanges: inventoryChanges });
     } else if (data.Action == "Pause") {
+        const inventory = await getInventory2(accountId, "GuildId", "LevelKeys");
         const guild = await getGuildForRequestEx(req, inventory);
         if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
             res.status(400).send("-1").end();
@@ -328,6 +369,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
         await removePigmentsFromGuildMembers(guild._id);
         res.end();
     } else if (data.Action == "Unpause") {
+        const inventory = await getInventory2(accountId, "GuildId", "LevelKeys");
         const guild = await getGuildForRequestEx(req, inventory);
         if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
             res.status(400).send("-1").end();
@@ -339,6 +381,13 @@ export const guildTechController: RequestHandler = async (req, res) => {
         await guild.save();
         res.end();
     } else if (data.Action == "Cancel" && data.CategoryItemId) {
+        const inventory = await getInventory2(
+            accountId,
+            "PersonalTechProjects",
+            "infiniteCredits",
+            "RegularCredits",
+            "MiscItems"
+        );
         const personalTechProjectIndex = inventory.PersonalTechProjects.findIndex(x =>
             x.CategoryItemId?.equals(data.CategoryItemId)
         );
@@ -347,7 +396,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
 
         const meta = ExportDojoRecipes.research[personalTechProject.ItemType];
         const contributedCredits = meta.price - personalTechProject.ReqCredits;
-        const inventoryChanges = updateCurrency(inventory, contributedCredits * -1, false);
+        const inventoryChanges = updateCredits(inventory, contributedCredits * -1);
         inventoryChanges.MiscItems = [];
         for (const ingredient of meta.ingredients) {
             const reqItem = personalTechProject.ReqItems.find(x => x.ItemType == ingredient.ItemType);
@@ -371,8 +420,20 @@ export const guildTechController: RequestHandler = async (req, res) => {
             }
         });
     } else if (data.Action == "Rush" && data.CategoryItemId) {
+        const inventory = await getInventory2(
+            accountId,
+            "infinitePlatinum",
+            "PremiumCredits",
+            "PremiumCreditsFree",
+            "PersonalTechProjects",
+            "CrewShipSalvageBin",
+            "CrewShipWeapons",
+            "CrewShipSalvagedWeapons",
+            "CrewShipWeaponSkins",
+            "CrewShipSalvagedWeaponSkins"
+        );
         const inventoryChanges: IInventoryChanges = {
-            ...updateCurrency(inventory, 20, true),
+            ...updatePlatinum(inventory, 20),
             ...claimSalvagedComponent(inventory, data.CategoryItemId)
         };
         await inventory.save();
@@ -383,6 +444,16 @@ export const guildTechController: RequestHandler = async (req, res) => {
         if (data.TechProductCategory != "CrewShipWeapons" && data.TechProductCategory != "CrewShipWeaponSkins") {
             throw new Error(`unexpected TechProductCategory: ${data.TechProductCategory}`);
         }
+        const inventory = await getInventory2(
+            accountId,
+            "PersonalTechProjects",
+            "CrewShipSalvageBin",
+            "CrewShipWeapons",
+            "CrewShipSalvagedWeapons",
+            "CrewShipWeaponSkins",
+            "CrewShipSalvagedWeaponSkins",
+            "MiscItems"
+        );
         const inventoryChanges = finishComponentRepair(inventory, data.TechProductCategory, data.CategoryItemId!);
         inventoryChanges.MiscItems = [
             {
@@ -435,7 +506,18 @@ const getSalvageCategory = (
     return category == "CrewShipWeapons" ? "CrewShipSalvagedWeapons" : "CrewShipSalvagedWeaponSkins";
 };
 
-const claimSalvagedComponent = (inventory: TInventoryDatabaseDocument, itemId: string): IInventoryChanges => {
+const claimSalvagedComponent = (
+    inventory: Pick<
+        TInventoryDatabaseDocument,
+        | "PersonalTechProjects"
+        | "CrewShipWeapons"
+        | "CrewShipWeaponSkins"
+        | "CrewShipSalvagedWeapons"
+        | "CrewShipSalvagedWeaponSkins"
+        | "CrewShipSalvageBin"
+    >,
+    itemId: string
+): IInventoryChanges => {
     // delete personal tech project
     const personalTechProjectIndex = inventory.PersonalTechProjects.findIndex(x => x.CategoryItemId?.equals(itemId));
     const personalTechProject = inventory.PersonalTechProjects[personalTechProjectIndex];
@@ -446,7 +528,14 @@ const claimSalvagedComponent = (inventory: TInventoryDatabaseDocument, itemId: s
 };
 
 const finishComponentRepair = (
-    inventory: TInventoryDatabaseDocument,
+    inventory: Pick<
+        TInventoryDatabaseDocument,
+        | "CrewShipWeapons"
+        | "CrewShipWeaponSkins"
+        | "CrewShipSalvagedWeapons"
+        | "CrewShipSalvagedWeaponSkins"
+        | "CrewShipSalvageBin"
+    >,
     category: "CrewShipWeapons" | "CrewShipWeaponSkins",
     itemId: string
 ): IInventoryChanges => {

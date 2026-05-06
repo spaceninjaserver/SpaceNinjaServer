@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
-import { getInventory, addMods, addMiscItem, addSkin } from "../../services/inventoryService.ts";
+import { getInventory2, addMods, addMiscItem, addSkin } from "../../services/inventoryService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import { logger } from "../../utils/logger.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
@@ -9,7 +9,14 @@ import { fromOid, version_compare } from "../../helpers/inventoryHelpers.ts";
 
 export const arcaneCommonController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const inventory = await getInventory(account._id.toString());
+    const inventory = await getInventory2(
+        account._id.toString(),
+        "WeaponSkins",
+        "OperatorAmps",
+        "Upgrades",
+        "RawUpgrades",
+        "MiscItems"
+    );
     const json = getJSONfromString<IArcaneCommonRequest | IArcaneLegacyRequest>(String(req.body));
     if (!("newRank" in json) && "skinId" in json) {
         // logger.debug(`legacy arcane request:`, json);

@@ -1,5 +1,5 @@
 import { getAccountIdForRequest } from "../../services/loginService.ts";
-import { getInventory, updateCurrency, updateSlots } from "../../services/inventoryService.ts";
+import { getInventory2, updatePlatinum, updateSlots } from "../../services/inventoryService.ts";
 import type { RequestHandler } from "express";
 import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { exhaustive } from "../../utils/ts-utils.ts";
@@ -62,8 +62,14 @@ export const inventorySlotsController: RequestHandler = async (req, res) => {
             throw new Error(`unexpected slot purchase of type ${body.Bin as string}`);
     }
 
-    const inventory = await getInventory(accountId);
-    const currencyChanges = updateCurrency(inventory, price, true);
+    const inventory = await getInventory2<InventorySlot | "infinitePlatinum" | "PremiumCredits" | "PremiumCreditsFree">(
+        accountId,
+        body.Bin,
+        "infinitePlatinum",
+        "PremiumCredits",
+        "PremiumCreditsFree"
+    );
+    const currencyChanges = updatePlatinum(inventory, price);
     updateSlots(inventory, body.Bin, amount, amount);
     await inventory.save();
 

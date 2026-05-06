@@ -6,9 +6,8 @@ import {
     addFusionPoints,
     addMiscItem,
     addMods,
-    CurrencyType,
-    getInventory,
-    updateCurrency
+    getInventory2,
+    updateCredits
 } from "../../services/inventoryService.ts";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 import { fromOid, version_compare } from "../../helpers/inventoryHelpers.ts";
@@ -20,7 +19,16 @@ export const artifactsController: RequestHandler = async (req, res) => {
 
     const { Upgrade, LevelDiff, Cost, FusionPointCost, Consumed, Fingerprint } = artifactsData;
 
-    const inventory = await getInventory(account._id);
+    const inventory = await getInventory2(
+        account._id,
+        "Upgrades",
+        "MiscItems",
+        "RawUpgrades",
+        "infiniteCredits",
+        "RegularCredits",
+        "infiniteEndo",
+        "FusionPoints"
+    );
     const { Upgrades } = inventory;
     const { ItemType, UpgradeFingerprint, ItemId } = Upgrade;
 
@@ -54,10 +62,8 @@ export const artifactsController: RequestHandler = async (req, res) => {
             addMods(inventory, [{ ItemType, ItemCount: -1 }]);
         }
 
-        updateCurrency(inventory, Cost, CurrencyType.CREDITS);
-        if (!inventory.infiniteEndo) {
-            addFusionPoints(inventory, -FusionPointCost);
-        }
+        updateCredits(inventory, Cost);
+        addFusionPoints(inventory, -FusionPointCost);
 
         if (artifactsData.LegendaryFusion) {
             addMods(inventory, [

@@ -1,10 +1,17 @@
-import { addFusionPoints, getInventory } from "../../services/inventoryService.ts";
+import { addFusionPoints, getInventory2 } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 export const claimLibraryDailyTaskRewardController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory2(
+        accountId,
+        "LibraryActiveDailyTaskInfo",
+        "LibraryAvailableDailyTaskInfo",
+        "Affiliations",
+        "infiniteEndo",
+        "FusionPoints"
+    );
 
     const rewardQuantity = inventory.LibraryActiveDailyTaskInfo!.RewardQuantity;
     const rewardStanding = inventory.LibraryActiveDailyTaskInfo!.RewardStanding;

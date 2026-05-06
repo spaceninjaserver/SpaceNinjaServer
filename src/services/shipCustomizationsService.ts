@@ -13,7 +13,7 @@ import type {
 } from "../types/personalRoomsTypes.ts";
 import { logger } from "../utils/logger.ts";
 import { Types } from "mongoose";
-import { addFusionTreasures, addShipDecorations, getInventory } from "./inventoryService.ts";
+import { addFusionTreasures, addShipDecorations, getInventory2 } from "./inventoryService.ts";
 import { Guild } from "../models/guildModel.ts";
 import { hasPermissionToDecorateComponent } from "./guildService.ts";
 import { ExportResources } from "warframe-public-export-plus";
@@ -135,13 +135,15 @@ export const handleSetShipDecorations = async (
         roomToPlaceIn.MaxCapacity += meta.capacityCost;
         await personalRooms.save();
 
-        const inventory = await getInventory(accountId);
         if (deco.Sockets !== undefined) {
+            const inventory = await getInventory2(accountId, "HybridFusionTreasures");
             addFusionTreasures(inventory, [{ ItemType: itemType, Sockets: deco.Sockets, ItemCount: 1 }]);
+            await inventory.save();
         } else {
+            const inventory = await getInventory2(accountId, "ShipDecorations");
             addShipDecorations(inventory, [{ ItemType: itemType, ItemCount: 1 }]);
+            await inventory.save();
         }
-        await inventory.save();
 
         return {
             DecoId: placedDecoration.RemoveId,
@@ -151,13 +153,15 @@ export const handleSetShipDecorations = async (
         };
     }
 
-    const inventory = await getInventory(accountId);
     if (placedDecoration.Sockets !== undefined) {
+        const inventory = await getInventory2(accountId, "HybridFusionTreasures");
         addFusionTreasures(inventory, [{ ItemType: itemType, Sockets: placedDecoration.Sockets, ItemCount: -1 }]);
+        await inventory.save();
     } else {
+        const inventory = await getInventory2(accountId, "ShipDecorations");
         addShipDecorations(inventory, [{ ItemType: itemType, ItemCount: -1 }]);
+        await inventory.save();
     }
-    await inventory.save();
 
     //place decoration
     const decoId = new Types.ObjectId();
@@ -198,7 +202,10 @@ export const handleResetShipDecorations = async (
     accountId: string,
     request: IResetShipDecorationsRequest
 ): Promise<IResetShipDecorationsResponse> => {
-    const [personalRooms, inventory] = await Promise.all([getPersonalRooms(accountId), getInventory(accountId)]);
+    const [personalRooms, inventory] = await Promise.all([
+        getPersonalRooms(accountId),
+        getInventory2(accountId, "HybridFusionTreasures", "ShipDecorations")
+    ]);
     const room = getRoomsForBootLocation(personalRooms, request).find(room => room.Name === request.Room);
     if (!room) {
         throw new Error(`unknown room: ${request.Room}`);

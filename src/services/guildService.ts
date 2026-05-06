@@ -50,7 +50,7 @@ export const getGuildForRequest = async (
 
 export const getGuildForRequestEx = async (
     req: Request,
-    inventory: TInventoryDatabaseDocument
+    inventory: Pick<TInventoryDatabaseDocument, "GuildId">
 ): Promise<TGuildDatabaseDocument> => {
     // guildTech requests from U8 don't have the guildId query param
     if ("guildId" in req.query) {
@@ -711,7 +711,7 @@ export const createUniqueClanName = async (name: string): Promise<string> => {
     throw new Error(`clan name is so unoriginal it's already been done 1000 times: ${name}`);
 };
 
-export const hasAccessToDojo = (inventory: TInventoryDatabaseDocument): boolean => {
+export const hasAccessToDojo = (inventory: Pick<TInventoryDatabaseDocument, "LevelKeys">): boolean => {
     return inventory.LevelKeys.find(x => x.ItemType == "/Lotus/Types/Keys/DojoKey") !== undefined;
 };
 

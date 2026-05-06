@@ -1,5 +1,5 @@
 import { toMongoDate2, toOid2 } from "../../helpers/inventoryHelpers.ts";
-import { addMiscItems, getInventory } from "../../services/inventoryService.ts";
+import { addMiscItems, getInventory2 } from "../../services/inventoryService.ts";
 import { fromStoreItem } from "../../services/itemDataService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import { getRandomInt, getRandomWeightedRewardUc } from "../../services/rngService.ts";
@@ -13,7 +13,7 @@ export const dronesController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const accountId = account._id.toString();
     if ("GetActive" in req.query) {
-        const inventory = await getInventory(accountId, "Drones");
+        const inventory = await getInventory2(accountId, "Drones");
         const activeDrones: IActiveDrone[] = [];
         for (const drone of inventory.Drones) {
             if (drone.DeployTime) {
@@ -39,9 +39,11 @@ export const dronesController: RequestHandler = async (req, res) => {
             ActiveDrones: activeDrones
         });
     } else if ("droneId" in req.query && "systemIndex" in req.query) {
-        const inventory = await getInventory(
+        const inventory = await getInventory2(
             accountId,
-            "Drones instantResourceExtractorDrones noResourceExtractorDronesDamage"
+            "Drones",
+            "instantResourceExtractorDrones",
+            "noResourceExtractorDronesDamage"
         );
         const drone = inventory.Drones.id(req.query.droneId as string)!;
         const droneMeta = ExportDrones[drone.ItemType];
@@ -80,7 +82,7 @@ export const dronesController: RequestHandler = async (req, res) => {
         await inventory.save();
         res.json({});
     } else if ("collectDroneId" in req.query) {
-        const inventory = await getInventory(accountId);
+        const inventory = await getInventory2(accountId, "RegularCredits", "Drones", "MiscItems", "FoundToday");
         const drone = inventory.Drones.id(req.query.collectDroneId as string)!;
 
         if (new Date() >= drone.DamageTime!) {

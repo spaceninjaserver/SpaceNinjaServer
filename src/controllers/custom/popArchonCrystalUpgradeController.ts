@@ -1,11 +1,11 @@
 import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
-import { getInventory } from "../../services/inventoryService.ts";
+import { getInventory2 } from "../../services/inventoryService.ts";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 export const popArchonCrystalUpgradeController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory2(accountId, "Suits");
     const suit = inventory.Suits.id(req.query.oid as string);
     if (suit && suit.ArchonCrystalUpgrades) {
         suit.ArchonCrystalUpgrades = suit.ArchonCrystalUpgrades.filter(

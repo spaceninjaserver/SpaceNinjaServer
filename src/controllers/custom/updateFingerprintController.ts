@@ -1,4 +1,4 @@
-import { getInventory } from "../../services/inventoryService.ts";
+import { getInventory2 } from "../../services/inventoryService.ts";
 import type { WeaponTypeInternal } from "../../services/itemDataService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
@@ -8,7 +8,7 @@ import type { TRarity } from "warframe-public-export-plus";
 export const updateFingerprintController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const request = req.body as IUpdateFingerPrintRequest;
-    const inventory = await getInventory(accountId, request.category);
+    const inventory = await getInventory2(accountId, request.category);
     if (request.category !== "Upgrades") {
         const item = inventory[request.category].id(request.oid);
         if (item) {

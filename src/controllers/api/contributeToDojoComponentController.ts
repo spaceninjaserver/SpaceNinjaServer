@@ -10,7 +10,7 @@ import {
     scaleRequiredCount,
     setDojoRoomLogFunded
 } from "../../services/guildService.ts";
-import { addMiscItems, getInventory, updateCurrency } from "../../services/inventoryService.ts";
+import { addMiscItems, getInventory2, updateCredits } from "../../services/inventoryService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import type { IDojoContributable, IGuildMemberDatabase } from "../../types/guildTypes.ts";
 import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
@@ -40,7 +40,14 @@ interface IContributeToDojoComponentRequest {
 
 export const contributeToDojoComponentController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const inventory = await getInventory(account._id);
+    const inventory = await getInventory2(
+        account._id,
+        "LevelKeys",
+        "GuildId",
+        "infiniteCredits",
+        "RegularCredits",
+        "MiscItems"
+    );
     // Any clan member should have permission to contribute although notably permission is denied if they have not crafted the dojo key and were simply invited in.
     if (!hasAccessToDojo(inventory)) {
         res.json({ DojoRequestStatus: -1 });
@@ -110,7 +117,7 @@ const processContribution = (
     guild: TGuildDatabaseDocument,
     guildMember: IGuildMemberDatabase,
     request: IContributeToDojoComponentRequest,
-    inventory: TInventoryDatabaseDocument,
+    inventory: Pick<TInventoryDatabaseDocument, "infiniteCredits" | "RegularCredits" | "MiscItems">,
     inventoryChanges: IInventoryChanges,
     meta: IDojoBuild,
     component: IDojoContributable,
@@ -120,7 +127,7 @@ const processContribution = (
     if (request.RegularCredits) {
         component.RegularCredits += request.RegularCredits;
         inventoryChanges.RegularCredits = -request.RegularCredits;
-        updateCurrency(inventory, request.RegularCredits, false);
+        updateCredits(inventory, request.RegularCredits);
 
         guildMember.RegularCreditsContributed ??= 0;
         guildMember.RegularCreditsContributed += request.RegularCredits;

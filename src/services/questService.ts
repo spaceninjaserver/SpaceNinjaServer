@@ -104,7 +104,7 @@ export const updateQuestStage = (
 };
 
 export const resetQuestKeyToStage = (
-    inventory: TInventoryDatabaseDocument,
+    inventory: Pick<TInventoryDatabaseDocument, "QuestKeys">,
     { KeyChain, ChainStage }: IKeyChainRequest
 ): void => {
     const quest = inventory.QuestKeys.find(quest => quest.ItemType === KeyChain);

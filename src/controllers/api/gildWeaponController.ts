@@ -2,7 +2,7 @@ import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
-import { addMiscItems, getInventory } from "../../services/inventoryService.ts";
+import { addMiscItems, getInventory2 } from "../../services/inventoryService.ts";
 import type { TEquipmentKey } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { ArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import { ExportRecipes } from "warframe-public-export-plus";
@@ -25,7 +25,7 @@ export const gildWeaponController: RequestHandler = async (req, res) => {
     data.ItemId = String(req.query.ItemId);
     data.Category = req.query.Category as TEquipmentKey;
 
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory2(accountId, data.Category, "MiscItems", "Affiliations");
     const weaponIndex = inventory[data.Category].findIndex(x => String(x._id) === data.ItemId);
     if (weaponIndex === -1) {
         throw new Error(`Weapon with ${data.ItemId} not found in category ${String(req.query.Category)}`);

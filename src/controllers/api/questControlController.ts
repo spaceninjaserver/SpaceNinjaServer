@@ -1,11 +1,11 @@
-import { getInventory } from "../../services/inventoryService.ts";
+import { getInventory2 } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 // Basic shim handling action=sync to login on U21
 export const questControlController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory2(accountId, "QuestKeys");
     const quests: IQuestState[] = [];
     for (const quest of inventory.QuestKeys) {
         quests.push({

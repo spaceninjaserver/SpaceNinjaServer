@@ -1,13 +1,13 @@
 import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
-import { addMiscItems, getInventory } from "../../services/inventoryService.ts";
+import { addMiscItems, getInventory2 } from "../../services/inventoryService.ts";
 import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { colorToShard, combineColors, shardToColor } from "../../helpers/shardHelper.ts";
 
 export const archonFusionController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const request = JSON.parse(String(req.body)) as IArchonFusionRequest;
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory2(accountId, "MiscItems");
     request.Consumed.forEach(x => {
         x.ItemCount *= -1;
     });
