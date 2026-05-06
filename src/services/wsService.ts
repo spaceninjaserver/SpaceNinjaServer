@@ -317,10 +317,10 @@ export const sendWsBroadcastTo = (accountId: string, data: IWsMsgToClient): void
     });
 };
 
-export const sendWsBroadcastToGame = (accountId: string, data: IWsMsgToClientGame): void => {
+export const sendWsBroadcastToGame = (accountId: string | undefined, data: IWsMsgToClientGame): void => {
     const msg = JSON.stringify(data);
     forEachWsClient(client => {
-        if (client.isGame && client.accountId == accountId) {
+        if (client.isGame && (!accountId || client.accountId == accountId)) {
             client.send(msg);
         }
     });

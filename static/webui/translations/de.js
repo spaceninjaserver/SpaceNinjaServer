@@ -434,6 +434,8 @@ dict = {
     worldState_allAtOnceSteelPath: `Alle gleichzeitig, Stählerne Pfad`,
     worldState_theCircuitOverride: `Der Rundkurs-Überschreibung`,
     worldState_darvoStockMultiplier: `Darvo-Vorratsmultiplikator`,
+    worldState_communitySynthesisTarget: `[UNTRANSLATED] Community Synthesis Target (0 to disable)`,
+    worldState_communitySynthesisProgress: `[UNTRANSLATED] Community Synthesis Progress`,
     worldState_varziaFullyStocked: `Varzia hat volles Inventar`,
     worldState_varziaOverride: `Varzia-Angebotsüberschreibung`,
     worldState_vanguardVaultRelics: `Vanguard-Relikte`,

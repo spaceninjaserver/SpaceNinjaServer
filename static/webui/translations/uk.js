@@ -434,6 +434,8 @@ dict = {
     worldState_allAtOnceSteelPath: `Всі одразу, в режимі Шляху Сталі`,
     worldState_theCircuitOverride: `Типи місій у підземеллі Дувірі`,
     worldState_darvoStockMultiplier: `Множник запасів Дарво`,
+    worldState_communitySynthesisTarget: `[UNTRANSLATED] Community Synthesis Target (0 to disable)`,
+    worldState_communitySynthesisProgress: `[UNTRANSLATED] Community Synthesis Progress`,
     worldState_varziaFullyStocked: `Повний асортимент Варзії`,
     worldState_varziaOverride: `Зміна ротації Варзії`,
     worldState_vanguardVaultRelics: `Реліквії передового загону`,

@@ -15,6 +15,7 @@ import {
     bootNonAdminsFromWebui,
     forEachWsClient,
     sendWsBroadcast,
+    sendWsBroadcastToGame,
     sendWsBroadcastToWebui,
     type IWsMsgToClient
 } from "./wsService.ts";
@@ -27,6 +28,7 @@ import { createMessage } from "./inboxService.ts";
 chokidar.watch(configPath).on("change", () => {
     if (shouldReloadConfig()) {
         const prevLogFormat = config.logger.format ?? "%timestamp% [%level%] %message%";
+        const prevWorldState = JSON.stringify(config.worldState);
         const prevTunables = JSON.stringify(config.tunables);
         const prevWebParams = JSON.stringify(getWebServerParams());
 
@@ -45,8 +47,13 @@ chokidar.watch(configPath).on("change", () => {
             logger.debug("Here's some text to feast your eyes upon.");
         }
 
+        if (JSON.stringify(config.worldState) != prevWorldState) {
+            logger.debug(`config.worldState changed, informing clients`);
+            sendWsBroadcastToGame(undefined, { sync_world_state: true });
+        }
+
         if (JSON.stringify(config.tunables) != prevTunables) {
-            logger.debug(`tunables changed, informing clients`);
+            logger.debug(`config.tunables changed, informing clients`);
             forEachWsClient(client => {
                 if (client.isGame) {
                     client.send(

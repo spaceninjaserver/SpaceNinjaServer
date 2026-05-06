@@ -434,6 +434,8 @@ dict = {
     worldState_allAtOnceSteelPath: `Toutes, Route de l'Acier`,
     worldState_theCircuitOverride: `Remplacement du Circuit`,
     worldState_darvoStockMultiplier: `Multiplicateur du stock de Darvo`,
+    worldState_communitySynthesisTarget: `[UNTRANSLATED] Community Synthesis Target (0 to disable)`,
+    worldState_communitySynthesisProgress: `[UNTRANSLATED] Community Synthesis Progress`,
     worldState_varziaFullyStocked: `Stock de Varzia au max`,
     worldState_varziaOverride: `Rotation de Varzia`,
     worldState_vanguardVaultRelics: `Reliques de l'Avant-garde`,

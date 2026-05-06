@@ -434,6 +434,8 @@ dict = {
     worldState_allAtOnceSteelPath: `全部同时开启 (钢铁之路)`,
     worldState_theCircuitOverride: `无尽回廊任务循环配置:`,
     worldState_darvoStockMultiplier: `Darvo特惠库存倍率`,
+    worldState_communitySynthesisTarget: `[UNTRANSLATED] Community Synthesis Target (0 to disable)`,
+    worldState_communitySynthesisProgress: `[UNTRANSLATED] Community Synthesis Progress`,
     worldState_varziaFullyStocked: `瓦奇娅开启全部库存商品`,
     worldState_varziaOverride: `瓦奇娅(Prime重生)轮换状态`,
     worldState_vanguardVaultRelics: `先锋遗物`,

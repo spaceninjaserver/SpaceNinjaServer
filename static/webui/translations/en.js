@@ -433,6 +433,8 @@ dict = {
     worldState_allAtOnceSteelPath: `All At Once, Steel Path`,
     worldState_theCircuitOverride: `The Circuit Override`,
     worldState_darvoStockMultiplier: `Darvo Stock Multiplier`,
+    worldState_communitySynthesisTarget: `Community Synthesis Target (0 to disable)`,
+    worldState_communitySynthesisProgress: `Community Synthesis Progress`,
     worldState_varziaFullyStocked: `Varzia Fully Stocked`,
     worldState_varziaOverride: `Varzia Rotation Override`,
     worldState_vanguardVaultRelics: `Vanguard Relics`,

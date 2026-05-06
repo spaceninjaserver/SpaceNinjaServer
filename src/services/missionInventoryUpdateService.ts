@@ -114,6 +114,7 @@ import { handleGuildGoalProgress } from "./guildService.ts";
 import { importLoadOutConfig } from "./importService.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import { corpusDeathSquadInfo, grineerDeathSquadInfo } from "./invasionService.ts";
+import { libraryTargetToAvatar } from "../constants/synthesis.ts";
 
 const getRotations = async (
     rewardInfo: IRewardInfo,
@@ -509,7 +510,7 @@ export const addMissionInventoryUpdates = async (
                 value.forEach(scan => {
                     let synthesisIgnored = true;
                     if (inventory.LibraryPersonalTarget) {
-                        const taskAvatar = libraryPersonalTargetToAvatar[inventory.LibraryPersonalTarget];
+                        const taskAvatar = libraryTargetToAvatar[inventory.LibraryPersonalTarget];
                         const taskAvatars = libraryDailyTasks.find(x => x.indexOf(taskAvatar) != -1)!;
                         if (taskAvatars.indexOf(scan.EnemyType) != -1) {
                             let progress = inventory.LibraryPersonalProgress.find(
@@ -2903,28 +2904,6 @@ const corruptedMods = [
     "/Lotus/StoreItems/Upgrades/Mods/Rifle/DualStat/CorruptedReloadSpeedMaxClipRifle", // Depleted Reload
     "/Lotus/StoreItems/Upgrades/Mods/Warframe/DualStat/FixedShieldAndShieldGatingDuration" // Catalyzing Shields
 ];
-
-const libraryPersonalTargetToAvatar: Record<string, string> = {
-    "/Lotus/Types/Game/Library/Targets/DragonframeQuestTarget":
-        "/Lotus/Types/Enemies/Grineer/Desert/Avatars/RifleLancerAvatar",
-    "/Lotus/Types/Game/Library/Targets/Research1Target":
-        "/Lotus/Types/Enemies/Grineer/Desert/Avatars/RifleLancerAvatar",
-    "/Lotus/Types/Game/Library/Targets/Research2Target":
-        "/Lotus/Types/Enemies/Corpus/BipedRobot/AIWeek/LaserDiscBipedAvatar",
-    "/Lotus/Types/Game/Library/Targets/Research3Target":
-        "/Lotus/Types/Enemies/Grineer/Desert/Avatars/EvisceratorLancerAvatar",
-    "/Lotus/Types/Game/Library/Targets/Research4Target": "/Lotus/Types/Enemies/Orokin/OrokinHealingAncientAvatar",
-    "/Lotus/Types/Game/Library/Targets/Research5Target":
-        "/Lotus/Types/Enemies/Corpus/Spaceman/AIWeek/ShotgunSpacemanAvatar",
-    "/Lotus/Types/Game/Library/Targets/Research6Target": "/Lotus/Types/Enemies/Infested/AiWeek/Runners/RunnerAvatar",
-    "/Lotus/Types/Game/Library/Targets/Research7Target":
-        "/Lotus/Types/Enemies/Grineer/AIWeek/Avatars/GrineerMeleeStaffAvatar",
-    "/Lotus/Types/Game/Library/Targets/Research8Target": "/Lotus/Types/Enemies/Orokin/OrokinHeavyFemaleAvatar",
-    "/Lotus/Types/Game/Library/Targets/Research9Target":
-        "/Lotus/Types/Enemies/Infested/AiWeek/Quadrupeds/QuadrupedAvatar",
-    "/Lotus/Types/Game/Library/Targets/Research10Target":
-        "/Lotus/Types/Enemies/Corpus/Spaceman/AIWeek/NullifySpacemanAvatar"
-};
 
 const chemistryBuddies: readonly string[] = [
     "/Lotus/Types/Gameplay/1999Wf/Dialogue/JabirDialogue_rom.dialogue",

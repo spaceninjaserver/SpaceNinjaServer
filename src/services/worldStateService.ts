@@ -47,6 +47,7 @@ import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import { getDescent } from "./descentService.ts";
 import { catBreadHash } from "../helpers/stringHelpers.ts";
 import { Guild } from "../models/guildModel.ts";
+import { libraryTargetToAvatar } from "../constants/synthesis.ts";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -1893,6 +1894,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         PrimeVaultTraders: [],
         VoidStorms: [],
         DailyDeals: [],
+        //LibraryInfo: {},
         EndlessXpChoices: [],
         KnownCalendarSeasons: [],
         PVPChallengeInstances: [],
@@ -4275,6 +4277,22 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         pushSyndicateMissions(worldState, sdy, rng.randomInt(0, 100_000), "ba6f84724fa48050", "PerrinSyndicate");
         pushSyndicateMissions(worldState, sdy, rng.randomInt(0, 100_000), "ba6f84724fa4805e", "RedVeilSyndicate");
         pushSyndicateMissions(worldState, sdy, rng.randomInt(0, 100_000), "ba6f84724fa48061", "SteelMeridianSyndicate");
+    }
+
+    if (config.worldState?.communitySynthesisTarget) {
+        const targetType = `/Lotus/Types/Game/Library/Targets/Research${config.worldState.communitySynthesisTarget}Target`;
+        worldState.LibraryInfo = {
+            CurrentTarget: {
+                StartTime: toMongoDate2(0, buildLabel),
+                TargetType: targetType,
+                EnemyType: libraryTargetToAvatar[targetType],
+                PersonalScansRequired: 10,
+                ProgressPercent: config.worldState.communitySynthesisProgress ?? 0
+            }
+        };
+        if (config.worldState.communitySynthesisTarget != 1) {
+            worldState.LibraryInfo.LastCompletedTargetType = `/Lotus/Types/Game/Library/Targets/Research${config.worldState.communitySynthesisTarget - 1}Target`;
+        }
     }
 
     if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["17.7.1"]) >= 0) {

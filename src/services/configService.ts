@@ -116,6 +116,8 @@ export interface IConfig {
         varziaOverride?: string;
         circuitGameModes?: string[];
         darvoStockMultiplier?: number;
+        communitySynthesisTarget?: number;
+        communitySynthesisProgress?: number;
     };
     tunables?: {
         useLoginToken?: boolean;

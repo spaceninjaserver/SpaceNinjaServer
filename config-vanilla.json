@@ -112,7 +112,9 @@
     "allTheFissures": "",
     "varziaOverride": "",
     "circuitGameModes": null,
-    "darvoStockMultiplier": 1
+    "darvoStockMultiplier": 1,
+    "communitySynthesisTarget": 0,
+    "communitySynthesisProgress": 0
   },
   "tunables": {
     "useLoginToken": false,

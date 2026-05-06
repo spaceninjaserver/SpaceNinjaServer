@@ -24,6 +24,16 @@ export interface IWorldState {
     PrimeVaultTraders: IPrimeVaultTrader[];
     VoidStorms: IVoidStorm[];
     DailyDeals: IDailyDeal[];
+    LibraryInfo?: {
+        CurrentTarget?: {
+            StartTime: IMongoDateWithLegacySupport;
+            TargetType: string;
+            EnemyType: string;
+            PersonalScansRequired: number;
+            ProgressPercent: number;
+        };
+        LastCompletedTargetType?: string;
+    };
     PVPChallengeInstances: IPVPChallengeInstance[];
     EndlessXpChoices: IEndlessXpChoice[];
     FeaturedGuilds: IFeaturedGuild[];
