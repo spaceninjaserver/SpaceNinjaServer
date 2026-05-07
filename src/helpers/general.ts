@@ -74,3 +74,13 @@ export const isObject = (objectCandidate: unknown): objectCandidate is Record<st
 export const lerp = (v0: number, v1: number, t: number): number => {
     return v0 + t * (v1 - v0);
 };
+
+export const filterInplace = <T>(arr: T[], cond: (elm: T) => boolean): void => {
+    for (let i = 0; i != arr.length; ) {
+        if (cond(arr[i])) {
+            ++i;
+        } else {
+            arr.splice(i, 1);
+        }
+    }
+};

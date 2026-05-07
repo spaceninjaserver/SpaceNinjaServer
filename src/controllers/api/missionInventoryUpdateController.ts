@@ -17,6 +17,9 @@ import type {
 } from "../../types/missionTypes.ts";
 import { sendWsBroadcastTo } from "../../services/wsService.ts";
 import { generateRewardSeed } from "../../services/rngService.ts";
+import { version_compare } from "../../helpers/inventoryHelpers.ts";
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { filterInplace } from "../../helpers/general.ts";
 
 /*
 **** INPUT ****
@@ -107,6 +110,11 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         inventory.RewardSeed = generateRewardSeed();
     }
     await inventory.save();
+
+    if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["18.18.0"]) < 0) {
+        // Client might crash if they see Endo, but their kids are gonna love it.
+        filterInplace(MissionRewards, x => !x.StoreItem.startsWith("/Lotus/StoreItems/Upgrades/Mods/FusionBundles/"));
+    }
 
     //TODO: figure out when to send inventory. it is needed for many cases.
     const deltas: IMissionInventoryUpdateResponseRailjackInterstitial = {
