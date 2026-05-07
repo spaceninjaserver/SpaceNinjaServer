@@ -36,7 +36,7 @@ export const handleInventoryItemConfigChange = async (
     accountId: string | Types.ObjectId,
     buildLabel: string | undefined
 ): Promise<string | void> => {
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, undefined);
 
     for (const [_equipmentName, equipment] of Object.entries(equipmentChanges)) {
         const equipmentName = _equipmentName as keyof ISaveLoadoutRequestNoUpgradeVer;

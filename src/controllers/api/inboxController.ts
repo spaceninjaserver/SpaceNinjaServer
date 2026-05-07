@@ -68,7 +68,7 @@ export const inboxController: RequestHandler = async (req, res) => {
             return;
         }
 
-        const inventory = await getInventory(account._id);
+        const inventory = await getInventory(account._id, undefined);
         const inventoryChanges = {};
         if (attachmentItems) {
             await addItems(

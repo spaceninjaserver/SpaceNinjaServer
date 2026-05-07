@@ -421,7 +421,7 @@ export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, del
 
 export const getInventory = async (
     accountOwnerId: string | Types.ObjectId,
-    projection?: string
+    projection: string | undefined
 ): Promise<TInventoryDatabaseDocument> => {
     const inventory = await Inventory.findOne({ accountOwnerId: accountOwnerId }, projection);
 

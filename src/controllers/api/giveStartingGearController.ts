@@ -7,7 +7,7 @@ import type { RequestHandler } from "express";
 export const giveStartingGearPostController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const startingGear = getJSONfromString<TPartialStartingGear>(String(req.body));
-    const inventory = await getInventory(account._id);
+    const inventory = await getInventory(account._id, undefined);
 
     const inventoryChanges = await addStartingGear(inventory, account.BuildLabel, startingGear);
     await inventory.save();
@@ -17,7 +17,7 @@ export const giveStartingGearPostController: RequestHandler = async (req, res) =
 
 export const giveStartingGearGetController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const inventory = await getInventory(account._id);
+    const inventory = await getInventory(account._id, undefined);
 
     const inventoryChanges = await addStartingGear(inventory, account.BuildLabel, {
         Suits: [

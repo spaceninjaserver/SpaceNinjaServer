@@ -44,7 +44,7 @@ export const startRecipeController: RequestHandler = async (req, res) => {
         throw new Error(`unknown recipe ${recipeName}`);
     }
 
-    const inventory = await getInventory(account._id);
+    const inventory = await getInventory(account._id, undefined);
     try {
         updateCurrency(inventory, recipe.buildPrice, false);
     } catch (e) {

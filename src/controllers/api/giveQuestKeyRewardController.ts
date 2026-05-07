@@ -13,7 +13,7 @@ export const giveQuestKeyRewardController: RequestHandler = async (req, res) => 
     }
 
     const reward = rewardRequest.reward;
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, undefined);
     const inventoryChanges = await addItem(inventory, reward.ItemType, reward.Amount);
     await inventory.save();
     res.json(inventoryChanges);

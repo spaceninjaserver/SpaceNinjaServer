@@ -8,7 +8,7 @@ import type { RequestHandler } from "express";
 // GET request; query parameters: CompletedEventIdx=0&Iteration=4&Version=19&Season=CST_SUMMER
 export const completeCalendarEventController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, undefined);
     const calendarProgress = getCalendarProgress(inventory);
     const currentSeason = getWorldState().KnownCalendarSeasons[0];
     let inventoryChanges: IInventoryChanges = {};

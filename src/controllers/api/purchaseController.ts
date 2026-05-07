@@ -30,7 +30,7 @@ export const purchasePostController: RequestHandler = async (req, res) => {
     if (!purchaseRequest.buildLabel) {
         purchaseRequest.buildLabel = account.BuildLabel!;
     }
-    const inventory = await getInventory(account._id);
+    const inventory = await getInventory(account._id, undefined);
     const response = await handlePurchase(purchaseRequest, inventory);
     await inventory.save();
     //console.log(JSON.stringify(response, null, 2));
@@ -53,7 +53,7 @@ export const purchaseGetController: RequestHandler = async (req, res) => {
         buildLabel: account.BuildLabel!
     };
     if (req.query.durability) purchaseRequest.PurchaseParams.Durability = Number(req.query.durability);
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, undefined);
     const response = await handlePurchase(purchaseRequest, inventory);
     await inventory.save();
     if (response.Body) {

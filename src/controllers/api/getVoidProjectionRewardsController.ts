@@ -12,7 +12,7 @@ export const getVoidProjectionRewardsController: RequestHandler = async (req, re
     logger.debug(`getVoidProjectionRewards request:`, data);
 
     if (data.ParticipantInfo.QualifiesForReward && !data.ParticipantInfo.HaveRewardResponse) {
-        const inventory = await getInventory(accountId);
+        const inventory = await getInventory(accountId, undefined);
         const reward = await crackRelic(inventory, data.ParticipantInfo);
         if (!inventory.MissionRelicRewards || inventory.MissionRelicRewards.length >= data.CurrentWave) {
             inventory.MissionRelicRewards = [];

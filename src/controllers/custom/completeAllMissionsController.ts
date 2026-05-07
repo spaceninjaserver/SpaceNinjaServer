@@ -10,7 +10,7 @@ import { ExportRegions } from "warframe-public-export-plus";
 export const completeAllMissionsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, undefined);
     const MissionRewards: IMissionReward[] = [];
     for (const [tag, node] of Object.entries(ExportRegions)) {
         let mission = inventory.Missions.find(x => x.Tag == tag);

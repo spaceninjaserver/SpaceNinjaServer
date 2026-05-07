@@ -18,7 +18,7 @@ export const importController: RequestHandler = async (req, res) => {
 
     let anyKnownKey = false;
     try {
-        const inventory = await getInventory(account._id);
+        const inventory = await getInventory(account._id, undefined);
         importInventory(inventory, request.inventory);
         if (inventory.isModified()) {
             anyKnownKey = true;

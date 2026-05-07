@@ -46,7 +46,7 @@ export const modularWeaponSaleController: RequestHandler = async (req, res) => {
         });
     } else if (req.query.op == "Purchase") {
         const accountId = await getAccountIdForRequest(req);
-        const inventory = await getInventory(accountId);
+        const inventory = await getInventory(accountId, undefined);
         const payload = getJSONfromString<IModularWeaponPurchaseRequest>(String(req.body));
         const weaponInfo = getSaleInfos(partTypeToParts, payload.Revision).find(x => x.Name == payload.SaleName)!
             .Weapons[payload.ItemIndex];

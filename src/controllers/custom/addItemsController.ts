@@ -11,7 +11,7 @@ export const addItemsController: RequestHandler = async (req, res) => {
         return;
     }
     const requests = req.body as IAddItemRequest[];
-    const inventory = await getInventory(account._id);
+    const inventory = await getInventory(account._id, undefined);
     for (const request of requests) {
         try {
             await addItem(

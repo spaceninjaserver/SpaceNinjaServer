@@ -35,7 +35,7 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
         throw new Error(`unknown modular weapon type: ${data.WeaponType}`);
     }
     const category = modularWeaponTypes[data.WeaponType];
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, undefined); // Projection is complicated a bit by defaultWeapon for MoaPets
 
     let defaultUpgrades: IDefaultUpgrade[] | undefined;
     const defaultOverwrites: Partial<IKubrowPetDatabase> = {

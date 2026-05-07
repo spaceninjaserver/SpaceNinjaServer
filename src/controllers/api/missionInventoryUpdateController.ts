@@ -66,7 +66,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     const missionReport = getJSONfromString<IMissionInventoryUpdateRequest>((req.body as string).toString());
     logger.debug("mission report:", missionReport);
 
-    const inventory = await getInventory(account._id);
+    const inventory = await getInventory(account._id, undefined);
     const firstCompletion = missionReport.SortieId
         ? inventory.CompletedSorties.indexOf(missionReport.SortieId) == -1
         : false;

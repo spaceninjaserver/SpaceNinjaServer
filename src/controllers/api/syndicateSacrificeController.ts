@@ -16,7 +16,7 @@ import { logger } from "../../utils/logger.ts";
 
 export const syndicateSacrificeController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);
-    const inventory = await getInventory(account._id);
+    const inventory = await getInventory(account._id, undefined);
     const data = getJSONfromString<ISyndicateSacrificeRequest>(String(request.body));
 
     let syndicate = inventory.Affiliations.find(x => x.Tag == data.AffiliationTag);

@@ -16,7 +16,7 @@ export const updateQuestController: RequestHandler = async (req, res) => {
         throw new Error(`quest keys array should only have 1 item, but has ${updateQuestRequest.QuestKeys.length}`);
     }
 
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, undefined);
 
     const updateQuestResponse: { CustomData?: string; InventoryChanges?: IInventoryChanges; MissionRewards: [] } = {
         MissionRewards: []

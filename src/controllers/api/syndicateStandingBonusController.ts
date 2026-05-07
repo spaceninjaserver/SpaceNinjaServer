@@ -31,7 +31,7 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
 
         item.ItemCount *= -1;
     });
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, undefined);
     addMiscItems(inventory, items);
     const inventoryChanges: IInventoryChanges = {};
     inventoryChanges.MiscItems = items;

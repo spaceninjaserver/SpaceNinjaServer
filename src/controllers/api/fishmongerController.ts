@@ -8,7 +8,7 @@ import type { IAffiliationMods } from "../../types/purchaseTypes.ts";
 
 export const fishmongerController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, undefined); // Standing limits complicate this a bit, so no projection for now. :(
     const body = getJSONfromString<IFishmongerRequest>(String(req.body));
     const miscItemChanges: IMiscItem[] = [];
     let syndicateTag: string | undefined;

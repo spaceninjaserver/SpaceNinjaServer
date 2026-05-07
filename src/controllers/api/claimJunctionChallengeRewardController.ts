@@ -7,7 +7,7 @@ import { ExportChallenges } from "warframe-public-export-plus";
 
 export const claimJunctionChallengeRewardController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId);
+    const inventory = await getInventory(accountId, undefined);
     const data = getJSONfromString<IClaimJunctionChallengeRewardRequest>(String(req.body));
     const challengeProgress = inventory.ChallengeProgress.find(x => x.Name == data.Challenge);
     if (!challengeProgress) {

@@ -75,7 +75,7 @@ export const giftingController: RequestHandler = async (req, res) => {
     // TODO: Cannot gift archwing items to players that have not completed the archwing quest. (Code 7)
     // TODO: Cannot gift necramechs to players that have not completed heart of deimos. (Code 20)
 
-    const senderInventory = await getInventory(senderAccount._id);
+    const senderInventory = await getInventory(senderAccount._id, undefined);
 
     if (!senderInventory.infiniteGifts) {
         if (senderInventory.GiftsRemaining == 0) {

@@ -50,7 +50,7 @@ export const endlessXpController: RequestHandler = async (req, res) => {
             NewProgress: inventory.toJSON<IInventoryClient>().EndlessXP!.find(x => x.Category == payload.Category)!
         });
     } else if (payload.Mode == "c") {
-        const inventory = await getInventory(accountId);
+        const inventory = await getInventory(accountId, undefined);
         const entry = inventory.EndlessXP!.find(x => x.Category == payload.Category)!;
         const inventoryChanges: IInventoryChanges = {};
         for (const reward of entry.PendingRewards) {
