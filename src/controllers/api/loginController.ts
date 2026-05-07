@@ -72,11 +72,16 @@ export const loginController: RequestHandler = async (request, response) => {
         }
     }
 
-    if (
-        !account &&
-        ((config.autoCreateAccount && loginRequest.ClientType != "webui") ||
-            loginRequest.ClientType == "webui-register")
-    ) {
+    if (!account && config.autoCreateAccount) {
+        // Early versions (~U14) allow login with the password field being empty.
+        if (
+            loginRequest.password ==
+            "19fa61d75522a4669b44e39c1d2e1726c530232130d407f89afee0964997f7a73e83be698b288febcf88e3e03c4f0757ea8964e59b63d93708b138cc42a66eb3"
+        ) {
+            response.status(400).json({ error: "please enter a password ._." });
+            return;
+        }
+
         const name = await getUsernameFromEmail(loginRequest.email);
         const newAccount = await createAccount({
             email: loginRequest.email,
