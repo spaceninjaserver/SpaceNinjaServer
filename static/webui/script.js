@@ -3978,9 +3978,10 @@ async function populateDetailedViewRoute() {
                             if (config.AbilityOverride) {
                                 const datalist = document.getElementById("datalist-Abilities");
                                 const options = Array.from(datalist.options);
-                                abilityOverrideInput.value = options.find(
-                                    option => config.AbilityOverride.Ability == option.getAttribute("data-key")
-                                )?.value;
+                                abilityOverrideInput.value =
+                                    options.find(
+                                        option => config.AbilityOverride.Ability == option.getAttribute("data-key")
+                                    )?.value || "";
                             }
                             abilityOverrideInputGroup.appendChild(abilityOverrideInput);
 
@@ -5258,12 +5259,17 @@ function handleAbilityOverride(event, configIndex) {
     const urlParams = new URLSearchParams(window.location.search);
     const action = event.submitter.value;
     const Ability = getKey(document.getElementById(`abilityOverride-ability-config-${configIndex}`));
-    if (action == "set" && !Ability) {
-        $(`#abilityOverride-ability-config-${configIndex}`).addClass("is-invalid").focus();
-        return;
-    }
     const input = document.getElementById(`abilityOverride-ability-index-config-${configIndex}`);
-    if (!input.value) return;
+    if (action == "set") {
+        if (!Ability) {
+            $(`#abilityOverride-ability-config-${configIndex}`).addClass("is-invalid").focus();
+            return;
+        }
+        if (!input.value) {
+            $(`#abilityOverride-ability-index-config-${configIndex}`).addClass("is-invalid").focus();
+            return;
+        }
+    }
     const category = urlParams.get("productCategory");
     const oid = urlParams.get("itemId");
     const Index = input.value - 1;
