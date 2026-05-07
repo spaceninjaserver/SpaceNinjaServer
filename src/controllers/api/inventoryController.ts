@@ -611,6 +611,19 @@ export const getInventoryResponse = async (
             inventoryResponse.Nemesis = undefined;
         }
 
+        // U42 migrated ability paths so translate them back for older versions
+        if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0) {
+            return inventoryResponse;
+        }
+        for (const suit of inventoryResponse.Suits) {
+            for (const config of suit.Configs) {
+                if (config.AbilityOverride) {
+                    config.AbilityOverride.Ability =
+                        "/Lotus/Powersuits/PowersuitAbilities/" + config.AbilityOverride.Ability.split("/").pop();
+                }
+            }
+        }
+
         // U40 migrated KubrowPetEggs to MiscItems so translate it back for older versions
         if (version_compare(buildLabel, gameToBuildVersion["40.0.0"]) >= 0) {
             return inventoryResponse;

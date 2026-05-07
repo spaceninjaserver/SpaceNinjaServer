@@ -297,6 +297,22 @@ export const handleInventoryItemConfigChange = async (
                             continue;
                         }
 
+                        const prevAbilityOverrides = JSON.stringify(
+                            inventoryItem.Configs.map(x => x.AbilityOverride?.Ability)
+                                .filter(x => x)
+                                .sort()
+                        );
+
+                        let abilityMapping: Record<string, string> | undefined;
+                        if (buildLabel && version_compare(buildLabel, gameToBuildVersion["42.0.0"]) < 0) {
+                            abilityMapping = {};
+                            for (const config of inventoryItem.Configs) {
+                                if (config.AbilityOverride) {
+                                    abilityMapping[config.AbilityOverride.Ability.split("/").pop()!] =
+                                        config.AbilityOverride.Ability;
+                                }
+                            }
+                        }
                         for (const [configId, config] of Object.entries(itemConfigEntries)) {
                             if (/^[0-9]+$/.test(configId)) {
                                 const c = config as IItemConfig;
@@ -343,9 +359,31 @@ export const handleInventoryItemConfigChange = async (
                                         }
                                     }
                                 }
+                                if (abilityMapping && c.AbilityOverride) {
+                                    c.AbilityOverride.Ability =
+                                        abilityMapping[c.AbilityOverride.Ability.split("/").pop()!];
+                                }
                                 inventoryItem.Configs[parseInt(configId)] = c as IItemConfigDatabase;
                             }
                         }
+
+                        const newAbilityOverrides = JSON.stringify(
+                            inventoryItem.Configs.map(x => x.AbilityOverride?.Ability)
+                                .filter(x => x)
+                                .sort()
+                        );
+                        if (
+                            JSON.stringify(
+                                inventoryItem.Configs.map(x => x.AbilityOverride?.Ability)
+                                    .filter(x => x)
+                                    .sort()
+                            ) != prevAbilityOverrides
+                        ) {
+                            throw new Error(
+                                `refusing saveLoadout with different abilityOverrides: before=${prevAbilityOverrides}, after=${newAbilityOverrides}`
+                            );
+                        }
+
                         if ("Favorite" in itemConfigEntries) {
                             inventoryItem.Favorite = itemConfigEntries.Favorite;
                         }

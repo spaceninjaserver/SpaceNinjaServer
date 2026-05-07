@@ -222,32 +222,22 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 let newAbilityOverride: IAbilityOverride | undefined;
                 let totalPercentagePointsConsumed = 0;
                 if (operation.UpgradeRequirement != "") {
-                    newAbilityOverride = {
-                        Ability: operation.UpgradeRequirement,
-                        Index: operation.PolarizeSlot
-                    };
-
                     const abilityName = operation.UpgradeRequirement.split("/").pop();
-                    let recipeFound = false;
-                    for (const recipe of Object.values(ExportRecipes)) {
-                        if (recipe.resultType.endsWith(`/${abilityName}`)) {
-                            recipeFound = true;
-                            for (const ingredient of recipe.ingredients) {
-                                totalPercentagePointsConsumed += ingredient.ItemCount / 10;
-                                if (!inventory.infiniteHelminthMaterials) {
-                                    inventory.InfestedFoundry!.Resources!.find(
-                                        x => x.ItemType == ingredient.ItemType
-                                    )!.Count -= ingredient.ItemCount;
-                                }
-                            }
-                            break;
+                    const recipe = Object.values(ExportRecipes).find(x => x.resultType.endsWith(`/${abilityName}`));
+                    if (!recipe) {
+                        throw new Error(`could not find recipe for ${operation.UpgradeRequirement}`);
+                    }
+                    for (const ingredient of recipe.ingredients) {
+                        totalPercentagePointsConsumed += ingredient.ItemCount / 10;
+                        if (!inventory.infiniteHelminthMaterials) {
+                            inventory.InfestedFoundry!.Resources!.find(x => x.ItemType == ingredient.ItemType)!.Count -=
+                                ingredient.ItemCount;
                         }
                     }
-                    if (!recipeFound) {
-                        console.warn(
-                            `could not find recipe for ${operation.UpgradeRequirement}; helminth resources won't be charged`
-                        );
-                    }
+                    newAbilityOverride = {
+                        Ability: recipe.resultType,
+                        Index: operation.PolarizeSlot
+                    };
                 }
 
                 for (const entry of operation.PolarityRemap) {
