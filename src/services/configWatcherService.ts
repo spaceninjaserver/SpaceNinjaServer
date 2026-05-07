@@ -24,6 +24,8 @@ import { getTunablesForClient } from "./tunablesService.ts";
 import { Account } from "../models/loginModel.ts";
 import { Inbox } from "../models/inboxModel.ts";
 import { createMessage } from "./inboxService.ts";
+import { buildVersionToInt } from "./loginService.ts";
+import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 
 chokidar.watch(configPath).on("change", () => {
     if (shouldReloadConfig()) {
@@ -220,7 +222,8 @@ export const syncConfigWithDatabase = (): void => {
                         icon: "/Lotus/Interface/Icons/Npcs/Roathe.png",
                         // startDate & endDate would be present with the event dates but MongoDB would delete the message if we set an endDate in the past.
                         transmission: "/Lotus/Sounds/Dialog/Tau/RoatheEventOutroInbox/DRoatheEventOutroInbox0020Roathe",
-                        QuestReq: "/Lotus/Types/Keys/TauPrequel/TauPrequelQuestKeyChain"
+                        QuestReq: "/Lotus/Types/Keys/TauPrequel/TauPrequelQuestKeyChain",
+                        minBuildVersion: buildVersionToInt(gameToBuildVersion["41.0.0"])
                     }
                 ]);
             }
@@ -231,7 +234,25 @@ export const syncConfigWithDatabase = (): void => {
         }).then(() => {});
     }
     if (!config.worldState?.operationAtramentum) {
-        void Account.updateMany({}, { $unset: { receivedEventMessage_operationAtramentum: 1 } }).then(() => {});
+        void Account.find({ receivedEventMessage_operationAtramentum: { $exists: true } }, "_id").then(accounts => {
+            for (const account of accounts) {
+                void createMessage(account._id, [
+                    {
+                        sndr: "/Lotus/Language/Shadowgrapher/ZorbaName",
+                        sub: "/Lotus/Language/Shadowgrapher/ShadowgrapherEventEndedInboxSubject",
+                        msg: "/Lotus/Language/Shadowgrapher/ShadowgrapherEventEndedInboxBody",
+                        icon: "/Lotus/Interface/Icons/Npcs/Syndicates/Zorba.png",
+                        transmission: "/Lotus/Sounds/Dialog/Shadowgrapher/Vendor/DSGInbox0012AspirantZorba",
+                        // startDate & endDate would be present with the event dates but MongoDB would delete the message if we set an endDate in the past.
+                        QuestReq: "/Lotus/Types/Keys/PriestFrameQuest/PriestQuestKeyChain",
+                        att: ["/Lotus/Types/Items/ShipDecos/Props/ShadowgrapherEaselShipDeco"],
+                        CrossPlatform: true,
+                        minBuildVersion: buildVersionToInt(gameToBuildVersion["42.0.0"])
+                    }
+                ]);
+            }
+            void Account.updateMany({}, { $unset: { receivedEventMessage_operationAtramentum: 1 } }).then(() => {});
+        });
         void Inbox.deleteMany({
             transmission: "/Lotus/Sounds/Dialog/Shadowgrapher/Vendor/DSGInbox0011AspirantZorba"
         }).then(() => {});
