@@ -3715,6 +3715,15 @@ function doRemoveUnrankedMods() {
     revalidateAuthz().then(() => {
         getInventoryData().then(data => {
             window.itemListPromise.then(itemMap => {
+                // Excluding unranked parazon mods and instead including ranked parazon mods because worse is better for them.
+                const upgradesToSell = data.RawUpgrades.filter(upgrade => !itemMap[upgrade.ItemType]?.parazon).map(
+                    upgrade => ({ String: upgrade.ItemType, Count: upgrade.ItemCount })
+                );
+                for (const upgrade of data.Upgrades) {
+                    if (itemMap[upgrade.ItemType]?.parazon) {
+                        upgradesToSell.push({ String: upgrade.ItemId.$oid, Count: 0 });
+                    }
+                }
                 $.post({
                     url: "/api/sell.php?" + window.authz,
                     contentType: "text/plain",
@@ -3722,9 +3731,38 @@ function doRemoveUnrankedMods() {
                         SellCurrency: "SC_RegularCredits",
                         SellPrice: 0,
                         Items: {
-                            Upgrades: data.RawUpgrades.filter(
-                                x => !itemMap[x.ItemType]?.parazon && x.ItemCount > 0
-                            ).map(x => ({ String: x.ItemType, Count: x.ItemCount }))
+                            Upgrades: upgradesToSell
+                        }
+                    })
+                }).done(function () {
+                    updateInventory();
+                });
+            });
+        });
+    });
+}
+
+function doRemoveRankedMods() {
+    revalidateAuthz().then(() => {
+        getInventoryData().then(data => {
+            window.itemListPromise.then(itemMap => {
+                // Excluding ranked parazon mods and instead including unranked parazon mods because worse is better for them.
+                const upgradesToSell = data.Upgrades.filter(upgrade => !itemMap[upgrade.ItemType]?.parazon).map(
+                    upgrade => ({ String: upgrade.ItemId.$oid, Count: 0 })
+                );
+                for (const upgrade of data.RawUpgrades) {
+                    if (itemMap[upgrade.ItemType]?.parazon) {
+                        upgradesToSell.push({ String: upgrade.ItemType, Count: upgrade.ItemCount });
+                    }
+                }
+                $.post({
+                    url: "/api/sell.php?" + window.authz,
+                    contentType: "text/plain",
+                    data: JSON.stringify({
+                        SellCurrency: "SC_RegularCredits",
+                        SellPrice: 0,
+                        Items: {
+                            Upgrades: upgradesToSell
                         }
                     })
                 }).done(function () {
