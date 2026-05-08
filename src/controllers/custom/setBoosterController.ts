@@ -10,10 +10,16 @@ export const setBoosterController: RequestHandler = async (req, res) => {
     const inventory = await getInventory(accountId, "Boosters");
     for (const request of requests) {
         const index = inventory.Boosters.findIndex(item => item.ItemType === request.ItemType);
-        if (index !== -1) {
-            inventory.Boosters[index].ExpiryDate = request.ExpiryDate;
+        if (request.ExpiryDate == 0) {
+            if (index != -1) {
+                inventory.Boosters.splice(index, 1);
+            }
         } else {
-            inventory.Boosters.push(request);
+            if (index != -1) {
+                inventory.Boosters[index].ExpiryDate = request.ExpiryDate;
+            } else {
+                inventory.Boosters.push(request);
+            }
         }
     }
     await inventory.save();
