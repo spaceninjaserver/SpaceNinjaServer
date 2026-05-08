@@ -143,7 +143,7 @@ export interface ILoadoutConfigClient {
     m?: IEquipmentSelectionClient; // Melee weapon
     h?: IEquipmentSelectionClient; // Gravimag weapon
     a?: IEquipmentSelectionClient; // Necromech exalted weapon
-    ItemId: IOid;
+    ItemId: IOidWithLegacySupport;
     Remove?: boolean; // when client wants to remove a config, it only includes ItemId & Remove.
 }
 

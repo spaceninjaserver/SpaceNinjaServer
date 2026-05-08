@@ -7,7 +7,7 @@ import { Loadout } from "../../models/inventoryModels/loadoutModel.ts";
 import { Account } from "../../models/loginModel.ts";
 import { Stats } from "../../models/statsModel.ts";
 import { allDailyAffiliationKeys } from "../../services/inventoryService.ts";
-import type { IMongoDateWithLegacySupport, IOid, IOidWithLegacySupport } from "../../types/commonTypes.ts";
+import type { IMongoDateWithLegacySupport, IOidWithLegacySupport } from "../../types/commonTypes.ts";
 import type {
     IAffiliation,
     IAlignment,
@@ -249,7 +249,7 @@ interface IPlayerProfileViewingDataResult extends Partial<IDailyAffiliations>, I
     AccountId: IOidWithLegacySupport;
     DisplayName: string;
     PlayerLevel: number;
-    LoadOutPreset?: Omit<ILoadoutConfigClient, "ItemId"> & { ItemId?: IOid };
+    LoadOutPreset?: Omit<ILoadoutConfigClient, "ItemId"> & { ItemId?: IOidWithLegacySupport };
     LoadOutInventory: {
         WeaponSkins: { ItemType: string }[];
         Suits?: IEquipmentClient[];

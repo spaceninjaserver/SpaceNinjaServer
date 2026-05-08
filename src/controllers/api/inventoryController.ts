@@ -1020,15 +1020,22 @@ const mapLegacyLoadoutConfig = (
     buildLabel: string
 ): ILoadoutConfigClientLegacy | undefined => {
     // Loadout config mapping for U15 and below
-    const normPreset = loadoutPresets.NORMAL.find(x => x.ItemId.$oid == inventory.CurrentLoadOutIds[0].toString());
+    const normPreset = loadoutPresets.NORMAL.find(x => inventory.CurrentLoadOutIds[0].equals(fromOid(x.ItemId)));
     if (normPreset) {
-        const s = normPreset.s?.ItemId?.$oid ? inventory.Suits.id(normPreset.s.ItemId.$oid) : null;
-        const p = normPreset.p?.ItemId?.$oid ? inventory.Pistols.id(normPreset.p.ItemId.$oid) : null;
-        const l = normPreset.l?.ItemId?.$oid ? inventory.LongGuns.id(normPreset.l.ItemId.$oid) : null;
-        const m = normPreset.m?.ItemId?.$oid ? inventory.Melee.id(normPreset.m.ItemId.$oid) : null;
+        const sId = normPreset.s?.ItemId && fromOid(normPreset.s.ItemId);
+        const pId = normPreset.p?.ItemId && fromOid(normPreset.p.ItemId);
+        const lId = normPreset.l?.ItemId && fromOid(normPreset.l.ItemId);
+        const mId = normPreset.m?.ItemId && fromOid(normPreset.m.ItemId);
+        const s = sId ? inventory.Suits.id(sId) : null;
+        const p = pId ? inventory.Pistols.id(pId) : null;
+        const l = lId ? inventory.LongGuns.id(lId) : null;
+        const m = mId ? inventory.Melee.id(mId) : null;
         const loadoutConfig = {
             ItemId: {
-                $id: version_compare(buildLabel, gameToBuildVersion["14.0.0"]) < 0 ? "Current" : normPreset.ItemId.$oid
+                $id:
+                    version_compare(buildLabel, gameToBuildVersion["14.0.0"]) < 0
+                        ? "Current"
+                        : fromOid(normPreset.ItemId)
             },
             Name: normPreset.n ?? "Default Loadout",
             Presets: [
@@ -1077,14 +1084,14 @@ const mapLegacyLoadoutConfig = (
 
         if (version_compare(buildLabel, "2013.03.18.00.00") >= 0) {
             if (inventory.CurrentLoadOutIds.length > 1 && loadoutPresets.SENTINEL.length > 0) {
-                const compPreset = loadoutPresets.SENTINEL.find(
-                    x => x.ItemId.$oid == inventory.CurrentLoadOutIds[1].toString()
+                const compPreset = loadoutPresets.SENTINEL.find(x =>
+                    inventory.CurrentLoadOutIds[1].equals(fromOid(x.ItemId))
                 );
                 if (compPreset) {
-                    const s = compPreset.s?.ItemId?.$oid ? inventory.Sentinels.id(compPreset.s.ItemId.$oid) : null;
-                    const l = compPreset.l?.ItemId?.$oid
-                        ? inventory.SentinelWeapons.id(compPreset.l.ItemId.$oid)
-                        : null;
+                    const sId = compPreset.s?.ItemId && fromOid(compPreset.s.ItemId);
+                    const lId = compPreset.l?.ItemId && fromOid(compPreset.l.ItemId);
+                    const s = sId ? inventory.Sentinels.id(sId) : null;
+                    const l = lId ? inventory.SentinelWeapons.id(lId) : null;
                     loadoutConfig.Presets.push(
                         {
                             ItemId: { $id: s?._id.toString() ?? "ffffffffffffffffffffffff" },
@@ -1140,13 +1147,16 @@ const mapLegacyLoadoutConfig = (
 
         if (version_compare(buildLabel, gameToBuildVersion["15.0.0"]) >= 0) {
             if (inventory.CurrentLoadOutIds.length > 2 && loadoutPresets.ARCHWING.length > 0) {
-                const archPreset = loadoutPresets.ARCHWING.find(
-                    x => x.ItemId.$oid == inventory.CurrentLoadOutIds[2].toString()
+                const archPreset = loadoutPresets.ARCHWING.find(x =>
+                    inventory.CurrentLoadOutIds[2].equals(fromOid(x.ItemId))
                 );
                 if (archPreset) {
-                    const s = archPreset.s?.ItemId?.$oid ? inventory.SpaceSuits.id(archPreset.s.ItemId.$oid) : null;
-                    const l = archPreset.l?.ItemId?.$oid ? inventory.SpaceGuns.id(archPreset.l.ItemId.$oid) : null;
-                    const m = archPreset.m?.ItemId?.$oid ? inventory.SpaceMelee.id(archPreset.m.ItemId.$oid) : null;
+                    const sId = normPreset.s?.ItemId && fromOid(normPreset.s.ItemId);
+                    const pId = normPreset.p?.ItemId && fromOid(normPreset.p.ItemId);
+                    const mId = normPreset.m?.ItemId && fromOid(normPreset.m.ItemId);
+                    const s = sId ? inventory.SpaceSuits.id(sId) : null;
+                    const l = pId ? inventory.SpaceGuns.id(pId) : null;
+                    const m = mId ? inventory.SpaceMelee.id(mId) : null;
                     loadoutConfig.Presets.push(
                         {
                             ItemId: { $id: s?._id.toString() ?? "ffffffffffffffffffffffff" },
