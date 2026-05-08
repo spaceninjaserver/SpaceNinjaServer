@@ -601,7 +601,7 @@ const pushTilesetModifiers = (modifiers: string[], tileset: TSortieTileset): voi
     }
 };
 
-export const getSortie = (day: number): ISortie => {
+export const getSortie = (day: number, buildLabel: string | undefined): ISortie => {
     const seed = new SRng(day).randomInt(0, 100_000);
     //logger.debug(`sortie seed: ${seed}`);
     const rng = new SRng(seed);
@@ -610,8 +610,10 @@ export const getSortie = (day: number): ISortie => {
     const enemyFaction = sortieBossToFaction[boss];
 
     const nodes: string[] = [];
+    const canUseKuvaFortress = !buildLabel || version_compare(buildLabel, gameToBuildVersion["19.0.1"]) >= 0;
     for (const [key, value] of Object.entries(ExportRegions)) {
         if (
+            (canUseKuvaFortress || value.systemIndex != 18) &&
             sortieFactionToSystemIndexes[enemyFaction].includes(value.systemIndex) &&
             sortieFactionToFactions[enemyFaction].includes(value.faction!) &&
             key in sortieTilesets &&
@@ -4261,10 +4263,10 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         // Omit sorties for pre-Star Chart 3.0 clients to avoid breaking them.
         if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["18.18.0"]) >= 0) {
             if (timeMs < rollover) {
-                worldState.Sorties.push(getSortie(day - 1));
+                worldState.Sorties.push(getSortie(day - 1, buildLabel));
             }
             if (isBeforeNextExpectedWorldStateRefresh(timeMs, rollover)) {
-                worldState.Sorties.push(getSortie(day));
+                worldState.Sorties.push(getSortie(day, buildLabel));
             }
         }
 

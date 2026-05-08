@@ -2145,7 +2145,7 @@ async function getRandomMissionDrops(
                 const arr = RewardInfo.sortieId.split("_");
                 let giveNodeReward = false;
                 if (arr[1] != "Lite") {
-                    const sortie = getSortie(idToDay(arr[1]));
+                    const sortie = getSortie(idToDay(arr[1]), account.BuildLabel);
                     giveNodeReward = sortie.Variants.find(x => x.node == arr[0])!.missionType == "MT_ASSASSINATION";
                 }
                 rewardManifests = giveNodeReward ? region.rewardManifests : [];
