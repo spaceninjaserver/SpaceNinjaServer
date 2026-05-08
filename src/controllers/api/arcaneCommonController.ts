@@ -25,12 +25,7 @@ export const arcaneCommonController: RequestHandler = async (req, res) => {
             const inventoryChanges = addSkin(inventory, json.itemTypeName);
             skinId = fromOid(inventoryChanges.WeaponSkins![0].ItemId);
         }
-        const item =
-            json.modType == 6
-                ? inventory.WeaponSkins.id(skinId)
-                : json.modType == 5
-                  ? inventory.OperatorAmps.id(skinId)
-                  : null;
+        const item = json.modType == 5 ? inventory.OperatorAmps.id(skinId) : inventory.WeaponSkins.id(skinId);
         if (item) {
             if (json.operationType == "Install") {
                 const resp: IArcaneLegacyInstallResp = { newLevel: 0 };
@@ -158,7 +153,7 @@ interface IArcaneLegacyRequest {
     arcaneType?: string;
     skinId: string;
     operationType: "Install" | "Distill" | "idk";
-    modType: number; // 6 for WeaponSkins, 5 for Amps
+    modType?: number; // 6 for WeaponSkins, 5 for Amps. not present in U18.5
     giveItem?: boolean;
     itemTypeName?: string;
 }
