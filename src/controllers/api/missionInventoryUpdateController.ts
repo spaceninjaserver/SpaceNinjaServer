@@ -142,31 +142,33 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         res.json(deltas);
     } else if (missionReport.RewardInfo) {
         logger.debug(`classic mission completion, sending everything`);
-        const inventoryResponse = await getInventoryResponse(
-            req,
-            inventory,
-            "xpBasedLevelCapDisabled" in req.query,
-            account.BuildLabel
-        );
-        const response: IMissionInventoryUpdateResponse = {
-            InventoryJson: JSON.stringify(inventoryResponse),
-            ...deltas
-        };
+        const response: IMissionInventoryUpdateResponse = deltas;
+        // InventoryJson is not recognised by early versions, and may lead them to buffer overrun if provided.
+        if (!account.BuildLabel || version_compare(account.BuildLabel, gameToBuildVersion["8.0.0"]) > 0) {
+            response.InventoryJson = JSON.stringify(
+                await getInventoryResponse(req, inventory, "xpBasedLevelCapDisabled" in req.query, account.BuildLabel)
+            );
+        }
         if (missionReport.RewardInfo.sortieTag == "Final" && firstCompletion) {
             response.CompletedSortie = true;
         }
         res.json(response);
     } else {
-        logger.debug(`no reward info, assuming this wasn't a mission completion and we should just sync inventory`);
-        const inventoryResponse = await getInventoryResponse(
-            req,
-            inventory,
-            "xpBasedLevelCapDisabled" in req.query,
-            account.BuildLabel
-        );
-        res.json({
-            InventoryJson: JSON.stringify(inventoryResponse)
-        } satisfies IMissionInventoryUpdateResponseBackToDryDock);
+        logger.debug(`no reward info, just syncing inventory`);
+        // InventoryJson is not recognised by early versions, and may lead them to buffer overrun if provided.
+        if (!account.BuildLabel || version_compare(account.BuildLabel, gameToBuildVersion["8.0.0"]) > 0) {
+            const inventoryResponse = await getInventoryResponse(
+                req,
+                inventory,
+                "xpBasedLevelCapDisabled" in req.query,
+                account.BuildLabel
+            );
+            res.json({
+                InventoryJson: JSON.stringify(inventoryResponse)
+            } satisfies IMissionInventoryUpdateResponseBackToDryDock);
+        } else {
+            res.json({});
+        }
     }
 
     sendWsBroadcastTo(account._id.toString(), { update_inventory: true });
