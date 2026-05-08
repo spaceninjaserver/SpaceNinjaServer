@@ -182,6 +182,22 @@ export const validateConfig = (): void => {
         delete config.worldState.lunarNewYear;
         modified = true;
     }
+    if (
+        config.worldState?.communitySynthesisTarget &&
+        (config.worldState.communitySynthesisTarget < 0 || config.worldState.communitySynthesisTarget > 10)
+    ) {
+        config.worldState.communitySynthesisTarget = 0;
+        modified = true;
+    }
+    if (config.worldState?.communitySynthesisProgress) {
+        if (config.worldState.communitySynthesisProgress < 0) {
+            config.worldState.communitySynthesisProgress = 0;
+            modified = true;
+        } else if (config.worldState.communitySynthesisProgress > 100) {
+            config.worldState.communitySynthesisProgress = 100;
+            modified = true;
+        }
+    }
     if (modified) {
         logger.info(`Updating config file to fix some issues with it.`);
         void saveConfig();

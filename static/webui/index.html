@@ -1700,7 +1700,7 @@
                                 <form class="form-group mt-2" onsubmit="doSaveConfigInt('worldState.communitySynthesisTarget'); return false;">
                                     <label class="form-label" for="worldState.communitySynthesisTarget" data-loc="worldState_communitySynthesisTarget"></label>
                                     <div class="input-group">
-                                        <input id="worldState.communitySynthesisTarget" class="form-control" type="number" data-default="0" />
+                                        <input id="worldState.communitySynthesisTarget" class="form-control" type="number" min="0" max="10" data-default="0" />
                                         <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
                                     </div>
                                 </form>
