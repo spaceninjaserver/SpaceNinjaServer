@@ -38,7 +38,7 @@ export interface IWorldState {
     EndlessXpChoices: IEndlessXpChoice[];
     FeaturedGuilds: IFeaturedGuild[];
     SeasonInfo?: {
-        Activation: IMongoDate;
+        Activation: IMongoDate; // Nightwave was introduced in U24 so this is fine
         Expiry: IMongoDate;
         AffiliationTag: string;
         Season: number;
@@ -73,7 +73,7 @@ export interface IEvent {
 }
 
 export interface IAlert {
-    _id: IOid;
+    _id: IOidWithLegacySupport;
     Activation: IMongoDate;
     Expiry: IMongoDate;
     MissionInfo: IAlertMissionInfo;
@@ -106,9 +106,9 @@ export interface IAlertMissionInfo {
 }
 
 export interface IGoal {
-    _id: IOid;
-    Activation: IMongoDate;
-    Expiry: IMongoDate;
+    _id: IOidWithLegacySupport;
+    Activation: IMongoDateWithLegacySupport;
+    Expiry: IMongoDateWithLegacySupport;
     GracePeriod?: IMongoDate; // U41+
 
     Count?: number;
@@ -205,9 +205,9 @@ export interface ISyndicateMissionInfo {
 }
 
 export interface IGlobalUpgrade {
-    _id: IOid;
-    Activation: IMongoDate;
-    ExpiryDate: IMongoDate;
+    _id: IOidWithLegacySupport;
+    Activation: IMongoDateWithLegacySupport;
+    ExpiryDate: IMongoDateWithLegacySupport;
     UpgradeType: string;
     OperationType: string;
     Value: number;
@@ -217,7 +217,7 @@ export interface IGlobalUpgrade {
 }
 
 export interface IInvasion {
-    _id: IOid;
+    _id: IOidWithLegacySupport;
     Faction: string;
     DefenderFaction: string;
     Node: string;
@@ -225,12 +225,12 @@ export interface IInvasion {
     Goal: number;
     LocTag: string;
     Completed: boolean;
-    ChainID: IOid;
+    ChainID: IOidWithLegacySupport;
     AttackerReward: IMissionReward;
     AttackerMissionInfo: IInvasionMissionInfo;
     DefenderReward: IMissionReward;
     DefenderMissionInfo: IInvasionMissionInfo;
-    Activation: IMongoDate;
+    Activation: IMongoDateWithLegacySupport;
 }
 
 export interface IInvasionMissionInfo {
@@ -259,9 +259,9 @@ export interface IFissureDatabase {
 }
 
 export interface INodeOverride {
-    _id: IOid;
-    Activation?: IMongoDate;
-    Expiry?: IMongoDate;
+    _id: IOidWithLegacySupport;
+    Activation?: IMongoDateWithLegacySupport;
+    Expiry?: IMongoDateWithLegacySupport;
     Node: string;
     Hide?: boolean;
     Seed?: number;

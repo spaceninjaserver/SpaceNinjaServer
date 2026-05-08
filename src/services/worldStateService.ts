@@ -1760,7 +1760,7 @@ const getAllVarziaManifests = (buildLabel: string | undefined): IPrimeVaultTrade
     return [...dualPacks, ...vanguardRelics, ...singlePacks, ...items, ...bobbleHeads, ...relics];
 };
 
-const createInvasion = (day: number, idx: number): IInvasion => {
+const createInvasion = (day: number, idx: number, buildLabel: string | undefined): IInvasion => {
     const id = day * 3 + idx;
     const defender = (["FC_GRINEER", "FC_CORPUS", day % 2 ? "FC_GRINEER" : "FC_CORPUS"] as const)[idx];
     const rng = new SRng(new SRng(id).randomInt(0, 1_000_000));
@@ -1788,7 +1788,7 @@ const createInvasion = (day: number, idx: number): IInvasion => {
         defenderReward.countedItems = [rng.randomElement(invasionRewards[defender][rewardTier])!];
     }
     return {
-        _id: { $oid: oid },
+        _id: toOid2(oid, buildLabel),
         Faction: attacker,
         DefenderFaction: defender,
         Node: node,
@@ -1816,18 +1816,14 @@ const createInvasion = (day: number, idx: number): IInvasion => {
             seed: rng.randomInt(0, 1_000_000),
             faction: attacker
         },
-        Activation: {
-            $date: {
-                $numberLong: startMs.toString()
-            }
-        }
+        Activation: toMongoDate2(startMs, buildLabel)
     };
 };
 
 export const getInvasionByOid = (oid: string): IInvasion | undefined => {
     const arr = oid.split("fd148cb8");
     if (arr.length == 2 && arr[0].length == 8 && arr[1].length == 8) {
-        return createInvasion(idToDay(oid), parseInt(arr[1], 16));
+        return createInvasion(idToDay(oid), parseInt(arr[1], 16), undefined);
     }
     return undefined;
 };
@@ -1916,19 +1912,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
     if (config.worldState?.tennoLiveRelay) {
         worldState.Goals.push({
-            _id: {
-                $oid: "687bf9400000000000000000"
-            },
-            Activation: {
-                $date: {
-                    $numberLong: "1752955200000"
-                }
-            },
-            Expiry: {
-                $date: {
-                    $numberLong: "2000000000000"
-                }
-            },
+            _id: toOid2("687bf9400000000000000000", buildLabel),
+            Activation: toMongoDate2(1752955200000, buildLabel),
+            Expiry: toMongoDate2(2000000000000, buildLabel),
             Count: 0,
             Goal: 0,
             Success: 0,
@@ -1942,9 +1928,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     }
     if (config.worldState?.baroTennoConRelay) {
         worldState.Goals.push({
-            _id: { $oid: "687bb2f00000000000000000" },
-            Activation: { $date: { $numberLong: "1752937200000" } },
-            Expiry: { $date: { $numberLong: "2000000000000" } },
+            _id: toOid2("687bb2f00000000000000000", buildLabel),
+            Activation: toMongoDate2(1752937200000, buildLabel),
+            Expiry: toMongoDate2(2000000000000, buildLabel),
             Count: 0,
             Goal: 0,
             Success: 0,
@@ -1957,9 +1943,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             Node: "TennoConHUB2"
         });
         const vt: IVoidTrader = {
-            _id: { $oid: "687809030379266d790495c6" },
-            Activation: { $date: { $numberLong: "1752937200000" } },
-            Expiry: { $date: { $numberLong: "2000000000000" } },
+            _id: toOid2("687809030379266d790495c6", buildLabel),
+            Activation: toMongoDate2(1752937200000, buildLabel),
+            Expiry: toMongoDate2(2000000000000, buildLabel),
             Character: "Baro'Ki Teel",
             Node: "TennoConHUB2",
             Manifest: []
@@ -1986,9 +1972,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
         worldState.Alerts.push(
             {
-                _id: {
-                    $oid: "68dc23c42e9d3acfa708ff3b"
-                },
+                _id: toOid2("68dc23c42e9d3acfa708ff3b", buildLabel),
                 Activation: { $date: { $numberLong: activation.toString() } },
                 Expiry: { $date: { $numberLong: expiry.toString() } },
                 MissionInfo: {
@@ -2011,9 +1995,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 ForceUnlock: true
             },
             {
-                _id: {
-                    $oid: "68dc2466e298b4f04206687a"
-                },
+                _id: toOid2("68dc2466e298b4f04206687a", buildLabel),
                 Activation: { $date: { $numberLong: activation.toString() } },
                 Expiry: { $date: { $numberLong: expiry.toString() } },
                 MissionInfo: {
@@ -2036,9 +2018,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 ForceUnlock: true
             },
             {
-                _id: {
-                    $oid: "68dc26865e7cb56b820b4252"
-                },
+                _id: toOid2("68dc26865e7cb56b820b4252", buildLabel),
                 Activation: { $date: { $numberLong: activation.toString() } },
                 Expiry: { $date: { $numberLong: expiry.toString() } },
                 MissionInfo: {
@@ -2100,7 +2080,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         (!buildLabel || version_compare(buildLabel, gameToBuildVersion["29.10.0"]) >= 0)
     ) {
         worldState.Goals.push({
-            _id: { $oid: "67a4dcce2a198564d62e1647" },
+            _id: toOid2("67a4dcce2a198564d62e1647", buildLabel),
             Activation: {
                 $date: {
                     $numberLong: config.worldState?.starDaysOverride
@@ -2132,9 +2112,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         // The client gets kinda confused when multiple goals have the same tag, so considering these mutually exclusive.
         if (config.worldState?.galleonOfGhouls == 1) {
             worldState.Goals.push({
-                _id: { $oid: "6814ddf00000000000000000" },
-                Activation: { $date: { $numberLong: "1746198000000" } },
-                Expiry: { $date: { $numberLong: "2000000000000" } },
+                _id: toOid2("6814ddf00000000000000000", buildLabel),
+                Activation: toMongoDate2(1746198000000, buildLabel),
+                Expiry: toMongoDate2(2000000000000, buildLabel),
                 Count: 0,
                 Goal: 1,
                 Success: 0,
@@ -2155,9 +2135,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             });
         } else if (config.worldState?.galleonOfGhouls == 2) {
             worldState.Goals.push({
-                _id: { $oid: "681e18700000000000000000" },
-                Activation: { $date: { $numberLong: "1746802800000" } },
-                Expiry: { $date: { $numberLong: "2000000000000" } },
+                _id: toOid2("681e18700000000000000000", buildLabel),
+                Activation: toMongoDate2(1746802800000, buildLabel),
+                Expiry: toMongoDate2(2000000000000, buildLabel),
                 Count: 0,
                 Goal: 1,
                 Success: 0,
@@ -2178,9 +2158,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             });
         } else if (config.worldState?.galleonOfGhouls == 3) {
             worldState.Goals.push({
-                _id: { $oid: "682752f00000000000000000" },
-                Activation: { $date: { $numberLong: "1747407600000" } },
-                Expiry: { $date: { $numberLong: "2000000000000" } },
+                _id: toOid2("682752f00000000000000000", buildLabel),
+                Activation: toMongoDate2(1747407600000, buildLabel),
+                Expiry: toMongoDate2(2000000000000, buildLabel),
                 Count: 0,
                 Goal: 1,
                 Success: 0,
@@ -2214,7 +2194,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         (!buildLabel || version_compare(buildLabel, gameToBuildVersion["22.7.0"]) >= 0)
     ) {
         worldState.Goals.push({
-            _id: { $oid: "654a5058c757487cdb11824f" },
+            _id: toOid2("654a5058c757487cdb11824f", buildLabel),
             Activation: {
                 $date: {
                     $numberLong: config.worldState?.plagueStarOverride ? "1699372800000" : plagueStarStart.toString()
@@ -2724,8 +2704,8 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                         config.worldState?.anniversary!.toString(16).padStart(4, "0") +
                         i.toString(16).padStart(4, "0")
                 },
-                Activation: { $date: { $numberLong: "1745593200000" } },
-                Expiry: { $date: { $numberLong: "2000000000000" } },
+                Activation: toMongoDate2(1745593200000, buildLabel),
+                Expiry: toMongoDate2(2000000000000, buildLabel),
                 Count: 0,
                 Goal: 1,
                 Success: 0,
@@ -2749,9 +2729,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     ) {
         if (config.worldState.wolfHunt == 0) {
             worldState.Goals.push({
-                _id: {
-                    $oid: "67ed7672798d6466172e3b9c"
-                },
+                _id: toOid2("67ed7672798d6466172e3b9c", buildLabel),
                 Activation: {
                     $date: {
                         $numberLong: "1743616800000"
@@ -2790,9 +2768,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             });
         } else if (config.worldState.wolfHunt == 1) {
             worldState.Goals.push({
-                _id: {
-                    $oid: "67ed7672798d6466172e3b9d"
-                },
+                _id: toOid2("67ed7672798d6466172e3b9d", buildLabel),
                 Activation: {
                     $date: {
                         $numberLong: "1743616800000"
@@ -2868,9 +2844,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     ) {
         worldState.Goals.push(
             {
-                _id: { $oid: "5db305403d34b5158873519a" },
-                Activation: { $date: { $numberLong: "1699372800000" } },
-                Expiry: { $date: { $numberLong: "2000000000000" } },
+                _id: toOid2("5db305403d34b5158873519a", buildLabel),
+                Activation: toMongoDate2(1699372800000, buildLabel),
+                Expiry: toMongoDate2(2000000000000, buildLabel),
                 Count: 0,
                 Goal: 3,
                 InterimGoals: [1, 2],
@@ -2899,9 +2875,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 }
             },
             {
-                _id: { $oid: "5db3054a3d34b5158873519c" },
-                Activation: { $date: { $numberLong: "1699372800000" } },
-                Expiry: { $date: { $numberLong: "2000000000000" } },
+                _id: toOid2("5db3054a3d34b5158873519c", buildLabel),
+                Activation: toMongoDate2(1699372800000, buildLabel),
+                Expiry: toMongoDate2(2000000000000, buildLabel),
                 Count: 0,
                 Goal: 900,
                 Success: 0,
@@ -2976,8 +2952,8 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
         worldState.Goals.push({
             _id: { $oid: "5bc98f00000000000000000" + year.toString(16) },
-            Activation: { $date: { $numberLong: "1539972000000" } },
-            Expiry: { $date: { $numberLong: "2000000000000" } },
+            Activation: toMongoDate2(1539972000000, buildLabel),
+            Expiry: toMongoDate2(2000000000000, buildLabel),
             Count: 0,
             InterimGoals: [1],
             Goal: 2,
@@ -3001,8 +2977,8 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         if (year != 2) {
             worldState.Goals.push({
                 _id: { $oid: "5bc98f01000000000000000" + year.toString(16) },
-                Activation: { $date: { $numberLong: "1539972000000" } },
-                Expiry: { $date: { $numberLong: "2000000000000" } },
+                Activation: toMongoDate2(1539972000000, buildLabel),
+                Expiry: toMongoDate2(2000000000000, buildLabel),
                 Count: 0,
                 Goal: 666,
                 Success: 0,
@@ -3079,8 +3055,8 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
         worldState.Goals.push({
             _id: { $oid: "5b5b5da0000000000000000" + year.toString(16) },
-            Activation: { $date: { $numberLong: "1532714400000" } },
-            Expiry: { $date: { $numberLong: "2000000000000" } },
+            Activation: toMongoDate2(1532714400000, buildLabel),
+            Expiry: toMongoDate2(2000000000000, buildLabel),
             Count: 0,
             Goal: 3,
             InterimGoals: [1, 2],
@@ -3113,9 +3089,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         (!buildLabel || version_compare(buildLabel, gameToBuildVersion["18.22.1"]) >= 0)
     ) {
         worldState.Goals.push({
-            _id: { $oid: "5bc9e8f7272d5d184c8398c9" },
-            Activation: { $date: { $numberLong: "1539972000000" } },
-            Expiry: { $date: { $numberLong: "2000000000000" } },
+            _id: toOid2("5bc9e8f7272d5d184c8398c9", buildLabel),
+            Activation: toMongoDate2(1539972000000, buildLabel),
+            Expiry: toMongoDate2(2000000000000, buildLabel),
             Count: 0,
             InterimGoals: [1, 2],
             Goal: 3,
@@ -3169,7 +3145,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             : Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 1);
 
         worldState.Goals.push({
-            _id: { $oid: "66fd602de1778d583419e8e7" },
+            _id: toOid2("66fd602de1778d583419e8e7", buildLabel),
             Activation: { $date: { $numberLong: activation.toString() } },
             Expiry: { $date: { $numberLong: expiry.toString() } },
             Count: 0,
@@ -3328,9 +3304,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
     if (config.worldState?.bellyOfTheBeast && (!buildLabel || version_compare(buildLabel, "2024.06.12.18.42") >= 0)) {
         worldState.Goals.push({
-            _id: { $oid: "67a5035c2a198564d62e165e" },
-            Activation: { $date: { $numberLong: "1738868400000" } },
-            Expiry: { $date: { $numberLong: "2000000000000" } },
+            _id: toOid2("67a5035c2a198564d62e165e", buildLabel),
+            Activation: toMongoDate2(1738868400000, buildLabel),
+            Expiry: toMongoDate2(2000000000000, buildLabel),
             Count: config.worldState.bellyOfTheBeastProgressOverride ?? 0,
             HealthPct: (config.worldState.bellyOfTheBeastProgressOverride ?? 0) / 100,
             Goal: 0,
@@ -3355,9 +3331,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         (!buildLabel || version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0)
     ) {
         worldState.Goals.push({
-            _id: { $oid: "69ce8b780000000000000000" },
-            Activation: { $date: { $numberLong: "1738868400000" } },
-            Expiry: { $date: { $numberLong: "2000000000000" } },
+            _id: toOid2("69ce8b780000000000000000", buildLabel),
+            Activation: toMongoDate2(1738868400000, buildLabel),
+            Expiry: toMongoDate2(2000000000000, buildLabel),
             Count: config.worldState.operationAtramentumProgressOverride ?? 0,
             HealthPct: (config.worldState.operationAtramentumProgressOverride ?? 0) / 100,
             Goal: 0,
@@ -3379,9 +3355,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     // <U39
     if (config.worldState?.eightClaw && (!buildLabel || version_compare(buildLabel, "2025.06.23.11.39") >= 0)) {
         worldState.Goals.push({
-            _id: { $oid: "685c15f80000000000000000" },
-            Activation: { $date: { $numberLong: "1750865400000" } },
-            Expiry: { $date: { $numberLong: "2000000000000" } },
+            _id: toOid2("685c15f80000000000000000", buildLabel),
+            Activation: toMongoDate2(1750865400000, buildLabel),
+            Expiry: toMongoDate2(2000000000000, buildLabel),
             Count: config.worldState.eightClawProgressOverride ?? 0,
             HealthPct: (config.worldState.eightClawProgressOverride ?? 0) / 100,
             Goal: 0,
@@ -3401,9 +3377,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
     if (config.worldState?.scarletSpear) {
         worldState.Goals.push({
-            _id: {
-                $oid: "5e7a3e2389e3090b0c6a998b"
-            },
+            _id: toOid2("5e7a3e2389e3090b0c6a998b", buildLabel),
             Activation: {
                 $date: {
                     $numberLong: "1585070400000"
@@ -3467,9 +3441,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     ) {
         worldState.Goals.push(
             {
-                _id: { $oid: "5fdcccb875d5ad500dc477d0" },
-                Activation: { $date: { $numberLong: "1608320400000" } },
-                Expiry: { $date: { $numberLong: "2000000000000" } },
+                _id: toOid2("5fdcccb875d5ad500dc477d0", buildLabel),
+                Activation: toMongoDate2(1608320400000, buildLabel),
+                Expiry: toMongoDate2(2000000000000, buildLabel),
                 Count: 0,
                 Goal: 500,
                 Success: 0,
@@ -3487,9 +3461,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 }
             },
             {
-                _id: { $oid: "5fdcccb875d5ad500dc477d1" },
-                Activation: { $date: { $numberLong: "1608320400000" } },
-                Expiry: { $date: { $numberLong: "2000000000000" } },
+                _id: toOid2("5fdcccb875d5ad500dc477d1", buildLabel),
+                Activation: toMongoDate2(1608320400000, buildLabel),
+                Expiry: toMongoDate2(2000000000000, buildLabel),
                 Count: 0,
                 Goal: 1000,
                 Success: 0,
@@ -3508,9 +3482,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 }
             },
             {
-                _id: { $oid: "5fdcccb875d5ad500dc477d2" },
-                Activation: { $date: { $numberLong: "1608320400000" } },
-                Expiry: { $date: { $numberLong: "2000000000000" } },
+                _id: toOid2("5fdcccb875d5ad500dc477d2", buildLabel),
+                Activation: toMongoDate2(1608320400000, buildLabel),
+                Expiry: toMongoDate2(2000000000000, buildLabel),
                 Count: 0,
                 Goal: 2000,
                 Success: 0,
@@ -3546,9 +3520,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         (!buildLabel || version_compare(buildLabel, gameToBuildVersion["41.0.0"]) >= 0)
     ) {
         worldState.Goals.push({
-            _id: { $oid: "694189080000000000000000" },
-            Activation: { $date: { $numberLong: "1765902600000" } },
-            Expiry: { $date: { $numberLong: "2000000000000" } },
+            _id: toOid2("694189080000000000000000", buildLabel),
+            Activation: toMongoDate2(1765902600000, buildLabel),
+            Expiry: toMongoDate2(2000000000000, buildLabel),
             GracePeriod: { $date: { $numberLong: "2000000000000" } },
             Count: 0,
             Goal: 0,
@@ -3803,7 +3777,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         // If we push it, the game may show the event even tho it's not activated yet (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2721)
         if (timeMs >= activation) {
             worldState.Goals.push({
-                _id: { $oid: "5c7cb0d00000000000000000" },
+                _id: toOid2("5c7cb0d00000000000000000", buildLabel),
                 Activation: { $date: { $numberLong: activation.toString() } },
                 Expiry: { $date: { $numberLong: expiry.toString() } },
                 Node: "SolNode129",
@@ -3842,7 +3816,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
                 ]
             });
             worldState.NodeOverrides.push({
-                _id: { $oid: "5c7cb0d00000000000000000" },
+                _id: toOid2("5c7cb0d00000000000000000", buildLabel),
                 Activation: { $date: { $numberLong: activation.toString() } },
                 Expiry: { $date: { $numberLong: expiry.toString() } },
                 Node: "SolNode129",
@@ -3851,7 +3825,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             });
             if (count >= 35) {
                 worldState.GlobalUpgrades.push({
-                    _id: { $oid: "5c81cefa4c4566791728eaa6" },
+                    _id: toOid2("5c81cefa4c4566791728eaa6", buildLabel),
                     Activation: { $date: { $numberLong: activation.toString() } },
                     ExpiryDate: { $date: { $numberLong: expiry.toString() } },
                     UpgradeType: "GAMEPLAY_MONEY_REWARD_AMOUNT",
@@ -3863,7 +3837,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             // Not sure about that
             if (count == 100) {
                 worldState.GlobalUpgrades.push({
-                    _id: { $oid: "5c81cefa4c4566791728eaa7" },
+                    _id: toOid2("5c81cefa4c4566791728eaa7", buildLabel),
                     Activation: { $date: { $numberLong: activation.toString() } },
                     ExpiryDate: { $date: { $numberLong: expiry.toString() } },
                     UpgradeType: "GAMEPLAY_PICKUP_AMOUNT",
@@ -3911,13 +3885,13 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
     {
         worldState.NodeOverrides.push(
-            { _id: { $oid: "549b18e9b029cef5991d6aec" }, Node: "EuropaHUB", Hide: true },
-            { _id: { $oid: "54a1737aeb658f6cbccf70ff" }, Node: "ErisHUB", Hide: true },
-            { _id: { $oid: "54a736ddec12f80bd6e9e326" }, Node: "VenusHUB", Hide: true }
+            { _id: toOid2("549b18e9b029cef5991d6aec", buildLabel), Node: "EuropaHUB", Hide: true },
+            { _id: toOid2("54a1737aeb658f6cbccf70ff", buildLabel), Node: "ErisHUB", Hide: true },
+            { _id: toOid2("54a736ddec12f80bd6e9e326", buildLabel), Node: "VenusHUB", Hide: true }
         );
         if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["22.18.0"]) >= 0) {
             worldState.NodeOverrides.push({
-                _id: { $oid: "5ad9f9bb6df82a56eabf3d44" },
+                _id: toOid2("5ad9f9bb6df82a56eabf3d44", buildLabel),
                 Node: "SolNode802",
                 // Elite Sanctuary Onslaught cycling every week
                 Seed: new SRng(week).randomInt(0, 0xff_ffff)
@@ -3925,20 +3899,20 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         }
         if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["25.7.0"]) >= 0) {
             worldState.NodeOverrides.push({
-                _id: { $oid: "5d24d1f674491d51f8d44473" },
+                _id: toOid2("5d24d1f674491d51f8d44473", buildLabel),
                 Node: "MercuryHUB",
                 Hide: true,
                 LevelOverride: "/Lotus/Levels/Proc/Hub/RelayStationHubHydroid",
-                Activation: { $date: { $numberLong: "1563030000000" } }
+                Activation: toMongoDate2(1563030000000, buildLabel)
             });
         }
         if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["21.0.0"]) >= 0) {
             worldState.NodeOverrides.push({
-                _id: { $oid: "5b8817c2bd4f253264d6aa91" },
+                _id: toOid2("5b8817c2bd4f253264d6aa91", buildLabel),
                 Node: "EarthHUB",
                 Hide: false,
                 LevelOverride: "/Lotus/Levels/Proc/Hub/RelayStationHubTwoB",
-                Activation: { $date: { $numberLong: "1535646600000" } }
+                Activation: toMongoDate2(1535646600000, buildLabel)
             });
         }
     }
@@ -4002,7 +3976,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         const bountyCycleStartSecs = Math.trunc(bountyEpoch + bountyCycle * eidolonCycleDuration);
 
         worldState.Goals.push({
-            _id: { $oid: "687ebbe6d1d17841c9c59f38" },
+            _id: toOid2("687ebbe6d1d17841c9c59f38", buildLabel),
             Activation: {
                 $date: {
                     $numberLong: config.worldState?.ghoulEmergenceOverride
@@ -4073,9 +4047,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
 
     if (config.worldState?.creditBoost) {
         worldState.GlobalUpgrades.push({
-            _id: { $oid: "5b23106f283a555109666672" },
-            Activation: { $date: { $numberLong: "1740164400000" } },
-            ExpiryDate: { $date: { $numberLong: "2000000000000" } },
+            _id: toOid2("5b23106f283a555109666672", buildLabel),
+            Activation: toMongoDate2(1740164400000, buildLabel),
+            ExpiryDate: toMongoDate2(2000000000000, buildLabel),
             UpgradeType: "GAMEPLAY_MONEY_REWARD_AMOUNT",
             OperationType: "MULTIPLY",
             Value: 2,
@@ -4085,9 +4059,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     }
     if (config.worldState?.affinityBoost) {
         worldState.GlobalUpgrades.push({
-            _id: { $oid: "5b23106f283a555109666673" },
-            Activation: { $date: { $numberLong: "1740164400000" } },
-            ExpiryDate: { $date: { $numberLong: "2000000000000" } },
+            _id: toOid2("5b23106f283a555109666673", buildLabel),
+            Activation: toMongoDate2(1740164400000, buildLabel),
+            ExpiryDate: toMongoDate2(2000000000000, buildLabel),
             UpgradeType: "GAMEPLAY_KILL_XP_AMOUNT",
             OperationType: "MULTIPLY",
             Value: 2,
@@ -4097,9 +4071,9 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     }
     if (config.worldState?.resourceBoost) {
         worldState.GlobalUpgrades.push({
-            _id: { $oid: "5b23106f283a555109666674" },
-            Activation: { $date: { $numberLong: "1740164400000" } },
-            ExpiryDate: { $date: { $numberLong: "2000000000000" } },
+            _id: toOid2("5b23106f283a555109666674", buildLabel),
+            Activation: toMongoDate2(1740164400000, buildLabel),
+            ExpiryDate: toMongoDate2(2000000000000, buildLabel),
             UpgradeType: "GAMEPLAY_PICKUP_AMOUNT",
             OperationType: "MULTIPLY",
             Value: 2,
@@ -4114,14 +4088,14 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         // TODO: Invasions chains, e.g. an infestation mission would soon lead to other nodes on that planet also having an infestation invasion.
         // TODO: Grineer/Corpus to fund their death stars with each invasion win.
         {
-            worldState.Invasions.push(createInvasion(day, 0));
-            worldState.Invasions.push(createInvasion(day, 1));
-            worldState.Invasions.push(createInvasion(day, 2));
+            worldState.Invasions.push(createInvasion(day, 0, buildLabel));
+            worldState.Invasions.push(createInvasion(day, 1, buildLabel));
+            worldState.Invasions.push(createInvasion(day, 2, buildLabel));
 
             // Completed invasions stay for up to 24 hours as the winner 'occupies' that node
-            worldState.Invasions.push(createInvasion(day - 1, 0));
-            worldState.Invasions.push(createInvasion(day - 1, 1));
-            worldState.Invasions.push(createInvasion(day - 1, 2));
+            worldState.Invasions.push(createInvasion(day - 1, 0, buildLabel));
+            worldState.Invasions.push(createInvasion(day - 1, 1, buildLabel));
+            worldState.Invasions.push(createInvasion(day - 1, 2, buildLabel));
         }
     }
 

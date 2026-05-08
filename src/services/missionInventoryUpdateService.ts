@@ -1348,11 +1348,11 @@ export const addMissionRewards = async (
         if (!alert) {
             logger.warn(`mission completed unknown alert`, { alertId: rewardInfo.alertId });
         } else {
-            if (inventory.CompletedAlerts.includes(alert._id.$oid)) {
-                logger.debug(`alert ${alert._id.$oid} already completed, skipping alert reward`);
+            if (inventory.CompletedAlerts.includes(rewardInfo.alertId)) {
+                logger.debug(`alert ${rewardInfo.alertId} already completed, skipping alert reward`);
             } else {
                 if (!inventory.alertsRepeatable) {
-                    inventory.CompletedAlerts.push(alert._id.$oid);
+                    inventory.CompletedAlerts.push(rewardInfo.alertId);
                 }
                 if (alert.MissionInfo.missionReward) {
                     if (alert.Tag && ["12MinWarEvent", "JadeShadows"].includes(alert.Tag) && isSteelPath) {
