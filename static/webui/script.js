@@ -3383,14 +3383,19 @@ for (const id of uiConfigs) {
                 url: "/custom/setConfig?" + window.authz,
                 contentType: "application/json",
                 data: JSON.stringify({ [id]: value })
+            }).done(function () {
+                config_data[id] = value;
             });
         };
     } else if (elm.type == "checkbox") {
         elm.onchange = function () {
+            const value = this.checked;
             $.post({
                 url: "/custom/setConfig?" + window.authz,
                 contentType: "application/json",
-                data: JSON.stringify({ [id]: this.checked })
+                data: JSON.stringify({ [id]: value })
+            }).done(function () {
+                config_data[id] = value;
             });
         };
     }
