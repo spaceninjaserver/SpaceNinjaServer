@@ -19,3 +19,7 @@ yarn.lock
 
 # Default Docker directory
 /docker-data
+
+# MongoDB data
+/database
+/db-data

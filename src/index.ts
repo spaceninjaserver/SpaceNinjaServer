@@ -46,7 +46,9 @@ if (mongodUri.startsWith("file://")) {
     fs.mkdirSync(dataDir, { recursive: true });
     const mongod = await MongoMemoryServer.create({
         instance: {
-            dbPath: dataDir
+            dbPath: dataDir,
+            port: 27017, // Prefer 27017
+            portGeneration: true // If 27017 is not available, use another port
         }
     });
     mongodUri = mongod.getUri();

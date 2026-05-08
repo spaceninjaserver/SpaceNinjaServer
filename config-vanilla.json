@@ -1,5 +1,5 @@
 {
-  "mongodbUrl": "mongodb://127.0.0.1:27017/openWF",
+  "mongodbUrl": "file://./database",
   "logger": {
     "files": true,
     "level": "trace",
