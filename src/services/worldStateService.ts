@@ -37,7 +37,8 @@ import type {
     IWorldState,
     TCircuitGameMode,
     IFlashSale,
-    IAlertMissionInfo
+    IAlertMissionInfo,
+    IEndlessXpChoice
 } from "../types/worldStateTypes.ts";
 import { toMongoDate2, toOid, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
@@ -1893,7 +1894,8 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
         VoidStorms: [],
         DailyDeals: [],
         //LibraryInfo: {},
-        EndlessXpChoices: [],
+        //EndlessXpChoices: [],
+        //EndlessXpSchedule: [],
         KnownCalendarSeasons: [],
         PVPChallengeInstances: [],
         FeaturedGuilds: [],
@@ -4302,35 +4304,24 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
     }
 
     // Circuit choices cycling every week
-    worldState.EndlessXpChoices.push({
-        Category: "EXC_NORMAL",
-        Choices: [
-            ["Nidus", "Octavia", "Harrow"],
-            ["Gara", "Khora", "Revenant"],
-            ["Garuda", "Baruuk", "Hildryn"],
-            ["Excalibur", "Trinity", "Ember"],
-            ["Loki", "Mag", "Rhino"],
-            ["Ash", "Frost", "Nyx"],
-            ["Saryn", "Vauban", "Nova"],
-            ["Nekros", "Valkyr", "Oberon"],
-            ["Hydroid", "Mirage", "Limbo"],
-            ["Mesa", "Chroma", "Atlas"],
-            ["Ivara", "Inaros", "Titania"]
-        ][week % 11]
-    });
-    worldState.EndlessXpChoices.push({
-        Category: "EXC_HARD",
-        Choices: [
-            ["Boar", "Gammacor", "Angstrum", "Gorgon", "Anku"],
-            ["Bo", "Latron", "Furis", "Furax", "Strun"],
-            ["Lex", "Magistar", "Boltor", "Bronco", "CeramicDagger"],
-            ["Torid", "DualToxocyst", "DualIchor", "Miter", "Atomos"],
-            ["AckAndBrunt", "Soma", "Vasto", "NamiSolo", "Burston"],
-            ["Zylok", "Sibear", "Dread", "Despair", "Hate"],
-            ["Dera", "Sybaris", "Cestra", "Sicarus", "Okina"],
-            ["Braton", "Lato", "Skana", "Paris", "Kunai"]
-        ][week % 8]
-    });
+    if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0) {
+        worldState.EndlessXpSchedule = [
+            {
+                Activation: { $date: { $numberLong: weekStart.toString() } },
+                Expiry: { $date: { $numberLong: weekEnd.toString() } },
+                CategoryChoices: getEndlessXpChoices(week)
+            }
+        ];
+        if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
+            worldState.EndlessXpSchedule.push({
+                Activation: { $date: { $numberLong: (weekStart + 604800000).toString() } },
+                Expiry: { $date: { $numberLong: (weekEnd + 604800000).toString() } },
+                CategoryChoices: getEndlessXpChoices(week)
+            });
+        }
+    } else {
+        worldState.EndlessXpChoices = getEndlessXpChoices(week);
+    }
 
     // 1999 Calendar Season cycling every week + YearIteration every 4 weeks
     worldState.KnownCalendarSeasons.push(getCalendarSeason(week));
@@ -4611,6 +4602,40 @@ export const getLiteSortie = (week: number): ILiteSortie => {
             }
         ]
     };
+};
+
+const getEndlessXpChoices = (week: number): IEndlessXpChoice[] => {
+    return [
+        {
+            Category: "EXC_NORMAL",
+            Choices: [
+                ["Nidus", "Octavia", "Harrow"],
+                ["Gara", "Khora", "Revenant"],
+                ["Garuda", "Baruuk", "Hildryn"],
+                ["Excalibur", "Trinity", "Ember"],
+                ["Loki", "Mag", "Rhino"],
+                ["Ash", "Frost", "Nyx"],
+                ["Saryn", "Vauban", "Nova"],
+                ["Nekros", "Valkyr", "Oberon"],
+                ["Hydroid", "Mirage", "Limbo"],
+                ["Mesa", "Chroma", "Atlas"],
+                ["Ivara", "Inaros", "Titania"]
+            ][week % 11]
+        },
+        {
+            Category: "EXC_HARD",
+            Choices: [
+                ["Boar", "Gammacor", "Angstrum", "Gorgon", "Anku"],
+                ["Bo", "Latron", "Furis", "Furax", "Strun"],
+                ["Lex", "Magistar", "Boltor", "Bronco", "CeramicDagger"],
+                ["Torid", "DualToxocyst", "DualIchor", "Miter", "Atomos"],
+                ["AckAndBrunt", "Soma", "Vasto", "NamiSolo", "Burston"],
+                ["Zylok", "Sibear", "Dread", "Despair", "Hate"],
+                ["Dera", "Sybaris", "Cestra", "Sicarus", "Okina"],
+                ["Braton", "Lato", "Skana", "Paris", "Kunai"]
+            ][week % 8]
+        }
+    ];
 };
 
 export const isArchwingMission = (node: IRegion): boolean => {

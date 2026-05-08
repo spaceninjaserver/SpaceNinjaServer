@@ -35,7 +35,8 @@ export interface IWorldState {
         LastCompletedTargetType?: string;
     };
     PVPChallengeInstances: IPVPChallengeInstance[];
-    EndlessXpChoices: IEndlessXpChoice[];
+    EndlessXpChoices?: IEndlessXpChoice[]; // < U42
+    EndlessXpSchedule?: IEndlessXpScheduleEntry[]; // >= U42
     FeaturedGuilds: IFeaturedGuild[];
     SeasonInfo?: {
         Activation: IMongoDate; // Nightwave was introduced in U24 so this is fine
@@ -395,6 +396,12 @@ export interface IPVPChallengeInstance {
 export interface IEndlessXpChoice {
     Category: string;
     Choices: string[];
+}
+
+export interface IEndlessXpScheduleEntry {
+    Activation: IMongoDate;
+    Expiry: IMongoDate;
+    CategoryChoices: IEndlessXpChoice[];
 }
 
 export interface IFeaturedGuild {

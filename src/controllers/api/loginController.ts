@@ -67,7 +67,7 @@ export const loginController: RequestHandler = async (request, response) => {
         if (args.dev) {
             logger.debug(`We are eagerly awaiting your pull requests!`);
         } else {
-            response.status(400).json({ error: "do you want me to change your diapers, too?" });
+            response.status(400).json({ error: "I'm making a list and checking it twice" });
             return;
         }
     }
