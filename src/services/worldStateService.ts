@@ -4316,7 +4316,7 @@ export const getWorldState = (buildLabel?: string): IWorldState => {
             worldState.EndlessXpSchedule.push({
                 Activation: { $date: { $numberLong: (weekStart + 604800000).toString() } },
                 Expiry: { $date: { $numberLong: (weekEnd + 604800000).toString() } },
-                CategoryChoices: getEndlessXpChoices(week)
+                CategoryChoices: getEndlessXpChoices(week + 1)
             });
         }
     } else {
