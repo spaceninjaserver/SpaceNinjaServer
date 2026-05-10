@@ -5017,6 +5017,7 @@ function handleU5ModEdit(event) {
                 }
             })
         }).done(function () {
+            toast(loc("code_succChange"));
             updateInventory();
         });
     });

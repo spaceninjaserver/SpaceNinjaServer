@@ -194,7 +194,7 @@ dict = {
     detailedView_equipmentFeaturesLabel: `Характеристики обладнання`,
     detailedView_umbraEchoesLabel: `Відлуння Умбри`,
 
-    detailedView_u5ModEditLabel: `[UNTRANSLATED] Update 5 mod editor`,
+    detailedView_u5ModEditLabel: `[UNTRANSLATED] Update 5 Mod Editor`,
     detailedView_u5ModEditDescription: `[UNTRANSLATED] Range for upgrade values changes with rarity.`,
     detailedView_u5ModEditFits: `[UNTRANSLATED] Fits:`,
     detailedView_u5ModEditReqLevel: `[UNTRANSLATED] Required Level:`,
