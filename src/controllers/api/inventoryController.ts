@@ -784,7 +784,7 @@ export const getInventoryResponse = async (
         for (const item of inventoryResponse.CurrentLoadOutIds) {
             toLegacyOid(item);
         }
-        if (version_compare(buildLabel, "2015.03.19.00.00") <= 0) {
+        if (version_compare(buildLabel, "2015.03.19.00.00") > 0) {
             for (const category of loadoutKeysLegacy) {
                 if (category in inventoryResponse.LoadOutPresets) {
                     for (const item of inventoryResponse.LoadOutPresets[category]) {
