@@ -1,6 +1,6 @@
 import { AllianceMember, GuildMember } from "../../models/guildModel.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
-import { GuildPermission } from "../../types/guildTypes.ts";
+import { eGuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
 export const setAllianceGuildPermissionsController: RequestHandler = async (req, res) => {
@@ -18,7 +18,7 @@ export const setAllianceGuildPermissionsController: RequestHandler = async (req,
         Pending: false
     }))!;
     if (
-        !(allianceMember.Permissions & GuildPermission.Ruler) ||
+        !(allianceMember.Permissions & eGuildPermission.Ruler) ||
         allianceMember.guildId.equals(req.query.guildId as string)
     ) {
         res.status(400).end();
@@ -31,7 +31,7 @@ export const setAllianceGuildPermissionsController: RequestHandler = async (req,
     }))!;
     targetAllianceMember.Permissions =
         parseInt(req.query.perms as string) &
-        (GuildPermission.Recruiter | GuildPermission.Treasurer | GuildPermission.ChatModerator);
+        (eGuildPermission.Recruiter | eGuildPermission.Treasurer | eGuildPermission.ChatModerator);
     await targetAllianceMember.save();
 
     res.end();

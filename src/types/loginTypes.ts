@@ -1,13 +1,14 @@
 import type { Types } from "mongoose";
 
-export enum Platform {
-    Windows = 0,
-    PlayStation = 1,
-    Xbox = 2,
-    Switch = 3,
-    iOS = 4,
-    Android = 5
-}
+export const ePlatform = {
+    Windows: 0,
+    PlayStation: 1,
+    Xbox: 2,
+    Switch: 3,
+    iOS: 4,
+    Android: 5
+} as const;
+export type TPlatform = (typeof ePlatform)[keyof typeof ePlatform];
 
 export interface IAccountAndLoginResponseCommons {
     DisplayName: string;
@@ -30,7 +31,7 @@ export interface IAccountCreationData extends IAccountAndLoginResponseCommons {
 }
 
 export interface IDatabaseAccount extends IAccountCreationData {
-    LastPlatform?: Platform;
+    LastPlatform?: TPlatform;
     Dropped?: true;
     LatestEventMessageDate: Date;
     LastLoginRewardDate: number;

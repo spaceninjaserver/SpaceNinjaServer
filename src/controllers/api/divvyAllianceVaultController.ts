@@ -1,6 +1,6 @@
 import { Alliance, AllianceMember, Guild, GuildMember } from "../../models/guildModel.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
-import { GuildPermission } from "../../types/guildTypes.ts";
+import { eGuildPermission } from "../../types/guildTypes.ts";
 import { parallelForeach } from "../../utils/async-utils.ts";
 import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
@@ -21,7 +21,7 @@ export const divvyAllianceVaultController: RequestHandler = async (req, res) => 
             allianceId: req.query.allianceId as string,
             guildId: guildMember.guildId
         }))!;
-        if (!(allianceMember.Permissions & GuildPermission.Treasurer)) {
+        if (!(allianceMember.Permissions & eGuildPermission.Treasurer)) {
             res.status(400).end();
             return;
         }

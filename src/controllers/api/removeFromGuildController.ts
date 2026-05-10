@@ -16,7 +16,7 @@ import {
     type TAccountDocument
 } from "../../services/loginService.ts";
 import { broadcastGuildUpdate, sendWsBroadcastToWebui } from "../../services/wsService.ts";
-import { GuildPermission } from "../../types/guildTypes.ts";
+import { eGuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler, Response } from "express";
 
 export const removeFromGuildGetController: RequestHandler = async (req, res) => {
@@ -49,7 +49,7 @@ const processRemoveFromGuildRequest = async (
         }
     }
     const isKick = !account._id.equals(payload.userId);
-    if (isKick && !(await hasGuildPermission(guild, account._id, GuildPermission.Regulator))) {
+    if (isKick && !(await hasGuildPermission(guild, account._id, eGuildPermission.Regulator))) {
         res.status(400).json("Invalid permission");
         return;
     }

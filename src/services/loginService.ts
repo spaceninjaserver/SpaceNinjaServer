@@ -1,7 +1,7 @@
 import { Account } from "../models/loginModel.ts";
 import { createInventory } from "./inventoryService.ts";
 import {
-    Platform,
+    ePlatform,
     type IAndroidAccount,
     type IDatabaseAccountJson,
     type IAccountCreationData
@@ -194,7 +194,7 @@ export const getGoogleAccountData = async (googleTokenId: string | undefined): P
 };
 
 export const getOriginalPlatform = (account: TAccountDocument): number => {
-    return account.GoogleTokenId ? Platform.Android : Platform.Windows;
+    return account.GoogleTokenId ? ePlatform.Android : ePlatform.Windows;
 };
 
 const platform_magics = [753, 639, 247, 37, 60, 161];

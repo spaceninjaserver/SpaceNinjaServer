@@ -18,12 +18,12 @@ import {
 } from "../../services/inventoryService.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { IPendingRecipeDatabase } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { eInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { fromOid, toOid2, U5ToModernRecipes, version_compare } from "../../helpers/inventoryHelpers.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
 import type { IRecipe } from "warframe-public-export-plus";
 import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
-import { EquipmentFeatures, Status } from "../../types/equipmentTypes.ts";
+import { eEquipmentFeatures, eStatus } from "../../types/equipmentTypes.ts";
 import { pseudoRecipeToOwnedRecipeMap } from "../../services/foundryService.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
@@ -185,7 +185,7 @@ const claimCompletedRecipe = async (
     if (recipe.secretIngredientAction == "SIA_CREATE_KUBROW") {
         // This request is sent automatically once the pending recipe is completed.
         const pet = inventory.KubrowPets.id(pendingRecipe.KubrowPet!)!;
-        pet.Details.Status = Status.StatusIncubated;
+        pet.Details.Status = eStatus.StatusIncubated;
     } else if (recipe.secretIngredientAction == "SIA_DISTILL_PRINT") {
         const pet = inventory.KubrowPets.id(pendingRecipe.KubrowPet!)!;
         addKubrowPetPrint(
@@ -272,7 +272,7 @@ const claimCompletedRecipe = async (
                         }
                     ],
                     XP: 900_000,
-                    Features: EquipmentFeatures.DOUBLE_CAPACITY
+                    Features: eEquipmentFeatures.DOUBLE_CAPACITY
                 },
                 account.BuildLabel,
                 resp.InventoryChanges
@@ -302,7 +302,7 @@ const claimCompletedRecipe = async (
                         }
                     ],
                     XP: 450_000,
-                    Features: EquipmentFeatures.DOUBLE_CAPACITY
+                    Features: eEquipmentFeatures.DOUBLE_CAPACITY
                 },
                 resp.InventoryChanges
             );
@@ -351,7 +351,7 @@ const refundRecipeIngredients = async (
                 inventoryChanges[category].push(inventory[category][index].toJSON<IEquipmentClient>());
                 equipmentIngredients.add(item.ItemType);
 
-                occupySlot(inventory, InventorySlot.WEAPONS, false);
+                occupySlot(inventory, eInventorySlot.WEAPONS, false);
                 inventoryChanges.WeaponBin ??= { Slots: 0 };
                 inventoryChanges.WeaponBin.Slots -= 1;
             });

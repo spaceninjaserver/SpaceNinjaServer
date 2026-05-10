@@ -1,7 +1,7 @@
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getInventory2, updatePlatinum, updateSlots } from "../../services/inventoryService.ts";
 import type { RequestHandler } from "express";
-import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { eInventorySlot, type TInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { exhaustive } from "../../utils/ts-utils.ts";
 
 /*
@@ -25,34 +25,34 @@ export const inventorySlotsController: RequestHandler = async (req, res) => {
     let price;
     let amount;
     switch (body.Bin) {
-        case InventorySlot.SUITS:
-        case InventorySlot.MECHSUITS:
-        case InventorySlot.PVE_LOADOUTS:
-        case InventorySlot.CREWMEMBERS:
+        case eInventorySlot.SUITS:
+        case eInventorySlot.MECHSUITS:
+        case eInventorySlot.PVE_LOADOUTS:
+        case eInventorySlot.CREWMEMBERS:
             price = 20;
             amount = 1;
             break;
 
-        case InventorySlot.SPACESUITS:
+        case eInventorySlot.SPACESUITS:
             price = 12;
             amount = 1;
             break;
 
-        case InventorySlot.WEAPONS:
-        case InventorySlot.SPACEWEAPONS:
-        case InventorySlot.SENTINELS:
-        case InventorySlot.RJ_COMPONENT_AND_ARMAMENTS:
-        case InventorySlot.AMPS:
+        case eInventorySlot.WEAPONS:
+        case eInventorySlot.SPACEWEAPONS:
+        case eInventorySlot.SENTINELS:
+        case eInventorySlot.RJ_COMPONENT_AND_ARMAMENTS:
+        case eInventorySlot.AMPS:
             price = 12;
             amount = 2;
             break;
 
-        case InventorySlot.RIVENS:
+        case eInventorySlot.RIVENS:
             price = 60;
             amount = 3;
             break;
 
-        case InventorySlot.PETS:
+        case eInventorySlot.PETS:
             price = 10;
             amount = 1;
             break;
@@ -62,13 +62,9 @@ export const inventorySlotsController: RequestHandler = async (req, res) => {
             throw new Error(`unexpected slot purchase of type ${body.Bin as string}`);
     }
 
-    const inventory = await getInventory2<InventorySlot | "infinitePlatinum" | "PremiumCredits" | "PremiumCreditsFree">(
-        accountId,
-        body.Bin,
-        "infinitePlatinum",
-        "PremiumCredits",
-        "PremiumCreditsFree"
-    );
+    const inventory = await getInventory2<
+        TInventorySlot | "infinitePlatinum" | "PremiumCredits" | "PremiumCreditsFree"
+    >(accountId, body.Bin, "infinitePlatinum", "PremiumCredits", "PremiumCreditsFree");
     const currencyChanges = updatePlatinum(inventory, price);
     updateSlots(inventory, body.Bin, amount, amount);
     await inventory.save();
@@ -77,5 +73,5 @@ export const inventorySlotsController: RequestHandler = async (req, res) => {
 };
 
 interface IInventorySlotsRequest {
-    Bin: InventorySlot;
+    Bin: TInventorySlot;
 }

@@ -2,7 +2,7 @@ import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { TEquipmentKey } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
+import { eEquipmentFeatures, type TEquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { broadcastInventoryUpdate, sendWsBroadcastTo } from "../../services/wsService.ts";
 import allIncarnons from "../../../static/fixed_responses/allIncarnonList.json" with { type: "json" };
 import { ExportWeapons } from "warframe-public-export-plus";
@@ -14,7 +14,7 @@ export const equipmentFeaturesController: RequestHandler = async (req, res) => {
         accountId,
         `${category} EvolutionProgress unlockDoubleCapacityPotatoesEverywhere unlockExilusEverywhere unlockArcanesEverywhere`
     );
-    const bit = Number(req.query.bit) as EquipmentFeatures;
+    const bit = Number(req.query.bit) as TEquipmentFeatures;
     /*if (
         (inventory.unlockDoubleCapacityPotatoesEverywhere && bit === EquipmentFeatures.DOUBLE_CAPACITY) ||
         (inventory.unlockExilusEverywhere && bit === EquipmentFeatures.UTILITY_SLOT) ||
@@ -28,7 +28,7 @@ export const equipmentFeaturesController: RequestHandler = async (req, res) => {
     if (item) {
         item.Features ??= 0;
         let requesterNeedsInventoryUpdateToo = false;
-        if (bit == EquipmentFeatures.INCARNON_GENESIS) {
+        if (bit == eEquipmentFeatures.INCARNON_GENESIS) {
             const parentName = ExportWeapons[item.ItemType].parentName;
             let searchType: string | undefined;
 

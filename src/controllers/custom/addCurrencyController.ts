@@ -2,7 +2,7 @@ import type { RequestHandler } from "express";
 import { getAccountForRequest, hasPermission } from "../../services/loginService.ts";
 import { addFusionPoints, getInventory } from "../../services/inventoryService.ts";
 import { getGuildForRequestEx, hasGuildPermission } from "../../services/guildService.ts";
-import { GuildPermission } from "../../types/guildTypes.ts";
+import { eGuildPermission } from "../../types/guildTypes.ts";
 import { broadcastGuildUpdate, broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 export const addCurrencyController: RequestHandler = async (req, res) => {
@@ -13,7 +13,7 @@ export const addCurrencyController: RequestHandler = async (req, res) => {
     const inventory = await getInventory(account._id, projection);
     if (request.currency == "VaultRegularCredits" || request.currency == "VaultPremiumCredits") {
         const guild = await getGuildForRequestEx(req, inventory);
-        if (await hasGuildPermission(guild, account._id, GuildPermission.Treasurer)) {
+        if (await hasGuildPermission(guild, account._id, eGuildPermission.Treasurer)) {
             guild[request.currency] ??= 0;
             guild[request.currency]! += request.delta;
             await guild.save();

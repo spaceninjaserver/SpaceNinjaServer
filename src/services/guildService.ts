@@ -20,9 +20,10 @@ import type {
     IGuildVaultClient,
     ITechProjectDatabase,
     IVaultDatabase,
-    IVaultPendingRecipeClient
+    IVaultPendingRecipeClient,
+    TGuildPermission
 } from "../types/guildTypes.ts";
-import { GuildPermission } from "../types/guildTypes.ts";
+import { eGuildPermission } from "../types/guildTypes.ts";
 import { toMongoDate, toMongoDate2, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
 import type { Types } from "mongoose";
 import type { IDojoBuild, IDojoResearch } from "warframe-public-export-plus";
@@ -718,7 +719,7 @@ export const hasAccessToDojo = (inventory: Pick<TInventoryDatabaseDocument, "Lev
 export const hasGuildPermission = async (
     guild: TGuildDatabaseDocument,
     accountId: string | Types.ObjectId,
-    perm: GuildPermission
+    perm: TGuildPermission
 ): Promise<boolean> => {
     const member = await GuildMember.findOne({ accountId: accountId, guildId: guild._id });
     if (member) {
@@ -732,7 +733,7 @@ export const hasPermissionToDecorateComponent = async (
     accountId: string,
     componentId: string | Types.ObjectId
 ): Promise<boolean> => {
-    if (await hasGuildPermission(guild, accountId, GuildPermission.Decorator)) {
+    if (await hasGuildPermission(guild, accountId, eGuildPermission.Decorator)) {
         return true;
     }
     const component = guild.DojoComponents.id(componentId);
@@ -748,7 +749,7 @@ export const hasPermissionToDecorateComponent = async (
 export const hasGuildPermissionEx = (
     guild: TGuildDatabaseDocument,
     member: IGuildMemberDatabase,
-    perm: GuildPermission
+    perm: TGuildPermission
 ): boolean => {
     const rank = guild.Ranks[member.rank];
     return (rank.Permissions & perm) != 0;
@@ -1012,7 +1013,7 @@ export const deleteGuild = async (guildId: Types.ObjectId): Promise<void> => {
     // If guild is the creator of an alliance, delete that as well.
     const allianceMember = await AllianceMember.findOne({ guildId, Pending: false });
     if (allianceMember) {
-        if (allianceMember.Permissions & GuildPermission.Ruler) {
+        if (allianceMember.Permissions & eGuildPermission.Ruler) {
             await deleteAlliance(allianceMember.allianceId);
         }
     }

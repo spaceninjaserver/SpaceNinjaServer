@@ -15,7 +15,7 @@ import type {
     IInventoryClient,
     IMiscItem
 } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { eInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { ExportResources } from "warframe-public-export-plus";
 import { getRecipe } from "../../services/itemDataService.ts";
 import { toMongoDate, version_compare } from "../../helpers/inventoryHelpers.ts";
@@ -302,7 +302,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             inventory.InfestedFoundry!.AbilityOverrideUnlockCooldown = new Date(Date.now() + 24 * 60 * 60 * 1000);
             const recipeChanges = addInfestedFoundryXP(inventory.InfestedFoundry!, 1600_00);
             addRecipes(inventory, recipeChanges);
-            freeUpSlot(inventory, InventorySlot.SUITS);
+            freeUpSlot(inventory, eInventorySlot.SUITS);
             await inventory.save();
             const infestedFoundry = inventory.toJSON<IInventoryClient>().InfestedFoundry!;
             applyCheatsToInfestedFoundry(inventory, infestedFoundry);

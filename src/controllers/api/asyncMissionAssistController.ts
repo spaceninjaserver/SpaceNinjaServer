@@ -5,7 +5,7 @@ import { Account } from "../../models/loginModel.ts";
 import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
 import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
 import { Loadout } from "../../models/inventoryModels/loadoutModel.ts";
-import { LoadoutIndex } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { eLoadoutIndex } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { toObjectId } from "../../helpers/inventoryHelpers.ts";
 
 export const asyncMissionAssistController: RequestHandler = async (req, res) => {
@@ -69,7 +69,7 @@ export const asyncMissionAssistController: RequestHandler = async (req, res) => 
         );
         const loadout = loadoutMap.get(inventory.accountOwnerId.toString());
         const configNum =
-            loadout?.OPERATOR.find(l => l._id == inventory.CurrentLoadOutIds[LoadoutIndex.OPERATOR])?.s?.cus || 0;
+            loadout?.OPERATOR.find(l => l._id == inventory.CurrentLoadOutIds[eLoadoutIndex.OPERATOR])?.s?.cus || 0;
         const operator: Omit<IEquipmentClient, "ItemId"> = {
             ItemType: operatorDb?.ItemType || "/Lotus/Powersuits/Operator/ChildOperatorSuitRemaster",
             Configs: operatorDb?.Configs.slice(configNum, configNum + 1) || [],

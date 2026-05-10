@@ -22,7 +22,7 @@ import questCompletionItems from "../../static/fixed_responses/questCompletionRe
 import type { ITypeCount } from "../types/commonTypes.ts";
 import { addString } from "../helpers/stringHelpers.ts";
 import { unlockShipFeature } from "./personalRoomsService.ts";
-import { EquipmentFeatures } from "../types/equipmentTypes.ts";
+import { eEquipmentFeatures } from "../types/equipmentTypes.ts";
 
 export interface IUpdateQuestRequest {
     QuestKeys: IQuestKeyClient[];
@@ -788,7 +788,7 @@ export const removeRequiredItems = async (inventory: TInventoryDatabaseDocument,
                             }
                         ],
                         XP: 900_000,
-                        Features: EquipmentFeatures.DOUBLE_CAPACITY
+                        Features: eEquipmentFeatures.DOUBLE_CAPACITY
                     });
                     inventory.XPInfo.push({
                         ItemType: "/Lotus/Powersuits/Excalibur/ExcaliburUmbra",
@@ -811,7 +811,7 @@ export const removeRequiredItems = async (inventory: TInventoryDatabaseDocument,
                             }
                         ],
                         XP: 450_000,
-                        Features: EquipmentFeatures.DOUBLE_CAPACITY
+                        Features: eEquipmentFeatures.DOUBLE_CAPACITY
                     });
                     inventory.XPInfo.push({
                         ItemType: "/Lotus/Weapons/Tenno/Melee/Swords/UmbraKatana/UmbraKatana",

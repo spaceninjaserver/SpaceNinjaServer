@@ -14,7 +14,7 @@ import {
 import { broadcastGuildUpdate } from "../../services/wsService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import type { IGuildMemberClient } from "../../types/guildTypes.ts";
-import { GuildPermission } from "../../types/guildTypes.ts";
+import { eGuildPermission } from "../../types/guildTypes.ts";
 import { logger } from "../../utils/logger.ts";
 import type { Request, Response, RequestHandler } from "express";
 import { ExportFlavour } from "warframe-public-export-plus";
@@ -77,7 +77,7 @@ const inviteToGuild = async (req: Request, res: Response, userName: string): Pro
 
     const senderInventory = await getInventory(senderAccount._id, "GuildId ActiveAvatarImageType");
     const guild = (await Guild.findById(senderInventory.GuildId!, "Name Ranks"))!;
-    if (!(await hasGuildPermission(guild, senderAccount._id, GuildPermission.Recruiter))) {
+    if (!(await hasGuildPermission(guild, senderAccount._id, eGuildPermission.Recruiter))) {
         res.status(400).send("Invalid permission");
     }
 

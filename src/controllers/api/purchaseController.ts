@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
 import { getAccountForRequest } from "../../services/loginService.ts";
-import { PurchaseSource } from "../../types/purchaseTypes.ts";
+import { ePurchaseSource } from "../../types/purchaseTypes.ts";
 import type { IPurchaseRequest, IPurchaseRequestU16 } from "../../types/purchaseTypes.ts";
 import { handlePurchase } from "../../services/purchaseService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
@@ -17,7 +17,7 @@ export const purchasePostController: RequestHandler = async (req, res) => {
         logger.debug("converting legacy purchase request", purchaseRequest);
         purchaseRequest = {
             PurchaseParams: {
-                Source: purchaseRequest.voidTraderId ? PurchaseSource.VoidTrader : PurchaseSource.Market,
+                Source: purchaseRequest.voidTraderId ? ePurchaseSource.VoidTrader : ePurchaseSource.Market,
                 SourceId: purchaseRequest.voidTraderId,
                 StoreItem: toStoreItem(purchaseRequest.productName),
                 Quantity: purchaseRequest.quantity,
@@ -45,7 +45,7 @@ export const purchaseGetController: RequestHandler = async (req, res) => {
     if (!(internalName in ExportBundles)) internalName = toStoreItem(internalName);
     const purchaseRequest: IPurchaseRequest = {
         PurchaseParams: {
-            Source: PurchaseSource.Market,
+            Source: ePurchaseSource.Market,
             StoreItem: internalName,
             Quantity: 1,
             UsePremium: Boolean(Number(req.query.usePremium))

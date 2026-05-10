@@ -28,10 +28,10 @@ import {
     updatePlatinum
 } from "../../services/inventoryService.ts";
 import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { eInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { ITechProjectClient } from "../../types/guildTypes.ts";
-import { GuildPermission } from "../../types/guildTypes.ts";
+import { eGuildPermission } from "../../types/guildTypes.ts";
 import { GuildMember } from "../../models/guildModel.ts";
 import { toMongoDate, toMongoDate2, toOid } from "../../helpers/inventoryHelpers.ts";
 import { logger } from "../../utils/logger.ts";
@@ -77,7 +77,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
         if (data.Mode != "Personal") {
             const inventory = await getInventory2(accountId, "GuildId", "LevelKeys");
             const guild = await getGuildForRequestEx(req, inventory);
-            if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
+            if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, eGuildPermission.Tech))) {
                 res.status(400).send("-1").end();
                 return;
             }
@@ -299,7 +299,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
             const guild = await getGuildForRequestEx(req, inventory);
             if (
                 !hasAccessToDojo(inventory) ||
-                !(await hasGuildPermission(guild, accountId, GuildPermission.Fabricator))
+                !(await hasGuildPermission(guild, accountId, eGuildPermission.Fabricator))
             ) {
                 res.status(400).send("-1").end();
                 return;
@@ -340,7 +340,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
     } else if (data.Action == "Fabricate") {
         const inventory = await getInventory(accountId, undefined);
         const guild = await getGuildForRequestEx(req, inventory);
-        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Fabricator))) {
+        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, eGuildPermission.Fabricator))) {
             res.status(400).send("-1").end();
             return;
         }
@@ -358,7 +358,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
     } else if (data.Action == "Pause") {
         const inventory = await getInventory2(accountId, "GuildId", "LevelKeys");
         const guild = await getGuildForRequestEx(req, inventory);
-        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
+        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, eGuildPermission.Tech))) {
             res.status(400).send("-1").end();
             return;
         }
@@ -371,7 +371,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
     } else if (data.Action == "Unpause") {
         const inventory = await getInventory2(accountId, "GuildId", "LevelKeys");
         const guild = await getGuildForRequestEx(req, inventory);
-        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
+        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, eGuildPermission.Tech))) {
             res.status(400).send("-1").end();
             return;
         }
@@ -554,7 +554,7 @@ const finishComponentRepair = (
                   UpgradeType: ExportRailjackWeapons[salvageItem.ItemType].defaultUpgrades?.[0].ItemType,
                   UpgradeFingerprint: salvageItem.UpgradeFingerprint
               })),
-        ...occupySlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS, false)
+        ...occupySlot(inventory, eInventorySlot.RJ_COMPONENT_AND_ARMAMENTS, false)
     };
 
     inventoryChanges.RemovedIdItems = [

@@ -1,5 +1,5 @@
 import type { IOid, IOidWithLegacySupport, ITypeCount } from "./commonTypes.ts";
-import type { ArtifactPolarity, IPolarity } from "./inventoryTypes/commonInventoryTypes.ts";
+import type { TArtifactPolarity, IPolarity } from "./inventoryTypes/commonInventoryTypes.ts";
 import type {
     IBooster,
     IChallengeProgress,
@@ -266,7 +266,7 @@ export interface IUpgradesRequestLegacy {
     IsSwappingOperation: boolean;
     PolarizeReq?: string;
     PolarizeSlot: number;
-    PolarizeValue: ArtifactPolarity;
+    PolarizeValue: TArtifactPolarity;
     PolarityRemap: IPolarity[];
     UpgradesToAttach?: IUpgradeClient[];
     UpgradesToDetach?: IUpgradeClient[];
@@ -276,7 +276,7 @@ export interface IUpgradeOperation {
     OperationType: string;
     UpgradeRequirement: string; // uniqueName of item being consumed
     PolarizeSlot: number;
-    PolarizeValue: ArtifactPolarity;
+    PolarizeValue: TArtifactPolarity;
     PolarityRemap: IPolarity[];
 }
 

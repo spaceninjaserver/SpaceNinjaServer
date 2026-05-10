@@ -11,7 +11,7 @@ import {
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest, getAccountIdForRequest, getSuffixedName } from "../../services/loginService.ts";
 import { broadcastGuildUpdate, sendWsBroadcastToWebui } from "../../services/wsService.ts";
-import { GuildPermission } from "../../types/guildTypes.ts";
+import { eGuildPermission } from "../../types/guildTypes.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
 import { Types } from "mongoose";
@@ -77,7 +77,7 @@ export const confirmGuildInvitationGetController: RequestHandler = async (req, r
 export const confirmGuildInvitationPostController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const guild = (await Guild.findById(req.query.clanId as string, "Ranks RosterActivity"))!;
-    if (!(await hasGuildPermission(guild, accountId, GuildPermission.Recruiter))) {
+    if (!(await hasGuildPermission(guild, accountId, eGuildPermission.Recruiter))) {
         res.status(400).json("Invalid permission");
         return;
     }

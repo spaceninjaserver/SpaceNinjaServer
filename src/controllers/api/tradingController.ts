@@ -9,7 +9,7 @@ import {
     updatePlatinum
 } from "../../services/inventoryService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
-import { GuildPermission } from "../../types/guildTypes.ts";
+import { eGuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 import type { IPendingTradeDatabase, ITradeOffer } from "../../types/tradingTypes.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
@@ -28,8 +28,8 @@ import { exportTrade } from "../../services/tradingService.ts";
 export const tradingController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const accountId = account._id.toString();
-    const op = req.query.op as string as TradingOperation;
-    if (op == TradingOperation.InitialOffer) {
+    const op = req.query.op as string as TTradingOperation;
+    if (op == eTradingOperation.InitialOffer) {
         const buddyId = req.query.buddyId as string;
         const offer = getJSONfromString<ITradeOffer>(String(req.body));
         const us = getSide(accountId, buddyId);
@@ -45,7 +45,7 @@ export const tradingController: RequestHandler = async (req, res) => {
         res.json({
             PendingTrades: [exportTrade(trade, us)]
         });
-    } else if (op == TradingOperation.CounterOffer) {
+    } else if (op == eTradingOperation.CounterOffer) {
         const buddyId = req.query.buddyId as string;
         const offer = getJSONfromString<ITradeOffer>(String(req.body));
         const us = getSide(accountId, buddyId);
@@ -64,7 +64,7 @@ export const tradingController: RequestHandler = async (req, res) => {
         res.json({
             PendingTrades: [exportTrade(trade, us)]
         });
-    } else if (op == TradingOperation.AcceptTrade) {
+    } else if (op == eTradingOperation.AcceptTrade) {
         const buddyId = req.query.buddyId as string;
         const trade = (await getPendingTrade(accountId, buddyId))!;
         if (parseInt(req.query.revision as string) != trade.revision) {
@@ -140,28 +140,28 @@ export const tradingController: RequestHandler = async (req, res) => {
                 account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["40.0.0"]) < 0 ? "8" : "11"
             ).end();
         }
-    } else if (op == TradingOperation.CancelTrade) {
+    } else if (op == eTradingOperation.CancelTrade) {
         const buddyId = req.query.buddyId as string;
         await PendingTrade.deleteOne(getTradeFilter(accountId, buddyId));
         res.end();
-    } else if (op == TradingOperation.RefreshTradeInfo) {
+    } else if (op == eTradingOperation.RefreshTradeInfo) {
         const buddyId = req.query.buddyId as string;
         const trade = (await getPendingTrade(accountId, buddyId))!;
         const us = trade.a.equals(accountId) ? "a" : "b";
         res.json({
             PendingTrades: [exportTrade(trade, us)]
         });
-    } else if (op == TradingOperation.SetClanTax) {
+    } else if (op == eTradingOperation.SetClanTax) {
         const inventory = await getInventory2(accountId, "GuildId", "LevelKeys");
         const guild = await getGuildForRequestEx(req, inventory);
-        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Treasurer))) {
+        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, eGuildPermission.Treasurer))) {
             res.status(400).send("-1").end();
             return;
         }
         guild.TradeTax = parseInt(req.query.tax as string);
         await guild.save();
         res.send(guild.TradeTax).end();
-    } else if (op == TradingOperation.SetReady) {
+    } else if (op == eTradingOperation.SetReady) {
         const buddyId = req.query.buddyId as string;
         const us = getSide(accountId, buddyId);
         const trade = (await getPendingTrade(accountId, buddyId))!;
@@ -172,7 +172,7 @@ export const tradingController: RequestHandler = async (req, res) => {
         res.json({
             PendingTrades: [exportTrade(trade, us)]
         });
-    } else if (op == TradingOperation.UnsetReady) {
+    } else if (op == eTradingOperation.UnsetReady) {
         const buddyId = req.query.buddyId as string;
         const us = getSide(accountId, buddyId);
         const trade = (await PendingTrade.findOneAndUpdate(
@@ -191,17 +191,18 @@ export const tradingController: RequestHandler = async (req, res) => {
     }
 };
 
-enum TradingOperation {
-    InitialOffer = "0",
-    CounterOffer = "1",
-    AcceptTrade = "2",
-    CancelTrade = "3",
-    RefreshTradeInfo = "4",
-    SetClanTax = "5",
-    SetReady = "6",
-    UnsetReady = "7",
-    NeverSayNever = "01189998819991197253"
-}
+const eTradingOperation = {
+    InitialOffer: "0",
+    CounterOffer: "1",
+    AcceptTrade: "2",
+    CancelTrade: "3",
+    RefreshTradeInfo: "4",
+    SetClanTax: "5",
+    SetReady: "6",
+    UnsetReady: "7",
+    NeverSayNever: "01189998819991197253"
+} as const;
+export type TTradingOperation = (typeof eTradingOperation)[keyof typeof eTradingOperation];
 
 const getSide = (accountId: string, buddyId: string): "a" | "b" => {
     return accountId.localeCompare(buddyId) < 0 ? "a" : "b";

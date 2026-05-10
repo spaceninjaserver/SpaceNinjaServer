@@ -13,7 +13,7 @@ import { getAccountForRequest, getSuffixedName } from "../../services/loginServi
 import { handleDailyDealPurchase, handleStoreItemAcquisition } from "../../services/purchaseService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import type { IPurchaseParams, IPurchaseResponse } from "../../types/purchaseTypes.ts";
-import { PurchaseSource } from "../../types/purchaseTypes.ts";
+import { ePurchaseSource } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
 import { ExportBundles, ExportFlavour } from "warframe-public-export-plus";
 import { logger } from "../../utils/logger.ts";
@@ -21,10 +21,10 @@ import { getBundle, getPrice } from "../../services/itemDataService.ts";
 
 const checkPurchaseParams = (params: IPurchaseParams): boolean => {
     switch (params.Source) {
-        case PurchaseSource.Market:
+        case ePurchaseSource.Market:
             return params.UsePremium;
 
-        case PurchaseSource.DailyDeal:
+        case ePurchaseSource.DailyDeal:
             return true;
     }
     return false;
@@ -35,7 +35,7 @@ export const giftingController: RequestHandler = async (req, res) => {
     if (!data.PurchaseParams) {
         const nameParts = String(req.query.productName).split(";");
         data.PurchaseParams = {
-            Source: PurchaseSource.Market,
+            Source: ePurchaseSource.Market,
             StoreItem: nameParts[0],
             Quantity: Number(req.query.quantity),
             UsePremium: true
@@ -88,7 +88,7 @@ export const giftingController: RequestHandler = async (req, res) => {
     const response: IPurchaseResponse = {
         InventoryChanges: {}
     };
-    if (data.PurchaseParams.Source == PurchaseSource.DailyDeal) {
+    if (data.PurchaseParams.Source == ePurchaseSource.DailyDeal) {
         await handleDailyDealPurchase(senderInventory, data.PurchaseParams, response);
     } else {
         if (!data.PurchaseParams.ExpectedPrice) {

@@ -327,19 +327,19 @@ export type TSolarMapRegion =
 
 //TODO: perhaps split response and database into their own files
 
-export enum LoadoutIndex {
-    NORMAL = 0,
-    SENTINEL = 1,
-    ARCHWING = 2,
-    NORMAL_PVP = 3,
-    LUNARO = 4,
-    OPERATOR = 5,
-    KDRIVE = 6,
-    DATAKNIFE = 7,
-    MECH = 8,
-    OPERATOR_ADULT = 9,
-    DRIFTER = 10
-}
+export const eLoadoutIndex = {
+    NORMAL: 0,
+    SENTINEL: 1,
+    ARCHWING: 2,
+    NORMAL_PVP: 3,
+    LUNARO: 4,
+    OPERATOR: 5,
+    KDRIVE: 6,
+    DATAKNIFE: 7,
+    MECH: 8,
+    OPERATOR_ADULT: 9,
+    DRIFTER: 10
+} as const;
 
 export interface IDailyAffiliations {
     DailyAffiliation: number;
@@ -696,20 +696,21 @@ export interface ICrewMemberDatabase extends Omit<ICrewMemberClient, "WeaponId" 
     _id: Types.ObjectId;
 }
 
-export enum InventorySlot {
-    SUITS = "SuitBin",
-    WEAPONS = "WeaponBin",
-    SPACESUITS = "SpaceSuitBin",
-    SPACEWEAPONS = "SpaceWeaponBin",
-    MECHSUITS = "MechBin",
-    PVE_LOADOUTS = "PveBonusLoadoutBin",
-    SENTINELS = "SentinelBin",
-    AMPS = "OperatorAmpBin",
-    RJ_COMPONENT_AND_ARMAMENTS = "CrewShipSalvageBin",
-    CREWMEMBERS = "CrewMemberBin",
-    RIVENS = "RandomModBin",
-    PETS = "PetBin"
-}
+export const eInventorySlot = {
+    SUITS: "SuitBin",
+    WEAPONS: "WeaponBin",
+    SPACESUITS: "SpaceSuitBin",
+    SPACEWEAPONS: "SpaceWeaponBin",
+    MECHSUITS: "MechBin",
+    PVE_LOADOUTS: "PveBonusLoadoutBin",
+    SENTINELS: "SentinelBin",
+    AMPS: "OperatorAmpBin",
+    RJ_COMPONENT_AND_ARMAMENTS: "CrewShipSalvageBin",
+    CREWMEMBERS: "CrewMemberBin",
+    RIVENS: "RandomModBin",
+    PETS: "PetBin"
+} as const;
+export type TInventorySlot = (typeof eInventorySlot)[keyof typeof eInventorySlot];
 
 export interface ISlots {
     Extra?: number;
@@ -923,10 +924,6 @@ export interface ILibraryPersonalProgress {
     TargetType: string;
     Scans: number;
     Completed: boolean;
-}
-
-export enum UpgradeType {
-    LotusWeaponsGrineerKuvaLichUpgradesInnateDamageRandomMod = "/Lotus/Weapons/Grineer/KuvaLich/Upgrades/InnateDamageRandomMod"
 }
 
 export interface ILoreFragmentScan {

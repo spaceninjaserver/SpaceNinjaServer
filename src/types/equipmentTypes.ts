@@ -20,16 +20,17 @@ export interface IEquipmentSelectionDatabase extends Omit<IEquipmentSelectionCli
     ItemId?: Types.ObjectId;
 }
 
-export enum EquipmentFeatures {
-    DOUBLE_CAPACITY = 1,
-    UTILITY_SLOT = 2,
-    GRAVIMAG_INSTALLED = 4,
-    GILDED = 8,
-    ARCANE_SLOT = 32,
-    SECOND_ARCANE_SLOT = 64,
-    INCARNON_GENESIS = 512,
-    VALENCE_SWAP = 1024
-}
+export const eEquipmentFeatures = {
+    DOUBLE_CAPACITY: 1,
+    UTILITY_SLOT: 2,
+    GRAVIMAG_INSTALLED: 4,
+    GILDED: 8,
+    ARCANE_SLOT: 32,
+    SECOND_ARCANE_SLOT: 64,
+    INCARNON_GENESIS: 512,
+    VALENCE_SWAP: 1024
+} as const;
+export type TEquipmentFeatures = (typeof eEquipmentFeatures)[keyof typeof eEquipmentFeatures];
 
 export interface IEquipmentDatabase {
     ItemType: string;
@@ -130,7 +131,7 @@ export interface IKubrowPetDetailsDatabase extends IKubrowGenetics {
     IsPuppy?: boolean;
     HasCollar: boolean;
     PrintsRemaining: number;
-    Status: Status;
+    Status: TStatus;
     HatchDate?: Date;
 }
 
@@ -138,13 +139,14 @@ export interface IKubrowPetDetailsClient extends Omit<IKubrowPetDetailsDatabase,
     HatchDate: IMongoDate;
 }
 
-export enum Status {
-    StatusIncubating = "STATUS_INCUBATING",
-    StatusIncubated = "STATUS_INCUBATED",
-    StatusAvailable = "STATUS_AVAILABLE",
-    StatusStasis = "STATUS_STASIS",
-    StatusDistilling = "STATUS_DISTILLING" // TODO: We currently don't ever set this, but we probably should?
-}
+export const eStatus = {
+    StatusIncubating: "STATUS_INCUBATING",
+    StatusIncubated: "STATUS_INCUBATED",
+    StatusAvailable: "STATUS_AVAILABLE",
+    StatusStasis: "STATUS_STASIS",
+    StatusDistilling: "STATUS_DISTILLING" // TODO: We currently don't ever set this, but we probably should?
+};
+type TStatus = (typeof eStatus)[keyof typeof eStatus];
 
 // inventory.CrewShips[0].Weapon
 export interface ICrewShipWeaponClient {

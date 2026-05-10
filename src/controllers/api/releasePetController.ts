@@ -3,7 +3,7 @@ import { freeUpSlot, getInventory, updateCurrency } from "../../services/invento
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 import type { RequestHandler } from "express";
-import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { eInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 
 export const releasePetController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -16,8 +16,8 @@ export const releasePetController: RequestHandler = async (req, res) => {
     inventoryChanges.RemovedIdItems = [{ ItemId: { $oid: payload.petId } }];
     inventory.KubrowPets.pull({ _id: payload.petId });
     inventory.PendingRecipes.pull({ KubrowPet: payload.petId });
-    inventoryChanges[InventorySlot.SENTINELS] = { count: -1, platinum: 0, Slots: 1 };
-    freeUpSlot(inventory, InventorySlot.SENTINELS);
+    inventoryChanges[eInventorySlot.SENTINELS] = { count: -1, platinum: 0, Slots: 1 };
+    freeUpSlot(inventory, eInventorySlot.SENTINELS);
 
     await inventory.save();
     res.json({

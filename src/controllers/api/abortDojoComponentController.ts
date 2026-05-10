@@ -10,7 +10,7 @@ import {
 } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
-import { GuildPermission, type IDojoClient } from "../../types/guildTypes.ts";
+import { eGuildPermission, type IDojoClient } from "../../types/guildTypes.ts";
 import type { Request, RequestHandler } from "express";
 
 export const abortDojoComponentGetController: RequestHandler = async (req, res) => {
@@ -34,7 +34,7 @@ const abortDojoComponent = async (
     const guild = await getGuildForRequestEx(req, inventory);
 
     if (resultType) {
-        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Tactician))) {
+        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, eGuildPermission.Tactician))) {
             return { DojoRequestStatus: -1 };
         }
 
@@ -50,7 +50,7 @@ const abortDojoComponent = async (
         await guild.save();
         return await getDojoClient(guild, 0, componentId, account.BuildLabel);
     } else {
-        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Architect))) {
+        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, eGuildPermission.Architect))) {
             return { DojoRequestStatus: -1 };
         }
 

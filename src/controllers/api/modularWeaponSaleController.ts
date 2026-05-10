@@ -3,7 +3,7 @@ import { ExportWeapons } from "warframe-public-export-plus";
 import type { IMongoDate } from "../../types/commonTypes.ts";
 import { toMongoDate } from "../../helpers/inventoryHelpers.ts";
 import { SRng } from "../../services/rngService.ts";
-import type { ArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
+import type { TArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import {
     addEquipment,
@@ -18,7 +18,7 @@ import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { sendWsBroadcastTo } from "../../services/wsService.ts";
 import { modularWeaponTypes } from "../../helpers/modularWeaponHelper.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
-import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
+import { eEquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { logger } from "../../utils/logger.ts";
 
 export const modularWeaponSaleController: RequestHandler = async (req, res) => {
@@ -57,7 +57,7 @@ export const modularWeaponSaleController: RequestHandler = async (req, res) => {
         inventoryChanges = {
             ...inventoryChanges,
             ...addEquipment(inventory, category, weaponInfo.ItemType, {
-                Features: EquipmentFeatures.DOUBLE_CAPACITY | EquipmentFeatures.GILDED,
+                Features: eEquipmentFeatures.DOUBLE_CAPACITY | eEquipmentFeatures.GILDED,
                 ItemName: payload.ItemName,
                 Configs: configs,
                 ModularParts: weaponInfo.ModularParts,
@@ -198,5 +198,5 @@ interface IModularWeaponPurchaseRequest {
     Revision: number;
     ItemName: string;
     PolarizeSlot: number;
-    PolarizeValue: ArtifactPolarity;
+    PolarizeValue: TArtifactPolarity;
 }

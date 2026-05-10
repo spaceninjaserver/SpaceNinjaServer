@@ -11,7 +11,7 @@ import {
     processCompletedGuildTechProject
 } from "../../services/guildService.ts";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
-import { GuildPermission } from "../../types/guildTypes.ts";
+import { eGuildPermission } from "../../types/guildTypes.ts";
 import { GuildMember } from "../../models/guildModel.ts";
 import { broadcastGuildUpdate } from "../../services/wsService.ts";
 
@@ -19,7 +19,7 @@ export const addTechProjectController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const requests = req.body as ITechProjectRequest[];
     const guild = await getGuildForRequest(req, accountId);
-    if (!(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
+    if (!(await hasGuildPermission(guild, accountId, eGuildPermission.Tech))) {
         res.status(400).send("-1").end();
         return;
     }
@@ -54,7 +54,7 @@ export const removeTechProjectController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const requests = req.body as ITechProjectRequest[];
     const guild = await getGuildForRequest(req, accountId);
-    if (!(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
+    if (!(await hasGuildPermission(guild, accountId, eGuildPermission.Tech))) {
         res.status(400).send("-1").end();
         return;
     }
@@ -78,7 +78,7 @@ export const fundTechProjectController: RequestHandler = async (req, res) => {
         { accountId, guildId: guild._id },
         "RegularCreditsContributed MiscItemsContributed"
     ))!;
-    if (!(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
+    if (!(await hasGuildPermission(guild, accountId, eGuildPermission.Tech))) {
         res.status(400).send("-1").end();
         return;
     }
@@ -105,7 +105,7 @@ export const completeTechProjectsController: RequestHandler = async (req, res) =
     const accountId = await getAccountIdForRequest(req);
     const requests = req.body as ITechProjectRequest[];
     const guild = await getGuildForRequest(req, accountId);
-    if (!(await hasGuildPermission(guild, accountId, GuildPermission.Tech))) {
+    if (!(await hasGuildPermission(guild, accountId, eGuildPermission.Tech))) {
         res.status(400).send("-1").end();
         return;
     }

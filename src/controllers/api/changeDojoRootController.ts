@@ -7,7 +7,7 @@ import {
 } from "../../services/guildService.ts";
 import { logger } from "../../utils/logger.ts";
 import type { IDojoComponentDatabase } from "../../types/guildTypes.ts";
-import { GuildPermission } from "../../types/guildTypes.ts";
+import { eGuildPermission } from "../../types/guildTypes.ts";
 import { Types } from "mongoose";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
@@ -16,7 +16,7 @@ export const changeDojoRootController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const inventory = await getInventory(account._id, "GuildId LevelKeys");
     const guild = await getGuildForRequestEx(req, inventory);
-    if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, account._id, GuildPermission.Architect))) {
+    if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, account._id, eGuildPermission.Architect))) {
         res.json({ DojoRequestStatus: -1 });
         return;
     }

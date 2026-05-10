@@ -3,7 +3,7 @@ import { Alliance, AllianceMember, Guild, GuildMember } from "../../models/guild
 import { createMessage } from "../../services/inboxService.ts";
 import { getEffectiveAvatarImageType, getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest, getSuffixedName } from "../../services/loginService.ts";
-import { GuildPermission } from "../../types/guildTypes.ts";
+import { eGuildPermission } from "../../types/guildTypes.ts";
 import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
 import { ExportFlavour } from "warframe-public-export-plus";
@@ -22,7 +22,7 @@ export const addToAllianceController: RequestHandler = async (req, res) => {
         allianceId: req.query.allianceId as string,
         guildId: guildMember.guildId
     }))!;
-    if (!(allianceMember.Permissions & GuildPermission.Recruiter)) {
+    if (!(allianceMember.Permissions & eGuildPermission.Recruiter)) {
         res.status(400).json({ Error: 104 });
         return;
     }

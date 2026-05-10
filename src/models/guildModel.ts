@@ -16,7 +16,7 @@ import type {
     IAllianceMemberDatabase,
     IVaultPendingRecipeDatabase
 } from "../types/guildTypes.ts";
-import { GuildPermission } from "../types/guildTypes.ts";
+import { eGuildPermission } from "../types/guildTypes.ts";
 import type { Document, Model } from "mongoose";
 import { model, Schema, Types } from "mongoose";
 import { fusionTreasuresSchema, typeCountSchema } from "./inventoryModels/inventoryModel.ts";
@@ -105,39 +105,39 @@ const guildRankSchema = new Schema<IGuildRank>(
 const defaultRanks: IGuildRank[] = [
     {
         Name: "/Lotus/Language/Game/Rank_Creator",
-        Permissions: GuildPermission.Tactician | GuildPermission.Host | 16351
+        Permissions: eGuildPermission.Tactician | eGuildPermission.Host | 16351
     },
     {
         Name: "/Lotus/Language/Game/Rank_Warlord",
-        Permissions: GuildPermission.Tactician | GuildPermission.Host | 16351
+        Permissions: eGuildPermission.Tactician | eGuildPermission.Host | 16351
     },
     {
         Name: "/Lotus/Language/Game/Rank_General",
-        Permissions: GuildPermission.Host | 4318
+        Permissions: eGuildPermission.Host | 4318
     },
     {
         Name: "/Lotus/Language/Game/Rank_Officer",
-        Permissions: GuildPermission.Host | 4314
+        Permissions: eGuildPermission.Host | 4314
     },
     {
         Name: "/Lotus/Language/Game/Rank_Leader",
-        Permissions: GuildPermission.Host | 4106
+        Permissions: eGuildPermission.Host | 4106
     },
     {
         Name: "/Lotus/Language/Game/Rank_Sage",
-        Permissions: GuildPermission.Host | 4304
+        Permissions: eGuildPermission.Host | 4304
     },
     {
         Name: "/Lotus/Language/Game/Rank_Soldier",
-        Permissions: GuildPermission.Host | 4098
+        Permissions: eGuildPermission.Host | 4098
     },
     {
         Name: "/Lotus/Language/Game/Rank_Initiate",
-        Permissions: GuildPermission.Host | GuildPermission.Fabricator
+        Permissions: eGuildPermission.Host | eGuildPermission.Fabricator
     },
     {
         Name: "/Lotus/Language/Game/Rank_Utility",
-        Permissions: GuildPermission.Host | GuildPermission.Fabricator
+        Permissions: eGuildPermission.Host | eGuildPermission.Fabricator
     }
 ];
 

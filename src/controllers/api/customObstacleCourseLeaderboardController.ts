@@ -3,7 +3,7 @@ import { Guild } from "../../models/guildModel.ts";
 import { hasAccessToDojo, hasGuildPermission } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest, getAccountIdForRequest } from "../../services/loginService.ts";
-import { GuildPermission } from "../../types/guildTypes.ts";
+import { eGuildPermission } from "../../types/guildTypes.ts";
 import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
 
@@ -42,7 +42,7 @@ export const customObstacleCourseLeaderboardController: RequestHandler = async (
         // TOVERIFY: What clan permission is actually needed for this?
         const accountId = await getAccountIdForRequest(req);
         const inventory = await getInventory(accountId, "GuildId LevelKeys");
-        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, GuildPermission.Decorator))) {
+        if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, accountId, eGuildPermission.Decorator))) {
             res.status(400).end();
             return;
         }

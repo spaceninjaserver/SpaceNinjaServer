@@ -4,17 +4,17 @@ import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { addMiscItems, getInventory2 } from "../../services/inventoryService.ts";
 import type { TEquipmentKey } from "../../types/inventoryTypes/inventoryTypes.ts";
-import type { ArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
+import type { TArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import { ExportRecipes } from "warframe-public-export-plus";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
-import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
+import { eEquipmentFeatures } from "../../types/equipmentTypes.ts";
 
 interface IGildWeaponRequest {
     ItemName: string;
     Recipe: string; // e.g. /Lotus/Weapons/SolarisUnited/LotusGildKitgunBlueprint
     PolarizeSlot?: number;
-    PolarizeValue?: ArtifactPolarity;
+    PolarizeValue?: TArtifactPolarity;
     ItemId: string;
     Category: TEquipmentKey;
 }
@@ -33,7 +33,7 @@ export const gildWeaponController: RequestHandler = async (req, res) => {
 
     const weapon = inventory[data.Category][weaponIndex];
     weapon.Features ??= 0;
-    weapon.Features |= EquipmentFeatures.GILDED;
+    weapon.Features |= eEquipmentFeatures.GILDED;
     weapon.ItemName = data.ItemName;
     weapon.XP = 0;
 

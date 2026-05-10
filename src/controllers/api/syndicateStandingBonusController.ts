@@ -2,12 +2,12 @@ import type { RequestHandler } from "express";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { addMiscItems, addStanding, freeUpSlot, getInventory } from "../../services/inventoryService.ts";
 import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { eInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import { ExportSyndicates, ExportWeapons } from "warframe-public-export-plus";
 import { logger } from "../../utils/logger.ts";
 import type { IAffiliationMods, IInventoryChanges } from "../../types/purchaseTypes.ts";
-import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
+import { eEquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { fromOid } from "../../helpers/inventoryHelpers.ts";
 
 export const syndicateStandingBonusController: RequestHandler = async (req, res) => {
@@ -51,12 +51,12 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
             logger.debug(`modular weapon part ${part} gives ${partStandingBonus} standing`);
             gainedStanding += partStandingBonus;
         });
-        if (weapon.Features && (weapon.Features & EquipmentFeatures.GILDED) != 0) {
+        if (weapon.Features && (weapon.Features & eEquipmentFeatures.GILDED) != 0) {
             gainedStanding *= 2;
         }
         inventoryChanges.RemovedIdItems = [{ ItemId: modularWeaponIdRaw }];
         inventory[category].pull({ _id: modularWeaponId });
-        const slotBin = category == "OperatorAmps" ? InventorySlot.AMPS : InventorySlot.WEAPONS;
+        const slotBin = category == "OperatorAmps" ? eInventorySlot.AMPS : eInventorySlot.WEAPONS;
         freeUpSlot(inventory, slotBin);
         inventoryChanges[slotBin] = { count: -1, platinum: 0, Slots: 1 };
     }

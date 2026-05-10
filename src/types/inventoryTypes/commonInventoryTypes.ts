@@ -1,21 +1,20 @@
 import type { IOid } from "../commonTypes.ts";
 import type { Types } from "mongoose";
 
+export type TArtifactPolarity =
+    | "AP_POWER"
+    | "AP_DEFENSE"
+    | "AP_TACTIC"
+    | "AP_ATTACK"
+    | "AP_WARD"
+    | "AP_UNIVERSAL"
+    | "AP_UMBRA"
+    | "AP_PRECEPT"
+    | "AP_ANY";
+
 export interface IPolarity {
     Slot: number;
-    Value: ArtifactPolarity;
-}
-
-export enum ArtifactPolarity {
-    Any = "AP_ANY",
-    Attack = "AP_ATTACK",
-    Defense = "AP_DEFENSE",
-    Power = "AP_POWER",
-    Precept = "AP_PRECEPT",
-    Tactic = "AP_TACTIC",
-    Umbra = "AP_UMBRA",
-    Universal = "AP_UNIVERSAL",
-    Ward = "AP_WARD"
+    Value: TArtifactPolarity;
 }
 
 export interface IColor {

@@ -4,7 +4,7 @@ import { hasGuildPermissionEx } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest, getSuffixedName } from "../../services/loginService.ts";
 import type { ILongMOTD } from "../../types/guildTypes.ts";
-import { GuildPermission } from "../../types/guildTypes.ts";
+import { eGuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
@@ -42,7 +42,7 @@ export const setGuildMotdController: RequestHandler = async (req, res) => {
         }
         await alliance.save();
     } else {
-        if (!hasGuildPermissionEx(guild, member, GuildPermission.Herald)) {
+        if (!hasGuildPermissionEx(guild, member, eGuildPermission.Herald)) {
             res.status(400).json("Invalid permission");
             return;
         }

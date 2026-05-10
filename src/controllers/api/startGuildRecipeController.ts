@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { GuildPermission } from "../../types/guildTypes.ts";
+import { eGuildPermission } from "../../types/guildTypes.ts";
 import {
     getDojoClient,
     getGuildForRequestEx,
@@ -19,7 +19,7 @@ export const startGuildRecipeController: RequestHandler = async (req, res) => {
     const guild = await getGuildForRequestEx(req, inventory);
     const payload = getJSONfromString<IStartGuildRecipeRequest>(String(req.body));
 
-    if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, account._id, GuildPermission.Tactician))) {
+    if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, account._id, eGuildPermission.Tactician))) {
         res.json({ DojoRequestStatus: -1 });
         return;
     }

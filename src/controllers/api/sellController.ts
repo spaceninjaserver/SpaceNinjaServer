@@ -13,7 +13,7 @@ import {
     addCrewShipFusionPoints,
     addFusionTreasures
 } from "../../services/inventoryService.ts";
-import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { eInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
@@ -62,34 +62,34 @@ export const sellController: RequestHandler = async (req, res) => {
         requiredFields.add("RawUpgrades");
     }
     if ("Suits" in payload.Items) {
-        requiredFields.add(InventorySlot.SUITS);
+        requiredFields.add(eInventorySlot.SUITS);
     }
     if ("LongGuns" in payload.Items || "Pistols" in payload.Items || "Melee" in payload.Items) {
-        requiredFields.add(InventorySlot.WEAPONS);
+        requiredFields.add(eInventorySlot.WEAPONS);
     }
     if ("SpaceSuits" in payload.Items) {
-        requiredFields.add(InventorySlot.SPACESUITS);
+        requiredFields.add(eInventorySlot.SPACESUITS);
     }
     if ("SpaceGuns" in payload.Items || "SpaceMelee" in payload.Items) {
-        requiredFields.add(InventorySlot.SPACEWEAPONS);
+        requiredFields.add(eInventorySlot.SPACEWEAPONS);
     }
     if ("MechSuits" in payload.Items) {
-        requiredFields.add(InventorySlot.MECHSUITS);
+        requiredFields.add(eInventorySlot.MECHSUITS);
     }
     if ("Sentinels" in payload.Items || "SentinelWeapons" in payload.Items || "MoaPets" in payload.Items) {
-        requiredFields.add(InventorySlot.SENTINELS);
+        requiredFields.add(eInventorySlot.SENTINELS);
     }
     if ("OperatorAmps" in payload.Items) {
-        requiredFields.add(InventorySlot.AMPS);
+        requiredFields.add(eInventorySlot.AMPS);
     }
     if ("Hoverboards" in payload.Items) {
-        requiredFields.add(InventorySlot.SPACESUITS);
+        requiredFields.add(eInventorySlot.SPACESUITS);
     }
     if ("CrewMembers" in payload.Items) {
-        requiredFields.add(InventorySlot.CREWMEMBERS);
+        requiredFields.add(eInventorySlot.CREWMEMBERS);
     }
     if ("CrewShipWeapons" in payload.Items || "CrewShipWeaponSkins" in payload.Items) {
-        requiredFields.add(InventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
+        requiredFields.add(eInventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
         requiredFields.add("CrewShipRawSalvage");
         if ("CrewShipWeapons" in payload.Items) {
             requiredFields.add("CrewShipSalvagedWeapons");
@@ -138,7 +138,7 @@ export const sellController: RequestHandler = async (req, res) => {
             case "Suits":
                 payload.Items.Suits.forEach(sellItem => {
                     inventory.Suits.pull({ _id: sellItem.String });
-                    freeUpSlot(inventory, InventorySlot.SUITS);
+                    freeUpSlot(inventory, eInventorySlot.SUITS);
                 });
                 break;
             case "LongGuns":
@@ -146,78 +146,78 @@ export const sellController: RequestHandler = async (req, res) => {
                     const item = inventory.LongGuns.id(sellItem.String)!;
                     if (item.AltWeaponModeId) {
                         inventory.Melee.pull({ _id: item.AltWeaponModeId });
-                        freeUpSlot(inventory, InventorySlot.WEAPONS);
+                        freeUpSlot(inventory, eInventorySlot.WEAPONS);
                         inventoryChanges.RemovedIdItems ??= [];
                         inventoryChanges.RemovedIdItems.push({ ItemId: toOid(item.AltWeaponModeId) });
                     }
                     inventory.LongGuns.pull({ _id: sellItem.String });
-                    freeUpSlot(inventory, InventorySlot.WEAPONS);
+                    freeUpSlot(inventory, eInventorySlot.WEAPONS);
                 });
                 break;
             case "Pistols":
                 payload.Items.Pistols.forEach(sellItem => {
                     inventory.Pistols.pull({ _id: sellItem.String });
-                    freeUpSlot(inventory, InventorySlot.WEAPONS);
+                    freeUpSlot(inventory, eInventorySlot.WEAPONS);
                 });
                 break;
             case "Melee":
                 payload.Items.Melee.forEach(sellItem => {
                     inventory.Melee.pull({ _id: sellItem.String });
-                    freeUpSlot(inventory, InventorySlot.WEAPONS);
+                    freeUpSlot(inventory, eInventorySlot.WEAPONS);
                 });
                 break;
             case "SpaceSuits":
                 payload.Items.SpaceSuits.forEach(sellItem => {
                     inventory.SpaceSuits.pull({ _id: sellItem.String });
-                    freeUpSlot(inventory, InventorySlot.SPACESUITS);
+                    freeUpSlot(inventory, eInventorySlot.SPACESUITS);
                 });
                 break;
             case "SpaceGuns":
                 payload.Items.SpaceGuns.forEach(sellItem => {
                     inventory.SpaceGuns.pull({ _id: sellItem.String });
-                    freeUpSlot(inventory, InventorySlot.SPACEWEAPONS);
+                    freeUpSlot(inventory, eInventorySlot.SPACEWEAPONS);
                 });
                 break;
             case "SpaceMelee":
                 payload.Items.SpaceMelee.forEach(sellItem => {
                     inventory.SpaceMelee.pull({ _id: sellItem.String });
-                    freeUpSlot(inventory, InventorySlot.SPACEWEAPONS);
+                    freeUpSlot(inventory, eInventorySlot.SPACEWEAPONS);
                 });
                 break;
             case "MechSuits":
                 payload.Items.MechSuits.forEach(sellItem => {
                     inventory.MechSuits.pull({ _id: sellItem.String });
-                    freeUpSlot(inventory, InventorySlot.MECHSUITS);
+                    freeUpSlot(inventory, eInventorySlot.MECHSUITS);
                 });
                 break;
             case "Sentinels":
                 payload.Items.Sentinels.forEach(sellItem => {
                     inventory.Sentinels.pull({ _id: sellItem.String });
-                    freeUpSlot(inventory, InventorySlot.SENTINELS);
+                    freeUpSlot(inventory, eInventorySlot.SENTINELS);
                 });
                 break;
             case "SentinelWeapons":
                 payload.Items.SentinelWeapons.forEach(sellItem => {
                     inventory.SentinelWeapons.pull({ _id: sellItem.String });
-                    freeUpSlot(inventory, InventorySlot.SENTINELS);
+                    freeUpSlot(inventory, eInventorySlot.SENTINELS);
                 });
                 break;
             case "MoaPets":
                 payload.Items.MoaPets.forEach(sellItem => {
                     inventory.MoaPets.pull({ _id: sellItem.String });
-                    freeUpSlot(inventory, InventorySlot.SENTINELS);
+                    freeUpSlot(inventory, eInventorySlot.SENTINELS);
                 });
                 break;
             case "OperatorAmps":
                 payload.Items.OperatorAmps.forEach(sellItem => {
                     inventory.OperatorAmps.pull({ _id: sellItem.String });
-                    freeUpSlot(inventory, InventorySlot.AMPS);
+                    freeUpSlot(inventory, eInventorySlot.AMPS);
                 });
                 break;
             case "Hoverboards":
                 payload.Items.Hoverboards.forEach(sellItem => {
                     inventory.Hoverboards.pull({ _id: sellItem.String });
-                    freeUpSlot(inventory, InventorySlot.SPACESUITS);
+                    freeUpSlot(inventory, eInventorySlot.SPACESUITS);
                 });
                 break;
             case "Drones":
@@ -233,7 +233,7 @@ export const sellController: RequestHandler = async (req, res) => {
             case "CrewMembers":
                 payload.Items.CrewMembers.forEach(sellItem => {
                     inventory.CrewMembers.pull({ _id: sellItem.String });
-                    freeUpSlot(inventory, InventorySlot.CREWMEMBERS);
+                    freeUpSlot(inventory, eInventorySlot.CREWMEMBERS);
                 });
                 break;
             case "CrewShipWeapons":
@@ -256,7 +256,7 @@ export const sellController: RequestHandler = async (req, res) => {
                                 );
                             }
                             inventory.CrewShipWeapons.splice(index, 1);
-                            freeUpSlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
+                            freeUpSlot(inventory, eInventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
                         } else {
                             inventory.CrewShipSalvagedWeapons.pull({ _id: sellItem.String });
                         }
@@ -283,7 +283,7 @@ export const sellController: RequestHandler = async (req, res) => {
                                 );
                             }
                             inventory.CrewShipWeaponSkins.splice(index, 1);
-                            freeUpSlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
+                            freeUpSlot(inventory, eInventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
                         } else {
                             inventory.CrewShipSalvagedWeaponSkins.pull({ _id: sellItem.String });
                         }

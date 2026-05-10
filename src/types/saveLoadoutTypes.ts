@@ -124,16 +124,10 @@ export interface ILoadoutEntry {
     [key: string]: ILoadoutConfigClient;
 }
 
-export enum FocusSchool {
-    Attack = "AP_ATTACK",
-    Defense = "AP_DEFENSE",
-    Power = "AP_POWER",
-    Tactic = "AP_TACTIC",
-    Ward = "AP_WARD"
-}
+type TFocusSchool = "AP_ATTACK" | "AP_DEFENSE" | "AP_POWER" | "AP_TACTIC" | "AP_WARD";
 
 export interface ILoadoutConfigClient {
-    FocusSchool?: FocusSchool;
+    FocusSchool?: TFocusSchool;
     PresetIcon?: string;
     Favorite?: boolean;
     n?: string; // Loadout name

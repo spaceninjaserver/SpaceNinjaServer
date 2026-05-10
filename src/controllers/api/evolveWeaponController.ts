@@ -4,7 +4,7 @@ import { addMiscItems, getInventory2 } from "../../services/inventoryService.ts"
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import type { WeaponTypeInternal } from "../../services/itemDataService.ts";
 import { getRecipe } from "../../services/itemDataService.ts";
-import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
+import { eEquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 export const evolveWeaponController: RequestHandler = async (req, res) => {
@@ -21,7 +21,7 @@ export const evolveWeaponController: RequestHandler = async (req, res) => {
 
         const item = inventory[payload.Category].id(req.query.ItemId as string)!;
         item.Features ??= 0;
-        item.Features |= EquipmentFeatures.INCARNON_GENESIS;
+        item.Features |= eEquipmentFeatures.INCARNON_GENESIS;
 
         item.SkillTree = "0";
 
@@ -42,7 +42,7 @@ export const evolveWeaponController: RequestHandler = async (req, res) => {
         ]);
 
         const item = inventory[payload.Category].id(req.query.ItemId as string)!;
-        item.Features! &= ~EquipmentFeatures.INCARNON_GENESIS;
+        item.Features! &= ~eEquipmentFeatures.INCARNON_GENESIS;
     } else {
         throw new Error(`unexpected evolve weapon action: ${payload.Action}`);
     }

@@ -12,7 +12,7 @@ import {
     isCorrectPassword
 } from "../../services/loginService.ts";
 import {
-    Platform,
+    ePlatform,
     type IDatabaseAccountJson,
     type ILoginRequest,
     type ILoginResponse
@@ -135,7 +135,7 @@ export const loginController: RequestHandler = async (request, response) => {
     }
     account.BuildLabel = buildLabel;
     account.LastLogin = new Date();
-    account.LastPlatform = isAndroid ? Platform.Android : Platform.Windows;
+    account.LastPlatform = isAndroid ? ePlatform.Android : ePlatform.Windows;
     account.Dropped = undefined;
 
     // These fields used to be set by default but are really not needed

@@ -1,6 +1,6 @@
 import type { Types } from "mongoose";
 import type { IMongoDateWithLegacySupport, IOidWithLegacySupport } from "./commonTypes.ts";
-import type { Platform } from "./loginTypes.ts";
+import type { TPlatform } from "./loginTypes.ts";
 
 export interface IFriendInfo {
     _id: IOidWithLegacySupport;
@@ -16,7 +16,7 @@ export interface IFriendInfo {
     Note?: string;
     Favorite?: boolean;
     NewRequest?: boolean;
-    LastPlatform?: Platform;
+    LastPlatform?: TPlatform;
 }
 
 export interface IFriendship {

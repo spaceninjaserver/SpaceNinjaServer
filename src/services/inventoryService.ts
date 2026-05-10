@@ -28,9 +28,10 @@ import type {
     IWeeklyMissionChallengeInfo,
     IKubrowPetEgg,
     ITauPrequelQuestCustomData,
-    ICollectibleEntry
+    ICollectibleEntry,
+    TInventorySlot
 } from "../types/inventoryTypes/inventoryTypes.ts";
-import { InventorySlot, equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
+import { eInventorySlot, equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdateTypes.ts";
 import type { IKeyChainRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes.ts";
 import { logger } from "../utils/logger.ts";
@@ -113,7 +114,7 @@ import type {
     IKubrowPetDetailsDatabase,
     ITraits
 } from "../types/equipmentTypes.ts";
-import { EquipmentFeatures, Status } from "../types/equipmentTypes.ts";
+import { eEquipmentFeatures, eStatus } from "../types/equipmentTypes.ts";
 import type { ITypeCount } from "../types/commonTypes.ts";
 import type { TLoadoutDatabaseDocument } from "../models/inventoryModels/loadoutModel.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
@@ -338,8 +339,8 @@ export const addStartingGear = async (
         inventoryChanges
     );
 
-    updateSlots(inventory, InventorySlot.SUITS, 0, 1);
-    updateSlots(inventory, InventorySlot.WEAPONS, 0, 3);
+    updateSlots(inventory, eInventorySlot.SUITS, 0, 1);
+    updateSlots(inventory, eInventorySlot.WEAPONS, 0, 3);
     inventoryChanges.SuitBin = { count: 1, platinum: 0, Slots: -1 };
     inventoryChanges.WeaponBin = { count: 3, platinum: 0, Slots: -3 };
 
@@ -450,40 +451,40 @@ export const getInventory2 = async <K extends keyof TInventoryDatabaseDocument>(
     return inventory;
 };
 
-export const productCategoryToInventoryBin = (productCategory: string): InventorySlot | undefined => {
+export const productCategoryToInventoryBin = (productCategory: string): TInventorySlot | undefined => {
     switch (productCategory) {
         case "Suits":
-            return InventorySlot.SUITS;
+            return eInventorySlot.SUITS;
         case "Pistols":
         case "LongGuns":
         case "Melee":
-            return InventorySlot.WEAPONS;
+            return eInventorySlot.WEAPONS;
         case "Sentinels":
         case "SentinelWeapons":
         case "KubrowPets":
         case "MoaPets":
-            return InventorySlot.SENTINELS;
+            return eInventorySlot.SENTINELS;
         case "SpaceSuits":
         case "Hoverboards":
-            return InventorySlot.SPACESUITS;
+            return eInventorySlot.SPACESUITS;
         case "SpaceGuns":
         case "SpaceMelee":
-            return InventorySlot.SPACEWEAPONS;
+            return eInventorySlot.SPACEWEAPONS;
         case "OperatorAmps":
         case "Antiques":
-            return InventorySlot.AMPS;
+            return eInventorySlot.AMPS;
         case "CrewShipWeapons":
         case "CrewShipWeaponSkins":
-            return InventorySlot.RJ_COMPONENT_AND_ARMAMENTS;
+            return eInventorySlot.RJ_COMPONENT_AND_ARMAMENTS;
         case "MechSuits":
-            return InventorySlot.MECHSUITS;
+            return eInventorySlot.MECHSUITS;
         case "CrewMembers":
-            return InventorySlot.CREWMEMBERS;
+            return eInventorySlot.CREWMEMBERS;
     }
     return undefined;
 };
 
-export const occupySlot = <ST extends InventorySlot>(
+export const occupySlot = <ST extends TInventorySlot>(
     inventory: Pick<TInventoryDatabaseDocument, ST>,
     bin: ST,
     premiumPurchase: boolean
@@ -504,7 +505,7 @@ export const occupySlot = <ST extends InventorySlot>(
     return inventoryChanges;
 };
 
-export const freeUpSlot = <ST extends InventorySlot>(
+export const freeUpSlot = <ST extends TInventorySlot>(
     inventory: Pick<TInventoryDatabaseDocument, ST>,
     bin: ST
 ): void => {
@@ -657,7 +658,7 @@ export const addItem = async (
                 }
                 inventoryChanges = {
                     ...addCrewShipWeaponSkin(inventory, typeName, undefined),
-                    ...occupySlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS, premiumPurchase)
+                    ...occupySlot(inventory, eInventorySlot.RJ_COMPONENT_AND_ARMAMENTS, premiumPurchase)
                 };
             }
         } else {
@@ -765,7 +766,7 @@ export const addItem = async (
             }
             const defaultOverwrites: Partial<IEquipmentDatabase> = {};
             if (premiumPurchase) {
-                defaultOverwrites.Features = EquipmentFeatures.DOUBLE_CAPACITY;
+                defaultOverwrites.Features = eEquipmentFeatures.DOUBLE_CAPACITY;
             }
             if (weapon.maxLevelCap == 40 && typeName.indexOf("BallasSword") == -1) {
                 if (!seed) {
@@ -834,7 +835,7 @@ export const addItem = async (
                 ...inventoryChanges,
                 ...occupySlot(
                     inventory,
-                    productCategoryToInventoryBin(weapon.productCategory) ?? InventorySlot.WEAPONS,
+                    productCategoryToInventoryBin(weapon.productCategory) ?? eInventorySlot.WEAPONS,
                     premiumPurchase
                 )
             };
@@ -862,7 +863,7 @@ export const addItem = async (
             return {
                 ...inventoryChanges,
                 ...addEquipment(inventory, "MoaPets", itemType, defaultOverwrites),
-                ...occupySlot(inventory, InventorySlot.SENTINELS, premiumPurchase)
+                ...occupySlot(inventory, eInventorySlot.SENTINELS, premiumPurchase)
             };
         } else {
             // Modular weapon parts
@@ -897,7 +898,7 @@ export const addItem = async (
             }
             return {
                 ...addEquipment(inventory, meta.productCategory, typeName),
-                ...occupySlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS, premiumPurchase)
+                ...occupySlot(inventory, eInventorySlot.RJ_COMPONENT_AND_ARMAMENTS, premiumPurchase)
             };
         }
     }
@@ -975,11 +976,11 @@ export const addItem = async (
                             inventory,
                             typeName,
                             {
-                                Features: premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
+                                Features: premiumPurchase ? eEquipmentFeatures.DOUBLE_CAPACITY : undefined
                             },
                             buildLabel
                         )),
-                        ...occupySlot(inventory, InventorySlot.SUITS, premiumPurchase)
+                        ...occupySlot(inventory, eInventorySlot.SUITS, premiumPurchase)
                     };
                 }
                 case "Archwing": {
@@ -992,9 +993,9 @@ export const addItem = async (
                             inventory,
                             typeName,
                             {},
-                            premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
+                            premiumPurchase ? eEquipmentFeatures.DOUBLE_CAPACITY : undefined
                         ),
-                        ...occupySlot(inventory, InventorySlot.SPACESUITS, premiumPurchase)
+                        ...occupySlot(inventory, eInventorySlot.SPACESUITS, premiumPurchase)
                     };
                 }
                 case "EntratiMech": {
@@ -1006,9 +1007,9 @@ export const addItem = async (
                             inventory,
                             typeName,
                             {},
-                            premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined
+                            premiumPurchase ? eEquipmentFeatures.DOUBLE_CAPACITY : undefined
                         )),
-                        ...occupySlot(inventory, InventorySlot.MECHSUITS, premiumPurchase)
+                        ...occupySlot(inventory, eInventorySlot.MECHSUITS, premiumPurchase)
                     };
                 }
             }
@@ -1143,7 +1144,7 @@ export const addItem = async (
                         seed |= BigInt(getAccountRandSeed(inventory)) << 32n;
                         return {
                             ...addCrewMember(inventory, typeName, seed),
-                            ...occupySlot(inventory, InventorySlot.CREWMEMBERS, premiumPurchase)
+                            ...occupySlot(inventory, eInventorySlot.CREWMEMBERS, premiumPurchase)
                         };
                     } else if (typeName == "/Lotus/Types/Game/CrewShip/RailJack/DefaultHarness") {
                         if (quantity != 1) {
@@ -1268,7 +1269,7 @@ export const addItem = async (
                         ...inventoryChanges,
                         ...occupySlot(
                             inventory,
-                            productCategoryToInventoryBin(productCategory) ?? InventorySlot.WEAPONS,
+                            productCategoryToInventoryBin(productCategory) ?? eInventorySlot.WEAPONS,
                             premiumPurchase
                         )
                     };
@@ -1288,7 +1289,7 @@ export const addItem = async (
                         ...inventoryChanges,
                         ...occupySlot(
                             inventory,
-                            productCategoryToInventoryBin(productCategory) ?? InventorySlot.AMPS,
+                            productCategoryToInventoryBin(productCategory) ?? eInventorySlot.AMPS,
                             premiumPurchase
                         )
                     };
@@ -1357,7 +1358,7 @@ const addSentinel = (
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
     // Sentinel itself occupies a slot in the sentinels bin
-    combineInventoryChanges(inventoryChanges, occupySlot(inventory, InventorySlot.SENTINELS, premiumPurchase));
+    combineInventoryChanges(inventoryChanges, occupySlot(inventory, eInventorySlot.SENTINELS, premiumPurchase));
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (ExportSentinels[sentinelName]?.defaultWeapon) {
@@ -1376,7 +1377,7 @@ const addSentinel = (
             ItemType: sentinelName,
             Configs: configs,
             XP: 0,
-            Features: premiumPurchase ? EquipmentFeatures.DOUBLE_CAPACITY : undefined,
+            Features: premiumPurchase ? eEquipmentFeatures.DOUBLE_CAPACITY : undefined,
             IsNew: inventory.Sentinels.find(x => x.ItemType == sentinelName) ? undefined : true
         }) - 1;
     inventoryChanges.Sentinels ??= [];
@@ -1392,7 +1393,7 @@ const addSentinelWeapon = (
     inventoryChanges: IInventoryChanges
 ): void => {
     // Sentinel weapons also occupy a slot in the sentinels bin
-    combineInventoryChanges(inventoryChanges, occupySlot(inventory, InventorySlot.SENTINELS, premiumPurchase));
+    combineInventoryChanges(inventoryChanges, occupySlot(inventory, eInventorySlot.SENTINELS, premiumPurchase));
 
     const index = inventory.SentinelWeapons.push({ ItemType: typeName, XP: 0 }) - 1;
     inventoryChanges.SentinelWeapons ??= [];
@@ -1547,7 +1548,7 @@ export const addKubrowPet = (
 
     combineInventoryChanges(
         inventoryChanges,
-        occupySlot(inventory, isPreU28 ? InventorySlot.PETS : InventorySlot.SENTINELS, premiumPurchase)
+        occupySlot(inventory, isPreU28 ? eInventorySlot.PETS : eInventorySlot.SENTINELS, premiumPurchase)
     );
 
     // TODO: When incubating, this should only be given when claiming the recipe.
@@ -1618,7 +1619,7 @@ export const addKubrowPet = (
             IsPuppy: !premiumPurchase,
             HasCollar: isCatbrow || questCompleted,
             PrintsRemaining: !isPreU26 && isCatbrow ? 3 : 2,
-            Status: premiumPurchase ? Status.StatusStasis : Status.StatusIncubating,
+            Status: premiumPurchase ? eStatus.StatusStasis : eStatus.StatusIncubating,
             HatchDate: premiumPurchase ? new Date() : new Date(Date.now() + 10 * unixTimesInMs.hour), // On live, this seems to be somewhat randomised so that the pet hatches 9~11 hours after start. TOVERIFY: Although it might differ for the quest recipe?
             IsMale: !!getRandomInt(0, 1),
             Size: getRandomInt(70, 100) / 100,
@@ -2532,18 +2533,18 @@ export const addFusionTreasures = (
 };
 
 export const addFocusXpIncreases = (inventory: TInventoryDatabaseDocument, focusXpPlus: number[]): void => {
-    enum FocusType {
-        AP_UNIVERSAL,
-        AP_ATTACK,
-        AP_DEFENSE,
-        AP_TACTIC,
-        AP_POWER,
-        AP_PRECEPT,
-        AP_FUSION,
-        AP_WARD,
-        AP_UMBRA,
-        AP_ANY
-    }
+    const FocusType = {
+        AP_UNIVERSAL: 0,
+        AP_ATTACK: 1,
+        AP_DEFENSE: 2,
+        AP_TACTIC: 3,
+        AP_POWER: 4,
+        AP_PRECEPT: 5,
+        AP_FUSION: 6,
+        AP_WARD: 7,
+        AP_UMBRA: 8,
+        AP_ANY: 9
+    };
 
     inventory.FocusXP ??= {};
     if (focusXpPlus[FocusType.AP_ATTACK]) {

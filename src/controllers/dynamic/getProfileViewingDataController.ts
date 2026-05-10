@@ -18,7 +18,7 @@ import type {
     IPlayerSkills,
     ITypeXPItem
 } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { LoadoutIndex } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { eLoadoutIndex } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
@@ -341,7 +341,7 @@ const populateLoadout = async (
         const loadout = (await Loadout.findById(inventory.LoadOutPresets, "NORMAL"))!;
 
         result.LoadOutPreset = loadout.NORMAL.id(
-            inventory.CurrentLoadOutIds[LoadoutIndex.NORMAL]
+            inventory.CurrentLoadOutIds[eLoadoutIndex.NORMAL]
         )!.toJSON<ILoadoutConfigClient>();
         result.LoadOutPreset.ItemId = undefined;
         if (buildLabel && version_compare(buildLabel, gameToBuildVersion["19.5.3"]) <= 0) {

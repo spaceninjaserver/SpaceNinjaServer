@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
 import type { IDojoComponentClient } from "../../types/guildTypes.ts";
-import { GuildPermission } from "../../types/guildTypes.ts";
+import { eGuildPermission } from "../../types/guildTypes.ts";
 import {
     getDojoClient,
     getGuildForRequestEx,
@@ -25,7 +25,7 @@ export const startDojoRecipeController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const inventory = await getInventory(account._id, "GuildId LevelKeys");
     const guild = await getGuildForRequestEx(req, inventory);
-    if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, account._id, GuildPermission.Architect))) {
+    if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, account._id, eGuildPermission.Architect))) {
         res.json({ DojoRequestStatus: -1 });
         return;
     }

@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
 import { fromOid, version_compare } from "../../helpers/inventoryHelpers.ts";
 import type { IUpgradesRequest, IUpgradesRequestLegacy } from "../../types/requestTypes.ts";
-import type { ArtifactPolarity, IAbilityOverride } from "../../types/inventoryTypes/commonInventoryTypes.ts";
+import type { TArtifactPolarity, IAbilityOverride } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import type { IInventoryClient, IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import {
@@ -16,7 +16,7 @@ import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import { addInfestedFoundryXP, applyCheatsToInfestedFoundry } from "../../services/infestedFoundryService.ts";
 import { sendWsBroadcastTo } from "../../services/wsService.ts";
 import type { IEquipmentDatabase } from "../../types/equipmentTypes.ts";
-import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
+import { eEquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { Types } from "mongoose";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 import { ExportRecipes } from "warframe-public-export-plus";
@@ -78,7 +78,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
                         case "/Lotus/Types/Items/MiscItems/UtilityUnlocker": {
                             const item = inventory[payload.Category].id(itemId)!;
                             item.Features ??= 0;
-                            item.Features |= EquipmentFeatures.UTILITY_SLOT;
+                            item.Features |= eEquipmentFeatures.UTILITY_SLOT;
                             break;
                         }
                         default:
@@ -97,7 +97,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
                         case "/Lotus/Types/Items/MiscItems/OrokinCatalyst": {
                             const item = inventory[payload.Category].id(itemId)!;
                             item.Features ??= 0;
-                            item.Features |= EquipmentFeatures.DOUBLE_CAPACITY;
+                            item.Features |= eEquipmentFeatures.DOUBLE_CAPACITY;
                             break;
                         }
                         default:
@@ -168,7 +168,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
             if (payload.Weapon.UnlockLevel && payload.Weapon.UnlockLevel > 0) {
                 const item = inventory[payload.Category].id(itemId)!;
                 item.Features ??= 0;
-                item.Features |= EquipmentFeatures.DOUBLE_CAPACITY;
+                item.Features |= eEquipmentFeatures.DOUBLE_CAPACITY;
                 updatePlatinum(inventory, 20);
             }
             if (payload.Weapon.UpgradeNodes != undefined) {
@@ -260,21 +260,21 @@ export const upgradesController: RequestHandler = async (req, res) => {
                     case "/Lotus/Types/Items/MiscItems/OrokinCatalyst": {
                         const item = inventory[payload.ItemCategory].id(payload.ItemId.$oid)!;
                         item.Features ??= 0;
-                        item.Features |= EquipmentFeatures.DOUBLE_CAPACITY;
+                        item.Features |= eEquipmentFeatures.DOUBLE_CAPACITY;
                         break;
                     }
                     case "/Lotus/Types/Items/MiscItems/UtilityUnlocker":
                     case "/Lotus/Types/Items/MiscItems/WeaponUtilityUnlocker": {
                         const item = inventory[payload.ItemCategory].id(payload.ItemId.$oid)!;
                         item.Features ??= 0;
-                        item.Features |= EquipmentFeatures.UTILITY_SLOT;
+                        item.Features |= eEquipmentFeatures.UTILITY_SLOT;
                         break;
                     }
                     case "/Lotus/Types/Items/MiscItems/HeavyWeaponCatalyst": {
                         console.assert(payload.ItemCategory == "SpaceGuns");
                         const item = inventory[payload.ItemCategory].id(payload.ItemId.$oid)!;
                         item.Features ??= 0;
-                        item.Features |= EquipmentFeatures.GRAVIMAG_INSTALLED;
+                        item.Features |= eEquipmentFeatures.GRAVIMAG_INSTALLED;
                         break;
                     }
                     case "/Lotus/Types/Items/MiscItems/WeaponPrimaryArcaneUnlocker":
@@ -285,16 +285,16 @@ export const upgradesController: RequestHandler = async (req, res) => {
                         const item = inventory[payload.ItemCategory].id(payload.ItemId.$oid)!;
                         item.Features ??= 0;
                         if (operation.OperationType == "UOT_ARCANE_UNLOCK_1") {
-                            item.Features |= EquipmentFeatures.SECOND_ARCANE_SLOT;
+                            item.Features |= eEquipmentFeatures.SECOND_ARCANE_SLOT;
                         } else {
-                            item.Features |= EquipmentFeatures.ARCANE_SLOT;
+                            item.Features |= eEquipmentFeatures.ARCANE_SLOT;
                         }
                         break;
                     }
                     case "/Lotus/Types/Items/MiscItems/ValenceAdapter": {
                         const item = inventory[payload.ItemCategory].id(payload.ItemId.$oid)!;
                         item.Features ??= 0;
-                        item.Features |= EquipmentFeatures.VALENCE_SWAP;
+                        item.Features |= eEquipmentFeatures.VALENCE_SWAP;
                         break;
                     }
                     case "/Lotus/Types/Items/MiscItems/Forma":
@@ -340,7 +340,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
     res.json({ InventoryChanges: inventoryChanges });
 };
 
-const setSlotPolarity = (item: IEquipmentDatabase, slot: number, polarity: ArtifactPolarity): void => {
+const setSlotPolarity = (item: IEquipmentDatabase, slot: number, polarity: TArtifactPolarity): void => {
     item.Polarity ??= [];
     const entry = item.Polarity.find(entry => entry.Slot == slot);
     if (entry) {

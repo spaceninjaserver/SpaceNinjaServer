@@ -14,7 +14,7 @@ import {
 import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import { Types } from "mongoose";
 import type { ISpectreLoadout } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { eInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { fromOid, toOid, U5ToModernRecipes, version_compare } from "../../helpers/inventoryHelpers.ts";
 import { ExportWeapons } from "warframe-public-export-plus";
 import { getRandomElement } from "../../services/rngService.ts";
@@ -86,7 +86,7 @@ export const startRecipeController: RequestHandler = async (req, res) => {
                 pr[category] ??= [];
                 pr[category].push(inventory[category][equipmentIndex]);
                 inventory[category].splice(equipmentIndex, 1);
-                freeUpSlot(inventory, InventorySlot.WEAPONS);
+                freeUpSlot(inventory, eInventorySlot.WEAPONS);
             }
         } else {
             const itemType = recipe.ingredients[i].ItemType;

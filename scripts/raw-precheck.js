@@ -1,5 +1,5 @@
 const [major, minor] = process.versions.node.split(".").map(x => parseInt(x));
-if (major > 22 || (major == 22 && minor >= 7)) {
+if (major > 22 || (major == 22 && minor >= 6)) {
     // ok
 } else {
     console.log("Sorry, your Node version is a bit too old for this. You have 2 options:");

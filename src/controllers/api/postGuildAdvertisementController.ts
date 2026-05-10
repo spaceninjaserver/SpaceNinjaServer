@@ -10,7 +10,7 @@ import {
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getVendorManifestByTypeName } from "../../services/serversideVendorsService.ts";
-import { GuildPermission } from "../../types/guildTypes.ts";
+import { eGuildPermission } from "../../types/guildTypes.ts";
 import type { IPurchaseParams } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
 
@@ -19,7 +19,7 @@ export const postGuildAdvertisementController: RequestHandler = async (req, res)
     const inventory = await getInventory(accountId, "GuildId MiscItems");
     const guild = await getGuildForRequestEx(req, inventory);
     const guildMember = (await GuildMember.findOne({ accountId, guildId: guild._id }))!;
-    if (!hasGuildPermissionEx(guild, guildMember, GuildPermission.Advertiser)) {
+    if (!hasGuildPermissionEx(guild, guildMember, eGuildPermission.Advertiser)) {
         res.status(400).end();
         return;
     }

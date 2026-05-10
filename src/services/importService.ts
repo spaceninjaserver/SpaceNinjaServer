@@ -47,7 +47,7 @@ import type {
 } from "../types/saveLoadoutTypes.ts";
 import { slotNames } from "../types/purchaseTypes.ts";
 import {
-    Status,
+    eStatus,
     type ICrewShipMemberClient,
     type ICrewShipMemberDatabase,
     type ICrewShipMembersClient,
@@ -601,7 +601,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     for (const pr of db.PendingRecipes) {
         const recipe = getRecipe(pr.ItemType);
         if (recipe?.secretIngredientAction == "SIA_CREATE_KUBROW" && !pr.KubrowPet) {
-            pr.KubrowPet = db.KubrowPets.find(x => x.Details.Status == Status.StatusIncubating)?._id;
+            pr.KubrowPet = db.KubrowPets.find(x => x.Details.Status == eStatus.StatusIncubating)?._id;
             logger.warn(
                 `imported recipe ${pr._id.toString()} (${pr.ItemType}) had no TargetItemId; best guess fixup is ${pr.KubrowPet?.toString()}`
             );

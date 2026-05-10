@@ -2,7 +2,7 @@ import type { RequestHandler } from "express";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import { getInventory2, addMiscItems, addEquipment, occupySlot } from "../../services/inventoryService.ts";
 import type { IMiscItem, TFocusPolarity, TEquipmentKey } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { eInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { logger } from "../../utils/logger.ts";
 import { ExportFocusUpgrades } from "warframe-public-export-plus";
 import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
@@ -348,7 +348,7 @@ export const focusController: RequestHandler = async (req, res) => {
                     "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingBarrel"
                 ]
             });
-            occupySlot(inventory, InventorySlot.AMPS, false);
+            occupySlot(inventory, eInventorySlot.AMPS, false);
             await inventory.save();
             res.json(inventoryChanges.OperatorAmps![0]);
             break;
@@ -422,44 +422,44 @@ export const focusController: RequestHandler = async (req, res) => {
 };
 
 // Focus 3.0
-enum Focus3Operation {
-    InstallLens = "1",
-    UnlockWay = "2",
-    UnlockUpgrade = "3",
-    LevelUpUpgrade = "4",
-    ActivateWay = "5",
-    SentTrainingAmplifier = "7",
-    UnbindUpgrade = "8",
-    ConvertShard = "9"
-}
+const Focus3Operation = {
+    InstallLens: "1",
+    UnlockWay: "2",
+    UnlockUpgrade: "3",
+    LevelUpUpgrade: "4",
+    ActivateWay: "5",
+    SentTrainingAmplifier: "7",
+    UnbindUpgrade: "8",
+    ConvertShard: "9"
+} as const;
 
 // Focus 2.0
-enum Focus2Operation {
-    InstallLens = "1",
-    UnlockWay = "2",
-    UnlockUpgrade = "3",
-    IncreasePool = "4",
-    LevelUpUpgrade = "5",
-    ActivateWay = "6",
-    UpdateUpgrade = "7", // used to change the IsActive state, same format as ILevelUpUpgradeRequest
-    SentTrainingAmplifier = "9",
-    UnbindUpgrade = "10",
-    ConvertShard = "11"
-}
+const Focus2Operation = {
+    InstallLens: "1",
+    UnlockWay: "2",
+    UnlockUpgrade: "3",
+    IncreasePool: "4",
+    LevelUpUpgrade: "5",
+    ActivateWay: "6",
+    UpdateUpgrade: "7", // used to change the IsActive state, same format as ILevelUpUpgradeRequest
+    SentTrainingAmplifier: "9",
+    UnbindUpgrade: "10",
+    ConvertShard: "11"
+} as const;
 
 // Focus 1.0
-enum Focus1Operation {
-    InstallLens = "1",
-    UnlockWay = "2",
-    UnlockUpgrade = "3",
-    IncreasePool = "4",
-    LevelUpUpgrade = "5",
-    ActivateWay = "6",
-    UpdateUpgrade = "7",
-    UpgradeCooldown = "8",
-    SentTrainingAmplifier = "9",
-    UpdateCooldownReduction = "10"
-}
+const Focus1Operation = {
+    InstallLens: "1",
+    UnlockWay: "2",
+    UnlockUpgrade: "3",
+    IncreasePool: "4",
+    LevelUpUpgrade: "5",
+    ActivateWay: "6",
+    UpdateUpgrade: "7",
+    UpgradeCooldown: "8",
+    SentTrainingAmplifier: "9",
+    UpdateCooldownReduction: "10"
+} as const;
 
 // For UnlockWay & ActivateWay
 interface IWayRequest {

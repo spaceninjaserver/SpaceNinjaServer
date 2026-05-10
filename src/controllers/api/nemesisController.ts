@@ -32,7 +32,7 @@ import type {
     TEquipmentKey,
     TNemesisFaction
 } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { InventorySlot, LoadoutIndex } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { eInventorySlot, eLoadoutIndex } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
 import { Types } from "mongoose";
@@ -66,7 +66,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
 
         // Remove source weapon
         inventory[body.Category].pull({ _id: body.SourceWeapon.$oid });
-        freeUpSlot(inventory, InventorySlot.WEAPONS);
+        freeUpSlot(inventory, eInventorySlot.WEAPONS);
 
         await inventory.save();
         res.json({
@@ -129,7 +129,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
             if (result1 == GUESS_CORRECT || result2 == GUESS_CORRECT || result3 == GUESS_CORRECT) {
                 let antivirusGain = 5;
                 const loadout = (await Loadout.findById(inventory.LoadOutPresets, "DATAKNIFE"))!;
-                const dataknifeLoadout = loadout.DATAKNIFE.id(inventory.CurrentLoadOutIds[LoadoutIndex.DATAKNIFE]);
+                const dataknifeLoadout = loadout.DATAKNIFE.id(inventory.CurrentLoadOutIds[eLoadoutIndex.DATAKNIFE]);
                 const dataknifeConfigIndex = dataknifeLoadout?.s?.mod ?? 0;
                 const dataknifeUpgrades = inventory.DataKnives[0].Configs[dataknifeConfigIndex].Upgrades!;
                 for (const upgrade of body.knife!.AttachedUpgrades) {
@@ -219,7 +219,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
 
                     // Subtract a charge from all requiem mods installed on parazon
                     const loadout = (await Loadout.findById(inventory.LoadOutPresets, "DATAKNIFE"))!;
-                    const dataknifeLoadout = loadout.DATAKNIFE.id(inventory.CurrentLoadOutIds[LoadoutIndex.DATAKNIFE]);
+                    const dataknifeLoadout = loadout.DATAKNIFE.id(inventory.CurrentLoadOutIds[eLoadoutIndex.DATAKNIFE]);
                     const dataknifeConfigIndex = dataknifeLoadout?.s?.mod ?? 0;
                     const dataknifeUpgrades = inventory.DataKnives[0].Configs[dataknifeConfigIndex].Upgrades!;
                     for (let i = 3; i != 6; ++i) {

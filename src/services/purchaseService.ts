@@ -18,7 +18,7 @@ import type {
     IPurchaseParams,
     SlotNames
 } from "../types/purchaseTypes.ts";
-import { PurchaseSource } from "../types/purchaseTypes.ts";
+import { ePurchaseSource } from "../types/purchaseTypes.ts";
 import { logger } from "../utils/logger.ts";
 import { getWorldState } from "./worldStateService.ts";
 import {
@@ -113,7 +113,7 @@ export const handlePurchase = async (
 
     const prePurchaseInventoryChanges: IInventoryChanges = {};
     let seed: bigint | undefined;
-    if (purchaseRequest.PurchaseParams.Source == PurchaseSource.Vendor) {
+    if (purchaseRequest.PurchaseParams.Source == ePurchaseSource.Vendor) {
         let manifest = getVendorManifestByOid(purchaseRequest.PurchaseParams.SourceId!, purchaseRequest.buildLabel);
         if (manifest) {
             manifest = applyStandingToVendorManifest(manifest, inventory.Affiliations);
@@ -216,8 +216,8 @@ export const handlePurchase = async (
     combineInventoryChanges(purchaseResponse.InventoryChanges, prePurchaseInventoryChanges);
 
     switch (purchaseRequest.PurchaseParams.Source) {
-        case PurchaseSource.Market:
-        case PurchaseSource.Arsenal:
+        case ePurchaseSource.Market:
+        case ePurchaseSource.Arsenal:
             if (!purchaseRequest.PurchaseParams.ExpectedPrice) {
                 logger.debug(`client didn't provide ExpectedPrice`);
                 purchaseRequest.PurchaseParams.ExpectedPrice = getPrice(
@@ -229,7 +229,7 @@ export const handlePurchase = async (
                 );
             }
             break;
-        case PurchaseSource.VoidTrader: {
+        case ePurchaseSource.VoidTrader: {
             const worldState = getWorldState(purchaseRequest.buildLabel);
             const voidTrader = worldState.VoidTraders.find(
                 x => fromOid(x._id) == purchaseRequest.PurchaseParams.SourceId!
@@ -269,7 +269,7 @@ export const handlePurchase = async (
             }
             break;
         }
-        case PurchaseSource.SyndicateFavor:
+        case ePurchaseSource.SyndicateFavor:
             {
                 const syndicateTag = purchaseRequest.PurchaseParams.SyndicateTag!;
                 if (purchaseRequest.PurchaseParams.UseFreeFavor!) {
@@ -306,13 +306,13 @@ export const handlePurchase = async (
                 }
             }
             break;
-        case PurchaseSource.DailyDeal:
+        case ePurchaseSource.DailyDeal:
             if (purchaseRequest.PurchaseParams.ExpectedPrice) {
                 throw new Error(`daily deal purchase should not have an expected price`);
             }
             await handleDailyDealPurchase(inventory, purchaseRequest.PurchaseParams, purchaseResponse);
             break;
-        case PurchaseSource.Vendor:
+        case ePurchaseSource.Vendor:
             if (purchaseRequest.PurchaseParams.ExpectedPrice) {
                 throw new Error(`vendor purchase should not have an expected price`);
             }
@@ -373,7 +373,7 @@ export const handlePurchase = async (
                 }
             }
             break;
-        case PurchaseSource.PrimeVaultTrader: {
+        case ePurchaseSource.PrimeVaultTrader: {
             const worldState = getWorldState(purchaseRequest.buildLabel);
             if (purchaseRequest.PurchaseParams.SourceId! != worldState.PrimeVaultTraders[0]._id.$oid) {
                 throw new Error("invalid request source");

@@ -3,7 +3,7 @@ import { version_compare } from "../../helpers/inventoryHelpers.ts";
 import { GuildMember } from "../../models/guildModel.ts";
 import { getGuildForRequest, getGuildRankBase, hasGuildPermissionEx } from "../../services/guildService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
-import { GuildPermission } from "../../types/guildTypes.ts";
+import { eGuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 import { logger } from "../../utils/logger.ts";
 import { broadcastGuildUpdate } from "../../services/wsService.ts";
@@ -31,7 +31,7 @@ export const changeGuildRankController: RequestHandler = async (req, res) => {
         `treating rankChange of ${rankChange} as ${rankChangeIsADelta ? "a delta" : "an absolute value"}, so newRank = ${newRank}`
     );
 
-    if (newRank < member.rank || !hasGuildPermissionEx(guild, member, GuildPermission.Promoter)) {
+    if (newRank < member.rank || !hasGuildPermissionEx(guild, member, eGuildPermission.Promoter)) {
         res.status(400).json("Invalid permission");
         return;
     }

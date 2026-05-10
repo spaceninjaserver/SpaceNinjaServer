@@ -2,7 +2,7 @@ import { AllianceMember, Guild, GuildMember } from "../../models/guildModel.ts";
 import { deleteAlliance } from "../../services/guildService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import { broadcastGuildUpdate } from "../../services/wsService.ts";
-import { GuildPermission } from "../../types/guildTypes.ts";
+import { eGuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
 export const removeFromAllianceController: RequestHandler = async (req, res) => {
@@ -17,7 +17,7 @@ export const removeFromAllianceController: RequestHandler = async (req, res) => 
     let allianceMember = (await AllianceMember.findOne({ guildId: guildMember.guildId }))!;
     if (!guildMember.guildId.equals(req.query.guildId as string)) {
         // Removing a guild that is not our own needs additional permissions
-        if (!(allianceMember.Permissions & GuildPermission.Ruler)) {
+        if (!(allianceMember.Permissions & eGuildPermission.Ruler)) {
             res.status(400).json({ Error: 104 });
             return;
         }
@@ -26,7 +26,7 @@ export const removeFromAllianceController: RequestHandler = async (req, res) => 
         allianceMember = (await AllianceMember.findOne({ guildId: req.query.guildId as string }))!;
     }
 
-    if (allianceMember.Permissions & GuildPermission.Ruler) {
+    if (allianceMember.Permissions & eGuildPermission.Ruler) {
         await deleteAlliance(allianceMember.allianceId);
     } else {
         await Promise.all([

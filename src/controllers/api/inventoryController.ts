@@ -20,7 +20,6 @@ import {
     loadoutKeysLegacy
 } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
-import { ArtifactPolarity } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import type { ICountedItem } from "warframe-public-export-plus";
 import { ExportArcanes, ExportResources, ExportWarframes, ExportWeapons } from "warframe-public-export-plus";
 import { applyCheatsToInfestedFoundry, handleSubsumeCompletion } from "../../services/infestedFoundryService.ts";
@@ -62,7 +61,7 @@ import {
 import { Inbox } from "../../models/inboxModel.ts";
 import { KAHL_EPOCH, unixTimesInMs } from "../../constants/timeConstants.ts";
 import { DailyDeal } from "../../models/worldStateModel.ts";
-import { EquipmentFeatures } from "../../types/equipmentTypes.ts";
+import { eEquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { generateRewardSeed } from "../../services/rngService.ts";
 import { getInvasionByOid, getWorldState } from "../../services/worldStateService.ts";
 import { createMessage, getInboxFilter } from "../../services/inboxService.ts";
@@ -493,7 +492,7 @@ export const getInventoryResponse = async (
         for (let i = 0; i != 15; ++i) {
             Polarity.push({
                 Slot: i,
-                Value: ArtifactPolarity.Any
+                Value: "AP_ANY"
             });
         }
         for (const key of equipmentKeys) {
@@ -510,7 +509,7 @@ export const getInventoryResponse = async (
             if (key in inventoryResponse) {
                 for (const equipment of inventoryResponse[key]) {
                     equipment.Features ??= 0;
-                    equipment.Features |= EquipmentFeatures.DOUBLE_CAPACITY;
+                    equipment.Features |= eEquipmentFeatures.DOUBLE_CAPACITY;
                 }
             }
         }
@@ -521,7 +520,7 @@ export const getInventoryResponse = async (
             if (key in inventoryResponse) {
                 for (const equipment of inventoryResponse[key]) {
                     equipment.Features ??= 0;
-                    equipment.Features |= EquipmentFeatures.UTILITY_SLOT;
+                    equipment.Features |= eEquipmentFeatures.UTILITY_SLOT;
                 }
             }
         }
@@ -532,8 +531,8 @@ export const getInventoryResponse = async (
             if (key in inventoryResponse) {
                 for (const equipment of inventoryResponse[key]) {
                     equipment.Features ??= 0;
-                    equipment.Features |= EquipmentFeatures.ARCANE_SLOT;
-                    equipment.Features |= EquipmentFeatures.SECOND_ARCANE_SLOT;
+                    equipment.Features |= eEquipmentFeatures.ARCANE_SLOT;
+                    equipment.Features |= eEquipmentFeatures.SECOND_ARCANE_SLOT;
                 }
             }
         }
@@ -687,13 +686,13 @@ export const getInventoryResponse = async (
         }
         for (const category of equipmentKeys) {
             for (const item of inventoryResponse[category]) {
-                if (item.Features && item.Features & EquipmentFeatures.DOUBLE_CAPACITY) {
+                if (item.Features && item.Features & eEquipmentFeatures.DOUBLE_CAPACITY) {
                     item.UnlockLevel = 1;
                 }
-                if (item.Features && item.Features & EquipmentFeatures.UTILITY_SLOT) {
+                if (item.Features && item.Features & eEquipmentFeatures.UTILITY_SLOT) {
                     item.UtilityUnlocked = 1;
                 }
-                if (item.Features && item.Features & EquipmentFeatures.GILDED) {
+                if (item.Features && item.Features & eEquipmentFeatures.GILDED) {
                     item.Gild = true;
                 }
             }
@@ -960,7 +959,7 @@ export const getInventoryResponse = async (
         }
         for (const category of equipmentKeys) {
             for (const item of inventoryResponse[category]) {
-                if (item.Features && item.Features & EquipmentFeatures.DOUBLE_CAPACITY) {
+                if (item.Features && item.Features & eEquipmentFeatures.DOUBLE_CAPACITY) {
                     item.UnlockLevel = 1;
                 }
             }

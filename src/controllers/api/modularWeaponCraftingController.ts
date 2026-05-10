@@ -20,7 +20,7 @@ import { getRandomInt } from "../../services/rngService.ts";
 import type { IDefaultUpgrade } from "warframe-public-export-plus";
 import { ExportSentinels, ExportWeapons } from "warframe-public-export-plus";
 import type { IKubrowPetDatabase } from "../../types/equipmentTypes.ts";
-import { Status } from "../../types/equipmentTypes.ts";
+import { eStatus } from "../../types/equipmentTypes.ts";
 
 interface IModularCraftRequest {
     WeaponType: string;
@@ -121,7 +121,7 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
             IsPuppy: false,
             HasCollar: true,
             PrintsRemaining: 2,
-            Status: Status.StatusStasis,
+            Status: eStatus.StatusStasis,
             HatchDate: new Date(Math.trunc(Date.now() / 86400000) * 86400000),
             IsMale: !!getRandomInt(0, 1),
             Size: getRandomInt(70, 100) / 100,

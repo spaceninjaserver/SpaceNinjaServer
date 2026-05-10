@@ -4,7 +4,7 @@ import { getAllianceClient } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
 import { broadcastGuildUpdate } from "../../services/wsService.ts";
-import { GuildPermission } from "../../types/guildTypes.ts";
+import { eGuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
 export const createAllianceController: RequestHandler = async (req, res) => {
@@ -38,12 +38,12 @@ export const createAllianceController: RequestHandler = async (req, res) => {
             guildId: guild._id,
             Pending: false,
             Permissions:
-                GuildPermission.Ruler |
-                GuildPermission.Promoter |
-                GuildPermission.Recruiter |
-                GuildPermission.Treasurer |
-                GuildPermission.ChatModerator |
-                GuildPermission.Tactician
+                eGuildPermission.Ruler |
+                eGuildPermission.Promoter |
+                eGuildPermission.Recruiter |
+                eGuildPermission.Treasurer |
+                eGuildPermission.ChatModerator |
+                eGuildPermission.Tactician
         })
     ]);
     res.json(await getAllianceClient(alliance, guild, account.BuildLabel));

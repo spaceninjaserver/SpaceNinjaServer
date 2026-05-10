@@ -1,5 +1,5 @@
 import type { Types } from "mongoose";
-import type { Platform } from "./loginTypes.ts";
+import type { TPlatform } from "./loginTypes.ts";
 
 export interface IHostSessionRequest {
     maxPlayers: number;
@@ -20,7 +20,7 @@ export interface IHostSessionRequest {
     rewardSeed?: number | bigint;
     guildId?: string;
     buildId: number | bigint;
-    platform?: Platform;
+    platform?: TPlatform;
     xplatform?: boolean;
     freePublic: number;
     freePrivate: number;
@@ -56,7 +56,7 @@ export type IFindSessionRequest = { queryId: number } & (
           eloRating?: number;
           enforceElo?: boolean;
           allowLobby?: boolean; // for conclave
-          platform?: Platform;
+          platform?: TPlatform;
           xplatform?: boolean;
       }
 );

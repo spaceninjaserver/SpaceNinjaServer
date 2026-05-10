@@ -14,7 +14,7 @@
     "dev:bun": "bun scripts/dev.cjs",
     "verify": "tsgo --noEmit",
     "verify:tsc": "tsc --noEmit",
-    "raw": "node scripts/raw-precheck.js && node --experimental-transform-types src/index.ts",
+    "raw": "node scripts/raw-precheck.js && node --experimental-strip-types src/index.ts",
     "raw:bun": "bun src/index.ts",
     "lint": "eslint \"**/*.ts\"",
     "lint:ci": "eslint \"**/*.ts\" --rule \"prettier/prettier: off\"",
@@ -57,7 +57,7 @@
     "eslint-plugin-prettier": "^5.2.5",
     "prettier": "^3.5.3",
     "tree-kill": "^1.2.2",
-    "typescript": "^5.7"
+    "typescript": "^5.8"
   },
   "engines": {
     "node": ">=20.18.1"

@@ -3,7 +3,7 @@ import { addMiscItems, freeUpSlot, getInventory2, updateCredits } from "../../se
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import type { ICrewShipComponentFingerprint } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { InventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { eInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
 import { ExportCustoms, ExportDojoRecipes } from "warframe-public-export-plus";
@@ -50,8 +50,8 @@ export const crewShipFusionController: RequestHandler = async (req, res) => {
         const inferiorId = tierA < tierB ? payload.PartA : payload.PartB;
         inventory[category].pull({ _id: inferiorId.$oid });
         inventoryChanges.RemovedIdItems = [{ ItemId: inferiorId }];
-        freeUpSlot(inventory, InventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
-        inventoryChanges[InventorySlot.RJ_COMPONENT_AND_ARMAMENTS] = { count: -1, platinum: 0, Slots: 1 };
+        freeUpSlot(inventory, eInventorySlot.RJ_COMPONENT_AND_ARMAMENTS);
+        inventoryChanges[eInventorySlot.RJ_COMPONENT_AND_ARMAMENTS] = { count: -1, platinum: 0, Slots: 1 };
     }
 
     // Upgrade superior item

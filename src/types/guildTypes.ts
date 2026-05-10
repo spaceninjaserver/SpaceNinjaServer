@@ -92,22 +92,23 @@ export interface ILongMOTD {
     authorGuildName?: string;
 }
 
-export enum GuildPermission {
-    Ruler = 1, // Clan: Change hierarchy. Alliance (Creator only): Kick clans.
-    Advertiser = 8192,
-    Recruiter = 2, // Send invites (Clans & Alliances)
-    Regulator = 4, // Kick members
-    Promoter = 8, // Clan: Promote and demote members. Alliance (Creator only): Change clan permissions.
-    Architect = 16, // Create and destroy rooms
-    Host = 32, // No longer used in modern versions
-    Decorator = 1024, // Create and destroy decos
-    Treasurer = 64, // Clan: Contribute from vault and edit tax rate. Alliance: Divvy vault.
-    Tech = 128, // Queue research
-    Tactician = 256, // Start Solar Rail Craft & Deploy Solar Rails
-    ChatModerator = 512, // (Clans & Alliances)
-    Herald = 2048, // Change MOTD
-    Fabricator = 4096 // Replicate research
-}
+export const eGuildPermission = {
+    Ruler: 1, // Clan: Change hierarchy. Alliance (Creator only): Kick clans.
+    Advertiser: 8192,
+    Recruiter: 2, // Send invites (Clans & Alliances)
+    Regulator: 4, // Kick members
+    Promoter: 8, // Clan: Promote and demote members. Alliance (Creator only): Change clan permissions.
+    Architect: 16, // Create and destroy rooms
+    Host: 32, // No longer used in modern versions
+    Decorator: 1024, // Create and destroy decos
+    Treasurer: 64, // Clan: Contribute from vault and edit tax rate. Alliance: Divvy vault.
+    Tech: 128, // Queue research
+    Tactician: 256, // Start Solar Rail Craft & Deploy Solar Rails
+    ChatModerator: 512, // (Clans & Alliances)
+    Herald: 2048, // Change MOTD
+    Fabricator: 4096 // Replicate research
+} as const;
+export type TGuildPermission = (typeof eGuildPermission)[keyof typeof eGuildPermission];
 
 export interface IGuildRank {
     Name: string;
