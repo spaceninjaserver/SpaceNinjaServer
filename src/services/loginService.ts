@@ -1,6 +1,11 @@
 import { Account } from "../models/loginModel.ts";
 import { createInventory } from "./inventoryService.ts";
-import { Platform, type IDatabaseAccountJson, type IDatabaseAccountRequiredFields } from "../types/loginTypes.ts";
+import {
+    Platform,
+    type IAndroidAccount,
+    type IDatabaseAccountJson,
+    type IAccountCreationData
+} from "../types/loginTypes.ts";
 import { createShip } from "./shipService.ts";
 import type { Document, Types } from "mongoose";
 import { Loadout, type TLoadoutDatabaseDocument } from "../models/inventoryModels/loadoutModel.ts";
@@ -13,6 +18,7 @@ import crypto from "node:crypto";
 import { logger } from "../utils/logger.ts";
 import { version_compare } from "../helpers/inventoryHelpers.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
+import { OAuth2Client } from "google-auth-library";
 
 export const isCorrectPassword = (requestPassword: string, databasePassword: string): boolean => {
     return requestPassword === databasePassword;
@@ -39,7 +45,7 @@ export const getUsernameFromEmail = async (email: string): Promise<string> => {
     return name;
 };
 
-export const createAccount = async (accountData: IDatabaseAccountRequiredFields): Promise<IDatabaseAccountJson> => {
+export const createAccount = async (accountData: IAccountCreationData): Promise<IDatabaseAccountJson> => {
     if (accountData.DisplayName == "all") {
         throw new Error(`"${accountData.DisplayName}" is reserved and may not be used as a username`);
     }
@@ -168,6 +174,23 @@ export const hasPermission = (account: Pick<TAccountDocument, "DisplayName">, pe
         }
     }
     return true;
+};
+
+export const getGoogleAccountData = async (googleTokenId: string | undefined): Promise<IAndroidAccount> => {
+    if (!googleTokenId) {
+        throw new Error("google token is missing");
+    }
+    const client = new OAuth2Client();
+    const ticket = await client.verifyIdToken({
+        idToken: googleTokenId
+    });
+
+    const payload = ticket.getPayload();
+    if (!payload) {
+        throw new Error("payload missing, perhaps invalid google token");
+    }
+
+    return { userId: payload["sub"], email: payload["email"] };
 };
 
 export const getOriginalPlatform = (account: TAccountDocument): number => {

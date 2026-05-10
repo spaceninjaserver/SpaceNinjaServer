@@ -1,5 +1,5 @@
 import type { IKeyChainRequest } from "../types/requestTypes.ts";
-import { isEmptyObject } from "../helpers/general.ts";
+import { isObjectEmpty } from "../helpers/general.ts";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 import { createMessage } from "./inboxService.ts";
 import {
@@ -371,7 +371,7 @@ export const giveKeyChainItem = async (
     if (!questKey.Progress?.[keyChainInfo.ChainStage]?.i) {
         inventoryChanges = await addKeyChainItems(inventory, keyChainInfo, buildLabel);
 
-        if (isEmptyObject(inventoryChanges)) {
+        if (isObjectEmpty(inventoryChanges)) {
             logger.warn("inventory changes was empty after getting keychain items: should not happen");
         }
         // items were added: update quest stage's i (item was given)

@@ -21,7 +21,7 @@ export interface IAccountAndLoginResponseCommons {
     Nonce: number;
 }
 
-export interface IDatabaseAccountRequiredFields extends IAccountAndLoginResponseCommons {
+export interface IAccountCreationData extends IAccountAndLoginResponseCommons {
     email: string;
     password: string;
     Language?: string;
@@ -29,7 +29,7 @@ export interface IDatabaseAccountRequiredFields extends IAccountAndLoginResponse
     LastLogin: Date;
 }
 
-export interface IDatabaseAccount extends IDatabaseAccountRequiredFields {
+export interface IDatabaseAccount extends IAccountCreationData {
     LastPlatform?: Platform;
     Dropped?: true;
     LatestEventMessageDate: Date;
@@ -89,4 +89,9 @@ export interface IGroup {
 export interface IIgnore {
     ignorer: Types.ObjectId;
     ignoree: Types.ObjectId;
+}
+
+export interface IAndroidAccount {
+    email?: string;
+    userId: string;
 }

@@ -7,6 +7,7 @@ import {
     buildVersionToInt,
     createAccount,
     createNonce,
+    getGoogleAccountData,
     getUsernameFromEmail,
     isCorrectPassword
 } from "../../services/loginService.ts";
@@ -25,7 +26,6 @@ import { fromStoreItem } from "../../services/itemDataService.ts";
 import { getTokenForClient, getTunablesForClient } from "../../services/tunablesService.ts";
 import type { AddressInfo } from "node:net";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
-import { getGoogleAccountData } from "../../helpers/customHelpers/customHelpers.ts";
 import { args } from "../../helpers/commandLineArguments.ts";
 
 export const loginController: RequestHandler = async (request, response) => {

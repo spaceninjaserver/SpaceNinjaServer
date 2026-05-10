@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
 import { Account } from "../../models/loginModel.ts";
-import { getGoogleAccountData } from "../../helpers/customHelpers/customHelpers.ts";
+import { getGoogleAccountData } from "../../services/loginService.ts";
 
 export const signupAndroidController: RequestHandler = async (request, res) => {
     const googleTokenId = request.query.googleTokenId as string | undefined;

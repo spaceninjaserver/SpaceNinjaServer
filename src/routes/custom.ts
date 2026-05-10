@@ -33,7 +33,6 @@ import { retroactivelyApplyGuildCheatController } from "../controllers/custom/re
 import { getRegisteredLosersController } from "../controllers/custom/getRegisteredLosersController.ts";
 
 import { abilityOverrideController } from "../controllers/custom/abilityOverrideController.ts";
-import { createAccountController } from "../controllers/custom/createAccountController.ts";
 import { createMessageController } from "../controllers/custom/createMessageController.ts";
 import { addCurrencyController } from "../controllers/custom/addCurrencyController.ts";
 import { addItemsController } from "../controllers/custom/addItemsController.ts";
@@ -92,7 +91,6 @@ customRouter.get("/retroactivelyApplyGuildCheat", retroactivelyApplyGuildCheatCo
 customRouter.get("/getRegisteredLosers", getRegisteredLosersController);
 
 customRouter.post("/abilityOverride", abilityOverrideController);
-customRouter.post("/createAccount", createAccountController);
 customRouter.post("/createMessage", createMessageController);
 customRouter.post("/addCurrency", addCurrencyController);
 customRouter.post("/addItems", addItemsController);

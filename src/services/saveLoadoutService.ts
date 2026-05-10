@@ -11,7 +11,7 @@ import { Loadout } from "../models/inventoryModels/loadoutModel.ts";
 import { addMods, getInventory } from "./inventoryService.ts";
 import type { IOidWithLegacySupport } from "../types/commonTypes.ts";
 import { Types } from "mongoose";
-import { isEmptyObject } from "../helpers/general.ts";
+import { isEmptyObject, isObjectEmpty } from "../helpers/general.ts";
 import { convertLegacyColorsToIColor, fromOid, toObjectId, version_compare } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
 import type { ISketch, TEquipmentKey } from "../types/inventoryTypes/inventoryTypes.ts";
@@ -99,7 +99,7 @@ export const handleInventoryItemConfigChange = async (
                         const newLoadout = _loadout as ILoadoutEntry;
 
                         // empty loadout slot like: "NORMAL": {}
-                        if (isEmptyObject(newLoadout)) {
+                        if (isObjectEmpty(newLoadout)) {
                             continue;
                         }
 
