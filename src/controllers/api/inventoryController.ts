@@ -738,7 +738,7 @@ export const getInventoryResponse = async (
         }
 
         // U19.5 and below use $id instead of $oid as well as a different date format
-        if (version_compare(buildLabel, gameToBuildVersion["19.5.0"]) > 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["19.5.3"]) > 0) {
             return inventoryResponse;
         }
         for (const category of equipmentKeys) {

@@ -327,7 +327,7 @@ const processLoadoutEquipment = (
         }
     }
 
-    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["19.5.0"]) <= 0) {
+    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["19.5.3"]) <= 0) {
         toLegacyOid(item.ItemId);
     }
 };
@@ -344,7 +344,7 @@ const populateLoadout = async (
             inventory.CurrentLoadOutIds[LoadoutIndex.NORMAL]
         )!.toJSON<ILoadoutConfigClient>();
         result.LoadOutPreset.ItemId = undefined;
-        if (buildLabel && version_compare(buildLabel, gameToBuildVersion["19.5.0"]) <= 0) {
+        if (buildLabel && version_compare(buildLabel, gameToBuildVersion["19.5.3"]) <= 0) {
             if (result.LoadOutPreset.s?.ItemId) {
                 toLegacyOid(result.LoadOutPreset.s.ItemId);
             }
