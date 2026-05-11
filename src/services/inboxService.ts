@@ -6,21 +6,17 @@ import { buildVersionToInt } from "./loginService.ts";
 
 export const getInboxFilter = (
     accountId: string | Types.ObjectId,
-    buildLabel: string | undefined
+    buildLabel: string
 ): QueryFilter<IMessageDatabase> => {
-    const query: QueryFilter<IMessageDatabase> = { ownerId: accountId };
-    if (buildLabel) {
-        query.$or = [
-            { minBuildVersion: { $exists: false } },
-            { minBuildVersion: { $lte: buildVersionToInt(buildLabel) } }
-        ];
-    }
-    return query;
+    return {
+        ownerId: accountId,
+        $or: [{ minBuildVersion: { $exists: false } }, { minBuildVersion: { $lte: buildVersionToInt(buildLabel) } }]
+    };
 };
 
 export const getMessagesSorted = async (
     accountId: string | Types.ObjectId,
-    buildLabel: string | undefined,
+    buildLabel: string,
     afterId?: string | Types.ObjectId
 ): Promise<TMessageDocument[]> => {
     const query = getInboxFilter(accountId, buildLabel);
@@ -58,7 +54,7 @@ export interface IMessageCreationTemplate extends Omit<IMessageDatabase, "_id" |
     date?: Date;
 }
 
-export const exportInboxMessage = (messageDatabase: TMessageDocument, buildLabel?: string): IMessageClient => {
+export const exportInboxMessage = (messageDatabase: TMessageDocument, buildLabel: string): IMessageClient => {
     const messageClient = messageDatabase.toJSON<IMessageClient>();
 
     if (messageDatabase.globaUpgradeId) {

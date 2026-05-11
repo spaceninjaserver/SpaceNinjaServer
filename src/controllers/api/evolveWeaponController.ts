@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { addMiscItems, getInventory2 } from "../../services/inventoryService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import type { WeaponTypeInternal } from "../../services/itemDataService.ts";
@@ -8,11 +8,12 @@ import { eEquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 export const evolveWeaponController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const payload = getJSONfromString<IEvolveWeaponRequest>(String(req.body));
-    const inventory = await getInventory2(accountId, payload.Category, "MiscItems", "EvolutionProgress");
+    const inventory = await getInventory2(account._id, payload.Category, "MiscItems", "EvolutionProgress");
 
-    const recipe = getRecipe(payload.Recipe)!;
+    const recipe = getRecipe(payload.Recipe, buildLabel)!;
     if (payload.Action == "EWA_INSTALL") {
         addMiscItems(
             inventory,

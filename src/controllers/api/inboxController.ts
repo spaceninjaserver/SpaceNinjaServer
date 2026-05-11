@@ -13,6 +13,7 @@ import {
     buildVersionToInt,
     getAccountForRequest,
     getAccountFromSuffixedName,
+    getBuildLabel,
     getSuffixedName,
     type TAccountDocument
 } from "../../services/loginService.ts";
@@ -31,14 +32,13 @@ import type { IOid } from "../../types/commonTypes.ts";
 import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import { config } from "../../services/configService.ts";
 import { Types } from "mongoose";
-import { version_compare } from "../../helpers/inventoryHelpers.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const inboxController: RequestHandler = async (req, res) => {
     const { deleteId, lastMessage: latestClientMessageId, messageId } = req.query;
 
     const account = await getAccountForRequest(req);
-    const buildLabel = "ignoreBuildLabel" in req.query ? undefined : account.BuildLabel;
+    const buildLabel = getBuildLabel(req, account);
 
     if (deleteId) {
         if (deleteId === "DeleteAllRead") {
@@ -155,10 +155,7 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
     const prevBaroEnd = (baroIndex - 1) * (unixTimesInMs.day * 14) + 910800000;
     const baroEnd = baroStart + unixTimesInMs.day * 14;
     const baroActualStart = baroStart + unixTimesInMs.day * (config.worldState?.baroAlwaysAvailable ? 0 : 12);
-    const evilBaroStage =
-        account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["40.0.0"]) < 0
-            ? 0
-            : (config.worldState?.evilBaroStage ?? 0);
+    const evilBaroStage = config.worldState?.evilBaroStage ?? 0;
     const evilBaroTransmission = [
         "",
         "/Lotus/Sounds/Dialog/BaroHalloween/Week1InboxMessage/DWeek1InboxMessage01290Baro",

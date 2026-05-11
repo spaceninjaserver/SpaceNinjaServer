@@ -3,8 +3,7 @@ import { logger } from "../../utils/logger.ts";
 import { getRecipe } from "../../services/itemDataService.ts";
 import type { IOidWithLegacySupport, ITypeCount } from "../../types/commonTypes.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
-import type { TAccountDocument } from "../../services/loginService.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import {
     getInventory,
     updateCurrency,
@@ -39,6 +38,7 @@ interface IClaimCompletedRecipeResponse {
 
 export const claimCompletedRecipeController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const inventory = await getInventory(account._id, undefined);
     const resp: IClaimCompletedRecipeResponse = {
         InventoryChanges: {}
@@ -68,7 +68,7 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
 
                 inventory.PendingRecipes.pull(pendingRecipe._id);
 
-                const recipe = getRecipe(pendingRecipe.ItemType, account.BuildLabel);
+                const recipe = getRecipe(pendingRecipe.ItemType, buildLabel);
                 if (!recipe) {
                     throw new Error(`no completed item found for recipe ${pendingRecipe._id.toString()}`);
                 }
@@ -81,14 +81,14 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
                     return;
                 }
 
-                await claimCompletedRecipe(account, inventory, recipe, pendingRecipe, resp, req.query.rush);
+                await claimCompletedRecipe(buildLabel, inventory, recipe, pendingRecipe, resp, req.query.rush);
             }
         } else {
             throw new Error(`recipe list from request was undefined?`);
         }
     } else {
         let recipeName = String(req.query.recipeName); // U8
-        if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["7.3.0"]) < 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) < 0) {
             const modernItemType = U5ToModernRecipes[recipeName];
             if (modernItemType) recipeName = modernItemType;
         }
@@ -99,12 +99,12 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
 
         inventory.PendingRecipes.pull(pendingRecipe._id);
 
-        const recipe = getRecipe(pendingRecipe.ItemType);
+        const recipe = getRecipe(pendingRecipe.ItemType, buildLabel);
         if (!recipe) {
             throw new Error(`no completed item found for recipe ${pendingRecipe._id.toString()}`);
         }
         await claimCompletedRecipe(
-            account,
+            buildLabel,
             inventory,
             recipe,
             pendingRecipe,
@@ -117,7 +117,7 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
 };
 
 const claimCompletedRecipe = async (
-    account: TAccountDocument,
+    buildLabel: string,
     inventory: TInventoryDatabaseDocument,
     recipe: IRecipe,
     pendingRecipe: IPendingRecipeDatabase,
@@ -148,7 +148,7 @@ const claimCompletedRecipe = async (
             inventory.BrandedSuits!.findIndex(x => x.equals(pendingRecipe.SuitToUnbrand)),
             1
         );
-        resp.BrandedSuits = [toOid2(pendingRecipe.SuitToUnbrand!, account.BuildLabel)];
+        resp.BrandedSuits = [toOid2(pendingRecipe.SuitToUnbrand!, buildLabel)];
     }
 
     if (recipe.consumeOnUse) {
@@ -172,7 +172,7 @@ const claimCompletedRecipe = async (
         const progress = secondsElapsed / recipe.buildTime;
         logger.debug(`rushing recipe at ${Math.trunc(progress * 100)}% completion`);
         // U18 introduced rush cost scaling, don't use it for older versions.
-        if (account.BuildLabel && version_compare(account.BuildLabel, "2015.12.03.00.00") >= 0) {
+        if (version_compare(buildLabel, "2015.12.03.00.00") >= 0) {
             // Haven't found the real build label for U18.0.0 yet, but this works
             cost =
                 progress > 0.5
@@ -274,7 +274,7 @@ const claimCompletedRecipe = async (
                     XP: 900_000,
                     Features: eEquipmentFeatures.DOUBLE_CAPACITY
                 },
-                account.BuildLabel,
+                buildLabel,
                 resp.InventoryChanges
             );
             inventory.XPInfo.push({
@@ -321,7 +321,7 @@ const claimCompletedRecipe = async (
                     undefined,
                     pendingRecipe.TargetFingerprint,
                     undefined,
-                    account.BuildLabel
+                    buildLabel
                 )
             );
         }

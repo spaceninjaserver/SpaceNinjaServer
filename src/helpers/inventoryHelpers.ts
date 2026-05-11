@@ -31,21 +31,17 @@ export const toOid = (objectId: Types.ObjectId): IOid => {
     return { $oid: objectId.toString() };
 };
 
-export function toOid2(objectId: Types.ObjectId | string, buildLabel: undefined): IOid;
-export function toOid2(objectId: Types.ObjectId | string, buildLabel: string | undefined): IOidWithLegacySupport;
-export function toOid2(objectId: Types.ObjectId | string, buildLabel: string | undefined): IOidWithLegacySupport {
+export function toOid2(objectId: Types.ObjectId | string, buildLabel: string): IOidWithLegacySupport {
     const oid = typeof objectId == "string" ? objectId : objectId.toString();
-    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["19.5.3"]) <= 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["19.5.3"]) <= 0) {
         return { $id: oid };
     }
     return { $oid: oid };
 }
 
-export function toMongoDate2(value: Date | number, buildLabel: undefined): IMongoDate;
-export function toMongoDate2(value: Date | number, buildLabel: string | undefined): IMongoDateWithLegacySupport;
-export function toMongoDate2(value: Date | number, buildLabel: string | undefined): IMongoDateWithLegacySupport {
+export function toMongoDate2(value: Date | number, buildLabel: string): IMongoDateWithLegacySupport {
     const ms = value instanceof Date ? value.getTime() : value;
-    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["19.5.3"]) <= 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["19.5.3"]) <= 0) {
         return { sec: Math.floor(ms / 1000), usec: (ms % 1000) * 1000 };
     }
 

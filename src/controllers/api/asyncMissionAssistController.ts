@@ -7,6 +7,7 @@ import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
 import { Loadout } from "../../models/inventoryModels/loadoutModel.ts";
 import { eLoadoutIndex } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { toObjectId } from "../../helpers/inventoryHelpers.ts";
+import { BL_LATEST } from "../../constants/gameVersions.ts";
 
 export const asyncMissionAssistController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -81,7 +82,7 @@ export const asyncMissionAssistController: RequestHandler = async (req, res) => 
             DeploymentType: focusAbilityToDeploymentType[focusAbility],
             FocusAbility: focusAbility,
             Location: payload.MissionTag, // not faithful, but game doesn't complain?
-            Name: getUnicodeName(a, undefined) || "cat\uE000",
+            Name: getUnicodeName(a, BL_LATEST) || "cat\uE000",
             Operator: operator
         };
         resp.Results.push(result);

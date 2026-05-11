@@ -11,7 +11,7 @@ import {
     setDojoRoomLogFunded
 } from "../../services/guildService.ts";
 import { addMiscItems, getInventory2, updateCredits } from "../../services/inventoryService.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import type { IDojoContributable, IGuildMemberDatabase } from "../../types/guildTypes.ts";
 import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
@@ -40,6 +40,7 @@ interface IContributeToDojoComponentRequest {
 
 export const contributeToDojoComponentController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const inventory = await getInventory2(
         account._id,
         "LevelKeys",
@@ -74,7 +75,7 @@ export const contributeToDojoComponentController: RequestHandler = async (req, r
         }
 
         const cRecipe = guild.VaultPendingRecipes.find(r => String(r.ParentRoom) == request.ComponentId)!;
-        const recipe = getRecipe(cRecipe.RecipeType)!;
+        const recipe = getRecipe(cRecipe.RecipeType, buildLabel)!;
         const meta: IDojoBuild = {
             name: "",
             description: "",
@@ -108,7 +109,7 @@ export const contributeToDojoComponentController: RequestHandler = async (req, r
 
     await Promise.all([guild.save(), inventory.save(), guildMember.save()]);
     res.json({
-        ...(await getDojoClient(guild, 0, component._id, account.BuildLabel)),
+        ...(await getDojoClient(guild, 0, component._id, buildLabel)),
         InventoryChanges: inventoryChanges
     });
 };

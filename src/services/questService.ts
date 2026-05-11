@@ -23,6 +23,7 @@ import type { ITypeCount } from "../types/commonTypes.ts";
 import { addString } from "../helpers/stringHelpers.ts";
 import { unlockShipFeature } from "./personalRoomsService.ts";
 import { eEquipmentFeatures } from "../types/equipmentTypes.ts";
+import { BL_LATEST } from "../constants/gameVersions.ts";
 
 export interface IUpdateQuestRequest {
     QuestKeys: IQuestKeyClient[];
@@ -154,7 +155,7 @@ export const addQuestKey = (
 export const completeQuest = async (
     inventory: TInventoryDatabaseDocument,
     questKey: string,
-    buildLabel: string | undefined,
+    buildLabel: string,
     sendMessages: boolean = false
 ): Promise<void | IQuestKeyClient> => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -364,7 +365,7 @@ export const giveKeyChainItem = async (
     inventory: TInventoryDatabaseDocument,
     keyChainInfo: IKeyChainRequest,
     questKey: IQuestKeyDatabase,
-    buildLabel: string | undefined
+    buildLabel: string
 ): Promise<IInventoryChanges> => {
     let inventoryChanges: IInventoryChanges = {};
 
@@ -395,7 +396,7 @@ export const giveKeyChainMessage = async (
     keyChainInfo: IKeyChainRequest,
     questKey: IQuestKeyDatabase,
     sendMessage: boolean = true,
-    buildLabel?: string
+    buildLabel: string
 ): Promise<void> => {
     const keyChainMessage = getKeyChainMessage(keyChainInfo, buildLabel);
 
@@ -422,7 +423,7 @@ export const giveKeyChainMessage = async (
 export const giveKeyChainMissionReward = async (
     inventory: TInventoryDatabaseDocument,
     keyChainInfo: IKeyChainRequest,
-    buildLabel: string | undefined
+    buildLabel: string
 ): Promise<void> => {
     const chainStages = getKey(keyChainInfo.KeyChain, buildLabel)?.chainStages;
 
@@ -477,11 +478,11 @@ export const giveKeyChainStageTriggered = async (
 
     if (chainStages && questKey) {
         if (chainStages[keyChainInfo.ChainStage].itemsToGiveWhenTriggered.length > 0) {
-            await giveKeyChainItem(inventory, keyChainInfo, questKey, undefined);
+            await giveKeyChainItem(inventory, keyChainInfo, questKey, BL_LATEST);
         }
 
         if (chainStages[keyChainInfo.ChainStage].messageToSendWhenTriggered) {
-            await giveKeyChainMessage(inventory, keyChainInfo, questKey, sendMessage);
+            await giveKeyChainMessage(inventory, keyChainInfo, questKey, sendMessage, BL_LATEST);
         }
     }
 };
@@ -489,7 +490,7 @@ export const giveKeyChainStageTriggered = async (
 export const installShipFeatures = async (
     inventory: TInventoryDatabaseDocument,
     keyChainInfo: IKeyChainRequest,
-    buildLabel: string | undefined
+    buildLabel: string
 ): Promise<void> => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const chainStages = ExportKeys[keyChainInfo.KeyChain]?.chainStages;

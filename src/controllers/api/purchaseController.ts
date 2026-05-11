@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { ePurchaseSource } from "../../types/purchaseTypes.ts";
 import type { IPurchaseRequest, IPurchaseRequestU16 } from "../../types/purchaseTypes.ts";
 import { handlePurchase } from "../../services/purchaseService.ts";
@@ -28,7 +28,7 @@ export const purchasePostController: RequestHandler = async (req, res) => {
     }
     const account = await getAccountForRequest(req);
     if (!purchaseRequest.buildLabel) {
-        purchaseRequest.buildLabel = account.BuildLabel!;
+        purchaseRequest.buildLabel = getBuildLabel(req, account);
     }
     const inventory = await getInventory(account._id, undefined);
     const response = await handlePurchase(purchaseRequest, inventory);
@@ -50,7 +50,7 @@ export const purchaseGetController: RequestHandler = async (req, res) => {
             Quantity: 1,
             UsePremium: Boolean(Number(req.query.usePremium))
         },
-        buildLabel: account.BuildLabel!
+        buildLabel: getBuildLabel(req, account)
     };
     if (req.query.durability) purchaseRequest.PurchaseParams.Durability = Number(req.query.durability);
     const inventory = await getInventory(accountId, undefined);
@@ -58,12 +58,12 @@ export const purchaseGetController: RequestHandler = async (req, res) => {
     await inventory.save();
     if (response.Body) {
         let body = response.Body.replace(/\/StoreItems/g, "");
-        if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["8.3.0"]) <= 0) {
+        if (version_compare(purchaseRequest.buildLabel, gameToBuildVersion["8.3.0"]) <= 0) {
             body = body.replace(/lvl=\d+;/g, "");
         }
         res.send(body);
     } else {
-        if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["8.0.0"]) > 0) {
+        if (version_compare(purchaseRequest.buildLabel, gameToBuildVersion["8.0.0"]) > 0) {
             res.send(String(req.query.productName));
         } else {
             res.json(1);

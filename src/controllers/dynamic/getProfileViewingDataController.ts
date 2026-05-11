@@ -28,19 +28,20 @@ import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
 import type { ILoadoutConfigClient } from "../../types/saveLoadoutTypes.ts";
 import { skinLookupTable } from "../../helpers/skinLookupTable.ts";
 import type { ITechProjectClient } from "../../types/guildTypes.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { BL_LATEST } from "../../constants/gameVersions.ts";
 
 export const getProfileViewingDataGetController: RequestHandler = async (req, res) => {
     if (req.query.playerId) {
-        const data = await getProfileViewingDataByPlayerId(req.query.playerId as string);
+        const data = await getProfileViewingDataByPlayerId(req.query.playerId as string, BL_LATEST);
         if (data) {
             res.json(data);
         } else {
             res.status(409).send("Could not find requested account");
         }
     } else if (req.query.guildId) {
-        const data = await getProfileViewingDataByGuildId(req.query.guildId as string);
+        const data = await getProfileViewingDataByGuildId(req.query.guildId as string, BL_LATEST);
         if (data) {
             res.json(data);
         } else {
@@ -57,7 +58,8 @@ export const getProfileViewingDataPostController: RequestHandler = async (req, r
     const payload = getJSONfromString<IGetProfileViewingDataRequest>(String(req.body));
     if ("AccountId" in payload) {
         const account = await getAccountForRequest(req);
-        const data = await getProfileViewingDataByPlayerId(payload.AccountId, account.BuildLabel);
+        const buildLabel = getBuildLabel(req, account);
+        const data = await getProfileViewingDataByPlayerId(payload.AccountId, buildLabel);
         if (data) {
             res.json(data);
         } else {
@@ -65,7 +67,8 @@ export const getProfileViewingDataPostController: RequestHandler = async (req, r
         }
     } else if ("GuildId" in payload) {
         const account = await getAccountForRequest(req);
-        const data = await getProfileViewingDataByGuildId(payload.GuildId, account.BuildLabel);
+        const buildLabel = getBuildLabel(req, account);
+        const data = await getProfileViewingDataByGuildId(payload.GuildId, buildLabel);
         if (data) {
             res.json(data);
         } else {
@@ -73,7 +76,7 @@ export const getProfileViewingDataPostController: RequestHandler = async (req, r
         }
     } else {
         const playerId = req.query.playerId as string; // companion app sends a POST request should be handled like a GET request
-        const data = await getProfileViewingDataByPlayerId(playerId);
+        const data = await getProfileViewingDataByPlayerId(playerId, BL_LATEST);
         if (data) {
             res.json(data);
         } else {
@@ -84,7 +87,7 @@ export const getProfileViewingDataPostController: RequestHandler = async (req, r
 
 const getProfileViewingDataByPlayerId = async (
     playerId: string,
-    buildLabel?: string
+    buildLabel: string
 ): Promise<IProfileViewingData | undefined> => {
     const account = await Account.findById(playerId, "DisplayName");
     if (!account) {
@@ -140,7 +143,7 @@ const getProfileViewingDataByPlayerId = async (
 
 export const getProfileViewingDataByGuildId = async (
     guildId: string,
-    buildLabel?: string
+    buildLabel: string
 ): Promise<IProfileViewingData | undefined> => {
     const guild = await Guild.findById(guildId, "Name Tier XP Class Emblem TechProjects ClaimedXP");
     if (!guild) {
@@ -303,7 +306,7 @@ const processLoadoutEquipment = (
     inventory: TInventoryDatabaseDocument,
     skins: Set<string>,
     item: IEquipmentClient,
-    buildLabel: string | undefined
+    buildLabel: string
 ): void => {
     // Resolve and collect skins
     for (const config of item.Configs) {
@@ -327,7 +330,7 @@ const processLoadoutEquipment = (
         }
     }
 
-    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["19.5.3"]) <= 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["19.5.3"]) <= 0) {
         toLegacyOid(item.ItemId);
     }
 };
@@ -335,7 +338,7 @@ const processLoadoutEquipment = (
 const populateLoadout = async (
     inventory: TInventoryDatabaseDocument,
     result: IPlayerProfileViewingDataResult,
-    buildLabel: string | undefined
+    buildLabel: string
 ): Promise<void> => {
     if (inventory.CurrentLoadOutIds.length) {
         const loadout = (await Loadout.findById(inventory.LoadOutPresets, "NORMAL"))!;
@@ -344,7 +347,7 @@ const populateLoadout = async (
             inventory.CurrentLoadOutIds[eLoadoutIndex.NORMAL]
         )!.toJSON<ILoadoutConfigClient>();
         result.LoadOutPreset.ItemId = undefined;
-        if (buildLabel && version_compare(buildLabel, gameToBuildVersion["19.5.3"]) <= 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["19.5.3"]) <= 0) {
             if (result.LoadOutPreset.s?.ItemId) {
                 toLegacyOid(result.LoadOutPreset.s.ItemId);
             }
@@ -393,7 +396,7 @@ const populateLoadout = async (
 const populateGuild = (
     guild: TGuildDatabaseDocument,
     result: IPlayerProfileViewingDataResult,
-    buildLabel: string | undefined
+    buildLabel: string
 ): void => {
     result.GuildId = toOid2(guild._id, buildLabel);
     result.GuildName = guild.Name;

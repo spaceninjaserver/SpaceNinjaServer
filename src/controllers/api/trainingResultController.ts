@@ -1,4 +1,9 @@
-import { buildVersionToInt, getAccountForRequest, type TAccountDocument } from "../../services/loginService.ts";
+import {
+    buildVersionToInt,
+    getAccountForRequest,
+    getBuildLabel,
+    type TAccountDocument
+} from "../../services/loginService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import type { IMongoDateWithLegacySupport } from "../../types/commonTypes.ts";
@@ -21,6 +26,7 @@ interface ITrainingResultsResponse {
 
 const handleTrainingProgress = async (
     account: TAccountDocument,
+    buildLabel: string,
     numLevelsGained: number
 ): Promise<ITrainingResultsResponse> => {
     const inventory = await getInventory(
@@ -73,7 +79,7 @@ const handleTrainingProgress = async (
     const changedinventory = await inventory.save();
 
     return {
-        NewTrainingDate: toMongoDate2(changedinventory.TrainingDate, account.BuildLabel),
+        NewTrainingDate: toMongoDate2(changedinventory.TrainingDate, buildLabel),
         NewLevel: numLevelsGained == 1 ? changedinventory.PlayerLevel : inventory.PlayerLevel,
         InventoryChanges: {}
     };
@@ -81,16 +87,18 @@ const handleTrainingProgress = async (
 
 export const trainingResultPostController: RequestHandler = async (req, res): Promise<void> => {
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const { numLevelsGained } = getJSONfromString<ITrainingResultsRequest>(String(req.body));
 
-    const response = await handleTrainingProgress(account, numLevelsGained);
+    const response = await handleTrainingProgress(account, buildLabel, numLevelsGained);
     res.json(response satisfies ITrainingResultsResponse);
 };
 
 export const trainingResultGetController: RequestHandler = async (req, res): Promise<void> => {
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const numLevelsGained = Number(req.query.numLevelsGained ?? 0);
 
-    const response = await handleTrainingProgress(account, numLevelsGained);
+    const response = await handleTrainingProgress(account, buildLabel, numLevelsGained);
     res.json(response satisfies ITrainingResultsResponse);
 };

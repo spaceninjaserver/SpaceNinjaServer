@@ -7,7 +7,7 @@ import {
     scaleRequiredCount
 } from "../../services/guildService.ts";
 import { getInventory2, updatePlatinum } from "../../services/inventoryService.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import type { IDojoContributable } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 import type { IDojoBuild } from "warframe-public-export-plus";
@@ -81,8 +81,9 @@ export const dojoComponentRushController: RequestHandler = async (req, res) => {
 
     await Promise.all([guild.save(), inventory.save(), guildMember.save()]);
 
+    const buildLabel = getBuildLabel(req, account);
     res.json({
-        ...(await getDojoClient(guild, 0, component._id, account.BuildLabel)),
+        ...(await getDojoClient(guild, 0, component._id, buildLabel)),
         InventoryChanges: inventoryChanges
     });
 };

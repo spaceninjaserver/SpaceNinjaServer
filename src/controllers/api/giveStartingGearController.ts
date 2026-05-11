@@ -1,15 +1,16 @@
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { addStartingGear, getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import type { TPartialStartingGear } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
 
 export const giveStartingGearPostController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const startingGear = getJSONfromString<TPartialStartingGear>(String(req.body));
     const inventory = await getInventory(account._id, undefined);
 
-    const inventoryChanges = await addStartingGear(inventory, account.BuildLabel, startingGear);
+    const inventoryChanges = await addStartingGear(inventory, buildLabel, startingGear);
     await inventory.save();
 
     res.send(inventoryChanges);
@@ -17,9 +18,10 @@ export const giveStartingGearPostController: RequestHandler = async (req, res) =
 
 export const giveStartingGearGetController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const inventory = await getInventory(account._id, undefined);
 
-    const inventoryChanges = await addStartingGear(inventory, account.BuildLabel, {
+    const inventoryChanges = await addStartingGear(inventory, buildLabel, {
         Suits: [
             {
                 ItemType: String(req.query.warframeName),

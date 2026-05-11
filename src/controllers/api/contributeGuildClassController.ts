@@ -3,11 +3,12 @@ import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { Guild } from "../../models/guildModel.ts";
 import { checkClanAscensionHasRequiredContributors } from "../../services/guildService.ts";
 import { addFusionPoints, getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 export const contributeGuildClassController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const payload = getJSONfromString<IContributeGuildClassRequest>(String(req.body));
     const guild = (await Guild.findById(payload.GuildId))!;
 
@@ -42,9 +43,7 @@ export const contributeGuildClassController: RequestHandler = async (req, res) =
         NumContributors: guild.CeremonyContributors.length,
         FusionPointReward: guild.CeremonyEndo,
         Class: guild.Class,
-        CeremonyResetDate: guild.CeremonyResetDate
-            ? toMongoDate2(guild.CeremonyResetDate, account.BuildLabel)
-            : undefined
+        CeremonyResetDate: guild.CeremonyResetDate ? toMongoDate2(guild.CeremonyResetDate, buildLabel) : undefined
     });
 };
 

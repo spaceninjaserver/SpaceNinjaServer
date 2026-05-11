@@ -1,19 +1,22 @@
 import type { RequestHandler } from "express";
 import { applyStandingToVendorManifest, getVendorManifestByTypeName } from "../../services/serversideVendorsService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { config } from "../../services/configService.ts";
 import { toMongoDate, version_compare } from "../../helpers/inventoryHelpers.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { BL_LATEST } from "../../constants/gameVersions.ts";
 
 export const getVendorInfoController: RequestHandler = async (req, res) => {
-    let buildLabel: string | undefined;
+    let buildLabel: string;
     let accountId: string | undefined;
 
     if (req.query.accountId) {
         const account = await getAccountForRequest(req);
-        buildLabel = account.BuildLabel;
+        buildLabel = getBuildLabel(req, account);
         accountId = account._id.toString();
+    } else {
+        buildLabel = BL_LATEST;
     }
 
     let manifest = getVendorManifestByTypeName(req.query.vendor as string, undefined, buildLabel);
@@ -34,7 +37,7 @@ export const getVendorInfoController: RequestHandler = async (req, res) => {
             };
         }
 
-        if (buildLabel && version_compare(buildLabel, gameToBuildVersion["42.0.0"]) < 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) < 0) {
             // Coda shop breaks if an item is unknown.
             manifest.VendorInfo.ItemManifest = manifest.VendorInfo.ItemManifest.filter(
                 item =>

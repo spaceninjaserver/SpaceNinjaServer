@@ -1,10 +1,11 @@
 import type { RequestHandler } from "express";
 import { Guild, GuildMember } from "../../models/guildModel.ts";
-import { toMongoDate, toOid2 } from "../../helpers/inventoryHelpers.ts";
+import { toMongoDate, toOid } from "../../helpers/inventoryHelpers.ts";
 import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "../../services/friendService.ts";
 import type { IGuildMemberClient } from "../../types/guildTypes.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
+import { BL_LATEST } from "../../constants/gameVersions.ts";
 
 export const getGuildController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -20,13 +21,13 @@ export const getGuildController: RequestHandler = async (req, res) => {
         const dataFillInPromises: Promise<void>[] = [];
         for (const guildMember of guildMembers) {
             const member: IGuildMemberClient = {
-                _id: toOid2(guildMember.accountId, undefined),
+                _id: toOid(guildMember.accountId),
                 Rank: guildMember.rank,
                 Status: guildMember.status,
                 Note: guildMember.RequestMsg,
                 RequestExpiry: guildMember.RequestExpiry ? toMongoDate(guildMember.RequestExpiry) : undefined
             };
-            dataFillInPromises.push(addAccountDataToFriendInfo(member, undefined));
+            dataFillInPromises.push(addAccountDataToFriendInfo(member, BL_LATEST));
             dataFillInPromises.push(addInventoryDataToFriendInfo(member));
 
             members.push(member);

@@ -37,6 +37,7 @@ import { fromMongoDate, fromOid, toMongoDate } from "../helpers/inventoryHelpers
 import { Guild } from "../models/guildModel.ts";
 import { handleGuildGoalProgress } from "./guildService.ts";
 import { Types } from "mongoose";
+import { BL_LATEST } from "../constants/gameVersions.ts";
 
 export const getStoreItemCategory = (storeItem: string): string => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -459,7 +460,7 @@ export const handleBundleAcquisition = async (
     inventory: TInventoryDatabaseDocument,
     quantity: number = 1,
     inventoryChanges: IInventoryChanges = {},
-    buildLabel?: string
+    buildLabel: string = BL_LATEST
 ): Promise<IInventoryChanges> => {
     const bundle = getBundle(storeItemName, buildLabel)!;
     logger.debug("acquiring bundle", bundle);
@@ -491,7 +492,7 @@ export const handleStoreItemAcquisition = async (
     ignorePurchaseQuantity: boolean = false,
     premiumPurchase: boolean = true,
     seed?: bigint,
-    buildLabel?: string
+    buildLabel: string = BL_LATEST
 ): Promise<IPurchaseResponse> => {
     let purchaseResponse = {
         InventoryChanges: {}
@@ -610,7 +611,7 @@ const handleBoosterPackPurchase = async (
     typeName: string,
     inventory: TInventoryDatabaseDocument,
     quantity: number,
-    buildLabel?: string
+    buildLabel: string = BL_LATEST
 ): Promise<IPurchaseResponse> => {
     const pack = await getBoosterPack(typeName, buildLabel);
     if (!pack) {
@@ -735,7 +736,7 @@ const handleTypesPurchase = async (
     ignorePurchaseQuantity: boolean,
     premiumPurchase: boolean = true,
     seed?: bigint,
-    buildLabel?: string
+    buildLabel: string = BL_LATEST
 ): Promise<IPurchaseResponse> => {
     const typeCategory = getStoreItemTypesCategory(typesName);
     logger.debug(`type category ${typeCategory}`);

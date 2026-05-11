@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { version_compare } from "../../helpers/inventoryHelpers.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
@@ -12,6 +12,7 @@ export const creditsController: RequestHandler = async (req, res) => {
     }
 
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const inventory = await getInventory(
         account._id,
         "RegularCredits TradesRemaining PremiumCreditsFree PremiumCredits infiniteCredits infinitePlatinum infiniteTrades"
@@ -21,9 +22,9 @@ export const creditsController: RequestHandler = async (req, res) => {
         RegularCredits: inventory.infiniteCredits ? 999999999 : inventory.RegularCredits,
         PremiumCredits: inventory.infinitePlatinum ? 999999999 : inventory.PremiumCredits
     };
-    if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["10.8.0"]) > 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["10.8.0"]) > 0) {
         response.PremiumCreditsFree = inventory.infinitePlatinum ? 0 : inventory.PremiumCreditsFree;
-        if (version_compare(account.BuildLabel, gameToBuildVersion["15.0.0"]) >= 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["15.0.0"]) >= 0) {
             response.TradesRemaining = inventory.TradesRemaining;
         }
     }

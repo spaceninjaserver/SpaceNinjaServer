@@ -5,15 +5,19 @@ import {
     populateFeaturedGuilds,
     populateFissures
 } from "../../services/worldStateService.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import {
+    getAccountForRequest,
+    getBuildLabel,
+    getBuildLabelForUnauthenticatedRequest
+} from "../../services/loginService.ts";
 
 export const worldStateController: RequestHandler = async (req, res) => {
-    let buildLabel = req.query.buildLabel as string | undefined;
-    if (buildLabel) {
-        buildLabel = buildLabel.replaceAll(" ", "+");
-    } else if (req.query.accountId) {
+    let buildLabel: string;
+    if (req.query.accountId && !req.query.buildLabel) {
         const account = await getAccountForRequest(req);
-        buildLabel = account.BuildLabel;
+        buildLabel = getBuildLabel(req, account);
+    } else {
+        buildLabel = getBuildLabelForUnauthenticatedRequest(req);
     }
 
     const worldState = getWorldState(buildLabel);

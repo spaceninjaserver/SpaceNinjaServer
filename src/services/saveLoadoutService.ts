@@ -34,7 +34,7 @@ itemconfig has multiple config ids
 export const handleInventoryItemConfigChange = async (
     equipmentChanges: ISaveLoadoutRequestNoUpgradeVer,
     accountId: string | Types.ObjectId,
-    buildLabel: string | undefined
+    buildLabel: string
 ): Promise<string | void> => {
     const inventory = await getInventory(accountId, undefined);
 
@@ -72,7 +72,6 @@ export const handleInventoryItemConfigChange = async (
             }
             case "LoadOuts": {
                 if (
-                    buildLabel &&
                     version_compare(buildLabel, gameToBuildVersion["13.0.0"]) >= 0 &&
                     version_compare(buildLabel, "2015.03.19.00.00") < 0
                 ) {
@@ -304,7 +303,7 @@ export const handleInventoryItemConfigChange = async (
                         );
 
                         let abilityMapping: Record<string, string> | undefined;
-                        if (buildLabel && version_compare(buildLabel, gameToBuildVersion["42.0.0"]) < 0) {
+                        if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) < 0) {
                             abilityMapping = {};
                             for (const config of inventoryItem.Configs) {
                                 if (config.AbilityOverride) {
@@ -316,7 +315,7 @@ export const handleInventoryItemConfigChange = async (
                         for (const [configId, config] of Object.entries(itemConfigEntries)) {
                             if (/^[0-9]+$/.test(configId)) {
                                 const c = config as IItemConfig;
-                                if (buildLabel && version_compare(buildLabel, gameToBuildVersion["16.0.2"]) <= 0) {
+                                if (version_compare(buildLabel, gameToBuildVersion["16.0.2"]) <= 0) {
                                     const legacyColors = c.Customization?.Colors ?? c.Colors;
                                     if (legacyColors) {
                                         if (legacyColors.length == 10) {
@@ -423,7 +422,7 @@ const saveLegacyLoadoutPreset = async (
     inventory: TInventoryDatabaseDocument,
     presets: ILoadoutPresetClientLegacy[],
     name: string | undefined,
-    buildLabel: string | undefined
+    buildLabel: string
 ): Promise<void> => {
     const loadout = await Loadout.findOne({ loadoutOwnerId: inventory.accountOwnerId });
     if (!loadout) {
@@ -606,7 +605,7 @@ const saveLegacyLoadoutPreset = async (
 
 const configureLegacyEquipmentSelection = (
     preset: ILoadoutPresetClientLegacy,
-    buildLabel: string | undefined,
+    buildLabel: string,
     item: IEquipmentDatabase | null,
     appearanceConfig: number | undefined
 ): IEquipmentSelectionDatabase | undefined => {
@@ -617,7 +616,7 @@ const configureLegacyEquipmentSelection = (
             cus: preset.CustSlot ?? 0
         };
 
-        if (item && buildLabel && version_compare(buildLabel, "2013.09.13.00.00") < 0) {
+        if (item && version_compare(buildLabel, "2013.09.13.00.00") < 0) {
             // Specific code path for U8 and below for applying cosmetics
             const config = item.Configs[appearanceConfig ?? 0];
             if (item.Configs[appearanceConfig ?? 0]) {

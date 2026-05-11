@@ -19,7 +19,7 @@ import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
 import { Loadout } from "../../models/inventoryModels/loadoutModel.ts";
 import { addMods, freeUpSlot, getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { SRng } from "../../services/rngService.ts";
 import type { IMongoDate, IOid, IOidWithLegacySupport } from "../../types/commonTypes.ts";
 import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
@@ -245,6 +245,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
         await inventory.save();
         res.json({ LastEnc: inventory.Nemesis!.LastEnc });
     } else if ((req.query.mode as string) == "s") {
+        const buildLabel = getBuildLabel(req, account);
         const inventory = await getInventory(account._id, "Nemesis noNemesis");
         if (inventory.Nemesis) {
             logger.warn(`overwriting an existing nemesis as a new one is being requested`);
@@ -253,9 +254,9 @@ export const nemesisController: RequestHandler = async (req, res) => {
         body.target.fp = BigInt(body.target.fp);
 
         const manifest = getNemesisManifest(body.target.manifest);
-        if (account.BuildLabel && version_compare(account.BuildLabel, manifest.minBuild) < 0) {
+        if (version_compare(buildLabel, manifest.minBuild) < 0) {
             logger.warn(
-                `client on version ${account.BuildLabel} provided nemesis manifest ${body.target.manifest} which was expected to require ${manifest.minBuild} or above. please file a bug report.`
+                `client on version ${buildLabel} provided nemesis manifest ${body.target.manifest} which was expected to require ${manifest.minBuild} or above. please file a bug report.`
             );
         }
 

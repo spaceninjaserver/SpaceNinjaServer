@@ -8,7 +8,7 @@ import {
     scaleRequiredCount
 } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 import { Types } from "mongoose";
 import { ExportDojoRecipes, ExportResources } from "warframe-public-export-plus";
@@ -120,7 +120,8 @@ export const placeDecoInComponentController: RequestHandler = async (req, res) =
     }
 
     await guild.save();
-    res.json(await getDojoClient(guild, 0, component._id, account.BuildLabel));
+    const buildLabel = getBuildLabel(req, account);
+    res.json(await getDojoClient(guild, 0, component._id, buildLabel));
 };
 
 interface IPlaceDecoInComponentRequest {

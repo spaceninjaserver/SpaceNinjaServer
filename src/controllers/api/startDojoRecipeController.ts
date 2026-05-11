@@ -12,7 +12,7 @@ import {
 } from "../../services/guildService.ts";
 import { Types } from "mongoose";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { fromOid } from "../../helpers/inventoryHelpers.ts";
 
@@ -75,5 +75,6 @@ export const startDojoRecipeController: RequestHandler = async (req, res) => {
         setDojoRoomLogFunded(guild, component);
     }
     await guild.save();
-    res.json(await getDojoClient(guild, 0, undefined, account.BuildLabel));
+    const buildLabel = getBuildLabel(req, account);
+    res.json(await getDojoClient(guild, 0, undefined, buildLabel));
 };

@@ -33,7 +33,7 @@ export const getStats = async (accountOwnerId: string | Types.ObjectId): Promise
 export const updateStats = async (
     accountOwnerId: string | Types.ObjectId,
     payload: IStatsUpdate,
-    buildLabel?: string
+    buildLabel: string
 ): Promise<void> => {
     const unknownCategories: Record<string, string[]> = {};
     const playerStats = await getStats(accountOwnerId);
@@ -478,7 +478,6 @@ export const updateStats = async (
 
     if (
         playerStats.Enemies &&
-        buildLabel &&
         version_compare(buildLabel, gameToBuildVersion["11.5.3"]) <= 0 // Should be 11.7.1
     ) {
         const totalKills = playerStats.Enemies.reduce((sum, e) => sum + (e.kills ?? 0), 0);

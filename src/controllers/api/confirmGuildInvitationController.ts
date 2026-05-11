@@ -9,7 +9,12 @@ import {
     removeDojoKeyItems
 } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getAccountIdForRequest, getSuffixedName } from "../../services/loginService.ts";
+import {
+    getAccountForRequest,
+    getAccountIdForRequest,
+    getBuildLabel,
+    getSuffixedName
+} from "../../services/loginService.ts";
 import { broadcastGuildUpdate, sendWsBroadcastToWebui } from "../../services/wsService.ts";
 import { eGuildPermission } from "../../types/guildTypes.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
@@ -62,8 +67,9 @@ export const confirmGuildInvitationGetController: RequestHandler = async (req, r
         });
         await guild.save();
 
+        const buildLabel = getBuildLabel(req, account);
         res.json({
-            ...(await getGuildClient(guild, account)),
+            ...(await getGuildClient(guild, account, buildLabel)),
             InventoryChanges: inventoryChanges
         });
         sendWsBroadcastToWebui({ update_guild: true }, account._id.toString());

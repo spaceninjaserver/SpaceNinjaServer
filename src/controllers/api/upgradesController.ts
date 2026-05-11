@@ -3,7 +3,7 @@ import { fromOid, version_compare } from "../../helpers/inventoryHelpers.ts";
 import type { IUpgradesRequest, IUpgradesRequestLegacy } from "../../types/requestTypes.ts";
 import type { TArtifactPolarity, IAbilityOverride } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import type { IInventoryClient, IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import {
     addMiscItems,
     addMods,
@@ -23,10 +23,11 @@ import { ExportRecipes } from "warframe-public-export-plus";
 
 export const upgradesController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const accountId = account._id.toString();
     const inventoryChanges: IInventoryChanges = {};
 
-    if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["24.4.0"]) < 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["24.4.0"]) < 0) {
         // Builds before U24.4.0 have a different request format
         const payload = JSON.parse(String(req.body)) as IUpgradesRequestLegacy;
         const itemId = fromOid(payload.Weapon.ItemId);

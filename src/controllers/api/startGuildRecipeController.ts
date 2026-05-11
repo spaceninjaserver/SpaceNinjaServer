@@ -6,7 +6,7 @@ import {
     hasAccessToDojo,
     hasGuildPermission
 } from "../../services/guildService.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { getRecipe } from "../../services/itemDataService.ts";
@@ -29,7 +29,8 @@ export const startGuildRecipeController: RequestHandler = async (req, res) => {
         return;
     }
 
-    const recipe = getRecipe(payload.Recipe)!;
+    const buildLabel = getBuildLabel(req, account);
+    const recipe = getRecipe(payload.Recipe, buildLabel)!;
     if (payload.Alliance) {
         res.json({ DojoRequestStatus: -1 });
         return;
@@ -63,7 +64,7 @@ export const startGuildRecipeController: RequestHandler = async (req, res) => {
             RecipeType: payload.Recipe
         });
         await guild.save();
-        res.json(await getDojoClient(guild, 0, undefined, account.BuildLabel));
+        res.json(await getDojoClient(guild, 0, undefined, buildLabel));
     }
 };
 

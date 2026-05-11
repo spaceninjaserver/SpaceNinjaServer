@@ -19,6 +19,7 @@ import { logger } from "../utils/logger.ts";
 import { version_compare } from "../helpers/inventoryHelpers.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import { OAuth2Client } from "google-auth-library";
+import { BL_LATEST } from "../constants/gameVersions.ts";
 
 export const isCorrectPassword = (requestPassword: string, databasePassword: string): boolean => {
     return requestPassword === databasePassword;
@@ -143,6 +144,23 @@ export const getAccountIdForRequest = async (req: Request): Promise<string> => {
     return (await getAccountForRequest(req))._id.toString();
 };
 
+export const getBuildLabelForUnauthenticatedRequest = (req: Request): string => {
+    const buildLabel =
+        typeof req.query.buildLabel == "string" ? req.query.buildLabel.replaceAll(" ", "+") : config.fallbackBuildLabel;
+    if (!buildLabel) {
+        throw new Error(`Client provided no buildLabel, and config has no fallbackBuildLabel.`);
+    }
+    return buildLabel;
+};
+
+export const getBuildLabel = (req: Request, account: Pick<TAccountDocument, "BuildLabel">): string => {
+    if ("wsid" in req.query) {
+        return BL_LATEST; // WebUI
+    } else {
+        return account.BuildLabel!; // loginController guarantees that a buildLabel is set for game clients.
+    }
+};
+
 export const isAdministrator = (account: Pick<TAccountDocument, "DisplayName">): boolean => {
     return (config.administratorNames?.indexOf(account.DisplayName) ?? -1) != -1;
 };
@@ -210,8 +228,8 @@ export const getAccountFromSuffixedName = (name: string): Promise<TAccountDocume
     return Account.findOne({ DisplayName: name.split("#")[0] });
 };
 
-export const getUnicodeName = (account: TAccountDocument, buildLabel: string | undefined): string => {
-    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["32.0.0"]) < 0) {
+export const getUnicodeName = (account: TAccountDocument, buildLabel: string): string => {
+    if (version_compare(buildLabel, gameToBuildVersion["32.0.0"]) < 0) {
         return account.DisplayName;
     }
     const platformId = getOriginalPlatform(account);

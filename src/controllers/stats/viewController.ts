@@ -3,12 +3,13 @@ import { getInventory2 } from "../../services/inventoryService.ts";
 import { getStats } from "../../services/statsService.ts";
 import type { IStatsClient } from "../../types/statTypes.ts";
 import { getProfileViewingDataByGuildId } from "../dynamic/getProfileViewingDataController.ts";
+import { BL_LATEST } from "../../constants/gameVersions.ts";
 
-const viewController: RequestHandler = async (req, res) => {
+export const viewController: RequestHandler = async (req, res) => {
     const lookupId = String(req.query.id ?? req.query.lookupId ?? req.query.accountId);
 
     if (req.query.guild == "1") {
-        const data = await getProfileViewingDataByGuildId(lookupId);
+        const data = await getProfileViewingDataByGuildId(lookupId, BL_LATEST);
         if (data) {
             res.json(data.Stats);
         } else {
@@ -32,5 +33,3 @@ const viewController: RequestHandler = async (req, res) => {
     }
     res.json(responseJson);
 };
-
-export { viewController };

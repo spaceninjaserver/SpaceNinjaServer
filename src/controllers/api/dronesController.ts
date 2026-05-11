@@ -1,7 +1,7 @@
 import { toMongoDate2, toOid2 } from "../../helpers/inventoryHelpers.ts";
 import { addMiscItems, getInventory2 } from "../../services/inventoryService.ts";
 import { fromStoreItem } from "../../services/itemDataService.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { getRandomInt, getRandomWeightedRewardUc } from "../../services/rngService.ts";
 import type { IMongoDateWithLegacySupport, IOidWithLegacySupport } from "../../types/commonTypes.ts";
 import type { IDroneClient } from "../../types/inventoryTypes/inventoryTypes.ts";
@@ -13,23 +13,24 @@ export const dronesController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const accountId = account._id.toString();
     if ("GetActive" in req.query) {
+        const buildLabel = getBuildLabel(req, account);
         const inventory = await getInventory2(accountId, "Drones");
         const activeDrones: IActiveDrone[] = [];
         for (const drone of inventory.Drones) {
             if (drone.DeployTime) {
                 activeDrones.push({
-                    DeployTime: toMongoDate2(drone.DeployTime, account.BuildLabel),
+                    DeployTime: toMongoDate2(drone.DeployTime, buildLabel),
                     System: drone.System!,
-                    ItemId: toOid2(drone._id, account.BuildLabel),
+                    ItemId: toOid2(drone._id, buildLabel),
                     ItemType: drone.ItemType,
                     CurrentHP: drone.CurrentHP,
-                    DamageTime: toMongoDate2(drone.DamageTime!, account.BuildLabel),
+                    DamageTime: toMongoDate2(drone.DamageTime!, buildLabel),
                     PendingDamage: drone.PendingDamage!,
                     Resources: [
                         {
                             ItemType: drone.ResourceType!,
                             BinTotal: drone.ResourceCount!,
-                            StartTime: toMongoDate2(drone.DeployTime, account.BuildLabel)
+                            StartTime: toMongoDate2(drone.DeployTime, buildLabel)
                         }
                     ]
                 });

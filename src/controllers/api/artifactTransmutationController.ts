@@ -7,7 +7,7 @@ import {
     getInventory2,
     updateCredits
 } from "../../services/inventoryService.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { getRandomElement, getRandomWeightedRewardUc } from "../../services/rngService.ts";
 import type { IUpgradeFromClient } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
@@ -57,10 +57,12 @@ export const artifactTransmutationController: RequestHandler = async (req, res) 
                 UpgradeFingerprint: JSON.stringify(fingerprint)
             }) - 1;
         await inventory.save();
+
+        const buildLabel = getBuildLabel(req, account);
         res.json({
             NewMods: [
                 {
-                    ItemId: toOid2(inventory.Upgrades[upgradeIndex]._id, account.BuildLabel),
+                    ItemId: toOid2(inventory.Upgrades[upgradeIndex]._id, buildLabel),
                     ItemType: rivenType,
                     UpgradeFingerprint: fingerprint
                 }

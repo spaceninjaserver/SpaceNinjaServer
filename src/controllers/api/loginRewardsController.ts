@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import type { ILoginRewardsReponse } from "../../services/loginRewardService.ts";
 import {
     claimLoginReward,
@@ -37,11 +37,11 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
                 LastLoginRewardDate: today
             };
 
+            const buildLabel = getBuildLabel(req, account);
+
             // https://wiki.warframe.com/w/Login_Rewards
-            const is_pre_daily_tribute =
-                account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["18.0.2"]) < 0;
-            const is_pre_milestones =
-                account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["23.10.0"]) < 0;
+            const is_pre_daily_tribute = version_compare(buildLabel, gameToBuildVersion["18.0.2"]) < 0;
+            const is_pre_milestones = version_compare(buildLabel, gameToBuildVersion["23.10.0"]) < 0;
 
             if (
                 (!isMilestoneDay && randomRewards.length == 1) || // A choice is not needed?

@@ -7,18 +7,18 @@ import {
     removeDojoDeco
 } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
 
 export const destroyDojoDecoController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId, "GuildId LevelKeys");
+    const account = await getAccountForRequest(req);
+    const inventory = await getInventory(account._id, "GuildId LevelKeys");
     const guild = await getGuildForRequestEx(req, inventory);
     const request = JSON.parse(String(req.body)) as IDestroyDojoDecoRequest | IClearObstacleCourseRequest;
     if (
         !hasAccessToDojo(inventory) ||
-        !(await hasPermissionToDecorateComponent(guild, accountId, request.ComponentId))
+        !(await hasPermissionToDecorateComponent(guild, account._id.toString(), request.ComponentId))
     ) {
         res.json({ DojoRequestStatus: -1 });
         return;
@@ -38,7 +38,8 @@ export const destroyDojoDecoController: RequestHandler = async (req, res) => {
     }
 
     await guild.save();
-    res.json(await getDojoClient(guild, 0, request.ComponentId));
+    const buildLabel = getBuildLabel(req, account);
+    res.json(await getDojoClient(guild, 0, request.ComponentId, buildLabel));
 };
 
 interface IDestroyDojoDecoRequest {

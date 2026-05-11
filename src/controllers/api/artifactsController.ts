@@ -1,5 +1,5 @@
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 import type { IUpgradeClient, IUpgradeFromClient } from "../../types/inventoryTypes/inventoryTypes.ts";
 import {
@@ -32,11 +32,8 @@ export const artifactsController: RequestHandler = async (req, res) => {
     const { Upgrades } = inventory;
     const { ItemType, UpgradeFingerprint, ItemId } = Upgrade;
 
-    if (
-        "ignoreBuildLabel" in req.query ||
-        !account.BuildLabel ||
-        version_compare(account.BuildLabel, gameToBuildVersion["18.18.0"]) >= 0
-    ) {
+    const buildLabel = getBuildLabel(req, account);
+    if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) >= 0) {
         const safeUpgradeFingerprint = UpgradeFingerprint || '{"lvl":0}';
         const parsedUpgradeFingerprint = JSON.parse(safeUpgradeFingerprint) as { lvl: number; variant?: number };
         parsedUpgradeFingerprint.lvl += LevelDiff;

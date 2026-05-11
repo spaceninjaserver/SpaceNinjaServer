@@ -5,7 +5,7 @@ import {
     hasGuildPermission
 } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { eGuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
@@ -22,5 +22,6 @@ export const abortDojoComponentDestructionController: RequestHandler = async (re
     guild.DojoComponents.id(componentId)!.DestructionTime = undefined;
 
     await guild.save();
-    res.json(await getDojoClient(guild, 0, componentId, account.BuildLabel));
+    const buildLabel = getBuildLabel(req, account);
+    res.json(await getDojoClient(guild, 0, componentId, buildLabel));
 };

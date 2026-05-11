@@ -116,11 +116,7 @@ import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import { corpusDeathSquadInfo, grineerDeathSquadInfo } from "./invasionService.ts";
 import { libraryTargetToAvatar } from "../constants/synthesis.ts";
 
-const getRotations = async (
-    rewardInfo: IRewardInfo,
-    buildLabel: string | undefined,
-    tierOverride?: number
-): Promise<number[]> => {
+const getRotations = async (rewardInfo: IRewardInfo, buildLabel: string, tierOverride?: number): Promise<number[]> => {
     // For Spy missions, e.g. 3 vaults cracked = A, B, C
     if (rewardInfo.VaultsCracked) {
         const rotations: number[] = [];
@@ -220,12 +216,13 @@ const getRandomRewardByChance = (pool: IReward[], rng?: SRng): IRngResult | unde
 
 export const addMissionInventoryUpdates = async (
     account: TAccountDocument,
+    buildLabel: string,
     inventory: TInventoryDatabaseDocument,
     inventoryUpdates: IMissionInventoryUpdateRequest
 ): Promise<IInventoryChanges> => {
     const inventoryChanges: IInventoryChanges = {};
     if (inventoryUpdates.Missions && inventoryUpdates.EndOfMatchUpload) {
-        const node = await getRegion(inventoryUpdates.Missions.Tag, account.BuildLabel);
+        const node = await getRegion(inventoryUpdates.Missions.Tag, buildLabel);
         if (node && node.miscItemFee && !inventory.noNodeEntryFees) {
             addMiscItems(inventory, [
                 {
@@ -419,7 +416,7 @@ export const addMissionInventoryUpdates = async (
                 break;
             case "ChallengeProgress":
                 await addChallenges(
-                    account,
+                    buildLabel,
                     inventory,
                     value,
                     inventoryUpdates.SeasonChallengeCompletions,
@@ -572,7 +569,7 @@ export const addMissionInventoryUpdates = async (
                     const id = fromOid(clientUpgrade.ItemId);
                     // U11 and below also don't initialize ItemCount since RawUpgrade doesn't exist in them
                     clientUpgrade.ItemCount ??= 1;
-                    if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["18.18.0"]) < 0) {
+                    if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) < 0) {
                         // Really old builds (tested U7-U8) do not have the UpgradeFingerprint set for unranked mod drops (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/3361)
                         clientUpgrade.UpgradeFingerprint ||= "lvl=0|";
                         // Acquired Mods have a different UpgradeFingerprint format in pre-U18.18.0 builds, this converts them to the format the database expects
@@ -588,10 +585,7 @@ export const addMissionInventoryUpdates = async (
                             UpgradeFingerprint: clientUpgrade.UpgradeFingerprint
                         });
                     } else if (id == "") {
-                        if (
-                            account.BuildLabel &&
-                            version_compare(account.BuildLabel, gameToBuildVersion["7.3.0"]) >= 0
-                        ) {
+                        if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0) {
                             // U19 does not provide RawUpgrades and instead interleaves them with riven progress here
                             addMods(inventory, [
                                 {
@@ -741,9 +735,7 @@ export const addMissionInventoryUpdates = async (
             }
             case "GoalProgress": {
                 for (const uploadProgress of value) {
-                    const goal = getWorldState(account.BuildLabel).Goals.find(
-                        x => x._id.$oid == uploadProgress._id.$oid
-                    );
+                    const goal = getWorldState().Goals.find(x => x._id.$oid == uploadProgress._id.$oid);
                     if (goal && goal.Tag == "ShadowgrapherEvent") {
                         if (inventoryUpdates.RewardInfo!.node == goal.Node) {
                             const extraCount = inventoryUpdates.Missions?.Tier ? 4 : 3;
@@ -1099,7 +1091,7 @@ export const addMissionInventoryUpdates = async (
                         inventory,
                         value as IEquipmentClient[],
                         key as TEquipmentKey,
-                        account.BuildLabel
+                        buildLabel
                     );
                 } else if (allDailyAffiliationKeys.includes(key as keyof IDailyAffiliations)) {
                     inventory[key as keyof IDailyAffiliations] -= value as number;
@@ -1271,7 +1263,7 @@ const isEligibleForCreditReward = async (
     rewardInfo: IRewardInfo,
     missions: IMission,
     node: IRegion,
-    buildLabel: string | undefined
+    buildLabel: string
 ): Promise<boolean> => {
     // (E)SO should not give credits for only completing zone 1, in which case it has no rewardQualifications (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1823)
     if ((await getRotations(rewardInfo, buildLabel)).length == 0) {
@@ -1295,6 +1287,7 @@ const isEligibleForCreditReward = async (
 //TODO: return type of partial missioninventoryupdate response
 export const addMissionRewards = async (
     account: TAccountDocument,
+    buildLabel: string,
     inventory: TInventoryDatabaseDocument,
     {
         wagerTier: wagerTier,
@@ -1327,7 +1320,7 @@ export const addMissionRewards = async (
 
     //TODO: check double reward merging
     const MissionRewards: IMissionReward[] = await getRandomMissionDrops(
-        account,
+        buildLabel,
         inventory,
         rewardInfo,
         levelKeyName,
@@ -1344,7 +1337,7 @@ export const addMissionRewards = async (
     let missionCompletionCredits = 0;
 
     if (rewardInfo.alertId) {
-        const alert = getWorldState(account.BuildLabel).Alerts.find(x => x._id.$oid == rewardInfo.alertId);
+        const alert = getWorldState(buildLabel).Alerts.find(x => x._id.$oid == rewardInfo.alertId);
         if (!alert) {
             logger.warn(`mission completed unknown alert`, { alertId: rewardInfo.alertId });
         } else {
@@ -1365,7 +1358,7 @@ export const addMissionRewards = async (
                     missionCompletionCredits += await addFixedLevelRewards(
                         alert.MissionInfo.missionReward,
                         MissionRewards,
-                        account.BuildLabel,
+                        buildLabel,
                         rewardInfo
                     );
                 }
@@ -1389,7 +1382,7 @@ export const addMissionRewards = async (
     }
 
     if (rewardInfo.goalId) {
-        const goal = getWorldState(account.BuildLabel).Goals.find(x => x._id.$oid == rewardInfo.goalId);
+        const goal = getWorldState(buildLabel).Goals.find(x => x._id.$oid == rewardInfo.goalId);
         if (goal) {
             if (rewardInfo.node == goal.Node && goal.MissionKeyName) levelKeyName = goal.MissionKeyName;
             if (goal.ConcurrentNodes && goal.ConcurrentMissionKeyNames) {
@@ -1421,11 +1414,11 @@ export const addMissionRewards = async (
     if (
         config.worldState?.operationAtramentum &&
         inventory.QuestKeys.some(x => x.ItemType.endsWith("PriestQuestKeyChain") && x.Completed) &&
-        (!account.BuildLabel || version_compare(account.BuildLabel, gameToBuildVersion["42.0.0"]) >= 0) &&
+        version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0 &&
         rewardInfo.nightmareMode
     ) {
         if (inventory.GuildId) {
-            const goal = getWorldState(account.BuildLabel).Goals.find(x => x.Tag == "ShadowgrapherEvent");
+            const goal = getWorldState(buildLabel).Goals.find(x => x.Tag == "ShadowgrapherEvent");
             if (goal && goal.ClanGoal) {
                 const guild = await Guild.findById(inventory.GuildId, "GoalProgress Tier VaultDecoRecipes");
                 if (guild) {
@@ -1444,13 +1437,13 @@ export const addMissionRewards = async (
     }
 
     if (levelKeyName) {
-        const fixedLevelRewards = getLevelKeyRewards(levelKeyName, account.BuildLabel);
+        const fixedLevelRewards = getLevelKeyRewards(levelKeyName, buildLabel);
         //logger.debug(`fixedLevelRewards ${fixedLevelRewards}`);
         if (fixedLevelRewards.levelKeyRewards) {
             missionCompletionCredits += await addFixedLevelRewards(
                 fixedLevelRewards.levelKeyRewards,
                 MissionRewards,
-                account.BuildLabel,
+                buildLabel,
                 rewardInfo
             );
         }
@@ -1480,9 +1473,9 @@ export const addMissionRewards = async (
     // - https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1013
     // - https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1365
     if (missions) {
-        const node = await getRegion(missions.Tag, account.BuildLabel);
+        const node = await getRegion(missions.Tag, buildLabel);
         if (node) {
-            if (await isEligibleForCreditReward(rewardInfo, missions, node, account.BuildLabel)) {
+            if (await isEligibleForCreditReward(rewardInfo, missions, node, buildLabel)) {
                 //node based credit rewards for mission completion
                 const levelCreditReward = getLevelCreditRewards(node);
                 if (levelCreditReward) {
@@ -1495,7 +1488,7 @@ export const addMissionRewards = async (
                 missionCompletionCredits += await addFixedLevelRewards(
                     node.missionReward,
                     MissionRewards,
-                    account.BuildLabel,
+                    buildLabel,
                     rewardInfo
                 );
             }
@@ -1629,7 +1622,7 @@ export const addMissionRewards = async (
     }
 
     if (rewardInfo.JobStage != undefined && rewardInfo.jobId) {
-        const result = getSyndicateJob(rewardInfo, account.BuildLabel);
+        const result = getSyndicateJob(rewardInfo, buildLabel);
         if (result) {
             const currentJob = result.currentJob;
             const syndicateTag = result.syndicateTag;
@@ -1892,7 +1885,7 @@ export const addMissionRewards = async (
         inventory.ChallengeInstanceStates ??= [];
         for (const challenge of challengeInstanceStates) {
             const inventoryState = inventory.ChallengeInstanceStates.find(
-                c => toOid2(c._id, account.BuildLabel) == challenge.id
+                c => toOid2(c._id, buildLabel) == challenge.id
             );
             if (inventoryState) {
                 inventoryState.Progress = challenge.Progress;
@@ -1970,7 +1963,7 @@ export const addCredits = async (
 export const addFixedLevelRewards = async (
     rewards: IMissionRewardExternal,
     MissionRewards: IMissionReward[],
-    buildLabel: string | undefined,
+    buildLabel: string,
     rewardInfo?: IRewardInfo
 ): Promise<number> => {
     let missionBonusCredits = 0;
@@ -2052,7 +2045,7 @@ function getLevelCreditRewards(node: Partial<IRegion>): number | undefined {
 }
 
 async function getRandomMissionDrops(
-    account: TAccountDocument,
+    buildLabel: string,
     inventory: TInventoryDatabaseDocument,
     RewardInfo: IRewardInfo,
     levelKeyName: string | undefined,
@@ -2129,7 +2122,7 @@ async function getRandomMissionDrops(
             ItemCount: 5
         });
     }
-    const region = await getRegion(RewardInfo.node, account.BuildLabel);
+    const region = await getRegion(RewardInfo.node, buildLabel);
     if (region) {
         let rewardManifests: string[];
         if (RewardInfo.periodicMissionTag == "EliteAlert" || RewardInfo.periodicMissionTag == "EliteAlertB") {
@@ -2145,7 +2138,7 @@ async function getRandomMissionDrops(
                 const arr = RewardInfo.sortieId.split("_");
                 let giveNodeReward = false;
                 if (arr[1] != "Lite") {
-                    const sortie = getSortie(idToDay(arr[1]), account.BuildLabel);
+                    const sortie = getSortie(idToDay(arr[1]), buildLabel);
                     giveNodeReward = sortie.Variants.find(x => x.node == arr[0])!.missionType == "MT_ASSASSINATION";
                 }
                 rewardManifests = giveNodeReward ? region.rewardManifests : [];
@@ -2221,7 +2214,7 @@ async function getRandomMissionDrops(
 
         let rotations: number[] = [];
         if (RewardInfo.jobId && RewardInfo.JobStage! >= 0) {
-            const result = getSyndicateJob(RewardInfo, account.BuildLabel);
+            const result = getSyndicateJob(RewardInfo, buildLabel);
 
             if (result) {
                 const currentJob = result.currentJob;
@@ -2333,7 +2326,7 @@ async function getRandomMissionDrops(
                 }
                 tierOverride = 0;
             }
-            rotations = await getRotations(RewardInfo, account.BuildLabel, tierOverride);
+            rotations = await getRotations(RewardInfo, buildLabel, tierOverride);
         }
         if (rewardManifests.length != 0) {
             logger.debug(`generating random mission rewards`, { rewardManifests, rotations });
@@ -2425,7 +2418,7 @@ async function getRandomMissionDrops(
             // Pre-U19 nightmare mode used a single combined pool without A/B/C rotations
             // In U19, Chilling Reload, Drifting Contact, and Streamlined Form were added
             // and the rewards were split into A/B/C pools
-            if (account.BuildLabel && version_compare(account.BuildLabel, "2016.10.27.13.03") < 0) {
+            if (version_compare(buildLabel, "2016.10.27.13.03") < 0) {
                 // In U19, they still had A/B/C probabilities, taken from wiki; all in one pool
                 const preU19Pool: IReward[] = [
                     // 8.431%
@@ -2581,7 +2574,7 @@ async function getRandomMissionDrops(
 
     if (RewardInfo.EnemyCachesFound) {
         if (RewardInfo.goalId) {
-            const goal = getWorldState(account.BuildLabel).Goals.find(x => x._id.$oid == RewardInfo.goalId);
+            const goal = getWorldState(buildLabel).Goals.find(x => x._id.$oid == RewardInfo.goalId);
             if (goal) {
                 let currentMissionKey: string | undefined;
                 if (RewardInfo.node == goal.Node) {
@@ -2620,7 +2613,7 @@ async function getRandomMissionDrops(
                 }
             }
         } else if (RewardInfo.alertId) {
-            const alert = getWorldState(account.BuildLabel).Alerts.find(x => x._id.$oid == RewardInfo.alertId);
+            const alert = getWorldState(buildLabel).Alerts.find(x => x._id.$oid == RewardInfo.alertId);
             if (alert && alert.MissionInfo.enemyCacheOverride) {
                 const deck = ExportRewards[alert.MissionInfo.enemyCacheOverride];
                 for (let rotation = 0; rotation != RewardInfo.EnemyCachesFound; ++rotation) {
@@ -2727,7 +2720,7 @@ export const handleConservation = (
 
 const getSyndicateJob = (
     rewardInfo: IRewardInfo,
-    buildLabel?: string
+    buildLabel: string
 ): { currentJob: ISyndicateJob; syndicateTag: string } | undefined => {
     if (!rewardInfo.jobId) return;
 

@@ -7,6 +7,7 @@ import {
     buildVersionToInt,
     createAccount,
     createNonce,
+    getBuildLabelForUnauthenticatedRequest,
     getGoogleAccountData,
     getUsernameFromEmail,
     isCorrectPassword
@@ -58,10 +59,7 @@ export const loginController: RequestHandler = async (request, response) => {
 
     const account = await Account.findOne({ email: loginRequest.email });
 
-    const buildLabel: string =
-        typeof request.query.buildLabel == "string"
-            ? request.query.buildLabel.replaceAll(" ", "+")
-            : (config.fallbackBuildLabel ?? "");
+    const buildLabel = getBuildLabelForUnauthenticatedRequest(request);
 
     if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0) {
         if (args.dev) {

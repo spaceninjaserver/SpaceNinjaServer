@@ -166,6 +166,7 @@ const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
                         email: data.auth.email,
                         password: data.auth.password,
                         ClientType: "webui",
+                        BuildLabel: undefined,
                         LastLogin: new Date(),
                         DisplayName: name,
                         Nonce: createNonce()

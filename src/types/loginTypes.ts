@@ -26,7 +26,7 @@ export interface IAccountCreationData extends IAccountAndLoginResponseCommons {
     email: string;
     password: string;
     Language?: string;
-    BuildLabel?: string;
+    BuildLabel: string | undefined;
     LastLogin: Date;
 }
 

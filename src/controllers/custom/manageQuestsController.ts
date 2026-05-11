@@ -6,6 +6,7 @@ import type { RequestHandler } from "express";
 import { ExportKeys } from "warframe-public-export-plus";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
+import { BL_LATEST } from "../../constants/gameVersions.ts";
 
 export const manageQuestsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -33,7 +34,7 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
         case "completeAll": {
             const inventory = await getInventory(accountId, undefined);
             for (const questKey of inventory.QuestKeys) {
-                await completeQuest(inventory, questKey.ItemType, undefined);
+                await completeQuest(inventory, questKey.ItemType, BL_LATEST);
             }
             modified = await saveOnDemand(inventory);
             break;
@@ -69,7 +70,7 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
                     logger.error(`Quest key not found in inventory: ${questItemType}`);
                     break;
                 }
-                await completeQuest(inventory, questItemType, undefined);
+                await completeQuest(inventory, questItemType, BL_LATEST);
                 modified = await saveOnDemand(inventory);
             }
             break;
@@ -139,7 +140,7 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
 
                 if (currentStage + 1 == questManifest.chainStages?.length) {
                     logger.debug(`Trying to complete last stage with nextStage, calling completeQuest instead`);
-                    await completeQuest(inventory, questKey.ItemType, undefined, true);
+                    await completeQuest(inventory, questKey.ItemType, BL_LATEST, true);
                 } else {
                     if (run > 0) {
                         questKey.Progress[currentStage + 1].c = run;
@@ -159,7 +160,7 @@ export const manageQuestsController: RequestHandler = async (req, res) => {
                                 KeyChain: questKey.ItemType,
                                 ChainStage: currentStage
                             },
-                            undefined
+                            BL_LATEST
                         );
                     }
                 }

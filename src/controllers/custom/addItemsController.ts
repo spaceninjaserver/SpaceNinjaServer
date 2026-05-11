@@ -3,6 +3,7 @@ import { getInventory, addItem } from "../../services/inventoryService.ts";
 import type { RequestHandler } from "express";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 import { logger } from "../../utils/logger.ts";
+import { BL_LATEST } from "../../constants/gameVersions.ts";
 
 export const addItemsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -22,7 +23,7 @@ export const addItemsController: RequestHandler = async (req, res) => {
                 undefined,
                 request.Fingerprint,
                 true,
-                account.BuildLabel
+                BL_LATEST
             );
         } catch (e) {
             logger.debug(`AddItemRequest ${JSON.stringify(request)} failed: ${(e as Error).message}`);

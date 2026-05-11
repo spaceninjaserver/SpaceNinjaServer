@@ -104,7 +104,7 @@ import { getNightwaveSyndicateTag, getWorldState } from "./worldStateService.ts"
 import type { ICalendarSeason } from "../types/worldStateTypes.ts";
 import type { INemesisProfile } from "../helpers/nemesisHelpers.ts";
 import { generateNemesisProfile } from "../helpers/nemesisHelpers.ts";
-import { buildVersionToInt, type TAccountDocument } from "./loginService.ts";
+import { buildVersionToInt } from "./loginService.ts";
 import { KAHL_EPOCH, unixTimesInMs } from "../constants/timeConstants.ts";
 import { addString } from "../helpers/stringHelpers.ts";
 import type {
@@ -122,6 +122,7 @@ import suitDefaultUpgrades from "../constants/suitDefaultUpgrades.ts";
 import kuriaMessage50 from "../../static/fixed_responses/kuriaMessages/fiftyPercent.json" with { type: "json" };
 import kuriaMessage75 from "../../static/fixed_responses/kuriaMessages/seventyFivePercent.json" with { type: "json" };
 import kuriaMessage100 from "../../static/fixed_responses/kuriaMessages/oneHundredPercent.json" with { type: "json" };
+import { BL_LATEST } from "../constants/gameVersions.ts";
 
 type OperatorAntiqueMeta = {
     focusAbility: string;
@@ -262,8 +263,8 @@ export const createInventory = async (
             inventory.MadeStoryModeDecision = true;
             inventory.PlayedParkourTutorial = true;
             const startingGear = await addStartingGear(inventory);
-            await completeQuest(inventory, "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain", undefined);
-            await completeQuest(inventory, "/Lotus/Types/Keys/ModQuest/ModQuestKeyChain", undefined);
+            await completeQuest(inventory, "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain", BL_LATEST);
+            await completeQuest(inventory, "/Lotus/Types/Keys/ModQuest/ModQuestKeyChain", BL_LATEST);
 
             loadout.NORMAL.push({
                 s: {
@@ -302,7 +303,7 @@ export const createInventory = async (
 
 export const addStartingGear = async (
     inventory: TInventoryDatabaseDocument,
-    buildLabel?: string,
+    buildLabel: string = BL_LATEST,
     startingGear?: Partial<TPartialStartingGear>
 ): Promise<IInventoryChanges> => {
     if (inventory.ReceivedStartingGear) {
@@ -523,7 +524,7 @@ export const addItem = async (
     seed?: bigint,
     targetFingerprint?: string,
     exactQuantity: boolean = false,
-    buildLabel?: string
+    buildLabel: string = BL_LATEST
 ): Promise<IInventoryChanges> => {
     // Bundles are technically StoreItems but a) they don't have a normal counterpart, and b) they are used in non-StoreItem contexts, e.g. email attachments.
     if (typeName in ExportBundles) {
@@ -554,7 +555,6 @@ export const addItem = async (
             addMiscItems(inventory, miscItemChanges);
 
             if (
-                buildLabel &&
                 typeName == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg" &&
                 version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0
             ) {
@@ -1404,7 +1404,7 @@ export const addPowerSuit = async (
     inventory: TInventoryDatabaseDocument,
     powersuitName: string,
     defaultOverwrites?: Partial<IEquipmentDatabase>,
-    buildLabel?: string,
+    buildLabel: string = BL_LATEST,
     inventoryChanges: IInventoryChanges = {}
 ): Promise<IInventoryChanges> => {
     const powersuit = ExportWarframes[powersuitName] as IPowersuit | undefined;
@@ -1420,7 +1420,7 @@ export const addPowerSuit = async (
         }
     }
     let configs: IItemConfig[] = [];
-    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["15.0.0"]) < 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["15.0.0"]) < 0) {
         if (powersuitName in suitDefaultUpgrades) {
             configs = applyDefaultUpgrades(inventory, suitDefaultUpgrades[powersuitName], inventoryChanges);
         }
@@ -1537,13 +1537,13 @@ const createRandomTraits = (kubrowPetName: string, traitsPool: TTraitsPool): ITr
 export const addKubrowPet = (
     inventory: TInventoryDatabaseDocument,
     kubrowPetName: string,
-    details?: IKubrowPetDetailsDatabase,
-    premiumPurchase: boolean = false,
-    inventoryChanges: IInventoryChanges = {},
-    buildLabel?: string
+    details: IKubrowPetDetailsDatabase | undefined,
+    premiumPurchase: boolean,
+    inventoryChanges: IInventoryChanges,
+    buildLabel: string
 ): IInventoryChanges => {
-    const isPreU28 = buildLabel && version_compare(buildLabel, gameToBuildVersion["28.0.0"]) < 0;
-    const isPreU26 = buildLabel && version_compare(buildLabel, gameToBuildVersion["26.0.0"]) < 0;
+    const isPreU28 = version_compare(buildLabel, gameToBuildVersion["28.0.0"]) < 0;
+    const isPreU26 = version_compare(buildLabel, gameToBuildVersion["26.0.0"]) < 0;
     const questCompleted = inventory.QuestKeys.some(x => x.ItemType.endsWith("KubrowQuestKeyChain") && x.Completed);
 
     combineInventoryChanges(
@@ -2068,7 +2068,7 @@ const addCrewShip = async (
             const questChanges = await completeQuest(
                 inventory,
                 "/Lotus/Types/Keys/RailJackBuildQuest/RailjackBuildQuestKeyChain",
-                undefined,
+                BL_LATEST,
                 false
             );
             if (questChanges) {
@@ -2204,7 +2204,7 @@ export const addEmailItem = async (
     >,
     typeName: string,
     inventoryChanges: IInventoryChanges = {},
-    buildLabel?: string
+    buildLabel: string = BL_LATEST
 ): Promise<IInventoryChanges> => {
     const meta = ExportEmailItems[typeName];
     const emailItem = inventory.EmailItems.find(x => x.ItemType == typeName);
@@ -2214,7 +2214,7 @@ export const addEmailItem = async (
             msg.cinematic == "/Lotus/Levels/1999/PlayerHomeBalconyCinematics.level" ||
             msg.cinematic == "/Lotus/Levels/EntratiLab/TriadRomanceCinematics.level"
         ) {
-            if (buildLabel && version_compare(buildLabel, gameToBuildVersion["41.0.0"]) < 0) {
+            if (version_compare(buildLabel, gameToBuildVersion["41.0.0"]) < 0) {
                 msg.customData = JSON.stringify({
                     Tag: msg.customData + "KissCin",
                     CinLoadout: {
@@ -2274,7 +2274,7 @@ export const applyClientEquipmentUpdates = <K extends TEquipmentKey>(
     inventory: Pick<TInventoryDatabaseDocument, K | "XPInfo">,
     gearArray: IEquipmentClient[],
     categoryName: K,
-    buildLabel: string | undefined
+    buildLabel: string
 ): void => {
     const category = inventory[categoryName];
 
@@ -2327,7 +2327,7 @@ export const applyClientEquipmentUpdates = <K extends TEquipmentKey>(
         }
 
         if (ExtraRemaining) {
-            if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["10.3.3"]) >= 0) {
+            if (version_compare(buildLabel, gameToBuildVersion["10.3.3"]) >= 0) {
                 if (ExtraRemaining > 0) {
                     throw new Error(
                         `unexpected value for ExtraRemaining (${ExtraRemaining}); expected a delta from this client`
@@ -2590,7 +2590,7 @@ for (const path of Object.keys(ExportChallenges)) {
 }
 
 export const addChallenges = async (
-    account: TAccountDocument,
+    buildLabel: string,
     inventory: TInventoryDatabaseDocument,
     ChallengeProgress: IChallengeProgress[],
     SeasonChallengeCompletions?: ISeasonChallenge[],
@@ -2619,7 +2619,7 @@ export const addChallenges = async (
                         const meta = ExportChallenges[path];
                         if (meta.message) {
                             logger.debug(`${Name} completed, sending inbox message`);
-                            await createMessage(account._id, [convertInboxMessage(meta.message)]);
+                            await createMessage(inventory.accountOwnerId, [convertInboxMessage(meta.message)]);
                             continue;
                         }
                         if (meta.countedRewards) {
@@ -2652,7 +2652,7 @@ export const addChallenges = async (
             }
 
             const meta = ExportChallenges[challenge.challenge];
-            const nightwaveSyndicateTag = getNightwaveSyndicateTag(account.BuildLabel);
+            const nightwaveSyndicateTag = getNightwaveSyndicateTag(buildLabel);
             logger.debug("Completed season challenge", {
                 uniqueName: challenge.challenge,
                 syndicateTag: nightwaveSyndicateTag,
@@ -2785,7 +2785,7 @@ export const updateSyndicate = (
 export const addKeyChainItems = async (
     inventory: TInventoryDatabaseDocument,
     keyChainData: IKeyChainRequest,
-    buildLabel: string | undefined
+    buildLabel: string
 ): Promise<IInventoryChanges> => {
     const keyChainItems = getKeyChainItems(keyChainData, buildLabel);
 

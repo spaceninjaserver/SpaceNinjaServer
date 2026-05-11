@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import type { IMissionInventoryUpdateRequest } from "../../types/requestTypes.ts";
 import {
     addMissionInventoryUpdates,
@@ -63,6 +63,7 @@ import { filterInplace } from "../../helpers/general.ts";
 //move credit calc in here, return MissionRewards: [] if no reward info
 export const missionInventoryUpdateController: RequestHandler = async (req, res): Promise<void> => {
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const missionReport = getJSONfromString<IMissionInventoryUpdateRequest>((req.body as string).toString());
     logger.debug("mission report:", missionReport);
 
@@ -70,7 +71,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     const firstCompletion = missionReport.SortieId
         ? inventory.CompletedSorties.indexOf(missionReport.SortieId) == -1
         : false;
-    const inventoryUpdates = await addMissionInventoryUpdates(account, inventory, missionReport);
+    const inventoryUpdates = await addMissionInventoryUpdates(account, buildLabel, inventory, missionReport);
 
     if (
         (missionReport.MissionStatus ? missionReport.MissionStatus !== "GS_SUCCESS" : missionReport.MissionFailed) &&
@@ -85,7 +86,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
             inventory.RewardSeed = generateRewardSeed();
         }
         await inventory.save();
-        const inventoryResponse = await getInventoryResponse(req, inventory, true, account.BuildLabel);
+        const inventoryResponse = await getInventoryResponse(req, inventory, true, buildLabel);
         res.json({
             InventoryJson: JSON.stringify(inventoryResponse),
             MissionRewards: []
@@ -103,7 +104,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         ConquestCompletedMissionsCount,
         NemesisTaxInfo,
         RecoveredItemInfo
-    } = await addMissionRewards(account, inventory, missionReport, firstCompletion);
+    } = await addMissionRewards(account, buildLabel, inventory, missionReport, firstCompletion);
     handleConservation(inventory, missionReport, AffiliationMods); // Conservation reports have GS_SUCCESS
 
     if (missionReport.EndOfMatchUpload) {
@@ -111,7 +112,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     }
     await inventory.save();
 
-    if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["18.18.0"]) < 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) < 0) {
         // Client might crash if they see Endo, but their kids are gonna love it.
         filterInplace(MissionRewards, x => !x.StoreItem.startsWith("/Lotus/StoreItems/Upgrades/Mods/FusionBundles/"));
     }
@@ -144,9 +145,9 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         logger.debug(`classic mission completion, sending everything`);
         const response: IMissionInventoryUpdateResponse = deltas;
         // InventoryJson is not recognised by early versions, and may lead them to buffer overrun if provided.
-        if (!account.BuildLabel || version_compare(account.BuildLabel, gameToBuildVersion["8.0.0"]) > 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["8.0.0"]) > 0) {
             response.InventoryJson = JSON.stringify(
-                await getInventoryResponse(req, inventory, "xpBasedLevelCapDisabled" in req.query, account.BuildLabel)
+                await getInventoryResponse(req, inventory, "xpBasedLevelCapDisabled" in req.query, buildLabel)
             );
         }
         if (missionReport.RewardInfo.sortieTag == "Final" && firstCompletion) {
@@ -156,12 +157,12 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     } else {
         logger.debug(`no reward info, just syncing inventory`);
         // InventoryJson is not recognised by early versions, and may lead them to buffer overrun if provided.
-        if (!account.BuildLabel || version_compare(account.BuildLabel, gameToBuildVersion["8.0.0"]) > 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["8.0.0"]) > 0) {
             const inventoryResponse = await getInventoryResponse(
                 req,
                 inventory,
                 "xpBasedLevelCapDisabled" in req.query,
-                account.BuildLabel
+                buildLabel
             );
             res.json({
                 InventoryJson: JSON.stringify(inventoryResponse)

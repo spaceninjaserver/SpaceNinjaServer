@@ -68,9 +68,9 @@ export const getGuildForRequestEx = async (
     return guild;
 };
 
-export const getGuildRankBase = (buildLabel: string | undefined): number => {
+export const getGuildRankBase = (buildLabel: string): number => {
     // Use 1-based indexing for clan ranks for versions before U24. In my testing, 2018.06.14.23.21 and below used 1-based indexing and 2019.04.04.21.31 and above used 0-based indexing. I didn't narrow it down further, but I think U24 is a good spot for them to have changed it.
-    return buildLabel && version_compare(buildLabel, gameToBuildVersion["24.0.0"]) < 0 ? 1 : 0;
+    return version_compare(buildLabel, gameToBuildVersion["24.0.0"]) < 0 ? 1 : 0;
 };
 
 const rankTagToName: Record<string, string> = {
@@ -87,17 +87,18 @@ const rankTagToName: Record<string, string> = {
 
 export const getGuildClient = async (
     guild: TGuildDatabaseDocument,
-    account: TAccountDocument
+    account: TAccountDocument,
+    buildLabel: string
 ): Promise<IGuildClient> => {
     const guildMembers = await GuildMember.find({ guildId: guild._id });
 
-    const rankBase = getGuildRankBase(account.BuildLabel);
+    const rankBase = getGuildRankBase(buildLabel);
     const members: IGuildMemberClient[] = [];
     let missingEntry = true;
     const dataFillInPromises: Promise<void>[] = [];
     for (const guildMember of guildMembers) {
         const member: IGuildMemberClient = {
-            _id: toOid2(guildMember.accountId, account.BuildLabel),
+            _id: toOid2(guildMember.accountId, buildLabel),
             Rank: guildMember.rank + rankBase,
             Status: guildMember.status,
             Note: guildMember.RequestMsg,
@@ -106,7 +107,7 @@ export const getGuildClient = async (
         if (guildMember.accountId.equals(account._id)) {
             missingEntry = false;
         } else {
-            dataFillInPromises.push(addAccountDataToFriendInfo(member, account.BuildLabel, true));
+            dataFillInPromises.push(addAccountDataToFriendInfo(member, buildLabel, true));
             dataFillInPromises.push(addInventoryDataToFriendInfo(member));
         }
         members.push(member);
@@ -120,7 +121,7 @@ export const getGuildClient = async (
             rank: 0
         });
         members.push({
-            _id: toOid2(account._id, account.BuildLabel),
+            _id: toOid2(account._id, buildLabel),
             Status: 0,
             Rank: 0
         });
@@ -129,7 +130,7 @@ export const getGuildClient = async (
     await Promise.all(dataFillInPromises);
 
     let ranks = guild.Ranks;
-    if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["24.0.0"]) < 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["24.0.0"]) < 0) {
         ranks = ranks.map(x => ({
             Name: rankTagToName[x.Name] ?? x.Name,
             Permissions: x.Permissions
@@ -137,7 +138,7 @@ export const getGuildClient = async (
     }
 
     return {
-        _id: toOid2(guild._id, account.BuildLabel),
+        _id: toOid2(guild._id, buildLabel),
         Name: guild.Name,
         MOTD: guild.MOTD,
         LongMOTD: guild.LongMOTD,
@@ -145,20 +146,18 @@ export const getGuildClient = async (
         Ranks: ranks,
         Tier: guild.Tier,
         GuildTierIncMoratorium: guild.GuildTierIncMoratorium
-            ? toMongoDate2(guild.GuildTierIncMoratorium, account.BuildLabel)
+            ? toMongoDate2(guild.GuildTierIncMoratorium, buildLabel)
             : undefined,
         Emblem: guild.Emblem,
-        Vault: await getGuildVault(guild, account.BuildLabel),
+        Vault: await getGuildVault(guild, buildLabel),
         ActiveDojoColorResearch: guild.ActiveDojoColorResearch,
         Class: guild.Class,
         XP: guild.XP,
         IsContributor: !!guild.CeremonyContributors?.find(x => x.equals(account._id)),
         NumContributors: guild.CeremonyContributors?.length ?? 0,
-        CeremonyResetDate: guild.CeremonyResetDate
-            ? toMongoDate2(guild.CeremonyResetDate, account.BuildLabel)
-            : undefined,
+        CeremonyResetDate: guild.CeremonyResetDate ? toMongoDate2(guild.CeremonyResetDate, buildLabel) : undefined,
         AutoContributeFromVault: guild.AutoContributeFromVault,
-        AllianceId: guild.AllianceId ? toOid2(guild.AllianceId, account.BuildLabel) : undefined,
+        AllianceId: guild.AllianceId ? toOid2(guild.AllianceId, buildLabel) : undefined,
         GoalProgress: guild.GoalProgress
             ? guild.GoalProgress.map(gp => ({
                   Count: gp.Count,
@@ -169,7 +168,7 @@ export const getGuildClient = async (
     };
 };
 
-export const getGuildVault = async (guild: TGuildDatabaseDocument, buildLabel?: string): Promise<IGuildVaultClient> => {
+export const getGuildVault = async (guild: TGuildDatabaseDocument, buildLabel: string): Promise<IGuildVaultClient> => {
     const { vault, needsSave } = getGuildVaultEx(guild, buildLabel);
     if (needsSave) await guild.save();
     return vault;
@@ -177,7 +176,7 @@ export const getGuildVault = async (guild: TGuildDatabaseDocument, buildLabel?: 
 
 export const getGuildVaultEx = (
     guild: TGuildDatabaseDocument,
-    buildLabel?: string,
+    buildLabel: string,
     needsSave: boolean = false
 ): { vault: IGuildVaultClient; needsSave: boolean } => {
     const vault: IGuildVaultClient = {
@@ -256,7 +255,7 @@ export const getGuildVaultEx = (
 
 export const getAllianceVault = async (
     alliance: TAllianceDatabaseDocument,
-    buildLabel?: string
+    buildLabel: string
 ): Promise<IGuildVaultClient> => {
     const { vault, needsSave } = getAllianceVaultEx(alliance, buildLabel);
     if (needsSave) await alliance.save();
@@ -265,7 +264,7 @@ export const getAllianceVault = async (
 
 export const getAllianceVaultEx = (
     alliance: TAllianceDatabaseDocument,
-    buildLabel?: string,
+    buildLabel: string,
     needsSave: boolean = false
 ): { vault: IGuildVaultClient; needsSave: boolean } => {
     const vault: IGuildVaultClient = {
@@ -342,8 +341,8 @@ export const getAllianceVaultEx = (
 export const getDojoClient = async (
     guild: TGuildDatabaseDocument,
     status: number,
-    componentId?: Types.ObjectId | string,
-    buildLabel?: string
+    componentId: Types.ObjectId | string | undefined,
+    buildLabel: string
 ): Promise<IDojoClient> => {
     const v = getGuildVaultEx(guild, buildLabel);
     let needSave = v.needsSave;
@@ -373,7 +372,6 @@ export const getDojoClient = async (
                 SortId: toOid2(dojoComponent.SortId ?? dojoComponent._id, buildLabel), // always providing a SortId so decos don't need repositioning to reparent
                 pf:
                     dojoComponent.pf == "/Lotus/Levels/ClanDojo/DojoHall.level" &&
-                    buildLabel &&
                     version_compare(buildLabel, gameToBuildVersion["9.1.0"]) <= 0
                         ? "/Lotus/Levels/ClanDojo/ClanHallA.level" // Pre-U9.5
                         : dojoComponent.pf,
@@ -739,7 +737,7 @@ export const hasPermissionToDecorateComponent = async (
     const component = guild.DojoComponents.id(componentId);
     if (component?.Settings) {
         const settings = JSON.parse(component.Settings) as IDojoComponentSettings;
-        if (settings.decorators && settings.decorators.indexOf(accountId) != -1) {
+        if (settings.decorators && settings.decorators.indexOf(accountId.toString()) != -1) {
             return true;
         }
     }
@@ -1035,7 +1033,7 @@ export const deleteAlliance = async (allianceId: Types.ObjectId): Promise<void> 
 export const getAllianceClient = async (
     alliance: TAllianceDatabaseDocument,
     guild: TGuildDatabaseDocument,
-    buildLabel: string | undefined
+    buildLabel: string
 ): Promise<IAllianceClient> => {
     const allianceMembers = await AllianceMember.find({ allianceId: alliance._id });
     const clans: IAllianceMemberClient[] = [];

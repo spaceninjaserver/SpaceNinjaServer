@@ -8,7 +8,7 @@ import { getUnicodeName } from "./loginService.ts";
 
 export const addAccountDataToFriendInfo = async (
     info: IFriendInfo,
-    buildLabel: string | undefined,
+    buildLabel: string,
     useUnicodeName?: boolean
 ): Promise<void> => {
     const account = (await Account.findById(

@@ -1,6 +1,7 @@
+import { BL_LATEST } from "../../constants/gameVersions.ts";
 import { addString } from "../../helpers/stringHelpers.ts";
 import { addChallenges, ensureUserHasSteelPathRewards, getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { addFixedLevelRewards } from "../../services/missionInventoryUpdateService.ts";
 import { handleStoreItemAcquisition } from "../../services/purchaseService.ts";
 import type { IMissionReward } from "../../types/missionTypes.ts";
@@ -8,7 +9,6 @@ import type { RequestHandler } from "express";
 import { ExportRegions } from "warframe-public-export-plus";
 
 export const completeAllMissionsController: RequestHandler = async (req, res) => {
-    const account = await getAccountForRequest(req);
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId, undefined);
     const MissionRewards: IMissionReward[] = [];
@@ -27,7 +27,7 @@ export const completeAllMissionsController: RequestHandler = async (req, res) =>
         if (mission.Completes == 0) {
             mission.Completes++;
             if (node.missionReward) {
-                await addFixedLevelRewards(node.missionReward, MissionRewards, account.BuildLabel);
+                await addFixedLevelRewards(node.missionReward, MissionRewards, BL_LATEST);
             }
         }
         mission.Tier = 1;
@@ -35,7 +35,7 @@ export const completeAllMissionsController: RequestHandler = async (req, res) =>
     for (const reward of MissionRewards) {
         await handleStoreItemAcquisition(reward.StoreItem, inventory, reward.ItemCount, undefined, true);
     }
-    await addChallenges(account, inventory, [
+    await addChallenges(BL_LATEST, inventory, [
         {
             Progress: 1,
             Name: `KillPhorid`

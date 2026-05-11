@@ -59,6 +59,7 @@ import EntratiSyndicate_pre_U41 from "../../static/fixed_responses/data/EntratiS
 import { getWorldState } from "./worldStateService.ts";
 import { promises as fs } from "fs";
 import path from "path";
+import { BL_LATEST } from "../constants/gameVersions.ts";
 
 export type WeaponTypeInternal =
     | "LongGuns"
@@ -1916,208 +1917,206 @@ const getLegacySolarMapData = async (target: string, buildLabel: string): Promis
     return json;
 };
 
-export const getRecipe = (uniqueName: string, buildLabel?: string): IRecipe | undefined => {
+export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | undefined => {
     let data = ExportRecipes[uniqueName] ?? supplementalRecipes[uniqueName];
-    if (buildLabel) {
-        if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/RhinoBlueprint") {
-            if (version_compare(buildLabel, gameToBuildVersion["39.0.0"]) < 0) {
-                data = {
-                    ...data,
-                    ingredients: [
-                        data.ingredients[0],
-                        data.ingredients[1],
-                        data.ingredients[2],
-                        {
-                            ItemType: "/Lotus/Types/Items/MiscItems/Gallium",
-                            ItemCount: 1
-                        }
-                    ]
-                };
-                if (version_compare(buildLabel, gameToBuildVersion["38.5.0"]) < 0) {
-                    data.buildTime = 259200;
-                    // Update 19.13 (2017-03-09)
-                    if (version_compare(buildLabel, "2017.03.09.00.00") < 0) {
-                        data.ingredients[3].ItemType = "/Lotus/Types/Items/MiscItems/OrokinCell";
+    if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/RhinoBlueprint") {
+        if (version_compare(buildLabel, gameToBuildVersion["39.0.0"]) < 0) {
+            data = {
+                ...data,
+                ingredients: [
+                    data.ingredients[0],
+                    data.ingredients[1],
+                    data.ingredients[2],
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Gallium",
+                        ItemCount: 1
                     }
-                }
-            }
-        } else if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/RhinoChassisBlueprint") {
-            if (version_compare(buildLabel, gameToBuildVersion["39.0.0"]) < 0) {
-                data = {
-                    ...data,
-                    ingredients: [
-                        {
-                            ItemType: "/Lotus/Types/Items/MiscItems/Morphic",
-                            ItemCount: 1
-                        },
-                        data.ingredients[1],
-                        data.ingredients[2]
-                    ]
-                };
-            }
-        } else if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/RhinoHelmetBlueprint") {
-            if (version_compare(buildLabel, gameToBuildVersion["39.0.0"]) < 0) {
-                data = {
-                    ...data,
-                    ingredients: [
-                        data.ingredients[0],
-                        {
-                            ItemType: "/Lotus/Types/Items/MiscItems/Morphic",
-                            ItemCount: 1
-                        },
-                        data.ingredients[2],
-                        data.ingredients[3]
-                    ]
-                };
+                ]
+            };
+            if (version_compare(buildLabel, gameToBuildVersion["38.5.0"]) < 0) {
+                data.buildTime = 259200;
                 // Update 19.13 (2017-03-09)
                 if (version_compare(buildLabel, "2017.03.09.00.00") < 0) {
-                    data.ingredients[1].ItemType = "/Lotus/Types/Items/MiscItems/NeuralSensor";
-                }
-            }
-        } else if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/RhinoSystemsBlueprint") {
-            if (version_compare(buildLabel, gameToBuildVersion["39.0.0"]) < 0) {
-                data = {
-                    ...data,
-                    ingredients: [
-                        {
-                            ItemType: "/Lotus/Types/Items/MiscItems/Gallium",
-                            ItemCount: 1
-                        },
-                        {
-                            ItemType: "/Lotus/Types/Items/MiscItems/Morphic",
-                            ItemCount: 1
-                        },
-                        {
-                            ItemType: "/Lotus/Types/Items/MiscItems/Salvage",
-                            ItemCount: 500
-                        },
-                        {
-                            ItemType: "/Lotus/Types/Items/MiscItems/Plastids",
-                            ItemCount: 600
-                        }
-                    ]
-                };
-                // Hotfix 30.0.6 (2021-04-20) Swapped the crafting requirement of Control Module for Gallium in Rhino Systems Blueprint to ease early player acquisition.
-                if (version_compare(buildLabel, "2021.04.20.00.00") < 0) {
-                    data.ingredients[0].ItemType = "/Lotus/Types/Items/MiscItems/ControlModule";
+                    data.ingredients[3].ItemType = "/Lotus/Types/Items/MiscItems/OrokinCell";
                 }
             }
         }
-        if (uniqueName.startsWith("/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/")) {
-            if (version_compare(buildLabel, gameToBuildVersion["22.2.4"]) >= 0) {
-                if (uniqueName.endsWith("ArmourOnOperatorModeBlueprint")) {
-                    data.ingredients[0].ItemCount = 20;
-                    data.ingredients[3] = {
-                        ItemType: "/Lotus/Types/Items/MiscItems/Cryotic",
-                        ItemCount: 7100
-                    };
-                } else if (uniqueName.endsWith("AttackSpeedOnKillBlueprint")) {
-                    data.ingredients[0].ItemCount = 20;
-                    data.ingredients[3] = {
-                        ItemType: "/Lotus/Types/Items/MiscItems/Plastids",
-                        ItemCount: 3500
-                    };
-                } else if (uniqueName.endsWith("CriticalChanceOnHeadshotBlueprint")) {
-                    data.ingredients[0].ItemCount = 3;
-                    data.ingredients[3] = {
-                        ItemType: "/Lotus/Types/Items/MiscItems/Rubedo",
-                        ItemCount: 5200
-                    };
-                } else if (uniqueName.endsWith("HealOnTransferenceInBlueprint")) {
-                    data.ingredients[0].ItemCount = 3;
-                    data.ingredients[1].ItemCount = 3;
-                    data.ingredients[3] = {
-                        ItemType: "/Lotus/Types/Items/MiscItems/OxiumAlloy",
-                        ItemCount: 2300
-                    };
-                } else if (uniqueName.endsWith("HealOnTransferenceOutBlueprint")) {
-                    data.ingredients[0].ItemCount = 3;
-                    data.ingredients[1].ItemCount = 3;
-                    data.ingredients[3] = {
-                        ItemType: "/Lotus/Types/Items/MiscItems/PolymerBundle",
-                        ItemCount: 8700
-                    };
-                } else if (uniqueName.endsWith("HealOnVoidDashBlueprint")) {
-                    data.ingredients[0].ItemCount = 3;
-                    data.ingredients[1].ItemCount = 3;
-                    data.ingredients[3] = {
-                        ItemType: "/Lotus/Types/Items/MiscItems/Salvage",
-                        ItemCount: 9200
-                    };
-                } else if (uniqueName.endsWith("HealthOnOperatorModeBlueprint")) {
-                    data.ingredients[0].ItemCount = 20;
-                    data.ingredients[3] = {
-                        ItemType: "/Lotus/Types/Items/MiscItems/AlloyPlate",
-                        ItemCount: 6400
-                    };
-                } else if (uniqueName.endsWith("ImmunityFallDamageOnVoidDashBlueprint")) {
-                    data.ingredients[0].ItemCount = 3;
-                    data.ingredients[3] = {
-                        ItemType: "/Lotus/Types/Items/MiscItems/Ferrite",
-                        ItemCount: 7600
-                    };
-                } else if (uniqueName.endsWith("IncreasedCriticalDamageOnCriticalStrikeBlueprint")) {
-                    data.ingredients[0].ItemCount = 3;
-                    data.ingredients[3] = {
-                        ItemType: "/Lotus/Types/Items/MiscItems/Circuits",
-                        ItemCount: 4400
-                    };
-                } else if (uniqueName.endsWith("IncreasedDamageOnStatusProcBlueprint")) {
-                    data.ingredients[0].ItemCount = 3;
-                    data.ingredients[3] = {
-                        ItemType: "/Lotus/Types/Items/MiscItems/Rubedo",
-                        ItemCount: 4100
-                    };
-                } else if (uniqueName.endsWith("OperatorAmmoRegenOnKillBlueprint")) {
-                    data.ingredients[0].ItemCount = 20;
-                    data.ingredients[3] = {
-                        ItemType: "/Lotus/Types/Items/MiscItems/Circuits",
-                        ItemCount: 3200
-                    };
-                } else if (uniqueName.endsWith("SpeedOnVoidDashBlueprint")) {
-                    data.ingredients[0].ItemCount = 3;
-                    data.ingredients[1].ItemCount = 3;
-                    data.ingredients[3] = {
-                        ItemType: "/Lotus/Types/Items/MiscItems/Nanospores",
-                        ItemCount: 8100
-                    };
-                } else if (uniqueName.endsWith("StatusChanceOnHeadshotBlueprint")) {
-                    data.ingredients[0].ItemCount = 3;
-                    data.ingredients[3] = {
-                        ItemType: "/Lotus/Types/Items/MiscItems/Plastids",
-                        ItemCount: 4800
-                    };
-                } else if (
-                    uniqueName.endsWith("ChannelKillEnergyRateBlueprint") ||
-                    uniqueName.endsWith("CritChannelingDamageBlueprint")
-                ) {
-                    data.ingredients[0].ItemCount = 10;
-                } else if (
-                    uniqueName.endsWith("FinisherLifestealBlueprint") ||
-                    uniqueName.endsWith("GroundSlamPullBlueprint") ||
-                    uniqueName.endsWith("StatusChannelingDamageBlueprint") ||
-                    uniqueName.endsWith("StatusTriggerRadialDamageBlueprint")
-                ) {
-                    data.ingredients[0].ItemCount = 10;
-                    data.ingredients[2].ItemCount = 5;
-                }
+    } else if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/RhinoChassisBlueprint") {
+        if (version_compare(buildLabel, gameToBuildVersion["39.0.0"]) < 0) {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Morphic",
+                        ItemCount: 1
+                    },
+                    data.ingredients[1],
+                    data.ingredients[2]
+                ]
+            };
+        }
+    } else if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/RhinoHelmetBlueprint") {
+        if (version_compare(buildLabel, gameToBuildVersion["39.0.0"]) < 0) {
+            data = {
+                ...data,
+                ingredients: [
+                    data.ingredients[0],
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Morphic",
+                        ItemCount: 1
+                    },
+                    data.ingredients[2],
+                    data.ingredients[3]
+                ]
+            };
+            // Update 19.13 (2017-03-09)
+            if (version_compare(buildLabel, "2017.03.09.00.00") < 0) {
+                data.ingredients[1].ItemType = "/Lotus/Types/Items/MiscItems/NeuralSensor";
             }
-            if (version_compare(buildLabel, "2017.12.08.15.29") >= 0) {
-                // Should be 22.3.4 - 2017-11-16
-                if (
-                    uniqueName.endsWith("ArmourOnOperatorModeBlueprint") ||
-                    uniqueName.endsWith("HealOnTransferenceInBlueprint")
-                ) {
-                    data.ingredients[3].ItemCount = data.ingredients[3].ItemCount / 10;
-                }
+        }
+    } else if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/RhinoSystemsBlueprint") {
+        if (version_compare(buildLabel, gameToBuildVersion["39.0.0"]) < 0) {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Gallium",
+                        ItemCount: 1
+                    },
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Morphic",
+                        ItemCount: 1
+                    },
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Salvage",
+                        ItemCount: 500
+                    },
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Plastids",
+                        ItemCount: 600
+                    }
+                ]
+            };
+            // Hotfix 30.0.6 (2021-04-20) Swapped the crafting requirement of Control Module for Gallium in Rhino Systems Blueprint to ease early player acquisition.
+            if (version_compare(buildLabel, "2021.04.20.00.00") < 0) {
+                data.ingredients[0].ItemType = "/Lotus/Types/Items/MiscItems/ControlModule";
+            }
+        }
+    }
+    if (uniqueName.startsWith("/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/")) {
+        if (version_compare(buildLabel, gameToBuildVersion["22.2.4"]) >= 0) {
+            if (uniqueName.endsWith("ArmourOnOperatorModeBlueprint")) {
+                data.ingredients[0].ItemCount = 20;
+                data.ingredients[3] = {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Cryotic",
+                    ItemCount: 7100
+                };
+            } else if (uniqueName.endsWith("AttackSpeedOnKillBlueprint")) {
+                data.ingredients[0].ItemCount = 20;
+                data.ingredients[3] = {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Plastids",
+                    ItemCount: 3500
+                };
+            } else if (uniqueName.endsWith("CriticalChanceOnHeadshotBlueprint")) {
+                data.ingredients[0].ItemCount = 3;
+                data.ingredients[3] = {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Rubedo",
+                    ItemCount: 5200
+                };
+            } else if (uniqueName.endsWith("HealOnTransferenceInBlueprint")) {
+                data.ingredients[0].ItemCount = 3;
+                data.ingredients[1].ItemCount = 3;
+                data.ingredients[3] = {
+                    ItemType: "/Lotus/Types/Items/MiscItems/OxiumAlloy",
+                    ItemCount: 2300
+                };
+            } else if (uniqueName.endsWith("HealOnTransferenceOutBlueprint")) {
+                data.ingredients[0].ItemCount = 3;
+                data.ingredients[1].ItemCount = 3;
+                data.ingredients[3] = {
+                    ItemType: "/Lotus/Types/Items/MiscItems/PolymerBundle",
+                    ItemCount: 8700
+                };
+            } else if (uniqueName.endsWith("HealOnVoidDashBlueprint")) {
+                data.ingredients[0].ItemCount = 3;
+                data.ingredients[1].ItemCount = 3;
+                data.ingredients[3] = {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Salvage",
+                    ItemCount: 9200
+                };
+            } else if (uniqueName.endsWith("HealthOnOperatorModeBlueprint")) {
+                data.ingredients[0].ItemCount = 20;
+                data.ingredients[3] = {
+                    ItemType: "/Lotus/Types/Items/MiscItems/AlloyPlate",
+                    ItemCount: 6400
+                };
+            } else if (uniqueName.endsWith("ImmunityFallDamageOnVoidDashBlueprint")) {
+                data.ingredients[0].ItemCount = 3;
+                data.ingredients[3] = {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Ferrite",
+                    ItemCount: 7600
+                };
+            } else if (uniqueName.endsWith("IncreasedCriticalDamageOnCriticalStrikeBlueprint")) {
+                data.ingredients[0].ItemCount = 3;
+                data.ingredients[3] = {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Circuits",
+                    ItemCount: 4400
+                };
+            } else if (uniqueName.endsWith("IncreasedDamageOnStatusProcBlueprint")) {
+                data.ingredients[0].ItemCount = 3;
+                data.ingredients[3] = {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Rubedo",
+                    ItemCount: 4100
+                };
+            } else if (uniqueName.endsWith("OperatorAmmoRegenOnKillBlueprint")) {
+                data.ingredients[0].ItemCount = 20;
+                data.ingredients[3] = {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Circuits",
+                    ItemCount: 3200
+                };
+            } else if (uniqueName.endsWith("SpeedOnVoidDashBlueprint")) {
+                data.ingredients[0].ItemCount = 3;
+                data.ingredients[1].ItemCount = 3;
+                data.ingredients[3] = {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Nanospores",
+                    ItemCount: 8100
+                };
+            } else if (uniqueName.endsWith("StatusChanceOnHeadshotBlueprint")) {
+                data.ingredients[0].ItemCount = 3;
+                data.ingredients[3] = {
+                    ItemType: "/Lotus/Types/Items/MiscItems/Plastids",
+                    ItemCount: 4800
+                };
+            } else if (
+                uniqueName.endsWith("ChannelKillEnergyRateBlueprint") ||
+                uniqueName.endsWith("CritChannelingDamageBlueprint")
+            ) {
+                data.ingredients[0].ItemCount = 10;
+            } else if (
+                uniqueName.endsWith("FinisherLifestealBlueprint") ||
+                uniqueName.endsWith("GroundSlamPullBlueprint") ||
+                uniqueName.endsWith("StatusChannelingDamageBlueprint") ||
+                uniqueName.endsWith("StatusTriggerRadialDamageBlueprint")
+            ) {
+                data.ingredients[0].ItemCount = 10;
+                data.ingredients[2].ItemCount = 5;
+            }
+        }
+        if (version_compare(buildLabel, "2017.12.08.15.29") >= 0) {
+            // Should be 22.3.4 - 2017-11-16
+            if (
+                uniqueName.endsWith("ArmourOnOperatorModeBlueprint") ||
+                uniqueName.endsWith("HealOnTransferenceInBlueprint")
+            ) {
+                data.ingredients[3].ItemCount = data.ingredients[3].ItemCount / 10;
             }
         }
     }
     return data;
 };
 
-export const getSyndicate = (tag: string, buildLabel: string | undefined): ISyndicate | undefined => {
-    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["41.0.0"]) < 0) {
+export const getSyndicate = (tag: string, buildLabel: string): ISyndicate | undefined => {
+    if (version_compare(buildLabel, gameToBuildVersion["41.0.0"]) < 0) {
         if (tag == "EntratiSyndicate") {
             return EntratiSyndicate_pre_U41 as ISyndicate;
         }
@@ -2279,10 +2278,7 @@ export const getNormalizedString = (key: string, dict: Record<string, string>): 
     return getString(key, dict).replaceAll("‘", "'").replaceAll("’", "'").replaceAll("\r\n", " ");
 };
 
-export const getKeyChainItems = (
-    { KeyChain, ChainStage }: IKeyChainRequest,
-    buildLabel: string | undefined
-): string[] => {
+export const getKeyChainItems = ({ KeyChain, ChainStage }: IKeyChainRequest, buildLabel: string): string[] => {
     const chainStages = getKey(KeyChain, buildLabel)?.chainStages;
     if (!chainStages) {
         throw new Error(`KeyChain ${KeyChain} does not contain chain stages`);
@@ -2305,7 +2301,7 @@ export const getKeyChainItems = (
 
 export const getLevelKeyRewards = (
     levelKey: string,
-    buildLabel: string | undefined
+    buildLabel: string
 ): { levelKeyRewards?: IMissionReward; levelKeyRewards2?: TReward[]; levelMission?: Partial<IRegion> } => {
     const key = getKey(levelKey, buildLabel);
 
@@ -2319,12 +2315,12 @@ export const getLevelKeyRewards = (
         );
     }
 
-    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0) {
         if (levelKey in vorsPrizePreU40Rewards) {
             levelKeyRewards2 = vorsPrizePreU40Rewards[levelKey as keyof typeof vorsPrizePreU40Rewards] as TReward[];
         } else {
             // Before U19 (Hotfix: Specters of the Rail 0.12, 2016-07-20), The New Strange gave Chroma component blueprints more directly.
-            if (buildLabel && version_compare(buildLabel, "2016.07.20.00.00") < 0) {
+            if (version_compare(buildLabel, "2016.07.20.00.00") < 0) {
                 if (levelKey == "/Lotus/Types/Keys/DragonQuest/DragonQuestMissionTwo") {
                     levelKeyRewards2 = [
                         {
@@ -2351,10 +2347,7 @@ export const getLevelKeyRewards = (
     };
 };
 
-export const getKeyChainMessage = (
-    { KeyChain, ChainStage }: IKeyChainRequest,
-    buildLabel: string | undefined
-): IMessage => {
+export const getKeyChainMessage = ({ KeyChain, ChainStage }: IKeyChainRequest, buildLabel: string): IMessage => {
     const chainStages = getKey(KeyChain, buildLabel)?.chainStages;
     if (!chainStages) {
         throw new Error(`KeyChain ${KeyChain} does not contain chain stages`);
@@ -2458,31 +2451,29 @@ export const getProductCategory = (uniqueName: string): string => {
     throw new Error(`don't know product category of ${uniqueName}`);
 };
 
-export const getBundle = (uniqueName: string, buildLabel: string = ""): IBundle | undefined => {
-    if (buildLabel) {
-        if (
-            uniqueName == "/Lotus/Types/StoreItems/Packages/StalkerPack" &&
-            version_compare(buildLabel, "2024.06.12.18.42") < 0 // < 36.0.0
-        ) {
-            return {
-                name: "/Lotus/Language/Items/StalkerPackName",
-                description: "/Lotus/Language/Items/StalkerPackDesc",
-                icon: "/Lotus/Interface/Icons/StoreIcons/MarketBundles/Weapons/StalkerPack.png",
-                components: [
-                    { typeName: "/Lotus/StoreItems/Weapons/Tenno/Bows/StalkerBow", purchaseQuantity: 1 },
-                    { typeName: "/Lotus/StoreItems/Weapons/Tenno/ThrowingWeapons/StalkerKunai", purchaseQuantity: 1 },
-                    {
-                        typeName: "/Lotus/StoreItems/Weapons/Tenno/Melee/Scythe/StalkerScytheWeapon",
-                        purchaseQuantity: 1
-                    },
-                    {
-                        typeName: "/Lotus/StoreItems/Types/StoreItems/SuitCustomizations/NinjaColourPickerItem",
-                        purchaseQuantity: 1
-                    }
-                ],
-                packageDiscount: 0.059
-            };
-        }
+export const getBundle = (uniqueName: string, buildLabel: string): IBundle | undefined => {
+    if (
+        uniqueName == "/Lotus/Types/StoreItems/Packages/StalkerPack" &&
+        version_compare(buildLabel, "2024.06.12.18.42") < 0 // < 36.0.0
+    ) {
+        return {
+            name: "/Lotus/Language/Items/StalkerPackName",
+            description: "/Lotus/Language/Items/StalkerPackDesc",
+            icon: "/Lotus/Interface/Icons/StoreIcons/MarketBundles/Weapons/StalkerPack.png",
+            components: [
+                { typeName: "/Lotus/StoreItems/Weapons/Tenno/Bows/StalkerBow", purchaseQuantity: 1 },
+                { typeName: "/Lotus/StoreItems/Weapons/Tenno/ThrowingWeapons/StalkerKunai", purchaseQuantity: 1 },
+                {
+                    typeName: "/Lotus/StoreItems/Weapons/Tenno/Melee/Scythe/StalkerScytheWeapon",
+                    purchaseQuantity: 1
+                },
+                {
+                    typeName: "/Lotus/StoreItems/Types/StoreItems/SuitCustomizations/NinjaColourPickerItem",
+                    purchaseQuantity: 1
+                }
+            ],
+            packageDiscount: 0.059
+        };
     }
 
     return ExportBundles[uniqueName];
@@ -2517,74 +2508,71 @@ export const getBoosterPack = async (
             canGiveDuplicates: true,
             platinumCost: 75
         };
-        if (buildLabel) {
-            if (version_compare(buildLabel, "2013.06.07.23.44") >= 0) {
-                boosterPack.rarityWeightsPerRoll[4] = { COMMON: 0, UNCOMMON: 0, RARE: 1, LEGENDARY: 0 };
-            }
-            if (version_compare(buildLabel, gameToBuildVersion["9.1.0"]) >= 0) {
-                boosterPack.components.push(
-                    { Item: "/Lotus/Types/Keys/OrokinCaptureKeyA", Rarity: "COMMON", Amount: 1 },
-                    { Item: "/Lotus/Types/Keys/OrokinCaptureKeyB", Rarity: "COMMON", Amount: 1 },
-                    { Item: "/Lotus/Types/Keys/OrokinCaptureKeyC", Rarity: "RARE", Amount: 1 },
-                    { Item: "/Lotus/Types/Keys/OrokinMobileDefenseKeyA", Rarity: "COMMON", Amount: 1 },
-                    { Item: "/Lotus/Types/Keys/OrokinMobileDefenseKeyB", Rarity: "UNCOMMON", Amount: 1 },
-                    { Item: "/Lotus/Types/Keys/OrokinMobileDefenseKeyC", Rarity: "RARE", Amount: 1 },
-                    { Item: "/Lotus/Types/Keys/OrokinDefenseKeyA", Rarity: "COMMON", Amount: 1 },
-                    { Item: "/Lotus/Types/Keys/OrokinDefenseKeyB", Rarity: "UNCOMMON", Amount: 1 },
-                    { Item: "/Lotus/Types/Keys/OrokinDefenseKeyC", Rarity: "RARE", Amount: 1 }
-                );
-            }
-            if (version_compare(buildLabel, gameToBuildVersion["10.3.3"]) >= 0) {
-                boosterPack.components.push({
-                    Item: "/Lotus/Types/Keys/OrokinTowerSurvivalT3Key",
+        if (version_compare(buildLabel, "2013.06.07.23.44") >= 0) {
+            boosterPack.rarityWeightsPerRoll[4] = { COMMON: 0, UNCOMMON: 0, RARE: 1, LEGENDARY: 0 };
+        }
+        if (version_compare(buildLabel, gameToBuildVersion["9.1.0"]) >= 0) {
+            boosterPack.components.push(
+                { Item: "/Lotus/Types/Keys/OrokinCaptureKeyA", Rarity: "COMMON", Amount: 1 },
+                { Item: "/Lotus/Types/Keys/OrokinCaptureKeyB", Rarity: "COMMON", Amount: 1 },
+                { Item: "/Lotus/Types/Keys/OrokinCaptureKeyC", Rarity: "RARE", Amount: 1 },
+                { Item: "/Lotus/Types/Keys/OrokinMobileDefenseKeyA", Rarity: "COMMON", Amount: 1 },
+                { Item: "/Lotus/Types/Keys/OrokinMobileDefenseKeyB", Rarity: "UNCOMMON", Amount: 1 },
+                { Item: "/Lotus/Types/Keys/OrokinMobileDefenseKeyC", Rarity: "RARE", Amount: 1 },
+                { Item: "/Lotus/Types/Keys/OrokinDefenseKeyA", Rarity: "COMMON", Amount: 1 },
+                { Item: "/Lotus/Types/Keys/OrokinDefenseKeyB", Rarity: "UNCOMMON", Amount: 1 },
+                { Item: "/Lotus/Types/Keys/OrokinDefenseKeyC", Rarity: "RARE", Amount: 1 }
+            );
+        }
+        if (version_compare(buildLabel, gameToBuildVersion["10.3.3"]) >= 0) {
+            boosterPack.components.push({
+                Item: "/Lotus/Types/Keys/OrokinTowerSurvivalT3Key",
+                Rarity: "UNCOMMON",
+                Amount: 1
+            });
+        }
+        if (version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
+            boosterPack.components.find(c => c.Item === "/Lotus/Types/Keys/OrokinTowerSurvivalT3Key")!.Rarity = "RARE";
+            boosterPack.components.push(
+                { Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerCaptureTier4Key", Rarity: "RARE", Amount: 1 },
+                { Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerDefenseTier4Key", Rarity: "RARE", Amount: 1 },
+                {
+                    Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerExterminateTier4Key",
+                    Rarity: "RARE",
+                    Amount: 1
+                },
+                {
+                    Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerInterceptionTier4Key",
+                    Rarity: "RARE",
+                    Amount: 1
+                },
+                {
+                    Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerMobileDefenseTier4Key",
+                    Rarity: "RARE",
+                    Amount: 1
+                },
+                { Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerSurvivalTier4Key", Rarity: "RARE", Amount: 1 }
+            );
+        }
+        if (version_compare(buildLabel, gameToBuildVersion["15.0.6"]) >= 0) {
+            boosterPack.components.push(
+                {
+                    Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerSabotageTier1Key",
+                    Rarity: "COMMON",
+                    Amount: 1
+                },
+                {
+                    Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerSabotageTier2Key",
                     Rarity: "UNCOMMON",
                     Amount: 1
-                });
-            }
-            if (version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
-                boosterPack.components.find(c => c.Item === "/Lotus/Types/Keys/OrokinTowerSurvivalT3Key")!.Rarity =
-                    "RARE";
-                boosterPack.components.push(
-                    { Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerCaptureTier4Key", Rarity: "RARE", Amount: 1 },
-                    { Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerDefenseTier4Key", Rarity: "RARE", Amount: 1 },
-                    {
-                        Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerExterminateTier4Key",
-                        Rarity: "RARE",
-                        Amount: 1
-                    },
-                    {
-                        Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerInterceptionTier4Key",
-                        Rarity: "RARE",
-                        Amount: 1
-                    },
-                    {
-                        Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerMobileDefenseTier4Key",
-                        Rarity: "RARE",
-                        Amount: 1
-                    },
-                    { Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerSurvivalTier4Key", Rarity: "RARE", Amount: 1 }
-                );
-            }
-            if (version_compare(buildLabel, gameToBuildVersion["15.0.6"]) >= 0) {
-                boosterPack.components.push(
-                    {
-                        Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerSabotageTier1Key",
-                        Rarity: "COMMON",
-                        Amount: 1
-                    },
-                    {
-                        Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerSabotageTier2Key",
-                        Rarity: "UNCOMMON",
-                        Amount: 1
-                    },
-                    {
-                        Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerSabotageTier3Key",
-                        Rarity: "RARE",
-                        Amount: 1
-                    },
-                    { Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerSabotageTier4Key", Rarity: "RARE", Amount: 1 }
-                );
-            }
+                },
+                {
+                    Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerSabotageTier3Key",
+                    Rarity: "RARE",
+                    Amount: 1
+                },
+                { Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerSabotageTier4Key", Rarity: "RARE", Amount: 1 }
+            );
         }
         return boosterPack;
     }
@@ -2615,7 +2603,7 @@ export const getBoosterPack = async (
         ].includes(uniqueName)
     ) {
         // PE+ already have latest data - so there is no need to do anything
-        if (buildLabel && version_compare(buildLabel, gameToBuildVersion["42.0.6"]) < 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["42.0.6"]) < 0) {
             const target = "RandomProjection";
             const version = await getLegacyDataVersion(target, buildLabel);
             if (version) {
@@ -2637,7 +2625,7 @@ export const getBoosterPack = async (
         ].includes(uniqueName)
     ) {
         // Mod packs retired in U25
-        if (buildLabel && version_compare(buildLabel, gameToBuildVersion["25.0.0"]) < 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["25.0.0"]) < 0) {
             const target = "LotusArtifactUpgradePackBase";
             const version = await getLegacyDataVersion(target, buildLabel);
             if (version) {
@@ -2653,7 +2641,7 @@ export const getBoosterPack = async (
     return ExportBoosterPacks[uniqueName];
 };
 
-export const getKey = (uniqueName: string, buildLabel?: string): IKey | undefined => {
+export const getKey = (uniqueName: string, buildLabel: string = BL_LATEST): IKey | undefined => {
     if (
         uniqueName == "/Lotus/Types/Keys/RaidKeys/Raid01Stage01KeyItem" ||
         uniqueName == "/Lotus/Types/Keys/RaidKeys/Raid01Stage01NightmareKeyItem"
@@ -2800,7 +2788,7 @@ export const getKey = (uniqueName: string, buildLabel?: string): IKey | undefine
         };
     } else if (uniqueName == "/Lotus/Types/Keys/DragonQuest/DragonQuestKeyChain") {
         // Before U19 (Hotfix: Specters of the Rail 0.12, 2016-07-20), The New Strange gave Chroma component blueprints more directly.
-        if (buildLabel && version_compare(buildLabel, "2016.07.20.00.00") < 0) {
+        if (version_compare(buildLabel, "2016.07.20.00.00") < 0) {
             const latestData = ExportKeys[uniqueName];
             return {
                 ...latestData,
@@ -2831,7 +2819,7 @@ export const getKey = (uniqueName: string, buildLabel?: string): IKey | undefine
             };
         }
     } else if (uniqueName == "/Lotus/Types/Keys/InfestedIntroQuest/InfestedIntroQuestKeyChain") {
-        if (buildLabel && version_compare(buildLabel, gameToBuildVersion["37.0.0"]) < 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["37.0.0"]) < 0) {
             const latestData = ExportKeys[uniqueName];
             return {
                 ...latestData,
@@ -2856,7 +2844,7 @@ export const getKey = (uniqueName: string, buildLabel?: string): IKey | undefine
             };
         }
     } else if (uniqueName == "/Lotus/Types/Keys/ArchwingQuest/ArchwingQuestKeyChain") {
-        if (buildLabel && version_compare(buildLabel, gameToBuildVersion["18.5.0"]) < 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["18.5.0"]) < 0) {
             const latestData = ExportKeys[uniqueName];
             return {
                 ...latestData,
@@ -3005,7 +2993,7 @@ export const getPrice = (
                 price = item.creditsCost;
             }
         } else {
-            const recipe = getRecipe(internalName);
+            const recipe = getRecipe(internalName, buildLabel);
             if (recipe) {
                 if (usePremium && "platinumCost" in recipe) {
                     price = recipe.platinumCost;
@@ -3039,9 +3027,9 @@ export const getPrice = (
     return price * quantity;
 };
 
-export const getRegion = async (uniqueName: string, buildLabel: string | undefined): Promise<IRegion | undefined> => {
+export const getRegion = async (uniqueName: string, buildLabel: string): Promise<IRegion | undefined> => {
     // after U27.2.0 OriginSolarMapRedux moved to binary format, so we don't have data for it
-    if (buildLabel && version_compare(buildLabel, gameToBuildVersion["27.2.0"]) <= 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["27.2.0"]) <= 0) {
         const target =
             version_compare(buildLabel, gameToBuildVersion["14.0.0"]) < 0
                 ? "SolStarChart"

@@ -4,7 +4,12 @@ import { Friendship } from "../../models/friendModel.ts";
 import { Account } from "../../models/loginModel.ts";
 import { addInventoryDataToFriendInfo, areFriendsOfFriends } from "../../services/friendService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getUnicodeName, type TAccountDocument } from "../../services/loginService.ts";
+import {
+    getAccountForRequest,
+    getBuildLabel,
+    getUnicodeName,
+    type TAccountDocument
+} from "../../services/loginService.ts";
 import type { IFriendInfo } from "../../types/friendTypes.ts";
 import type { RequestHandler, Response } from "express";
 import { logger } from "../../utils/logger.ts";
@@ -13,8 +18,9 @@ import { sendCustomMessageToNrs } from "../../helpers/udp.ts";
 
 export const addPendingFriendPostController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const payload = getJSONfromString<IAddPendingFriendRequest>(String(req.body));
-    await sendFriendRequest(account, payload.friend, payload.message, res);
+    await sendFriendRequest(account, buildLabel, payload.friend, payload.message, res);
 };
 
 interface IAddPendingFriendRequest {
@@ -24,11 +30,13 @@ interface IAddPendingFriendRequest {
 
 export const addPendingFriendGetController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    await sendFriendRequest(account, req.query.friend as string, undefined, res);
+    const buildLabel = getBuildLabel(req, account);
+    await sendFriendRequest(account, buildLabel, req.query.friend as string, undefined, res);
 };
 
 const sendFriendRequest = async (
     requesterAccount: TAccountDocument,
+    requesterBuildLabel: string,
     name: string,
     message: string | undefined,
     res: Response
@@ -62,8 +70,7 @@ const sendFriendRequest = async (
         return;
     }
 
-    const requesterUsesNrsNotifications =
-        requesterAccount.BuildLabel && version_compare(requesterAccount.BuildLabel, gameToBuildVersion["40.0.0"]) < 0;
+    const requesterUsesNrsNotifications = version_compare(requesterBuildLabel, gameToBuildVersion["40.0.0"]) < 0;
     const requesteeUsesNrsNotifications =
         requesteeAccount.BuildLabel && version_compare(requesteeAccount.BuildLabel, gameToBuildVersion["40.0.0"]) < 0;
     if (requesteeUsesNrsNotifications && !requesterUsesNrsNotifications) {
@@ -72,14 +79,11 @@ const sendFriendRequest = async (
         );
     }
 
-    if (
-        !requesterAccount.BuildLabel ||
-        version_compare(requesterAccount.BuildLabel, gameToBuildVersion["13.0.0"]) >= 0
-    ) {
+    if (version_compare(requesterBuildLabel, gameToBuildVersion["13.0.0"]) >= 0) {
         const friendInfo: IFriendInfo = {
-            _id: toOid2(requesteeAccount._id, requesterAccount.BuildLabel),
-            DisplayName: getUnicodeName(requesteeAccount, requesterAccount.BuildLabel),
-            LastLogin: toMongoDate2(requesteeAccount.LastLogin, requesterAccount.BuildLabel),
+            _id: toOid2(requesteeAccount._id, requesterBuildLabel),
+            DisplayName: getUnicodeName(requesteeAccount, requesterBuildLabel),
+            LastLogin: toMongoDate2(requesteeAccount.LastLogin, requesterBuildLabel),
             Note: message
         };
         await addInventoryDataToFriendInfo(friendInfo);

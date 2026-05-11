@@ -1,7 +1,6 @@
 import type { Request, RequestHandler } from "express";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
-import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
 import { config } from "../../services/configService.ts";
 import allDialogue from "../../../static/fixed_responses/allDialogue.json" with { type: "json" };
 import allPopups from "../../../static/fixed_responses/allPopups.json" with { type: "json" };
@@ -34,6 +33,7 @@ import {
     ensureUserHasFounderHonoria,
     ensureUserHasSteelPathRewards,
     getCalendarProgress,
+    getInventory,
     handleTauMemories,
     PRE_U40_MAX_KUBROW_EGGS
 } from "../../services/inventoryService.ts";
@@ -71,13 +71,8 @@ import { exportTrade } from "../../services/tradingService.ts";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);
-
-    const inventory = await Inventory.findOne({ accountOwnerId: account._id });
-
-    if (!inventory) {
-        response.status(400).json({ error: "inventory was undefined" });
-        return;
-    }
+    const buildLabel = getBuildLabel(request, account);
+    const inventory = await getInventory(account._id, undefined);
 
     // Handle daily reset
     if (!inventory.NextRefill || Date.now() >= inventory.NextRefill.getTime()) {
@@ -229,7 +224,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
                 const dialogue = inventory.DialogueHistory.Dialogues.find(x => x.DialogueName == dialogueName);
                 if (dialogue) {
                     if (dialogue.Rank == 7) {
-                        await addEmailItem(inventory, kissEmail, {}, account.BuildLabel);
+                        await addEmailItem(inventory, kissEmail, {}, buildLabel);
                         kalymos = false;
                         break;
                     }
@@ -239,12 +234,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
                 }
             }
             if (kalymos) {
-                await addEmailItem(
-                    inventory,
-                    "/Lotus/Types/Items/EmailItems/KalymosKissEmailItem",
-                    {},
-                    account.BuildLabel
-                );
+                await addEmailItem(inventory, "/Lotus/Types/Items/EmailItems/KalymosKissEmailItem", {}, buildLabel);
             }
         }
 
@@ -352,8 +342,8 @@ export const inventoryController: RequestHandler = async (request, response) => 
             request,
             inventory,
             "xpBasedLevelCapDisabled" in request.query,
-            "ignoreBuildLabel" in request.query ? undefined : account.BuildLabel,
-            "ignoreBuildLabel" in request.query
+            getBuildLabel(request, account),
+            "wsid" in request.query
         )
     );
 };
@@ -362,7 +352,7 @@ export const getInventoryResponse = async (
     request: Request,
     inventory: TInventoryDatabaseDocument,
     xpBasedLevelCapDisabled: boolean,
-    buildLabel: string | undefined,
+    buildLabel: string,
     forWebui: boolean = false
 ): Promise<IInventoryClient> => {
     const [inventoryWithLoadOutPresets, ships, latestMessage, pendingTrades] = await Promise.all([
@@ -601,415 +591,413 @@ export const getInventoryResponse = async (
         }
     }
 
-    if (buildLabel) {
-        // Remove nemesis if it's using too new of a manifest to avoid script errors
-        if (
-            inventoryResponse.Nemesis &&
-            version_compare(buildLabel, getNemesisManifest(inventoryResponse.Nemesis.manifest).minBuild) < 0
-        ) {
-            inventoryResponse.Nemesis = undefined;
-        }
+    // Remove nemesis if it's using too new of a manifest to avoid script errors
+    if (
+        inventoryResponse.Nemesis &&
+        version_compare(buildLabel, getNemesisManifest(inventoryResponse.Nemesis.manifest).minBuild) < 0
+    ) {
+        inventoryResponse.Nemesis = undefined;
+    }
 
-        // U42 migrated ability paths so translate them back for older versions
-        if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0) {
-            return inventoryResponse;
-        }
-        for (const suit of inventoryResponse.Suits) {
-            for (const config of suit.Configs) {
-                if (config.AbilityOverride) {
-                    config.AbilityOverride.Ability =
-                        "/Lotus/Powersuits/PowersuitAbilities/" + config.AbilityOverride.Ability.split("/").pop();
-                }
+    // U42 migrated ability paths so translate them back for older versions
+    if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0) {
+        return inventoryResponse;
+    }
+    for (const suit of inventoryResponse.Suits) {
+        for (const config of suit.Configs) {
+            if (config.AbilityOverride) {
+                config.AbilityOverride.Ability =
+                    "/Lotus/Powersuits/PowersuitAbilities/" + config.AbilityOverride.Ability.split("/").pop();
             }
         }
+    }
 
-        // U40 migrated KubrowPetEggs to MiscItems so translate it back for older versions
-        if (version_compare(buildLabel, gameToBuildVersion["40.0.0"]) >= 0) {
-            return inventoryResponse;
+    // U40 migrated KubrowPetEggs to MiscItems so translate it back for older versions
+    if (version_compare(buildLabel, gameToBuildVersion["40.0.0"]) >= 0) {
+        return inventoryResponse;
+    }
+    inventoryResponse.KubrowPetEggs = [];
+    const index = inventoryResponse.MiscItems.findIndex(
+        x => x.ItemType == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg"
+    );
+    if (index != -1) {
+        const numKubrowEggs = Math.min(inventoryResponse.MiscItems[index].ItemCount, PRE_U40_MAX_KUBROW_EGGS);
+        inventoryResponse.MiscItems.splice(index, 1);
+        for (let i = 0; i != numKubrowEggs; ++i) {
+            inventoryResponse.KubrowPetEggs.push({
+                ItemType: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg",
+                ExpirationDate: toMongoDate2(2000000000000, buildLabel),
+                ItemId: toOid2(i.toString().padStart(24, "0"), buildLabel)
+            });
         }
-        inventoryResponse.KubrowPetEggs = [];
-        const index = inventoryResponse.MiscItems.findIndex(
-            x => x.ItemType == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg"
-        );
-        if (index != -1) {
-            const numKubrowEggs = Math.min(inventoryResponse.MiscItems[index].ItemCount, PRE_U40_MAX_KUBROW_EGGS);
-            inventoryResponse.MiscItems.splice(index, 1);
-            for (let i = 0; i != numKubrowEggs; ++i) {
-                inventoryResponse.KubrowPetEggs.push({
-                    ItemType: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg",
-                    ExpirationDate: toMongoDate2(2000000000000, buildLabel),
-                    ItemId: toOid2(i.toString().padStart(24, "0"), buildLabel)
-                });
-            }
-        }
+    }
 
-        if (version_compare(buildLabel, gameToBuildVersion["38.5.0"]) >= 0) {
-            return inventoryResponse;
-        }
-        for (const category of equipmentKeys) {
-            for (const item of inventoryResponse[category]) {
-                delete item.IsNew;
-            }
-        }
-        for (const item of inventoryResponse.WeaponSkins) {
+    if (version_compare(buildLabel, gameToBuildVersion["38.5.0"]) >= 0) {
+        return inventoryResponse;
+    }
+    for (const category of equipmentKeys) {
+        for (const item of inventoryResponse[category]) {
             delete item.IsNew;
         }
+    }
+    for (const item of inventoryResponse.WeaponSkins) {
+        delete item.IsNew;
+    }
 
-        if (version_compare(buildLabel, gameToBuildVersion["33.0.0"]) >= 0) {
-            return inventoryResponse;
+    if (version_compare(buildLabel, gameToBuildVersion["33.0.0"]) >= 0) {
+        return inventoryResponse;
+    }
+    // Old versions crash when faced with an unrecognised CollectibleType, so filter this array.
+    if (inventoryResponse.CollectibleSeries) {
+        inventoryResponse.CollectibleSeries = inventoryResponse.CollectibleSeries.filter(
+            x => x.CollectibleType == "/Lotus/Objects/Orokin/Props/CollectibleSeriesOne"
+        );
+
+        // U22.13.4 crashes if there's more than 64 characters + a '1' here.
+        for (const cs of inventoryResponse.CollectibleSeries) {
+            if (cs.Tracking.length > 64) {
+                cs.Tracking = cs.Tracking.substring(cs.Tracking.length - 64);
+            }
         }
-        // Old versions crash when faced with an unrecognised CollectibleType, so filter this array.
-        if (inventoryResponse.CollectibleSeries) {
-            inventoryResponse.CollectibleSeries = inventoryResponse.CollectibleSeries.filter(
-                x => x.CollectibleType == "/Lotus/Objects/Orokin/Props/CollectibleSeriesOne"
+    }
+
+    // U28.1 introduced Steel Path
+    if (version_compare(buildLabel, "2020.07.08.00.00") >= 0) {
+        return inventoryResponse;
+    }
+    for (const mission of inventoryResponse.Missions) {
+        delete mission.Tier;
+    }
+
+    // Builds before U24.4.0 handle equipment features differently
+    if (version_compare(buildLabel, gameToBuildVersion["24.4.0"]) >= 0) {
+        return inventoryResponse;
+    }
+    for (const category of equipmentKeys) {
+        for (const item of inventoryResponse[category]) {
+            if (item.Features && item.Features & eEquipmentFeatures.DOUBLE_CAPACITY) {
+                item.UnlockLevel = 1;
+            }
+            if (item.Features && item.Features & eEquipmentFeatures.UTILITY_SLOT) {
+                item.UtilityUnlocked = 1;
+            }
+            if (item.Features && item.Features & eEquipmentFeatures.GILDED) {
+                item.Gild = true;
+            }
+        }
+    }
+
+    // U15 ~ U18 are known to crash with unknown item types in XPInfo, so filter this array.
+    {
+        const prevLength = inventoryResponse.XPInfo.length;
+        inventoryResponse.XPInfo = inventoryResponse.XPInfo.filter(item => {
+            let introducedAt: number | undefined;
+            if (item.ItemType in ExportWarframes) {
+                introducedAt = ExportWarframes[item.ItemType].introducedAt;
+            } else if (item.ItemType in ExportWeapons) {
+                introducedAt = ExportWeapons[item.ItemType].introducedAt;
+            }
+            if (!introducedAt) {
+                return false;
+            }
+            const date = new Date(introducedAt * 1000);
+            return (
+                version_compare(
+                    buildLabel,
+                    `${date.getUTCFullYear()}.${date.getUTCMonth()}.${date.getUTCDate()}.${date.getUTCHours()}.${date.getUTCMinutes()}`
+                ) >= 0
             );
+        });
+        if (prevLength != inventoryResponse.XPInfo.length) {
+            logger.debug(`omitting mastery info for ${prevLength - inventoryResponse.XPInfo.length} item(s)`);
+        }
+    }
 
-            // U22.13.4 crashes if there's more than 64 characters + a '1' here.
-            for (const cs of inventoryResponse.CollectibleSeries) {
-                if (cs.Tracking.length > 64) {
-                    cs.Tracking = cs.Tracking.substring(cs.Tracking.length - 64);
-                }
-            }
-        }
+    // Before U22.14.0 Arcanes was installed directly at cosmetic items so client doesn't know about ranked up arcanes and UI displays them unproperly
+    if (version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0) {
+        return inventoryResponse;
+    }
+    inventoryResponse.Upgrades = inventoryResponse.Upgrades.filter(upgrade => !(upgrade.ItemType in ExportArcanes));
 
-        // U28.1 introduced Steel Path
-        if (version_compare(buildLabel, "2020.07.08.00.00") >= 0) {
-            return inventoryResponse;
-        }
-        for (const mission of inventoryResponse.Missions) {
-            delete mission.Tier;
-        }
+    {
+        const personalRoomsDb = await getPersonalRooms(inventory.accountOwnerId.toString());
+        const personalRooms = personalRoomsDb.toJSON<IPersonalRoomsClient>();
+        inventoryResponse.Ship = personalRooms.Ship;
+    }
 
-        // Builds before U24.4.0 handle equipment features differently
-        if (version_compare(buildLabel, gameToBuildVersion["24.4.0"]) >= 0) {
-            return inventoryResponse;
-        }
-        for (const category of equipmentKeys) {
-            for (const item of inventoryResponse[category]) {
-                if (item.Features && item.Features & eEquipmentFeatures.DOUBLE_CAPACITY) {
-                    item.UnlockLevel = 1;
-                }
-                if (item.Features && item.Features & eEquipmentFeatures.UTILITY_SLOT) {
-                    item.UtilityUnlocked = 1;
-                }
-                if (item.Features && item.Features & eEquipmentFeatures.GILDED) {
-                    item.Gild = true;
-                }
-            }
-        }
-
-        // U15 ~ U18 are known to crash with unknown item types in XPInfo, so filter this array.
-        {
-            const prevLength = inventoryResponse.XPInfo.length;
-            inventoryResponse.XPInfo = inventoryResponse.XPInfo.filter(item => {
-                let introducedAt: number | undefined;
-                if (item.ItemType in ExportWarframes) {
-                    introducedAt = ExportWarframes[item.ItemType].introducedAt;
-                } else if (item.ItemType in ExportWeapons) {
-                    introducedAt = ExportWeapons[item.ItemType].introducedAt;
-                }
-                if (!introducedAt) {
-                    return false;
-                }
-                const date = new Date(introducedAt * 1000);
-                return (
-                    version_compare(
-                        buildLabel,
-                        `${date.getUTCFullYear()}.${date.getUTCMonth()}.${date.getUTCDate()}.${date.getUTCHours()}.${date.getUTCMinutes()}`
-                    ) >= 0
-                );
-            });
-            if (prevLength != inventoryResponse.XPInfo.length) {
-                logger.debug(`omitting mastery info for ${prevLength - inventoryResponse.XPInfo.length} item(s)`);
-            }
-        }
-
-        // Before U22.14.0 Arcanes was installed directly at cosmetic items so client doesn't know about ranked up arcanes and UI displays them unproperly
-        if (version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0) {
-            return inventoryResponse;
-        }
-        inventoryResponse.Upgrades = inventoryResponse.Upgrades.filter(upgrade => !(upgrade.ItemType in ExportArcanes));
-
-        {
-            const personalRoomsDb = await getPersonalRooms(inventory.accountOwnerId.toString());
-            const personalRooms = personalRoomsDb.toJSON<IPersonalRoomsClient>();
-            inventoryResponse.Ship = personalRooms.Ship;
-        }
-
-        // U19.5 and below use $id instead of $oid as well as a different date format
-        if (version_compare(buildLabel, gameToBuildVersion["19.5.3"]) > 0) {
-            return inventoryResponse;
-        }
-        for (const category of equipmentKeys) {
-            for (const item of inventoryResponse[category]) {
-                toLegacyOid(item.ItemId);
-                if (version_compare(buildLabel, gameToBuildVersion["16.5.5"]) < 0) {
-                    // Appearance config format is different for versions before U16.5
-                    for (const config of item.Configs) {
-                        if (version_compare(buildLabel, gameToBuildVersion["16.0.2"]) < 0) {
-                            config.Customization = {
-                                Colors: convertIColorToLegacyColorsWithAtt(config.pricol, config.attcol),
-                                Skins: config.Skins ?? []
-                            };
-                        } else if (version_compare(buildLabel, gameToBuildVersion["16.0.2"]) >= 0) {
-                            config.Colors = convertIColorToLegacyColorsWithAtt(config.pricol, config.attcol);
-                        }
-                    }
-                }
-            }
-        }
-        if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) < 0) {
-            for (const upgrade of inventoryResponse.Upgrades) {
-                toLegacyOid(upgrade.ItemId);
-            }
-            for (const item of inventoryResponse.WeaponSkins) {
-                toLegacyOid(item.ItemId);
-            }
-        }
-        for (const ship of inventoryResponse.Ships) {
-            toLegacyOid(ship.ItemId);
-        }
-        for (const item of inventoryResponse.RawUpgrades) {
-            if (item.LastAdded) toLegacyOid(item.LastAdded);
-        }
-        if (inventoryResponse.BrandedSuits) {
-            for (const id of inventoryResponse.BrandedSuits) {
-                toLegacyOid(id);
-            }
-        }
-        if (inventoryResponse.GuildId) {
-            toLegacyOid(inventoryResponse.GuildId);
-        }
-        for (const item of inventoryResponse.CurrentLoadOutIds) {
-            toLegacyOid(item);
-        }
-        if (version_compare(buildLabel, "2015.03.19.00.00") > 0) {
-            for (const category of loadoutKeysLegacy) {
-                if (category in inventoryResponse.LoadOutPresets) {
-                    for (const item of inventoryResponse.LoadOutPresets[category]) {
-                        toLegacyOid(item.ItemId);
-                        if (item.s?.ItemId) {
-                            toLegacyOid(item.s.ItemId);
-                        }
-                        if (item.l?.ItemId) {
-                            toLegacyOid(item.l.ItemId);
-                        }
-                        if (item.p?.ItemId) {
-                            toLegacyOid(item.p.ItemId);
-                        }
-                        if (item.m?.ItemId) {
-                            toLegacyOid(item.m.ItemId);
-                        }
-                    }
-                }
-            }
-        }
-        for (const item of inventoryResponse.Drones) {
+    // U19.5 and below use $id instead of $oid as well as a different date format
+    if (version_compare(buildLabel, gameToBuildVersion["19.5.3"]) > 0) {
+        return inventoryResponse;
+    }
+    for (const category of equipmentKeys) {
+        for (const item of inventoryResponse[category]) {
             toLegacyOid(item.ItemId);
+            if (version_compare(buildLabel, gameToBuildVersion["16.5.5"]) < 0) {
+                // Appearance config format is different for versions before U16.5
+                for (const config of item.Configs) {
+                    if (version_compare(buildLabel, gameToBuildVersion["16.0.2"]) < 0) {
+                        config.Customization = {
+                            Colors: convertIColorToLegacyColorsWithAtt(config.pricol, config.attcol),
+                            Skins: config.Skins ?? []
+                        };
+                    } else if (version_compare(buildLabel, gameToBuildVersion["16.0.2"]) >= 0) {
+                        config.Colors = convertIColorToLegacyColorsWithAtt(config.pricol, config.attcol);
+                    }
+                }
+            }
         }
-        for (const pr of inventoryResponse.PendingRecipes) {
-            toLegacyDate(pr.CompletionDate);
-        }
-        toLegacyDate(inventoryResponse.TrainingDate);
-        toLegacyDate(inventoryResponse.NextRefill!);
-
-        // Pre-U18.18 builds use a different UpgradeFingerprint format
-        if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) >= 0) {
-            return inventoryResponse;
-        }
+    }
+    if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) < 0) {
         for (const upgrade of inventoryResponse.Upgrades) {
             toLegacyOid(upgrade.ItemId);
-            const json = JSON.parse(upgrade.UpgradeFingerprint || '{"lvl":0}') as { lvl?: number };
-            const rank: number = json.lvl ?? 0;
-            upgrade.UpgradeFingerprint = convertToLegacyFingerprint(upgrade.UpgradeFingerprint || '{"lvl":0}');
-            if (
-                version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0 &&
-                version_compare(buildLabel, gameToBuildVersion["13.0.0"]) < 0
-            ) {
-                // Pre-U10 builds
-                if (!upgrade.AmountRemaining || (upgrade.AmountRemaining && upgrade.AmountRemaining <= 0)) {
-                    upgrade.AmountRemaining = 1;
-                }
-                upgrade.Rank = rank;
-                if (inventoryResponse.Cards) {
-                    inventoryResponse.Cards.push(upgrade);
-                }
-            }
         }
-        for (const skin of inventoryResponse.WeaponSkins) {
-            toLegacyOid(skin.ItemId);
-            if (skin.UpgradeType) {
-                skin.UpgradeFingerprint = convertToLegacyFingerprint(skin.UpgradeFingerprint || '{"lvl":0}');
-            }
-        }
-
-        // U18.16 merged left & right sentinel wings into the same skin item
-        if (version_compare(buildLabel, gameToBuildVersion["18.16.0"]) >= 0) {
-            return inventoryResponse;
-        }
-        const rightSkins = [];
         for (const item of inventoryResponse.WeaponSkins) {
-            if (item.ItemType.startsWith("/Lotus/Upgrades/Skins/Sentinels/Wings/")) {
-                rightSkins.push(item.ItemType + "Right");
-            }
+            toLegacyOid(item.ItemId);
         }
-        for (const itemType of rightSkins) {
-            inventoryResponse.WeaponSkins.push({
-                ItemType: itemType,
-                ItemId: { $id: "ca70ca70ca70ca70" + catBreadHash(itemType).toString(16).padStart(8, "0") }
-            });
+    }
+    for (const ship of inventoryResponse.Ships) {
+        toLegacyOid(ship.ItemId);
+    }
+    for (const item of inventoryResponse.RawUpgrades) {
+        if (item.LastAdded) toLegacyOid(item.LastAdded);
+    }
+    if (inventoryResponse.BrandedSuits) {
+        for (const id of inventoryResponse.BrandedSuits) {
+            toLegacyOid(id);
         }
-
-        if (version_compare(buildLabel, "2015.03.19.00.00") > 0) {
-            return inventoryResponse;
-        }
-        if (inventoryResponse.CurrentLoadOutIds.length > 0 && inventoryResponse.LoadOutPresets.NORMAL.length > 0) {
-            if (version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
-                // U14-U15
-                inventoryResponse.CurrentLoadout = {
-                    $id: fromOid(inventoryResponse.CurrentLoadOutIds[0])
-                };
-                inventoryResponse.LoadoutPresets = [
-                    mapLegacyLoadoutConfig(inventory, inventoryResponse.LoadOutPresets, buildLabel)
-                ] as unknown as FlattenMaps<ILoadoutConfigClientLegacy[]>;
-            } else {
-                // U13 and below
-                inventoryResponse.CurrentLoadout = mapLegacyLoadoutConfig(
-                    inventory,
-                    inventoryResponse.LoadOutPresets,
-                    buildLabel
-                );
-            }
-        }
-
-        // Pre-U12 builds store mods in an array called Cards, and have no concept of RawUpgrades
-        if (version_compare(buildLabel, "2014.02.05.00.00") >= 0) {
-            return inventoryResponse;
-        }
-        inventoryResponse.Cards = [];
-        if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0) {
-            for (const rawUpgrade of inventoryResponse.RawUpgrades) {
-                const id = inventory.RawUpgrades.find(x => x.ItemType == rawUpgrade.ItemType)?._id;
-                if (id) {
-                    for (let i = 0; i < rawUpgrade.ItemCount; i++) {
-                        const card = {
-                            ItemType: rawUpgrade.ItemType,
-                            ItemId: toOid2(id, buildLabel),
-                            Rank: 0,
-                            AmountRemaining: rawUpgrade.ItemCount
-                        } as IUpgradeClient;
-                        // Client doesn't see the mods unless they are in both Cards and Upgrades
-                        inventoryResponse.Cards.push(card);
-                        inventoryResponse.Upgrades.push(card);
+    }
+    if (inventoryResponse.GuildId) {
+        toLegacyOid(inventoryResponse.GuildId);
+    }
+    for (const item of inventoryResponse.CurrentLoadOutIds) {
+        toLegacyOid(item);
+    }
+    if (version_compare(buildLabel, "2015.03.19.00.00") > 0) {
+        for (const category of loadoutKeysLegacy) {
+            if (category in inventoryResponse.LoadOutPresets) {
+                for (const item of inventoryResponse.LoadOutPresets[category]) {
+                    toLegacyOid(item.ItemId);
+                    if (item.s?.ItemId) {
+                        toLegacyOid(item.s.ItemId);
+                    }
+                    if (item.l?.ItemId) {
+                        toLegacyOid(item.l.ItemId);
+                    }
+                    if (item.p?.ItemId) {
+                        toLegacyOid(item.p.ItemId);
+                    }
+                    if (item.m?.ItemId) {
+                        toLegacyOid(item.m.ItemId);
                     }
                 }
             }
         }
-        inventoryResponse.RawUpgrades = [];
+    }
+    for (const item of inventoryResponse.Drones) {
+        toLegacyOid(item.ItemId);
+    }
+    for (const pr of inventoryResponse.PendingRecipes) {
+        toLegacyDate(pr.CompletionDate);
+    }
+    toLegacyDate(inventoryResponse.TrainingDate);
+    toLegacyDate(inventoryResponse.NextRefill!);
 
-        for (const category of equipmentKeys) {
-            for (const item of inventoryResponse[category]) {
-                for (const config of item.Configs) {
-                    if (config.Upgrades) {
-                        // Convert installed upgrades for U10-U11
-                        const convertedUpgrades: { $id: string }[] = [];
-                        config.Upgrades.forEach(upgrade => {
-                            const upgradeId = upgrade as string;
-                            convertedUpgrades.push({ $id: upgradeId });
-                        });
-                        config.Upgrades = convertedUpgrades;
-                    }
+    // Pre-U18.18 builds use a different UpgradeFingerprint format
+    if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) >= 0) {
+        return inventoryResponse;
+    }
+    for (const upgrade of inventoryResponse.Upgrades) {
+        toLegacyOid(upgrade.ItemId);
+        const json = JSON.parse(upgrade.UpgradeFingerprint || '{"lvl":0}') as { lvl?: number };
+        const rank: number = json.lvl ?? 0;
+        upgrade.UpgradeFingerprint = convertToLegacyFingerprint(upgrade.UpgradeFingerprint || '{"lvl":0}');
+        if (
+            version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0 &&
+            version_compare(buildLabel, gameToBuildVersion["13.0.0"]) < 0
+        ) {
+            // Pre-U10 builds
+            if (!upgrade.AmountRemaining || (upgrade.AmountRemaining && upgrade.AmountRemaining <= 0)) {
+                upgrade.AmountRemaining = 1;
+            }
+            upgrade.Rank = rank;
+            if (inventoryResponse.Cards) {
+                inventoryResponse.Cards.push(upgrade);
+            }
+        }
+    }
+    for (const skin of inventoryResponse.WeaponSkins) {
+        toLegacyOid(skin.ItemId);
+        if (skin.UpgradeType) {
+            skin.UpgradeFingerprint = convertToLegacyFingerprint(skin.UpgradeFingerprint || '{"lvl":0}');
+        }
+    }
+
+    // U18.16 merged left & right sentinel wings into the same skin item
+    if (version_compare(buildLabel, gameToBuildVersion["18.16.0"]) >= 0) {
+        return inventoryResponse;
+    }
+    const rightSkins = [];
+    for (const item of inventoryResponse.WeaponSkins) {
+        if (item.ItemType.startsWith("/Lotus/Upgrades/Skins/Sentinels/Wings/")) {
+            rightSkins.push(item.ItemType + "Right");
+        }
+    }
+    for (const itemType of rightSkins) {
+        inventoryResponse.WeaponSkins.push({
+            ItemType: itemType,
+            ItemId: { $id: "ca70ca70ca70ca70" + catBreadHash(itemType).toString(16).padStart(8, "0") }
+        });
+    }
+
+    if (version_compare(buildLabel, "2015.03.19.00.00") > 0) {
+        return inventoryResponse;
+    }
+    if (inventoryResponse.CurrentLoadOutIds.length > 0 && inventoryResponse.LoadOutPresets.NORMAL.length > 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
+            // U14-U15
+            inventoryResponse.CurrentLoadout = {
+                $id: fromOid(inventoryResponse.CurrentLoadOutIds[0])
+            };
+            inventoryResponse.LoadoutPresets = [
+                mapLegacyLoadoutConfig(inventory, inventoryResponse.LoadOutPresets, buildLabel)
+            ] as unknown as FlattenMaps<ILoadoutConfigClientLegacy[]>;
+        } else {
+            // U13 and below
+            inventoryResponse.CurrentLoadout = mapLegacyLoadoutConfig(
+                inventory,
+                inventoryResponse.LoadOutPresets,
+                buildLabel
+            );
+        }
+    }
+
+    // Pre-U12 builds store mods in an array called Cards, and have no concept of RawUpgrades
+    if (version_compare(buildLabel, "2014.02.05.00.00") >= 0) {
+        return inventoryResponse;
+    }
+    inventoryResponse.Cards = [];
+    if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0) {
+        for (const rawUpgrade of inventoryResponse.RawUpgrades) {
+            const id = inventory.RawUpgrades.find(x => x.ItemType == rawUpgrade.ItemType)?._id;
+            if (id) {
+                for (let i = 0; i < rawUpgrade.ItemCount; i++) {
+                    const card = {
+                        ItemType: rawUpgrade.ItemType,
+                        ItemId: toOid2(id, buildLabel),
+                        Rank: 0,
+                        AmountRemaining: rawUpgrade.ItemCount
+                    } as IUpgradeClient;
+                    // Client doesn't see the mods unless they are in both Cards and Upgrades
+                    inventoryResponse.Cards.push(card);
+                    inventoryResponse.Upgrades.push(card);
                 }
             }
         }
+    }
+    inventoryResponse.RawUpgrades = [];
 
-        // Convert installed mods for pre-U12 builds
-        for (const category of equipmentKeys) {
-            for (const item of inventoryResponse[category]) {
-                for (const config of item.Configs) {
-                    if (config.Upgrades) {
-                        for (let i = 0; i < config.Upgrades.length; i++) {
-                            const id = config.Upgrades[i] as { $id: string | undefined };
-                            const invUpgrade = inventoryResponse.Upgrades.find(x => x.ItemId.$id == id.$id);
-                            if (invUpgrade) {
-                                if (id.$id?.startsWith("/Lotus")) {
-                                    // Pre-U12 builds have no concept of RawUpgrades, have to convert the db entry to the closest id of an unranked copy
-                                    id.$id = inventoryResponse.Upgrades.find(x => x.ItemType == id.$id)?.ItemId.$id;
-                                }
-                                // Pre-U10
-                                invUpgrade.ParentId = item.ItemId;
-                                invUpgrade.Slot = i + 1;
+    for (const category of equipmentKeys) {
+        for (const item of inventoryResponse[category]) {
+            for (const config of item.Configs) {
+                if (config.Upgrades) {
+                    // Convert installed upgrades for U10-U11
+                    const convertedUpgrades: { $id: string }[] = [];
+                    config.Upgrades.forEach(upgrade => {
+                        const upgradeId = upgrade as string;
+                        convertedUpgrades.push({ $id: upgradeId });
+                    });
+                    config.Upgrades = convertedUpgrades;
+                }
+            }
+        }
+    }
+
+    // Convert installed mods for pre-U12 builds
+    for (const category of equipmentKeys) {
+        for (const item of inventoryResponse[category]) {
+            for (const config of item.Configs) {
+                if (config.Upgrades) {
+                    for (let i = 0; i < config.Upgrades.length; i++) {
+                        const id = config.Upgrades[i] as { $id: string | undefined };
+                        const invUpgrade = inventoryResponse.Upgrades.find(x => x.ItemId.$id == id.$id);
+                        if (invUpgrade) {
+                            if (id.$id?.startsWith("/Lotus")) {
+                                // Pre-U12 builds have no concept of RawUpgrades, have to convert the db entry to the closest id of an unranked copy
+                                id.$id = inventoryResponse.Upgrades.find(x => x.ItemType == id.$id)?.ItemId.$id;
                             }
+                            // Pre-U10
+                            invUpgrade.ParentId = item.ItemId;
+                            invUpgrade.Slot = i + 1;
                         }
                     }
                 }
             }
         }
+    }
 
-        // < U8 clients advertise gzip decompression support, but for inventory responses roughly >100k bytes, if we actually made use of that, it would buffer overrun.
-        if (version_compare(buildLabel, gameToBuildVersion["8.0.0"]) >= 0) {
-            return inventoryResponse;
-        }
-        request.headers["accept-encoding"] = "";
-        //(inventoryResponse as any).Deez = "a".repeat(100_000);
+    // < U8 clients advertise gzip decompression support, but for inventory responses roughly >100k bytes, if we actually made use of that, it would buffer overrun.
+    if (version_compare(buildLabel, gameToBuildVersion["8.0.0"]) >= 0) {
+        return inventoryResponse;
+    }
+    request.headers["accept-encoding"] = "";
+    //(inventoryResponse as any).Deez = "a".repeat(100_000);
 
-        // U5 clients are very sensitive to unknown items
-        if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0) {
-            return inventoryResponse;
-        }
-        for (const category of equipmentKeys) {
-            for (const item of inventoryResponse[category]) {
-                if (item.Features && item.Features & eEquipmentFeatures.DOUBLE_CAPACITY) {
-                    item.UnlockLevel = 1;
-                }
+    // U5 clients are very sensitive to unknown items
+    if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0) {
+        return inventoryResponse;
+    }
+    for (const category of equipmentKeys) {
+        for (const item of inventoryResponse[category]) {
+            if (item.Features && item.Features & eEquipmentFeatures.DOUBLE_CAPACITY) {
+                item.UnlockLevel = 1;
             }
         }
-        const allowedMods = [
-            "/Lotus/Upgrades/Modules/GrineerMeleeModule",
-            "/Lotus/Upgrades/Modules/GrineerPistolModule",
-            "/Lotus/Upgrades/Modules/GrineerRifleModule",
-            "/Lotus/Upgrades/Modules/GrineerShotgunModule",
-            "/Lotus/Upgrades/Modules/OrokinWarframeModule",
-            "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod"
-        ];
-        if (version_compare(buildLabel, gameToBuildVersion["5.2.0"]) >= 0) {
-            allowedMods.push("/Lotus/Upgrades/Modules/TennoSwordModule");
-        }
-        inventoryResponse.RawUpgrades = inventoryResponse.RawUpgrades.filter(x => allowedMods.includes(x.ItemType));
-        inventoryResponse.Upgrades = inventoryResponse.Upgrades.filter(x => allowedMods.includes(x.ItemType));
-        inventoryResponse.Cards = [];
-        inventoryResponse.Missions = inventoryResponse.Missions.filter(m => {
-            if (!m.Tag.startsWith("SolNode")) return false;
-            const n = Number.parseInt(m.Tag.slice(7), 10);
-            return n >= 1 && n <= 128;
-        });
-        inventoryResponse.Recipes = inventoryResponse.Recipes.map(recipe => {
-            const U5ItemType = modernToU5Recipes[recipe.ItemType];
-            return U5ItemType ? { ...recipe, ItemType: U5ItemType } : recipe;
-        }).filter(recipe => U5Recipes.includes(recipe.ItemType));
-        inventoryResponse.PendingRecipes = inventoryResponse.PendingRecipes.map(recipe => {
-            const U5ItemType = modernToU5Recipes[recipe.ItemType];
-            return U5ItemType ? { ...recipe, ItemType: U5ItemType } : recipe;
-        }).filter(recipe => U5Recipes.includes(recipe.ItemType));
-        const allowedMiscItems = [
-            "/Lotus/Types/Items/MiscItems/Actuator",
-            "/Lotus/Types/Items/MiscItems/AlloyPlate",
-            "/Lotus/Types/Items/MiscItems/Circuits",
-            "/Lotus/Types/Items/MiscItems/ControlModule",
-            "/Lotus/Types/Items/MiscItems/Ferrite",
-            "/Lotus/Types/Items/MiscItems/Gallium",
-            "/Lotus/Types/Items/MiscItems/Morphic",
-            "/Lotus/Types/Items/MiscItems/Nanospores",
-            "/Lotus/Types/Items/MiscItems/NeuralSensor",
-            "/Lotus/Types/Items/MiscItems/Neurode",
-            "/Lotus/Types/Items/MiscItems/OrokinCell",
-            "/Lotus/Types/Items/MiscItems/Plastids",
-            "/Lotus/Types/Items/MiscItems/PolymerBundle",
-            "/Lotus/Types/Items/MiscItems/Rubedo",
-            "/Lotus/Types/Items/MiscItems/Salvage"
-        ];
-        inventoryResponse.MiscItems = inventoryResponse.MiscItems.filter(m => allowedMiscItems.includes(m.ItemType));
     }
+    const allowedMods = [
+        "/Lotus/Upgrades/Modules/GrineerMeleeModule",
+        "/Lotus/Upgrades/Modules/GrineerPistolModule",
+        "/Lotus/Upgrades/Modules/GrineerRifleModule",
+        "/Lotus/Upgrades/Modules/GrineerShotgunModule",
+        "/Lotus/Upgrades/Modules/OrokinWarframeModule",
+        "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod"
+    ];
+    if (version_compare(buildLabel, gameToBuildVersion["5.2.0"]) >= 0) {
+        allowedMods.push("/Lotus/Upgrades/Modules/TennoSwordModule");
+    }
+    inventoryResponse.RawUpgrades = inventoryResponse.RawUpgrades.filter(x => allowedMods.includes(x.ItemType));
+    inventoryResponse.Upgrades = inventoryResponse.Upgrades.filter(x => allowedMods.includes(x.ItemType));
+    inventoryResponse.Cards = [];
+    inventoryResponse.Missions = inventoryResponse.Missions.filter(m => {
+        if (!m.Tag.startsWith("SolNode")) return false;
+        const n = Number.parseInt(m.Tag.slice(7), 10);
+        return n >= 1 && n <= 128;
+    });
+    inventoryResponse.Recipes = inventoryResponse.Recipes.map(recipe => {
+        const U5ItemType = modernToU5Recipes[recipe.ItemType];
+        return U5ItemType ? { ...recipe, ItemType: U5ItemType } : recipe;
+    }).filter(recipe => U5Recipes.includes(recipe.ItemType));
+    inventoryResponse.PendingRecipes = inventoryResponse.PendingRecipes.map(recipe => {
+        const U5ItemType = modernToU5Recipes[recipe.ItemType];
+        return U5ItemType ? { ...recipe, ItemType: U5ItemType } : recipe;
+    }).filter(recipe => U5Recipes.includes(recipe.ItemType));
+    const allowedMiscItems = [
+        "/Lotus/Types/Items/MiscItems/Actuator",
+        "/Lotus/Types/Items/MiscItems/AlloyPlate",
+        "/Lotus/Types/Items/MiscItems/Circuits",
+        "/Lotus/Types/Items/MiscItems/ControlModule",
+        "/Lotus/Types/Items/MiscItems/Ferrite",
+        "/Lotus/Types/Items/MiscItems/Gallium",
+        "/Lotus/Types/Items/MiscItems/Morphic",
+        "/Lotus/Types/Items/MiscItems/Nanospores",
+        "/Lotus/Types/Items/MiscItems/NeuralSensor",
+        "/Lotus/Types/Items/MiscItems/Neurode",
+        "/Lotus/Types/Items/MiscItems/OrokinCell",
+        "/Lotus/Types/Items/MiscItems/Plastids",
+        "/Lotus/Types/Items/MiscItems/PolymerBundle",
+        "/Lotus/Types/Items/MiscItems/Rubedo",
+        "/Lotus/Types/Items/MiscItems/Salvage"
+    ];
+    inventoryResponse.MiscItems = inventoryResponse.MiscItems.filter(m => allowedMiscItems.includes(m.ItemType));
     return inventoryResponse;
 };
 

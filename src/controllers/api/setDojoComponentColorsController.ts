@@ -6,15 +6,18 @@ import {
     hasPermissionToDecorateComponent
 } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 export const setDojoComponentColorsController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId, "GuildId LevelKeys");
+    const account = await getAccountForRequest(req);
+    const inventory = await getInventory(account._id, "GuildId LevelKeys");
     const guild = await getGuildForRequestEx(req, inventory);
     const data = getJSONfromString<ISetDojoComponentColorsRequest>(String(req.body));
-    if (!hasAccessToDojo(inventory) || !(await hasPermissionToDecorateComponent(guild, accountId, data.ComponentId))) {
+    if (
+        !hasAccessToDojo(inventory) ||
+        !(await hasPermissionToDecorateComponent(guild, account._id.toString(), data.ComponentId))
+    ) {
         res.json({ DojoRequestStatus: -1 });
         return;
     }
@@ -28,7 +31,8 @@ export const setDojoComponentColorsController: RequestHandler = async (req, res)
         component.PendingColors = data.Colours;
     }
     await guild.save();
-    res.json(await getDojoClient(guild, 0, component._id));
+    const buildLabel = getBuildLabel(req, account);
+    res.json(await getDojoClient(guild, 0, component._id, buildLabel));
 };
 
 interface ISetDojoComponentColorsRequest {

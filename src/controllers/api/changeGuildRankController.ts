@@ -2,7 +2,7 @@ import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 import { version_compare } from "../../helpers/inventoryHelpers.ts";
 import { GuildMember } from "../../models/guildModel.ts";
 import { getGuildForRequest, getGuildRankBase, hasGuildPermissionEx } from "../../services/guildService.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { eGuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 import { logger } from "../../utils/logger.ts";
@@ -10,6 +10,7 @@ import { broadcastGuildUpdate } from "../../services/wsService.ts";
 
 export const changeGuildRankController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const member = (await GuildMember.findOne({
         accountId: account._id,
         guildId: req.query.guildId as string
@@ -22,8 +23,7 @@ export const changeGuildRankController: RequestHandler = async (req, res) => {
 
     // TODO: Figure out the exact version when rankChange stopped being a delta.
     const rankChange: number = parseInt(req.query.rankChange as string);
-    const rankChangeIsADelta =
-        account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["24.0.0"]) <= 0;
+    const rankChangeIsADelta = version_compare(buildLabel, gameToBuildVersion["24.0.0"]) <= 0;
     const newRank: number = rankChangeIsADelta
         ? target.rank + parseInt(req.query.rankChange as string)
         : parseInt(req.query.rankChange as string);
@@ -47,7 +47,7 @@ export const changeGuildRankController: RequestHandler = async (req, res) => {
 
     res.json({
         _id: req.query.targetId as string,
-        Rank: getGuildRankBase(account.BuildLabel) + newRank
+        Rank: getGuildRankBase(buildLabel) + newRank
     });
 
     broadcastGuildUpdate(req, guild._id.toString());

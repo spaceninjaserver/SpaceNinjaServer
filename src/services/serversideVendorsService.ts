@@ -10,6 +10,7 @@ import { config } from "./configService.ts";
 import type { IAffiliation } from "../types/inventoryTypes/inventoryTypes.ts";
 import { getNightwaveSyndicateTag, nightwaveTagToSeason } from "./worldStateService.ts";
 import { legacyNightwaveVendorManifest } from "../constants/legacyNightwaveVendorManifest.ts";
+import { BL_LATEST } from "../constants/gameVersions.ts";
 
 interface IGeneratableVendorInfo extends Omit<IVendorInfo, "ItemManifest" | "Expiry"> {
     cycleOffset?: number;
@@ -66,7 +67,7 @@ const getCycleDuration = (manifest: IVendor): number => {
 export const getVendorManifestByTypeName = (
     typeName: string,
     fullStock?: boolean,
-    buildLabel?: string
+    buildLabel: string = BL_LATEST
 ): IVendorManifest | undefined => {
     for (const vendorInfo of generatableVendors) {
         if (vendorInfo.TypeName == typeName) {
@@ -107,7 +108,7 @@ export const getVendorManifestByTypeName = (
     return undefined;
 };
 
-export const getVendorManifestByOid = (oid: string, buildLabel?: string): IVendorManifest | undefined => {
+export const getVendorManifestByOid = (oid: string, buildLabel: string): IVendorManifest | undefined => {
     for (const vendorInfo of generatableVendors) {
         if (vendorInfo._id.$oid == oid) {
             return generateVendorManifest(vendorInfo, config.fullyStockedVendors);
@@ -476,7 +477,7 @@ const generateVendorManifest = (
     return cacheEntry;
 };
 
-const getLegacyNightwaveManifestType = (buildLabel?: string): string | undefined => {
+const getLegacyNightwaveManifestType = (buildLabel: string): string | undefined => {
     const affiliationTag = getNightwaveSyndicateTag(buildLabel);
     const manifests = Object.keys(legacyNightwaveVendorManifest);
     if (!affiliationTag) return undefined;

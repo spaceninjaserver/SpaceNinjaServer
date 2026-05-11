@@ -3,10 +3,11 @@ import type { RequestHandler } from "express";
 import { Types } from "mongoose";
 import { getDojoClient, getGuildForRequest } from "../../services/guildService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 
 export const createGuildDojoController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const guild = await getGuildForRequest(req, account._id);
 
     if (guild.DojoComponents.length == 0) {
@@ -21,7 +22,7 @@ export const createGuildDojoController: RequestHandler = async (req, res) => {
         await guild.save();
     }
 
-    res.json(await getDojoClient(guild, 0, undefined, account.BuildLabel));
+    res.json(await getDojoClient(guild, 0, undefined, buildLabel));
 };
 
 interface ICreateGuildDojoRequest {

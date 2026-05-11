@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { getInventory2, addMods, addMiscItem, addSkin } from "../../services/inventoryService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import { logger } from "../../utils/logger.ts";
@@ -66,7 +66,8 @@ export const arcaneCommonController: RequestHandler = async (req, res) => {
                 item.UpgradeFingerprint = undefined;
                 item.UpgradeType = undefined;
                 addMods(inventory, [{ ItemType: arcaneType, ItemCount: numToRefund }]);
-                if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["19.4.1"]) <= 0) {
+                const buildLabel = getBuildLabel(req, account);
+                if (version_compare(buildLabel, gameToBuildVersion["19.4.1"]) <= 0) {
                     addMiscItem(inventory, "/Lotus/Types/Recipes/CosmeticUnenhancerItem", -1);
                 }
                 res.json({ arcaneType, numToRefund });

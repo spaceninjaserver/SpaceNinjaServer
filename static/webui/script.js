@@ -1229,7 +1229,7 @@ function getInventoryData() {
         if (inventory_data) {
             resolve(inventory_data);
         } else {
-            $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1&ignoreBuildLabel=1")
+            $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1")
                 .done(data => {
                     inventory_data = data;
                     resolve(inventory_data);
@@ -3266,12 +3266,12 @@ function doAcquireRiven() {
             ])
         }).done(function () {
             // Get riven's assigned id
-            $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1&ignoreBuildLabel=1").done(data => {
+            $.get("/api/inventory.php?" + window.authz + "&xpBasedLevelCapDisabled=1").done(data => {
                 for (const rawUpgrade of data.RawUpgrades) {
                     if (rawUpgrade.ItemType === uniqueName) {
                         // Add fingerprint to riven
                         $.post({
-                            url: "/api/artifacts.php?" + window.authz + "&ignoreBuildLabel=1",
+                            url: "/api/artifacts.php?" + window.authz,
                             contentType: "text/plain",
                             data: JSON.stringify({
                                 Upgrade: {
@@ -3298,7 +3298,7 @@ function doAcquireRiven() {
 function setFingerprint(ItemType, ItemId, fingerprint) {
     revalidateAuthz().then(() => {
         $.post({
-            url: "/api/artifacts.php?" + window.authz + "&ignoreBuildLabel=1",
+            url: "/api/artifacts.php?" + window.authz,
             contentType: "text/plain",
             data: JSON.stringify({
                 Upgrade: {
@@ -5202,11 +5202,11 @@ document.querySelectorAll("#sidebar .nav-link").forEach(function (elm) {
 
 async function markAllAsRead() {
     await revalidateAuthz();
-    const { Inbox } = await fetch("/api/inbox.php?" + window.authz + "&ignoreBuildLabel=1").then(x => x.json());
+    const { Inbox } = await fetch("/api/inbox.php?" + window.authz).then(x => x.json());
     let any = false;
     for (const msg of Inbox) {
         if (!msg.r) {
-            await fetch("/api/inbox.php?" + window.authz + "&ignoreBuildLabel=1&messageId=" + msg.messageId.$oid);
+            await fetch("/api/inbox.php?" + window.authz + "&messageId=" + msg.messageId.$oid);
             any = true;
         }
     }

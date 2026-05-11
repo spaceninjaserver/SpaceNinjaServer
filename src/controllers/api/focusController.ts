@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { getInventory2, addMiscItems, addEquipment, occupySlot } from "../../services/inventoryService.ts";
 import type { IMiscItem, TFocusPolarity, TEquipmentKey } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { eInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
@@ -11,11 +11,12 @@ import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const focusController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
 
     let focusVersion = 3;
-    if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["31.5.0"]) < 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["31.5.0"]) < 0) {
         focusVersion = 2;
-        if (version_compare(account.BuildLabel, gameToBuildVersion["22.0.0"]) < 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["22.0.0"]) < 0) {
             focusVersion = 1;
         }
     }

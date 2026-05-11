@@ -8,7 +8,7 @@ import {
     updateCredits,
     updatePlatinum
 } from "../../services/inventoryService.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { eGuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 import type { IPendingTradeDatabase, ITradeOffer } from "../../types/tradingTypes.ts";
@@ -65,6 +65,7 @@ export const tradingController: RequestHandler = async (req, res) => {
             PendingTrades: [exportTrade(trade, us)]
         });
     } else if (op == eTradingOperation.AcceptTrade) {
+        const buildLabel = getBuildLabel(req, account);
         const buddyId = req.query.buddyId as string;
         const trade = (await getPendingTrade(accountId, buddyId))!;
         if (parseInt(req.query.revision as string) != trade.revision) {
@@ -131,14 +132,10 @@ export const tradingController: RequestHandler = async (req, res) => {
             }
 
             await Promise.all([aInventory.save(), bInventory.save(), trade.deleteOne()]);
-            res.send(
-                account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["40.0.0"]) < 0 ? "9" : "12"
-            ).end();
+            res.send(version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0 ? "9" : "12").end();
         } else {
             await trade.save();
-            res.send(
-                account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["40.0.0"]) < 0 ? "8" : "11"
-            ).end();
+            res.send(version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0 ? "8" : "11").end();
         }
     } else if (op == eTradingOperation.CancelTrade) {
         const buddyId = req.query.buddyId as string;

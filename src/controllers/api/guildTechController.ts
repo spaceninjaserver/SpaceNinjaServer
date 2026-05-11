@@ -13,7 +13,7 @@ import {
     setGuildTechLogState
 } from "../../services/guildService.ts";
 import { ExportDojoRecipes, ExportRailjackWeapons } from "warframe-public-export-plus";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import {
     addCrewShipWeaponSkin,
     addEquipment,
@@ -46,6 +46,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
     if (data.Action == "Sync") {
         let needSave = false;
         const techProjects: ITechProjectClient[] = [];
+        const buildLabel = getBuildLabel(req, account);
         const inventory = await getInventory2(accountId, "GuildId");
         const guild = await getGuildForRequestEx(req, inventory);
         if (guild.TechProjects) {
@@ -57,7 +58,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
                     State: project.State
                 };
                 if (project.CompletionDate) {
-                    techProject.CompletionDate = toMongoDate2(project.CompletionDate, account.BuildLabel);
+                    techProject.CompletionDate = toMongoDate2(project.CompletionDate, buildLabel);
                     if (
                         Date.now() >= project.CompletionDate.getTime() &&
                         setGuildTechLogState(guild, project.ItemType, 4, project.CompletionDate)
@@ -276,9 +277,10 @@ export const guildTechController: RequestHandler = async (req, res) => {
             await processGuildTechProjectContributionsUpdate(guild, techProject);
 
             await Promise.all([guild.save(), inventory.save(), guildMember.save()]);
+            const buildLabel = getBuildLabel(req, account);
             res.json({
                 InventoryChanges: inventoryChanges,
-                Vault: await getGuildVault(guild, account.BuildLabel)
+                Vault: await getGuildVault(guild, buildLabel)
             });
             broadcastGuildUpdate(req, guild._id.toString());
         }

@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import {
     getInventory2,
@@ -63,6 +63,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
 
         case "x": {
             // shard removal
+            const buildLabel = getBuildLabel(req, account);
             const request = getJSONfromString<IShardUninstallRequest>(String(req.body));
             const inventory = await getInventory2(
                 account._id,
@@ -89,7 +90,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                 if (!inventory.infiniteHelminthMaterials) {
                     let type: string;
                     let count: number;
-                    if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["38.6.0"]) < 0) {
+                    if (version_compare(buildLabel, gameToBuildVersion["38.6.0"]) < 0) {
                         type = "/Lotus/Types/Items/InfestedFoundry/HelminthBile";
                         count = 300;
                     } else {
@@ -269,6 +270,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
 
         case "a": {
             // subsume warframe
+            const buildLabel = getBuildLabel(req, account);
             const request = getJSONfromString<IHelminthSubsumeRequest>(String(req.body));
             const inventory = await getInventory2(
                 account._id,
@@ -278,7 +280,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                 "Recipes",
                 "SuitBin"
             );
-            const recipe = getRecipe(request.Recipe)!;
+            const recipe = getRecipe(request.Recipe, buildLabel)!;
             if (!inventory.infiniteHelminthMaterials) {
                 for (const ingredient of recipe.secretIngredients!) {
                     const resource = inventory.InfestedFoundry!.Resources!.find(x => x.ItemType == ingredient.ItemType);

@@ -2,12 +2,13 @@ import type { RequestHandler } from "express";
 import type { IFriendInfo } from "../../types/friendTypes.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "../../services/friendService.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { fromOid, toOid2 } from "../../helpers/inventoryHelpers.ts";
 import { Account } from "../../models/loginModel.ts";
 
 export const getRecentPlayersController: RequestHandler = async (req, res): Promise<void> => {
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const payload = getJSONfromString<IRecentPlayersPayload>(String(req.body));
     const results: IFriendInfo[] = [];
     for (const info of payload.RecentPlayers) {
@@ -18,12 +19,9 @@ export const getRecentPlayersController: RequestHandler = async (req, res): Prom
                 if (!otherAccount) {
                     continue;
                 }
-                info._id = toOid2(otherAccount._id, account.BuildLabel);
+                info._id = toOid2(otherAccount._id, buildLabel);
             }
-            await Promise.all([
-                addAccountDataToFriendInfo(info, account.BuildLabel),
-                addInventoryDataToFriendInfo(info)
-            ]);
+            await Promise.all([addAccountDataToFriendInfo(info, buildLabel), addInventoryDataToFriendInfo(info)]);
             results.push(info);
         } catch (_) {
             /* empty */

@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
 import { Guild } from "../../models/guildModel.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { logger } from "../../utils/logger.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { createUniqueClanName, getGuildClient } from "../../services/guildService.ts";
@@ -24,7 +24,8 @@ export const getGuildController: RequestHandler = async (req, res) => {
                 guild.CeremonyResetDate = undefined;
                 await guild.save();
             }
-            res.json(await getGuildClient(guild, account));
+            const buildLabel = getBuildLabel(req, account);
+            res.json(await getGuildClient(guild, account, buildLabel));
             return;
         }
     }

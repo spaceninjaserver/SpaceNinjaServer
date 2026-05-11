@@ -9,7 +9,7 @@ import {
     getInventory,
     updateCurrency
 } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getSuffixedName } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel, getSuffixedName } from "../../services/loginService.ts";
 import { handleDailyDealPurchase, handleStoreItemAcquisition } from "../../services/purchaseService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import type { IPurchaseParams, IPurchaseResponse } from "../../types/purchaseTypes.ts";
@@ -63,6 +63,7 @@ export const giftingController: RequestHandler = async (req, res) => {
 
     // Cannot gift to players who have gifting disabled.
     const senderAccount = await getAccountForRequest(req);
+    const senderBuildLabel = getBuildLabel(req, account);
     if (
         inventory.Settings?.GiftMode == "GIFT_MODE_NONE" ||
         (inventory.Settings?.GiftMode == "GIFT_MODE_FRIENDS" && !(await areFriends(account._id, senderAccount._id)))
@@ -98,7 +99,7 @@ export const giftingController: RequestHandler = async (req, res) => {
                 data.PurchaseParams.Quantity,
                 data.PurchaseParams.Durability,
                 data.PurchaseParams.UsePremium,
-                data.buildLabel ?? senderAccount.BuildLabel!
+                data.buildLabel ?? senderBuildLabel
             );
         }
         updateCurrency(
@@ -109,7 +110,7 @@ export const giftingController: RequestHandler = async (req, res) => {
         );
     }
     if (data.PurchaseParams.StoreItem in ExportBundles) {
-        const bundle = getBundle(data.PurchaseParams.StoreItem, data.buildLabel)!;
+        const bundle = getBundle(data.PurchaseParams.StoreItem, senderBuildLabel)!;
         if (bundle.giftingBonus) {
             combineInventoryChanges(
                 response.InventoryChanges,

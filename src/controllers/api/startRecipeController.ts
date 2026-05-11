@@ -1,4 +1,4 @@
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
@@ -31,14 +31,15 @@ export const startRecipeController: RequestHandler = async (req, res) => {
     logger.debug("StartRecipe Request", { startRecipeRequest });
 
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
 
     let recipeName = startRecipeRequest.RecipeName;
     if (req.query.recipeName) recipeName = String(req.query.recipeName); // U8
-    if (account.BuildLabel && version_compare(account.BuildLabel, gameToBuildVersion["7.3.0"]) < 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) < 0) {
         const modernItemType = U5ToModernRecipes[recipeName];
         if (modernItemType) recipeName = modernItemType;
     }
-    const recipe = getRecipe(recipeName, account.BuildLabel);
+    const recipe = getRecipe(recipeName, buildLabel);
 
     if (!recipe) {
         throw new Error(`unknown recipe ${recipeName}`);
@@ -105,7 +106,7 @@ export const startRecipeController: RequestHandler = async (req, res) => {
         if (infestedSuit) {
             infestedSuit.InfestationDate = new Date();
         }
-        inventoryChanges = addKubrowPet(inventory, resultSuitType, undefined, false, {}, account.BuildLabel);
+        inventoryChanges = addKubrowPet(inventory, resultSuitType, undefined, false, {}, buildLabel);
         pr.KubrowPet = new Types.ObjectId(fromOid(inventoryChanges.KubrowPets![0].ItemId));
     } else if (recipe.secretIngredientAction == "SIA_DISTILL_PRINT") {
         pr.KubrowPet = new Types.ObjectId(startRecipeRequest.Ids[recipe.ingredients.length]);
