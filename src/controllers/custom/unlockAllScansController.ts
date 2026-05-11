@@ -46,6 +46,17 @@ export const unlockAllScansController: RequestHandler = async (req, res) => {
         });
     }
 
+    // Complete the mars to phobos junction scan challenge for older versions
+    const mpCephFragments = inventory.ChallengeProgress.find(x => x.Name == "MPCephFragments");
+    if (mpCephFragments) {
+        mpCephFragments.Progress = 3;
+    } else {
+        inventory.ChallengeProgress.push({
+            Name: "MPCephFragments",
+            Progress: 3
+        });
+    }
+
     // Unlock all kuria scans
     inventory.CollectibleSeries ??= [];
     let kuriaSeries = inventory.CollectibleSeries.find(
