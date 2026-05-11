@@ -216,10 +216,10 @@ export const focusController: RequestHandler = async (req, res) => {
             break;
         }
         case "UnlockUpgrade": {
-            if (focusVersion > 1) {
-                const request = JSON.parse(String(req.body)) as IUnlockUpgrade2Request;
+            const request = JSON.parse(String(req.body)) as IUnlockUpgrade2Request | IUnlockUpgrade1Request;
+            const inventory = await getInventory2(account._id, "FocusUpgrades", "FocusXP");
+            if ("FocusTypes" in request) {
                 const focusPolarity = focusTypeToPolarity(request.FocusTypes[0]);
-                const inventory = await getInventory2(account._id, "FocusUpgrades", "FocusXP");
                 let cost = 0;
                 for (const focusType of request.FocusTypes) {
                     cost += getUpgradeUnlockCost(focusType);
@@ -232,7 +232,6 @@ export const focusController: RequestHandler = async (req, res) => {
                     FocusPointCosts: { [focusPolarity]: cost }
                 });
             } else {
-                const request = JSON.parse(String(req.body)) as IUnlockUpgrade1Request;
                 const focusPolarity = focusTypeToPolarity(request.FocusType);
                 const inventory = await getInventory2(account._id, "FocusUpgrades", "FocusXP");
                 const cost = getUpgradeUnlockCost(request.FocusType);
@@ -467,12 +466,10 @@ interface IWayRequest {
     FocusType: string;
 }
 
-// Focus 2.0 & Focus 3.0
+// Format changed in U18.5, maybe earlier
 interface IUnlockUpgrade2Request {
     FocusTypes: string[];
 }
-
-// Focus 1.0
 interface IUnlockUpgrade1Request {
     FocusType: string;
     ActivateUpgrade: boolean;
