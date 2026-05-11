@@ -39,13 +39,13 @@ import { handleGuildGoalProgress } from "./guildService.ts";
 import { Types } from "mongoose";
 import { BL_LATEST } from "../constants/gameVersions.ts";
 
-export const getStoreItemCategory = (storeItem: string): string => {
+const getStoreItemCategory = (storeItem: string): string => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
     const storeItemElements = storeItemString.split("/");
     return storeItemElements[1];
 };
 
-export const getStoreItemTypesCategory = (typesItem: string): string => {
+const getStoreItemTypesCategory = (typesItem: string): string => {
     const typesString = getSubstringFromKeyword(typesItem, "Types");
     const typeElements = typesString.split("/");
     if (typesItem.includes("StoreItems")) {

@@ -400,7 +400,7 @@ export const parseUpgrade = (
     }
 };
 
-export const getInnateDamageTag = (KillingSuit: string): TInnateDamageTag => {
+const getInnateDamageTag = (KillingSuit: string): TInnateDamageTag => {
     return ExportWarframes[KillingSuit].nemesisUpgradeTag!;
 };
 

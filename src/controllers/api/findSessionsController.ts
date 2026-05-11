@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
 import { getSession } from "../../services/sessionService.ts";
 import { logger } from "../../utils/logger.ts";
-import type { IFindSessionRequest } from "../../types/sessionTypes.ts";
+import type { IFindSessionRequest, IFindSessionResponse } from "../../types/sessionTypes.ts";
 import { getNrsAddresses } from "../../services/configService.ts";
 
 export const findSessionsController: RequestHandler = async (_req, res) => {
@@ -27,7 +27,7 @@ export const findSessionsController: RequestHandler = async (_req, res) => {
     }
 
     logger.debug("FindSession Result:", { sessions });
-    if (sessions.length) res.json({ queryId: req.queryId, Sessions: sessions });
+    if (sessions.length) res.json({ queryId: req.queryId, Sessions: sessions } satisfies IFindSessionResponse);
     else res.json({});
 };
 

@@ -242,7 +242,7 @@ export interface ITailorShop extends Omit<ITailorShopDatabase, "Rooms" | "Favour
 
 export type RoomsType = { Name: string; MaxCapacity: number; PlacedDecos: Types.DocumentArray<IPlacedDecosDatabase> };
 
-export type PersonalRoomsDocumentProps = {
+type PersonalRoomsDocumentProps = {
     Ship: Omit<IOrbiterDatabase, "Rooms"> & {
         Rooms: RoomsType[];
     };

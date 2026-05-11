@@ -17,6 +17,7 @@ jobs:
             - run: cp config-vanilla.json config.json
             - run: npm run verify
             - run: npm run lint:ci
+            - run: npm run knip
             - run: npm run prettier
             - run: npm run update-translations
             - name: Fail if there are uncommitted changes

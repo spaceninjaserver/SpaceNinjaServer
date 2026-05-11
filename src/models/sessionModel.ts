@@ -1,7 +1,7 @@
 import { model, Schema, Types } from "mongoose";
 import type { ISessionDatabase } from "../types/sessionTypes.ts";
 
-export const sessionSchema = new Schema<ISessionDatabase>({
+const sessionSchema = new Schema<ISessionDatabase>({
     maxPlayers: Number,
     minPlayers: Number,
     privateSlots: Number,

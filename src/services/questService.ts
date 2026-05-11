@@ -67,7 +67,7 @@ export const updateQuestKey = async (
     return inventoryChanges;
 };
 
-export const updateQuestStage = (
+const updateQuestStage = (
     inventory: TInventoryDatabaseDocument,
     { KeyChain, ChainStage }: IKeyChainRequest,
     questStageUpdate: Partial<IQuestStage>
@@ -487,7 +487,7 @@ export const giveKeyChainStageTriggered = async (
     }
 };
 
-export const installShipFeatures = async (
+const installShipFeatures = async (
     inventory: TInventoryDatabaseDocument,
     keyChainInfo: IKeyChainRequest,
     buildLabel: string
@@ -530,7 +530,7 @@ export const installShipFeatures = async (
     }
 };
 
-export const removeRequiredItems = async (inventory: TInventoryDatabaseDocument, typeName: string): Promise<void> => {
+const removeRequiredItems = async (inventory: TInventoryDatabaseDocument, typeName: string): Promise<void> => {
     switch (typeName) {
         case "/Lotus/Types/Recipes/WarframeRecipes/MagicianHelmetBlueprint": {
             const recipeItem = inventory.Recipes.find(

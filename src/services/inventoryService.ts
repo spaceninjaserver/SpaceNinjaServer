@@ -1447,7 +1447,7 @@ export const addPowerSuit = async (
     return inventoryChanges;
 };
 
-export const addMechSuit = async (
+const addMechSuit = async (
     inventory: TInventoryDatabaseDocument,
     mechsuitName: string,
     inventoryChanges: IInventoryChanges = {},
@@ -1499,7 +1499,7 @@ export const addSpecialItem = (
     inventoryChanges.SpecialItems.push(inventory.SpecialItems[specialItemIndex].toJSON<IEquipmentClient>());
 };
 
-export const addSpaceSuit = (
+const addSpaceSuit = (
     inventory: TInventoryDatabaseDocument,
     spacesuitName: string,
     inventoryChanges: IInventoryChanges = {},
@@ -1968,7 +1968,7 @@ export const addEquipment = <K extends TEquipmentKey>(
     return inventoryChanges;
 };
 
-export const addCustomization = (
+const addCustomization = (
     inventory: TInventoryDatabaseDocument,
     customizationName: string,
     inventoryChanges: IInventoryChanges = {}
@@ -2121,11 +2121,11 @@ const addDrone = (
     return inventoryChanges;
 };
 
-export const getAccountRandSeed = (inventory: TInventoryDatabaseDocument): number => {
+const getAccountRandSeed = (inventory: TInventoryDatabaseDocument): number => {
     return parseInt(inventory.accountOwnerId.toString().substring(2, 8), 16);
 };
 
-export const getCrewMemberSkills = (seed: bigint, skillPointsToAssign: number): Record<string, number> => {
+/*export const getCrewMemberSkills = (seed: bigint, skillPointsToAssign: number): Record<string, number> => {
     const rng = new SRng(seed);
 
     const skills = ["PILOTING", "GUNNERY", "ENGINEERING", "COMBAT", "SURVIVABILITY"];
@@ -2155,7 +2155,7 @@ export const getCrewMemberSkills = (seed: bigint, skillPointsToAssign: number): 
         combined[skills[i]] = skillAssignments[i];
     }
     return combined;
-};
+};*/
 
 const addCrewMember = (
     inventory: TInventoryDatabaseDocument,

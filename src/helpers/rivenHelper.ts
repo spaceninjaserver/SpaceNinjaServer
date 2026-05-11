@@ -8,7 +8,7 @@ export interface IVeiledRivenFingerprint {
     IsSentinel?: true;
 }
 
-export interface IRivenChallenge {
+interface IRivenChallenge {
     Type: string;
     Progress: number;
     Required: number;

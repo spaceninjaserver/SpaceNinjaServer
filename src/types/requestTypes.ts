@@ -32,7 +32,7 @@ import type { ILoadOutPresets } from "./saveLoadoutTypes.ts";
 import type { IEquipmentClient } from "./equipmentTypes.ts";
 import type { TMissionType } from "warframe-public-export-plus";
 
-export interface IAffiliationChange {
+interface IAffiliationChange {
     Tag: string;
     Standing: number;
     Title: number;
@@ -177,7 +177,7 @@ export type IMissionInventoryUpdateRequest = {
     [K in TEquipmentKey]?: IEquipmentClient[];
 };
 
-export interface IBountyRewardInfo {
+interface IBountyRewardInfo {
     node: string;
     EOM_AFK?: number;
     JobTier?: number;
@@ -239,7 +239,7 @@ export interface IRewardInfo extends IBountyRewardInfo {
     };
 }
 
-export type IMissionStatus = "GS_SUCCESS" | "GS_FAILURE" | "GS_DUMPED" | "GS_QUIT" | "GS_INTERRUPTED";
+type IMissionStatus = "GS_SUCCESS" | "GS_FAILURE" | "GS_DUMPED" | "GS_QUIT" | "GS_INTERRUPTED";
 
 export interface IUpgradesRequest {
     ItemCategory: TEquipmentKey;
@@ -272,7 +272,7 @@ export interface IUpgradesRequestLegacy {
     UpgradesToDetach?: IUpgradeClient[];
     Cost?: number;
 }
-export interface IUpgradeOperation {
+interface IUpgradeOperation {
     OperationType: string;
     UpgradeRequirement: string; // uniqueName of item being consumed
     PolarizeSlot: number;

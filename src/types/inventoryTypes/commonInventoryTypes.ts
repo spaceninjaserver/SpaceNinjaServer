@@ -33,10 +33,6 @@ export interface IAbilityOverride {
     Index: number;
 }
 
-export interface ISlotsBin {
-    Slots: number;
-}
-
 export interface IItemConfig {
     Skins?: string[];
     pricol?: IColor;
@@ -68,7 +64,7 @@ export interface IItemConfigDatabase extends Omit<IItemConfig, "Upgrades"> {
     Upgrades?: string[];
 }
 
-export interface ISong {
+interface ISong {
     m?: string;
     b?: string;
     p?: string;

@@ -60,12 +60,12 @@ export interface IMessage {
     RegularCredits?: number;
 }
 
-export interface Arg {
+interface Arg {
     Key: string;
     Tag: string | number;
 }
 
-export interface IGift {
+interface IGift {
     GiftType: string;
 }
 

@@ -31,7 +31,7 @@ import type { CalendarSeasonType } from "../worldStateTypes.ts";
 import type { SlotNames } from "../purchaseTypes.ts";
 import type { IPendingTradeClient } from "../tradingTypes.ts";
 
-export type InventoryDatabaseEquipment = {
+type InventoryDatabaseEquipment = {
     KubrowPets: IKubrowPetDatabase[];
 } & {
     [_ in TEquipmentKey]: IEquipmentDatabase[];
@@ -298,7 +298,7 @@ export interface IFocusLoadoutDatabase extends Omit<IFocusLoadoutClient, "Preset
     Preset: IEquipmentSelectionDatabase;
 }
 
-export interface IMailboxClient {
+interface IMailboxClient {
     LastInboxId: IOid;
 }
 
@@ -358,11 +358,11 @@ export interface IDailyAffiliations {
     DailyAffiliationHex: number;
 }
 
-export type InventoryClientEquipment = {
+type InventoryClientEquipment = {
     [_ in TEquipmentKey]: IEquipmentClient[];
 };
 
-export type InventorySlots = {
+type InventorySlots = {
     [_ in SlotNames]: ISlots;
 };
 
@@ -659,10 +659,10 @@ export interface ICompletedJobChain {
     Jobs: string[];
 }
 
-export interface ICompletedJob {
+/*interface ICompletedJob {
     JobId: string;
     StageCompletions: number[];
-}
+}*/
 
 export interface ICrewMemberSkill {
     Assigned: number;
@@ -857,10 +857,10 @@ export interface IConsumedSuit {
     c?: IColor;
 }
 
-export interface IInvasionChainProgress {
+/*interface IInvasionChainProgress {
     id: IOid;
     count: number;
-}
+}*/
 
 export interface IInvasionProgressClient {
     _id: IOid;
@@ -1110,9 +1110,9 @@ export interface ISeasonChallenge {
     id: string;
 }
 
-export interface ISentientSpawnChanceBoosters {
+/*interface ISentientSpawnChanceBoosters {
     numOceanMissionsCompleted: number;
-}
+}*/
 
 export interface ISettings {
     FriendInvRestriction: "GIFT_MODE_ALL" | "GIFT_MODE_FRIENDS" | "GIFT_MODE_NONE";
@@ -1176,7 +1176,7 @@ export interface IWeaponSkinClient extends Omit<IWeaponSkinDatabase, "_id"> {
     ItemId: IOidWithLegacySupport;
 }
 
-export interface IWebFlags {
+/*interface IWebFlags {
     activeBuyPlat: number;
     noShow2FA: boolean;
     Tennocon2018Digital: boolean;
@@ -1191,7 +1191,7 @@ export interface IWebFlags {
     Tennocon2020Digital: boolean;
     Anniversary2021: boolean;
     HitDownloadBtn: IMongoDate;
-}
+}*/
 
 export interface IEvolutionProgress {
     Progress: number;
@@ -1329,7 +1329,7 @@ export interface IMarker {
     showInHud: boolean;
 }
 
-export interface ISeasonProgress {
+interface ISeasonProgress {
     SeasonType: CalendarSeasonType;
     LastCompletedDayIdx: number;
     LastCompletedChallengeDayIdx: number;
@@ -1382,7 +1382,7 @@ export interface INokkoColony {
     JournalEntries: IJournalEntry[];
 }
 
-export type TSketches =
+type TSketches =
     | "ExplosiveBarrel"
     | "ArcTrap"
     | "RocketLauncher"

@@ -13,7 +13,7 @@ export const getSubstringFromKeyword = (str: string, keyword: string): string =>
     return str.substring(index);
 };
 
-export const getSubstringFromKeywordToKeyword = (str: string, keywordBegin: string, keywordEnd: string): string => {
+/*export const getSubstringFromKeywordToKeyword = (str: string, keywordBegin: string, keywordEnd: string): string => {
     const beginIndex = str.lastIndexOf(keywordBegin) + 1;
     const endIndex = str.indexOf(keywordEnd);
     return str.substring(beginIndex, endIndex + 1);
@@ -25,7 +25,7 @@ export const getIndexAfter = (str: string, searchWord: string): number => {
         return -1;
     }
     return index + searchWord.length;
-};
+};*/
 
 // This is FNV1a-32 except operating under modulus 2^31 because JavaScript is stinky and likes producing negative integers out of nowhere.
 export const catBreadHash = (name: string): number => {

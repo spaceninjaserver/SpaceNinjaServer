@@ -24,10 +24,3 @@ export interface ITypeCount {
     ItemType: string;
     ItemCount: number;
 }
-
-export interface IReward {
-    items: ITypeCount[];
-    credits: number;
-}
-
-export type IJunctionRewards = Record<string, IReward>;

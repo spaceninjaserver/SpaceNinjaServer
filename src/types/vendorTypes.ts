@@ -1,6 +1,6 @@
 import type { IMongoDate, IOid } from "./commonTypes.ts";
 
-export interface IItemPrice {
+interface IItemPrice {
     ItemType: string;
     ItemCount: number;
     ProductCategory: string;

@@ -63,7 +63,7 @@ export type IFindSessionRequest = { queryId: number } & (
 
 export interface IFindSessionResponse {
     queryId: number;
-    Sesions: IFindSessionResponseSession[];
+    Sessions: IFindSessionResponseSession[];
 }
 
 export interface IFindSessionResponseSession {

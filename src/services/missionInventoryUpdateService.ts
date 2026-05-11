@@ -1913,7 +1913,7 @@ export const addMissionRewards = async (
     };
 };
 
-export const addCredits = async (
+const addCredits = async (
     account: TAccountDocument,
     inventory: TInventoryDatabaseDocument,
     {

@@ -68,13 +68,13 @@ export const createAccount = async (accountData: IAccountCreationData): Promise<
     }
 };
 
-export const createLoadout = async (accountId: Types.ObjectId): Promise<TLoadoutDatabaseDocument> => {
+const createLoadout = async (accountId: Types.ObjectId): Promise<TLoadoutDatabaseDocument> => {
     const loadout = new Loadout({ loadoutOwnerId: accountId });
     const savedLoadout = await loadout.save();
     return savedLoadout;
 };
 
-export const createPersonalRooms = async (accountId: Types.ObjectId, shipId: Types.ObjectId): Promise<void> => {
+const createPersonalRooms = async (accountId: Types.ObjectId, shipId: Types.ObjectId): Promise<void> => {
     const personalRooms = new PersonalRooms({
         personalRoomsOwnerId: accountId,
         activeShipId: shipId
@@ -211,7 +211,7 @@ export const getGoogleAccountData = async (googleTokenId: string | undefined): P
     return { userId: payload["sub"], email: payload["email"] };
 };
 
-export const getOriginalPlatform = (account: TAccountDocument): number => {
+const getOriginalPlatform = (account: TAccountDocument): number => {
     return account.GoogleTokenId ? ePlatform.Android : ePlatform.Windows;
 };
 

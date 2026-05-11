@@ -2,7 +2,7 @@
   "name": "spaceninjaserver",
   "version": "0.1.0",
   "description": "SpaceNinjaServer",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "scripts": {
     "start": "node --enable-source-maps build/src/index.js",
     "build": "tsgo --inlineSourceMap && ncp static/webui build/static/webui",
@@ -21,7 +21,9 @@
     "lint:fix": "eslint --fix \"**/*.ts\"",
     "prettier": "prettier --write .",
     "update-translations": "cd scripts && node update-translations.cjs",
-    "fix": "npm run update-translations && npm run prettier"
+    "knip": "knip",
+    "knip:fix": "knip --fix",
+    "fix": "npm run update-translations && npm run knip:fix && npm run prettier"
   },
   "type": "module",
   "dependencies": {
@@ -51,13 +53,16 @@
     "ncp": "^2.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "*",
+    "@types/node": "^25.6.2",
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",
     "eslint": "^9.39.4",
     "eslint-plugin-prettier": "^5.2.5",
+    "knip": "^6.12.2",
     "prettier": "^3.5.3",
     "tree-kill": "^1.2.2",
-    "typescript": "^5.8"
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=20.18.1"

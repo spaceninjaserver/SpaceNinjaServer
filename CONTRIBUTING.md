@@ -11,8 +11,11 @@ Auto reloading is supported for server and WebUI development. Simply use `npm ru
 ### Testing
 
 Before submitting a PR:
+
 - Use `npm run verify` to verify that the code is type-safe.
-- Use `npm run fix` to fix formatting issues as well as be informed of any unfixable issues. Avoid introducing new warnings.
+- Use `npm run lint` and `npm run fix` to ensure your code meets our standards.
+
+Repeat these steps if you make any changes.
 
 ## WebUI Specific
 

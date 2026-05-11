@@ -10,7 +10,7 @@ export const ePlatform = {
 } as const;
 export type TPlatform = (typeof ePlatform)[keyof typeof ePlatform];
 
-export interface IAccountAndLoginResponseCommons {
+interface IAccountAndLoginResponseCommons {
     DisplayName: string;
     CountryCode?: string;
     ClientType?: string;
@@ -30,7 +30,7 @@ export interface IAccountCreationData extends IAccountAndLoginResponseCommons {
     LastLogin: Date;
 }
 
-export interface IDatabaseAccount extends IAccountCreationData {
+interface IDatabaseAccount extends IAccountCreationData {
     LastPlatform?: TPlatform;
     Dropped?: true;
     LatestEventMessageDate: Date;

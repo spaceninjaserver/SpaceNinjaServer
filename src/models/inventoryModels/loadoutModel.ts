@@ -59,7 +59,7 @@ loadoutConfigSchema.set("toJSON", {
     }
 });
 
-export const loadoutSchema = new Schema<ILoadoutDatabase, loadoutModelType>({
+const loadoutSchema = new Schema<ILoadoutDatabase, loadoutModelType>({
     NORMAL: [loadoutConfigSchema],
     SENTINEL: [loadoutConfigSchema],
     ARCHWING: [loadoutConfigSchema],

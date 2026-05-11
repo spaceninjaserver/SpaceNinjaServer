@@ -199,7 +199,7 @@ const eTradingOperation = {
     UnsetReady: "7",
     NeverSayNever: "01189998819991197253"
 } as const;
-export type TTradingOperation = (typeof eTradingOperation)[keyof typeof eTradingOperation];
+type TTradingOperation = (typeof eTradingOperation)[keyof typeof eTradingOperation];
 
 const getSide = (accountId: string, buddyId: string): "a" | "b" => {
     return accountId.localeCompare(buddyId) < 0 ? "a" : "b";

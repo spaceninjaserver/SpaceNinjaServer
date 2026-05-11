@@ -40,7 +40,7 @@ export const pictureFrameInfoSchema = new Schema<IPictureFrameInfo>(
     { _id: false }
 );
 
-export const customizationInfoSchema = new Schema<ICustomizationInfoDatabase>(
+const customizationInfoSchema = new Schema<ICustomizationInfoDatabase>(
     {
         Anim: String,
         AnimPose: Number,
@@ -229,7 +229,7 @@ const tailorShopDefault: ITailorShopDatabase = {
     ]
 };
 
-export const personalRoomsSchema = new Schema<IPersonalRoomsDatabase>({
+const personalRoomsSchema = new Schema<IPersonalRoomsDatabase>({
     personalRoomsOwnerId: Schema.Types.ObjectId,
     activeShipId: Schema.Types.ObjectId,
     Ship: { type: orbiterSchema, default: orbiterDefault },

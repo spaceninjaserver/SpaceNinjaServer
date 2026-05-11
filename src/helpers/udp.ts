@@ -2,7 +2,7 @@ import dgram from "node:dgram";
 import { getNrsAddresses } from "../services/configService.ts";
 import { crc32 } from "node:zlib";
 
-export const sendUdpMessage = (host: string, port: number, message: Buffer | string): Promise<void> => {
+const sendUdpMessage = (host: string, port: number, message: Buffer | string): Promise<void> => {
     return new Promise<void>((resolve, reject) => {
         const socket = dgram.createSocket("udp4");
         socket.send(message, port, host, err => {

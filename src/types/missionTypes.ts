@@ -23,7 +23,7 @@ export interface IMissionCredits {
 }
 
 // These fields will only be respected by the client when completing a showdown mission.
-export interface INemsisEndBody {
+interface INemsisEndBody {
     WeaponRecipes?: {
         ItemType: string;
         CompletionDate: IMongoDate;

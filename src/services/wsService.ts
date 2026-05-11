@@ -91,7 +91,7 @@ interface IWsMsgFromClient {
     guildId?: string;
 }
 
-export interface IWsMsgToClientCommon {
+interface IWsMsgToClientCommon {
     wsid?: number;
     ports?: {
         http: number | undefined;
@@ -292,7 +292,7 @@ export const forEachWsClient = (cb: (client: IWsCustomData) => void): void => {
     }
 };
 
-export const haveGameWs = (accountId: string): boolean => {
+const haveGameWs = (accountId: string): boolean => {
     let ret = false;
     forEachWsClient(client => {
         if (client.isGame && client.accountId == accountId) {

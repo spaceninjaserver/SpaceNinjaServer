@@ -174,7 +174,7 @@ export const getGuildVault = async (guild: TGuildDatabaseDocument, buildLabel: s
     return vault;
 };
 
-export const getGuildVaultEx = (
+const getGuildVaultEx = (
     guild: TGuildDatabaseDocument,
     buildLabel: string,
     needsSave: boolean = false
@@ -262,7 +262,7 @@ export const getAllianceVault = async (
     return vault;
 };
 
-export const getAllianceVaultEx = (
+const getAllianceVaultEx = (
     alliance: TAllianceDatabaseDocument,
     buildLabel: string,
     needsSave: boolean = false
@@ -645,7 +645,7 @@ export const addVaultFusionTreasures = (guild: TGuildDatabaseDocument, fusionTre
     }
 };
 
-export const addVaultInventoryItems = (vault: IVaultDatabase, miscItems: ITypeCount[]): void => {
+const addVaultInventoryItems = (vault: IVaultDatabase, miscItems: ITypeCount[]): void => {
     vault.VaultInventoryItems ??= [];
     for (const item of miscItems) {
         const vaultItem = vault.VaultInventoryItems.find(x => x.ItemType == item.ItemType);
@@ -1107,7 +1107,7 @@ export const handleGuildGoalProgress = async (
     await guild.save();
 };
 
-export const goalGuildRewardByTag: Record<string, { guildGoals: number[][]; rewards: string[] }> = {
+const goalGuildRewardByTag: Record<string, { guildGoals: number[][]; rewards: string[] }> = {
     JadeShadowsEvent: {
         guildGoals: [
             // I don't know what ClanGoal means

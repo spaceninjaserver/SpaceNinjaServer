@@ -104,6 +104,7 @@ import { loginRewardsController } from "../controllers/api/loginRewardsControlle
 import { loginRewardsSelectionController } from "../controllers/api/loginRewardsSelectionController.ts";
 import { logoutController } from "../controllers/api/logoutController.ts";
 import { marketRecommendationsController } from "../controllers/api/marketRecommendationsController.ts";
+import { marketSearchRecommendationsController } from "../controllers/api/marketSearchRecommendationsController.ts";
 import { maturePetController } from "../controllers/api/maturePetController.ts";
 import { missionInventoryUpdateController } from "../controllers/api/missionInventoryUpdateController.ts";
 import { modularWeaponCraftingController } from "../controllers/api/modularWeaponCraftingController.ts";
@@ -243,7 +244,7 @@ apiRouter.get("/leaveSession.php", deleteSessionController); // ~U10
 apiRouter.get("/loginRewards.php", loginRewardsController);
 apiRouter.get("/logout.php", logoutController);
 apiRouter.get("/marketRecommendations.php", marketRecommendationsController);
-apiRouter.get("/marketSearchRecommendations.php", marketRecommendationsController);
+apiRouter.get("/marketSearchRecommendations.php", marketSearchRecommendationsController);
 apiRouter.get("/modularWeaponSale.php", modularWeaponSaleController);
 apiRouter.get("/playedParkourTutorial.php", playedParkourTutorialController);
 apiRouter.get("/purchase.php", purchaseGetController); // U8

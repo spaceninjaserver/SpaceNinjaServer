@@ -53,7 +53,7 @@ export interface IWorldState {
     Tmp?: string;
 }
 
-export interface IEvent {
+interface IEvent {
     _id?: IOid;
     Msg?: string;
     Messages: {
@@ -205,7 +205,7 @@ export interface ISyndicateMissionInfo {
     Jobs?: ISyndicateJob[];
 }
 
-export interface IGlobalUpgrade {
+interface IGlobalUpgrade {
     _id: IOidWithLegacySupport;
     Activation: IMongoDateWithLegacySupport;
     ExpiryDate: IMongoDateWithLegacySupport;
@@ -234,12 +234,12 @@ export interface IInvasion {
     Activation: IMongoDateWithLegacySupport;
 }
 
-export interface IInvasionMissionInfo {
+interface IInvasionMissionInfo {
     seed: number;
     faction: string;
 }
 
-export interface IFissure {
+interface IFissure {
     _id: IOidWithLegacySupport;
     Region: number;
     Seed: number;
@@ -259,7 +259,7 @@ export interface IFissureDatabase {
     Hard?: boolean;
 }
 
-export interface INodeOverride {
+interface INodeOverride {
     _id: IOidWithLegacySupport;
     Activation?: IMongoDateWithLegacySupport;
     Expiry?: IMongoDateWithLegacySupport;
@@ -349,13 +349,13 @@ export interface IPrimeVaultTraderOffer {
     EndDate?: IMongoDate;
 }
 
-export interface IScheduleInfo {
+interface IScheduleInfo {
     Expiry: IMongoDate;
     PreviewHiddenUntil?: IMongoDate;
     FeaturedItem?: string;
 }
 
-export interface IDailyDeal {
+interface IDailyDeal {
     StoreItem: string;
     Activation: IMongoDateWithLegacySupport;
     Expiry: IMongoDateWithLegacySupport;
@@ -398,13 +398,13 @@ export interface IEndlessXpChoice {
     Choices: string[];
 }
 
-export interface IEndlessXpScheduleEntry {
+interface IEndlessXpScheduleEntry {
     Activation: IMongoDate;
     Expiry: IMongoDate;
     CategoryChoices: IEndlessXpChoice[];
 }
 
-export interface IFeaturedGuild {
+interface IFeaturedGuild {
     _id: IOid;
     Name: string;
     Tier: number;
@@ -488,15 +488,15 @@ export interface IFlashSale {
     BannerIndex?: number;
 }
 
-export interface IInGameMarket {
+interface IInGameMarket {
     LandingPage: ILandingPage;
 }
 
-export interface ILandingPage {
+interface ILandingPage {
     Categories: IGameMarketCategory[];
 }
 
-export interface IGameMarketCategory {
+interface IGameMarketCategory {
     CategoryName: string;
     Name: string;
     Icon: string;

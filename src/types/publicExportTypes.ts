@@ -217,7 +217,7 @@ export interface INightwaveChallenge {
     required: number;
 }
 
-export interface INightwaveReward {
+interface INightwaveReward {
     uniqueName: string;
     itemCount?: number;
     name?: string;
@@ -225,14 +225,14 @@ export interface INightwaveReward {
     components?: string[];
 }
 
-export interface IOther {
+interface IOther {
     uniqueName: string;
     name: string;
     description: string;
     excludeFromCodex?: boolean;
 }
 
-export interface IExportRailjack {
+interface IExportRailjack {
     nodes: {
         uniqueName: string;
         name: string;
