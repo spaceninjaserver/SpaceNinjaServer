@@ -54,6 +54,7 @@ export const accountCheatBooleans = [
     "infinitePlatinum",
     "infiniteEndo",
     "infiniteRegalAya",
+    "infiniteRevives",
     "infiniteTrades",
     "infiniteGifts",
     "infiniteHelminthMaterials",

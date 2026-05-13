@@ -254,6 +254,7 @@ dict = {
     cheats_infinitePlatinum: `无限白金`,
     cheats_infiniteEndo: `无限内融核心`,
     cheats_infiniteRegalAya: `无限御品阿耶`,
+    cheats_infiniteRevives: `[UNTRANSLATED] Infinite Revives (Pre-U18)`,
     cheats_infiniteTrades: `无限交易次数`,
     cheats_infiniteGifts: `无限赠送次数`,
     cheats_infiniteHelminthMaterials: `无限Helminth材料`,

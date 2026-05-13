@@ -254,6 +254,7 @@ dict = {
     cheats_infinitePlatinum: `Бескінечна Платина`,
     cheats_infiniteEndo: `Бескінечне Ендо`,
     cheats_infiniteRegalAya: `Бескінечна Королівська Ая`,
+    cheats_infiniteRevives: `[UNTRANSLATED] Infinite Revives (Pre-U18)`,
     cheats_infiniteTrades: `[UNTRANSLATED] Infinite Trades`,
     cheats_infiniteGifts: `[UNTRANSLATED] Infinite Gifts`,
     cheats_infiniteHelminthMaterials: `Бескінечні секреції Гельмінта`,

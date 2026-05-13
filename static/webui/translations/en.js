@@ -253,6 +253,7 @@ dict = {
     cheats_infinitePlatinum: `Infinite Platinum`,
     cheats_infiniteEndo: `Infinite Endo`,
     cheats_infiniteRegalAya: `Infinite Regal Aya`,
+    cheats_infiniteRevives: `Infinite Revives (Pre-U18)`,
     cheats_infiniteTrades: `Infinite Trades`,
     cheats_infiniteGifts: `Infinite Gifts`,
     cheats_infiniteHelminthMaterials: `Infinite Helminth Materials`,

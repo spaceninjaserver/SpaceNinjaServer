@@ -11,7 +11,12 @@ import type { RequestHandler } from "express";
 export const addXpController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const request = req.body as IAddXpRequest;
-    const inventory = await getInventory2(accountId, "XPInfo", ...(Object.keys(request) as TEquipmentKey[]));
+    const inventory = await getInventory2(
+        accountId,
+        "XPInfo",
+        "infiniteRevives",
+        ...(Object.keys(request) as TEquipmentKey[])
+    );
     for (const [category, gear] of Object.entries(request)) {
         for (const clientItem of gear) {
             const dbItem = inventory[category as TEquipmentKey].id((clientItem.ItemId as IOid).$oid);

@@ -254,6 +254,7 @@ dict = {
     cheats_infinitePlatinum: `Unendlich Platinum`,
     cheats_infiniteEndo: `Unendlich Endo`,
     cheats_infiniteRegalAya: `Unendlich Reines Aya`,
+    cheats_infiniteRevives: `Unendlich Wiederbelebungen (vor U18)`,
     cheats_infiniteTrades: `Unendlich handeln`,
     cheats_infiniteGifts: `Unendlich schenken`,
     cheats_infiniteHelminthMaterials: `Unendlich Helminth-Materialien`,

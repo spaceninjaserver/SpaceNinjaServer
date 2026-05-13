@@ -2271,7 +2271,7 @@ const xpEarningParts: readonly string[] = [
 ];
 
 export const applyClientEquipmentUpdates = <K extends TEquipmentKey>(
-    inventory: Pick<TInventoryDatabaseDocument, K | "XPInfo">,
+    inventory: Pick<TInventoryDatabaseDocument, K | "XPInfo" | "infiniteRevives">,
     gearArray: IEquipmentClient[],
     categoryName: K,
     buildLabel: string
@@ -2327,6 +2327,9 @@ export const applyClientEquipmentUpdates = <K extends TEquipmentKey>(
         }
 
         if (ExtraRemaining !== undefined) {
+            if (inventory.infiniteRevives) {
+                return;
+            }
             if (version_compare(buildLabel, gameToBuildVersion["10.3.3"]) >= 0) {
                 if (ExtraRemaining > 0) {
                     throw new Error(

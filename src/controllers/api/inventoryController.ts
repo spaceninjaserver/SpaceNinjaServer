@@ -399,6 +399,11 @@ export const getInventoryResponse = async (
     if (inventory.infiniteRegalAya) {
         inventoryResponse.PrimeTokens = 999999999;
     }
+    if (inventory.infiniteRevives) {
+        for (const suit of inventoryResponse.Suits) {
+            suit.ExtraRemaining = 999999999;
+        }
+    }
     if (inventory.infiniteTrades) {
         inventoryResponse.TradesRemaining = 9999;
     }
