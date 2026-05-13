@@ -22,7 +22,8 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
     if (today != account.LastLoginRewardDate) {
         const inventory = await getInventory(account._id, undefined);
         if (!inventory.disableDailyTribute) {
-            const randomRewards = getRandomLoginRewards(account, inventory);
+            const buildLabel = getBuildLabel(req, account);
+            const randomRewards = await getRandomLoginRewards(account, inventory, buildLabel);
             const response: ILoginRewardsReponse = {
                 DailyTributeInfo: {
                     Rewards: randomRewards,
@@ -36,8 +37,6 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
                 },
                 LastLoginRewardDate: today
             };
-
-            const buildLabel = getBuildLabel(req, account);
 
             // https://wiki.warframe.com/w/Login_Rewards
             const is_pre_daily_tribute = version_compare(buildLabel, gameToBuildVersion["18.0.2"]) < 0;
@@ -61,7 +60,7 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
                     if (reward.Icon == "/Lotus/Interface/Icons/StoreIcons/Currency/CreditsLarge.png") {
                         reward.Icon = "/Lotus/Interface/Icons/Store/CreditBooster.png";
                     } else if (reward.RewardType == "RT_RESOURCE") {
-                        reward.Icon = ExportResources[reward.ItemType].icon.replaceAll(
+                        reward.Icon = ExportResources[reward.ItemType!].icon.replaceAll(
                             "/Lotus/Interface/Icons/StoreIcons/Resources/CraftingComponents/",
                             "/Lotus/Interface/Icons/Store/"
                         );

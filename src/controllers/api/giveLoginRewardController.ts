@@ -6,13 +6,14 @@ import {
     type ILoginReward
 } from "../../services/loginRewardService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
-import { getAccountForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { sendWsBroadcastTo } from "../../services/wsService.ts";
 import { logger } from "../../utils/logger.ts";
 
 export const giveLoginRewardController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const today = Math.trunc(Date.now() / 86400000) * 86400;
     if (account.LastLoginRewardDate == today) {
         logger.debug(`login reward was already pre-emptively claimed server-side, so ignoring manual claim`);
@@ -21,7 +22,7 @@ export const giveLoginRewardController: RequestHandler = async (req, res) => {
         const body = getJSONfromString<IGiveLoginRewardRequest>(String(req.body));
         const inventory = await getInventory(account._id, undefined);
 
-        const randomRewards = getRandomLoginRewards(account, inventory);
+        const randomRewards = await getRandomLoginRewards(account, inventory, buildLabel);
         const chosenReward = randomRewards.find(x => x.StoreItemType == body.reward.StoreItemType)!;
         const inventoryChanges = await claimLoginReward(inventory, chosenReward);
 
