@@ -13,6 +13,8 @@ export const claimLibraryDailyTaskRewardController: RequestHandler = async (req,
         "FusionPoints"
     );
 
+    const rewardStoreItem = inventory.LibraryActiveDailyTaskInfo!.RewardStoreItem;
+    const rewardEndo = rewardStoreItem == "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/RareFusionBundle" ? 80 : 50;
     const rewardQuantity = inventory.LibraryActiveDailyTaskInfo!.RewardQuantity;
     const rewardStanding = inventory.LibraryActiveDailyTaskInfo!.RewardStanding;
     inventory.LibraryActiveDailyTaskInfo = undefined;
@@ -24,15 +26,15 @@ export const claimLibraryDailyTaskRewardController: RequestHandler = async (req,
     }
     syndicate.Standing += rewardStanding;
 
-    addFusionPoints(inventory, 80 * rewardQuantity);
+    addFusionPoints(inventory, rewardEndo * rewardQuantity);
     await inventory.save();
 
     res.json({
-        RewardItem: "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/RareFusionBundle",
+        RewardItem: rewardStoreItem,
         RewardQuantity: rewardQuantity,
         StandingAwarded: rewardStanding,
         InventoryChanges: {
-            FusionPoints: 80 * rewardQuantity
+            FusionPoints: rewardEndo * rewardQuantity
         }
     });
 };

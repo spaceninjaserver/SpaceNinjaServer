@@ -2812,13 +2812,18 @@ export const createLibraryDailyTask = (): ILibraryDailyTaskInfo => {
     const enemyTypes = getRandomElement(libraryDailyTasks)!;
     const enemyAvatar = ExportEnemies.avatars[enemyTypes[0]];
     const scansRequired = getRandomInt(2, 4);
+    const rewardQuantityMultiplier =
+        (config.serversideQualityOfLife?.doubleDailySynthesisEndoReward ?? true) ? 2.5 : 1.25;
     return {
         EnemyTypes: enemyTypes,
         EnemyLocTag: enemyAvatar.name,
         EnemyIcon: enemyAvatar.icon!,
         ScansRequired: scansRequired,
-        RewardStoreItem: "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/RareFusionBundle",
-        RewardQuantity: Math.trunc(scansRequired * 2.5),
+        RewardStoreItem:
+            Math.random() < 0.25 // Unsure what the actual chance for a "rare reward" is
+                ? "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/RareFusionBundle"
+                : "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/UncommonFusionBundle",
+        RewardQuantity: Math.trunc(scansRequired * rewardQuantityMultiplier),
         RewardStanding: 2500 * scansRequired
     };
 };

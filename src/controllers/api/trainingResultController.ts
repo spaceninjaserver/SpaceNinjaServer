@@ -13,6 +13,7 @@ import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import { createMessage } from "../../services/inboxService.ts";
 import { toMongoDate2 } from "../../helpers/inventoryHelpers.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { config } from "../../services/configService.ts";
 
 interface ITrainingResultsRequest {
     numLevelsGained: number;
@@ -37,7 +38,9 @@ const handleTrainingProgress = async (
     if (numLevelsGained === 1) {
         let time = Date.now();
         if (!inventory.noMasteryRankUpCooldown) {
-            time += unixTimesInMs.hour * 23;
+            time +=
+                unixTimesInMs.hour *
+                ((config.serversideQualityOfLife?.twentythreeHourMasteryRankCooldown ?? true) ? 23 : 24);
         }
         inventory.TrainingDate = new Date(time);
 

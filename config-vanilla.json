@@ -116,6 +116,10 @@
     "communitySynthesisTarget": 0,
     "communitySynthesisProgress": 0
   },
+  "serversideQualityOfLife": {
+    "twentythreeHourMasteryRankCooldown": true,
+    "doubleDailySynthesisEndoReward": true
+  },
   "tunables": {
     "useLoginToken": false,
     "prohibitSkipMissionStartTimer": false,

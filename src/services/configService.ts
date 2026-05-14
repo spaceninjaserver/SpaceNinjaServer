@@ -119,6 +119,10 @@ export interface IConfig {
         communitySynthesisTarget?: number;
         communitySynthesisProgress?: number;
     };
+    serversideQualityOfLife?: {
+        twentythreeHourMasteryRankCooldown?: boolean;
+        doubleDailySynthesisEndoReward?: boolean;
+    };
     tunables?: {
         useLoginToken?: boolean;
         prohibitSkipMissionStartTimer?: boolean;
