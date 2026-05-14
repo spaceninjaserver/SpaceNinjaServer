@@ -106,6 +106,7 @@ dict = {
     code_funded: `Профінансовано`,
     code_replays: `Повтори`,
     code_stalker: `Сталкер`,
+    code_darkExcalibur: `Темний |ITEM|`,
     code_drifterBeardName: `Борода мандрівника: |INDEX|`,
     code_reviveBooster: `Збільшувач зцілення`,
     code_reviveBoosterDesc: `Встановлює кількість відроджень до 4, що дозволяє самовідроджуватися в Архонтових ловах.`,

@@ -106,6 +106,7 @@ dict = {
     code_funded: `Gespendet`,
     code_replays: `Wiederholungen`,
     code_stalker: `Stalker`,
+    code_darkExcalibur: `[UNTRANSLATED] Dark |ITEM|`,
     code_drifterBeardName: `Drifter-Bart: |INDEX|`,
     code_reviveBooster: `Wiederbelebungsbooster`,
     code_reviveBoosterDesc: `Setzt die Wiederbelebungsanzahl auf 4 und ermöglicht Selbstwiederbelebung in Archon Jagd.`,

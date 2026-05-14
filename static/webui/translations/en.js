@@ -105,6 +105,7 @@ dict = {
     code_funded: `Funded`,
     code_replays: `Replays`,
     code_stalker: `Stalker`,
+    code_darkExcalibur: `Dark |ITEM|`,
     code_drifterBeardName: `Drifter Beard |INDEX|`,
     code_reviveBooster: `Revive Booster`,
     code_reviveBoosterDesc: `Sets revive count to 4, which allows self-revive in Archon Hunts.`,
