@@ -26,6 +26,7 @@ import { syncConfigWithDatabase, validateConfig } from "./services/configWatcher
 import { updateWorldStateCollections } from "./services/worldStateService.ts";
 import { repoDir } from "./helpers/pathHelper.ts";
 import { MongoMemoryServer } from "mongodb-memory-server-core";
+import { args } from "./helpers/commandLineArguments.ts";
 
 JSON.stringify = JSONStringify; // Patch JSON.stringify to work flawlessly with Bigints.
 
@@ -90,6 +91,12 @@ mongoose
                     }
                 });
             }
+        }
+
+        if (args.dev) {
+            logger.debug(
+                "Developer mode is enabled. Note that this project is where it is now due to code contributions; please pay it forward with pull requests."
+            );
         }
 
         void updateWorldStateCollections();

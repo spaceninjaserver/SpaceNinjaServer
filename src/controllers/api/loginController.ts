@@ -61,13 +61,9 @@ export const loginController: RequestHandler = async (request, response) => {
 
     const buildLabel = getBuildLabelForUnauthenticatedRequest(request);
 
-    if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0) {
-        if (args.dev) {
-            logger.debug(`We are eagerly awaiting your pull requests!`);
-        } else {
-            response.status(400).json({ error: "I'm making a list and checking it twice" });
-            return;
-        }
+    if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0 && !args.dev) {
+        response.status(400).json({ error: "I'm making a list and checking it twice" });
+        return;
     }
 
     if (!account && config.autoCreateAccount) {
