@@ -493,7 +493,7 @@ function setActiveLanguage(lang) {
 
         script = document.createElement("script");
         script.id = "translations";
-        script.src = "/translations/" + webui_lang + ".js";
+        script.src = "/webui/translations/" + webui_lang + ".js";
         script.onload = function () {
             updateLocElements();
             updateTitle();

@@ -77,7 +77,7 @@ webuiRouter.get("/webui/riven-tool/RivenParser.js", async (_req, res) => {
 });
 
 // Serve translations
-webuiRouter.get("/translations/:file", async (req, res) => {
+webuiRouter.get("/webui/translations/:file", async (req, res) => {
     res.set("Content-Type", "text/javascript;charset=utf8");
     res.send(await fs.readFile(path.join(baseDir, `static/webui/translations/${req.params.file}`)));
 });
