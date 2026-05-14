@@ -971,6 +971,11 @@ export const addItem = async (
                     if (quantity != 1) {
                         throw new Error(`unexpected acquisition quantity of Suits: got ${quantity}, expected 1`);
                     }
+                    if (typeName == "/Lotus/Powersuits/Excalibur/DoomSwordCYUmbra") {
+                        const inventoryChanges: IInventoryChanges = {};
+                        addSpecialItem(inventory, typeName, inventoryChanges);
+                        return inventoryChanges;
+                    }
                     return {
                         ...(await addPowerSuit(
                             inventory,
