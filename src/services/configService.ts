@@ -123,6 +123,7 @@ export interface IConfig {
         twentythreeHourMasteryRankCooldown?: boolean;
         doubleDailySynthesisEndoReward?: boolean;
     };
+    inventoryDefaults?: Record<string, any>;
     tunables?: {
         useLoginToken?: boolean;
         prohibitSkipMissionStartTimer?: boolean;

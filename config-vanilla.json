@@ -120,6 +120,7 @@
     "twentythreeHourMasteryRankCooldown": true,
     "doubleDailySynthesisEndoReward": true
   },
+  "inventoryDefaults": {},
   "tunables": {
     "useLoginToken": false,
     "prohibitSkipMissionStartTimer": false,

@@ -245,6 +245,7 @@ export const createInventory = async (
 ): Promise<void> => {
     try {
         const inventory = new Inventory({
+            ...(config.inventoryDefaults ?? {}),
             accountOwnerId: accountOwnerId,
             LoadOutPresets: defaultItemReferences.loadOutPresetId,
             Ships: [defaultItemReferences.ship]
