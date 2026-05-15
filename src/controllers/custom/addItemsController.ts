@@ -33,12 +33,13 @@ export const addItemsController: RequestHandler = async (req, res) => {
             return;
         }
     }
-    if (inventory.isModified()) {
+    const modifiedPaths = inventory.modifiedPaths();
+    if (modifiedPaths.length) {
         await inventory.save();
-        res.json(true);
+    }
+    res.json(modifiedPaths);
+    if (modifiedPaths.length) {
         broadcastInventoryUpdate(req);
-    } else {
-        res.json(false);
     }
 };
 

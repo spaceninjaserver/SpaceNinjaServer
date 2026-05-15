@@ -2293,9 +2293,9 @@ function doAcquireEquipment(category) {
                 }
             ])
         });
-        req.done(didAnything => {
+        req.done(modifiedPaths => {
             document.getElementById("acquire-type-" + category).value = "";
-            if (didAnything) {
+            if (modifiedPaths.length) {
                 updateInventory();
             } else {
                 toast(loc("code_nothingToDo"));
@@ -3167,8 +3167,8 @@ function doAcquireCountItems(category) {
                     }
                 ])
             })
-                .done(function (didAnything) {
-                    if (didAnything) {
+                .done(function (modifiedPaths) {
+                    if (modifiedPaths.length) {
                         if (count > 0) {
                             toast(loc("code_succAdded"));
                         } else {
@@ -3222,12 +3222,15 @@ function addItemByItemType() {
                     }
                 ])
             })
-                .done(function (didAnything) {
-                    if (didAnything) {
+                .done(function (modifiedPaths) {
+                    if (modifiedPaths.length) {
                         if (ItemCount > 0) {
                             toast(loc("code_succAdded"));
                         } else {
                             toast(loc("code_succRemoved"));
+                        }
+                        if (modifiedPaths.some(x => !x.startsWith("MiscItems"))) {
+                            updateInventory();
                         }
                     } else {
                         toast(loc("code_nothingToDo"));
