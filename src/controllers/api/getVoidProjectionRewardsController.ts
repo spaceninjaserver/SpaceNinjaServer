@@ -8,13 +8,19 @@ import { logger } from "../../utils/logger.ts";
 
 export const getVoidProjectionRewardsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const data = getJSONfromString<IVoidProjectionRewardRequest>(String(req.body));
+    const data = getJSONfromString<IVoidProjectionRewardRequest | IVoidProjectionRewardsLegacyRequest>(String(req.body));
     logger.debug(`getVoidProjectionRewards request:`, data);
 
-    if (data.ParticipantInfo.QualifiesForReward && !data.ParticipantInfo.HaveRewardResponse) {
+    const currentWave = "CurrentWave" in data ? data.CurrentWave : data.VoidTearParticipantsCurrWave.Wave;
+    const participantInfo =
+        "ParticipantInfo" in data
+            ? data.ParticipantInfo
+            : data.VoidTearParticipantsCurrWave.Participants.find(p => p.AccountId == accountId);
+
+    if (participantInfo && participantInfo.QualifiesForReward && !participantInfo.HaveRewardResponse) {
         const inventory = await getInventory(accountId, undefined);
-        const reward = await crackRelic(inventory, data.ParticipantInfo);
-        if (!inventory.MissionRelicRewards || inventory.MissionRelicRewards.length >= data.CurrentWave) {
+        const reward = await crackRelic(inventory, participantInfo);
+        if (!inventory.MissionRelicRewards || inventory.MissionRelicRewards.length >= currentWave) {
             inventory.MissionRelicRewards = [];
         }
         inventory.MissionRelicRewards.push({ ItemType: reward.type, ItemCount: reward.itemCount });
@@ -24,12 +30,17 @@ export const getVoidProjectionRewardsController: RequestHandler = async (req, re
         await inventory.save();
     }
 
-    const response: IVoidProjectionRewardResponse = {
-        CurrentWave: data.CurrentWave,
-        ParticipantInfo: data.ParticipantInfo,
-        DifficultyTier: data.DifficultyTier
-    };
-    res.json(response);
+    if ("CurrentWave" in data) {
+        res.json({
+            CurrentWave: data.CurrentWave,
+            ParticipantInfo: data.ParticipantInfo,
+            DifficultyTier: data.DifficultyTier
+        } satisfies IVoidProjectionRewardResponse);
+    } else {
+        res.json({
+            VoidTearParticipantsCurrWave: data.VoidTearParticipantsCurrWave
+        } satisfies IVoidProjectionRewardsLegacyResponse);
+    }
 };
 
 interface IVoidProjectionRewardRequest {
@@ -40,9 +51,20 @@ interface IVoidProjectionRewardRequest {
     DifficultyTier: number;
     VoidProjectionRemovalHash: string;
 }
-
 interface IVoidProjectionRewardResponse {
     CurrentWave: number;
     ParticipantInfo: IVoidTearParticipantInfo;
     DifficultyTier: number;
+}
+
+// Legacy format seen in U27.3, unsure when it changed
+interface IVoidProjectionRewardsLegacyRequest {
+    VoidTearParticipantsCurrWave: IVoidTearWaveInfo;
+    VoidTearParticipantsPrevWave?: IVoidTearWaveInfo;
+    VoidTier: string;
+    VoidProjectionRemovalHash: string;
+}
+
+interface IVoidProjectionRewardsLegacyResponse {
+    VoidTearParticipantsCurrWave: IVoidTearWaveInfo;
 }

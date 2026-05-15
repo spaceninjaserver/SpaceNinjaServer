@@ -282,7 +282,7 @@ interface IUpgradeOperation {
 
 export interface IVoidTearWaveInfo {
     Wave: number;
-    IsFinalWave: boolean;
+    IsFinalWave?: boolean; // not in U27.3
     Participants: IVoidTearParticipantInfo[];
 }
 
