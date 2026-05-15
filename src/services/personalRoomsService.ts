@@ -12,6 +12,7 @@ import { logger } from "../utils/logger.ts";
 import type { Types } from "mongoose";
 import { getLoadout } from "./loadoutService.ts";
 import { toOid } from "../helpers/inventoryHelpers.ts";
+import type { ILoadoutClient } from "../types/saveLoadoutTypes.ts";
 
 export const getPersonalRooms = async (
     accountId: string | Types.ObjectId,
@@ -113,7 +114,7 @@ export const getShip = async (personalRoomsDb: TPersonalRoomsDatabaseDocument): 
     const loadout = await getLoadout(personalRoomsDb.personalRoomsOwnerId);
     return {
         ShipOwnerId: personalRoomsDb.personalRoomsOwnerId.toString(),
-        LoadOutInventory: { LoadOutPresets: loadout.toJSON() },
+        LoadOutInventory: { LoadOutPresets: loadout.toJSON<ILoadoutClient>() },
         Ship: {
             ...personalRooms.Ship,
             ShipId: toOid(personalRoomsDb.activeShipId)

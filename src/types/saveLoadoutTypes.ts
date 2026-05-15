@@ -86,7 +86,7 @@ type IConfigEntry = {
     CrewMembers?: ICrewShipMembersClient;
 };
 
-export type ILoadoutClient = Omit<ILoadoutDatabase, "_id" | "loadoutOwnerId">;
+export type ILoadoutClient = ILoadOutPresets;
 
 export interface ILoadoutDatabase {
     NORMAL: ILoadoutConfigDatabase[];
