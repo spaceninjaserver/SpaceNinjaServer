@@ -114,53 +114,57 @@ export const getSession = async (request: IFindSessionRequest): Promise<IFindSes
         }));*/
 };
 
-export const updateSession = async (sessionId: string | Types.ObjectId, updateData: string): Promise<boolean> => {
-    logger.debug(`session update: ${updateData}`);
-
+export const updateSession = async (
+    sessionId: string | Types.ObjectId,
+    updateData: string | undefined
+): Promise<boolean> => {
     //const session = sessions.find(session => session._id.equals(sessionId));
     const session = await Session.findById(sessionId);
-
     if (!session) {
         return false;
     }
-    if (updateData.substring(0, 1) == "{") {
-        try {
-            Object.assign(session, JSONParse(updateData));
-        } catch (error) {
-            logger.error("Invalid JSON string for session update.");
-            return false;
-        }
-    } else {
-        const updates: string[] = updateData.split("&");
-        for (const update of updates) {
-            const arr = update.split("=");
-            if (arr.length == 2) {
-                const [key, value] = arr;
-                switch (key) {
-                    case "maxPlayers":
-                    case "minPlayers":
-                    case "privateSlots":
-                    case "scoreLimit":
-                    case "timeLimit":
-                    case "gameModeId":
-                    case "eloRating":
-                    case "regionId":
-                    case "difficulty":
-                    case "freePublic":
-                    case "freePrivate":
-                        session[key] = parseInt(value);
-                        break;
 
-                    default:
-                        logger.error(`unexpected key in legacy session update format: ${key}`);
-                        break;
+    if (updateData) {
+        logger.debug(`session update: ${updateData}`);
+        if (updateData.substring(0, 1) == "{") {
+            try {
+                Object.assign(session, JSONParse(updateData));
+            } catch (error) {
+                logger.error("Invalid JSON string for session update.");
+                return false;
+            }
+        } else {
+            const updates: string[] = updateData.split("&");
+            for (const update of updates) {
+                const arr = update.split("=");
+                if (arr.length == 2) {
+                    const [key, value] = arr;
+                    switch (key) {
+                        case "maxPlayers":
+                        case "minPlayers":
+                        case "privateSlots":
+                        case "scoreLimit":
+                        case "timeLimit":
+                        case "gameModeId":
+                        case "eloRating":
+                        case "regionId":
+                        case "difficulty":
+                        case "freePublic":
+                        case "freePrivate":
+                            session[key] = parseInt(value);
+                            break;
+
+                        default:
+                            logger.error(`unexpected key in legacy session update format: ${key}`);
+                            break;
+                    }
                 }
             }
         }
     }
-    //logger.debug(`session after update:`, session);
 
     session.lastUpdate = new Date();
+    //logger.debug(`session after update:`, session);
     await session.save();
 
     return true;

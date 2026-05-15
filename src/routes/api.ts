@@ -180,7 +180,7 @@ import { unlockShipFeatureController } from "../controllers/api/unlockShipFeatur
 import { updateAlignmentController } from "../controllers/api/updateAlignmentController.ts";
 import { updateChallengeProgressController } from "../controllers/api/updateChallengeProgressController.ts";
 import { updateQuestController } from "../controllers/api/updateQuestController.ts";
-import { updateSessionController } from "../controllers/api/updateSessionController.ts";
+import { updateSessionGetController, updateSessionPostController } from "../controllers/api/updateSessionController.ts";
 import { updateSongChallengeController } from "../controllers/api/updateSongChallengeController.ts";
 import { updateThemeController } from "../controllers/api/updateThemeController.ts";
 import { upgradeOperatorController } from "../controllers/api/upgradeOperatorController.ts";
@@ -267,7 +267,7 @@ apiRouter.get("/startLibraryPersonalTarget.php", startLibraryPersonalTargetContr
 apiRouter.get("/surveys.php", surveysController);
 apiRouter.get("/trading.php", tradingController);
 apiRouter.get("/trainingResult.php", trainingResultGetController);
-apiRouter.get("/updateSession.php", updateSessionController);
+apiRouter.get("/updateSession.php", updateSessionGetController);
 apiRouter.get("/upgradeOperator.php", upgradeOperatorController);
 apiRouter.get("/version.php", versionController);
 apiRouter.get("/worldState.php", worldStateController); // U8
@@ -416,7 +416,7 @@ apiRouter.post("/updateChallengeProgress.php", updateChallengeProgressController
 apiRouter.post("/updateInventory.php", missionInventoryUpdateController); // U26 and below
 apiRouter.post("/updateNodeIntros.php", genericUpdateController);
 apiRouter.post("/updateQuest.php", updateQuestController);
-apiRouter.post("/updateSession.php", updateSessionController);
+apiRouter.post("/updateSession.php", updateSessionPostController);
 apiRouter.post("/updateSongChallenge.php", updateSongChallengeController);
 apiRouter.post("/updateTheme.php", updateThemeController);
 apiRouter.post("/upgrades.php", upgradesController);
