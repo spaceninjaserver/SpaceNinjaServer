@@ -14,7 +14,6 @@ try {
 
 // Now we can init the logger with the settings provided in the config.
 import { logger } from "./utils/logger.ts";
-logger.info("Starting up...");
 
 // Proceed with normal startup: bring up config watcher service, validate config, connect to MongoDB, and finally start listening for HTTP.
 import mongoose from "mongoose";
