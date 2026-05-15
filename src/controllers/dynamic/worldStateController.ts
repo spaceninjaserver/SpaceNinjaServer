@@ -28,7 +28,7 @@ export const worldStateController: RequestHandler = async (req, res) => {
         populateFissures(worldState)
     ]);
 
-    if (req.query.l && worldState.Events) {
+    if (req.query.l) {
         for (const event of worldState.Events) {
             const msg = event.Messages.find(x => x.LanguageCode == req.query.l)?.Message ?? event.Msg;
             if (msg) {

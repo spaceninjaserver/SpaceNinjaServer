@@ -8,7 +8,7 @@ export interface IWorldState {
     MobileVersion?: string; // if present, the companion app may show a warning about being out of date
     BuildLabel: string;
     Time: number;
-    Events?: IEvent[];
+    Events: IEvent[];
     Goals: IGoal[];
     Alerts: IAlert[];
     Sorties: ISortie[];
@@ -50,6 +50,17 @@ export interface IWorldState {
     KnownCalendarSeasons: ICalendarSeason[];
     Conquests?: IConquest[];
     Descents?: IDescent[];
+    PrimeVaultAvailabilities: boolean[]; // different in older versions
+    PrimeAccessAvailability: { State: string };
+    PrimeTokenAvailability: boolean;
+    PersistentEnemies: IPersistentEnemy[];
+    PVPAlternativeModes: IPVPAltMode[];
+    PVPActiveTournaments: IPVPTournament[];
+    ConstructionProjects: IConstructionProject[];
+    TwitchPromos: { startDate: IMongoDateWithLegacySupport; endDate: IMongoDateWithLegacySupport; type: string }[];
+    ProjectPct: [number, number, number];
+    ForceLogoutVersion: number;
+    ExperimentRecommended: never[]; // idk proper type
     Tmp?: string;
 }
 
@@ -75,8 +86,8 @@ interface IEvent {
 
 export interface IAlert {
     _id: IOidWithLegacySupport;
-    Activation: IMongoDate;
-    Expiry: IMongoDate;
+    Activation: IMongoDateWithLegacySupport;
+    Expiry: IMongoDateWithLegacySupport;
     MissionInfo: IAlertMissionInfo;
     Tag?: string;
     Icon?: string;
@@ -196,9 +207,9 @@ export interface ISyndicateJob {
 }
 
 export interface ISyndicateMissionInfo {
-    _id: IOid;
-    Activation: IMongoDate;
-    Expiry: IMongoDate;
+    _id: IOidWithLegacySupport;
+    Activation: IMongoDateWithLegacySupport;
+    Expiry: IMongoDateWithLegacySupport;
     Tag: string;
     Seed: number;
     Nodes: string[];
@@ -592,4 +603,90 @@ interface IConquestOverride {
     mf?: number[];
     c?: [string, string][];
     fv?: string[];
+}
+
+interface IPersistentEnemy {
+    _id: IOidWithLegacySupport;
+    StartTime: IMongoDateWithLegacySupport;
+    AgentType: string;
+    LocTag: string;
+    Icon: string;
+    Rank: number;
+    HealthPercent: number;
+    FleeDamage: number;
+    UseTicketing: boolean;
+    Region: number;
+    Discovered: boolean;
+    LastDiscoveredLocation: string; // SolNode
+    LastDiscoveredTime: IMongoDateWithLegacySupport;
+
+    // I'm not sure about that - it's not in the ws archives, but the game does parse those fields
+    EnhancementIndex?: number;
+    LeaderWeaponType?: string;
+    MinionAgentTypes?: string[];
+    MinionWeaponTypes?: string[];
+}
+
+interface IPVPAltMode {
+    TargetMode: string;
+
+    TitleLoc: string;
+    DescriptionLoc: string;
+
+    DisableEnergyPickups: boolean;
+    DisableEnergySurge: boolean;
+    DisableAmmoPickups: boolean;
+    DisableWeaponSwitching: boolean;
+    DisableWeaponHud: boolean;
+    ForceChangeLoadoutOnDeath: boolean;
+
+    MatchTimeOverride: number;
+    EnergyCapOverride: number;
+    MaxPlayersOverride: number;
+    MinPlayersPerTeamOverride: number;
+    MaxTeamCountDifferenceOverride: number;
+
+    WeaponOverrides: IPVPAltModeWeaponOverride[];
+    MeleeWeaponOverride: IPVPAltModeMeleeOverride;
+}
+
+interface IPVPAltModeWeaponOverride {
+    Override: boolean;
+    UseFirstAsDefault: boolean;
+    Resources: string[];
+    OriginalVersions: string[];
+}
+
+interface IPVPAltModeMeleeOverride extends IPVPAltModeWeaponOverride {
+    IsModularMeleeWeapon: boolean;
+    BalancesPool: string[];
+    HandlesPool: string[];
+    TipsPool: string[];
+}
+
+interface IPVPTournament {
+    TargetMode: string;
+    StartDate: IMongoDateWithLegacySupport;
+    EndDate: IMongoDateWithLegacySupport;
+    Week: number;
+    Season: number;
+}
+
+interface IConstructionProject {
+    Tag: string;
+    Node: string;
+    Activation: IMongoDateWithLegacySupport;
+    EarlyAccess: IMongoDateWithLegacySupport;
+    PublicAccess: IMongoDateWithLegacySupport;
+    Completed: boolean;
+    Phases: IConstructionPhase[];
+}
+
+interface IConstructionPhase {
+    GoalId: IOidWithLegacySupport;
+    Option0: number; // ???
+    Option1: number; // ???
+    RequiredCount: number;
+    RequiredCountGuild: [{ Tier: string }, { Tier: string }, { Tier: string }]; // ???
+    ClanResearchRecipe: string;
 }

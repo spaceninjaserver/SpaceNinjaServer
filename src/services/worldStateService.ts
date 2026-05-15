@@ -1,4 +1,3 @@
-import staticWorldState from "../../static/fixed_responses/worldState/worldState.json" with { type: "json" };
 import baro from "../../static/fixed_responses/worldState/baro.json" with { type: "json" };
 import varzia from "../constants/varzia.ts";
 import fissureMissions from "../../static/fixed_responses/worldState/fissureMissions.json" with { type: "json" };
@@ -573,9 +572,9 @@ const pushSyndicateMissions = (
     const dayStart = getSortieTime(day);
     const dayEnd = getSortieTime(day + 1);
     worldState.SyndicateMissions.push({
-        _id: { $oid: ((dayStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + idSuffix },
-        Activation: { $date: { $numberLong: dayStart.toString() } },
-        Expiry: { $date: { $numberLong: dayEnd.toString() } },
+        _id: toOid2(((dayStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + idSuffix, worldState.BuildLabel),
+        Activation: toMongoDate2(dayStart, worldState.BuildLabel),
+        Expiry: toMongoDate2(dayEnd, worldState.BuildLabel),
         Tag: syndicateTag,
         Seed: seed,
         Nodes: nodes
@@ -1874,9 +1873,11 @@ export const getWorldState = (buildLabel: string = BL_LATEST): IWorldState => {
     const defenseWavesPerRotation = version_compare(buildLabel, gameToBuildVersion["38.5.0"]) < 0 ? 5 : 3;
 
     const worldState: IWorldState = {
+        Version: 10,
         BuildLabel: buildLabel,
         Time: timeSecs,
         Goals: [],
+        Events: [],
         Alerts: [],
         Sorties: [],
         LiteSorties: [],
@@ -1888,24 +1889,177 @@ export const getWorldState = (buildLabel: string = BL_LATEST): IWorldState => {
         PrimeVaultTraders: [],
         VoidStorms: [],
         DailyDeals: [],
-        //LibraryInfo: {},
         //EndlessXpChoices: [],
         //EndlessXpSchedule: [],
         KnownCalendarSeasons: [],
         PVPChallengeInstances: [],
         FeaturedGuilds: [],
         NodeOverrides: [],
-        ...staticWorldState,
-        SyndicateMissions: [...staticWorldState.SyndicateMissions],
+        LibraryInfo: { LastCompletedTargetType: "/Lotus/Types/Game/Library/Targets/Research7Target" },
+        PrimeVaultAvailabilities: [false, false, false, false, false],
+        PrimeTokenAvailability: true,
+        PrimeAccessAvailability: { State: "PRIME1" },
+        PersistentEnemies: [],
+        PVPAlternativeModes: [],
+        PVPActiveTournaments: [],
+        ConstructionProjects: [],
+        ProjectPct: [0, 0, 0],
+        TwitchPromos: [],
+        ForceLogoutVersion: 0,
+        ExperimentRecommended: [],
+        SyndicateMissions: [],
         InGameMarket: {
             LandingPage: {
-                Categories: staticWorldState.InGameMarket.LandingPage.Categories.map(c => ({
-                    ...c,
-                    Items: [...c.Items]
-                }))
+                Categories: [
+                    {
+                        CategoryName: "NEW_PLAYER",
+                        Name: "/Lotus/Language/Store/NewPlayerCategoryTitle",
+                        Icon: "newplayer",
+                        AddToMenu: true,
+                        Items: [
+                            "/Lotus/Types/StoreItems/Packages/2024Bundles/WeaponStarterPack",
+                            "/Lotus/StoreItems/Powersuits/MonkeyKing/MonkeyKing",
+                            "/Lotus/StoreItems/Weapons/Tenno/Melee/SwordsAndBoards/MeleeContestWinnerOne/TennoSwordShield",
+                            "/Lotus/StoreItems/Upgrades/Skins/Effects/WerewolfEphemera",
+                            "/Lotus/StoreItems/Types/StoreItems/SlotItems/TwoWeaponSlotItem",
+                            "/Lotus/StoreItems/Powersuits/Wisp/Wisp",
+                            "/Lotus/StoreItems/Weapons/Tenno/Shotgun/Shotgun",
+                            "/Lotus/StoreItems/Powersuits/Rhino/Rhino",
+                            "/Lotus/StoreItems/Weapons/Corpus/Pistols/CrpAirPistol/CrpAirPistolArray",
+                            "/Lotus/Types/StoreItems/Boosters/AffinityBooster3DayStoreItem"
+                        ]
+                    },
+                    {
+                        CategoryName: "NEW",
+                        Name: "/Lotus/Language/Menu/Store_New",
+                        Icon: "new",
+                        Items: []
+                    },
+                    {
+                        CategoryName: "POPULAR",
+                        Name: "/Lotus/Language/Menu/StorePopular",
+                        Icon: "popular",
+                        AddToMenu: true,
+                        Items: [
+                            "/Lotus/Types/StoreItems/Packages/2025Bundles/TC2025DigitalPack",
+                            "/Lotus/Types/StoreItems/Packages/2025Bundles/EncoreCompSupPack",
+                            "/Lotus/Types/StoreItems/Packages/2025Bundles/EncoreGeminiSupPack",
+                            "/Lotus/Types/StoreItems/Packages/WarframeBundles/TempleItemsBundle",
+                            "/Lotus/Types/StoreItems/Packages/FormaPack",
+                            "/Lotus/StoreItems/Upgrades/Skins/Saryn/WF1999SarynSkin",
+                            "/Lotus/StoreItems/Weapons/Tenno/Melee/Swords/DaxDuviriKatana/DaxDuviriKatanaWeapon",
+                            "/Lotus/StoreItems/Upgrades/Skins/Jade/WF1999NyxSkin",
+                            "/Lotus/StoreItems/Types/StoreItems/SuitCustomizations/NinjaColourPickerItem",
+                            "/Lotus/StoreItems/Upgrades/Skins/Mag/WF1999MagSkin",
+                            "/Lotus/StoreItems/Upgrades/Skins/Frost/WF1999FrostSkin",
+                            "/Lotus/StoreItems/Weapons/Tenno/Melee/Swords/DaxDuviriTwoHandedKatana/DaxDuviriTwoHandedKatanaWeapon",
+                            "/Lotus/StoreItems/Upgrades/Skins/Harlequin/MirageDeluxeSkin",
+                            "/Lotus/StoreItems/Weapons/Tenno/Melee/Hammer/DaxDuviriHammer/DaxDuviriHammerWeapon"
+                        ]
+                    },
+                    {
+                        CategoryName: "SEASONAL",
+                        Name: "/Lotus/Language/Store/SeasonalCategoryTitle",
+                        Icon: "seasonal",
+                        AddToMenu: true,
+                        Items: []
+                    },
+                    {
+                        CategoryName: "COMMUNITY",
+                        Name: "/Lotus/Language/Store/CommunityCategoryTitle",
+                        Icon: "community",
+                        AddToMenu: true,
+                        Items: []
+                    },
+                    {
+                        CategoryName: "HEIRLOOM",
+                        Name: "/Lotus/Language/Store/HeirloomCategoryTitle",
+                        Icon: "heirloom",
+                        AddToMenu: true,
+                        Items: [
+                            "/Lotus/StoreItems/Upgrades/Skins/Berserker/ValkyrHeirloomSkin",
+                            "/Lotus/StoreItems/Upgrades/Skins/Crowns/HeirloomValkyrCrown",
+                            "/Lotus/StoreItems/Types/StoreItems/SuitCustomizations/ColourPickerValkyrHeirloom",
+                            "/Lotus/StoreItems/Types/Items/ShipDecos/TarotCardValkyrHeirloom",
+                            "/Lotus/StoreItems/Types/StoreItems/AvatarImages/HeirloomValkyrGlyph",
+                            "/Lotus/StoreItems/Upgrades/Skins/Sigils/HeirloomValkyrSigil",
+                            "/Lotus/Types/StoreItems/Packages/HeirloomPackRhino",
+                            "/Lotus/StoreItems/Upgrades/Skins/Rhino/RhinoHeirloomSkin",
+                            "/Lotus/StoreItems/Upgrades/Skins/Crowns/HeirloomRhinoCrown",
+                            "/Lotus/StoreItems/Types/StoreItems/SuitCustomizations/ColourPickerRhinoHeirloom",
+                            "/Lotus/StoreItems/Types/Items/ShipDecos/TarotCardRhinoHeirloom",
+                            "/Lotus/StoreItems/Types/StoreItems/AvatarImages/HeirloomRhinoGlyph",
+                            "/Lotus/StoreItems/Upgrades/Skins/Sigils/HeirloomRhinoSigil",
+                            "/Lotus/Types/StoreItems/Packages/HeirloomPackEmber",
+                            "/Lotus/StoreItems/Upgrades/Skins/Ember/EmberHeirloomSkin",
+                            "/Lotus/StoreItems/Upgrades/Skins/Crowns/HeirloomEmberCrown",
+                            "/Lotus/StoreItems/Types/StoreItems/SuitCustomizations/ColourPickerEmberHeirloom",
+                            "/Lotus/StoreItems/Types/Items/ShipDecos/TarotCardEmberHeirloom",
+                            "/Lotus/StoreItems/Types/StoreItems/AvatarImages/HeirloomEmberGlyph",
+                            "/Lotus/StoreItems/Upgrades/Skins/Sigils/HeirloomEmberSigil"
+                        ]
+                    },
+                    {
+                        CategoryName: "TENNOGEN",
+                        Name: "/Lotus/Language/Menu/Store_Tennogen",
+                        Icon: "tennogen",
+                        AddToMenu: true,
+                        Items: [
+                            "/Lotus/StoreItems/Upgrades/Skins/Armor/SWEndocitosShoulderArmor/SWEndocitosShoulderArmorA",
+                            "/Lotus/StoreItems/Upgrades/Skins/Scarves/SWLunariusSyandana",
+                            "/Lotus/StoreItems/Upgrades/Skins/Scarves/SWRauSyandana",
+                            "/Lotus/StoreItems/Upgrades/Skins/Hoplite/SWStyanaxHuzarrSkin",
+                            "/Lotus/StoreItems/Upgrades/Skins/Werewolf/VorunaDemionnaSkin"
+                        ]
+                    },
+                    {
+                        CategoryName: "SALE",
+                        Name: "/Lotus/Language/Menu/Store_Sale",
+                        Icon: "sale",
+                        AddToMenu: true,
+                        Items: []
+                    },
+                    {
+                        CategoryName: "WISH_LIST",
+                        Name: "/Lotus/Language/Menu/Store_Wishlist",
+                        Icon: "wishlist",
+                        Items: []
+                    },
+                    {
+                        CategoryName: "QUICK_BUY",
+                        Name: "/Lotus/Language/Store/TopSeller_Title",
+                        Icon: "quickbuy",
+                        Items: [
+                            "/Lotus/Types/StoreItems/Packages/FormaPack",
+                            "/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst",
+                            "/Lotus/StoreItems/Types/Items/MiscItems/WeaponUtilityUnlocker"
+                        ]
+                    }
+                ]
             }
         }
     };
+
+    worldState.Events.push({
+        Msg: "Join the OpenWF Discord!",
+        Messages: [
+            { LanguageCode: "fr", Message: "Rejoignez le Discord OpenWF!" },
+            { LanguageCode: "it", Message: "Unisciti al Discord di OpenWF!" },
+            { LanguageCode: "de", Message: "Trete dem OpenWF Discord bei!" },
+            { LanguageCode: "es", Message: "Únete al Discord de OpenWF!" },
+            { LanguageCode: "pt", Message: "Junte-se ao Discord do OpenWF!" },
+            { LanguageCode: "ru", Message: "Присоединяйтесь к OpenWF Discord!" },
+            { LanguageCode: "pl", Message: "Dołącz do Discord OpenWF!" },
+            { LanguageCode: "uk", Message: "Приєднуйтесь до OpenWF Discord!" },
+            { LanguageCode: "tr", Message: "OpenWF Discord'a katıl!" },
+            { LanguageCode: "ja", Message: "OpenWFのDiscordに参加しよう！" },
+            { LanguageCode: "zh", Message: "加入OpenWF Discord!" },
+            { LanguageCode: "ko", Message: "OpenWF Discord에 가입하세요!" },
+            { LanguageCode: "tc", Message: "加入OpenWF Discord!" }
+        ],
+        Prop: "https://discord.gg/PNNZ3asUuY",
+        Icon: "/Lotus/Interface/Icons/DiscordIconNoBacker.png"
+    });
 
     if (config.worldState?.tennoLiveRelay) {
         worldState.Goals.push({
@@ -3894,25 +4048,34 @@ export const getWorldState = (buildLabel: string = BL_LATEST): IWorldState => {
         const bountyCycleStart = Math.trunc((bountyEpoch + bountyCycle * eidolonCycleDuration) * 1000);
         bountyCycleEnd = Math.trunc(bountyCycleStart + eidolonCycleDuration * 1000);
         worldState.SyndicateMissions.push({
-            _id: { $oid: ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000029" },
-            Activation: { $date: { $numberLong: bountyCycleStart.toString() } },
-            Expiry: { $date: { $numberLong: bountyCycleEnd.toString() } },
+            _id: toOid2(
+                ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000029",
+                buildLabel
+            ),
+            Activation: toMongoDate2(bountyCycleStart, buildLabel),
+            Expiry: toMongoDate2(bountyCycleEnd, buildLabel),
             Tag: "ZarimanSyndicate",
             Seed: bountyCycle,
             Nodes: []
         });
         worldState.SyndicateMissions.push({
-            _id: { $oid: ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000004" },
-            Activation: { $date: { $numberLong: bountyCycleStart.toString() } },
-            Expiry: { $date: { $numberLong: bountyCycleEnd.toString() } },
+            _id: toOid2(
+                ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000004",
+                buildLabel
+            ),
+            Activation: toMongoDate2(bountyCycleStart, buildLabel),
+            Expiry: toMongoDate2(bountyCycleEnd, buildLabel),
             Tag: "EntratiLabSyndicate",
             Seed: bountyCycle,
             Nodes: []
         });
         worldState.SyndicateMissions.push({
-            _id: { $oid: ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000006" },
-            Activation: { $date: { $numberLong: bountyCycleStart.toString(10) } },
-            Expiry: { $date: { $numberLong: bountyCycleEnd.toString(10) } },
+            _id: toOid2(
+                ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000006",
+                buildLabel
+            ),
+            Activation: toMongoDate2(bountyCycleStart, buildLabel),
+            Expiry: toMongoDate2(bountyCycleEnd, buildLabel),
             Tag: "HexSyndicate",
             Seed: bountyCycle,
             Nodes: []
