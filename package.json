@@ -57,7 +57,7 @@
     "@types/node": "^25.6.2",
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",
-    "eslint": "^9.39.4",
+    "eslint": "^10",
     "eslint-plugin-prettier": "^5.2.5",
     "knip": "^6.12.2",
     "prettier": "^3.5.3",
@@ -65,6 +65,6 @@
     "typescript": "^5.9.3"
   },
   "engines": {
-    "node": ">=20.18.1"
+    "node": ">=20.19"
   }
 }
