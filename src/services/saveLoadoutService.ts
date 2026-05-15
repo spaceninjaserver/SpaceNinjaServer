@@ -15,7 +15,7 @@ import { isEmptyObject, isObjectEmpty } from "../helpers/general.ts";
 import { convertLegacyColorsToIColor, fromOid, toObjectId, version_compare } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
 import type { ISketch, TEquipmentKey } from "../types/inventoryTypes/inventoryTypes.ts";
-import { equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
+import { eLoadoutIndex, equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IItemConfig, IItemConfigDatabase } from "../types/inventoryTypes/commonInventoryTypes.ts";
 import { importCrewShipMembers, importCrewShipWeapon, importLoadOutConfig } from "./importService.ts";
 import type { IEquipmentDatabase, IEquipmentSelectionDatabase } from "../types/equipmentTypes.ts";
@@ -437,7 +437,7 @@ const saveLegacyLoadoutPreset = async (
                   presets[0],
                   buildLabel,
                   inventory.Suits.id(fromOid(presets[0].ItemId)),
-                  loadout.NORMAL.id(currentLoadouts[0])?.s?.cus
+                  loadout.NORMAL.id(currentLoadouts[eLoadoutIndex.NORMAL])?.s?.cus
               )
             : undefined;
     const p =
@@ -446,7 +446,7 @@ const saveLegacyLoadoutPreset = async (
                   presets[1],
                   buildLabel,
                   inventory.Pistols.id(fromOid(presets[1].ItemId)),
-                  loadout.NORMAL.id(currentLoadouts[0])?.p?.cus
+                  loadout.NORMAL.id(currentLoadouts[eLoadoutIndex.NORMAL])?.p?.cus
               )
             : undefined;
     const l =
@@ -455,7 +455,7 @@ const saveLegacyLoadoutPreset = async (
                   presets[2],
                   buildLabel,
                   inventory.LongGuns.id(fromOid(presets[2].ItemId)),
-                  loadout.NORMAL.id(currentLoadouts[0])?.l?.cus
+                  loadout.NORMAL.id(currentLoadouts[eLoadoutIndex.NORMAL])?.l?.cus
               )
             : undefined;
     const m =
@@ -464,7 +464,7 @@ const saveLegacyLoadoutPreset = async (
                   presets[3],
                   buildLabel,
                   inventory.Melee.id(fromOid(presets[3].ItemId)),
-                  loadout.NORMAL.id(currentLoadouts[0])?.m?.cus
+                  loadout.NORMAL.id(currentLoadouts[eLoadoutIndex.NORMAL])?.m?.cus
               )
             : undefined;
 
@@ -481,25 +481,20 @@ const saveLegacyLoadoutPreset = async (
         if (currentLoadouts.length == 0) {
             currentLoadouts.push(loadoutId);
         } else {
-            currentLoadouts[0] = loadoutId;
+            currentLoadouts[eLoadoutIndex.NORMAL] = loadoutId;
         }
     } else {
-        if (currentLoadouts.length <= 0) {
+        if (currentLoadouts.length <= eLoadoutIndex.NORMAL) {
             currentLoadouts.push(loadout.NORMAL[0]._id);
+        } else if (!loadout.NORMAL.id(currentLoadouts[0])) {
+            currentLoadouts[eLoadoutIndex.NORMAL] = loadout.NORMAL[0]._id;
         }
-        const loadoutId = currentLoadouts[0];
-        const preset = loadout.NORMAL.id(loadoutId);
-        if (preset) {
-            preset.n = name ?? preset.n;
-            preset.s = s;
-            preset.p = p;
-            preset.l = l;
-            preset.m = m;
-        } else {
-            logger.warn(
-                `Could not find NORMAL loadout with id ${loadoutId.toString()}, equipment selection will not be saved`
-            );
-        }
+        const preset = loadout.NORMAL.id(currentLoadouts[0])!;
+        preset.n = name ?? preset.n;
+        preset.s = s;
+        preset.p = p;
+        preset.l = l;
+        preset.m = m;
     }
 
     if (presets.length >= 6) {
@@ -509,7 +504,7 @@ const saveLegacyLoadoutPreset = async (
                       presets[4],
                       buildLabel,
                       inventory.Sentinels.id(fromOid(presets[4].ItemId)),
-                      loadout.SENTINEL.id(currentLoadouts[1])?.s?.cus
+                      loadout.SENTINEL.id(currentLoadouts[eLoadoutIndex.SENTINEL])?.s?.cus
                   )
                 : undefined;
         const l =
@@ -518,7 +513,7 @@ const saveLegacyLoadoutPreset = async (
                       presets[5],
                       buildLabel,
                       inventory.SentinelWeapons.id(fromOid(presets[5].ItemId)),
-                      loadout.SENTINEL.id(currentLoadouts[1])?.l?.cus
+                      loadout.SENTINEL.id(currentLoadouts[eLoadoutIndex.SENTINEL])?.l?.cus
                   )
                 : undefined;
 
@@ -533,23 +528,18 @@ const saveLegacyLoadoutPreset = async (
             if (currentLoadouts.length < 2) {
                 currentLoadouts.push(loadoutId);
             } else {
-                currentLoadouts[1] = loadoutId;
+                currentLoadouts[eLoadoutIndex.SENTINEL] = loadoutId;
             }
         } else {
-            if (currentLoadouts.length <= 1) {
+            if (currentLoadouts.length <= eLoadoutIndex.SENTINEL) {
                 currentLoadouts.push(loadout.SENTINEL[0]._id);
+            } else if (!loadout.SENTINEL.id(currentLoadouts[eLoadoutIndex.SENTINEL])) {
+                currentLoadouts[eLoadoutIndex.SENTINEL] = loadout.SENTINEL[0]._id;
             }
-            const loadoutId = currentLoadouts[1];
-            const preset = loadout.SENTINEL.id(loadoutId);
-            if (preset) {
-                preset.n = name ?? preset.n;
-                preset.s = s;
-                preset.l = l;
-            } else {
-                logger.warn(
-                    `Could not find SENTINEL loadout with id ${loadoutId.toString()}, equipment selection will not be saved`
-                );
-            }
+            const preset = loadout.SENTINEL.id(currentLoadouts[eLoadoutIndex.SENTINEL])!;
+            preset.n = name ?? preset.n;
+            preset.s = s;
+            preset.l = l;
         }
     }
 
@@ -579,24 +569,19 @@ const saveLegacyLoadoutPreset = async (
             if (currentLoadouts.length < 3) {
                 currentLoadouts.push(loadoutId);
             } else {
-                currentLoadouts[2] = loadoutId;
+                currentLoadouts[eLoadoutIndex.ARCHWING] = loadoutId;
             }
         } else {
-            if (currentLoadouts.length <= 2) {
+            if (currentLoadouts.length <= eLoadoutIndex.ARCHWING) {
                 currentLoadouts.push(loadout.ARCHWING[0]._id);
+            } else if (!loadout.ARCHWING.id(currentLoadouts[eLoadoutIndex.ARCHWING])) {
+                currentLoadouts[eLoadoutIndex.ARCHWING] = loadout.ARCHWING[0]._id;
             }
-            const loadoutId = currentLoadouts[2];
-            const preset = loadout.ARCHWING.id(loadoutId);
-            if (preset) {
-                preset.n = name ?? preset.n;
-                preset.s = s;
-                preset.l = l;
-                preset.m = m;
-            } else {
-                logger.warn(
-                    `Could not find ARCHWING loadout with id ${loadoutId.toString()}, equipment selection will not be saved`
-                );
-            }
+            const preset = loadout.ARCHWING.id(currentLoadouts[eLoadoutIndex.ARCHWING])!;
+            preset.n = name ?? preset.n;
+            preset.s = s;
+            preset.l = l;
+            preset.m = m;
         }
     }
 

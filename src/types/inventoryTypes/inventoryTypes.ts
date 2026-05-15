@@ -409,7 +409,7 @@ export interface IInventoryClient
     QuestKeys: IQuestKeyClient[];
     ActiveQuest: string;
     FlavourItems: IFlavourItem[];
-    LoadOutPresets: ILoadOutPresets;
+    LoadOutPresets?: ILoadOutPresets; // U16+
     LoadoutPresets?: ILoadoutConfigClientLegacy[]; // U14-U15
     CurrentLoadOutIds: IOid[];
     CurrentLoadout?:
