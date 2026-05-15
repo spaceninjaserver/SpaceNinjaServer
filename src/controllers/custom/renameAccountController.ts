@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest, isAdministrator, isNameTaken } from "../../services/loginService.ts";
+import { getAccountForRequest, isAdministrator, isNameReserved, isNameTaken } from "../../services/loginService.ts";
 import { config } from "../../services/configService.ts";
 import { saveConfig } from "../../services/configWriterService.ts";
 import { MAX_NAME_LENGTH } from "../../models/loginModel.ts";
@@ -9,7 +9,7 @@ export const renameAccountController: RequestHandler = async (req, res) => {
     if (typeof req.query.newname == "string") {
         if (req.query.newname.length > MAX_NAME_LENGTH) {
             res.status(400).send("Name too long").end();
-        } else if (await isNameTaken(req.query.newname)) {
+        } else if ((await isNameTaken(req.query.newname)) || isNameReserved(req.query.newname)) {
             res.status(409).send("Name already in use").end();
         } else {
             if (isAdministrator(account)) {

@@ -29,6 +29,10 @@ export const isNameTaken = async (name: string): Promise<boolean> => {
     return !!(await Account.findOne({ DisplayName: name }));
 };
 
+export const isNameReserved = (name: string): boolean => {
+    return name == "all";
+};
+
 export const createNonce = (): number => {
     return Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
 };
@@ -47,7 +51,7 @@ export const getUsernameFromEmail = async (email: string): Promise<string> => {
 };
 
 export const createAccount = async (accountData: IAccountCreationData): Promise<IDatabaseAccountJson> => {
-    if (accountData.DisplayName == "all") {
+    if (isNameReserved(accountData.DisplayName)) {
         throw new Error(`"${accountData.DisplayName}" is reserved and may not be used as a username`);
     }
 
