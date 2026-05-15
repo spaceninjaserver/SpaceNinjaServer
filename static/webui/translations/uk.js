@@ -91,6 +91,7 @@ dict = {
     code_cosmeticUnenhancer: `Перегінник містифікаторів`,
     code_pigment: `Барвник`,
     code_bossNavCode: `Навкоордината Лефантиса`,
+    code_basicSolarRail: `Сонячна рейка класу «Вежа»`,
     code_actuator: `[UNTRANSLATED] Actuators`,
     code_lawOfRetribution: `ЗАКОН ВІДПЛАТИ`,
     code_lawOfRetributionNm: `ЗАКОН ВІДПЛАТИ (ЖАХІТТЯ)`,

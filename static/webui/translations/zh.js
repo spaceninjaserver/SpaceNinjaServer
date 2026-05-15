@@ -91,6 +91,7 @@ dict = {
     code_cosmeticUnenhancer: `赋能萃聚器`,
     code_pigment: `颜料`,
     code_bossNavCode: `雷凡魔像导航坐标`,
+    code_basicSolarRail: `星际航道 - 航道名称`,
     code_actuator: `传动装置`,
     code_lawOfRetribution: `复仇法则`,
     code_lawOfRetributionNm: `复仇法则 (噩梦)`,

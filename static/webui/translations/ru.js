@@ -91,6 +91,7 @@ dict = {
     code_cosmeticUnenhancer: `Мистический дистиллятор`,
     code_pigment: `Пигмент`,
     code_bossNavCode: `Координаты Лефантиса`,
+    code_basicSolarRail: `Солнечный Монорельс: Класс Башня`,
     code_actuator: `[UNTRANSLATED] Actuators`,
     code_lawOfRetribution: `ЗАКОН ВОЗДАЯНИЯ`,
     code_lawOfRetributionNm: `ЗАКОН ВОЗДАЯНИЯ (КОШМАР)`,

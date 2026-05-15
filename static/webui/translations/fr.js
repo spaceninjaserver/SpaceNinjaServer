@@ -91,6 +91,7 @@ dict = {
     code_cosmeticUnenhancer: `Arcane Distiller`,
     code_pigment: `Pigment`,
     code_bossNavCode: `Coord. Nav de Lephantis`,
+    code_basicSolarRail: `Rail Solaire - Classe Tour`,
     code_actuator: `Actionneurs`,
     code_lawOfRetribution: `Le Droit de Rétribution`,
     code_lawOfRetributionNm: `Le Droit de Rétribution (Cauchemar)`,

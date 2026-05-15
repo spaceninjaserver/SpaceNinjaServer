@@ -1139,7 +1139,8 @@ function fetchItemList() {
                                 "|TYPE|",
                                 loc("code_warframe")
                             ),
-                            "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod": loc("code_infernoMod")
+                            "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod": loc("code_infernoMod"),
+                            "/Lotus/Types/Game/SolarRails/BasicSolarRail": loc("code_basicSolarRail")
                         };
                         if (nameMap[item.name]) {
                             item.name = nameMap[item.name];

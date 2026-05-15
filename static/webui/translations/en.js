@@ -90,6 +90,7 @@ dict = {
     code_cosmeticUnenhancer: `Arcane Distiller`,
     code_pigment: `Pigment`,
     code_bossNavCode: `Lephantis Nav Coordinate`,
+    code_basicSolarRail: `Solar Rail - Tower Class`,
     code_actuator: `Actuators`,
     code_lawOfRetribution: `THE LAW OF RETRIBUTION`,
     code_lawOfRetributionNm: `THE LAW OF RETRIBUTION (NIGHTMARE)`,

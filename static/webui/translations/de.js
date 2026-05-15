@@ -91,6 +91,7 @@ dict = {
     code_cosmeticUnenhancer: `Arkana Destillator`,
     code_pigment: `Pigment`,
     code_bossNavCode: `Lephantis Nav-Koordinaten`,
+    code_basicSolarRail: `Solarschiene - Turmklasse`,
     code_actuator: `Aktoren`,
     code_lawOfRetribution: `DAS GESETZ DER VERGELTUNG`,
     code_lawOfRetributionNm: `DAS GESETZ DER VERGELTUNG (ALBTRAUM)`,
