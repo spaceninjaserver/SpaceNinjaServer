@@ -8,7 +8,9 @@ import { logger } from "../../utils/logger.ts";
 
 export const getVoidProjectionRewardsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const data = getJSONfromString<IVoidProjectionRewardRequest | IVoidProjectionRewardsLegacyRequest>(String(req.body));
+    const data = getJSONfromString<IVoidProjectionRewardRequest | IVoidProjectionRewardsLegacyRequest>(
+        String(req.body)
+    );
     logger.debug(`getVoidProjectionRewards request:`, data);
 
     const currentWave = "CurrentWave" in data ? data.CurrentWave : data.VoidTearParticipantsCurrWave.Wave;
