@@ -27,11 +27,10 @@ import {
     ExportCreditBundles,
     ExportGear,
     ExportResources,
-    ExportSyndicates,
     ExportVendors
 } from "warframe-public-export-plus";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
-import { fromStoreItem, getBoosterPack, getBundle, getPrice, toStoreItem } from "./itemDataService.ts";
+import { fromStoreItem, getBoosterPack, getBundle, getPrice, getSyndicate, toStoreItem } from "./itemDataService.ts";
 import { DailyDeal } from "../models/worldStateModel.ts";
 import { fromMongoDate, fromOid, toMongoDate } from "../helpers/inventoryHelpers.ts";
 import { Guild } from "../models/guildModel.ts";
@@ -285,8 +284,7 @@ export const handlePurchase = async (
                         }
                     ];
                 } else if (!inventory.dontSubtractPurchaseStandingCost) {
-                    const syndicate = ExportSyndicates[syndicateTag];
-                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                    const syndicate = await getSyndicate(syndicateTag, purchaseRequest.buildLabel);
                     if (syndicate) {
                         const favour = syndicate.favours.find(
                             x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem

@@ -1,0 +1,2296 @@
+{
+  "uniqueName": "/Lotus/Syndicates/RadioLegionIntermission5Syndicate",
+  "name": "/Lotus/Language/Syndicates/RadioLegionTitle",
+  "icon": "/Lotus/Interface/Icons/Sigils/RadioLegionSigil.png",
+  "description": "/Lotus/Language/Syndicates/RadioLegionDesc",
+  "colour": {
+    "value": "0xFFF5ACAC"
+  },
+  "backgroundColour": {
+    "value": "0xFF6C1822"
+  },
+  "dailyLimitBin": "STANDING_LIMIT_BIN_NONE",
+  "dailyChallenges": [
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyAimGlide",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyBulletJump",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyCodexScan",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyCollectCredits",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyCompleteMission",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyDeployGlyph",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemies",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithAbilities",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithBlast",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithCorrosive",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithElectricity",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithFinishers",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithFire",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithFreeze",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithGas",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithHeadshots",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithMagnetic",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithMelee",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithPoison",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithPrimary",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithRadiation",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithSecondary",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithViral",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyOpenLockers",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyPickUpEnergy",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyPickUpMods",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyPlaceMarker",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyPlayEmote",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailySlideKills",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailySolveCiphers",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWhileOnKDrive",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyPilotFallenMech",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyRequiemTotem",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyLiquidation",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyTwoForOne",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyDeathFromAbove",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailySwatter",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyToppingOffTheTank",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyThePersonalTouch",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyAugmentation",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyAFirmShake",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyBuildersTouch",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyMedic",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyStayOnTop"
+  ],
+  "weeklyChallenges": [
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCatchRarePlainsFish",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCatchRareVenusFish",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteAssassination",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteCapture",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteClemMission",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteExterminate",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteInvasionMissions",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteMobileDefense",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteNightmareMissions",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteRescue",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteSabotage",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteSortie",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteSpy",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteSyndicateMissions",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteTreasures",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyKillEnemies",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyKillEximus",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyMineRarePlainsResources",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyMineRareVenusResources",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPerfectAnimalCapture",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPickUpRareMods",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPlainsBounties",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklySabotageCaches",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklySanctuaryOnslaught",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklySimarisScan",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyUnlockDragonVaults",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyUnlockRelics",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyUseForma",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyVenusBounties",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyNightAndDay",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyLoyalty",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyMadLab",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyTheOldWays",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyBloodthirsty",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardKillSilverGroveSpecters",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardLuaPuzzles",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardCompleteNightmareMissions",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardCompleteSortie",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardEliteSanctuaryOnslaught",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardExterminateNoAlarm",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardFriendsDefense",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardFriendsProfitTaker",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardFriendsSurvival",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardIndexWinStreak",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardKillEnemies",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardKillEximus",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardKillOrCaptureRainalyst",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardKuvaSurvivalNoCapsules",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardUnlockRelics",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyIsolationBounties",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyFeedHelminth",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyKillEnemiesInMech",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardKillEnemiesSteelPath",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardCollectUniqueResources",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardCompleteSteelPathMissions",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardAntiquarian",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardThePriceOfFreedom",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardTheManyMadeWhole",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardTerminated",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardRiseOfTheMachine"
+  ],
+  "titles": [
+    {
+      "level": 180,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle180",
+      "minStanding": 1800000,
+      "maxStanding": 1810000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 179,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle179",
+      "minStanding": 1790000,
+      "maxStanding": 1800000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 178,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle178",
+      "minStanding": 1780000,
+      "maxStanding": 1790000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 177,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle177",
+      "minStanding": 1770000,
+      "maxStanding": 1780000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 176,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle176",
+      "minStanding": 1760000,
+      "maxStanding": 1770000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 175,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle175",
+      "minStanding": 1750000,
+      "maxStanding": 1760000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 174,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle174",
+      "minStanding": 1740000,
+      "maxStanding": 1750000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 173,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle173",
+      "minStanding": 1730000,
+      "maxStanding": 1740000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 172,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle172",
+      "minStanding": 1720000,
+      "maxStanding": 1730000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 171,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle171",
+      "minStanding": 1710000,
+      "maxStanding": 1720000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 170,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle170",
+      "minStanding": 1700000,
+      "maxStanding": 1710000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 169,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle169",
+      "minStanding": 1690000,
+      "maxStanding": 1700000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 168,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle168",
+      "minStanding": 1680000,
+      "maxStanding": 1690000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 167,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle167",
+      "minStanding": 1670000,
+      "maxStanding": 1680000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 166,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle166",
+      "minStanding": 1660000,
+      "maxStanding": 1670000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 165,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle165",
+      "minStanding": 1650000,
+      "maxStanding": 1660000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 164,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle164",
+      "minStanding": 1640000,
+      "maxStanding": 1650000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 163,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle163",
+      "minStanding": 1630000,
+      "maxStanding": 1640000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 162,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle162",
+      "minStanding": 1620000,
+      "maxStanding": 1630000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 161,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle161",
+      "minStanding": 1610000,
+      "maxStanding": 1620000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 160,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle160",
+      "minStanding": 1600000,
+      "maxStanding": 1610000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 159,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle159",
+      "minStanding": 1590000,
+      "maxStanding": 1600000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 158,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle158",
+      "minStanding": 1580000,
+      "maxStanding": 1590000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 157,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle157",
+      "minStanding": 1570000,
+      "maxStanding": 1580000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 156,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle156",
+      "minStanding": 1560000,
+      "maxStanding": 1570000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 155,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle155",
+      "minStanding": 1550000,
+      "maxStanding": 1560000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 154,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle154",
+      "minStanding": 1540000,
+      "maxStanding": 1550000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 153,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle153",
+      "minStanding": 1530000,
+      "maxStanding": 1540000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 152,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle152",
+      "minStanding": 1520000,
+      "maxStanding": 1530000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 151,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle151",
+      "minStanding": 1510000,
+      "maxStanding": 1520000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 150,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle150",
+      "minStanding": 1500000,
+      "maxStanding": 1510000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 149,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle149",
+      "minStanding": 1490000,
+      "maxStanding": 1500000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 148,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle148",
+      "minStanding": 1480000,
+      "maxStanding": 1490000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 147,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle147",
+      "minStanding": 1470000,
+      "maxStanding": 1480000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 146,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle146",
+      "minStanding": 1460000,
+      "maxStanding": 1470000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 145,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle145",
+      "minStanding": 1450000,
+      "maxStanding": 1460000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 144,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle144",
+      "minStanding": 1440000,
+      "maxStanding": 1450000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 143,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle143",
+      "minStanding": 1430000,
+      "maxStanding": 1440000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 142,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle142",
+      "minStanding": 1420000,
+      "maxStanding": 1430000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 141,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle141",
+      "minStanding": 1410000,
+      "maxStanding": 1420000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 140,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle140",
+      "minStanding": 1400000,
+      "maxStanding": 1410000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 139,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle139",
+      "minStanding": 1390000,
+      "maxStanding": 1400000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 138,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle138",
+      "minStanding": 1380000,
+      "maxStanding": 1390000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 137,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle137",
+      "minStanding": 1370000,
+      "maxStanding": 1380000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 136,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle136",
+      "minStanding": 1360000,
+      "maxStanding": 1370000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 135,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle135",
+      "minStanding": 1350000,
+      "maxStanding": 1360000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 134,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle134",
+      "minStanding": 1340000,
+      "maxStanding": 1350000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 133,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle133",
+      "minStanding": 1330000,
+      "maxStanding": 1340000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 132,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle132",
+      "minStanding": 1320000,
+      "maxStanding": 1330000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 131,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle131",
+      "minStanding": 1310000,
+      "maxStanding": 1320000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 130,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle130",
+      "minStanding": 1300000,
+      "maxStanding": 1310000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 129,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle129",
+      "minStanding": 1290000,
+      "maxStanding": 1300000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 128,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle128",
+      "minStanding": 1280000,
+      "maxStanding": 1290000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 127,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle127",
+      "minStanding": 1270000,
+      "maxStanding": 1280000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 126,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle126",
+      "minStanding": 1260000,
+      "maxStanding": 1270000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 125,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle125",
+      "minStanding": 1250000,
+      "maxStanding": 1260000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 124,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle124",
+      "minStanding": 1240000,
+      "maxStanding": 1250000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 123,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle123",
+      "minStanding": 1230000,
+      "maxStanding": 1240000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 122,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle122",
+      "minStanding": 1220000,
+      "maxStanding": 1230000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 121,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle121",
+      "minStanding": 1210000,
+      "maxStanding": 1220000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 120,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle120",
+      "minStanding": 1200000,
+      "maxStanding": 1210000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 119,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle119",
+      "minStanding": 1190000,
+      "maxStanding": 1200000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 118,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle118",
+      "minStanding": 1180000,
+      "maxStanding": 1190000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 117,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle117",
+      "minStanding": 1170000,
+      "maxStanding": 1180000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 116,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle116",
+      "minStanding": 1160000,
+      "maxStanding": 1170000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 115,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle115",
+      "minStanding": 1150000,
+      "maxStanding": 1160000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 114,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle114",
+      "minStanding": 1140000,
+      "maxStanding": 1150000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 113,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle113",
+      "minStanding": 1130000,
+      "maxStanding": 1140000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 112,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle112",
+      "minStanding": 1120000,
+      "maxStanding": 1130000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 111,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle111",
+      "minStanding": 1110000,
+      "maxStanding": 1120000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 110,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle110",
+      "minStanding": 1100000,
+      "maxStanding": 1110000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 109,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle109",
+      "minStanding": 1090000,
+      "maxStanding": 1100000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 108,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle108",
+      "minStanding": 1080000,
+      "maxStanding": 1090000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 107,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle107",
+      "minStanding": 1070000,
+      "maxStanding": 1080000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 106,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle106",
+      "minStanding": 1060000,
+      "maxStanding": 1070000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 105,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle105",
+      "minStanding": 1050000,
+      "maxStanding": 1060000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 104,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle104",
+      "minStanding": 1040000,
+      "maxStanding": 1050000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 103,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle103",
+      "minStanding": 1030000,
+      "maxStanding": 1040000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 102,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle102",
+      "minStanding": 1020000,
+      "maxStanding": 1030000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 101,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle101",
+      "minStanding": 1010000,
+      "maxStanding": 1020000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 100,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle100",
+      "minStanding": 1000000,
+      "maxStanding": 1010000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 99,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle99",
+      "minStanding": 990000,
+      "maxStanding": 1000000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 98,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle98",
+      "minStanding": 980000,
+      "maxStanding": 990000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 97,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle97",
+      "minStanding": 970000,
+      "maxStanding": 980000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 96,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle96",
+      "minStanding": 960000,
+      "maxStanding": 970000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 95,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle95",
+      "minStanding": 950000,
+      "maxStanding": 960000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 94,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle94",
+      "minStanding": 940000,
+      "maxStanding": 950000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 93,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle93",
+      "minStanding": 930000,
+      "maxStanding": 940000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 92,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle92",
+      "minStanding": 920000,
+      "maxStanding": 930000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 91,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle91",
+      "minStanding": 910000,
+      "maxStanding": 920000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 90,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle90",
+      "minStanding": 900000,
+      "maxStanding": 910000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 89,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle89",
+      "minStanding": 890000,
+      "maxStanding": 900000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 88,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle88",
+      "minStanding": 880000,
+      "maxStanding": 890000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 87,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle87",
+      "minStanding": 870000,
+      "maxStanding": 880000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        },
+        {
+          "ItemCount": 0,
+          "ItemType": ""
+        }
+      ]
+    },
+    {
+      "level": 86,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle86",
+      "minStanding": 860000,
+      "maxStanding": 870000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 85,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle85",
+      "minStanding": 850000,
+      "maxStanding": 860000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 84,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle84",
+      "minStanding": 840000,
+      "maxStanding": 850000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 83,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle83",
+      "minStanding": 830000,
+      "maxStanding": 840000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        },
+        {
+          "ItemCount": 0,
+          "ItemType": ""
+        }
+      ]
+    },
+    {
+      "level": 82,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle82",
+      "minStanding": 820000,
+      "maxStanding": 830000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 81,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle81",
+      "minStanding": 810000,
+      "maxStanding": 820000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 80,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle80",
+      "minStanding": 800000,
+      "maxStanding": 810000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 79,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle79",
+      "minStanding": 790000,
+      "maxStanding": 800000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 78,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle78",
+      "minStanding": 780000,
+      "maxStanding": 790000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 77,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle77",
+      "minStanding": 770000,
+      "maxStanding": 780000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 76,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle76",
+      "minStanding": 760000,
+      "maxStanding": 770000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 75,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle75",
+      "minStanding": 750000,
+      "maxStanding": 760000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 74,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle74",
+      "minStanding": 740000,
+      "maxStanding": 750000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 73,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle73",
+      "minStanding": 730000,
+      "maxStanding": 740000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 72,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle72",
+      "minStanding": 720000,
+      "maxStanding": 730000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 71,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle71",
+      "minStanding": 710000,
+      "maxStanding": 720000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 70,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle70",
+      "minStanding": 700000,
+      "maxStanding": 710000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 69,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle69",
+      "minStanding": 690000,
+      "maxStanding": 700000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 68,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle68",
+      "minStanding": 680000,
+      "maxStanding": 690000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 67,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle67",
+      "minStanding": 670000,
+      "maxStanding": 680000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 66,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle66",
+      "minStanding": 660000,
+      "maxStanding": 670000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 65,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle65",
+      "minStanding": 650000,
+      "maxStanding": 660000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 64,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle64",
+      "minStanding": 640000,
+      "maxStanding": 650000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 63,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle63",
+      "minStanding": 630000,
+      "maxStanding": 640000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 62,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle62",
+      "minStanding": 620000,
+      "maxStanding": 630000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 61,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle61",
+      "minStanding": 610000,
+      "maxStanding": 620000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 60,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle60",
+      "minStanding": 600000,
+      "maxStanding": 610000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 59,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle59",
+      "minStanding": 590000,
+      "maxStanding": 600000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 58,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle58",
+      "minStanding": 580000,
+      "maxStanding": 590000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 57,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle57",
+      "minStanding": 570000,
+      "maxStanding": 580000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 56,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle56",
+      "minStanding": 560000,
+      "maxStanding": 570000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 55,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle55",
+      "minStanding": 550000,
+      "maxStanding": 560000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 54,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle54",
+      "minStanding": 540000,
+      "maxStanding": 550000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 53,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle53",
+      "minStanding": 530000,
+      "maxStanding": 540000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 52,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle52",
+      "minStanding": 520000,
+      "maxStanding": 530000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 51,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle51",
+      "minStanding": 510000,
+      "maxStanding": 520000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 50,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle50",
+      "minStanding": 500000,
+      "maxStanding": 510000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 49,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle49",
+      "minStanding": 490000,
+      "maxStanding": 500000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 48,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle48",
+      "minStanding": 480000,
+      "maxStanding": 490000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 47,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle47",
+      "minStanding": 470000,
+      "maxStanding": 480000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 46,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle46",
+      "minStanding": 460000,
+      "maxStanding": 470000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 45,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle45",
+      "minStanding": 450000,
+      "maxStanding": 460000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 44,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle44",
+      "minStanding": 440000,
+      "maxStanding": 450000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 43,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle43",
+      "minStanding": 430000,
+      "maxStanding": 440000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 42,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle42",
+      "minStanding": 420000,
+      "maxStanding": 430000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 41,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle41",
+      "minStanding": 410000,
+      "maxStanding": 420000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 40,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle40",
+      "minStanding": 400000,
+      "maxStanding": 410000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 39,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle39",
+      "minStanding": 390000,
+      "maxStanding": 400000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 38,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle38",
+      "minStanding": 380000,
+      "maxStanding": 390000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 37,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle37",
+      "minStanding": 370000,
+      "maxStanding": 380000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 36,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle36",
+      "minStanding": 360000,
+      "maxStanding": 370000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 35,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle35",
+      "minStanding": 350000,
+      "maxStanding": 360000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 34,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle34",
+      "minStanding": 340000,
+      "maxStanding": 350000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 33,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle33",
+      "minStanding": 330000,
+      "maxStanding": 340000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 32,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle32",
+      "minStanding": 320000,
+      "maxStanding": 330000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 31,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle31",
+      "minStanding": 310000,
+      "maxStanding": 320000,
+      "reward": [
+        {
+          "ItemCount": 15,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 30,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle30",
+      "minStanding": 300000,
+      "maxStanding": 310000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Upgrades/Skins/Scarves/IceSpikeCape"
+        }
+      ]
+    },
+    {
+      "level": 29,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle29",
+      "minStanding": 290000,
+      "maxStanding": 300000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Types/Items/MiscItems/FormaUmbra"
+        }
+      ]
+    },
+    {
+      "level": 28,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle28",
+      "minStanding": 280000,
+      "maxStanding": 290000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Types/Items/ShipDecos/LisetPropCleaningDroneTenno"
+        }
+      ]
+    },
+    {
+      "level": 27,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle27",
+      "minStanding": 270000,
+      "maxStanding": 280000,
+      "storeItemReward": "/Lotus/Types/StoreItems/Packages/FormaPack"
+    },
+    {
+      "level": 26,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle26",
+      "minStanding": 260000,
+      "maxStanding": 270000,
+      "reward": [
+        {
+          "ItemCount": 3,
+          "ItemType": "/Lotus/Upgrades/CosmeticEnhancers/Defensive/HealthRegenOnDamage"
+        }
+      ]
+    },
+    {
+      "level": 25,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle25",
+      "minStanding": 250000,
+      "maxStanding": 260000,
+      "storeItemReward": "/Lotus/Types/StoreItems/Packages/PetAttachmentsPackInfNightwave"
+    },
+    {
+      "level": 24,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle24",
+      "minStanding": 240000,
+      "maxStanding": 250000,
+      "reward": [
+        {
+          "ItemCount": 50,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 23,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle23",
+      "minStanding": 230000,
+      "maxStanding": 240000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Upgrades/Mods/Rifle/Event/Nightwave/NightwaveTigrisAugmentMod"
+        }
+      ]
+    },
+    {
+      "level": 22,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle22",
+      "minStanding": 220000,
+      "maxStanding": 230000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Types/Items/ShipDecos/TeaSet"
+        }
+      ]
+    },
+    {
+      "level": 21,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle21",
+      "minStanding": 210000,
+      "maxStanding": 220000,
+      "reward": [
+        {
+          "ItemCount": 50,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 20,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle20",
+      "minStanding": 200000,
+      "maxStanding": 210000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Upgrades/Mods/Rifle/Event/Nightwave/NightwaveAkjagaraAugmentMod"
+        }
+      ]
+    },
+    {
+      "level": 19,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle19",
+      "minStanding": 190000,
+      "maxStanding": 200000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Types/Items/MiscItems/UtilityUnlocker"
+        }
+      ]
+    },
+    {
+      "level": 18,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle18",
+      "minStanding": 180000,
+      "maxStanding": 190000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Weapons/Tenno/Melee/AxeML/StavikaDualSwordSkin"
+        }
+      ]
+    },
+    {
+      "level": 17,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle17",
+      "minStanding": 170000,
+      "maxStanding": 180000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Types/Items/MiscItems/WeaponUtilityUnlocker"
+        }
+      ]
+    },
+    {
+      "level": 16,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle16",
+      "minStanding": 160000,
+      "maxStanding": 170000,
+      "reward": [
+        {
+          "ItemCount": 50,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 15,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle15",
+      "minStanding": 150000,
+      "maxStanding": 160000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Upgrades/Skins/Events/InfQuantaInfestedAladV"
+        }
+      ]
+    },
+    {
+      "level": 14,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle14",
+      "minStanding": 140000,
+      "maxStanding": 150000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Upgrades/Mods/Randomized/PlayerMeleeWeaponRandomModRare"
+        }
+      ]
+    },
+    {
+      "level": 13,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle13",
+      "minStanding": 130000,
+      "maxStanding": 140000,
+      "reward": [
+        {
+          "ItemCount": 20000,
+          "ItemType": "/Lotus/Types/Items/MiscItems/Kuva"
+        }
+      ]
+    },
+    {
+      "level": 12,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle12",
+      "minStanding": 120000,
+      "maxStanding": 130000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Types/StoreItems/SlotItems/SuitSlotItem"
+        }
+      ]
+    },
+    {
+      "level": 11,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle11",
+      "minStanding": 110000,
+      "maxStanding": 120000,
+      "reward": [
+        {
+          "ItemCount": 50,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 10,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle10",
+      "minStanding": 100000,
+      "maxStanding": 110000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Upgrades/Skins/Hoverboard/HoverboardStickerWolf"
+        }
+      ]
+    },
+    {
+      "level": 9,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle9",
+      "minStanding": 90000,
+      "maxStanding": 100000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Types/StoreItems/AvatarImages/AvatarImageIvaraAction"
+        }
+      ]
+    },
+    {
+      "level": 8,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle8",
+      "minStanding": 80000,
+      "maxStanding": 90000,
+      "reward": [
+        {
+          "ItemCount": 2,
+          "ItemType": "/Lotus/Types/Items/MiscItems/OrokinCatalyst"
+        }
+      ]
+    },
+    {
+      "level": 7,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle7",
+      "minStanding": 70000,
+      "maxStanding": 80000,
+      "storeItemReward": "/Lotus/Types/StoreItems/Packages/FormaPack"
+    },
+    {
+      "level": 6,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle6",
+      "minStanding": 60000,
+      "maxStanding": 70000,
+      "reward": [
+        {
+          "ItemCount": 50,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    },
+    {
+      "level": 5,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle5",
+      "minStanding": 50000,
+      "maxStanding": 60000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Upgrades/Skins/Effects/BatsEphemera"
+        }
+      ]
+    },
+    {
+      "level": 4,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle4",
+      "minStanding": 40000,
+      "maxStanding": 50000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Types/Game/QuartersWallpapers/NoraWallpaper"
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle3",
+      "minStanding": 30000,
+      "maxStanding": 40000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Types/StoreItems/SlotItems/TwoWeaponSlotItem"
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle2",
+      "minStanding": 20000,
+      "maxStanding": 30000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Types/Items/Emotes/WolfRageEmote"
+        }
+      ]
+    },
+    {
+      "level": 1,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle1",
+      "minStanding": 10000,
+      "maxStanding": 20000,
+      "reward": [
+        {
+          "ItemCount": 150,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraIntermissionFiveCreds"
+        }
+      ]
+    }
+  ],
+  "favours": [
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/LoginSigilA",
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/Types/StoreItems/Packages/ColorPackB",
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Camo/DesertMarelokSkin",
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    }
+  ]
+}

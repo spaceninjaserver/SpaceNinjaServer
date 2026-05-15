@@ -1,17 +1,19 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { addMiscItems, addStanding, freeUpSlot, getInventory } from "../../services/inventoryService.ts";
 import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { eInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IOid } from "../../types/commonTypes.ts";
-import { ExportSyndicates, ExportWeapons } from "warframe-public-export-plus";
+import { ExportWeapons } from "warframe-public-export-plus";
 import { logger } from "../../utils/logger.ts";
 import type { IAffiliationMods, IInventoryChanges } from "../../types/purchaseTypes.ts";
 import { eEquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { fromOid } from "../../helpers/inventoryHelpers.ts";
+import { getSyndicate } from "../../services/itemDataService.ts";
 
 export const syndicateStandingBonusController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
+    const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const request = JSON.parse(String(req.body)) as ISyndicateStandingBonusRequest;
 
     const affiliationTag = "Operation" in request ? request.Operation.AffiliationTag : request.AffiliationTag;
@@ -19,7 +21,7 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
     const modularWeaponIdRaw = "Operation" in request ? request.Operation.ModularWeaponId : request.ModularWeaponId;
     const modularWeaponId = fromOid(modularWeaponIdRaw);
 
-    const syndicateMeta = ExportSyndicates[affiliationTag];
+    const syndicateMeta = (await getSyndicate(buildLabel, buildLabel))!;
 
     // Process items
     let gainedStanding = 0;
@@ -31,7 +33,7 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
 
         item.ItemCount *= -1;
     });
-    const inventory = await getInventory(accountId, undefined);
+    const inventory = await getInventory(account._id, undefined);
     addMiscItems(inventory, items);
     const inventoryChanges: IInventoryChanges = {};
     inventoryChanges.MiscItems = items;
@@ -62,7 +64,7 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
     }
 
     const affiliationMods: IAffiliationMods[] = [];
-    addStanding(inventory, affiliationTag, gainedStanding, affiliationMods, true);
+    await addStanding(inventory, buildLabel, affiliationTag, gainedStanding, affiliationMods, true);
 
     await inventory.save();
 

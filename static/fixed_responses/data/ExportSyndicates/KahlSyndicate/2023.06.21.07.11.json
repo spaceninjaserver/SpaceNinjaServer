@@ -1,0 +1,98 @@
+{
+  "uniqueName": "/Lotus/Syndicates/Kahl/KahlSyndicate",
+  "name": "/Lotus/Language/Syndicates/KahlSyndicateName",
+  "icon": "/Lotus/Interface/Icons/Syndicates/FactionKahl.png",
+  "description": "/Lotus/Language/Syndicates/KahlSyndicateDesc",
+  "colour": {
+    "value": "0xFFA16042"
+  },
+  "backgroundColour": {
+    "value": "0xFF032310"
+  },
+  "dailyLimitBin": "STANDING_LIMIT_BIN_KAHL",
+  "titles": [
+    {
+      "level": 5,
+      "name": "/Lotus/Language/Syndicates/KahlSyndicateTitle5",
+      "icon": "/Lotus/Interface/Icons/Syndicates/FactionKahlLevel5.png",
+      "description": "/Lotus/Language/Syndicates/KahlSyndicateTitle5Desc",
+      "minStanding": 4,
+      "maxStanding": 5
+    },
+    {
+      "level": 4,
+      "name": "/Lotus/Language/Syndicates/KahlSyndicateTitle4",
+      "icon": "/Lotus/Interface/Icons/Syndicates/FactionKahlLevel4.png",
+      "description": "/Lotus/Language/Syndicates/KahlSyndicateTitle4Desc",
+      "minStanding": 3,
+      "maxStanding": 4
+    },
+    {
+      "level": 3,
+      "name": "/Lotus/Language/Syndicates/KahlSyndicateTitle3",
+      "icon": "/Lotus/Interface/Icons/Syndicates/FactionKahlLevel3.png",
+      "description": "/Lotus/Language/Syndicates/KahlSyndicateTitle3Desc",
+      "minStanding": 2,
+      "maxStanding": 3
+    },
+    {
+      "level": 2,
+      "name": "/Lotus/Language/Syndicates/KahlSyndicateTitle2",
+      "icon": "/Lotus/Interface/Icons/Syndicates/FactionKahlLevel2.png",
+      "description": "/Lotus/Language/Syndicates/KahlSyndicateTitle2Desc",
+      "minStanding": 1,
+      "maxStanding": 2
+    },
+    {
+      "level": 1,
+      "name": "/Lotus/Language/Syndicates/KahlSyndicateTitle1",
+      "icon": "/Lotus/Interface/Icons/Syndicates/FactionKahlLevel1.png",
+      "description": "/Lotus/Language/Syndicates/KahlSyndicateTitle1Desc",
+      "minStanding": 0,
+      "maxStanding": 1
+    }
+  ],
+  "favours": [
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Warframe/Kahl/KahlAvatarAbilityDurationMod",
+      "standingCost": 50,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Warframe/Kahl/KahlAvatarAbilityRangeMod",
+      "standingCost": 50,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Warframe/Kahl/KahlAvatarAbilityStrengthMod",
+      "standingCost": 50,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Warframe/Kahl/KahlAvatarHealthMaxMod",
+      "standingCost": 50,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Warframe/Kahl/KahlAvatarPowerMaxMod",
+      "standingCost": 50,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "",
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    }
+  ]
+}

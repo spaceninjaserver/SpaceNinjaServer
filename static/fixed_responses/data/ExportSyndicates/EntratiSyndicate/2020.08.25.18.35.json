@@ -4,10 +4,10 @@
   "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilEntrati.png",
   "description": "/Lotus/Language/InfestedMicroplanet/EntratiSyndicateDesc",
   "colour": {
-    "value": "0x00BC9028"
+    "value": "0xFFBC9028"
   },
   "backgroundColour": {
-    "value": "0x00494E5C"
+    "value": "0xFF494E5C"
   },
   "dailyLimitBin": "STANDING_LIMIT_BIN_ENTRATI",
   "titles": [
@@ -25,11 +25,11 @@
             "ItemType": "/Lotus/Types/Items/Deimos/SeriglassShard"
           },
           {
-            "ItemCount": 1,
+            "ItemCount": 25,
             "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonB"
           },
           {
-            "ItemCount": 1,
+            "ItemCount": 25,
             "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonA"
           }
         ],
@@ -54,11 +54,11 @@
             "ItemType": "/Lotus/Types/Friendly/Pets/CreaturePets/CreaturePetParts/Deimos/InfestedPredatorMutagenC"
           },
           {
-            "ItemCount": 1,
+            "ItemCount": 20,
             "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonA"
           },
           {
-            "ItemCount": 1,
+            "ItemCount": 5,
             "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentCommonB"
           }
         ],
@@ -83,11 +83,11 @@
             "ItemType": "/Lotus/Types/Items/Deimos/AnimalTagInfestedPredatorRare"
           },
           {
-            "ItemCount": 1,
+            "ItemCount": 20,
             "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonB"
           },
           {
-            "ItemCount": 1,
+            "ItemCount": 10,
             "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentCommonB"
           }
         ],
@@ -112,11 +112,11 @@
             "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/InfTransformClawsWeaponGloveBlueprint"
           },
           {
-            "ItemCount": 1,
+            "ItemCount": 10,
             "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonA"
           },
           {
-            "ItemCount": 1,
+            "ItemCount": 10,
             "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentCommonC"
           }
         ],
@@ -135,6 +135,14 @@
           {
             "ItemCount": 3,
             "ItemType": "/Lotus/Types/Items/Fish/Deimos/FishParts/DeimosOrokinFishBPartItem"
+          },
+          {
+            "ItemCount": 5,
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentCommonB"
+          },
+          {
+            "ItemCount": 5,
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentCommonC"
           }
         ],
         "credits": 0
@@ -165,10 +173,6 @@
     {
       "itemType": "/Lotus/Types/Items/Deimos/EntratiFragmentRareA",
       "standing": 1500
-    },
-    {
-      "itemType": "/Lotus/Types/Items/SyndicateDogTags/UniversalSyndicateDogTag",
-      "standing": 1000
     }
   ],
   "medallionsCappedByDailyLimit": true,
@@ -203,13 +207,6 @@
     },
     {
       "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Deimos/TrophyBlueprints/FishTrophyInfestedCommonDBlueprint",
-      "standingCost": 1500,
-      "creditsCost": 0,
-      "requiredLevel": 1,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Deimos/TrophyBlueprints/FishTrophyInfestedCommonEBlueprint",
       "standingCost": 1500,
       "creditsCost": 0,
       "requiredLevel": 1,
@@ -272,13 +269,6 @@
       "rankUpReward": true
     },
     {
-      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Deimos/TrophyBlueprints/FishTrophyInfestedRareABlueprint",
-      "standingCost": 7500,
-      "creditsCost": 0,
-      "requiredLevel": 4,
-      "rankUpReward": true
-    },
-    {
       "storeItem": "/Lotus/StoreItems/Types/Game/FishBait/Infested/OrokinFishBaitB",
       "standingCost": 400,
       "creditsCost": 0,
@@ -290,48 +280,6 @@
       "standingCost": 10000,
       "creditsCost": 0,
       "requiredLevel": 5,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Weapons/Infested/Pistols/InfKitGun/Barrels/InfBarrelBeam/InfModularBarrelBeamBlueprint",
-      "standingCost": 500,
-      "creditsCost": 0,
-      "requiredLevel": 0,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Weapons/Infested/Pistols/InfKitGun/Barrels/InfBarrelEgg/InfModularBarrelEggBlueprint",
-      "standingCost": 500,
-      "creditsCost": 0,
-      "requiredLevel": 0,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigBlueprint",
-      "standingCost": 500,
-      "creditsCost": 0,
-      "requiredLevel": 0,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Weapons/Infested/Pistols/InfKitGun/Clips/InfSmallClip/InfModularClipSmallBlueprint",
-      "standingCost": 500,
-      "creditsCost": 0,
-      "requiredLevel": 0,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Weapons/Infested/Pistols/InfKitGun/Handles/InfPrimaryHandle/InfModularPrimaryHandleBlueprint",
-      "standingCost": 500,
-      "creditsCost": 0,
-      "requiredLevel": 0,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Weapons/Infested/Pistols/InfKitGun/Handles/InfSecondaryHandle/InfModularSecondaryHandleBlueprint",
-      "standingCost": 500,
-      "creditsCost": 0,
-      "requiredLevel": 0,
       "rankUpReward": true
     },
     {
@@ -354,48 +302,6 @@
       "creditsCost": 0,
       "requiredLevel": 0,
       "rankUpReward": false
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Gameplay/InfestedMicroplanet/Resources/Mechs/DamagedMechPartChassisItem",
-      "standingCost": 2000,
-      "creditsCost": 0,
-      "requiredLevel": 0,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Gameplay/InfestedMicroplanet/Resources/Mechs/DamagedMechPartEngineItem",
-      "standingCost": 2000,
-      "creditsCost": 0,
-      "requiredLevel": 0,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Gameplay/InfestedMicroplanet/Resources/Mechs/DamagedMechPartSystemsItem",
-      "standingCost": 2000,
-      "creditsCost": 0,
-      "requiredLevel": 0,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Gameplay/InfestedMicroplanet/Resources/Mechs/DamagedMechPartWeaponPodItem",
-      "standingCost": 2000,
-      "creditsCost": 0,
-      "requiredLevel": 0,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Weapons/Infested/Pistols/InfKitGun/Clips/InfClipBig/InfModularClipBigCritStatBlueprint",
-      "standingCost": 1000,
-      "creditsCost": 0,
-      "requiredLevel": 1,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Weapons/Infested/Pistols/InfKitGun/Clips/InfSmallClip/InfModularClipSmallCritStatBlueprint",
-      "standingCost": 1000,
-      "creditsCost": 0,
-      "requiredLevel": 1,
-      "rankUpReward": true
     },
     {
       "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/InfUziBlueprint",
@@ -440,13 +346,6 @@
       "rankUpReward": false
     },
     {
-      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/LavosBlueprint",
-      "standingCost": 5000,
-      "creditsCost": 0,
-      "requiredLevel": 2,
-      "rankUpReward": false
-    },
-    {
       "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/ThanotechRifleBlueprint",
       "standingCost": 5000,
       "creditsCost": 0,
@@ -470,27 +369,6 @@
     {
       "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/ThanotechRifleStockBlueprint",
       "standingCost": 2500,
-      "creditsCost": 0,
-      "requiredLevel": 3,
-      "rankUpReward": false
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/LavosChassisBlueprint",
-      "standingCost": 5000,
-      "creditsCost": 0,
-      "requiredLevel": 3,
-      "rankUpReward": false
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/LavosHelmetBlueprint",
-      "standingCost": 5000,
-      "creditsCost": 0,
-      "requiredLevel": 3,
-      "rankUpReward": false
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/LavosSystemsBlueprint",
-      "standingCost": 5000,
       "creditsCost": 0,
       "requiredLevel": 3,
       "rankUpReward": false
@@ -529,34 +407,6 @@
       "creditsCost": 0,
       "requiredLevel": 0,
       "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/TnAlchemistShotgunBlueprint",
-      "standingCost": 5000,
-      "creditsCost": 0,
-      "requiredLevel": 4,
-      "rankUpReward": false
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/TnAlchemistShotgunBarrel",
-      "standingCost": 5000,
-      "creditsCost": 0,
-      "requiredLevel": 5,
-      "rankUpReward": false
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/TnAlchemistShotgunReceiver",
-      "standingCost": 5000,
-      "creditsCost": 0,
-      "requiredLevel": 5,
-      "rankUpReward": false
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/TnAlchemistShotgunStock",
-      "standingCost": 5000,
-      "creditsCost": 0,
-      "requiredLevel": 5,
-      "rankUpReward": false
     },
     {
       "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Prospecting/DeimosCommonGemBCutBlueprint",
@@ -606,13 +456,6 @@
       "creditsCost": 0,
       "requiredLevel": 2,
       "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/BoosterPacks/RandomSyndicateProjectionPack",
-      "standingCost": 20000,
-      "creditsCost": 0,
-      "requiredLevel": 2,
-      "rankUpReward": false
     },
     {
       "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Prospecting/DeimosEidolonGemACutBlueprint",
@@ -699,13 +542,6 @@
       "rankUpReward": true
     },
     {
-      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/EntratiRankOne",
-      "standingCost": 5000,
-      "creditsCost": 0,
-      "requiredLevel": 1,
-      "rankUpReward": true
-    },
-    {
       "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/Deimos/InfestedMergooLureGearItem",
       "standingCost": 2000,
       "creditsCost": 0,
@@ -748,27 +584,6 @@
       "rankUpReward": true
     },
     {
-      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/EntratiRankTwo",
-      "standingCost": 10000,
-      "creditsCost": 0,
-      "requiredLevel": 2,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/Deimos/InfestedZongroLureGearItem",
-      "standingCost": 3000,
-      "creditsCost": 0,
-      "requiredLevel": 3,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/Deimos/InfestedZongroRarityBoost",
-      "standingCost": 150,
-      "creditsCost": 0,
-      "requiredLevel": 3,
-      "rankUpReward": false
-    },
-    {
       "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Pets/InfestedCritterAntigenCBlueprint",
       "standingCost": 4000,
       "creditsCost": 0,
@@ -804,48 +619,6 @@
       "rankUpReward": false
     },
     {
-      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/EntratiRankThree",
-      "standingCost": 15000,
-      "creditsCost": 0,
-      "requiredLevel": 3,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Sentinels/SentinelPrecepts/VoidBond/BoneSplitter",
-      "standingCost": 20000,
-      "creditsCost": 0,
-      "requiredLevel": 3,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Sentinels/SentinelPrecepts/VoidBond/BondedExaltation",
-      "standingCost": 20000,
-      "creditsCost": 0,
-      "requiredLevel": 3,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Sentinels/SentinelPrecepts/VoidBond/Proliferation",
-      "standingCost": 20000,
-      "creditsCost": 0,
-      "requiredLevel": 3,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Sentinels/SentinelPrecepts/VoidBond/VoidClone",
-      "standingCost": 20000,
-      "creditsCost": 0,
-      "requiredLevel": 3,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Items/ShipFeatureItems/InfestedFoundryUpgradeBlueprint",
-      "standingCost": 30000,
-      "creditsCost": 0,
-      "requiredLevel": 5,
-      "rankUpReward": true
-    },
-    {
       "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Pets/InfestedCritterAntigenDBlueprint",
       "standingCost": 6000,
       "creditsCost": 0,
@@ -874,67 +647,11 @@
       "rankUpReward": true
     },
     {
-      "storeItem": "/Lotus/StoreItems/Types/Friendly/Pets/CreaturePets/CreaturePrecepts/InfestedCatbrowVampireShieldPrecept",
-      "standingCost": 10000,
-      "creditsCost": 0,
-      "requiredLevel": 4,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Friendly/Pets/CreaturePets/CreaturePrecepts/InfestedPredatorMaggotSummonerPrecept",
-      "standingCost": 10000,
-      "creditsCost": 0,
-      "requiredLevel": 4,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/EntratiRankFour",
-      "standingCost": 20000,
-      "creditsCost": 0,
-      "requiredLevel": 4,
-      "rankUpReward": true
-    },
-    {
       "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/PhotoboothTileDeimosLandscape",
       "standingCost": 130000,
       "creditsCost": 0,
       "requiredLevel": 5,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/EntratiRankFive",
-      "standingCost": 30000,
-      "creditsCost": 0,
-      "requiredLevel": 5,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/KDrive/KDriveVelocipodSkin",
-      "standingCost": 50000,
-      "creditsCost": 0,
-      "requiredLevel": 0,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/KDrive/KDriveVelocipodUncommonSkin",
-      "standingCost": 50000,
-      "creditsCost": 0,
-      "requiredLevel": 0,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/KDrive/KDriveVelocipodRareSkin",
-      "standingCost": 50000,
-      "creditsCost": 0,
-      "requiredLevel": 0,
-      "rankUpReward": true
-    },
-    {
-      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/TranqRifleGearItem",
-      "standingCost": 500,
-      "creditsCost": 0,
-      "requiredLevel": 0,
-      "rankUpReward": true
+      "rankUpReward": false
     }
   ]
 }

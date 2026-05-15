@@ -1,0 +1,645 @@
+{
+  "uniqueName": "/Lotus/Syndicates/ArbitersSyndicate",
+  "name": "/Lotus/Language/Syndicates/ArbitersName",
+  "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilJudge.png",
+  "description": "/Lotus/Language/Syndicates/ArbitersDesc",
+  "colour": {
+    "value": "0xFFD3E4E7"
+  },
+  "backgroundColour": {
+    "value": "0xFF3A3843"
+  },
+  "dailyLimitBin": "STANDING_LIMIT_BIN_NORMAL",
+  "initiationSacrifice": {
+    "items": [
+      {
+        "ItemCount": 500,
+        "ItemType": "/Lotus/Types/Items/MiscItems/Nanospores"
+      }
+    ],
+    "credits": 10000
+  },
+  "initiationReward": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilArbitersOfHexisA",
+  "alignments": {
+    "RedVeilSyndicate": -1,
+    "PerrinSyndicate": -0.5,
+    "CephalonSudaSyndicate": 0.5
+  },
+  "titles": [
+    {
+      "level": 5,
+      "name": "/Lotus/Language/Syndicates/ArbitersTitle5",
+      "description": "/Lotus/Language/Syndicates/GenericAugmentModsReward",
+      "minStanding": 240000,
+      "maxStanding": 372000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Recipes/WarframeRecipes/MiragePrimeSystemsComponent"
+          }
+        ],
+        "credits": 500000
+      }
+    },
+    {
+      "level": 4,
+      "name": "/Lotus/Language/Syndicates/ArbitersTitle4",
+      "description": "/Lotus/Language/Syndicates/GenericWeaponModsReward",
+      "minStanding": 141000,
+      "maxStanding": 240000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/SybarisPrimeBarrel"
+          }
+        ],
+        "credits": 250000
+      }
+    },
+    {
+      "level": 3,
+      "name": "/Lotus/Language/Syndicates/ArbitersTitle3",
+      "description": "/Lotus/Language/Syndicates/ArbitersReward3",
+      "minStanding": 71000,
+      "maxStanding": 141000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Items/MiscItems/OrokinReactor"
+          }
+        ],
+        "credits": 100000
+      }
+    },
+    {
+      "level": 2,
+      "name": "/Lotus/Language/Syndicates/ArbitersTitle2",
+      "description": "/Lotus/Language/Syndicates/ArbitersReward2",
+      "minStanding": 27000,
+      "maxStanding": 71000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Items/MiscItems/Forma"
+          }
+        ],
+        "credits": 50000
+      }
+    },
+    {
+      "level": 1,
+      "name": "/Lotus/Language/Syndicates/ArbitersTitle1",
+      "description": "/Lotus/Language/Syndicates/ArbitersReward1",
+      "minStanding": 5000,
+      "maxStanding": 27000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 2,
+            "ItemType": "/Lotus/Types/Items/MiscItems/NeuralSensor"
+          }
+        ],
+        "credits": 30000
+      }
+    },
+    {
+      "level": -1,
+      "name": "/Lotus/Language/Syndicates/ArbitersTitleNeg1",
+      "description": "/Lotus/Language/Syndicates/ArbitersRewardNeg1",
+      "minStanding": -27000,
+      "maxStanding": -5000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Items/MiscItems/Forma"
+          }
+        ],
+        "credits": 50000
+      }
+    },
+    {
+      "level": -2,
+      "name": "/Lotus/Language/Syndicates/ArbitersTitleNeg2",
+      "description": "/Lotus/Language/Syndicates/ArbitersRewardNeg2",
+      "minStanding": -71000,
+      "maxStanding": -27000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Items/MiscItems/OrokinReactor"
+          }
+        ],
+        "credits": 100000
+      }
+    }
+  ],
+  "medallions": [
+    {
+      "itemType": "/Lotus/Types/Items/SyndicateDogTags/ArbitersDogTag",
+      "standing": 500
+    },
+    {
+      "itemType": "/Lotus/Types/Items/SyndicateDogTags/ArbitersUncommonDogTag",
+      "standing": 1000
+    },
+    {
+      "itemType": "/Lotus/Types/Items/SyndicateDogTags/ArbitersRareDogTag",
+      "standing": 5000
+    },
+    {
+      "itemType": "/Lotus/Types/Items/SyndicateDogTags/KelaEventDogTag",
+      "standing": 10000
+    }
+  ],
+  "favours": [
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Consumable/CorruptedLancerBall",
+      "standingCost": 2500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilArbitersOfHexisB",
+      "standingCost": 2500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilArbitersOfHexisC",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilArbitersOfHexisD",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/BoosterPacks/RandomSyndicateProjectionPack",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilArbitersOfHexisE",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilArbitersOfHexisF",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/ArchHeavyPistolsBarrel",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/ArchLongRifleBarrel",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/ArchCannonBarrel",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilArbitersOfHexisG",
+      "standingCost": 12000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilArbitersOfHexisH",
+      "standingCost": 17000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/ArchBurstGunBarrel",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/ArchSwordShieldAegis",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/StoreItems/Consumables/Restoratives/SyndicateTeamEnergyTenPackBlueprint",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Syndicate/BurstonPrimeMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Syndicate/JawSwordMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Syndicate/SilvaAegisMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Syndicate/ViperMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilArbitersOfHexisI",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilArbitersOfHexisJ",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ArbitersHexisSyndicateOrnament",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Ninja/GlaiveAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Ninja/SmokeScreenAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Ninja/TeleportToAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Ninja/NinjaStormAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/YinYang/YinYangSwitchAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/YinYang/YinYangTargetAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/YinYang/YinYangAuraAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/YinYang/YinYangBurstAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Excalibur/SlashDashAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Excalibur/RadialBlindAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Excalibur/RadialJavelinAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Excalibur/SwordOfDoomAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Glass/GlassShatterAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Priest/PriestRavageAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Priest/PriestPactAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Sandman/SandmanStormAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Sandman/SandmanSwarmAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Magician/BanishAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Magician/VolatileAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Magician/TearInSpaceAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Loki/DecoyAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Loki/InvisibilityAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Loki/SwitchAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Loki/DisarmAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Harlequin/IllusionAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Harlequin/ObjectChangeAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Harlequin/LightAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Jade/MindControlAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Jade/DaggerAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Jade/ChaosAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Jade/SelfBulletAttractorAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Volt/ShockAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Volt/SpeedAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Volt/ShieldAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Volt/OverloadAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/MonkeyKing/MonkeyPokeAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/MonkeyKing/MonkeyCloudAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/MonkeyKing/MonkeyStaffAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilArbitersOfHexisK",
+      "standingCost": 30000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Syndicates/ArbitersOfHexis/Pistols/AHAkbolto",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Syndicates/ArbitersOfHexis/LongGuns/AHBoltor",
+      "standingCost": 125000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Syndicates/ArbitersOfHexis/Melee/AHBoltace",
+      "standingCost": 125000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Scarves/SyndicateAHScarf",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/PhotoboothTileSyndicateArbiters",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/PhotoboothTileSyndicateArbitersNursery",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/PhotoboothTileSyndicateArbitersContainment",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Game/QuartersWallpapers/SyndicateAHWallpaper",
+      "standingCost": 125000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    }
+  ]
+}

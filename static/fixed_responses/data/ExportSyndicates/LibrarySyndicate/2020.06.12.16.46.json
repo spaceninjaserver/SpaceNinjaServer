@@ -1,0 +1,587 @@
+{
+  "uniqueName": "/Lotus/Syndicates/LibrarySyndicate",
+  "name": "/Lotus/Language/Syndicates/LibraryTitle",
+  "icon": "/Lotus/Interface/Icons/Categories/IconLibrarian256.png",
+  "description": "/Lotus/Language/Syndicates/LibraryDesc",
+  "colour": {
+    "value": "0xFFECD38F"
+  },
+  "backgroundColour": {
+    "value": "0xFF5A3706"
+  },
+  "dailyLimitBin": "STANDING_LIMIT_BIN_LIBRARY",
+  "initiationReward": "/Lotus/Types/StoreItems/Packages/SanctuaryInitiationKit",
+  "medallions": [
+    {
+      "itemType": "/Lotus/Types/Items/SyndicateDogTags/UniversalSyndicateDogTag",
+      "standing": 1000
+    }
+  ],
+  "favours": [
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Consumable/LibraryScanner",
+      "creditsCost": 5000,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Consumable/HunterTool",
+      "creditsCost": 5000,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/CollectorSigil",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/TransmuteCores/AttackTransmuteCore",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/TransmuteCores/DefenseTransmuteCore",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/TransmuteCores/TacticTransmuteCore",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/LibraryScannerEnemyWeaknessUpgrade",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/LibraryScannerDoubleScanUpgrade",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/LibraryScannerRechargeUpgrade",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/LibraryScannerScanSpeedUpgrade",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Sentinels/SentinelPrecepts/Looter",
+      "standingCost": 75000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Sentinels/SentinelPrecepts/WeaknessScanPrecept",
+      "standingCost": 75000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Sentinels/SentinelPrecepts/RespawnSelf",
+      "standingCost": 75000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Sentinels/SentinelPrecepts/ProcAbsorb",
+      "standingCost": 75000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Sentinels/SentinelPrecepts/GhostAugmentCard",
+      "standingCost": 75000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Sentinels/SentinelPrecepts/ItemDropOnAssist",
+      "standingCost": 75000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Warframe/EnergyPickupGivesStrengthMod",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Warframe/HealthPickupGivesArmourMod",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Archwing/Melee/ArchwingMeleeScanOnKillMod",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/DangerRoomKey",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sentinels/Skins/LibrarianHelios",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/CephPrimaryBlueprint",
+      "standingCost": 75000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/CephHammerBlueprint",
+      "standingCost": 75000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Components/UtilityUnlockerBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/PhotoboothTileWhiteBox",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/PhotoboothTileSyndicateSimarisDerelictHub",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/PhotoboothTileSyndicateSimarisOnslaught",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/TeshinGlaiveBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/Arcade",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Arcade/FlappyArcadeItem",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Arcade/WyrmiusArcadeItem",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/LisetPropSimarisOfferings",
+      "standingCost": 75000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/LisetPropSimarisResearch",
+      "standingCost": 75000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/BoosterPacks/SingleSentinelRandomArtifact",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/GlassBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/MagicianChassisBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/MagicianSystemsBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/MagicianHelmetBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/ChromaBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/ChromaChassisBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/ChromaSystemsBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/ChromaHelmetBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/HarlequinChassisBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/HarlequinSystemsBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/HarlequinHelmetBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/PriestBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/MummyBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/MummyChassisBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/MummySystemsBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/MummyHelmetBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/FairyBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/FairyChassisBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/FairySystemsBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/FairyHelmetBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/NidusBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/OctaviaBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/BrawlerBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/BrokenScepterBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/ArchwingRecipes/StandardArchwing/StandardArchwingBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/ArchwingRecipes/StandardArchwing/StandardArchwingChassisBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/ArchwingRecipes/StandardArchwing/StandardArchwingSystemsBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/ArchwingRecipes/StandardArchwing/StandardArchwingWingsBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/ImperatorBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/VerituxBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/RevenantBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/GarudaBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Keys/BardQuest/BardQuestSequencerItem",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/SheduHeavyWeaponBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Sets/Umbra/WarframeUmbraModA",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Sets/Umbra/WarframeUmbraModB",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Sets/Umbra/WarframeUmbraModC",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Sets/Sacrifice/MeleeSacrificeModA",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Sets/Sacrifice/MeleeSacrificeModB",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/CrpGhostCatcherGlaiveBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/CrpGhostCatcherGlaivePartBlade",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/CrpGhostCatcherGlaivePartCore",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/CrpGhostCatcherGlaivePartHandle",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/SundialAxeBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/SundialPistolBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/SundialRifleBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/SundialSwordBoardBlueprint",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    }
+  ]
+}

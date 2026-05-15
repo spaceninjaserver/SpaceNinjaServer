@@ -55,7 +55,6 @@ import { logger } from "../utils/logger.ts";
 import { version_compare } from "../helpers/inventoryHelpers.ts";
 import vorsPrizePreU40Rewards from "../../static/fixed_responses/vorsPrizePreU40Rewards.json" with { type: "json" };
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
-import EntratiSyndicate_pre_U41 from "../../static/fixed_responses/data/EntratiSyndicate_pre_U41.json" with { type: "json" };
 import { getWorldState } from "./worldStateService.ts";
 import { promises as fs } from "fs";
 import path from "path";
@@ -1869,17 +1868,31 @@ export const U5Modules: Record<string, IU5FingerprintData> = {
     }
 };
 
-const legacyBoosterPacksCache = new Map<string, Partial<IBoosterPack>>();
-const legacySolarMapCache = new Map<string, Record<string, IRegion>>();
+interface legacyCacheKey {
+    target: string;
+    buildLabel: string;
+}
 
-const getLegacyDataIndex = async (target: string): Promise<string[]> => {
-    const filePath = path.join("./static/fixed_responses/data", target, "index.json");
-    const raw = await fs.readFile(filePath, "utf-8");
-    return JSON.parse(raw) as Promise<string[]>;
+const legacyCacheKeyStore = new Map<string, legacyCacheKey>();
+const legacyIndexCache = new WeakMap<legacyCacheKey, string[]>();
+const legacyBoosterPacksCache = new WeakMap<legacyCacheKey, Partial<IBoosterPack>>();
+const legacySolarMapCache = new WeakMap<legacyCacheKey, Record<string, IRegion>>();
+const legacySyndicatesCache = new WeakMap<legacyCacheKey, ISyndicate>();
+
+const getLegacyCacheKey = (target: string, buildLabel: string): legacyCacheKey => {
+    const id = `${target}:${buildLabel}`;
+    let obj = legacyCacheKeyStore.get(id);
+
+    if (!obj) {
+        obj = { target, buildLabel };
+        legacyCacheKeyStore.set(id, obj);
+    }
+
+    return obj;
 };
 
 const getLegacyDataVersion = async (target: string, buildLabel: string): Promise<string | null> => {
-    const index = await getLegacyDataIndex(target);
+    const index = await getLegacyData<string[]>(legacyIndexCache, target, "index");
     let selected: string | null = null;
     for (const v of index) {
         if (version_compare(v, buildLabel) <= 0) {
@@ -1891,31 +1904,31 @@ const getLegacyDataVersion = async (target: string, buildLabel: string): Promise
     return selected;
 };
 
-const getLegacyBoosterPackData = async (target: string, buildLabel: string): Promise<Partial<IBoosterPack>> => {
-    const key = `${target}:${buildLabel}`;
-    const cached = legacyBoosterPacksCache.get(key);
-    if (cached) return cached;
+const getLegacyData = async <T>(cache: WeakMap<legacyCacheKey, T>, target: string, buildLabel: string): Promise<T> => {
+    const key = getLegacyCacheKey(target, buildLabel);
+    if (cache.has(key)) {
+        logger.debug(`Using cached ${buildLabel} data for ${target}`);
+        return cache.get(key)!;
+    }
 
     const filePath = path.join("./static/fixed_responses/data", target, `${buildLabel}.json`);
     const raw = await fs.readFile(filePath, "utf-8");
-    const json = JSON.parse(raw) as Partial<IBoosterPack>;
-    legacyBoosterPacksCache.set(key, json);
+    const json = JSON.parse(raw) as T;
+    cache.set(key, json);
+
+    logger.debug(`Cached ${buildLabel} data for ${target}`);
 
     return json;
 };
 
-const getLegacySolarMapData = async (target: string, buildLabel: string): Promise<Record<string, IRegion>> => {
-    const key = `${target}:${buildLabel}`;
-    const cached = legacySolarMapCache.get(key);
-    if (cached) return cached;
+const getLegacyBoosterPackData = async (target: string, buildLabel: string): Promise<Partial<IBoosterPack>> =>
+    await getLegacyData<Partial<IBoosterPack>>(legacyBoosterPacksCache, target, buildLabel);
 
-    const filePath = path.join("./static/fixed_responses/data", target, `${buildLabel}.json`);
-    const raw = await fs.readFile(filePath, "utf-8");
-    const json = JSON.parse(raw) as Record<string, IRegion>;
-    legacySolarMapCache.set(key, json);
+const getLegacySolarMapData = async (target: string, buildLabel: string): Promise<Record<string, IRegion>> =>
+    await getLegacyData<Record<string, IRegion>>(legacySolarMapCache, target, buildLabel);
 
-    return json;
-};
+const getLegacySyndicateData = async (target: string, buildLabel: string): Promise<ISyndicate> =>
+    await getLegacyData<ISyndicate>(legacySyndicatesCache, target, buildLabel);
 
 export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | undefined => {
     let data = ExportRecipes[uniqueName] ?? supplementalRecipes[uniqueName];
@@ -2115,45 +2128,16 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
     return data;
 };
 
-export const getSyndicate = (tag: string, buildLabel: string): ISyndicate | undefined => {
-    if (version_compare(buildLabel, gameToBuildVersion["41.0.0"]) < 0) {
-        if (tag == "EntratiSyndicate") {
-            return EntratiSyndicate_pre_U41 as ISyndicate;
-        }
-        if (version_compare(buildLabel, gameToBuildVersion["33.5.0"]) < 0) {
-            let syndicate = ExportSyndicates[tag];
-            if (tag == "ArbitersSyndicate") {
-                syndicate = {
-                    ...syndicate,
-                    initiationReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilArbitersOfHexisA"
-                };
-            } else if (tag == "CephalonSudaSyndicate") {
-                syndicate = {
-                    ...syndicate,
-                    initiationReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilCephalonSudaA"
-                };
-            } else if (tag == "NewLokaSyndicate") {
-                syndicate = {
-                    ...syndicate,
-                    initiationReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilNewLokaA"
-                };
-            } else if (tag == "PerrinSyndicate") {
-                syndicate = {
-                    ...syndicate,
-                    initiationReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilPerrinSequenceA"
-                };
-            } else if (tag == "RedVeilSyndicate") {
-                syndicate = {
-                    ...syndicate,
-                    initiationReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilRedVeilA"
-                };
-            } else if (tag == "SteelMeridianSyndicate") {
-                syndicate = {
-                    ...syndicate,
-                    initiationReward: "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilSteelMeridianA"
-                };
-            }
-            return syndicate;
+export const getSyndicate = async (tag: string, buildLabel: string): Promise<ISyndicate | undefined> => {
+    if (
+        version_compare(buildLabel, gameToBuildVersion["37.0.0"]) < 0 ||
+        (version_compare(buildLabel, gameToBuildVersion["41.0.0"]) < 0 && tag == "EntratiSyndicate")
+    ) {
+        const target = `ExportSyndicates/${tag}`;
+        const version = await getLegacyDataVersion(target, buildLabel);
+        if (version) {
+            const legacyData = await getLegacySyndicateData(target, version);
+            return legacyData;
         }
     }
     return ExportSyndicates[tag];

@@ -39,6 +39,7 @@ import {
     convertInboxMessage,
     fromStoreItem,
     getKeyChainItems,
+    getSyndicate,
     supplementalRecipes,
     U5ModsWeights,
     U5Modules
@@ -64,7 +65,6 @@ import {
     ExportRegions,
     ExportResources,
     ExportSentinels,
-    ExportSyndicates,
     ExportSystems,
     ExportUpgrades,
     ExportWarframes,
@@ -1808,16 +1808,17 @@ const updateStandingLimit = (
     }
 };
 
-export const addStanding = (
+export const addStanding = async (
     inventory: TInventoryDatabaseDocument,
+    buildLabel: string,
     syndicateTag: string,
     gainedStanding: number,
     affiliationMods: IAffiliationMods[] = [],
     isMedallion: boolean = false,
     propagateAlignments: boolean = true
-): void => {
+): Promise<void> => {
     let syndicate = inventory.Affiliations.find(x => x.Tag == syndicateTag);
-    const syndicateMeta = ExportSyndicates[syndicateTag];
+    const syndicateMeta = (await getSyndicate(syndicateTag, buildLabel))!;
 
     if (!syndicate) {
         syndicate =
@@ -1848,7 +1849,15 @@ export const addStanding = (
     if (syndicateMeta.alignments) {
         if (propagateAlignments) {
             for (const [tag, factor] of Object.entries(syndicateMeta.alignments)) {
-                addStanding(inventory, tag, gainedStanding * factor, affiliationMods, isMedallion, false);
+                await addStanding(
+                    inventory,
+                    buildLabel,
+                    tag,
+                    gainedStanding * factor,
+                    affiliationMods,
+                    isMedallion,
+                    false
+                );
             }
         } else {
             while (syndicate.Standing < getMinStanding(syndicateMeta, syndicate.Title ?? 0)) {
@@ -2765,12 +2774,16 @@ export const setBooster = (ItemType: string, expiryTimeSecs: number, inventory: 
     }
 };
 
-export const updateSyndicate = (
+export const updateSyndicate = async (
     inventory: TInventoryDatabaseDocument,
+    buildLabel: string,
     syndicateUpdate: IMissionInventoryUpdateRequest["AffiliationChanges"]
-): void => {
-    syndicateUpdate?.forEach(affiliation => {
+): Promise<void> => {
+    if (!syndicateUpdate) return;
+
+    for (const affiliation of syndicateUpdate) {
         const syndicate = inventory.Affiliations.find(x => x.Tag == affiliation.Tag);
+        const syndicateMeta = await getSyndicate(affiliation.Tag, buildLabel);
         if (syndicate !== undefined) {
             syndicate.Standing += affiliation.Standing;
             syndicate.Title = syndicate.Title === undefined ? affiliation.Title : syndicate.Title + affiliation.Title;
@@ -2783,8 +2796,9 @@ export const updateSyndicate = (
                 FreeFavorsUsed: []
             });
         }
-        updateStandingLimit(inventory, ExportSyndicates[affiliation.Tag].dailyLimitBin, affiliation.Standing);
-    });
+
+        updateStandingLimit(inventory, syndicateMeta!.dailyLimitBin, affiliation.Standing);
+    }
 };
 
 /**

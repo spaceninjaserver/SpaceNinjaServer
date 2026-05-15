@@ -1,0 +1,1379 @@
+{
+  "uniqueName": "/Lotus/Syndicates/ConclaveSyndicate",
+  "name": "/Lotus/Language/Syndicates/ConclaveName",
+  "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilConclave.png",
+  "description": "/Lotus/Language/Syndicates/ConclaveDesc",
+  "colour": {
+    "value": "0xFFF4F4F4"
+  },
+  "backgroundColour": {
+    "value": "0xFF090909"
+  },
+  "dailyLimitBin": "STANDING_LIMIT_BIN_PVP",
+  "initiationSacrifice": {
+    "items": [
+      {
+        "ItemCount": 100,
+        "ItemType": "/Lotus/Types/Items/MiscItems/Plastids"
+      }
+    ],
+    "credits": 10000
+  },
+  "initiationReward": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilConclaveA",
+  "titles": [
+    {
+      "level": 5,
+      "name": "/Lotus/Language/Syndicates/ConclaveTitle5",
+      "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilConclaveLevel14.png",
+      "description": "/Lotus/Language/Syndicates/ConclaveReward5",
+      "minStanding": 240000,
+      "maxStanding": 372000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 100,
+            "ItemType": "/Lotus/Types/Items/MiscItems/PrimeBucks"
+          }
+        ],
+        "credits": 500000
+      }
+    },
+    {
+      "level": 4,
+      "name": "/Lotus/Language/Syndicates/ConclaveTitle4",
+      "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilConclaveLevel8.png",
+      "description": "/Lotus/Language/Syndicates/ConclaveReward4",
+      "minStanding": 141000,
+      "maxStanding": 240000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Items/MiscItems/OrokinCatalyst"
+          }
+        ],
+        "credits": 250000
+      }
+    },
+    {
+      "level": 3,
+      "name": "/Lotus/Language/Syndicates/ConclaveTitle3",
+      "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilConclaveLevel6.png",
+      "description": "/Lotus/Language/Syndicates/ConclaveReward3",
+      "minStanding": 71000,
+      "maxStanding": 141000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Items/MiscItems/OrokinReactor"
+          }
+        ],
+        "credits": 100000
+      }
+    },
+    {
+      "level": 2,
+      "name": "/Lotus/Language/Syndicates/ConclaveTitle2",
+      "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilConclaveLevel2.png",
+      "description": "/Lotus/Language/Syndicates/ConclaveReward2",
+      "minStanding": 27000,
+      "maxStanding": 71000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Items/MiscItems/Forma"
+          }
+        ],
+        "credits": 50000
+      }
+    },
+    {
+      "level": 1,
+      "name": "/Lotus/Language/Syndicates/ConclaveTitle1",
+      "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilConclaveLevel1.png",
+      "description": "/Lotus/Language/Syndicates/ConclaveReward1",
+      "minStanding": 5000,
+      "maxStanding": 27000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 2,
+            "ItemType": "/Lotus/Types/Items/MiscItems/Neurode"
+          }
+        ],
+        "credits": 30000
+      }
+    }
+  ],
+  "favours": [
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilConclaveB",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilConclaveC",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilConclaveD",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilConclaveE",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Pistol/FasterReloadMoreRecoilPistolMod",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Pistol/LargerMagLongerReloadPistolMod",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Rifle/FasterReloadMoreRecoilRifleMod",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Rifle/LargerMagLongerReloadRifleMod",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Shotgun/FasterReloadMoreRecoilShotgunMod",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Shotgun/LargerMagLongerReloadShotgunMod",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/AirSlideBoost",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/MoreBulletJumpLessHealthMod",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/MoreBulletJumpLessShieldMod",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/MoreHealthLessBulletJumpMod",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/MoreShieldLessBulletJumpMod",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/MoreBulletJumpLessEnergy",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/StaggerImmunityMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPClawStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPDaggerStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPDualDaggersStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPDualSwordStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPFistStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPGlaiveStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPHammerStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPHeavyBladeStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPKatanaStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPMacheteStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPNunchakuStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPPolearmStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPPunchKickStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPRapierStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPScytheStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPStavesStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPSwordShieldStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPSwordStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPSwordWhipStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPTonfaStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Stances/PvPWhipStanceOne",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Pistol/MarkTargetPistolMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Rifle/MarkTargetRifleMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Shotgun/MarkTargetShotgunMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Pistol/HolsterSpeedBonusMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Rifle/HolsterSpeedBonusMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Shotgun/HolsterSpeedBonusMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/EffectOnFullEnergyMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Pistol/DamageBiasImpactPistolMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Pistol/DamageBiasPuncturePistolMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Pistol/DamageBiasSlashPistolMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Rifle/DamageBiasImpactRifleMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Rifle/DamageBiasPunctureRifleMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Rifle/DamageBiasSlashRifleMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Shotgun/DamageBiasImpactShotgunMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Shotgun/DamageBiasPunctureShotgunMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Shotgun/DamageBiasSlashShotgunMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Melee/DamageBiasImpactMeleeMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Melee/DamageBiasPunctureMeleeMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Melee/DamageBiasSlashMeleeMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Pistol/FasterMovementWhileAimingPistolMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Rifle/FasterMovementWhileAimingRifleMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Shotgun/FasterMovementWhileAimingShotgunlMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Pistol/HigherAirAimFoVPistolMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Rifle/HigherAirAimFoVRifleMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Shotgun/HigherAirAimFoVShotgunMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/BoosterPacks/RandomSyndicateProjectionPack",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Armor/LunaroSetA/LunaroSetAA",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Armor/LunaroSetA/LunaroSetAC",
+      "standingCost": 30000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Armor/LunaroSetA/LunaroSetAL",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilConclaveG",
+      "standingCost": 14000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilConclaveH",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilConclaveF",
+      "standingCost": 12000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/BlastResist",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/DamageResistanceLessMobility",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/DamageResistanceLessSlide",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/RagdollImmunityMod",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/EnergyOnKill",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Pistol/PassiveReloadMod",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Rifle/PassiveReloadMod",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Shotgun/PassiveReloadMod",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Melee/ExplodeOnMeleeDeath",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/EnergyOnFullShieldRegenMod",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Rifle/MoreAccuracyLessRecoilSlidingMod",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Shotgun/MoreAccuracyLessRecoilSlidingShotgunMod",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Pistol/MoreAccuracyLessRecoilSlidingPistolMod",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Melee/MeleeAutoTargetBonus",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Melee/MeleeVictimStaminaDrain",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Melee/DaggerMeleeAutoTargetBonus",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Melee/BlockMoreAttackSlowerMeleeMod",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Melee/IncreasedMobilityEquipped",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Rifle/HigherAimedDamageMoreRecoilSniperMod",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Armor/LunaroSetB/LunaroSetBA",
+      "standingCost": 30000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Armor/LunaroSetB/LunaroSetBC",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Armor/LunaroSetB/LunaroSetBL",
+      "standingCost": 30000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilConclaveI",
+      "standingCost": 13000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilConclaveJ",
+      "standingCost": 14000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilConclaveK",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Dragon/DragonBreathAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Brawler/BrawlerSummonPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/YinYang/YinYangSwitchPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Loki/DecoyPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Harlequin/PrismPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Necro/SoulPunchPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Nezha/NezhaSashPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/AntiMatter/AntiMatterDropPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Ranger/RangerQuiverPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Cowgirl/GunFuPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Excalibur/SlashDashPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Excalibur/RadialBlindPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Frost/IceSpikeAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Mag/PullPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Mag/ShieldRegenPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Jade/SelfBulletAttractorPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Rhino/IronSkinAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Volt/SpeedPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Volt/ShieldPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Berserker/LastStandPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Ember/FireBlastPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Paladin/ReckoningPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Ninja/SmokeScreenPvPAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Pistol/RestoreHealthOnKillMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Pistol/RestoreShieldsOnKillMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Rifle/RestoreHealthOnKillMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Rifle/RestoreShieldsOnKillMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Shotgun/RestoreHealthOnKillMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Shotgun/RestoreShieldsOnKillMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Melee/AbilityDamageBlockMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/ReduceShieldRechargeDelayWarframe",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/EnergyToOvershieldsOnSpawnMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Rifle/DaikyuMoreDamageOverDistanceMod",
+      "standingCost": 30000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/ElectricityParkourPvPMod",
+      "standingCost": 30000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/FireParkourPvPMod",
+      "standingCost": 30000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/FreezeParkourPvPMod",
+      "standingCost": 30000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/PvPMods/Warframe/PoisonParkourPvPMod",
+      "standingCost": 30000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilConclaveL",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilConclaveM",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilConclaveN",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Armor/LunaroSetC/LunaroSetCA",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Armor/LunaroSetC/LunaroSetCC",
+      "standingCost": 120000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Armor/LunaroSetC/LunaroSetCL",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Scarves/ConclaveCape",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/LongGuns/PvPBraton",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/LongGuns/PvPGorgon",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/LongGuns/PvPLatron",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Melee/PvPAckBrunt",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Melee/PvPDragonNikana",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Melee/PvPNikana",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Melee/PvPSkana",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Melee/PvPDualSkana",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Pistols/PvPAngstrum",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Pistols/PvPVasto",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Pistols/PvPAkvasto",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Pistols/PvPViper",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Pistols/PvPTwinVipers",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/LongGuns/PvPSybaris",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/LongGuns/PvPStrun",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Bows/PvPDaikyu",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Melee/PvPFurax",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Melee/PvPKronen",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Pistols/PvPLato",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Pistols/PvPAklato",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Pistols/PvPLex",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/LongGuns/PvPGrinlok",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/LongGuns/PvPTonkor",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Melee/PvPJatKittag",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Pistols/PvPMarelok",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/LongGuns/PvPSoma",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/LongGuns/PvPKarak",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Pistols/PvPKraken",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Pistols/PvPAkstiletto",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Melee/PvPGlaive",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/Melee/PvPTipedo",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/PvP/LongGuns/PvPOpticor",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Components/UtilityUnlockerBlueprint",
+      "standingCost": 75000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Mag/Mag",
+      "standingCost": 60000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Volt/Volt",
+      "standingCost": 60000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Excalibur/Excalibur",
+      "standingCost": 60000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilConclaveO",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilConclaveP",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilConclaveQ",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/StoreItems/SlotItems/PvPLoadoutSlotItem",
+      "standingCost": 35000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/PhotoboothTilePvPConclave",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/PhotoboothTilePvPTennoBallMoon",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    }
+  ]
+}

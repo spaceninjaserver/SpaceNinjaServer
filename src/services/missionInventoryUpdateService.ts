@@ -348,7 +348,7 @@ export const addMissionInventoryUpdates = async (
                 await updateQuestKey(inventory, value);
                 break;
             case "AffiliationChanges":
-                updateSyndicate(inventory, value);
+                await updateSyndicate(inventory, buildLabel, value);
                 break;
             // Incarnon Challenges
             case "EvolutionProgress": {
@@ -1656,7 +1656,13 @@ export const addMissionRewards = async (
                 if (rewardInfo.JobStage >= currentJob.xpAmounts.length) {
                     logger.debug(`xpAmount for stage ${rewardInfo.JobStage} is out of bounds, fallback to ${xpAmount}`);
                 }
-                addStanding(inventory, syndicateTag, Math.floor(xpAmount / (rewardInfo.Q ? 0.8 : 1)), AffiliationMods);
+                await addStanding(
+                    inventory,
+                    buildLabel,
+                    syndicateTag,
+                    Math.floor(xpAmount / (rewardInfo.Q ? 0.8 : 1)),
+                    AffiliationMods
+                );
             }
         }
     }
@@ -1697,7 +1703,7 @@ export const addMissionRewards = async (
             let standingAmount = (tier + 1) * 1000;
             if (tier > 5) standingAmount = 7500; // InfestedLichBounty
             if (isSteelPath) standingAmount *= 1.5;
-            addStanding(inventory, syndicateTag, standingAmount, AffiliationMods);
+            await addStanding(inventory, buildLabel, syndicateTag, standingAmount, AffiliationMods);
         }
         if (syndicateTag == "HexSyndicate" && tier < 6) {
             const buddy = chemistryBuddies[chemistryBuddy];
@@ -2670,11 +2676,12 @@ async function getRandomMissionDrops(
     return drops;
 }
 
-export const handleConservation = (
+export const handleConservation = async (
     inventory: TInventoryDatabaseDocument,
+    buildLabel: string,
     missionReport: IMissionInventoryUpdateRequest,
     AffiliationMods: IAffiliationMods[]
-): void => {
+): Promise<void> => {
     if (missionReport.CapturedAnimals) {
         for (const capturedAnimal of missionReport.CapturedAnimals) {
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -2704,8 +2711,9 @@ export const handleConservation = (
                     }
                 }
                 if (meta.standingReward) {
-                    addStanding(
+                    await addStanding(
                         inventory,
+                        buildLabel,
                         missionReport.Missions!.Tag == "SolNode129" ? "SolarisSyndicate" : "CetusSyndicate",
                         [2, 1.5, 1][capturedAnimal.CaptureRating] * meta.standingReward * capturedAnimal.Count,
                         AffiliationMods

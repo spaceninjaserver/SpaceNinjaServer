@@ -1,0 +1,1457 @@
+{
+  "uniqueName": "/Lotus/Syndicates/Zariman/ZarimanSyndicate",
+  "name": "/Lotus/Language/Syndicates/ZarimanName",
+  "icon": "/Lotus/Interface/Icons/Syndicates/Zariman/FactionSigilZariman.png",
+  "description": "/Lotus/Language/Syndicates/ZarimanDesc",
+  "colour": {
+    "value": "0xFF476C9E"
+  },
+  "backgroundColour": {
+    "value": "0xFF1B1F28"
+  },
+  "dailyLimitBin": "STANDING_LIMIT_BIN_ZARIMAN",
+  "titles": [
+    {
+      "level": 5,
+      "name": "/Lotus/Language/Syndicates/ZarimanTitle5",
+      "icon": "/Lotus/Interface/Icons/Syndicates/Zariman/ZarimanSyndicateRankE.png",
+      "description": "/Lotus/Language/Syndicates/ZarimanTitle5Desc",
+      "minStanding": 240000,
+      "maxStanding": 372000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 5,
+            "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/VoidAngelItem"
+          },
+          {
+            "ItemCount": 90,
+            "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/VoidWraithItem"
+          },
+          {
+            "ItemCount": 20,
+            "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanMiscItemB"
+          }
+        ],
+        "credits": 200000
+      }
+    },
+    {
+      "level": 4,
+      "name": "/Lotus/Language/Syndicates/ZarimanTitle4",
+      "icon": "/Lotus/Interface/Icons/Syndicates/Zariman/ZarimanSyndicateRankD.png",
+      "description": "/Lotus/Language/Syndicates/ZarimanTitle4Desc",
+      "minStanding": 141000,
+      "maxStanding": 240000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 15,
+            "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanDogTagBounty"
+          },
+          {
+            "ItemCount": 60,
+            "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/VoidWraithItem"
+          },
+          {
+            "ItemCount": 40,
+            "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanMiscItemA"
+          }
+        ],
+        "credits": 100000
+      }
+    },
+    {
+      "level": 3,
+      "name": "/Lotus/Language/Syndicates/ZarimanTitle3",
+      "icon": "/Lotus/Interface/Icons/Syndicates/Zariman/ZarimanSyndicateRankC.png",
+      "description": "/Lotus/Language/Syndicates/ZarimanTitle3Desc",
+      "minStanding": 71000,
+      "maxStanding": 141000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanDogTagRare"
+          },
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanMiscItemB"
+          },
+          {
+            "ItemCount": 5000,
+            "ItemType": "/Lotus/Types/Items/MiscItems/Ferrite"
+          }
+        ],
+        "credits": 50000
+      }
+    },
+    {
+      "level": 2,
+      "name": "/Lotus/Language/Syndicates/ZarimanTitle2",
+      "icon": "/Lotus/Interface/Icons/Syndicates/Zariman/ZarimanSyndicateRankB.png",
+      "description": "/Lotus/Language/Syndicates/ZarimanTitle2Desc",
+      "minStanding": 27000,
+      "maxStanding": 71000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanDogTagUncommon"
+          },
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanMiscItemA"
+          },
+          {
+            "ItemCount": 5000,
+            "ItemType": "/Lotus/Types/Items/MiscItems/AlloyPlate"
+          }
+        ],
+        "credits": 25000
+      }
+    },
+    {
+      "level": 1,
+      "name": "/Lotus/Language/Syndicates/ZarimanTitle1",
+      "icon": "/Lotus/Interface/Icons/Syndicates/Zariman/ZarimanSyndicateRankA.png",
+      "description": "/Lotus/Language/Syndicates/ZarimanTitle1Desc",
+      "minStanding": 5000,
+      "maxStanding": 27000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 5,
+            "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanDogTagCommon"
+          },
+          {
+            "ItemCount": 2000,
+            "ItemType": "/Lotus/Types/Items/MiscItems/Ferrite"
+          },
+          {
+            "ItemCount": 2000,
+            "ItemType": "/Lotus/Types/Items/MiscItems/AlloyPlate"
+          }
+        ],
+        "credits": 10000
+      }
+    }
+  ],
+  "medallions": [
+    {
+      "itemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanDogTagCommon",
+      "standing": 500
+    },
+    {
+      "itemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanDogTagUncommon",
+      "standing": 1000
+    },
+    {
+      "itemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanDogTagRare",
+      "standing": 2000
+    },
+    {
+      "itemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanDogTagBounty",
+      "standing": 2500
+    },
+    {
+      "itemType": "/Lotus/Types/Gameplay/Zariman/Resources/VoidAngelItem",
+      "standing": 5000
+    },
+    {
+      "itemType": "/Lotus/Types/Items/SyndicateDogTags/UniversalSyndicateDogTag",
+      "standing": 1000
+    }
+  ],
+  "medallionsCappedByDailyLimit": true,
+  "favours": [
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpBarrelPlastic",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateLargeA",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateLargeAOpen",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateLargeAOpenTop",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateMediumA",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateMediumAOpen",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateMediumAOpenTop",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateMediumB",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateMediumBOpen",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateMediumBOpenTop",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateMediumC",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateMediumCOpen",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateMediumCOpenTop",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateMediumD",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateMediumDEmpty",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateSmallB",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateStackingMediumA",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateStackingMediumAOpen",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateStackingMediumAOpenTop",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateStackingMediumB",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateStackingMediumC",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateTankMediumA",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCrateTankMediumB",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpCubeStationary",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureBenchA60A",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureBenchA60B",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureBenchA90A",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureBenchA90B",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureBenchASingle",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpHallwayCenterDivideA",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpHallwayCenterDivideAPannelA",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxGlobeLightOrb",
+      "standingCost": 8500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxGlobeLightOrbJustOrb",
+      "standingCost": 8500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxGlowStickLightA",
+      "standingCost": 2500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxCeilingLightA",
+      "standingCost": 2500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpEngineGeneratorA",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpEngineGeneratorALight",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFloatingGlobe",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFloatingGlobeBase",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureGroundLockerLongA",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureGroundLockerLongB",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureGroundLockerShortB",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureWallLockerLongA",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureWallLockerSmallA",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureWallLockerSmallB",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureWallLockerTallA",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureWallLockerTallB",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureChairA",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureClassRoomDeskA",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureTableA",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxCineCabinTableA",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpPlanterClipOnSmlA",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpPlanterClipOnSmlAFoliageB",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxHydroPlantStationA",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxHydroponicsDoor",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureBenchB",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureBenchB20A",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureBenchB60A",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureBenchB60B",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureBenchB90A",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFurnitureBenchB90B",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpDrinkDispenser",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFoodCanA",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFoodCanB",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFoodDrinkA",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFoodDrinkB",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFoodDrinkC",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFoodKnifeA",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFoodPouchA",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFoodSpoonA",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFoodTrayA",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpGarbageBinB",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpKitchenBoiler",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpKitchenMiscApplianceA",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpKitchenMiscApplianceB",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpKitchenMiscApplianceC",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpKitchenMiscApplianceD",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpKitchenMiscApplianceE",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpKitchenMiscApplianceF",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpKitchenFoodRationA",
+      "standingCost": 1500,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpKitchenFoodRationB",
+      "standingCost": 1500,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpKitchenFoodRationC",
+      "standingCost": 1500,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpKitchenFoodRationD",
+      "standingCost": 1500,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpKitchenFoodRationE",
+      "standingCost": 1500,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpKitchenMiscTrayA",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpKitchenMixer",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpKitchenPanA",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpKitchenSaladSpinner",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpKitchenSterilizer",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxLunaroCourtBannerLargeA",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxLunaroCourtBannerMediumA",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxParkSignMapA",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpBannerFloorA",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpBannerFloorB",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpFloorSealPadA",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpHangingPlanets",
+      "standingCost": 3500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpHangingPlanetsB",
+      "standingCost": 3500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpLabSetA",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpLabSetB",
+      "standingCost": 4000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpLabSetC",
+      "standingCost": 4000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpStatuePlinthA",
+      "standingCost": 4000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpToolBoxStandingNew",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpWoodPanelWallSingleA16mA",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpWoodPanelWallSingleEndCapA",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpWoodPanelWallSingleEndCapB",
+      "standingCost": 40000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpClassRoomPostersAa",
+      "standingCost": 3500,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpClassRoomPostersAb",
+      "standingCost": 3500,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpClassRoomPostersAc",
+      "standingCost": 3500,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpClassRoomPostersAd",
+      "standingCost": 3500,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpClassRoomPostersAe",
+      "standingCost": 3500,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpClassRoomPostersAf",
+      "standingCost": 3500,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpClassRoomPostersAg",
+      "standingCost": 3500,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpClassRoomPostersAh",
+      "standingCost": 3500,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpClassRoomPostersAi",
+      "standingCost": 3500,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxStatueChildHeroicA",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxStatueChildHeroicB",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxStatueFemaleHeroicA",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxStatueMaleHeroicA",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxStatueMaleHeroicB",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxStatueMaleHeroicDrummerA",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxStatueMaleHeroicKneelA",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxStatueOrokinB",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxStatuePlatformA",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxMomPortrait",
+      "standingCost": 60000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPortraitFrameAlbrecht",
+      "standingCost": 60000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPortraitFrameFemale",
+      "standingCost": 60000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPortraitFrame",
+      "standingCost": 60000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxPrpShoes",
+      "standingCost": 6500,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxTrophyA",
+      "standingCost": 60000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxTrophyB",
+      "standingCost": 60000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ZarimanApartment/ZARxTrophyC",
+      "standingCost": 60000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sentinels/GardenerDethcubeSkin",
+      "standingCost": 60000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sentinels/Masks/GardenerMask",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sentinels/Tails/GardenerTail",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sentinels/Wings/GardenerWings",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/TextureOverrides/RoughMetal",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/TextureOverrides/SilkFabric",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/TextureOverrides/Ivory",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/TextureOverrides/Canvas",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/TextureOverrides/PatternWrapped",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/HoldfastsRankOne",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/HoldfastsRankTwo",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/HoldfastsRankThree",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/HoldfastsRankFour",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/HoldfastsRankFive",
+      "standingCost": 30000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Zariman/PhotoboothTileZarAmphitheatre",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Zariman/PhotoboothTileZarApartment",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Zariman/PhotoboothTileZarCargoBay",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Zariman/PhotoboothTileZarCellBlock",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Zariman/PhotoboothTileZarHydroponics",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Zariman/PhotoboothTileZarIndoctrinationHall",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Zariman/PhotoboothTileZarLivingQuarters",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Zariman/PhotoboothTileZarLunaroCourt",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Zariman/PhotoboothTileZarParkA",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Zariman/PhotoboothTileZarParkB",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Zariman/PhotoboothTileZarParkC",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Zariman/PhotoboothTileZarParkHub",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Zariman/PhotoboothTileZarSchool",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Zariman/PhotoboothTileZarShuttleBay",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Zariman/PhotoboothTileZarVoidEngine",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/Evolving/ZarimanHeavyPistolBlueprint",
+      "standingCost": 3000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/Evolving/ZarimanDaggerWeaponBlueprint",
+      "standingCost": 5500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Zariman/OperatorOnOperatorAbilityIncreaseDamage",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Zariman/SecondaryOnRollCritChanceOnHeadshot",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Zariman/PrimaryOnAbilityReloadSpeed",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Zariman/WarframeOnOperatorAbilityPowerStrength",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Zariman/OperatorOnDeathInvulnerability",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/Evolving/ZarimanSemiAutoRifleBlueprint",
+      "standingCost": 6000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Zariman/AmpOnEnergyDepletedCritChance",
+      "standingCost": 5500,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/SecondaryDamageOnHeatProc",
+      "standingCost": 5500,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/Evolving/ZarimanPumpShotgunBlueprint",
+      "standingCost": 8000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Zariman/SecondaryOnStatusProcBonusDamage",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Zariman/WarframeOnShieldUptimePowerDuration",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Zariman/OperatorOnEnergyDepletedRegenEnergy",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/Evolving/ZarimanTonfaWeaponBlueprint",
+      "standingCost": 9000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Utility/HealAlliesOnEnergySpent",
+      "standingCost": 8500,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Zariman/AmpOnVoidSlingAmpAmmoEfficiency",
+      "standingCost": 8500,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Zariman/SecondaryOnOvershieldCritChance",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Zariman/EnergyOnGhostDissipate",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/PowerStrengthOnKill",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/WeaponAmpArcaneUnlocker",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeSkins/VoidAngelEphemeraABlueprint",
+      "standingCost": 30000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeSkins/VoidAngelEphemeraBBlueprint",
+      "standingCost": 30000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/ApartmentPenthouseKey",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    }
+  ]
+}

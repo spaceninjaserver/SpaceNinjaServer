@@ -1,0 +1,945 @@
+{
+  "uniqueName": "/Lotus/Syndicates/Solaris/SolarisSyndicate",
+  "name": "/Lotus/Language/Syndicates/SolarisName",
+  "icon": "/Lotus/Interface/Graphics/Fortuna/FortunaTitleIcon.png",
+  "description": "/Lotus/Language/Syndicates/SolarisDesc",
+  "colour": {
+    "value": "0xFFF2E5A7"
+  },
+  "backgroundColour": {
+    "value": "0xFF4A2B18"
+  },
+  "dailyLimitBin": "STANDING_LIMIT_BIN_SOLARIS",
+  "titles": [
+    {
+      "level": 5,
+      "name": "/Lotus/Language/Syndicates/SolarisTitle5",
+      "description": "/Lotus/Language/Syndicates/SolarisTitle5Desc",
+      "minStanding": 240000,
+      "maxStanding": 372000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Items/Solaris/DebtTokenE"
+          },
+          {
+            "ItemCount": 12,
+            "ItemType": "/Lotus/Types/Items/Solaris/DebtTokenD"
+          },
+          {
+            "ItemCount": 12,
+            "ItemType": "/Lotus/Types/Items/Solaris/DebtTokenC"
+          }
+        ],
+        "credits": 200000
+      }
+    },
+    {
+      "level": 4,
+      "name": "/Lotus/Language/Syndicates/SolarisTitle4",
+      "description": "/Lotus/Language/Syndicates/SolarisTitle4Desc",
+      "minStanding": 141000,
+      "maxStanding": 240000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 13,
+            "ItemType": "/Lotus/Types/Items/Solaris/DebtTokenD"
+          },
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Items/Solaris/DebtTokenC"
+          },
+          {
+            "ItemCount": 12,
+            "ItemType": "/Lotus/Types/Items/Solaris/DebtTokenB"
+          }
+        ],
+        "credits": 100000
+      }
+    },
+    {
+      "level": 3,
+      "name": "/Lotus/Language/Syndicates/SolarisTitle3",
+      "description": "/Lotus/Language/Syndicates/SolarisTitle3Desc",
+      "minStanding": 71000,
+      "maxStanding": 141000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 13,
+            "ItemType": "/Lotus/Types/Items/Solaris/DebtTokenC"
+          },
+          {
+            "ItemCount": 15,
+            "ItemType": "/Lotus/Types/Items/Solaris/DebtTokenB"
+          },
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Items/Solaris/DebtTokenA"
+          }
+        ],
+        "credits": 50000
+      }
+    },
+    {
+      "level": 2,
+      "name": "/Lotus/Language/Syndicates/SolarisTitle2",
+      "description": "/Lotus/Language/Syndicates/SolarisTitle2Desc",
+      "minStanding": 27000,
+      "maxStanding": 71000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 15,
+            "ItemType": "/Lotus/Types/Items/Solaris/DebtTokenB"
+          },
+          {
+            "ItemCount": 12,
+            "ItemType": "/Lotus/Types/Items/Solaris/DebtTokenA"
+          }
+        ],
+        "credits": 25000
+      }
+    },
+    {
+      "level": 1,
+      "name": "/Lotus/Language/Syndicates/SolarisTitle1",
+      "description": "/Lotus/Language/Syndicates/SolarisTitle1Desc",
+      "minStanding": 5000,
+      "maxStanding": 27000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 13,
+            "ItemType": "/Lotus/Types/Items/Solaris/DebtTokenA"
+          }
+        ],
+        "credits": 10000
+      }
+    }
+  ],
+  "medallions": [
+    {
+      "itemType": "/Lotus/Types/Items/Gems/Solaris/SolarisCommonGemAItem",
+      "standing": 50
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Gems/Solaris/SolarisCommonGemBItem",
+      "standing": 50
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Gems/Solaris/SolarisUncommonGemAItem",
+      "standing": 200
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Gems/Solaris/SolarisRareGemAItem",
+      "standing": 500
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Gems/Solaris/SolarisEidolonGemAItem",
+      "standing": 1000
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Gems/Solaris/SolarisEidolonGemBItem",
+      "standing": 1000
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Fish/Solaris/CorpusCoolCommonFishALargeItem",
+      "standing": 50
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Fish/Solaris/CorpusWarmCommonFishALargeItem",
+      "standing": 50
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Fish/Solaris/CorpusWarmCommonFishBLargeItem",
+      "standing": 50
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Fish/Solaris/SolarisBothCommonFishALargeItem",
+      "standing": 50
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Fish/Solaris/SolarisCoolCommonFishALargeItem",
+      "standing": 50
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Fish/Solaris/CorpusBothUncommonFishALargeItem",
+      "standing": 200
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Fish/Solaris/CorpusCoolUncommonFishALargeItem",
+      "standing": 200
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Fish/Solaris/CorpusWarmUncommonFishALargeItem",
+      "standing": 200
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Fish/Solaris/SolarisCoolUncommonFishALargeItem",
+      "standing": 200
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Fish/Solaris/SolarisWarmRareFishALargeItem",
+      "standing": 500
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Fish/Solaris/OrokinBothRareFishALargeItem",
+      "standing": 800
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Fish/Solaris/OrokinCoolRareFishALargeItem",
+      "standing": 800
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Fish/Solaris/OrokinBothLegendaryFishALargeItem",
+      "standing": 1200
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Solaris/DebtTokenA",
+      "standing": 100
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Solaris/DebtTokenB",
+      "standing": 200
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Solaris/DebtTokenC",
+      "standing": 300
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Solaris/DebtTokenD",
+      "standing": 400
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Solaris/DebtTokenE",
+      "standing": 500
+    }
+  ],
+  "medallionsCappedByDailyLimit": true,
+  "favours": [
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelAPartBlueprint",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelBPartBlueprint",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelCPartBlueprint",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Barrel/SUModularSecondaryBarrelDPartBlueprint",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleAPartBlueprint",
+      "standingCost": 750,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleBPartBlueprint",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCapIClipPartBlueprint",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularReloadIClipPartBlueprint",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleCPartBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Handle/SUModularSecondaryHandleDPartBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCapIIClipPartBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularReloadIIClipPartBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritICapIClipPartBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIReloadIClipPartBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularStatICapIClipPartBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularStatIReloadIClipPartBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritICapIIClipPartBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIReloadIIClipPartBlueprint",
+      "standingCost": 3000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularStatICapIIClipPartBlueprint",
+      "standingCost": 3000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularStatIReloadIIClipPartBlueprint",
+      "standingCost": 3000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIICapIClipPartBlueprint",
+      "standingCost": 4000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularCritIIReloadIClipPartBlueprint",
+      "standingCost": 4000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularStatIICapIClipPartBlueprint",
+      "standingCost": 4000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/Clip/SUModularStatIIReloadIClipPartBlueprint",
+      "standingCost": 4000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/EyeInTheSky",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Utility/BulletToBattery",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Utility/EnergyEfficiencyOnHeadshot",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/SeekerProjOnHeadshotKill",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/TranqRifleGearItem",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/SnowRodentLureGearItem",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/RarityBoosts/SnowRodentRarityBoost",
+      "standingCost": 100,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Consumable/RobofishSpearB",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Game/FishBait/Venus/GenericContaminant",
+      "standingCost": 50,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/SnowCritterLureGearItem",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/RarityBoosts/SnowCritterRarityBoost",
+      "standingCost": 100,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Game/FishBait/Venus/LakeContaminantTierA",
+      "standingCost": 100,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Game/FishBait/Venus/PondContaminantTierA",
+      "standingCost": 100,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/TrophyBlueprints/CorpusCoolCommonFishATrophyBlueprint",
+      "standingCost": 1500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/TrophyBlueprints/CorpusWarmCommonFishATrophyBlueprint",
+      "standingCost": 1500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/TrophyBlueprints/CorpusWarmCommonFishBTrophyBlueprint",
+      "standingCost": 1500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/TrophyBlueprints/SolarisBothCommonFishATrophyBlueprint",
+      "standingCost": 1500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/TrophyBlueprints/SolarisCoolCommonFishATrophyBlueprint",
+      "standingCost": 1500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/SnowBirdLureGearItem",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/RarityBoosts/SnowBirdRarityBoost",
+      "standingCost": 200,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Game/FishBait/Venus/CaveContaminantTierA",
+      "standingCost": 200,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Game/FishBait/Venus/LakeContaminantTierB",
+      "standingCost": 200,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/TrophyBlueprints/CorpusCoolUncommonFishATrophyBlueprint",
+      "standingCost": 3000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/TrophyBlueprints/CorpusWarmUncommonFishATrophyBlueprint",
+      "standingCost": 3000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/TrophyBlueprints/SolarisCoolUncommonFishATrophyBlueprint",
+      "standingCost": 3000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/SnowArmadilloLureGearItem",
+      "standingCost": 4000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/RarityBoosts/SnowArmadilloRarityBoost",
+      "standingCost": 300,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Game/FishBait/Venus/PondContaminantTierB",
+      "standingCost": 300,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Game/FishBait/Venus/CaveContaminantTierB",
+      "standingCost": 300,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Consumable/RobofishSpearC",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/TrophyBlueprints/CorpusBothUncommonFishATrophyBlueprint",
+      "standingCost": 6000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/TrophyBlueprints/SolarisWarmRareFishATrophyBlueprint",
+      "standingCost": 6000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Game/FishBait/Venus/CaveContaminantTierC",
+      "standingCost": 400,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/SnowPredatorLureGearItem",
+      "standingCost": 8000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/RarityBoosts/SnowPredatorRarityBoost",
+      "standingCost": 400,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/OrokinKubrowLureGearItem",
+      "standingCost": 8000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/RarityBoosts/OrokinKubrowRarityBoost",
+      "standingCost": 400,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/TrophyBlueprints/OrokinBothRareFishATrophyBlueprint",
+      "standingCost": 9000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/TrophyBlueprints/OrokinCoolRareFishATrophyBlueprint",
+      "standingCost": 9000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/TrophyBlueprints/CrewmanBootTrophyBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/LegendaryKubrowLureGearItem",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/RarityBoosts/LegendaryKubrowRarityBoost",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Solaris/TrophyBlueprints/OrokinBothLegendaryFishATrophyBlueprint",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/SentinelRecipes/RadarSentinelBlueprint",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Consumable/MiningLaserSolaris",
+      "standingCost": 2500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/SolarisRecipes/Prospecting/SolarisCommonGemACutBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/SolarisRecipes/Prospecting/SolarisCommonOreAAlloyBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/SolarisRecipes/Prospecting/SolarisCommonGemBCutBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/SolarisRecipes/Prospecting/SolarisCommonOreBAlloyBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/SolarisRecipes/Prospecting/SolarisUncommonGemACutBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/SolarisRecipes/Prospecting/SolarisUncommonOreAAlloyBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/SolarisRecipes/Prospecting/SolarisRareGemACutBlueprint",
+      "standingCost": 4000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/SolarisRecipes/Prospecting/SolarisRareOreAAlloyBlueprint",
+      "standingCost": 4000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/SolarisRecipes/Prospecting/SolarisEidolonGemACutBlueprint",
+      "standingCost": 8000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/SolarisRecipes/Prospecting/SolarisEidolonGemBCutBlueprint",
+      "standingCost": 12000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/PhotoboothTileVenusLandscape",
+      "standingCost": 130000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/PhotoboothTileFortunaTown",
+      "standingCost": 130000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/SolarisMiningToolSilenceUpgrade",
+      "standingCost": 30000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/SolarisMiningToolRangeUpgrade",
+      "standingCost": 30000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/MoaPetParts/MoaPetLegABlueprint",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/MoaPetParts/MoaPetLegBBlueprint",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/MoaPetParts/MoaPetHeadParaBlueprint",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/MoaPetParts/MoaPetEngineThricoreBlueprint",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/MoaPetParts/MoaPetPayloadCryoxionBlueprint",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/MoaPetParts/MoaPetHeadLambeoBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/MoaPetParts/MoaPetEngineKrisysBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/MoaPetParts/MoaPetLegCBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/MoaPetParts/MoaPetPayloadDartaBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/MoaPetParts/MoaPetHeadOloroBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/MoaPetParts/MoaPetEngineArcotekBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/MoaPetParts/MoaPetLegDBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/MoaPetParts/MoaPetPayloadAegronBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/MoaPetParts/MoaPetPayloadMunitronBlueprint",
+      "standingCost": 3000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/MoaPetParts/MoaPetPayloadHextraBlueprint",
+      "standingCost": 3000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/MoaPetParts/MoaPetPayloadTazronBlueprint",
+      "standingCost": 4000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/MoaPetParts/MoaPetPayloadThermocorBlueprint",
+      "standingCost": 4000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/SentinelCryoxionWeaponBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/SentinelTazronWeaponBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/SentinelThermocorWeaponBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    }
+  ]
+}

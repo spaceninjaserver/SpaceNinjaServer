@@ -1,0 +1,494 @@
+{
+  "uniqueName": "/Lotus/Syndicates/Solaris/VoxSyndicate",
+  "name": "/Lotus/Language/Syndicates/VoxSolName",
+  "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilSolarisUnited.png",
+  "description": "/Lotus/Language/Syndicates/VoxSolDesc",
+  "colour": {
+    "value": "0xFF4A2B18"
+  },
+  "backgroundColour": {
+    "value": "0xFFF2E5A7"
+  },
+  "dailyLimitBin": "STANDING_LIMIT_BIN_VOX",
+  "titles": [
+    {
+      "level": 5,
+      "name": "/Lotus/Language/Syndicates/VoxSolTitle5",
+      "description": "/Lotus/Language/Syndicates/VoxSolTitle5Desc",
+      "minStanding": 240000,
+      "maxStanding": 372000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 5,
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/ArachnoidCamperItem"
+          },
+          {
+            "ItemCount": 5,
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/CorpusWidgetCItem"
+          }
+        ],
+        "credits": 1000000
+      }
+    },
+    {
+      "level": 4,
+      "name": "/Lotus/Language/Syndicates/VoxSolTitle4",
+      "description": "/Lotus/Language/Syndicates/VoxSolTitle4Desc",
+      "minStanding": 141000,
+      "maxStanding": 240000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/ArachnoidWraithItem"
+          },
+          {
+            "ItemCount": 5,
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/CorpusWidgetCItem"
+          }
+        ],
+        "credits": 500000
+      }
+    },
+    {
+      "level": 3,
+      "name": "/Lotus/Language/Syndicates/VoxSolTitle3",
+      "description": "/Lotus/Language/Syndicates/VoxSolTitle3Desc",
+      "minStanding": 71000,
+      "maxStanding": 141000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/ArachnoidHungerItem"
+          },
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/CorpusWidgetBItem"
+          }
+        ],
+        "credits": 250000
+      }
+    },
+    {
+      "level": 2,
+      "name": "/Lotus/Language/Syndicates/VoxSolTitle2",
+      "description": "/Lotus/Language/Syndicates/VoxSolTitle2Desc",
+      "minStanding": 27000,
+      "maxStanding": 71000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/ArachnoidMicroidItem"
+          },
+          {
+            "ItemCount": 15,
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/CorpusWidgetAItem"
+          }
+        ],
+        "credits": 100000
+      }
+    },
+    {
+      "level": 1,
+      "name": "/Lotus/Language/Syndicates/VoxSolTitle1",
+      "description": "/Lotus/Language/Syndicates/VoxSolTitle1Desc",
+      "minStanding": 5000,
+      "maxStanding": 27000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 2,
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/ArachnoidMicroidItem"
+          },
+          {
+            "ItemCount": 2,
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/ArachnoidHungerItem"
+          },
+          {
+            "ItemCount": 2,
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/ArachnoidWraithItem"
+          }
+        ],
+        "credits": 50000
+      }
+    }
+  ],
+  "medallions": [
+    {
+      "itemType": "/Lotus/Types/Gameplay/Venus/Resources/ArachnoidMicroidItem",
+      "standing": 1000
+    },
+    {
+      "itemType": "/Lotus/Types/Gameplay/Venus/Resources/ArachnoidHungerItem",
+      "standing": 1000
+    },
+    {
+      "itemType": "/Lotus/Types/Gameplay/Venus/Resources/ArachnoidWraithItem",
+      "standing": 1000
+    },
+    {
+      "itemType": "/Lotus/Types/Gameplay/Venus/Resources/ArachnoidCamperItem",
+      "standing": 6000
+    },
+    {
+      "itemType": "/Lotus/Types/Gameplay/Venus/Resources/ArachnoidCamperTerraItem",
+      "standing": 12000
+    }
+  ],
+  "medallionsCappedByDailyLimit": true,
+  "favours": [
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/ApparatistArmsBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/ApparatistBodyBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/OperatorArmourApparatistHipBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/ApparatistHeadBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/ApparatistLegsBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/GreaseWitchArmsBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/GreaseWitchBodyBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/OperatorArmourGreaseHipBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/GreaseWitchHeadBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/GreaseWitchLegsBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/SmelterArmsBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/SmelterBodyBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/SmelterHeadBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/SmelterLegsBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/TechnomancerArmsBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/TechnomancerBodyBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/TechnomancerHeadBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/TechnomancerLegsBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Corpus/OperatorAmplifiers/Set1/Barrel/CorpAmpSet1BarrelPartABlueprint",
+      "standingCost": 3000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Corpus/OperatorAmplifiers/Set1/Chassis/CorpAmpSet1ChassisPartABlueprint",
+      "standingCost": 3000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Corpus/OperatorAmplifiers/Set1/Grip/CorpAmpSet1GripPartABlueprint",
+      "standingCost": 3000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/OperatorAmps/VoidToElectricDamage",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/OperatorAmps/VoidToPunctureDamage",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/PacifistBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/IronframeBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Corpus/OperatorAmplifiers/Set1/Barrel/CorpAmpSet1BarrelPartBBlueprint",
+      "standingCost": 3000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Corpus/OperatorAmplifiers/Set1/Chassis/CorpAmpSet1ChassisPartBBlueprint",
+      "standingCost": 3000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Corpus/OperatorAmplifiers/Set1/Grip/CorpAmpSet1GripPartBBlueprint",
+      "standingCost": 3000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/PacifistChassisBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/PacifistHelmetBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/PacifistSystemsBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/OperatorAmps/VoidToHeatDamage",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/OperatorAmps/VoidToViralDamage",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Gameplay/Venus/Resources/CorpusWidgetAItem",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Gameplay/Venus/Resources/CorpusWidgetBItem",
+      "standingCost": 2500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Gameplay/Venus/Resources/CorpusWidgetCItem",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Corpus/OperatorAmplifiers/Set1/Barrel/CorpAmpSet1BarrelPartCBlueprint",
+      "standingCost": 3000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Corpus/OperatorAmplifiers/Set1/Chassis/CorpAmpSet1ChassisPartCBlueprint",
+      "standingCost": 3000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Corpus/OperatorAmplifiers/Set1/Grip/CorpAmpSet1GripPartCBlueprint",
+      "standingCost": 3000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/OperatorArmour/PullOnTransferenceIn",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/OperatorArmour/ProcResistOnBlast",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/OperatorArmour/TetherMineOnDash",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/OperatorArmour/DamageReductionOnVoidMode",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/OperatorArmour/HoverboardSpeedOnTransferenceIn",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/OperatorArmour/HealOnVoidMode",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/OperatorArmour/HeatDamageOnDash",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/OperatorArmour/HeatResistOnBlast",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/OperatorArmour/RobotStunOnBlast",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/OperatorArmour/NoPenaltyOnDeath",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/OperatorArmour/ReverseOnDash",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    }
+  ]
+}

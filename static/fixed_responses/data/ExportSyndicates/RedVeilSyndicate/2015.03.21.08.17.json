@@ -1,0 +1,410 @@
+{
+  "uniqueName": "/Lotus/Syndicates/RedVeilSyndicate",
+  "name": "/Lotus/Language/Syndicates/RedVeilName",
+  "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilAssassins.png",
+  "description": "/Lotus/Language/Syndicates/RedVeilDesc",
+  "colour": {
+    "value": "0xFFFC8988"
+  },
+  "backgroundColour": {
+    "value": "0xFF29101D"
+  },
+  "dailyLimitBin": "STANDING_LIMIT_BIN_NORMAL",
+  "initiationSacrifice": {
+    "items": [
+      {
+        "ItemCount": 500,
+        "ItemType": "/Lotus/Types/Items/MiscItems/AlloyPlate"
+      }
+    ],
+    "credits": 10000
+  },
+  "initiationReward": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilRedVeilA",
+  "alignments": {
+    "ArbitersSyndicate": -1,
+    "CephalonSudaSyndicate": -0.5,
+    "SteelMeridianSyndicate": 0.5
+  },
+  "titles": [
+    {
+      "level": 5,
+      "name": "/Lotus/Language/Syndicates/RedVeilTitle5",
+      "description": "/Lotus/Language/Syndicates/GenericAugmentModsReward",
+      "minStanding": 240000,
+      "maxStanding": 372000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Recipes/WarframeRecipes/EmberPrimeHelmetComponent"
+          }
+        ],
+        "credits": 500000
+      }
+    },
+    {
+      "level": 4,
+      "name": "/Lotus/Language/Syndicates/RedVeilTitle4",
+      "description": "/Lotus/Language/Syndicates/GenericWeaponModsReward",
+      "minStanding": 141000,
+      "maxStanding": 240000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Recipes/Weapons/WeaponParts/PrimeFangHandle"
+          }
+        ],
+        "credits": 250000
+      }
+    },
+    {
+      "level": 3,
+      "name": "/Lotus/Language/Syndicates/RedVeilTitle3",
+      "description": "/Lotus/Language/Syndicates/RedVeilReward3",
+      "minStanding": 71000,
+      "maxStanding": 141000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Items/MiscItems/OrokinCatalyst"
+          }
+        ],
+        "credits": 100000
+      }
+    },
+    {
+      "level": 2,
+      "name": "/Lotus/Language/Syndicates/RedVeilTitle2",
+      "description": "/Lotus/Language/Syndicates/RedVeilReward2",
+      "minStanding": 27000,
+      "maxStanding": 71000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Items/MiscItems/Forma"
+          }
+        ],
+        "credits": 50000
+      }
+    },
+    {
+      "level": 1,
+      "name": "/Lotus/Language/Syndicates/RedVeilTitle1",
+      "description": "/Lotus/Language/Syndicates/RedVeilReward1",
+      "minStanding": 5000,
+      "maxStanding": 27000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 2,
+            "ItemType": "/Lotus/Types/Items/MiscItems/Gallium"
+          }
+        ],
+        "credits": 30000
+      }
+    },
+    {
+      "level": -1,
+      "name": "/Lotus/Language/Syndicates/RedVeilTitleNeg1",
+      "description": "/Lotus/Language/Syndicates/RedVeilRewardNeg1",
+      "minStanding": -27000,
+      "maxStanding": -5000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Items/MiscItems/Forma"
+          }
+        ],
+        "credits": 50000
+      }
+    },
+    {
+      "level": -2,
+      "name": "/Lotus/Language/Syndicates/RedVeilTitleNeg2",
+      "description": "/Lotus/Language/Syndicates/RedVeilRewardNeg2",
+      "minStanding": -71000,
+      "maxStanding": -27000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Items/MiscItems/OrokinCatalyst"
+          }
+        ],
+        "credits": 100000
+      }
+    }
+  ],
+  "medallions": [
+    {
+      "itemType": "/Lotus/Types/Items/SyndicateDogTags/RedVeilDogTag",
+      "standing": 500
+    },
+    {
+      "itemType": "/Lotus/Types/Items/SyndicateDogTags/RedVeilUncommonDogTag",
+      "standing": 1000
+    },
+    {
+      "itemType": "/Lotus/Types/Items/SyndicateDogTags/RedVeilRareDogTag",
+      "standing": 5000
+    }
+  ],
+  "favours": [
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Consumable/ChargerBall",
+      "standingCost": 2500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilRedVeilB",
+      "standingCost": 2500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilRedVeilC",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilRedVeilD",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/BoosterPacks/SyndicateRandomKey",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilRedVeilE",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilRedVeilF",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/StoreItems/Consumables/Restoratives/SyndicateTeamAmmoTenPackBlueprint",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilRedVeilG",
+      "standingCost": 12000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilRedVeilH",
+      "standingCost": 17000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Syndicate/DarkDaggerMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Syndicate/EmbolistMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Syndicate/MireMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilRedVeilI",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilRedVeilJ",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Ninja/GlaiveAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Ninja/SmokeScreenAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Ninja/NinjaStormAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Ember/FireBallAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Ember/FireBlastAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Loki/InvisibilityAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Loki/SwitchAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Loki/DisarmAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Cowgirl/BallisticBatteryAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Cowgirl/RussianRouletteAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Necro/SoulPunchAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Necro/SearchTheDeadAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Saryn/PoisonAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Saryn/ShedAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Volt/ShockAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Volt/SpeedAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Tengu/DiveBombAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Powersuits/Tengu/TurbulenceAugmentCard",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/SyndicateSigilRedVeilK",
+      "standingCost": 30000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Syndicates/RedVeil/Pistols/RVBallistica",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Scarves/SyndicateRVScarf",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    }
+  ]
+}

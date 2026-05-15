@@ -1,0 +1,340 @@
+{
+  "uniqueName": "/Lotus/Syndicates/Deimos/NecraloidSyndicate",
+  "name": "/Lotus/Language/InfestedMicroplanet/NecraloidSyndicateName",
+  "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilNecraloid.png",
+  "description": "/Lotus/Language/InfestedMicroplanet/NecraloidSyndicateDesc",
+  "colour": {
+    "value": "0xFF79673E"
+  },
+  "backgroundColour": {
+    "value": "0xFF2D2D2E"
+  },
+  "dailyLimitBin": "STANDING_LIMIT_BIN_NECRALOID",
+  "titles": [
+    {
+      "level": 3,
+      "name": "/Lotus/Language/InfestedMicroplanet/NecraloidTitle3",
+      "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilNecraloidLevel3.png",
+      "description": "/Lotus/Language/InfestedMicroplanet/NecraloidTitle3Desc",
+      "minStanding": 71000,
+      "maxStanding": 141000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 15,
+            "ItemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/Necraloids/NecraloidStandingRareItem"
+          },
+          {
+            "ItemCount": 350,
+            "ItemType": "/Lotus/Types/Items/MiscItems/VoidTearDrop"
+          },
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Recipes/Weapons/ThanotechRifleBlueprint"
+          },
+          {
+            "ItemCount": 20,
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonA"
+          }
+        ],
+        "credits": 0
+      }
+    },
+    {
+      "level": 2,
+      "name": "/Lotus/Language/InfestedMicroplanet/NecraloidTitle2",
+      "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilNecraloidLevel2.png",
+      "description": "/Lotus/Language/InfestedMicroplanet/NecraloidTitle2Desc",
+      "minStanding": 27000,
+      "maxStanding": 71000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 15,
+            "ItemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/Necraloids/NecraloidStandingUncommonItem"
+          },
+          {
+            "ItemCount": 250,
+            "ItemType": "/Lotus/Types/Items/MiscItems/VoidTearDrop"
+          },
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Recipes/Weapons/ThanotechPistolBlueprint"
+          },
+          {
+            "ItemCount": 20,
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonA"
+          }
+        ],
+        "credits": 0
+      }
+    },
+    {
+      "level": 1,
+      "name": "/Lotus/Language/InfestedMicroplanet/NecraloidTitle1",
+      "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilNecraloidLevel1.png",
+      "description": "/Lotus/Language/InfestedMicroplanet/NecraloidTitle1Desc",
+      "minStanding": 5000,
+      "maxStanding": 27000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/Necraloids/NecraloidStandingCommonItem"
+          },
+          {
+            "ItemCount": 150,
+            "ItemType": "/Lotus/Types/Items/MiscItems/VoidTearDrop"
+          },
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Recipes/Weapons/InfUziBlueprint"
+          },
+          {
+            "ItemCount": 20,
+            "ItemType": "/Lotus/Types/Items/Deimos/EntratiFragmentUncommonA"
+          }
+        ],
+        "credits": 0
+      }
+    }
+  ],
+  "medallions": [
+    {
+      "itemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/Necraloids/NecraloidStandingCommonItem",
+      "standing": 1000
+    },
+    {
+      "itemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/Necraloids/NecraloidStandingUncommonItem",
+      "standing": 2500
+    },
+    {
+      "itemType": "/Lotus/Types/Gameplay/InfestedMicroplanet/Resources/Necraloids/NecraloidStandingRareItem",
+      "standing": 5000
+    },
+    {
+      "itemType": "/Lotus/Types/Items/SyndicateDogTags/UniversalSyndicateDogTag",
+      "standing": 1000
+    }
+  ],
+  "medallionsCappedByDailyLimit": true,
+  "favours": [
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Mechs/NecromechPartChassisBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Mechs/NecromechPartEngineBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Mechs/NecromechPartSystemsBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Mechs/NecromechPartWeaponPodBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Mechs/NecromechBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Mechs/ThanotechPartChassisBlueprint",
+      "standingCost": 3500,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Mechs/ThanotechPartEngineBlueprint",
+      "standingCost": 3500,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Mechs/ThanotechPartSystemsBlueprint",
+      "standingCost": 3500,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Mechs/ThanotechPartWeaponPodBlueprint",
+      "standingCost": 3500,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Mechs/ThanotechArchGunBarrelBlueprint",
+      "standingCost": 4000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Mechs/ThanotechArchGunReceiverBlueprint",
+      "standingCost": 4000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Mechs/ThanotechArchGunStockBlueprint",
+      "standingCost": 4000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Mechs/ThanotechGrenadeLauncherBarrelBlueprint",
+      "standingCost": 4000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Mechs/ThanotechGrenadeLauncherReceiverBlueprint",
+      "standingCost": 4000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Mechs/ThanotechGrenadeLauncherStockBlueprint",
+      "standingCost": 4000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechHealthMaxMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechBoostRechargeMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/DeimosRecipes/Mechs/ThanotechBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/ThanotechArchGunBlueprint",
+      "standingCost": 8000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/ThanotechGrenadeLauncherBlueprint",
+      "standingCost": 8000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechAbilityStrengthMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechMeleeDamageMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechBoostEfficiencyMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechHoverEfficiencyMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechSlideEfficiencyMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/PhotoboothTileDeimosTomb",
+      "standingCost": 70000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sentinels/Skins/ThanotechSentinelSkin",
+      "standingCost": 30000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sentinels/Masks/ThanoTechMask",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sentinels/Tails/ThanoTechTail",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sentinels/Wings/ThanoTechWings",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/FusionTreasures/OroFusexEntrati",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    }
+  ]
+}

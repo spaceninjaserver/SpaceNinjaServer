@@ -1,0 +1,266 @@
+{
+  "uniqueName": "/Lotus/Syndicates/Solaris/VentKidsSyndicate",
+  "name": "/Lotus/Language/Syndicates/VentkidsName",
+  "icon": "/Lotus/Interface/Icons/Syndicates/FactionVentKidz.png",
+  "description": "/Lotus/Language/Syndicates/VentkidsDesc",
+  "colour": {
+    "value": "0xFFFFF58F"
+  },
+  "backgroundColour": {
+    "value": "0xFFB97EF9"
+  },
+  "dailyLimitBin": "STANDING_LIMIT_BIN_VENTKIDS",
+  "titles": [
+    {
+      "level": 5,
+      "name": "/Lotus/Language/Syndicates/VentkidsTitle5",
+      "description": "/Lotus/Language/Syndicates/VentkidsTitle5Desc",
+      "minStanding": 240000,
+      "maxStanding": 372000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/CoolantItem"
+          }
+        ],
+        "credits": 50000
+      }
+    },
+    {
+      "level": 4,
+      "name": "/Lotus/Language/Syndicates/VentkidsTitle4",
+      "description": "/Lotus/Language/Syndicates/VentkidsTitle4Desc",
+      "minStanding": 141000,
+      "maxStanding": 240000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/CoolantItem"
+          }
+        ],
+        "credits": 40000
+      }
+    },
+    {
+      "level": 3,
+      "name": "/Lotus/Language/Syndicates/VentkidsTitle3",
+      "description": "/Lotus/Language/Syndicates/VentkidsTitle3Desc",
+      "minStanding": 71000,
+      "maxStanding": 141000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/CoolantItem"
+          }
+        ],
+        "credits": 30000
+      }
+    },
+    {
+      "level": 2,
+      "name": "/Lotus/Language/Syndicates/VentkidsTitle2",
+      "description": "/Lotus/Language/Syndicates/VentkidsTitle2Desc",
+      "minStanding": 27000,
+      "maxStanding": 71000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/CoolantItem"
+          }
+        ],
+        "credits": 20000
+      }
+    },
+    {
+      "level": 1,
+      "name": "/Lotus/Language/Syndicates/VentkidsTitle1",
+      "description": "/Lotus/Language/Syndicates/VentkidsTitle1Desc",
+      "minStanding": 5000,
+      "maxStanding": 27000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/CoolantItem"
+          }
+        ],
+        "credits": 10000
+      }
+    }
+  ],
+  "medallionsCappedByDailyLimit": true,
+  "favours": [
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardSolarisA/HoverboardSolarisADeckBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardSolarisA/HoverboardSolarisAEngineBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardSolarisA/HoverboardSolarisAFrontBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardSolarisA/HoverboardSolarisAJetBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Hoverboard/HBAirGravMod",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Hoverboard/HBElementTrailMod",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Hoverboard/HBGrindMagnetismMod",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Hoverboard/HBGrindSpeedMod",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardCorpusA/HoverboardCorpusADeckBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardCorpusA/HoverboardCorpusAEngineBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardCorpusA/HoverboardCorpusAFrontBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardCorpusA/HoverboardCorpusAJetBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Hoverboard/HBGrindStaticMod",
+      "standingCost": 12500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Hoverboard/HBJumpHeightMod",
+      "standingCost": 12500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Hoverboard/HBPointsMultiplierMod",
+      "standingCost": 12500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Hoverboard/HBSlayBoardMod",
+      "standingCost": 12500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardCorpusB/HoverboardCorpusBDeckBlueprint",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardCorpusB/HoverboardCorpusBEngineBlueprint",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardCorpusB/HoverboardCorpusBFrontBlueprint",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardCorpusB/HoverboardCorpusBJetBlueprint",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Hoverboard/HBSonicBoomMod",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Hoverboard/HBSpeedMod",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Hoverboard/HBSprintSpeedMod",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Hoverboard/HBTrickExplosionMod",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    }
+  ]
+}

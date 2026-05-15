@@ -1,0 +1,168 @@
+{
+  "uniqueName": "/Lotus/Syndicates/Solaris/VoxSyndicate",
+  "name": "/Lotus/Language/Syndicates/VoxSolName",
+  "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilSolarisUnited.png",
+  "description": "/Lotus/Language/Syndicates/VoxSolDesc",
+  "colour": {
+    "value": "0xFF4A2B18"
+  },
+  "backgroundColour": {
+    "value": "0xFFF2E5A7"
+  },
+  "dailyLimitBin": "STANDING_LIMIT_BIN_VOX",
+  "titles": [
+    {
+      "level": 1,
+      "name": "/Lotus/Language/Syndicates/VoxSolTitle1",
+      "description": "/Lotus/Language/Syndicates/VoxSolTitle1Desc",
+      "minStanding": 5000,
+      "maxStanding": 27000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 2,
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/ArachnoidMicroidItem"
+          },
+          {
+            "ItemCount": 2,
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/ArachnoidHungerItem"
+          },
+          {
+            "ItemCount": 2,
+            "ItemType": "/Lotus/Types/Gameplay/Venus/Resources/ArachnoidWraithItem"
+          }
+        ],
+        "credits": 50000
+      }
+    }
+  ],
+  "medallions": [
+    {
+      "itemType": "/Lotus/Types/Gameplay/Venus/Resources/ArachnoidMicroidItem",
+      "standing": 1000
+    },
+    {
+      "itemType": "/Lotus/Types/Gameplay/Venus/Resources/ArachnoidHungerItem",
+      "standing": 1000
+    },
+    {
+      "itemType": "/Lotus/Types/Gameplay/Venus/Resources/ArachnoidWraithItem",
+      "standing": 1000
+    }
+  ],
+  "medallionsCappedByDailyLimit": true,
+  "favours": [
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/ApparatistArmsBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/ApparatistBodyBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/ApparatistHeadBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/ApparatistLegsBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/GreaseWitchArmsBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/GreaseWitchBodyBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/GreaseWitchHeadBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/GreaseWitchLegsBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/SmelterArmsBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/SmelterBodyBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/SmelterHeadBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/SmelterLegsBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/TechnomancerArmsBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/TechnomancerBodyBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/TechnomancerHeadBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/Solaris/TechnomancerLegsBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    }
+  ]
+}

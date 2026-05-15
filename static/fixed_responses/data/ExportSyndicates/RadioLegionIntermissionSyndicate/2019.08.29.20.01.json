@@ -1,0 +1,289 @@
+{
+  "uniqueName": "/Lotus/Syndicates/RadioLegionIntermissionSyndicate",
+  "name": "/Lotus/Language/Syndicates/RadioLegionTitle",
+  "icon": "/Lotus/Interface/Icons/Sigils/RadioLegionSigil.png",
+  "description": "/Lotus/Language/Syndicates/RadioLegionDesc",
+  "colour": {
+    "value": "0xFFF5ACAC"
+  },
+  "backgroundColour": {
+    "value": "0xFF6C1822"
+  },
+  "dailyLimitBin": "STANDING_LIMIT_BIN_NONE",
+  "dailyChallenges": [
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyAimGlide",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyBulletJump",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyCodexScan",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyCollectCredits",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyCompleteMission",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyDeployGlyph",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemies",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithAbilities",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithBlast",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithCorrosive",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithElectricity",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithFinishers",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithFire",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithFreeze",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithGas",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithHeadshots",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithMagnetic",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithMelee",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithPoison",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithPrimary",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithRadiation",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithSecondary",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyKillEnemiesWithViral",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyOpenLockers",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyPickUpEnergy",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyPickUpMods",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyPlaceMarker",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailyPlayEmote",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailySlideKills",
+    "/Lotus/Types/Challenges/Seasons/Daily/SeasonDailySolveCiphers"
+  ],
+  "weeklyChallenges": [
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCatchRarePlainsFish",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCatchRareVenusFish",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteAssassination",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteCapture",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteClemMission",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteExterminate",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteInvasionMissions",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteMobileDefense",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteNightmareMissions",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteRescue",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteSabotage",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteSortie",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteSpy",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteSyndicateMissions",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyCompleteTreasures",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyGildModular",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyKillEnemies",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyKillEximus",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyMineRarePlainsResources",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyMineRareVenusResources",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPerfectAnimalCapture",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPickUpRareMods",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPlainsBounties",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklySabotageCaches",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklySanctuaryOnslaught",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklySimarisScan",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyUnlockDragonVaults",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyUnlockRelics",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyUseForma",
+    "/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyVenusBounties",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardKillSilverGroveSpecters",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardLuaPuzzles",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardCompleteNightmareMissions",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardCompleteSortie",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardEliteSanctuaryOnslaught",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardExterminateNoAlarm",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardFriendsDefense",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardFriendsProfitTaker",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardFriendsSurvival",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardIndexWinStreak",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardKillEnemies",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardKillEximus",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardKillOrCaptureRainalyst",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardKuvaSurvivalNoCapsules",
+    "/Lotus/Types/Challenges/Seasons/WeeklyHard/SeasonWeeklyHardUnlockRelics"
+  ],
+  "titles": [
+    {
+      "level": 15,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle15",
+      "minStanding": 150000,
+      "maxStanding": 160000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Upgrades/Skins/Effects/FootstepsEidolon"
+        }
+      ]
+    },
+    {
+      "level": 14,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle14",
+      "minStanding": 140000,
+      "maxStanding": 150000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Types/Items/MiscItems/FormaAura"
+        }
+      ]
+    },
+    {
+      "level": 13,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle13",
+      "minStanding": 130000,
+      "maxStanding": 140000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Types/Items/MiscItems/OrokinCatalyst"
+        }
+      ]
+    },
+    {
+      "level": 12,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle12",
+      "minStanding": 120000,
+      "maxStanding": 130000,
+      "reward": [
+        {
+          "ItemCount": 10000,
+          "ItemType": "/Lotus/Types/Items/MiscItems/Kuva"
+        }
+      ]
+    },
+    {
+      "level": 11,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle11",
+      "minStanding": 110000,
+      "maxStanding": 120000,
+      "reward": [
+        {
+          "ItemCount": 50,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraWolfTwoCreds"
+        }
+      ]
+    },
+    {
+      "level": 10,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle10",
+      "minStanding": 100000,
+      "maxStanding": 110000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Types/Items/MiscItems/OrokinReactor"
+        }
+      ]
+    },
+    {
+      "level": 9,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle9",
+      "minStanding": 90000,
+      "maxStanding": 100000,
+      "storeItemReward": "/Lotus/Types/StoreItems/Packages/FormaPack"
+    },
+    {
+      "level": 8,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle8",
+      "minStanding": 80000,
+      "maxStanding": 90000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Upgrades/Skins/Sigils/EnergySigilA"
+        }
+      ]
+    },
+    {
+      "level": 7,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle7",
+      "minStanding": 70000,
+      "maxStanding": 80000,
+      "reward": [
+        {
+          "ItemCount": 10000,
+          "ItemType": "/Lotus/Types/Items/MiscItems/Kuva"
+        }
+      ]
+    },
+    {
+      "level": 6,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle6",
+      "minStanding": 60000,
+      "maxStanding": 70000,
+      "reward": [
+        {
+          "ItemCount": 50,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraWolfTwoCreds"
+        }
+      ]
+    },
+    {
+      "level": 5,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle5",
+      "minStanding": 50000,
+      "maxStanding": 60000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Types/StoreItems/SuitCustomizations/ColourPickerGammaItemA"
+        }
+      ]
+    },
+    {
+      "level": 4,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle4",
+      "minStanding": 40000,
+      "maxStanding": 50000,
+      "reward": [
+        {
+          "ItemCount": 3,
+          "ItemType": "/Lotus/Types/Items/MiscItems/OrokinCell"
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle3",
+      "minStanding": 30000,
+      "maxStanding": 40000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Types/StoreItems/SlotItems/TwoSentinelSlotItem"
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle2",
+      "minStanding": 20000,
+      "maxStanding": 30000,
+      "reward": [
+        {
+          "ItemCount": 1,
+          "ItemType": "/Lotus/Upgrades/Mods/FusionBundles/EliteAlertFusionBundleLarge"
+        }
+      ]
+    },
+    {
+      "level": 1,
+      "name": "/Lotus/Language/Syndicates/RadioLegionTitle1",
+      "minStanding": 10000,
+      "maxStanding": 20000,
+      "reward": [
+        {
+          "ItemCount": 100,
+          "ItemType": "/Lotus/Types/Items/MiscItems/NoraWolfTwoCreds"
+        }
+      ]
+    }
+  ],
+  "favours": [
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/LoginSigilA",
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/Types/StoreItems/Packages/ColorPackB",
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Camo/DesertMarelokSkin",
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    }
+  ]
+}

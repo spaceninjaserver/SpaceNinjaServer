@@ -1,0 +1,147 @@
+{
+  "uniqueName": "/Lotus/Syndicates/LibrarySyndicate",
+  "name": "/Lotus/Language/Syndicates/LibraryTitle",
+  "icon": "/Lotus/Interface/Icons/Categories/IconLibrarian256.png",
+  "description": "/Lotus/Language/Syndicates/LibraryDesc",
+  "colour": {
+    "value": "0xFFECD38F"
+  },
+  "backgroundColour": {
+    "value": "0xFF5A3706"
+  },
+  "dailyLimitBin": "STANDING_LIMIT_BIN_LIBRARY",
+  "initiationReward": "/Lotus/Types/StoreItems/Packages/SanctuaryInitiationKit",
+  "favours": [
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Consumable/LibraryScanner",
+      "creditsCost": 5000,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Consumable/HunterTool",
+      "creditsCost": 5000,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/CollectorSigil",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/TransmuteCores/AttackTransmuteCore",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/TransmuteCores/DefenseTransmuteCore",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/TransmuteCores/TacticTransmuteCore",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/LibraryScannerDoubleScanUpgrade",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/LibraryScannerRechargeUpgrade",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/LibraryScannerScanSpeedUpgrade",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Sentinels/SentinelPrecepts/Looter",
+      "standingCost": 75000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Sentinels/SentinelPrecepts/WeaknessScanPrecept",
+      "standingCost": 75000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Warframe/EnergyPickupGivesStrengthMod",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Warframe/HealthPickupGivesArmourMod",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Archwing/Melee/ArchwingMeleeScanOnKillMod",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/DangerRoomKey",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sentinels/Skins/LibrarianHelios",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/CephPrimaryBlueprint",
+      "standingCost": 75000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/CephHammerBlueprint",
+      "standingCost": 75000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Components/UtilityUnlockerBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    }
+  ]
+}

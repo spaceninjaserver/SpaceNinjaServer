@@ -43,7 +43,7 @@ export const syndicateSacrificeController: RequestHandler = async (request, resp
     };
 
     // Process sacrifices and rewards for every level we're reaching
-    const manifest = getSyndicate(data.AffiliationTag, buildLabel)!;
+    const manifest = (await getSyndicate(data.AffiliationTag, buildLabel))!;
     for (let level = oldLevel + Math.min(levelIncrease, 1); level <= data.SacrificeLevel; ++level) {
         let sacrifice: ISyndicateSacrifice | undefined;
         if (level == 0) {

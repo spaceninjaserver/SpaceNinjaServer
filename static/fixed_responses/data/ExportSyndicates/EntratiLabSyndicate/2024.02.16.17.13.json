@@ -1,0 +1,513 @@
+{
+  "uniqueName": "/Lotus/Syndicates/EntratiLab/EntratiLabSyndicate",
+  "name": "/Lotus/Language/EntratiLab/EntratiGeneral/EntratiLabSyndicateName",
+  "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilCavia.png",
+  "description": "/Lotus/Language/EntratiLab/EntratiGeneral/EntratiLabSyndicateDesc",
+  "colour": {
+    "value": "0xFFAAA697"
+  },
+  "backgroundColour": {
+    "value": "0xFF3D3937"
+  },
+  "dailyLimitBin": "STANDING_LIMIT_BIN_CAVIA",
+  "titles": [
+    {
+      "level": 5,
+      "name": "/Lotus/Language/EntratiLab/EntratiGeneral/EntratiLabSyndTitle5",
+      "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilCaviaLevel5.png",
+      "description": "/Lotus/Language/EntratiLab/EntratiGeneral/EntratiLabSyndTitle5Desc",
+      "minStanding": 240000,
+      "maxStanding": 372000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabDogTagRare"
+          },
+          {
+            "ItemCount": 25,
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabMiscItemB"
+          },
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanMiscItemB"
+          },
+          {
+            "ItemCount": 32,
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/MurmurItem"
+          }
+        ],
+        "credits": 200000
+      }
+    },
+    {
+      "level": 4,
+      "name": "/Lotus/Language/EntratiLab/EntratiGeneral/EntratiLabSyndTitle4",
+      "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilCaviaLevel4.png",
+      "description": "/Lotus/Language/EntratiLab/EntratiGeneral/EntratiLabSyndTitle4Desc",
+      "minStanding": 141000,
+      "maxStanding": 240000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabDogTagRare"
+          },
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabDogTagUncommon"
+          },
+          {
+            "ItemCount": 1500,
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabMiscItemA"
+          },
+          {
+            "ItemCount": 5,
+            "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanMiscItemB"
+          }
+        ],
+        "credits": 100000
+      }
+    },
+    {
+      "level": 3,
+      "name": "/Lotus/Language/EntratiLab/EntratiGeneral/EntratiLabSyndTitle3",
+      "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilCaviaLevel3.png",
+      "description": "/Lotus/Language/EntratiLab/EntratiGeneral/EntratiLabSyndTitle3Desc",
+      "minStanding": 71000,
+      "maxStanding": 141000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 2,
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabDogTagUncommon"
+          },
+          {
+            "ItemCount": 8,
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabDogTagCommon"
+          },
+          {
+            "ItemCount": 15,
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabMiscItemB"
+          },
+          {
+            "ItemCount": 16,
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/MurmurItem"
+          }
+        ],
+        "credits": 50000
+      }
+    },
+    {
+      "level": 2,
+      "name": "/Lotus/Language/EntratiLab/EntratiGeneral/EntratiLabSyndTitle2",
+      "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilCaviaLevel2.png",
+      "description": "/Lotus/Language/EntratiLab/EntratiGeneral/EntratiLabSyndTitle2Desc",
+      "minStanding": 27000,
+      "maxStanding": 71000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 5,
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabDogTagCommon"
+          },
+          {
+            "ItemCount": 60,
+            "ItemType": "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanMiscItemA"
+          },
+          {
+            "ItemCount": 12,
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabMiscItemB"
+          },
+          {
+            "ItemCount": 8,
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/MurmurItem"
+          }
+        ],
+        "credits": 25000
+      }
+    },
+    {
+      "level": 1,
+      "name": "/Lotus/Language/EntratiLab/EntratiGeneral/EntratiLabSyndTitle1",
+      "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilCaviaLevel1.png",
+      "description": "/Lotus/Language/EntratiLab/EntratiGeneral/EntratiLabSyndTitle1Desc",
+      "minStanding": 5000,
+      "maxStanding": 27000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 3,
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabDogTagCommon"
+          },
+          {
+            "ItemCount": 300,
+            "ItemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabMiscItemA"
+          },
+          {
+            "ItemCount": 1100,
+            "ItemType": "/Lotus/Types/Items/MiscItems/Rubedo"
+          }
+        ],
+        "credits": 10000
+      }
+    }
+  ],
+  "medallions": [
+    {
+      "itemType": "/Lotus/Types/Items/SyndicateDogTags/UniversalSyndicateDogTag",
+      "standing": 1000
+    },
+    {
+      "itemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabDogTagCommon",
+      "standing": 500
+    },
+    {
+      "itemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabDogTagUncommon",
+      "standing": 1000
+    },
+    {
+      "itemType": "/Lotus/Types/Gameplay/EntratiLab/Resources/EntratiLabDogTagRare",
+      "standing": 2000
+    }
+  ],
+  "medallionsCappedByDailyLimit": true,
+  "favours": [
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/CaviaRankOne",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/CaviaRankTwo",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/CaviaRankThree",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/CaviaRankFour",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/CaviaRankFive",
+      "standingCost": 30000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/MeleeDamageForActiveShields",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/ArmorOnMeleeKill",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/CorrosiveMeleePerAbilityCast",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/MeleeProcsSpread",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/HeavyCritOnRegularMelee",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/PullEnemiesOnMeleeKill",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/WeaponMeleeArcaneUnlocker",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechSlideDamageMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechAvatarEnemyRadarMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechAvatarShieldRechargeRateMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechSlideSpeedMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechAvatarDamageReductionInAir",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechMeleeSpeedMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechMeleeRangeMod",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechShieldMaxMod",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechEnergyToOvershieldsMod",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechReflectOnShieldBreakMod",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechAvatarDamageToEnergyMod",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechJumpHeightMod",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechRegenOnLowHealthMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechArmourMaxMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechAbilityDurationMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechAbilityRangeMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechSlamDamageMod",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechAbilityEfficiencyMod",
+      "standingCost": 28000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Necromech/NecromechBoostMaxMod",
+      "standingCost": 28000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipFeatureItems/InfestedFoundryArchonShardUpgradeFeatureBlueprint",
+      "standingCost": 30000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/GrimoireBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/ConcreteFrameBlueprint",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/ConcreteFrameChassisBlueprint",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/ConcreteFrameHelmetBlueprint",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/ConcreteFrameSystemsBlueprint",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/EntSphereHammerBlueprint",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Entrati/PhotoboothTileArchives",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Entrati/PhotoboothTileCapRoomNarrow",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Entrati/PhotoboothTileHubLabMITW",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Entrati/PhotoboothTileOctopedeArena",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/PhotoBooth/Entrati/PhotoboothTileTriExperiment",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Focus/PowerLensOstron",
+      "standingCost": 60000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Focus/TacticLensOstron",
+      "standingCost": 60000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Focus/WardLensOstron",
+      "standingCost": 60000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Focus/DefenseLensOstron",
+      "standingCost": 60000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Focus/AttackLensOstron",
+      "standingCost": 60000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    }
+  ]
+}

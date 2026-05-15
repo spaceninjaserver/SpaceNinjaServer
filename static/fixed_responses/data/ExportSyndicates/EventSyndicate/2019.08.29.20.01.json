@@ -1,0 +1,215 @@
+{
+  "uniqueName": "/Lotus/Syndicates/EventSyndicate",
+  "name": "/Lotus/Language/Syndicates/EventSyndicateName",
+  "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilLotusEvent.png",
+  "description": "/Lotus/Language/Syndicates/EventSyndicateDesc",
+  "colour": {
+    "value": "0xFFFFFFFF"
+  },
+  "backgroundColour": {
+    "value": "0xFF6B5574"
+  },
+  "dailyLimitBin": "STANDING_LIMIT_BIN_NONE",
+  "titles": [
+    {
+      "level": 3,
+      "name": "/Lotus/Language/Syndicates/EventSyndicateTitle3",
+      "icon": "/Lotus/Materials/Emblems/PlagueStarEventBadge_e.png",
+      "description": "/Lotus/Language/Syndicates/EventSyndicateTitle3Desc",
+      "minStanding": 6000,
+      "maxStanding": 500000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/NistlebrushItem"
+          }
+        ],
+        "credits": 20000
+      }
+    },
+    {
+      "level": 2,
+      "name": "/Lotus/Language/Syndicates/EventSyndicateTitle2",
+      "icon": "/Lotus/Materials/Emblems/PlagueStarEventBadge_e.png",
+      "description": "/Lotus/Language/Syndicates/EventSyndicateTitle2Desc",
+      "minStanding": 3000,
+      "maxStanding": 6000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/IraditeItem"
+          }
+        ],
+        "credits": 10000
+      }
+    },
+    {
+      "level": 1,
+      "name": "/Lotus/Language/Syndicates/EventSyndicateTitle1",
+      "icon": "/Lotus/Materials/Emblems/PlagueStarEventBadge_e.png",
+      "description": "/Lotus/Language/Syndicates/EventSyndicateTitle1Desc",
+      "minStanding": 1000,
+      "maxStanding": 3000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/GrokdrulItem"
+          }
+        ],
+        "credits": 5000
+      }
+    }
+  ],
+  "favours": [
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/SynthicatorRecipes/FlareBlueBlueprint",
+      "standingCost": 250,
+      "creditsCost": 500,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/SynthicatorRecipes/FlareRedBlueprint",
+      "standingCost": 250,
+      "creditsCost": 500,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Clan/PlagueStarBadgeItem",
+      "standingCost": 500,
+      "creditsCost": 1000,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Gameplay/Eidolon/Resources/CetusWispItem",
+      "standingCost": 750,
+      "creditsCost": 1500,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Gems/Eidolon/EidolonGemACutAItem",
+      "standingCost": 750,
+      "creditsCost": 1500,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Gems/Eidolon/EidolonGemBCutAItem",
+      "standingCost": 750,
+      "creditsCost": 1500,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/FishParts/BothRareFishAPartItem",
+      "standingCost": 750,
+      "creditsCost": 1500,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/FishParts/NightRareFishAPartItem",
+      "standingCost": 750,
+      "creditsCost": 1500,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/FishParts/NightRareFishBPartItem",
+      "standingCost": 750,
+      "creditsCost": 1500,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Mods/Pistol/Event/AmbulasEvent/SecondaryExplosionRadiusMod",
+      "standingCost": 1500,
+      "creditsCost": 3500,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Sentinels/SentinelPrecepts/RevivePlayer",
+      "standingCost": 1500,
+      "creditsCost": 3500,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/Forma",
+      "standingCost": 3000,
+      "creditsCost": 5000,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/InfestedEventIngredientBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 4000,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/SnipetronBlueprint",
+      "standingCost": 3000,
+      "creditsCost": 5000,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/DualEtherDaggerBlueprint",
+      "standingCost": 3000,
+      "creditsCost": 5000,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/MeleeArcaneProjectileOnJump",
+      "standingCost": 5000,
+      "creditsCost": 1500,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/MeleeArcaneShockwaveOnJump",
+      "standingCost": 5000,
+      "creditsCost": 1500,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMeleeInfested/Handles/InfestedHandleOneBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 3500,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipTwoBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 3500,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMeleeInfested/Handles/InfestedHandleTwoBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 3500,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMeleeInfested/Tips/InfestedTipOneBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 3500,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    }
+  ]
+}

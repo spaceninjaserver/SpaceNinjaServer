@@ -1,0 +1,322 @@
+{
+  "uniqueName": "/Lotus/Syndicates/Ostron/QuillsSyndicate",
+  "name": "/Lotus/Language/Syndicates/QuillsName",
+  "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilEidolonHunter.png",
+  "description": "/Lotus/Language/Syndicates/QuillsDesc",
+  "colour": {
+    "value": "0xFFB3371A"
+  },
+  "backgroundColour": {
+    "value": "0xFFF7FACB"
+  },
+  "dailyLimitBin": "STANDING_LIMIT_BIN_QUILLS",
+  "titles": [
+    {
+      "level": 5,
+      "name": "/Lotus/Language/Syndicates/QuillsTitle5",
+      "description": "/Lotus/Language/Syndicates/QuillsTitle5Desc",
+      "minStanding": 240000,
+      "maxStanding": 372000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 30,
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/SentientShards/SentientShardCommonItem"
+          }
+        ],
+        "credits": 500000
+      }
+    },
+    {
+      "level": 4,
+      "name": "/Lotus/Language/Syndicates/QuillsTitle4",
+      "description": "/Lotus/Language/Syndicates/QuillsTitle4Desc",
+      "minStanding": 141000,
+      "maxStanding": 240000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 20,
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/SentientShards/SentientShardCommonItem"
+          }
+        ],
+        "credits": 250000
+      }
+    },
+    {
+      "level": 3,
+      "name": "/Lotus/Language/Syndicates/QuillsTitle3",
+      "description": "/Lotus/Language/Syndicates/QuillsTitle3Desc",
+      "minStanding": 71000,
+      "maxStanding": 141000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/SentientShards/SentientShardCommonItem"
+          }
+        ],
+        "credits": 100000
+      }
+    },
+    {
+      "level": 2,
+      "name": "/Lotus/Language/Syndicates/QuillsTitle2",
+      "description": "/Lotus/Language/Syndicates/QuillsTitle2Desc",
+      "minStanding": 27000,
+      "maxStanding": 71000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 20,
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/QuillsDogTag"
+          }
+        ],
+        "credits": 50000
+      }
+    },
+    {
+      "level": 1,
+      "name": "/Lotus/Language/Syndicates/QuillsTitle1",
+      "description": "/Lotus/Language/Syndicates/QuillsTitle1Desc",
+      "minStanding": 5000,
+      "maxStanding": 27000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/QuillsDogTag"
+          }
+        ],
+        "credits": 30000
+      }
+    }
+  ],
+  "medallions": [
+    {
+      "itemType": "/Lotus/Types/Gameplay/Eidolon/Resources/QuillsDogTag",
+      "standing": 100
+    },
+    {
+      "itemType": "/Lotus/Types/Gameplay/Eidolon/Resources/QuillsUncommonDogTag",
+      "standing": 500
+    },
+    {
+      "itemType": "/Lotus/Types/Gameplay/Eidolon/Resources/QuillsRareDogTag",
+      "standing": 1200
+    }
+  ],
+  "medallionsCappedByDailyLimit": true,
+  "favours": [
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Sentients/OperatorAmplifiers/Set1/Barrel/SentAmpSet1BarrelPartABlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Sentients/OperatorAmplifiers/Set1/Chassis/SentAmpSet1ChassisPartABlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Sentients/OperatorAmplifiers/Set1/Grip/SentAmpSet1GripPartABlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/OperatorArmourMonkBodyBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/OperatorArmourSeerBodyBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/Quills/HealthOnOperatorModeBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/Quills/OperatorAmmoRegenOnKillBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Sentients/OperatorAmplifiers/Set1/Barrel/SentAmpSet1BarrelPartBBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Sentients/OperatorAmplifiers/Set1/Chassis/SentAmpSet1ChassisPartBBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Sentients/OperatorAmplifiers/Set1/Grip/SentAmpSet1GripPartBBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/OperatorArmourMonkArmsBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/OperatorArmourSeerArmsBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/Quills/ArmourOnOperatorModeBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/Quills/AttackSpeedOnKillBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Sentients/OperatorAmplifiers/Set1/Barrel/SentAmpSet1BarrelPartCBlueprint",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Sentients/OperatorAmplifiers/Set1/Chassis/SentAmpSet1ChassisPartCBlueprint",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Sentients/OperatorAmplifiers/Set1/Grip/SentAmpSet1GripPartCBlueprint",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/Quills/IncreasedDamageOnStatusProcBlueprint",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/OperatorArmourMonkLegsBlueprint",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/OperatorArmourSeerLegsBlueprint",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/Quills/ImmunityFallDamageOnVoidDashBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/Quills/IncreasedCriticalDamageOnCriticalStrikeBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/OperatorArmourMonkHeadBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/OperatorArmour/OperatorArmourSeerHeadBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/Quills/SpeedOnVoidDashBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/Quills/HealOnVoidDashBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/Quills/CriticalChanceOnHeadshotBlueprint",
+      "standingCost": 12500,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/Quills/StatusChanceOnHeadshotBlueprint",
+      "standingCost": 12500,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/Quills/HealOnTransferenceInBlueprint",
+      "standingCost": 12500,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/Quills/HealOnTransferenceOutBlueprint",
+      "standingCost": 12500,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    }
+  ]
+}

@@ -1,0 +1,929 @@
+{
+  "uniqueName": "/Lotus/Syndicates/Ostron/CetusSyndicate",
+  "name": "/Lotus/Language/Syndicates/CetusName",
+  "icon": "/Lotus/Interface/Icons/Syndicates/FactionSigilEidolonCetusElder.png",
+  "description": "/Lotus/Language/Syndicates/CetusDesc",
+  "colour": {
+    "value": "0xFFF7FACB"
+  },
+  "backgroundColour": {
+    "value": "0xFFB3371A"
+  },
+  "dailyLimitBin": "STANDING_LIMIT_BIN_CETUS",
+  "titles": [
+    {
+      "level": 5,
+      "name": "/Lotus/Language/Syndicates/CetusTitle5",
+      "icon": "/Lotus/Interface/Icons/Syndicates/SyndicateOstronRankSigilE.png",
+      "description": "/Lotus/Language/Syndicates/CetusTitle5Desc",
+      "minStanding": 240000,
+      "maxStanding": 372000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Items/Fish/Eidolon/FishParts/NightRareFishAPartItem"
+          },
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Items/Fish/Eidolon/FishParts/NightRareFishBPartItem"
+          },
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Items/Gems/Eidolon/EidolonGemAItem"
+          },
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Items/Gems/Eidolon/EidolonGemBItem"
+          }
+        ],
+        "credits": 200000
+      }
+    },
+    {
+      "level": 4,
+      "name": "/Lotus/Language/Syndicates/CetusTitle4",
+      "icon": "/Lotus/Interface/Icons/Syndicates/SyndicateOstronRankSigilD.png",
+      "description": "/Lotus/Language/Syndicates/CetusTitle4Desc",
+      "minStanding": 141000,
+      "maxStanding": 240000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 5,
+            "ItemType": "/Lotus/Types/Items/Fish/Eidolon/FishParts/BothRareFishAPartItem"
+          },
+          {
+            "ItemCount": 40,
+            "ItemType": "/Lotus/Types/Items/Gems/Eidolon/UncommonOreAAlloyAItem"
+          },
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/EidolonFruitItem"
+          }
+        ],
+        "credits": 100000
+      }
+    },
+    {
+      "level": 3,
+      "name": "/Lotus/Language/Syndicates/CetusTitle3",
+      "icon": "/Lotus/Interface/Icons/Syndicates/SyndicateOstronRankSigilC.png",
+      "description": "/Lotus/Language/Syndicates/CetusTitle3Desc",
+      "minStanding": 71000,
+      "maxStanding": 141000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 5,
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/EidolonFruitItem"
+          },
+          {
+            "ItemCount": 1,
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/CetusWispItem"
+          }
+        ],
+        "credits": 50000
+      }
+    },
+    {
+      "level": 2,
+      "name": "/Lotus/Language/Syndicates/CetusTitle2",
+      "icon": "/Lotus/Interface/Icons/Syndicates/SyndicateOstronRankSigilB.png",
+      "description": "/Lotus/Language/Syndicates/CetusTitle2Desc",
+      "minStanding": 27000,
+      "maxStanding": 71000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 60,
+            "ItemType": "/Lotus/Types/Items/Fish/Eidolon/FishParts/EidolonFishScalesItem"
+          },
+          {
+            "ItemCount": 40,
+            "ItemType": "/Lotus/Types/Items/Gems/Eidolon/CommonOreAItem"
+          },
+          {
+            "ItemCount": 10,
+            "ItemType": "/Lotus/Types/Items/Gems/Eidolon/CommonGemACutAItem"
+          }
+        ],
+        "credits": 25000
+      }
+    },
+    {
+      "level": 1,
+      "name": "/Lotus/Language/Syndicates/CetusTitle1",
+      "icon": "/Lotus/Interface/Icons/Syndicates/SyndicateOstronRankSigilA.png",
+      "description": "/Lotus/Language/Syndicates/CetusTitle1Desc",
+      "minStanding": 5000,
+      "maxStanding": 27000,
+      "sacrifice": {
+        "items": [
+          {
+            "ItemCount": 25,
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/GrokdrulItem"
+          },
+          {
+            "ItemCount": 25,
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/IraditeItem"
+          },
+          {
+            "ItemCount": 25,
+            "ItemType": "/Lotus/Types/Gameplay/Eidolon/Resources/NistlebrushItem"
+          }
+        ],
+        "credits": 10000
+      }
+    }
+  ],
+  "medallions": [
+    {
+      "itemType": "/Lotus/Types/Items/Gems/Eidolon/CommonGemAItem",
+      "standing": 50
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Gems/Eidolon/CommonGemBItem",
+      "standing": 50
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Gems/Eidolon/UncommonGemAItem",
+      "standing": 75
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Gems/Eidolon/RareGemAItem",
+      "standing": 100
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Gems/Eidolon/EidolonGemAItem",
+      "standing": 400
+    },
+    {
+      "itemType": "/Lotus/Types/Items/Gems/Eidolon/EidolonGemBItem",
+      "standing": 400
+    },
+    {
+      "itemType": "/Lotus/Types/Items/SyndicateDogTags/UniversalSyndicateDogTag",
+      "standing": 1000
+    }
+  ],
+  "medallionsCappedByDailyLimit": true,
+  "favours": [
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageIBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleOneBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFourBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleTwoBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleFiveBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleThreeBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Handle/HandleSixBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee02/Handle/HandleNineBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee02/Handle/HandleTenBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Tip/TipOneBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Tip/TipTwoBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Tip/TipSixBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFiveBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Tip/TipThreeBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Tip/TipFourBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee02/Tip/TipNineBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee02/Tip/TipTenBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee02/Tip/TipElevenBlueprint",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageIIBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageICritIBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageIStatusIBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedICritIBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusIBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageICritIIBlueprint",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageIStatusIIBlueprint",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedICritIIBlueprint",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIStatusIIBlueprint",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageIICritIBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceDamageIIStatusIBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIICritIBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Weapons/Ostron/Melee/ModularMelee01/Balance/BalanceSpeedIIStatusIBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/ChannelKillEnergyRate",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/CritChannelingDamage",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/FinisherLifesteal",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/StatusChannelingDamage",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/GroundSlamPull",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Offensive/StatusTriggerRadialDamage",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Consumable/SpearFishingSpear",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Consumable/SpearFishingSpearB",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Consumable/SpearFishingSpearC",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Game/FishBait/GenericFishBait",
+      "standingCost": 50,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Consumable/FishingBoosts/AnglerVision",
+      "standingCost": 100,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Game/FishBait/BothUncommonFishBaitItem",
+      "standingCost": 100,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/TrophyBlueprints/DayCommonFishATrophyBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/TrophyBlueprints/DayCommonFishBTrophyBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/TrophyBlueprints/DayCommonFishCTrophyBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/TrophyBlueprints/BothCommonFishATrophyBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/TrophyBlueprints/BothCommonFishBTrophyBlueprint",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Game/FishBait/BothRareFishBaitAItem",
+      "standingCost": 200,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/TrophyBlueprints/DayUncommonFishATrophyBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/TrophyBlueprints/DayUncommonFishBTrophyBlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Game/FishBait/NightRareFishBaitAItem",
+      "standingCost": 300,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/TrophyBlueprints/BothUncommonFishATrophyBlueprint",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/TrophyBlueprints/BothUncommonFishBTrophyBlueprint",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Consumable/FishingBoosts/SoftTouch",
+      "standingCost": 100,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Game/FishBait/NightRareFishBaitBItem",
+      "standingCost": 400,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/TrophyBlueprints/BothRareFishATrophyBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/TrophyBlueprints/NightRareFishATrophyBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/TrophyBlueprints/NightRareFishBTrophyBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/TrophyBlueprints/BothRareBootTrophyBlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Game/FishBait/NightLegendaryFishBaitItem",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/Fish/Eidolon/TrophyBlueprints/NightLegendaryFishATrophyBlueprint",
+      "standingCost": 12500,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/StoreItems/AvatarImages/Conservation/AvatarImageEidolonFish",
+      "standingCost": 25000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Consumable/MiningLaser",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Prospecting/CommonGemACutABlueprint",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Prospecting/CommonOreAAlloyABlueprint",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Prospecting/CommonGemBCutABlueprint",
+      "standingCost": 2500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Prospecting/CommonOreBAlloyABlueprint",
+      "standingCost": 2500,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/OstronRankOne",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Consumable/MiningLaserB",
+      "standingCost": 750,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Prospecting/UncommonGemACutABlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Prospecting/UncommonOreAAlloyABlueprint",
+      "standingCost": 5000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/OstronRankTwo",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Prospecting/RareGemACutABlueprint",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Prospecting/RareOreAAlloyABlueprint",
+      "standingCost": 7500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/OstronRankThree",
+      "standingCost": 15000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Consumable/MiningLaserC",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Prospecting/EidolonGemACutABlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Prospecting/EidolonGemBCutABlueprint",
+      "standingCost": 10000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/LisetPropCetusJug",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/LisetPropCetusVegBasketA",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/LisetPropCetusVegBasketB",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/LisetPropCetusVegBasketC",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/LisetPropCetusPigmentBasketSmall",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/ResourceDecoItemIradite",
+      "standingCost": 50000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/OstronRankFour",
+      "standingCost": 20000,
+      "creditsCost": 0,
+      "requiredLevel": 4,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/PhotoboothTileEidolonLandscape",
+      "standingCost": 130000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/MiscItems/PhotoboothTileCetusTown",
+      "standingCost": 130000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/Types/StoreItems/Packages/SyndicateArmorPackOstron",
+      "standingCost": 125000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/LisetPropCetusPigmentBasketLarge",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/LisetPropCetusStallSignA",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/LisetPropCetusStallSignB",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/LisetPropCetusStallSignC",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Items/ShipDecos/LisetPropFishingBoot",
+      "standingCost": 100000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/StoreItems/AvatarImages/Conservation/AvatarImageEidolonGem",
+      "standingCost": 75000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/Syndicate/OstronRankFive",
+      "standingCost": 30000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/ForestRodentLureGearItem",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/RarityBoosts/KuakaRarityBoost",
+      "standingCost": 100,
+      "creditsCost": 0,
+      "requiredLevel": 0,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/BirdOfPreyLureGearItem",
+      "standingCost": 1000,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/RarityBoosts/CondrocRarityBoost",
+      "standingCost": 100,
+      "creditsCost": 0,
+      "requiredLevel": 1,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/OstronSeaBirdLureGearItem",
+      "standingCost": 2000,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/RarityBoosts/MergooRarityBoost",
+      "standingCost": 200,
+      "creditsCost": 0,
+      "requiredLevel": 2,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/VampireKavatLureGearItem",
+      "standingCost": 3000,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/Conservation/RarityBoosts/VampireKavatRarityBoost",
+      "standingCost": 200,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": false
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/Restoratives/CatbrowVampireDisinfect",
+      "standingCost": 500,
+      "creditsCost": 0,
+      "requiredLevel": 3,
+      "rankUpReward": true
+    },
+    {
+      "storeItem": "/Lotus/StoreItems/Types/StoreItems/AvatarImages/Conservation/AvatarImageEidolonCritter",
+      "standingCost": 75000,
+      "creditsCost": 0,
+      "requiredLevel": 5,
+      "rankUpReward": false
+    }
+  ]
+}

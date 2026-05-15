@@ -105,7 +105,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         NemesisTaxInfo,
         RecoveredItemInfo
     } = await addMissionRewards(account, buildLabel, inventory, missionReport, firstCompletion);
-    handleConservation(inventory, missionReport, AffiliationMods); // Conservation reports have GS_SUCCESS
+    await handleConservation(inventory, buildLabel, missionReport, AffiliationMods); // Conservation reports have GS_SUCCESS
 
     if (missionReport.EndOfMatchUpload) {
         inventory.RewardSeed = generateRewardSeed();
