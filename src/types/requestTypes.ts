@@ -290,14 +290,14 @@ export interface IVoidTearParticipantInfo {
     AccountId: string;
     Name: string;
     ChosenRewardOwner: string;
-    MissionHash: string;
+    MissionHash?: string;
     VoidProjection: string;
     Reward: string;
     QualifiesForReward: boolean;
-    HaveRewardResponse: boolean;
+    HaveRewardResponse?: boolean;
     RewardsMultiplier: number;
     RewardProjection: string;
-    HardModeReward: ITypeCount;
+    HardModeReward?: ITypeCount;
 }
 
 export interface IKeyChainRequest {
