@@ -477,6 +477,20 @@ export const giveKeyChainStageTriggered = async (
     const questKey = inventory.QuestKeys.find(qk => qk.ItemType === keyChainInfo.KeyChain);
 
     if (chainStages && questKey) {
+        if (
+            keyChainInfo.KeyChain == "/Lotus/Types/Keys/PriestFrameQuest/PriestQuestKeyChain" &&
+            keyChainInfo.ChainStage == 0 &&
+            !inventory.OperatorAmps.some(
+                x =>
+                    x.ItemType ==
+                    "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/OperatorTrainingAmpWeapon"
+            )
+        ) {
+            await addItem(
+                inventory,
+                "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/OperatorTrainingAmpWeapon"
+            );
+        }
         if (chainStages[keyChainInfo.ChainStage].itemsToGiveWhenTriggered.length > 0) {
             await giveKeyChainItem(inventory, keyChainInfo, questKey, BL_LATEST);
         }

@@ -1300,6 +1300,29 @@ export const addItem = async (
                         )
                     };
                 }
+                case "OperatorAmplifiers": {
+                    if (quantity != 1) {
+                        throw new Error(`unexpected acquisition quantity of OperatorAmps: got ${quantity}, expected 1`);
+                    }
+                    let defaultOverrides = {};
+                    if (
+                        typeName ==
+                        "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/OperatorTrainingAmpWeapon"
+                    ) {
+                        defaultOverrides = {
+                            ModularParts: [
+                                "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingGrip",
+                                "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingChassis",
+                                "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/SentAmpTrainingBarrel"
+                            ]
+                        };
+                    }
+                    const inventoryChanges = addEquipment(inventory, "OperatorAmps", typeName, defaultOverrides);
+                    return {
+                        ...inventoryChanges,
+                        ...occupySlot(inventory, eInventorySlot.AMPS, premiumPurchase)
+                    };
+                }
             }
             break;
         }

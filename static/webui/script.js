@@ -964,6 +964,11 @@ function fetchItemList() {
                 uniqueName: "/Lotus/Types/Boosters/ReviveBooster",
                 name: loc("code_reviveBooster")
             });
+            data.OperatorAmps.push({
+                uniqueName:
+                    "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/OperatorTrainingAmpWeapon",
+                name: loc("code_moteAmp")
+            });
 
             const itemMap = {
                 // Generics for rivens
@@ -979,9 +984,6 @@ function fetchItemList() {
                 "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimarySniper": { name: loc("code_kitgun") },
                 "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam": { name: loc("code_kitgun") },
                 "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun": { name: loc("code_kitgun") },
-                "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/OperatorTrainingAmpWeapon": {
-                    name: loc("code_moteAmp")
-                },
                 "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": { name: loc("code_kDrive") },
                 "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetAPowerSuit": {
                     name: data.ModularParts.find(
@@ -1289,6 +1291,7 @@ const modularWeapons = [
     "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun",
     "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
     "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
+    "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/OperatorTrainingAmpWeapon",
     "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit",
     "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit",
     "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetAPowerSuit",
