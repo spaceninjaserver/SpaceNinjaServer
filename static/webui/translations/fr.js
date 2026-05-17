@@ -455,6 +455,7 @@ dict = {
     import_samples: `Échantillons :`,
     import_samples_maxFocus3: `Maxer toutes les écoles de focus (Focus 3.0)`,
     import_samples_maxFocus2: `Maxer toutes les écoles de focus (Focus 2.0)`,
+    import_samples_maxFocus1: `Maxer toutes les écoles de focus (Focus 1.0)`,
     import_samples_accolades: `Accolades et accès au tchat Design Council`,
     import_samples_maxStratos: `Badge Stratos rang max`,
     import_samples_clearWishlist: `Effacer la liste de souhaits`,

@@ -455,6 +455,7 @@ dict = {
     import_samples: `Muestras:`,
     import_samples_maxFocus3: `[UNTRANSLATED] All Focus Schools Maxed Out (Focus 3.0)`,
     import_samples_maxFocus2: `[UNTRANSLATED] All Focus Schools Maxed Out (Focus 2.0)`,
+    import_samples_maxFocus1: `[UNTRANSLATED] All Focus Schools Maxed Out (Focus 1.0)`,
     import_samples_accolades: `[UNTRANSLATED] Accolades & Council Chat Access`,
     import_samples_maxStratos: `[UNTRANSLATED] Max Rank Stratos Emblem Icon`,
     import_samples_clearWishlist: `[UNTRANSLATED] Clear Wishlist`,

@@ -455,6 +455,7 @@ dict = {
     import_samples: `示例:`,
     import_samples_maxFocus3: `全专精学派满级 (专精3.0版本)`,
     import_samples_maxFocus2: `全专精学派满级 (专精2.0版本)`,
+    import_samples_maxFocus1: `全专精学派满级 (专精1.0版本)`,
     import_samples_accolades: `荣誉与议会聊天权限`,
     import_samples_maxStratos: `最大 Stratos Emblem Icon等级`,
     import_samples_clearWishlist: `清空心愿单`,
