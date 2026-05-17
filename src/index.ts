@@ -56,56 +56,57 @@ if (mongodUri.startsWith("file://")) {
     mongodUri += "openWF";
 }
 
-mongoose
-    .connect(mongodUri)
-    .then(() => {
-        logger.info("Connected to MongoDB");
-        syncConfigWithDatabase();
+try {
+    await mongoose.connect(mongodUri);
+} catch (error) {
+    if (error instanceof Error) {
+        logger.error(`Error connecting to MongoDB server: ${error.message}`);
+    }
+    process.exit(1);
+}
+logger.info("Connected to MongoDB");
+syncConfigWithDatabase();
 
-        startWebServer().catch((err: IListenError) => {
-            if (err.port) {
-                logger.error(`Failed to bind port ${err.port}`);
-                if (process.platform == "win32") {
-                    logger.error(
-                        `You can check who has that port via powershell: Get-Process -Id (Get-NetTCPConnection -LocalPort ${err.port}).OwningProcess`
-                    );
-                }
-            } else {
-                logger.error(err.message);
-            }
-            process.exit(1);
-        });
-
-        for (const [what, key] of [
-            ["IRC", "ircExecutable"],
-            ["HUB", "hubExecutable"]
-        ] as const) {
-            if (config[key]) {
-                logger.info(`Starting ${what}: ${config[key]}`);
-                child_process.execFile(config[key], (error, _stdout, _stderr) => {
-                    if (error) {
-                        logger.warn(`Failed to start ${what} server`, error);
-                    } else {
-                        logger.warn(`${what} server terminated unexpectedly`);
-                    }
-                });
-            }
-        }
-
-        if (args.dev) {
-            logger.debug(
-                "Developer mode is enabled. Note that this project is where it is now due to code contributions; please pay it forward with pull requests."
+try {
+    await startWebServer();
+} catch (_err) {
+    const err = _err as IListenError;
+    if (err.port) {
+        logger.error(`Failed to bind port ${err.port}`);
+        if (process.platform == "win32") {
+            logger.error(
+                `You can check who has that port via powershell: Get-Process -Id (Get-NetTCPConnection -LocalPort ${err.port}).OwningProcess`
             );
         }
+    } else {
+        logger.error(err.message);
+    }
+    process.exit(1);
+}
 
-        void updateWorldStateCollections();
-        setInterval(() => {
-            void updateWorldStateCollections();
-        }, 60_000);
-    })
-    .catch(error => {
-        if (error instanceof Error) {
-            logger.error(`Error connecting to MongoDB server: ${error.message}`);
-        }
-        process.exit(1);
-    });
+for (const [what, key] of [
+    ["IRC", "ircExecutable"],
+    ["HUB", "hubExecutable"]
+] as const) {
+    if (config[key]) {
+        logger.info(`Starting ${what}: ${config[key]}`);
+        child_process.execFile(config[key], (error, _stdout, _stderr) => {
+            if (error) {
+                logger.warn(`Failed to start ${what} server`, error);
+            } else {
+                logger.warn(`${what} server terminated unexpectedly`);
+            }
+        });
+    }
+}
+
+if (args.dev) {
+    logger.debug(
+        "Developer mode is enabled. Note that this project is where it is now due to code contributions; please pay it forward with pull requests."
+    );
+}
+
+void updateWorldStateCollections();
+setInterval(() => {
+    void updateWorldStateCollections();
+}, 60_000);
