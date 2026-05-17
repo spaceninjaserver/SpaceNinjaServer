@@ -5168,7 +5168,8 @@ const pushFlashSales = (
     );
 
     ws.FlashSales.push(
-        ...filteredItems.map(item => ({
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        ...filteredItems.map(({ minBuildLabel, ...item }) => ({
             ...item,
             StartDate: toMongoDate2(startDate, buildLabel),
             EndDate: toMongoDate2(endDate, buildLabel),
