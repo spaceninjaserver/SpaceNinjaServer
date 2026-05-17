@@ -1781,7 +1781,7 @@ export const addMissionRewards = async (
     }
 
     if (voidTearWave && voidTearWave.Participants[0].QualifiesForReward) {
-        if (!voidTearWave.Participants[0].HaveRewardResponse) {
+        if (!voidTearWave.Participants[0].HaveRewardResponse && !voidTearWave.Participants[0].Reward) {
             // non-endless fissure in solo mode; giving reward now
             const reward = await crackRelic(inventory, voidTearWave.Participants[0], inventoryChanges);
             MissionRewards.push({ StoreItem: reward.type, ItemCount: reward.itemCount });
