@@ -21,7 +21,7 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
     const modularWeaponIdRaw = "Operation" in request ? request.Operation.ModularWeaponId : request.ModularWeaponId;
     const modularWeaponId = fromOid(modularWeaponIdRaw);
 
-    const syndicateMeta = (await getSyndicate(buildLabel, buildLabel))!;
+    const syndicateMeta = (await getSyndicate(affiliationTag, buildLabel))!;
 
     // Process items
     let gainedStanding = 0;
