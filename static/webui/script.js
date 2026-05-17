@@ -716,13 +716,11 @@ function fetchItemList() {
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Fusers/UncommonModFuser",
-                    name: loc("code_fusionCoreUncommon"),
-                    fusionLimit: 5
+                    name: loc("code_fusionCoreUncommon")
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Fusers/RareModFuser",
-                    name: loc("code_fusionCoreRare"),
-                    fusionLimit: 5
+                    name: loc("code_fusionCoreRare")
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyCommonModFuser",
@@ -747,6 +745,27 @@ function fetchItemList() {
                 {
                     uniqueName: "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod",
                     name: loc("code_traumaticPeculiar")
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Warframe/AvatarStaminaCostMultiplierMod",
+                    name: loc("code_acrobat")
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Warframe/AvatarShieldToStaminaMod",
+                    name: loc("code_shieldFlux"),
+                    fusionLimit: 3
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Warframe/AvatarStaminaMaxMod",
+                    name: loc("code_marathon")
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Warframe/AvatarStaminaRechargeRateMod",
+                    name: loc("code_quickRest")
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Melee/WeaponStaminaBonusMod",
+                    name: loc("code_secondWind")
                 }
             );
 
