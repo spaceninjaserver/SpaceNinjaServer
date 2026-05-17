@@ -321,7 +321,7 @@ dict = {
     cheats_addMissingSubsumedAbilities: `Add Missing Subsumed Abilities`,
     cheats_intrinsicsUnlockAll: `Max Rank All Intrinsics`,
     cheats_maxPlexus: `Max Rank Plexus`,
-    cheats_changeSupportedSyndicate: `Supported syndicate`,
+    cheats_changeSupportedSyndicate: `Supported Syndicate`,
     cheats_changeButton: `Change`,
     cheats_markAllAsRead: `Mark Inbox As Read`,
     cheats_finishInvasionsInOneMission: `Finish Invasions in One Mission`,
