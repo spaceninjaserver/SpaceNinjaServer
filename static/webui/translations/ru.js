@@ -113,6 +113,7 @@ dict = {
     code_replays: `Повторов`,
     code_stalker: `Сталкер`,
     code_darkExcalibur: `Тёмный |ITEM|`,
+    code_metadataPatchRequierd: `Чтобы увидеть этот предмет в игре, требуется metadata patch.`,
     code_drifterBeardName: `Борода скитальца: |INDEX|`,
     code_reviveBooster: `Усилитель возрождения`,
     code_reviveBoosterDesc: `Устанавливает количество возрождений на 4. Снимает ограничение на самовоскрешение на миссиях Охоты на архонтов.`,

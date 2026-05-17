@@ -1376,6 +1376,17 @@ async function populateInventoryRoute() {
                         });
                         td.textContent = td.textContent.slice(0, -1) + " ]";
                     }
+                    if (
+                        ["/Lotus/Powersuits/Stalker/Stalker", "/Lotus/Powersuits/Excalibur/DarkExcalibur"].includes(
+                            item.ItemType
+                        )
+                    ) {
+                        td.textContent += " ";
+                        const abbr = document.createElement("abbr");
+                        abbr.innerHTML = icons.note;
+                        abbr.title = loc("code_metadataPatchRequierd");
+                        td.appendChild(abbr);
+                    }
                     tr.appendChild(td);
                 }
                 {

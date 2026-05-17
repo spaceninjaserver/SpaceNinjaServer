@@ -113,6 +113,7 @@ dict = {
     code_replays: `Wiederholungen`,
     code_stalker: `Stalker`,
     code_darkExcalibur: `Dark |ITEM|`,
+    code_metadataPatchRequierd: `[UNTRANSLATED] To see this item in the game, a metadata patch is required.`,
     code_drifterBeardName: `Drifter-Bart: |INDEX|`,
     code_reviveBooster: `Wiederbelebungsbooster`,
     code_reviveBoosterDesc: `Setzt die Wiederbelebungsanzahl auf 4 und ermöglicht Selbstwiederbelebung in Archon Jagd.`,

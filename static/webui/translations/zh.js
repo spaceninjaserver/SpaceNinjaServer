@@ -113,6 +113,7 @@ dict = {
     code_replays: `回放`,
     code_stalker: `追猎者`,
     code_darkExcalibur: `暗影圣装圣剑`,
+    code_metadataPatchRequierd: `[UNTRANSLATED] To see this item in the game, a metadata patch is required.`,
     code_drifterBeardName: `漂泊者胡须 |INDEX|`,
     code_reviveBooster: `复活加速器`,
     code_reviveBoosterDesc: `将复活次数设置为4次, 这样在执政官狩猎中就可以进行自我复活.`,

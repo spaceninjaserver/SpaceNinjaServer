@@ -113,6 +113,7 @@ dict = {
     code_replays: `Rejouée`,
     code_stalker: `Stalker`,
     code_darkExcalibur: `[UNTRANSLATED] Dark |ITEM|`,
+    code_metadataPatchRequierd: `[UNTRANSLATED] To see this item in the game, a metadata patch is required.`,
     code_drifterBeardName: `Barbe du Voyageur |INDEX|`,
     code_reviveBooster: `Booster de Réanimation`,
     code_reviveBoosterDesc: `Définir le nombre de réanimations à 4, permet de s'auto-réanimer lors de la Chasse aux Archontes.`,

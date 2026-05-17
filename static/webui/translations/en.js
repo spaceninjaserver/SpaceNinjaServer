@@ -112,6 +112,7 @@ dict = {
     code_replays: `Replays`,
     code_stalker: `Stalker`,
     code_darkExcalibur: `Dark |ITEM|`,
+    code_metadataPatchRequierd: `To see this item in the game, a metadata patch is required.`,
     code_drifterBeardName: `Drifter Beard |INDEX|`,
     code_reviveBooster: `Revive Booster`,
     code_reviveBoosterDesc: `Sets revive count to 4, which allows self-revive in Archon Hunts.`,
