@@ -1635,6 +1635,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         spoofMasteryRank: Number,
         dailyTributeRewardMultiplier: Number,
         relicRewardItemCountMultiplier: Number,
+        relicCrackPlatinumBonus: Number,
         nightwaveStandingMultiplier: Number,
 
         Created: Date,

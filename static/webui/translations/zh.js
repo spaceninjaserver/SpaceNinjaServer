@@ -319,6 +319,7 @@ dict = {
     cheats_spoofMasteryRank: `伪造精通段位(-1为禁用)`,
     cheats_dailyTributeRewardMultiplier: `每日登陆奖励倍率`,
     cheats_relicRewardItemCountMultiplier: `虚空遗物奖励物品数量倍率`,
+    cheats_relicCrackPlatinumBonus: `[UNTRANSLATED] Platinum Per Relic Crack (0 to disable)`,
     cheats_nightwaveStandingMultiplier: `午夜电波声望倍率`,
     cheats_save: `保存`,
     cheats_account: `账户`,

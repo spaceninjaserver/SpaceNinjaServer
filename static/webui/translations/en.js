@@ -318,6 +318,7 @@ dict = {
     cheats_spoofMasteryRank: `Spoofed Mastery Rank (-1 to disable)`,
     cheats_dailyTributeRewardMultiplier: `Daily Tribute Reward Multiplier`,
     cheats_relicRewardItemCountMultiplier: `Relic Reward Item Count Multiplier`,
+    cheats_relicCrackPlatinumBonus: `Platinum Per Relic Crack (0 to disable)`,
     cheats_nightwaveStandingMultiplier: `Nightwave Standing Multiplier`,
     cheats_save: `Save`,
     cheats_account: `Account`,

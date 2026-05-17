@@ -51,6 +51,12 @@ export const crackRelic = async (
     // Give reward
     combineInventoryChanges(inventoryChanges, await addItem(inventory, fromStoreItem(reward.type), reward.itemCount));
 
+    const relicBonusPlatAmount = inventory.relicCrackPlatinumBonus ?? 0;
+    if (relicBonusPlatAmount > 0 && !inventory.infinitePlatinum) {
+        inventory.PremiumCredits += relicBonusPlatAmount;
+        combineInventoryChanges(inventoryChanges, { PremiumCredits: relicBonusPlatAmount });
+    }
+
     // Client has picked its own reward (for lack of choice)
     participant.ChosenRewardOwner = participant.AccountId;
 

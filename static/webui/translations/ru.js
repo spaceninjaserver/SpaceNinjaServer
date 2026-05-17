@@ -319,6 +319,7 @@ dict = {
     cheats_spoofMasteryRank: `Поддельный ранг мастерства (-1 для отключения)`,
     cheats_dailyTributeRewardMultiplier: `Множитель награды ежедневного бонуса`,
     cheats_relicRewardItemCountMultiplier: `Мультипликатор количества предметов награды реликвии`,
+    cheats_relicCrackPlatinumBonus: `[UNTRANSLATED] Platinum Per Relic Crack (0 to disable)`,
     cheats_nightwaveStandingMultiplier: `Мультипликатор репутации Ночной волны`,
     cheats_save: `Сохранить`,
     cheats_account: `Аккаунт`,

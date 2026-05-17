@@ -319,6 +319,7 @@ dict = {
     cheats_spoofMasteryRank: `Rang de maîtrise personnalisé (-1 pour désactiver)`,
     cheats_dailyTributeRewardMultiplier: `Multiplicateur de récompense journalière`,
     cheats_relicRewardItemCountMultiplier: `Multiplicateur de récompense de relique`,
+    cheats_relicCrackPlatinumBonus: `[UNTRANSLATED] Platinum Per Relic Crack (0 to disable)`,
     cheats_nightwaveStandingMultiplier: `Multiplicateur de réputation des Ondes Nocturnes`,
     cheats_save: `Sauvegarder`,
     cheats_account: `Compte`,
