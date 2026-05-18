@@ -1,4 +1,4 @@
-import { ExportRegions, ExportWarframes } from "warframe-public-export-plus";
+import { ExportRegions } from "warframe-public-export-plus";
 import type { IInfNode, INemesisDatabase, TNemesisFaction } from "../types/inventoryTypes/inventoryTypes.ts";
 import { generateRewardSeed, getRewardAtPercentage, SRng } from "../services/rngService.ts";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
@@ -7,6 +7,7 @@ import { isArchwingMission } from "../services/worldStateService.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import type { INemesisTaxInfo } from "../types/missionTypes.ts";
 import { lerp } from "./general.ts";
+import { getPowerSuit } from "../services/itemDataService.ts";
 
 type TInnateDamageTag =
     | "InnateElectricityDamage"
@@ -401,7 +402,7 @@ export const parseUpgrade = (
 };
 
 const getInnateDamageTag = (KillingSuit: string): TInnateDamageTag => {
-    return ExportWarframes[KillingSuit].nemesisUpgradeTag!;
+    return getPowerSuit(KillingSuit)!.nemesisUpgradeTag!;
 };
 
 const petHeads = [

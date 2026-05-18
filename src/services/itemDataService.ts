@@ -6,6 +6,7 @@ import type {
     IInboxMessage,
     IKey,
     IMissionReward,
+    IPowersuit,
     IRecipe,
     IRegion,
     ISyndicate,
@@ -1093,6 +1094,65 @@ export const supplementalRecipes: Record<string, IRecipe> = {
     }
 };
 
+export const supplementalSuits: Record<string, IPowersuit> = {
+    "/Lotus/Powersuits/Excalibur/DarkExcalibur": {
+        name: "/Lotus/Language/Changyou/DarkExcaliburName",
+        parentName: "/Lotus/Powersuits/Excalibur/ExcaliburBaseSuit",
+        description: "/Lotus/Language/Suits/DarkExcaliburDesc",
+        icon: "/Lotus/Interface/Icons/Store/DarkExcalibur.png",
+        health: 270,
+        shield: 270,
+        armor: 315,
+        stamina: 3,
+        power: 175,
+        codexSecret: true,
+        masteryReq: 0,
+        longDescription: "/Lotus/Language/Codex/DarkExcaliburLongDesc",
+        sprintSpeed: 1,
+        passiveDescription: "/Lotus/Language/Suits/ExcaliburPassiveAbility",
+        exalted: ["/Lotus/Powersuits/Excalibur/DoomSwordCYUmbra"],
+        abilities: [
+            {
+                uniqueName: "/Lotus/Powersuits/Excalibur/Abilities/SlashDashNewAbility",
+                name: "/Lotus/Language/Suits/SlashDashAbilityName",
+                description: "/Lotus/Language/Suits/SlashDashAbilityDesc",
+                icon: "/Lotus/Interface/Icons/Abilities/Power04.png",
+                energyRequiredToActivate: 25
+            },
+            {
+                uniqueName: "/Lotus/Powersuits/Excalibur/Abilities/RadialBlindAbility",
+                name: "/Lotus/Language/Suits/RadialBlindAbilityName",
+                description: "/Lotus/Language/Suits/RadialBlindAbilityDesc",
+                icon: "/Lotus/Interface/Icons/Abilities/Power01.png",
+                energyRequiredToActivate: 50
+            },
+            {
+                uniqueName: "/Lotus/Powersuits/Excalibur/Abilities/RadialJavelinAbility",
+                name: "/Lotus/Language/Suits/RadialJavelinAbilityName",
+                description: "/Lotus/Language/Suits/RadialJavelinAbilityDesc",
+                icon: "/Lotus/Interface/Icons/Abilities/Power03.png",
+                energyRequiredToActivate: 75
+            },
+            {
+                uniqueName: "/Lotus/Powersuits/Excalibur/Abilities/SwordOfDoomAbility",
+                name: "/Lotus/Language/Suits/SwordOfDoomAbilityName",
+                description: "/Lotus/Language/Suits/SwordOfDoomAbilityDesc",
+                icon: "/Lotus/Interface/Icons/Abilities/ExcaliburSwordOfDoom.png",
+                energyRequiredToActivate: 25,
+                energyConsumptionOverTime: 2.5
+            }
+        ],
+        productCategory: "Suits",
+        variantType: "VT_VARIANT",
+        additionalItems: [
+            "/Lotus/Upgrades/Skins/Excalibur/ExcaliburUmbraHelmet",
+            "/Lotus/Powersuits/Excalibur/DoomSwordCYUmbra"
+        ],
+        excludeFromMarket: true,
+        introducedAt: 1519338301
+    }
+};
+
 interface IU5FingerprintData {
     fits: { type: string; rarity: TRarity; statAtten?: number }[];
     upgrades: IU5FingerprintUpgrade[];
@@ -2165,6 +2225,9 @@ export const getItemCategoryByUniqueName = (uniqueName: string): string | undefi
     if (uniqueName in ExportWarframes) {
         return ExportWarframes[uniqueName].productCategory;
     }
+    if (uniqueName in supplementalSuits) {
+        return supplementalSuits[uniqueName].productCategory;
+    }
     if (uniqueName in ExportWeapons) {
         return ExportWeapons[uniqueName].productCategory;
     }
@@ -2201,6 +2264,9 @@ export const getItemName = (uniqueName: string): string | undefined => {
     }
     if (uniqueName in ExportWarframes) {
         return ExportWarframes[uniqueName].name;
+    }
+    if (uniqueName in supplementalSuits) {
+        return supplementalSuits[uniqueName].name;
     }
     if (uniqueName in ExportWeapons) {
         return ExportWeapons[uniqueName].name;
@@ -2865,6 +2931,10 @@ export const getKey = (uniqueName: string, buildLabel: string = BL_LATEST): IKey
 
 export const getMissionDeck = (uniqueName: string): TMissionDeck | undefined => {
     return ExportRewards[uniqueName];
+};
+
+export const getPowerSuit = (uniqueName: string): IPowersuit | undefined => {
+    return ExportWarframes[uniqueName] ?? supplementalSuits[uniqueName];
 };
 
 const u7WeaponCosts: Record<string, number> = {

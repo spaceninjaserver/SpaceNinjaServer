@@ -69,6 +69,7 @@ import { createMessage, getInboxFilter } from "../../services/inboxService.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 import { PendingTrade } from "../../models/tradingModel.ts";
 import { exportTrade } from "../../services/tradingService.ts";
+import { supplementalSuits } from "../../services/itemDataService.ts";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);
@@ -700,6 +701,8 @@ export const getInventoryResponse = async (
             let introducedAt: number | undefined;
             if (item.ItemType in ExportWarframes) {
                 introducedAt = ExportWarframes[item.ItemType].introducedAt;
+            } else if (item.ItemType in supplementalSuits) {
+                introducedAt = supplementalSuits[item.ItemType].introducedAt;
             } else if (item.ItemType in ExportWeapons) {
                 introducedAt = ExportWeapons[item.ItemType].introducedAt;
             }

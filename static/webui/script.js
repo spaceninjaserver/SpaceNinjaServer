@@ -1007,7 +1007,8 @@ function fetchItemList() {
                     name: loc("code_darkExcalibur").replace(
                         "|ITEM|",
                         data.Suits.find(i => i.uniqueName === "/Lotus/Powersuits/Excalibur/ExcaliburPrime").name
-                    )
+                    ),
+                    exalted: ["/Lotus/Powersuits/Excalibur/DoomSwordCYUmbra"]
                 },
                 "/Lotus/Language/Game/Rank_Creator": {
                     name: loc("guildView_rank_creator")

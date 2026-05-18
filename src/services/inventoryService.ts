@@ -39,13 +39,14 @@ import {
     convertInboxMessage,
     fromStoreItem,
     getKeyChainItems,
+    getPowerSuit,
     getSyndicate,
     supplementalRecipes,
     U5ModsWeights,
     U5Modules
 } from "./itemDataService.ts";
 import type { IFlavourItem, IItemConfig, IItemConfigDatabase } from "../types/inventoryTypes/commonInventoryTypes.ts";
-import type { IDefaultUpgrade, IPowersuit, IRegion, ISentinel, TStandingLimitBin } from "warframe-public-export-plus";
+import type { IDefaultUpgrade, IRegion, ISentinel, TStandingLimitBin } from "warframe-public-export-plus";
 import {
     ExportArcanes,
     ExportBoosters,
@@ -67,7 +68,6 @@ import {
     ExportSentinels,
     ExportSystems,
     ExportUpgrades,
-    ExportWarframes,
     ExportWeapons
 } from "warframe-public-export-plus";
 import { createShip } from "./shipService.ts";
@@ -1436,7 +1436,7 @@ export const addPowerSuit = async (
     buildLabel: string = BL_LATEST,
     inventoryChanges: IInventoryChanges = {}
 ): Promise<IInventoryChanges> => {
-    const powersuit = ExportWarframes[powersuitName] as IPowersuit | undefined;
+    const powersuit = getPowerSuit(powersuitName);
     const exalted = powersuit?.exalted ?? [];
     for (const specialItem of exalted) {
         addSpecialItem(inventory, specialItem, inventoryChanges);
@@ -1482,7 +1482,7 @@ const addMechSuit = async (
     inventoryChanges: IInventoryChanges = {},
     features?: number
 ): Promise<IInventoryChanges> => {
-    const powersuit = ExportWarframes[mechsuitName] as IPowersuit | undefined;
+    const powersuit = getPowerSuit(mechsuitName);
     const exalted = powersuit?.exalted ?? [];
     for (const specialItem of exalted) {
         addSpecialItem(inventory, specialItem, inventoryChanges);
