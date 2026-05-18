@@ -51,16 +51,30 @@ export const crackRelic = async (
     // Give reward
     combineInventoryChanges(inventoryChanges, await addItem(inventory, fromStoreItem(reward.type), reward.itemCount));
 
-    const relicBonusPlatAmount = inventory.relicCrackPlatinumBonus ?? 0;
-    if (relicBonusPlatAmount > 0 && !inventory.infinitePlatinum) {
-        inventory.PremiumCredits += relicBonusPlatAmount;
-        combineInventoryChanges(inventoryChanges, { PremiumCredits: relicBonusPlatAmount });
+    const platinumValue =
+        getRelicPlatinumBonusForRarity(inventory, reward.rarity) * (inventory.relicRewardItemCountMultiplier ?? 1);
+    if (platinumValue > 0 && !inventory.infinitePlatinum) {
+        inventory.PremiumCredits += platinumValue;
+        combineInventoryChanges(inventoryChanges, { PremiumCredits: platinumValue });
     }
 
     // Client has picked its own reward (for lack of choice)
     participant.ChosenRewardOwner = participant.AccountId;
 
     return reward;
+};
+
+const getRelicPlatinumBonusForRarity = (inventory: TInventoryDatabaseDocument, rarity: TRarity): number => {
+    switch (rarity) {
+        case "COMMON":
+            return inventory.relicPlatinumBonusCommon ?? 0;
+        case "UNCOMMON":
+            return inventory.relicPlatinumBonusUncommon ?? 0;
+        case "RARE":
+            return inventory.relicPlatinumBonusRare ?? 0;
+        default:
+            return 0;
+    }
 };
 
 const refinementToWeights = {

@@ -96,7 +96,9 @@ export const accountCheatNumbers = [
     "spoofMasteryRank",
     "dailyTributeRewardMultiplier",
     "relicRewardItemCountMultiplier",
-    "relicCrackPlatinumBonus",
+    "relicPlatinumBonusCommon",
+    "relicPlatinumBonusUncommon",
+    "relicPlatinumBonusRare",
     "nightwaveStandingMultiplier"
 ] as const;
 
