@@ -1730,7 +1730,7 @@ export const updateCredits = (
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
     if (price != 0 && !inventory.infiniteCredits) {
-        if (inventory.RegularCredits - price < 0) {
+        if (price > inventory.RegularCredits) {
             throw new Error(`Cannot subtract ${price} credits, would be left with ${inventory.RegularCredits - price}`);
         }
         inventoryChanges.RegularCredits ??= 0;
@@ -1748,17 +1748,26 @@ export const updatePlatinum = (
     inventoryChanges: IInventoryChanges = {}
 ): IInventoryChanges => {
     if (price != 0 && !inventory.infinitePlatinum) {
-        if (price > 0 && inventory.PremiumCreditsFree > 0 && !mustBePaidPlatinum) {
-            const premiumCreditsFreeDelta = Math.min(price, inventory.PremiumCreditsFree) * -1;
-            inventoryChanges.PremiumCreditsFree ??= 0;
-            inventoryChanges.PremiumCreditsFree += premiumCreditsFreeDelta;
-            inventory.PremiumCreditsFree += premiumCreditsFreeDelta;
-            logger.debug(`spending ${-premiumCreditsFreeDelta} starter plat`);
-        }
-        if (inventory.PremiumCredits - price < 0) {
-            throw new Error(
-                `Cannot subtract ${price} platinum, would be left with ${inventory.PremiumCredits - price}`
-            );
+        if (price > 0) {
+            if (mustBePaidPlatinum) {
+                const paidPlatinumBalance = inventory.PremiumCredits - inventory.PremiumCreditsFree;
+                if (price > paidPlatinumBalance) {
+                    throw new Error(
+                        `Cannot subtract ${price} paid platinum, would be left with ${paidPlatinumBalance - price}`
+                    );
+                }
+            } else if (inventory.PremiumCreditsFree > 0) {
+                const premiumCreditsFreeDelta = Math.min(price, inventory.PremiumCreditsFree) * -1;
+                inventoryChanges.PremiumCreditsFree ??= 0;
+                inventoryChanges.PremiumCreditsFree += premiumCreditsFreeDelta;
+                inventory.PremiumCreditsFree += premiumCreditsFreeDelta;
+                logger.debug(`spending ${-premiumCreditsFreeDelta} starter plat`);
+            }
+            if (price > inventory.PremiumCredits) {
+                throw new Error(
+                    `Cannot subtract ${price} platinum, would be left with ${inventory.PremiumCredits - price}`
+                );
+            }
         }
         inventoryChanges.PremiumCredits ??= 0;
         inventoryChanges.PremiumCredits -= price;
