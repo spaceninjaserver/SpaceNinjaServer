@@ -2075,7 +2075,33 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
                 data.ingredients[0].ItemType = "/Lotus/Types/Items/MiscItems/ControlModule";
             }
         }
+    } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/HuntingBowBlueprint") {
+        // There was an undocumented change to this recipe's ingredients sometime between 8.3.0 and 9.1.2...
+        if (version_compare(buildLabel, "2013.07.15.20.46") < 0) {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Morphic",
+                        ItemCount: 1
+                    },
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Circuits",
+                        ItemCount: 300
+                    },
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/PolymerBundle",
+                        ItemCount: 500
+                    },
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Nanospores",
+                        ItemCount: 1250
+                    }
+                ]
+            };
+        }
     }
+
     if (uniqueName.startsWith("/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/")) {
         if (version_compare(buildLabel, gameToBuildVersion["22.2.4"]) >= 0) {
             if (uniqueName.endsWith("ArmourOnOperatorModeBlueprint")) {
