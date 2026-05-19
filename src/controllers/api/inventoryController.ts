@@ -259,6 +259,23 @@ export const inventoryController: RequestHandler = async (request, response) => 
         //await inventory.save();
     }
 
+    const forWebui = "wsid" in request.query;
+
+    if (inventory.pendingPremiumCredits && !forWebui) {
+        await createMessage(inventory.accountOwnerId, [
+            {
+                sndr: "/Lotus/Language/Bosses/Ordis",
+                msg: "/Lotus/Language/Inbox/FoundItemsBody",
+                sub: "/Lotus/Language/Inbox/FoundItemsTitle",
+                icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
+                PremiumCredits: inventory.pendingPremiumCredits,
+                highPriority: true // FoundItems messages on live have this flag, tho as we are reusing it here for platinum rewards, it's maybe questionable if it's needed, but whatever.
+            }
+        ]);
+        inventory.pendingPremiumCredits = undefined;
+        //await inventory.save();
+    }
+
     for (let i = 0; i != inventory.QualifyingInvasions.length; ) {
         const qi = inventory.QualifyingInvasions[i];
         const invasion = getInvasionByOid(qi.invasionId.toString());
@@ -345,7 +362,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
             inventory,
             "xpBasedLevelCapDisabled" in request.query,
             getBuildLabel(request, account),
-            "wsid" in request.query
+            forWebui
         )
     );
 };

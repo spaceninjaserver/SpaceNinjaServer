@@ -177,6 +177,7 @@ export interface IInventoryDatabase
     duviriSeedRefresh?: Date;
     HybridFusionTreasures: IHybridFusionTreasure[]; // SNS-specific in-database format to support both modern & legacy clients
     receivedThousandYearFishDeco?: true; // placed decos are not in inventory, hence this boolean
+    pendingPremiumCredits?: number;
 
     Created: Date;
     CurrentLoadOutIds: Types.ObjectId[];

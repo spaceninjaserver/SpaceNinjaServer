@@ -1655,6 +1655,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         PremiumCredits: { type: Number, default: 0 },
         //Gift Platinum(Non trade)
         PremiumCreditsFree: { type: Number, default: 0 },
+        pendingPremiumCredits: Number,
         //Endo
         FusionPoints: { type: Number, default: 0 },
         //Dirac

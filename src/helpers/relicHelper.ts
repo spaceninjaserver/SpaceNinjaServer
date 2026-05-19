@@ -53,9 +53,9 @@ export const crackRelic = async (
 
     const platinumValue =
         getRelicPlatinumBonusForRarity(inventory, reward.rarity) * (inventory.relicRewardItemCountMultiplier ?? 1);
-    if (platinumValue > 0 && !inventory.infinitePlatinum) {
-        inventory.PremiumCredits += platinumValue;
-        combineInventoryChanges(inventoryChanges, { PremiumCredits: platinumValue });
+    if (platinumValue != 0) {
+        inventory.pendingPremiumCredits ??= 0;
+        inventory.pendingPremiumCredits += platinumValue;
     }
 
     // Client has picked its own reward (for lack of choice)
