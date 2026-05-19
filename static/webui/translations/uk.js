@@ -113,7 +113,7 @@ dict = {
     code_replays: `Повтори`,
     code_stalker: `Сталкер`,
     code_darkExcalibur: `Темний |ITEM|`,
-    code_metadataPatchRequierd: `[UNTRANSLATED] To see this item in the game, a metadata patch is required.`,
+    code_metadataPatchRequired: `[UNTRANSLATED] To see this item in-game, a metadata patch is required.`,
     code_drifterBeardName: `Борода мандрівника: |INDEX|`,
     code_reviveBooster: `Збільшувач зцілення`,
     code_reviveBoosterDesc: `Встановлює кількість відроджень до 4, що дозволяє самовідроджуватися в Архонтових ловах.`,

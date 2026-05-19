@@ -113,7 +113,7 @@ dict = {
     code_replays: `Repeticiones`,
     code_stalker: `Stalker`,
     code_darkExcalibur: `[UNTRANSLATED] Dark |ITEM|`,
-    code_metadataPatchRequierd: `[UNTRANSLATED] To see this item in the game, a metadata patch is required.`,
+    code_metadataPatchRequired: `[UNTRANSLATED] To see this item in-game, a metadata patch is required.`,
     code_drifterBeardName: `Barba del Viajero: |INDEX|`,
     code_reviveBooster: `Potenciador de reanimaciones`,
     code_reviveBoosterDesc: `[UNTRANSLATED] Sets revive count to 4, which allows self-revive in Archon Hunts.`,

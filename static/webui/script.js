@@ -1385,7 +1385,7 @@ async function populateInventoryRoute() {
                         td.textContent += " ";
                         const abbr = document.createElement("abbr");
                         abbr.innerHTML = icons.note;
-                        abbr.title = loc("code_metadataPatchRequierd");
+                        abbr.title = loc("code_metadataPatchRequired");
                         td.appendChild(abbr);
                     }
                     tr.appendChild(td);
