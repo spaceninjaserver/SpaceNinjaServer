@@ -1,5 +1,6 @@
 import type { RequestHandler } from "express";
-import { Inbox, type IMessageClient } from "../../models/inboxModel.ts";
+import type { IMessageClient } from "../../types/inboxTypes.ts";
+import { Inbox } from "../../models/inboxModel.ts";
 import {
     createMessage,
     deleteAllMessagesRead,

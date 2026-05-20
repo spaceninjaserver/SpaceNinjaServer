@@ -1,5 +1,6 @@
 import { toMongoDate2, toOid2 } from "../helpers/inventoryHelpers.ts";
-import type { IMessageClient, IMessageDatabase, TMessageDocument } from "../models/inboxModel.ts";
+import type { IMessageClient, IMessageDatabase } from "../types/inboxTypes.ts";
+import type { TMessageDocument } from "../models/inboxModel.ts";
 import { Inbox } from "../models/inboxModel.ts";
 import type { QueryFilter, Types } from "mongoose";
 import { buildVersionToInt } from "./loginService.ts";

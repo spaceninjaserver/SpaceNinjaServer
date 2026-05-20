@@ -51,7 +51,7 @@ import {
     ExportWarframes,
     ExportWeapons
 } from "warframe-public-export-plus";
-import type { IMessage } from "../models/inboxModel.ts";
+import type { IMessage } from "../types/inboxTypes.ts";
 import { logger } from "../utils/logger.ts";
 import { version_compare } from "../helpers/inventoryHelpers.ts";
 import vorsPrizePreU40Rewards from "../../static/fixed_responses/vorsPrizePreU40Rewards.json" with { type: "json" };
