@@ -603,6 +603,7 @@ const pushTilesetModifiers = (modifiers: string[], tileset: TSortieTileset): voi
 };
 
 export const getSortie = (day: number, buildLabel: string): ISortie => {
+    // Seeds featuring CorpusIcePlanet to test seed validation: 23418, 71281
     const seed = new SRng(day).randomInt(0, 100_000);
     //logger.debug(`sortie seed: ${seed}`);
     const rng = new SRng(seed);
@@ -769,15 +770,8 @@ const validateSortieSeed = (seed: number, variants: ISortieMission[]): boolean =
             if (missionPermutation.extraEnemySpecs?.length) {
                 rng.randomInt(1, missionPermutation.extraEnemySpecs.length);
             }
-            rng.randomFloat(); // difficulty
         }
-        if (
-            variant.missionType != "MT_ARENA" &&
-            variant.missionType != "MT_JUNCTION" &&
-            variant.tileset.indexOf("GasCity") == -1 &&
-            variant.tileset.indexOf("Forest") == -1 &&
-            variant.tileset.indexOf("Settlement") == -1
-        ) {
+        if (variant.missionType != "MT_ARENA" && variant.missionType != "MT_JUNCTION") {
             const locationTextureIndex = rng.randomInt(0, 1);
             if (variant.tileset == "CorpusIcePlanetTileset" || variant.tileset == "CorpusIcePlanetTilesetCaves") {
                 if (locationTextureIndex != 0) {
