@@ -5,19 +5,18 @@ import {
     populateFeaturedGuilds,
     populateFissures
 } from "../../services/worldStateService.ts";
-import {
-    getAccountForRequest,
-    getBuildLabel,
-    getBuildLabelForUnauthenticatedRequest
-} from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { BL_LATEST } from "../../constants/gameVersions.ts";
 
 export const worldStateController: RequestHandler = async (req, res) => {
     let buildLabel: string;
-    if (req.query.accountId && !req.query.buildLabel) {
+    if (typeof req.query.buildLabel == "string") {
+        buildLabel = req.query.buildLabel.replaceAll(" ", "+");
+    } else if (req.query.accountId) {
         const account = await getAccountForRequest(req);
         buildLabel = getBuildLabel(req, account);
     } else {
-        buildLabel = getBuildLabelForUnauthenticatedRequest(req);
+        buildLabel = BL_LATEST;
     }
 
     const worldState = getWorldState(buildLabel);
