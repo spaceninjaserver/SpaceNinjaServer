@@ -31,6 +31,7 @@ import {
     checkCalendarAutoAdvance,
     cleanupInventory,
     createLibraryDailyTask,
+    dispatchPendingPremiumCredits,
     ensureUserHasFounderHonoria,
     ensureUserHasSteelPathRewards,
     getCalendarProgress,
@@ -262,17 +263,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
     const forWebui = "wsid" in request.query;
 
     if (inventory.pendingPremiumCredits && !forWebui) {
-        await createMessage(inventory.accountOwnerId, [
-            {
-                sndr: "/Lotus/Language/Bosses/Ordis",
-                msg: "/Lotus/Language/Inbox/FoundItemsBody",
-                sub: "/Lotus/Language/Inbox/FoundItemsTitle",
-                icon: "/Lotus/Interface/Icons/Npcs/Ordis.png",
-                PremiumCredits: inventory.pendingPremiumCredits,
-                highPriority: true // FoundItems messages on live have this flag, tho as we are reusing it here for platinum rewards, it's maybe questionable if it's needed, but whatever.
-            }
-        ]);
-        inventory.pendingPremiumCredits = undefined;
+        await dispatchPendingPremiumCredits(inventory);
         //await inventory.save();
     }
 

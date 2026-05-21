@@ -7,7 +7,7 @@ import {
     addMissionRewards,
     handleConservation
 } from "../../services/missionInventoryUpdateService.ts";
-import { getInventory } from "../../services/inventoryService.ts";
+import { dispatchPendingPremiumCredits, getInventory } from "../../services/inventoryService.ts";
 import { getInventoryResponse } from "./inventoryController.ts";
 import { logger } from "../../utils/logger.ts";
 import type {
@@ -106,6 +106,11 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         RecoveredItemInfo
     } = await addMissionRewards(account, buildLabel, inventory, missionReport, firstCompletion);
     await handleConservation(inventory, buildLabel, missionReport, AffiliationMods); // Conservation reports have GS_SUCCESS
+
+    if (inventory.pendingPremiumCredits) {
+        await dispatchPendingPremiumCredits(inventory);
+        //await inventory.save();
+    }
 
     if (missionReport.EndOfMatchUpload) {
         inventory.RewardSeed = generateRewardSeed();
