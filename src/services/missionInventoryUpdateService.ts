@@ -223,7 +223,12 @@ export const addMissionInventoryUpdates = async (
     const inventoryChanges: IInventoryChanges = {};
     if (inventoryUpdates.Missions && inventoryUpdates.EndOfMatchUpload) {
         const node = await getRegion(inventoryUpdates.Missions.Tag, buildLabel);
-        if (node && node.miscItemFee && !inventory.noNodeEntryFees) {
+        if (
+            node &&
+            node.miscItemFee &&
+            !inventoryUpdates.SortieId && // Entry is free for sortie missions (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/4183)
+            !inventory.noNodeEntryFees
+        ) {
             addMiscItems(inventory, [
                 {
                     ItemType: node.miscItemFee.ItemType,
