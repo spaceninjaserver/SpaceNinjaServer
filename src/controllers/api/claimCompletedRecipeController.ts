@@ -25,6 +25,7 @@ import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
 import { eEquipmentFeatures, eStatus } from "../../types/equipmentTypes.ts";
 import { pseudoRecipeToOwnedRecipeMap } from "../../services/foundryService.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { broadcastInventoryUpdate } from "../../services/wsService.ts";
 
 interface IClaimCompletedRecipeRequest {
     RecipeIds?: IOidWithLegacySupport[]; // U24.4 and beyond
@@ -114,6 +115,7 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
     }
     await inventory.save();
     res.json(resp);
+    broadcastInventoryUpdate(req);
 };
 
 const claimCompletedRecipe = async (

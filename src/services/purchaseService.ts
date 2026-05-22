@@ -111,6 +111,13 @@ export const handlePurchase = async (
 ): Promise<IPurchaseResponse> => {
     logger.debug("purchase request", purchaseRequest);
 
+    // Fix this path for pre-U25
+    if (
+        purchaseRequest.PurchaseParams.StoreItem == "/Lotus/StoreItems/Weapons/Tenno/Melee/Brass Knuckles/BrassKnuckles"
+    ) {
+        purchaseRequest.PurchaseParams.StoreItem = "/Lotus/StoreItems/Weapons/Tenno/Melee/BrassKnuckles/BrassKnuckles";
+    }
+
     const prePurchaseInventoryChanges: IInventoryChanges = {};
     let seed: bigint | undefined;
     if (purchaseRequest.PurchaseParams.Source == ePurchaseSource.Vendor) {
@@ -492,7 +499,7 @@ export const handleStoreItemAcquisition = async (
     seed?: bigint,
     buildLabel: string = BL_LATEST
 ): Promise<IPurchaseResponse> => {
-    let purchaseResponse = {
+    let purchaseResponse: IPurchaseResponse = {
         InventoryChanges: {}
     };
     logger.debug(`handling acquisition of ${storeItemName}`);

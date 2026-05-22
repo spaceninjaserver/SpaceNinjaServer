@@ -684,6 +684,15 @@ export const getInventoryResponse = async (
         delete mission.Tier;
     }
 
+    if (version_compare(buildLabel, gameToBuildVersion["25.0.0"]) >= 0) {
+        return inventoryResponse;
+    }
+    for (const melee of inventoryResponse.Melee) {
+        if (melee.ItemType == "/Lotus/Weapons/Tenno/Melee/BrassKnuckles/BrassKnuckles") {
+            melee.ItemType = "/Lotus/Weapons/Tenno/Melee/Brass Knuckles/BrassKnuckles";
+        }
+    }
+
     // Builds before U24.4.0 handle equipment features differently
     if (version_compare(buildLabel, gameToBuildVersion["24.4.0"]) >= 0) {
         return inventoryResponse;
