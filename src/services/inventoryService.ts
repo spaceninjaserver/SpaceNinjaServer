@@ -2765,7 +2765,10 @@ export const addKahlProgress = (
     }
 };
 
-export const addMissionComplete = (inventory: TInventoryDatabaseDocument, { Tag, Completes, Tier }: IMission): void => {
+export const addMissionComplete = (
+    inventory: Pick<TInventoryDatabaseDocument, "Missions">,
+    { Tag, Completes, Tier }: IMission
+): void => {
     const { Missions } = inventory;
     const itemIndex = Missions.findIndex(item => item.Tag === Tag);
 

@@ -377,6 +377,11 @@ export const addMissionInventoryUpdates = async (
                     await ensureUserHasSteelPathRewards(inventory);
                 }
                 break;
+            case "CompletedAlerts":
+                if (value.indexOf("e1i03119f130000000000000") != -1) {
+                    addMissionComplete(inventory, { Tag: "SolNode12", Completes: 1 });
+                }
+                break;
             case "LastRegionPlayed":
                 if (!(config.unfaithfulBugFixes?.ignore1999LastRegionPlayed && value === "1999MapName")) {
                     inventory.LastRegionPlayed = value;

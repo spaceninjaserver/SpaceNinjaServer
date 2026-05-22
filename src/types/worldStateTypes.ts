@@ -96,6 +96,7 @@ export interface IAlert {
 
 export interface IAlertMissionInfo {
     location: string;
+    completeTag?: string; // (U7~U8) unsure what this is actually for as it does not seem to produce a Missions field in the updateInventory request either way
     missionType: TMissionType;
     faction: TFaction;
     difficulty: number;
