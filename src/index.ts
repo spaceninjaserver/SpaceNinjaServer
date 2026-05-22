@@ -64,7 +64,13 @@ try {
     }
     process.exit(1);
 }
-logger.info("Connected to MongoDB");
+const mongodbBuildInfo = await mongoose.connection.db!.admin().buildInfo();
+if (Array.isArray(mongodbBuildInfo.versionArray) && mongodbBuildInfo.versionArray.every(x => typeof x == "number")) {
+    const [major, minor, patch] = mongodbBuildInfo.versionArray;
+    logger.info(`Connected to MongoDB v${major}.${minor}.${patch}`);
+} else {
+    logger.info("Connected to MongoDB (version unknown)");
+}
 syncConfigWithDatabase();
 
 try {
