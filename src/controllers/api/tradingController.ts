@@ -4,7 +4,9 @@ import {
     addMiscItem,
     addMods,
     addRecipes,
+    freeUpSlot,
     getInventory2,
+    occupySlot,
     updateCredits,
     updatePlatinum
 } from "../../services/inventoryService.ts";
@@ -14,16 +16,17 @@ import type { RequestHandler } from "express";
 import type { IPendingTradeDatabase, ITradeOffer } from "../../types/tradingTypes.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { logger } from "../../utils/logger.ts";
-import { fromMongoDate, version_compare } from "../../helpers/inventoryHelpers.ts";
+import { fromMongoDate, fromOid, version_compare } from "../../helpers/inventoryHelpers.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
-import { importUpgrade } from "../../services/importService.ts";
+import { importEquipment, importUpgrade } from "../../services/importService.ts";
 import { Guild } from "../../models/guildModel.ts";
 import { ExportArcanes, ExportResources, ExportUpgrades, type TRarity } from "warframe-public-export-plus";
 import { getInfNodes, getNemesisManifest } from "../../helpers/nemesisHelpers.ts";
 import { PendingTrade } from "../../models/tradingModel.ts";
 import type { HydratedDocument, QueryFilter } from "mongoose";
 import { exportTrade } from "../../services/tradingService.ts";
+import { eInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 
 export const tradingController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -83,6 +86,10 @@ export const tradingController: RequestHandler = async (req, res) => {
                     "RawUpgrades",
                     "MiscItems",
                     "Recipes",
+                    "LongGuns",
+                    "Pistols",
+                    "Melee",
+                    "WeaponBin",
                     "HybridFusionTreasures",
                     "NemesisHistory",
                     "Nemesis",
@@ -101,6 +108,10 @@ export const tradingController: RequestHandler = async (req, res) => {
                     "RawUpgrades",
                     "MiscItems",
                     "Recipes",
+                    "LongGuns",
+                    "Pistols",
+                    "Melee",
+                    "WeaponBin",
                     "HybridFusionTreasures",
                     "NemesisHistory",
                     "Nemesis",
@@ -223,6 +234,10 @@ const applyOfferToInventory = (
         | "RawUpgrades"
         | "MiscItems"
         | "Recipes"
+        | "LongGuns"
+        | "Pistols"
+        | "Melee"
+        | "WeaponBin"
         | "HybridFusionTreasures"
         | "NemesisHistory"
         | "Nemesis"
@@ -236,7 +251,7 @@ const applyOfferToInventory = (
     if (offer.RandomUpgrades) {
         for (const item of offer.RandomUpgrades) {
             if (factor == -1) {
-                inventory.Upgrades.pull({ _id: item.ItemId.$oid });
+                inventory.Upgrades.pull({ _id: fromOid(item.ItemId) });
             } else {
                 inventory.Upgrades.push(importUpgrade(item));
             }
@@ -245,7 +260,7 @@ const applyOfferToInventory = (
     if (offer.Upgrades) {
         for (const item of offer.Upgrades) {
             if (factor == -1) {
-                inventory.Upgrades.pull({ _id: item.ItemId.$oid });
+                inventory.Upgrades.pull({ _id: fromOid(item.ItemId) });
             } else {
                 inventory.Upgrades.push(importUpgrade(item));
             }
@@ -280,6 +295,19 @@ const applyOfferToInventory = (
                     throw new Error(`negative quantity in trade offer`);
                 }
                 addRecipes(inventory, [{ ...item, ItemCount: item.ItemCount * -1 }]);
+            }
+        }
+    }
+    for (const key of ["LongGuns", "Pistols", "Melee"] as const) {
+        if (offer[key]) {
+            for (const item of offer[key]) {
+                if (factor == 1) {
+                    inventory[key].push(importEquipment(item));
+                    occupySlot(inventory, eInventorySlot.WEAPONS, false);
+                } else {
+                    inventory[key].pull({ _id: fromOid(item.ItemId) });
+                    freeUpSlot(inventory, eInventorySlot.WEAPONS);
+                }
             }
         }
     }
@@ -384,9 +412,10 @@ const calcuateTax = (offer: ITradeOffer): number => {
             }
         }
     }
-    if (offer.Recipes) {
-        tax += offer.Recipes.length * 2000;
-    }
+    tax += (offer.Recipes?.length ?? 0) * 2000;
+    tax += (offer.LongGuns?.length ?? 0) * 2000;
+    tax += (offer.Pistols?.length ?? 0) * 2000;
+    tax += (offer.Melee?.length ?? 0) * 2000;
     if (offer.FusionTreasures) {
         for (const item of offer.FusionTreasures) {
             tax += item.ItemCount * (item.Sockets ? 12000 : 4000);

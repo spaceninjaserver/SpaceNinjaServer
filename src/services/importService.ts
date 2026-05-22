@@ -96,7 +96,7 @@ const convertOptionalDate = (value: IMongoDateWithLegacySupport | undefined): Da
     return value ? fromMongoDate(value) : undefined;
 };
 
-const convertEquipment = (client: IEquipmentClient): IEquipmentDatabase | IKubrowPetDatabase => {
+export const importEquipment = (client: IEquipmentClient): IEquipmentDatabase | IKubrowPetDatabase => {
     const { ItemId, ...rest } = client;
     return {
         ...rest,
@@ -210,7 +210,7 @@ export const importCrewShipMembers = (client: ICrewShipMembersClient): ICrewShip
 const convertInfestedFoundry = (client: IInfestedFoundryClient): IInfestedFoundryDatabase => {
     return {
         ...client,
-        LastConsumedSuit: client.LastConsumedSuit ? convertEquipment(client.LastConsumedSuit) : undefined,
+        LastConsumedSuit: client.LastConsumedSuit ? importEquipment(client.LastConsumedSuit) : undefined,
         AbilityOverrideUnlockCooldown: convertOptionalDate(client.AbilityOverrideUnlockCooldown)
     };
 };
@@ -310,11 +310,11 @@ const convertPeriodicMissionCompletion = (
 export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<IInventoryClient>): void => {
     for (const key of equipmentKeys) {
         if (client[key] !== undefined) {
-            replaceArray<IEquipmentDatabase>(db[key], client[key].map(convertEquipment));
+            replaceArray<IEquipmentDatabase>(db[key], client[key].map(importEquipment));
         }
     }
     if (client.OperatorSuits !== undefined) {
-        replaceArray<IEquipmentDatabase>(db.OperatorSuits, client.OperatorSuits.map(convertEquipment));
+        replaceArray<IEquipmentDatabase>(db.OperatorSuits, client.OperatorSuits.map(importEquipment));
     }
     if (client.WeaponSkins !== undefined) {
         replaceArray<IWeaponSkinDatabase>(db.WeaponSkins, client.WeaponSkins.map(convertWeaponSkin));

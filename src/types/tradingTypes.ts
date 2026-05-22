@@ -1,6 +1,7 @@
 import type { Types } from "mongoose";
 import type { IOid, ITypeCount } from "./commonTypes.ts";
 import type { IFusionTreasure, INemesisClient, IRawUpgrade, IUpgradeClient } from "./inventoryTypes/inventoryTypes.ts";
+import type { IEquipmentClient } from "./equipmentTypes.ts";
 
 export interface ITradeOffer {
     RandomUpgrades?: IUpgradeClient[];
@@ -8,6 +9,9 @@ export interface ITradeOffer {
     RawUpgrades?: IRawUpgrade[];
     MiscItems?: ITypeCount[];
     Recipes?: ITypeCount[];
+    LongGuns?: IEquipmentClient[];
+    Pistols?: IEquipmentClient[];
+    Melee?: IEquipmentClient[];
     FusionTreasures?: IFusionTreasure[];
     NemesisHistory?: INemesisClient;
     PremiumCredits?: number;
