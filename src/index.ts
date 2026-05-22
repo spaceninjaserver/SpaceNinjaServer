@@ -37,14 +37,14 @@ fs.readFile(path.join(repoDir, "BUILD_DATE"), "utf-8", (err, data) => {
     }
 });
 
-let mongodUri = config.mongodbUrl;
-if (mongodUri.startsWith("file://")) {
-    let dataDir = path.resolve(mongodUri.substring("file://".length));
-    if (dataDir.substring(0, 1) == "/" && process.platform == "win32") {
-        dataDir = dataDir.substring(1); // Absolute path on Windows must not start with /
-    }
+let mongodUri = config.database;
+if (typeof mongodUri != "string") {
+    const dataDir = path.resolve(mongodUri.dbPath);
     fs.mkdirSync(dataDir, { recursive: true });
     const mongod = await MongoMemoryServer.create({
+        binary: {
+            version: mongodUri.engine == "MongoDB 8.0" ? undefined : "7.0.34" // Check https://www.mongodb.com/docs/v7.0/release-notes/7.0/ for updates :)
+        },
         instance: {
             dbPath: dataDir,
             port: 27017, // Prefer 27017

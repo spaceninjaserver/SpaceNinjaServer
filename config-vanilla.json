@@ -1,5 +1,8 @@
 {
-  "mongodbUrl": "file://./database",
+  "database": {
+    "engine": "MongoDB 7.0",
+    "dbPath": "./database"
+  },
   "logger": {
     "files": true,
     "level": "trace",

@@ -13,7 +13,7 @@ To get an idea of what functionality you can expect to be missing [have a look t
 SpaceNinjaServer requires a `config.json`. To set it up, you can copy the [config-vanilla.json](config-vanilla.json), which has most cheats disabled.
 
 - `skipTutorial` affects only newly created accounts, so you may wish to change it before logging in for the first time.
-- `mongodbUrl` defaults to a `file://` URI which starts up an embedded mongod, but can be `mongodb://127.0.0.1:27017/openWF` if you have a system-wide mongod installation.
+- `database` defaults to an object to configure the _embedded_ mongod, but can be a string like `"mongodb://127.0.0.1:27017/openWF"` to simply connect to an existing MongoDB instance.
 - `logger.level` can be `fatal`, `error`, `warn`, `info`, `http`, `debug`, or `trace`.
 - `bindAddress`, `httpPort`, `httpsPort` are related to how SpaceNinjaServer is reached on the network. Under Docker, these options are unchangable; modify your `docker-compose.yml`, instead.
 - `ircExecutable` and `hubExecutable` can be provided with relative paths to executables which will be ran as child processes of SpaceNinjaServer.

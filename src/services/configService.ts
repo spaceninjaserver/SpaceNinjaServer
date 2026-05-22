@@ -20,7 +20,13 @@ export interface IWebuiConfig {
 }
 
 export interface IConfig {
-    mongodbUrl: string;
+    /** @deprecated */ mongodbUrl?: string;
+    database:
+        | string
+        | {
+              engine: "MongoDB 7.0" | "MongoDB 8.0";
+              dbPath: string;
+          };
     logger: {
         files: boolean;
         level: string; // "fatal" | "error" | "warn" | "info" | "http" | "debug" | "trace";
@@ -222,7 +228,7 @@ if (args.docker) {
 export const configPath = path.join(repoDir, args.configPath ?? "config.json");
 
 export const config: IConfig = {
-    mongodbUrl: "mongodb://127.0.0.1:27017/openWF",
+    database: "mongodb://127.0.0.1:27017/openWF",
     logger: {
         files: true,
         level: "trace"

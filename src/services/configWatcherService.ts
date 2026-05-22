@@ -91,6 +91,22 @@ chokidar.watch(configPath).on("change", () => {
 
 export const validateConfig = (): void => {
     let modified = false;
+    if (config.mongodbUrl) {
+        if (config.mongodbUrl.startsWith("file://")) {
+            let dataDir = config.mongodbUrl.substring("file://".length);
+            if (dataDir.substring(0, 1) == "/" && process.platform == "win32") {
+                dataDir = dataDir.substring(1); // Absolute path on Windows must not start with /
+            }
+            config.database = {
+                engine: "MongoDB 8.0",
+                dbPath: dataDir
+            };
+        } else {
+            config.database = config.mongodbUrl;
+        }
+        delete config.mongodbUrl;
+        modified = true;
+    }
     for (const key of configRemovedOptionsKeys) {
         if (config[key as keyof IConfig] !== undefined) {
             logger.debug(
