@@ -27,6 +27,7 @@ import {
     addEmailItem,
     addItem,
     addMiscItems,
+    addMods,
     allDailyAffiliationKeys,
     checkCalendarAutoAdvance,
     cleanupInventory,
@@ -71,11 +72,15 @@ import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 import { PendingTrade } from "../../models/tradingModel.ts";
 import { exportTrade } from "../../services/tradingService.ts";
 import { supplementalSuits } from "../../services/itemDataService.ts";
+import suitDefaultUpgrades from "../../constants/suitDefaultUpgrades.ts";
+import type { ITypeCount } from "../../types/commonTypes.ts";
+import { sendWsBroadcastToWebui } from "../../services/wsService.ts";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);
     const buildLabel = getBuildLabel(request, account);
     const inventory = await getInventory(account._id, undefined);
+    let sendUpdateForWebui = false;
 
     // Handle daily reset
     if (!inventory.NextRefill || Date.now() >= inventory.NextRefill.getTime()) {
@@ -343,18 +348,40 @@ export const inventoryController: RequestHandler = async (request, response) => 
     }
     await handleTauMemories(inventory);
 
+    if (version_compare(buildLabel, gameToBuildVersion["15.0.0"]) < 0) {
+        const suitTypes = inventory.Suits.map(s => s.ItemType);
+        const rawUpgradeTypes = inventory.RawUpgrades.map(s => s.ItemType);
+        const upgradeTypes = inventory.Upgrades.map(s => s.ItemType);
+        const blacklist = new Set([...rawUpgradeTypes, ...upgradeTypes]);
+        const seen = new Set<string>();
+
+        const modsToAdd: ITypeCount[] = suitTypes.flatMap(suit =>
+            (suitDefaultUpgrades[suit] ?? []).flatMap(u => {
+                const itemType = u.ItemType;
+                if (blacklist.has(itemType) || seen.has(itemType)) return [];
+                seen.add(itemType);
+                return [
+                    {
+                        ItemType: itemType,
+                        ItemCount: 1
+                    }
+                ];
+            })
+        );
+        if (modsToAdd.length > 0) {
+            logger.debug(`adding ${modsToAdd.length} missing legacy ability mods`);
+            addMods(inventory, modsToAdd);
+            sendUpdateForWebui = true;
+        }
+    }
+
     if (inventory.isModified()) {
         await inventory.save();
+        if (sendUpdateForWebui) sendWsBroadcastToWebui({ update_inventory: true }, account._id.toString());
     }
 
     response.json(
-        await getInventoryResponse(
-            request,
-            inventory,
-            "xpBasedLevelCapDisabled" in request.query,
-            getBuildLabel(request, account),
-            forWebui
-        )
+        await getInventoryResponse(request, inventory, "xpBasedLevelCapDisabled" in request.query, buildLabel, forWebui)
     );
 };
 
