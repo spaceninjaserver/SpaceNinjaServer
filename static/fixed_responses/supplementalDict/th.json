@@ -1,0 +1,12 @@
+{
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffName": "Electrical Resistance",
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffDesc": "ลดความเสียหายจาก <DT_ELECTRICITY_COLOR>ไฟฟ้า",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffName": "Heat Resistance",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffDesc": "ลดความเสียหายจาก <DT_FIRE_COLOR>ไฟ",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffName": "Frost Insulation",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffDesc": "ลดความเสียหายจาก <DT_FREEZE_COLOR>น้ำแข็ง",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffName": "Laser Deflection",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffDesc": "ลดความเสียหายจาก <DT_RADIATION_COLOR>รังสี",
+  "/Lotus/Language/Items/PlayerXPBuffName": "Affinity Amp",
+  "/Lotus/Language/Items/PlayerXPBuffDesc": "แอฟฟินิตี้จากการฆ่าเพิ่มขึ้น"
+}

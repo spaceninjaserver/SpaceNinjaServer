@@ -1,0 +1,12 @@
+{
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffName": "Elektrischer Widerstand",
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffDesc": "Reduzierter <DT_ELECTRICITY_COLOR>Elektrizitätsschaden.",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffName": "Feuerwiderstand",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffDesc": "Reduzierter <DT_FIRE_COLOR>Hitzeschaden.",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffName": "Kälteisolierung",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffDesc": "Reduzierter <DT_FREEZE_COLOR>Kälteschaden.",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffName": "Laser-Immunität",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffDesc": "Reduzierter <DT_RADIATION_COLOR>Strahlungsschaden.",
+  "/Lotus/Language/Items/PlayerXPBuffName": "Erfahrungssteigerung",
+  "/Lotus/Language/Items/PlayerXPBuffDesc": "Mehr Erfahrung von getöteten Feinden"
+}

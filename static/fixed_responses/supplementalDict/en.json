@@ -1,0 +1,12 @@
+{
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffName": "Electrical Resistance",
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffDesc": "Reduced <DT_ELECTRICITY_COLOR>Electricity Damage.",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffName": "Heat Resistance",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffDesc": "Reduced <DT_FIRE_COLOR>Heat Damage.",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffName": "Frost Insulation",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffDesc": "Reduced <DT_FREEZE_COLOR>Cold Damage.",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffName": "Laser Deflection",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffDesc": "Reduced <DT_RADIATION_COLOR>Radiation Damage.",
+  "/Lotus/Language/Items/PlayerXPBuffName": "Affinity Amp",
+  "/Lotus/Language/Items/PlayerXPBuffDesc": "Affinity from kills increased"
+}

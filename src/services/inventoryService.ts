@@ -42,6 +42,7 @@ import {
     getPowerSuit,
     getSyndicate,
     supplementalRecipes,
+    supplementalUpgrades,
     U5ModsWeights,
     U5Modules
 } from "./itemDataService.ts";
@@ -682,6 +683,7 @@ export const addItem = async (
         typeName in ExportUpgrades ||
         typeName in ExportArcanes ||
         typeName in U5Modules ||
+        typeName in supplementalUpgrades ||
         (typeName.startsWith("/Lotus/Upgrades/Mods/") && // Fusion Core, Legendary Core
             !typeName.startsWith("/Lotus/Upgrades/Mods/FusionBundles/")) ||
         typeName.startsWith("/Lotus/Upgrades/CosmeticEnhancers/") || // Traumatic Peculiar

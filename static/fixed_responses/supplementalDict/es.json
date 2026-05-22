@@ -1,0 +1,12 @@
+{
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffName": "Resistencia eléctrica",
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffDesc": "Daño de <DT_ELECTRICITY_COLOR>electricidad reducido.",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffName": "Resistencia al calor",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffDesc": "Daño de <DT_FIRE_COLOR>calor reducido.",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffName": "Aislamiento helado",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffDesc": "Daño de <DT_FREEZE_COLOR>frío reducido.",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffName": "Desviación láser",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffDesc": "Daño de <DT_RADIATION_COLOR>radiación reducido.",
+  "/Lotus/Language/Items/PlayerXPBuffName": "Amplificador de afinidad",
+  "/Lotus/Language/Items/PlayerXPBuffDesc": "Afinidad por muertes aumentada"
+}

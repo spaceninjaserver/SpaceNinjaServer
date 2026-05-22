@@ -5,6 +5,7 @@ import {
     getNormalizedString,
     getString,
     supplementalRecipes,
+    supplementalUpgrades,
     U5Modules
 } from "../../services/itemDataService.ts";
 import type { IU5FingerprintUpgrade } from "../../services/itemDataService.ts";
@@ -371,7 +372,7 @@ const getItemListsController: RequestHandler = (req, response) => {
         }
     }
 
-    for (const [uniqueName, upgrade] of Object.entries(ExportUpgrades)) {
+    for (const [uniqueName, upgrade] of Object.entries({ ...ExportUpgrades, ...supplementalUpgrades })) {
         const mod: ListedItem = {
             uniqueName,
             name: getString(upgrade.name, lang),

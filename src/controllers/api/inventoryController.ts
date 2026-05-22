@@ -950,6 +950,54 @@ export const getInventoryResponse = async (
     }
     inventoryResponse.RawUpgrades = [];
 
+    // Before U9, these aura mods were artifacts, ~U9.1.2 changed their paths
+    if (
+        version_compare(buildLabel, gameToBuildVersion["5.2.0"]) >= 0 &&
+        version_compare(buildLabel, gameToBuildVersion["9.1.2"]) < 0
+    ) {
+        const supportedAuraMods = new Set([
+            "EnemyArmorReductionAuraMod",
+            "EnemyShieldReductionAuraMod",
+            "InfestationSpeedReductionAuraMod",
+            "PlayerElectricityImmunityAuraMod",
+            "PlayerFireImmunityAuraMod",
+            "PlayerFreezeImmunityAuraMod",
+            "PlayerLaserImmunityAuraMod",
+            "PlayerPoisonImmunityAuraMod",
+            "PlayerEnemyRadarAuraMod",
+            "PlayerLootRadarAuraMod",
+            "PlayerEnergyRegenAuraMod",
+            "PlayerHealthAuraMod",
+            "PlayerHealthRegenAuraMod",
+            "PlayerMeleeAuraMod",
+            "PlayerPistolAmmoAuraMod",
+            "PlayerPistolDamageAuraMod",
+            "PlayerRifleAmmoAuraMod",
+            "PlayerRifleDamageAuraMod",
+            "PlayerShellAmmoAuraMod",
+            "PlayerShellDamageAuraMod",
+            "PlayerSniperAmmoAuraMod",
+            "PlayerSniperDamageAuraMod",
+            "PlayerSprintAuraMod",
+            "PlayerXPAuraMod",
+            "RobotPoorAimAuraMod"
+        ]);
+
+        for (const x of [...inventoryResponse.Cards, ...inventoryResponse.Upgrades]) {
+            const itemType = x.ItemType;
+            console.log(itemType);
+            if (
+                !itemType.includes("/Lotus/Upgrades/Mods/Aura/") ||
+                !supportedAuraMods.has(itemType.slice(itemType.lastIndexOf("/") + 1))
+            )
+                continue;
+
+            x.ItemType = itemType
+                .replace("/Lotus/Upgrades/Mods/Aura/", "/Lotus/Types/Game/MissionBuffs/")
+                .replace("AuraMod", "Buff");
+        }
+    }
+
     for (const category of equipmentKeys) {
         for (const item of inventoryResponse[category]) {
             for (const config of item.Configs) {
@@ -1015,12 +1063,41 @@ export const getInventoryResponse = async (
         "/Lotus/Upgrades/Modules/OrokinWarframeModule",
         "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod"
     ];
+
+    // for some reason they didn't shipped artifacts with U5.1
     if (version_compare(buildLabel, gameToBuildVersion["5.2.0"]) >= 0) {
         allowedMods.push("/Lotus/Upgrades/Modules/TennoSwordModule");
+        const oldMissionBuffs = [
+            "/Lotus/Types/Game/MissionBuffs/EnemyArmorReductionBuff",
+            "/Lotus/Types/Game/MissionBuffs/EnemyShieldReductionBuff",
+            "/Lotus/Types/Game/MissionBuffs/InfestationSpeedReductionBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerElectricityImmunityBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerFireImmunityBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerFreezeImmunityBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerLaserImmunityBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerPoisonImmunityBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerEnemyRadarBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerLootRadarBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerEnergyRegenBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerHealthBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerHealthRegenBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerMeleeBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerPistolAmmoBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerPistolDamageBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerRifleAmmoBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerRifleDamageBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerShellAmmoBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerShellDamageBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerSniperAmmoBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerSniperDamageBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerSprintBuff",
+            "/Lotus/Types/Game/MissionBuffs/PlayerXPBuff",
+            "/Lotus/Types/Game/MissionBuffs/RobotPoorAimBuff"
+        ];
+        inventoryResponse.Cards = inventoryResponse.Upgrades.filter(c => oldMissionBuffs.includes(c.ItemType));
     }
-    inventoryResponse.RawUpgrades = inventoryResponse.RawUpgrades.filter(x => allowedMods.includes(x.ItemType));
+
     inventoryResponse.Upgrades = inventoryResponse.Upgrades.filter(x => allowedMods.includes(x.ItemType));
-    inventoryResponse.Cards = [];
     inventoryResponse.Missions = inventoryResponse.Missions.filter(m => {
         if (!m.Tag.startsWith("SolNode")) return false;
         const n = Number.parseInt(m.Tag.slice(7), 10);

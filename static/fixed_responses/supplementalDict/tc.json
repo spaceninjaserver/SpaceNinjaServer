@@ -1,0 +1,12 @@
+{
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffName": "電擊抗性",
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffDesc": "減少<DT_ELECTRICITY_COLOR>電擊抗害。",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffName": "火焰抗性",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffDesc": "減少<DT_FIRE_COLOR>火焰傷害。",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffName": "冰凍抗性",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffDesc": "減少<DT_FREEZE_COLOR>冰凍傷害。",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffName": "雷射偏折",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffDesc": "減少<DT_RADIATION_COLOR>輻射傷害。",
+  "/Lotus/Language/Items/PlayerXPBuffName": "經驗增幅",
+  "/Lotus/Language/Items/PlayerXPBuffDesc": "增加殺敵獲取的經驗值"
+}

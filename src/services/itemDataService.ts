@@ -10,6 +10,7 @@ import type {
     IRecipe,
     IRegion,
     ISyndicate,
+    IUpgrade,
     TMissionDeck,
     TRarity,
     TReward
@@ -48,9 +49,25 @@ import {
     ExportRewards,
     ExportSentinels,
     ExportSyndicates,
+    ExportUpgrades,
     ExportWarframes,
     ExportWeapons
 } from "warframe-public-export-plus";
+import dict_en_supp from "../../static/fixed_responses/supplementalDict/en.json" with { type: "json" };
+import dict_de_supp from "../../static/fixed_responses/supplementalDict/de.json" with { type: "json" };
+import dict_es_supp from "../../static/fixed_responses/supplementalDict/es.json" with { type: "json" };
+import dict_fr_supp from "../../static/fixed_responses/supplementalDict/fr.json" with { type: "json" };
+import dict_it_supp from "../../static/fixed_responses/supplementalDict/it.json" with { type: "json" };
+import dict_ja_supp from "../../static/fixed_responses/supplementalDict/ja.json" with { type: "json" };
+import dict_ko_supp from "../../static/fixed_responses/supplementalDict/ko.json" with { type: "json" };
+import dict_pl_supp from "../../static/fixed_responses/supplementalDict/pl.json" with { type: "json" };
+import dict_pt_supp from "../../static/fixed_responses/supplementalDict/pt.json" with { type: "json" };
+import dict_ru_supp from "../../static/fixed_responses/supplementalDict/ru.json" with { type: "json" };
+import dict_tc_supp from "../../static/fixed_responses/supplementalDict/tc.json" with { type: "json" };
+import dict_th_supp from "../../static/fixed_responses/supplementalDict/th.json" with { type: "json" };
+import dict_tr_supp from "../../static/fixed_responses/supplementalDict/tr.json" with { type: "json" };
+import dict_uk_supp from "../../static/fixed_responses/supplementalDict/uk.json" with { type: "json" };
+import dict_zh_supp from "../../static/fixed_responses/supplementalDict/zh.json" with { type: "json" };
 import type { IMessage } from "../types/inboxTypes.ts";
 import { logger } from "../utils/logger.ts";
 import { version_compare } from "../helpers/inventoryHelpers.ts";
@@ -1153,6 +1170,89 @@ export const supplementalSuits: Record<string, IPowersuit> = {
     }
 };
 
+export const supplementalUpgrades: Record<string, IUpgrade> = {
+    // removed in 2017.03.06.29.02.13
+    "/Lotus/Upgrades/Mods/Aura/PlayerElectricityImmunityAuraMod": {
+        name: "/Lotus/Language/Items/PlayerElectricityImmunityBuffName",
+        icon: "/Lotus/Interface/Cards/Images/MissionBuffs/PlayerElectricityImmunityBuff.png",
+        polarity: "AP_ANY", // it should be none
+        rarity: "UNCOMMON",
+        codexSecret: true,
+        baseDrain: -2,
+        fusionLimit: 5,
+        compat: "/Lotus/Types/Game/PowerSuits/PlayerPowerSuit",
+        compatName: "AURA",
+        type: "AURA",
+        description: "/Lotus/Language/Items/PlayerElectricityImmunityBuffDesc",
+        isFrivolous: true,
+        tradable: false
+    },
+    // removed in 2017.03.06.29.02.13
+    "/Lotus/Upgrades/Mods/Aura/PlayerFireImmunityAuraMod": {
+        name: "/Lotus/Language/Items/PlayerFireImmunityBuffName",
+        icon: "/Lotus/Interface/Cards/Images/MissionBuffs/PlayerFireImmunityBuff.png",
+        polarity: "AP_ANY", // it should be none
+        rarity: "UNCOMMON",
+        codexSecret: true,
+        baseDrain: -2,
+        fusionLimit: 5,
+        compat: "/Lotus/Types/Game/PowerSuits/PlayerPowerSuit",
+        compatName: "AURA",
+        type: "AURA",
+        description: "/Lotus/Language/Items/PlayerFireImmunityBuffDesc",
+        isFrivolous: true,
+        tradable: false
+    },
+    // removed in 2017.03.06.29.02.13
+    "/Lotus/Upgrades/Mods/Aura/PlayerFreezeImmunityAuraMod": {
+        name: "/Lotus/Language/Items/PlayerFreezeImmunityBuffName",
+        icon: "/Lotus/Interface/Cards/Images/MissionBuffs/PlayerFreezeImmunityBuff.png",
+        polarity: "AP_ANY", // it should be none
+        rarity: "UNCOMMON",
+        codexSecret: true,
+        baseDrain: -2,
+        fusionLimit: 5,
+        compat: "/Lotus/Types/Game/PowerSuits/PlayerPowerSuit",
+        compatName: "AURA",
+        type: "AURA",
+        description: "/Lotus/Language/Items/PlayerFreezeImmunityBuffDesc",
+        isFrivolous: true,
+        tradable: false
+    },
+    // removed in 2017.03.06.29.02.13
+    "/Lotus/Upgrades/Mods/Aura/PlayerLaserImmunityAuraMod": {
+        name: "/Lotus/Language/Items/PlayerLaserImmunityBuffName",
+        icon: "/Lotus/Interface/Cards/Images/MissionBuffs/PlayerLaserImmunityBuff.png",
+        polarity: "AP_ANY", // it should be none
+        rarity: "UNCOMMON",
+        codexSecret: true,
+        baseDrain: -2,
+        fusionLimit: 5,
+        compat: "/Lotus/Types/Game/PowerSuits/PlayerPowerSuit",
+        compatName: "AURA",
+        type: "AURA",
+        description: "/Lotus/Language/Items/PlayerLaserImmunityBuffDesc",
+        isFrivolous: true,
+        tradable: false
+    },
+    // removed in 2015.12.05.18.07
+    "/Lotus/Upgrades/Mods/Aura/PlayerXPAuraMod": {
+        name: "/Lotus/Language/Items/PlayerXPBuffName",
+        icon: "/Lotus/Interface/Cards/Images/MissionBuffs/PlayerXPBuff.png",
+        polarity: "AP_TACTIC",
+        rarity: "UNCOMMON",
+        codexSecret: true,
+        baseDrain: -2,
+        fusionLimit: 5,
+        compat: "/Lotus/Types/Game/PowerSuits/PlayerPowerSuit",
+        compatName: "AURA",
+        type: "AURA",
+        description: "/Lotus/Language/Items/PlayerXPBuffDesc",
+        isFrivolous: true,
+        tradable: false
+    }
+};
+
 interface IU5FingerprintData {
     fits: { type: string; rarity: TRarity; statAtten?: number }[];
     upgrades: IU5FingerprintUpgrade[];
@@ -2077,7 +2177,7 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
         }
     } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/HuntingBowBlueprint") {
         // There was an undocumented change to this recipe's ingredients sometime between 8.3.0 and 9.1.2...
-        if (version_compare(buildLabel, "2013.07.15.20.46") < 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["9.1.2"]) < 0) {
             data = {
                 ...data,
                 ingredients: [
@@ -2312,38 +2412,26 @@ export const getItemName = (uniqueName: string): string | undefined => {
     return undefined;
 };
 
+const dicts: Record<string, Record<string, string>> = {
+    de: { ...dict_de, ...dict_de_supp },
+    es: { ...dict_es, ...dict_es_supp },
+    fr: { ...dict_fr, ...dict_fr_supp },
+    it: { ...dict_it, ...dict_it_supp },
+    ja: { ...dict_ja, ...dict_ja_supp },
+    ko: { ...dict_ko, ...dict_ko_supp },
+    pl: { ...dict_pl, ...dict_pl_supp },
+    pt: { ...dict_pt, ...dict_pt_supp },
+    ru: { ...dict_ru, ...dict_ru_supp },
+    tc: { ...dict_tc, ...dict_tc_supp },
+    th: { ...dict_th, ...dict_th_supp },
+    tr: { ...dict_tr, ...dict_tr_supp },
+    uk: { ...dict_uk, ...dict_uk_supp },
+    zh: { ...dict_zh, ...dict_zh_supp },
+    en: { ...dict_en, ...dict_en_supp }
+} as const;
+
 export const getDict = (lang: string): Record<string, string> => {
-    switch (lang) {
-        case "de":
-            return dict_de;
-        case "es":
-            return dict_es;
-        case "fr":
-            return dict_fr;
-        case "it":
-            return dict_it;
-        case "ja":
-            return dict_ja;
-        case "ko":
-            return dict_ko;
-        case "pl":
-            return dict_pl;
-        case "pt":
-            return dict_pt;
-        case "ru":
-            return dict_ru;
-        case "tc":
-            return dict_tc;
-        case "th":
-            return dict_th;
-        case "tr":
-            return dict_tr;
-        case "uk":
-            return dict_uk;
-        case "zh":
-            return dict_zh;
-    }
-    return dict_en;
+    return dicts[lang] ?? dicts.en;
 };
 
 export const getString = (key: string, dict: Record<string, string>): string => {
@@ -3133,4 +3221,8 @@ export const getShipDecoByNameTag = (name: string): string => {
         }
     }
     throw new Error(`No ship deco with name tag ${name}`);
+};
+
+export const getUpgrade = (uniqueName: string): IUpgrade | undefined => {
+    return ExportUpgrades[uniqueName] ?? supplementalUpgrades[uniqueName];
 };

@@ -1,0 +1,12 @@
+{
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffName": "Electrical Resistance",
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffDesc": "<DT_ELECTRICITY_COLOR>電気ダメージを減少させる。",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffName": "Fire Resistance",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffDesc": "<DT_FIRE_COLOR>火炎ダメージを減少させる。",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffName": "Frost Insulation",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffDesc": "<DT_FREEZE_COLOR>冷気ダメージを減少させる。",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffName": "Laser Deflection",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffDesc": "<DT_RADIATION_COLOR>放射線ダメージを減少させる。",
+  "/Lotus/Language/Items/PlayerXPBuffName": "Affinity Amp",
+  "/Lotus/Language/Items/PlayerXPBuffDesc": "キル時に得られるアフィニティの量が増加"
+}

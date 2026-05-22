@@ -1,0 +1,12 @@
+{
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffName": "Сопротивление электричеству",
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffDesc": "Снижен получаемый урон <DT_ELECTRICITY_COLOR>электричеством.",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffName": "Сопротивление огню",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffDesc": "Снижен получаемый урон <DT_FIRE_COLOR>огнём.",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffName": "Сопротивление холоду",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffDesc": "Снижен получаемый урон <DT_FREEZE_COLOR>холодом.",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffName": "Отклонение лазера",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffDesc": "Снижен получаемый от <DT_RADIATION_COLOR>радиации урон.",
+  "/Lotus/Language/Items/PlayerXPBuffName": "Усилитель: Синтез",
+  "/Lotus/Language/Items/PlayerXPBuffDesc": "Больше синтеза за убийства"
+}

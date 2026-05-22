@@ -1,0 +1,12 @@
+{
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffName": "Electrical Resistance",
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffDesc": "Danno <DT_ELECTRICITY_COLOR>Elettricità ridotto.",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffName": "Fire Resistance",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffDesc": "Danno <DT_FIRE_COLOR>Fuoco ridotto.",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffName": "Frost Insulation",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffDesc": "Danno <DT_FREEZE_COLOR>Ghiaccio ridotto.",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffName": "Laser Deflection",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffDesc": "Danno <DT_RADIATION_COLOR>Radiazione ridotto.",
+  "/Lotus/Language/Items/PlayerXPBuffName": "Affinity Amp",
+  "/Lotus/Language/Items/PlayerXPBuffDesc": "Affinità da uccisione aumentata"
+}

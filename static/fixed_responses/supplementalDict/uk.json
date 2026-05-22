@@ -1,0 +1,12 @@
+{
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffName": "Електростійкість",
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffDesc": "Зменшує отримувану <DT_ELECTRICITY_COLOR>електричну шкоду.",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffName": "Вогнетривкість",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffDesc": "Зменшує отримувану <DT_FIRE_COLOR>термічну шкоду.",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffName": "Теплоізоляція",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffDesc": "Зменшує отримувану <DT_FREEZE_COLOR>крижану шкоду.",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffName": "Лазерний відсвіт",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffDesc": "Зменшена <DT_RADIATION_COLOR>радіаційна шкода.",
+  "/Lotus/Language/Items/PlayerXPBuffName": "Підсилювач єдності",
+  "/Lotus/Language/Items/PlayerXPBuffDesc": "Посилює отримувану єдність від убивств ворогів."
+}

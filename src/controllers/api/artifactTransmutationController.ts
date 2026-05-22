@@ -7,6 +7,7 @@ import {
     getInventory2,
     updateCredits
 } from "../../services/inventoryService.ts";
+import { getUpgrade } from "../../services/itemDataService.ts";
 import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { getRandomElement, getRandomWeightedRewardUc } from "../../services/rngService.ts";
 import type { IUpgradeFromClient } from "../../types/inventoryTypes/inventoryTypes.ts";
@@ -78,7 +79,7 @@ export const artifactTransmutationController: RequestHandler = async (req, res) 
         let forcedPolarity: string | undefined;
         payload.Consumed.forEach(upgrade => {
             upgrade.ItemCount ??= 1;
-            const meta = ExportUpgrades[upgrade.ItemType];
+            const meta = getUpgrade(upgrade.ItemType)!;
             counts[meta.rarity] += upgrade.ItemCount;
             if (fromOid(upgrade.ItemId) != "" && fromOid(upgrade.ItemId) != "000000000000000000000000") {
                 inventory.Upgrades.pull({ _id: fromOid(upgrade.ItemId) });

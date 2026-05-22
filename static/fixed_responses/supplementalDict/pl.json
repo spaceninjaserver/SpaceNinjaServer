@@ -1,0 +1,12 @@
+{
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffName": "Opór Elektryczny",
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffDesc": "Zmniejszone Obrażenia od <DT_ELECTRICITY_COLOR>Elektryczności.",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffName": "Odporność na ogień",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffDesc": "Zmniejszone <DT_FIRE_COLOR>Obrażenia od Ognia.",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffName": "Izolacja od odmrożeń",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffDesc": "Zmniejszone <DT_FREEZE_COLOR>Obrażenia od Zimna.",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffName": "Odbicie Laserów",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffDesc": "Zmniejszone <DT_RADIATION_COLOR>Obrażenia Radiacyjne.",
+  "/Lotus/Language/Items/PlayerXPBuffName": "Amplituda Biegłości",
+  "/Lotus/Language/Items/PlayerXPBuffDesc": "Zwiększona biegłość za zabójstwa"
+}

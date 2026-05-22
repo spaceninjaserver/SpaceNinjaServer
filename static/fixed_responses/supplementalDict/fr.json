@@ -1,0 +1,12 @@
+{
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffName": "Résistance Électrique",
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffDesc": "Dégâts <DT_ELECTRICITY_COLOR>Électriques réduits.",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffName": "Résistance au Feu",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffDesc": "Dégâts de <DT_FIRE_COLOR>Feu réduits.",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffName": "Isolation au Froid",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffDesc": "Dégâts de <DT_FREEZE_COLOR>Glace réduits.",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffName": "Déviation Laser",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffDesc": "Dégâts de <DT_RADIATION_COLOR>Radiations réduits.",
+  "/Lotus/Language/Items/PlayerXPBuffName": "Affinité amplifiée",
+  "/Lotus/Language/Items/PlayerXPBuffDesc": "L'Affinité venant des éliminations augmente"
+}

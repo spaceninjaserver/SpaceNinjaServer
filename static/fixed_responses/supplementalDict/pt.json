@@ -1,0 +1,12 @@
+{
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffName": "Electrical Resistance",
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffDesc": "Reduzirá o Dano <DT_ELECTRICITY_COLOR>Elétrico recebido.",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffName": "Heat Resistance",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffDesc": "Reduzirá o Dano <DT_FIRE_COLOR>Ígneo recebido.",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffName": "Frost Insulation",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffDesc": "Reduzirá o Dano <DT_FREEZE_COLOR>Glacial recebido.",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffName": "Laser Deflection",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffDesc": "Reduzirá o Dano <DT_RADIATION_COLOR>Radioativo recebido.",
+  "/Lotus/Language/Items/PlayerXPBuffName": "Affinity Amp",
+  "/Lotus/Language/Items/PlayerXPBuffDesc": "Afinidade recebida por eliminações é aumentada."
+}

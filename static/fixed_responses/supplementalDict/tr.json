@@ -1,0 +1,12 @@
+{
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffName": "Electrical Resistance",
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffDesc": "Azaltılmış <DT_ELECTRICITY_COLOR>Elektrik Hasarı.",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffName": "Heat Resistance",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffDesc": "Azaltılmış <DT_FIRE_COLOR>Ateş Hasarı.",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffName": "Frost Insulation",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffDesc": "Azaltılmış <DT_FREEZE_COLOR>Buz Hasarı.",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffName": "Laser Deflection",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffDesc": "Azaltılmış <DT_RADIATION_COLOR>Radyasyon Hasarı.",
+  "/Lotus/Language/Items/PlayerXPBuffName": "Affinity Amp",
+  "/Lotus/Language/Items/PlayerXPBuffDesc": "Öldürdüklerinizden gelen Tecrübe miktarı artar"
+}

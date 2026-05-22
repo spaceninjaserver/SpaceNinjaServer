@@ -1,0 +1,12 @@
+{
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffName": "일렉트릭 레지스턴스",
+  "/Lotus/Language/Items/PlayerElectricityImmunityBuffDesc": "<DT_ELECTRICITY_COLOR>전기 피해가 감소합니다.",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffName": "파이어 레지스턴스",
+  "/Lotus/Language/Items/PlayerFireImmunityBuffDesc": "<DT_FIRE_COLOR>화염 피해가 감소합니다.",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffName": "프로스트 인설레이션",
+  "/Lotus/Language/Items/PlayerFreezeImmunityBuffDesc": "<DT_FREEZE_COLOR>냉기 피해가 감소합니다.",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffName": "레이저 디플렉션",
+  "/Lotus/Language/Items/PlayerLaserImmunityBuffDesc": "<DT_RADIATION_COLOR>방사능 피해가 감소합니다.",
+  "/Lotus/Language/Items/PlayerXPBuffName": "어피너티 앰프",
+  "/Lotus/Language/Items/PlayerXPBuffDesc": "적 처치 시 획득하는 숙련도를 증가시킵니다."
+}
