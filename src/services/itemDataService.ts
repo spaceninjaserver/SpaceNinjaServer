@@ -2200,6 +2200,27 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
                 ]
             };
         }
+    } else if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/ExcaliburBlueprint") {
+        if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) < 0) {
+            data = {
+                ...data,
+                buildTime: 259200
+            };
+        }
+    } else if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/MagBlueprint") {
+        if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) < 0) {
+            data = {
+                ...data,
+                buildTime: 259200
+            };
+        }
+    } else if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/VOLTBlueprint") {
+        if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) < 0) {
+            data = {
+                ...data,
+                buildTime: 259200
+            };
+        }
     }
 
     if (uniqueName.startsWith("/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/")) {
