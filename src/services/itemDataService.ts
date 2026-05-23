@@ -1253,6 +1253,220 @@ export const supplementalUpgrades: Record<string, IUpgrade> = {
     }
 };
 
+export const supplementalKeys: Record<string, IKey> = {
+    "/Lotus/Types/Keys/RaidKeys/Raid01Stage01KeyItem": {
+        name: "/Lotus/Language/Items/GrineerTrialsName",
+        description: "/Lotus/Language/Items/GrineerTrialsDesc",
+        icon: "/Lotus/Interface/Quests/GrineerRaidKeyChain.png",
+        parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
+        codexSecret: true,
+        mission: {
+            minEnemyLevel: 70,
+            maxEnemyLevel: 80
+        }
+    },
+    "/Lotus/Types/Keys/RaidKeys/Raid01Stage01NightmareKeyItem": {
+        name: "/Lotus/Language/Items/GrineerTrialsName",
+        description: "/Lotus/Language/Items/GrineerTrialsDesc",
+        icon: "/Lotus/Interface/Quests/GrineerRaidKeyChain.png",
+        parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
+        codexSecret: true,
+        mission: {
+            minEnemyLevel: 70,
+            maxEnemyLevel: 80
+        }
+    },
+    "/Lotus/Types/Keys/RaidKeys/Raid01Stage02KeyItem": {
+        name: "/Lotus/Language/Items/GrineerTrialsName",
+        description: "/Lotus/Language/Items/GrineerTrialsDesc",
+        icon: "/Lotus/Interface/Quests/GrineerRaidKeyChain.png",
+        parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
+        codexSecret: true,
+        mission: {
+            minEnemyLevel: 80,
+            maxEnemyLevel: 90
+        }
+    },
+    "/Lotus/Types/Keys/RaidKeys/Raid01Stage02NightmareKeyItem": {
+        name: "/Lotus/Language/Items/GrineerTrialsName",
+        description: "/Lotus/Language/Items/GrineerTrialsDesc",
+        icon: "/Lotus/Interface/Quests/GrineerRaidKeyChain.png",
+        parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
+        codexSecret: true,
+        mission: {
+            minEnemyLevel: 80,
+            maxEnemyLevel: 90
+        }
+    },
+    "/Lotus/Types/Keys/RaidKeys/Raid01Stage03KeyItem": {
+        name: "/Lotus/Language/Items/GrineerTrialsName",
+        description: "/Lotus/Language/Items/GrineerTrialsDesc",
+        icon: "/Lotus/Interface/Quests/GrineerRaidKeyChain.png",
+        parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
+        codexSecret: true,
+        missionReward: {
+            credits: 200000,
+            droptable: "/Lotus/Types/Game/MissionDecks/RaidRewards/HekRaid"
+        },
+        mission: {
+            minEnemyLevel: 80,
+            maxEnemyLevel: 100
+        }
+    },
+    "/Lotus/Types/Keys/RaidKeys/Raid01Stage03NightmareKeyItem": {
+        name: "/Lotus/Language/Items/GrineerNightmareTrialsName",
+        description: "/Lotus/Language/Items/GrineerTrialsDesc",
+        icon: "/Lotus/Interface/Quests/GrineerRaidKeyChain.png",
+        parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
+        codexSecret: true,
+        missionReward: {
+            credits: 250000,
+            droptable: "/Lotus/Types/Game/MissionDecks/RaidRewards/NightmareHekRaid"
+        },
+        mission: {
+            minEnemyLevel: 80,
+            maxEnemyLevel: 100
+        }
+    },
+    "/Lotus/Types/Keys/RaidKeys/RaidGolemStage01KeyItem": {
+        name: "/Lotus/Language/Items/GolemTrialsName",
+        description: "/Lotus/Language/Items/GolemTrialsDesc",
+        icon: "/Lotus/Interface/Icons/Store/GolemRaidKey.png",
+        parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
+        codexSecret: true,
+        mission: {
+            minEnemyLevel: 86,
+            maxEnemyLevel: 88
+        }
+    },
+    "/Lotus/Types/Keys/RaidKeys/RaidGolemStage02KeyItem": {
+        name: "/Lotus/Language/Items/GolemTrialsName",
+        description: "/Lotus/Language/Items/GolemTrialsDesc",
+        icon: "/Lotus/Interface/Icons/Store/GolemRaidKey.png",
+        parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
+        codexSecret: true,
+        mission: {
+            minEnemyLevel: 88,
+            maxEnemyLevel: 92
+        }
+    },
+    "/Lotus/Types/Keys/RaidKeys/RaidGolemStage03KeyItem": {
+        name: "/Lotus/Language/Items/GolemTrialsName",
+        description: "/Lotus/Language/Items/GolemTrialsDesc",
+        icon: "/Lotus/Interface/Icons/Store/GolemRaidKey.png",
+        parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
+        codexSecret: true,
+        missionReward: {
+            credits: 300000,
+            items: ["/Lotus/StoreItems/Upgrades/Mods/FusionBundles/RareFusionBundle"],
+            droptable: "/Lotus/Types/Game/MissionDecks/RaidRewards/GolemRaid"
+        },
+        mission: {
+            minEnemyLevel: 92,
+            maxEnemyLevel: 97
+        }
+    },
+    "/Lotus/Types/Keys/DerelictGolemKey": {
+        name: "/Lotus/Language/Items/OrokinDerelictBossKey",
+        description: "/Lotus/Language/Items/OrokinDerelictBossKeyDesc",
+        icon: "/Lotus/Interface/Icons/Store/OrokinDerelictKey.png",
+        parentName: "/Lotus/Types/Game/KeyItems/DerelictKeyItem",
+        codexSecret: false,
+        missionReward: {
+            credits: 7500,
+            droptable: "/Lotus/Types/Game/MissionDecks/GolemMissionRewards"
+        },
+        mission: {
+            minEnemyLevel: 25,
+            maxEnemyLevel: 35
+        }
+    },
+    "/Lotus/Types/Keys/DerelictSabotageKey": {
+        name: "/Lotus/Language/Items/OrokinDerelictSabotageKey",
+        description: "/Lotus/Language/Items/OrokinDerelictSabotageKeyDesc",
+        icon: "/Lotus/Interface/Icons/Store/OrokinDerelictKey.png",
+        parentName: "/Lotus/Types/Game/KeyItems/DerelictKeyItem",
+        codexSecret: false,
+        cacheRewardManifest: "/Lotus/Types/Game/MissionDecks/OrokinDerelictSabotageRewards",
+        mission: {
+            minEnemyLevel: 25,
+            maxEnemyLevel: 35
+        }
+    },
+    "/Lotus/Types/Keys/DerelictCaptureKey": {
+        name: "/Lotus/Language/Items/OrokinDerelictCaptureKey",
+        description: "/Lotus/Language/Items/OrokinDerelictCaptureKeyDesc",
+        icon: "/Lotus/Interface/Icons/Store/OrokinDerelictKey.png",
+        parentName: "/Lotus/Types/Game/KeyItems/DerelictKeyItem",
+        codexSecret: false,
+        mission: {
+            minEnemyLevel: 25,
+            maxEnemyLevel: 35
+        }
+    },
+    "/Lotus/Types/Keys/DerelictDefenseKey": {
+        name: "/Lotus/Language/Items/OrokinDerelictDefenseKey",
+        description: "/Lotus/Language/Items/OrokinDerelictDefenseKeyDesc",
+        icon: "/Lotus/Interface/Icons/Store/OrokinDerelictKey.png",
+        parentName: "/Lotus/Types/Game/KeyItems/DerelictKeyItem",
+        codexSecret: false,
+        missionReward: {
+            droptable: "/Lotus/Types/Game/MissionDecks/DerelictDefenseRewards"
+        },
+        mission: {
+            minEnemyLevel: 25,
+            maxEnemyLevel: 30
+        }
+    },
+    "/Lotus/Types/Keys/DerelictEmissaryBossKey": {
+        name: "/Lotus/Language/Items/OrokinDerelictEmissaryBossKey",
+        description: "/Lotus/Language/Items/OrokinDerelictBossKeyDesc",
+        icon: "/Lotus/Interface/Icons/Store/OrokinDerelictKey.png",
+        parentName: "/Lotus/Types/Game/KeyItems/DerelictKeyItem",
+        codexSecret: false,
+        missionReward: {
+            credits: 7500
+        },
+        mission: {
+            minEnemyLevel: 30,
+            maxEnemyLevel: 35
+        }
+    },
+    "/Lotus/Types/Keys/DerelictExterminateKey": {
+        name: "/Lotus/Language/Items/OrokinDerelictExterminateKey",
+        description: "/Lotus/Language/Items/OrokinDerelictExterminateKeyDesc",
+        icon: "/Lotus/Interface/Icons/Store/OrokinDerelictKey.png",
+        parentName: "/Lotus/Types/Game/KeyItems/DerelictKeyItem",
+        codexSecret: false,
+        mission: {
+            minEnemyLevel: 25,
+            maxEnemyLevel: 35
+        }
+    },
+    "/Lotus/Types/Keys/DerelictMobileDefenseKey": {
+        name: "/Lotus/Language/Items/OrokinDerelictMobDefKey",
+        description: "/Lotus/Language/Items/OrokinDerelictMobDefKeyDesc",
+        icon: "/Lotus/Interface/Icons/Store/OrokinDerelictKey.png",
+        parentName: "/Lotus/Types/Game/KeyItems/DerelictKeyItem",
+        codexSecret: false,
+        mission: {
+            minEnemyLevel: 25,
+            maxEnemyLevel: 35
+        }
+    },
+    "/Lotus/Types/Keys/DerelictSurvivalKey": {
+        name: "/Lotus/Language/Items/OrokinDerelictSurvivalKey",
+        description: "/Lotus/Language/Items/OrokinDerelictSurvivalKeyDesc",
+        icon: "/Lotus/Interface/Icons/Store/OrokinDerelictKey.png",
+        parentName: "/Lotus/Types/Game/KeyItems/DerelictKeyItem",
+        codexSecret: false,
+        mission: {
+            minEnemyLevel: 25,
+            maxEnemyLevel: 35
+        }
+    }
+};
+
 interface IU5FingerprintData {
     fits: { type: string; rarity: TRarity; statAtten?: number }[];
     upgrades: IU5FingerprintUpgrade[];
@@ -2430,6 +2644,9 @@ export const getItemName = (uniqueName: string): string | undefined => {
     if (uniqueName in ExportDojoRecipes.decos) {
         return ExportDojoRecipes.decos[uniqueName].name;
     }
+    if (uniqueName == "/Lotus/Types/Game/SolarRails/BasicSolarRail") {
+        return "/Lotus/Language/Items/BasicSolarRailName";
+    }
     return undefined;
 };
 
@@ -2827,151 +3044,7 @@ export const getBoosterPack = async (
 };
 
 export const getKey = (uniqueName: string, buildLabel: string = BL_LATEST): IKey | undefined => {
-    if (
-        uniqueName == "/Lotus/Types/Keys/RaidKeys/Raid01Stage01KeyItem" ||
-        uniqueName == "/Lotus/Types/Keys/RaidKeys/Raid01Stage01NightmareKeyItem"
-    ) {
-        return {
-            name: "/Lotus/Language/Items/GrineerTrialsName",
-            description: "/Lotus/Language/Items/GrineerTrialsDesc",
-            icon: "/Lotus/Interface/Quests/GrineerRaidKeyChain.png",
-            parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
-            codexSecret: true,
-            mission: {
-                minEnemyLevel: 70,
-                maxEnemyLevel: 80
-            }
-        };
-    } else if (
-        uniqueName == "/Lotus/Types/Keys/RaidKeys/Raid01Stage02KeyItem" ||
-        uniqueName == "/Lotus/Types/Keys/RaidKeys/Raid01Stage02NightmareKeyItem"
-    ) {
-        return {
-            name: "/Lotus/Language/Items/GrineerTrialsName",
-            description: "/Lotus/Language/Items/GrineerTrialsDesc",
-            icon: "/Lotus/Interface/Quests/GrineerRaidKeyChain.png",
-            parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
-            codexSecret: true,
-            mission: {
-                minEnemyLevel: 80,
-                maxEnemyLevel: 90
-            }
-        };
-    } else if (uniqueName == "/Lotus/Types/Keys/RaidKeys/Raid01Stage03KeyItem") {
-        return {
-            name: "/Lotus/Language/Items/GrineerTrialsName",
-            description: "/Lotus/Language/Items/GrineerTrialsDesc",
-            icon: "/Lotus/Interface/Quests/GrineerRaidKeyChain.png",
-            parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
-            codexSecret: true,
-            missionReward: {
-                credits: 200000,
-                droptable: "/Lotus/Types/Game/MissionDecks/RaidRewards/HekRaid"
-            },
-            mission: {
-                minEnemyLevel: 80,
-                maxEnemyLevel: 100
-            }
-        };
-    } else if (uniqueName == "/Lotus/Types/Keys/RaidKeys/Raid01Stage03NightmareKeyItem") {
-        return {
-            name: "/Lotus/Language/Items/GrineerNightmareTrialsName",
-            description: "/Lotus/Language/Items/GrineerTrialsDesc",
-            icon: "/Lotus/Interface/Quests/GrineerRaidKeyChain.png",
-            parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
-            codexSecret: true,
-            missionReward: {
-                credits: 250000,
-                droptable: "/Lotus/Types/Game/MissionDecks/RaidRewards/NightmareHekRaid"
-            },
-            mission: {
-                minEnemyLevel: 80,
-                maxEnemyLevel: 100
-            }
-        };
-    } else if (uniqueName == "/Lotus/Types/Keys/RaidKeys/RaidGolemStage01KeyItem") {
-        return {
-            name: "/Lotus/Language/Items/GolemTrialsName",
-            description: "/Lotus/Language/Items/GolemTrialsDesc",
-            icon: "/Lotus/Interface/Icons/Store/GolemRaidKey.png",
-            parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
-            codexSecret: true,
-            mission: {
-                minEnemyLevel: 86,
-                maxEnemyLevel: 88
-            }
-        };
-    } else if (uniqueName == "/Lotus/Types/Keys/RaidKeys/RaidGolemStage02KeyItem") {
-        return {
-            name: "/Lotus/Language/Items/GolemTrialsName",
-            description: "/Lotus/Language/Items/GolemTrialsDesc",
-            icon: "/Lotus/Interface/Icons/Store/GolemRaidKey.png",
-            parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
-            codexSecret: true,
-            mission: {
-                minEnemyLevel: 88,
-                maxEnemyLevel: 92
-            }
-        };
-    } else if (uniqueName == "/Lotus/Types/Keys/RaidKeys/RaidGolemStage03KeyItem") {
-        return {
-            name: "/Lotus/Language/Items/GolemTrialsName",
-            description: "/Lotus/Language/Items/GolemTrialsDesc",
-            icon: "/Lotus/Interface/Icons/Store/GolemRaidKey.png",
-            parentName: "/Lotus/Types/Keys/RaidKeys/BaseRaidKey",
-            codexSecret: true,
-            missionReward: {
-                credits: 300000,
-                items: ["/Lotus/StoreItems/Upgrades/Mods/FusionBundles/RareFusionBundle"],
-                droptable: "/Lotus/Types/Game/MissionDecks/RaidRewards/GolemRaid"
-            },
-            mission: {
-                minEnemyLevel: 92,
-                maxEnemyLevel: 97
-            }
-        };
-    } else if (uniqueName == "/Lotus/Types/Keys/DerelictGolemKey") {
-        return {
-            name: "/Lotus/Language/Items/OrokinDerelictBossKey",
-            description: "/Lotus/Language/Items/OrokinDerelictBossKeyDesc",
-            icon: "/Lotus/Interface/Icons/Store/OrokinDerelictKey.png",
-            parentName: "/Lotus/Types/Game/KeyItems/DerelictKeyItem",
-            codexSecret: false,
-            missionReward: {
-                credits: 7500,
-                droptable: "/Lotus/Types/Game/MissionDecks/GolemMissionRewards"
-            },
-            mission: {
-                minEnemyLevel: 25,
-                maxEnemyLevel: 35
-            }
-        };
-    } else if (uniqueName == "/Lotus/Types/Keys/DerelictSabotageKey") {
-        return {
-            name: "/Lotus/Language/Items/OrokinDerelictSabotageKey",
-            description: "/Lotus/Language/Items/OrokinDerelictSabotageKeyDesc",
-            icon: "/Lotus/Interface/Icons/Store/OrokinDerelictKey.png",
-            parentName: "/Lotus/Types/Game/KeyItems/DerelictKeyItem",
-            codexSecret: false,
-            cacheRewardManifest: "/Lotus/Types/Game/MissionDecks/OrokinDerelictSabotageRewards",
-            mission: {
-                minEnemyLevel: 25,
-                maxEnemyLevel: 35
-            }
-        };
-    } else if (uniqueName.startsWith("/Lotus/Types/Keys/Derelict")) {
-        return {
-            name: "/Lotus/Language/Items/OrokinDerelictCaptureKey",
-            description: "/Lotus/Language/Items/OrokinDerelictCaptureKeyDesc",
-            icon: "/Lotus/Interface/Icons/Store/OrokinDerelictKey.png",
-            parentName: "/Lotus/Types/Game/KeyItems/DerelictKeyItem",
-            codexSecret: false,
-            mission: {
-                minEnemyLevel: 25,
-                maxEnemyLevel: 35
-            }
-        };
-    } else if (uniqueName == "/Lotus/Types/Keys/DragonQuest/DragonQuestKeyChain") {
+    if (uniqueName == "/Lotus/Types/Keys/DragonQuest/DragonQuestKeyChain") {
         // Before U19 (Hotfix: Specters of the Rail 0.12, 2016-07-20), The New Strange gave Chroma component blueprints more directly.
         if (version_compare(buildLabel, "2016.07.20.00.00") < 0) {
             const latestData = ExportKeys[uniqueName];
@@ -3061,7 +3134,7 @@ export const getKey = (uniqueName: string, buildLabel: string = BL_LATEST): IKey
         }
     }
 
-    return ExportKeys[uniqueName];
+    return ExportKeys[uniqueName] ?? supplementalKeys[uniqueName];
 };
 
 export const getMissionDeck = (uniqueName: string): TMissionDeck | undefined => {

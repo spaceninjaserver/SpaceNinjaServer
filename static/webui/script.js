@@ -476,6 +476,11 @@ function updateLocElements() {
             const item = itemMap[key];
             elm.innerHTML = item && item.name ? item.name : key;
         });
+        document.querySelectorAll("[data-loc-itemMap-norm]").forEach(elm => {
+            const key = elm.getAttribute("data-loc-itemMap-norm");
+            const item = itemMap[key];
+            elm.innerHTML = item && item.name ? normalizeText(item.name) : key;
+        });
     });
 }
 
@@ -698,13 +703,26 @@ function fetchItemList() {
             window.archonCrystalUpgrades = data.archonCrystalUpgrades;
 
             data.innateDamages = {
-                InnateElectricityDamage: loc("damageType_Electricity"),
-                InnateFreezeDamage: loc("damageType_Freeze"),
-                InnateHeatDamage: loc("damageType_Fire"),
-                InnateImpactDamage: loc("damageType_Impact"),
-                InnateMagDamage: loc("damageType_Magnetic"),
-                InnateRadDamage: loc("damageType_Radiation"),
-                InnateToxinDamage: loc("damageType_Poison")
+                InnateElectricityDamage: data.AdditionalDict.find(
+                    i => i.uniqueName == "/Lotus/Language/Game/DT_ELECTRICITY_NoIcon"
+                ).name,
+                InnateFreezeDamage: data.AdditionalDict.find(
+                    i => i.uniqueName == "/Lotus/Language/Game/DT_FREEZE_NoIcon"
+                ).name,
+                InnateHeatDamage: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Game/DT_FIRE_NoIcon")
+                    .name,
+                InnateImpactDamage: data.AdditionalDict.find(
+                    i => i.uniqueName == "/Lotus/Language/Game/DT_IMPACT_NoIcon"
+                ).name,
+                InnateMagDamage: data.AdditionalDict.find(
+                    i => i.uniqueName == "/Lotus/Language/Game/DT_MAGNETIC_NoIcon"
+                ).name,
+                InnateRadDamage: data.AdditionalDict.find(
+                    i => i.uniqueName == "/Lotus/Language/Game/DT_RADIATION_NoIcon"
+                ).name,
+                InnateToxinDamage: data.AdditionalDict.find(
+                    i => i.uniqueName == "/Lotus/Language/Game/DT_POISON_NoIcon"
+                ).name
             };
 
             // Add mods missing in data sources
@@ -739,158 +757,99 @@ function fetchItemList() {
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser",
-                    name: loc("code_legendaryCore"),
+                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/LegendaryFusionPart")
+                        .name,
                     fusionLimit: 0
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod",
-                    name: loc("code_traumaticPeculiar")
+                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Mods/PerculiarCyoteMod").name
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Warframe/AvatarStaminaCostMultiplierMod",
-                    name: loc("code_acrobat")
+                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/WarframeModStaminaCost")
+                        .name
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Warframe/AvatarShieldToStaminaMod",
-                    name: loc("code_shieldFlux"),
+                    name: data.AdditionalDict.find(
+                        i => i.uniqueName == "/Lotus/Language/Items/WarframeModShieldToStamina"
+                    ).name,
                     fusionLimit: 3
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Warframe/AvatarStaminaMaxMod",
-                    name: loc("code_marathon")
+                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/WarframeModStaminaMax")
+                        .name
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Warframe/AvatarStaminaRechargeRateMod",
-                    name: loc("code_quickRest")
+                    name: data.AdditionalDict.find(
+                        i => i.uniqueName == "/Lotus/Language/Items/WarframeModStaminaRechargeRate"
+                    ).name
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Melee/WeaponStaminaBonusMod",
-                    name: loc("code_secondWind")
+                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/MeleeModStaminaBonus")
+                        .name
                 }
             );
 
             // Add modular weapons
             data.OperatorAmps.push({
                 uniqueName: "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
-                name: loc("code_amp")
+                name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/OperatorVoidBeam").name
+            });
+            data.OperatorAmps.push({
+                uniqueName:
+                    "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/OperatorTrainingAmpWeapon",
+                name: data.AdditionalDict.find(
+                    i => i.uniqueName == "/Lotus/Language/OstronCrafting/OperatorTrainingAmpName"
+                ).name
             });
             data.Melee.push({
                 uniqueName: "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
-                name: loc("code_zaw")
+                name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/OstronCrafting/Zaw_Singular").name
             });
             data.LongGuns.push({
                 uniqueName: "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
-                name: loc("code_kitgun")
+                name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/SolarisVenus/Kitgun_Singular").name
             });
             data.Pistols.push({
                 uniqueName: "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
-                name: loc("code_kitgun")
+                name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/SolarisVenus/Kitgun_Singular").name
             });
             data.MoaPets ??= [];
             data.MoaPets.push({
                 uniqueName: "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit",
-                name: loc("code_moa")
+                name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/SolarisVenus/MoaPet_Singular").name
             });
             data.MoaPets.push({
                 uniqueName: "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetPowerSuit",
-                name: loc("code_zanuka")
+                name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Pets/ZanukaPetItemName").name
             });
 
             data.miscitems.push(
-                { uniqueName: "/Lotus/Types/Recipes/CosmeticUnenhancerItem", name: loc("code_cosmeticUnenhancer") },
+                {
+                    uniqueName: "/Lotus/Types/Recipes/CosmeticUnenhancerItem",
+                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/CosmeticUnenhancerName")
+                        .name
+                },
                 {
                     uniqueName: "/Lotus/Types/Items/Research/DojoColors/GenericDojoColorPigment",
-                    name: loc("code_pigment")
+                    name: normalizeText(
+                        data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/DojoColorPigment")
+                            .name.replaceAll("|COLOUR_NAME|", "")
+                            .replaceAll(" ", "")
+                    )
                 },
                 {
                     uniqueName: "/Lotus/Types/Items/MiscItems/BossNavCode",
-                    name: loc("code_bossNavCode")
+                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/BossNavCode").name
                 },
                 {
                     uniqueName: "/Lotus/Types/Items/MiscItems/Actuator",
-                    name: loc("code_actuator")
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/RaidKeys/Raid01Stage01KeyItem",
-                    name: loc("code_lawOfRetribution")
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/GrineerRaidKeyBlueprint",
-                    name: data.blueprintAndItem.replace("|ITEM|", loc("code_lawOfRetribution"))
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/RaidKeys/Raid01Stage01NightmareKeyItem",
-                    name: loc("code_lawOfRetributionNm")
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/RaidKeys/Raid01Stage02NightmareKeyItem",
-                    name: loc("code_lawOfRetributionNm")
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/NightmareGrineerRaidKeyBlueprint",
-                    name: data.blueprintAndItem.replace("|ITEM|", loc("code_lawOfRetributionNm"))
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/RaidKeys/RaidGolemStage01KeyItem",
-                    name: loc("code_jordasVerdict")
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/RaidKeys/RaidGolemStage02KeyItem",
-                    name: loc("code_jordasVerdict")
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/RaidKeys/RaidGolemStage03KeyItem",
-                    name: loc("code_jordasVerdict")
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/GolemRaidKeyBlueprint",
-                    name: data.blueprintAndItem.replace("|ITEM|", loc("code_jordasVerdict"))
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/DerelictGolemKey",
-                    name: data.miscitems.find(i => i.uniqueName === "/Lotus/Types/Keys/SortieBossKeyLephantis").name
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/DerelictCaptureKey",
-                    name: loc("code_derelictKey").replace(
-                        "|MISSION_TYPE|",
-                        data.MissionTypes.find(i => i.uniqueName === "MT_CAPTURE").name
-                    )
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/DerelictDefenseKey",
-                    name: loc("code_derelictKey").replace(
-                        "|MISSION_TYPE|",
-                        data.MissionTypes.find(i => i.uniqueName === "MT_DEFENSE").name
-                    )
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/DerelictExterminateKey",
-                    name: loc("code_derelictKey").replace(
-                        "|MISSION_TYPE|",
-                        data.MissionTypes.find(i => i.uniqueName === "MT_EXTERMINATION").name
-                    )
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/DerelictMobileDefenseKey",
-                    name: loc("code_derelictKey").replace(
-                        "|MISSION_TYPE|",
-                        data.MissionTypes.find(i => i.uniqueName === "MT_MOBILE_DEFENSE").name
-                    )
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/DerelictSabotageKey",
-                    name: loc("code_derelictKey").replace(
-                        "|MISSION_TYPE|",
-                        data.MissionTypes.find(i => i.uniqueName === "MT_SABOTAGE").name
-                    )
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/DerelictSurvivalKey",
-                    name: loc("code_derelictKey").replace(
-                        "|MISSION_TYPE|",
-                        data.MissionTypes.find(i => i.uniqueName === "MT_SURVIVAL").name
-                    )
+                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/Actuator").name
                 }
             );
 
@@ -962,12 +921,7 @@ function fetchItemList() {
             data.Boosters ??= [];
             data.Boosters.push({
                 uniqueName: "/Lotus/Types/Boosters/ReviveBooster",
-                name: loc("code_reviveBooster")
-            });
-            data.OperatorAmps.push({
-                uniqueName:
-                    "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/OperatorTrainingAmpWeapon",
-                name: loc("code_moteAmp")
+                name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/ReviveBoosterName").name
             });
 
             const itemMap = {
@@ -978,13 +932,35 @@ function fetchItemList() {
                 "/Lotus/Weapons/Tenno/Rifle/LotusRifle": { name: loc("code_rifle") },
                 "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": { name: loc("code_shotgun") },
                 // Modular weapons
-                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam": { name: loc("code_kitgun") },
-                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryLauncher": { name: loc("code_kitgun") },
-                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryShotgun": { name: loc("code_kitgun") },
-                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimarySniper": { name: loc("code_kitgun") },
-                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam": { name: loc("code_kitgun") },
-                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun": { name: loc("code_kitgun") },
-                "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": { name: loc("code_kDrive") },
+                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam": {
+                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/SolarisVenus/Kitgun_Singular")
+                        .name
+                },
+                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryLauncher": {
+                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/SolarisVenus/Kitgun_Singular")
+                        .name
+                },
+                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryShotgun": {
+                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/SolarisVenus/Kitgun_Singular")
+                        .name
+                },
+                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimarySniper": {
+                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/SolarisVenus/Kitgun_Singular")
+                        .name
+                },
+                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam": {
+                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/SolarisVenus/Kitgun_Singular")
+                        .name
+                },
+                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun": {
+                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/SolarisVenus/Kitgun_Singular")
+                        .name
+                },
+                "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": {
+                    name: data.AdditionalDict.find(
+                        i => i.uniqueName == "/Lotus/Language/Hoverboards/Hoverboard_Singular"
+                    ).name
+                },
                 "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetAPowerSuit": {
                     name: data.ModularParts.find(
                         i => i.uniqueName === "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadA"
@@ -1001,7 +977,7 @@ function fetchItemList() {
                     ).name
                 },
                 "/Lotus/Powersuits/Stalker/Stalker": {
-                    name: loc("code_stalker")
+                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Game/Stalker").name
                 },
                 "/Lotus/Powersuits/Excalibur/DarkExcalibur": {
                     name: loc("code_darkExcalibur").replace(
@@ -1009,33 +985,6 @@ function fetchItemList() {
                         data.Suits.find(i => i.uniqueName === "/Lotus/Powersuits/Excalibur/ExcaliburPrime").name
                     ),
                     exalted: ["/Lotus/Powersuits/Excalibur/DoomSwordCYUmbra"]
-                },
-                "/Lotus/Language/Game/Rank_Creator": {
-                    name: loc("guildView_rank_creator")
-                },
-                "/Lotus/Language/Game/Rank_Warlord": {
-                    name: loc("guildView_rank_warlord")
-                },
-                "/Lotus/Language/Game/Rank_General": {
-                    name: loc("guildView_rank_general")
-                },
-                "/Lotus/Language/Game/Rank_Officer": {
-                    name: loc("guildView_rank_officer")
-                },
-                "/Lotus/Language/Game/Rank_Leader": {
-                    name: loc("guildView_rank_leader")
-                },
-                "/Lotus/Language/Game/Rank_Sage": {
-                    name: loc("guildView_rank_sage")
-                },
-                "/Lotus/Language/Game/Rank_Soldier": {
-                    name: loc("guildView_rank_soldier")
-                },
-                "/Lotus/Language/Game/Rank_Initiate": {
-                    name: loc("guildView_rank_initiate")
-                },
-                "/Lotus/Language/Game/Rank_Utility": {
-                    name: loc("guildView_rank_utility")
                 },
                 // U5
                 "/Lotus/Types/Game/PowerSuit": { name: loc("code_warframe") },
@@ -1095,7 +1044,9 @@ function fetchItemList() {
                                 }
                             }
                         } else if (item.uniqueName.includes("ColourPicker")) {
-                            item.name = loc("code_itemColorPalette").replaceAll("|ITEM|", item.name);
+                            item.name = data.AdditionalDict.find(
+                                i => i.uniqueName == "/Lotus/Language/Store/ItemColorPalette"
+                            ).name.replaceAll("|ITEM|", item.name);
                         }
                         if (!item.alwaysAvailable) {
                             const option = document.createElement("option");
@@ -1110,10 +1061,9 @@ function fetchItemList() {
                     items.forEach(item => {
                         if (item.name == "") {
                             if (item.uniqueName.includes("/Beards/")) {
-                                item.name = loc("code_drifterBeardName").replaceAll(
-                                    "|INDEX|",
-                                    beardNumber.toString().padStart(3, "0")
-                                );
+                                item.name = data.AdditionalDict.find(
+                                    i => i.uniqueName == "/Lotus/Language/Operator/TennoCustomization_DrifterBeardName"
+                                ).name.replaceAll("|INDEX|", beardNumber.toString().padStart(3, "0"));
                                 beardNumber++;
                             } else {
                                 item.name = item.uniqueName;
@@ -1127,7 +1077,7 @@ function fetchItemList() {
                         }
                         itemMap[item.uniqueName] = { ...item, type };
                     });
-                } else if (["MissionTypes", "Nodes"].includes(type)) {
+                } else if (["MissionTypes", "Nodes", "AdditionalDict"].includes(type)) {
                     items.forEach(item => {
                         itemMap[item.uniqueName] = { ...item, type };
                     });
@@ -1136,7 +1086,6 @@ function fetchItemList() {
                     items.forEach(item => {
                         item.name = item.name.replace(/<.+>/g, "").trim();
                         const nameMap = {
-                            "/Lotus/Language/Suits/RiftWalkAbilityName": loc("code_RiftWalkAbilityName"),
                             "/Lotus/Upgrades/Modules/GrineerMeleeModule":
                                 loc("code_U5Mod").replace("|TYPE|", loc("code_melee")) + " [GrineerMeleeModule]",
                             "/Lotus/Upgrades/Modules/TennoSwordModule":
@@ -1161,8 +1110,7 @@ function fetchItemList() {
                                 "|TYPE|",
                                 loc("code_warframe")
                             ),
-                            "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod": loc("code_infernoMod"),
-                            "/Lotus/Types/Game/SolarRails/BasicSolarRail": loc("code_basicSolarRail")
+                            "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod": loc("code_infernoMod")
                         };
                         if (nameMap[item.name]) {
                             item.name = nameMap[item.name];
@@ -4286,14 +4234,15 @@ single.getRoute("#guild-route").on("beforeload", function () {
                 $("#guild-route > .row").removeClass("d-none");
 
                 document.getElementById("guildView-title").textContent = guildData.Name;
-                document.getElementById("guildView-tier").textContent = loc("guildView_tierDisplay").replaceAll(
-                    "|TIER|",
-                    loc(`guildView_tier${guildData.Tier}`)
+                document.getElementById("guildView-tier").textContent = normalizeText(
+                    itemMap["/Lotus/Language/Clan/Clan_TierDisplay"].name.replaceAll(
+                        "|TIER|",
+                        itemMap[`/Lotus/Language/Clan/Clan_Tier${guildData.Tier}`].name
+                    )
                 );
-                document.getElementById("guildView-class").textContent = loc("guildView_classDisplay").replaceAll(
-                    "|CLASS|",
-                    guildData.Class
-                );
+                document.getElementById("guildView-class").textContent = itemMap[
+                    "/Lotus/Language/Clan/Clan_ClassLower"
+                ].name.replaceAll("|CLASS|", guildData.Class);
 
                 ["VaultRegularCredits", "VaultPremiumCredits"].forEach(currency => {
                     document.getElementById(currency + "-owned").textContent = loc(
@@ -4552,7 +4501,9 @@ single.getRoute("#guild-route").on("beforeload", function () {
                                 const td = document.createElement("td");
                                 td.textContent = clan.Name;
                                 if (clan.Pending) {
-                                    td.textContent += " | " + loc("guildView_pending");
+                                    td.textContent +=
+                                        " | " +
+                                        normalizeText(itemMap["/Lotus/Language/Menu/SocialOverlay_PendingLabel"].name);
                                 }
                                 tr.appendChild(td);
                             }
@@ -5161,7 +5112,7 @@ function createUpgradeInput(targetDiv, itemMap, itemType, upgrade) {
         const rangeSuffix = document.createElement("span");
         rangeSuffix.classList.add("input-group-text");
         rangeSuffix.id = "u5ModEdit-upgradeValueSuffix";
-        rangeSuffix.textContent = displayAsPercent ? "%" : loc("code_metersShort");
+        rangeSuffix.textContent = displayAsPercent ? "%" : itemMap["/Lotus/Language/UiElements/PLACEMENT_METERS"].name;
 
         inputGroup.appendChild(rangePrefix);
         inputGroup.appendChild(input);
@@ -5564,4 +5515,8 @@ async function doAdminBroadcastInbox() {
     } finally {
         submitButton.disabled = false;
     }
+}
+
+function normalizeText(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }

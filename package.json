@@ -21,6 +21,7 @@
     "lint:fix": "eslint --fix \"**/*.ts\"",
     "prettier": "prettier --write .",
     "update-translations": "cd scripts && node update-translations.cjs",
+    "generate-supplementalDict": "cd scripts && node generate-supplementalDict.js",
     "knip": "knip",
     "knip:fix": "knip --fix",
     "fix": "npm run update-translations && npm run knip:fix && npm run prettier"

@@ -4,6 +4,7 @@ import {
     getItemName,
     getNormalizedString,
     getString,
+    supplementalKeys,
     supplementalRecipes,
     supplementalUpgrades,
     U5Modules
@@ -35,6 +36,7 @@ import {
     ExportWeapons
 } from "warframe-public-export-plus";
 import allIncarnons from "../../../static/fixed_responses/allIncarnonList.json" with { type: "json" };
+import supplementalDict from "../../../static/fixed_responses/supplementalDict/index.json" with { type: "json" };
 import varzia from "../../constants/varzia.ts";
 import suitDefaultUpgrades from "../../constants/suitDefaultUpgrades.ts";
 import { pseudoRecipeToOwnedRecipeMap } from "../../services/foundryService.ts";
@@ -86,6 +88,7 @@ interface ItemLists {
     WeaponSkins: ListedItem[];
     MissionTypes: ListedItem[];
     Nodes: ListedItem[];
+    AdditionalDict: ListedItem[];
     //circuitGameModes: ListedItem[];
     blueprintAndItem: string;
 }
@@ -132,6 +135,7 @@ const getItemListsController: RequestHandler = (req, response) => {
         WeaponSkins: [],
         MissionTypes: [],
         Nodes: [],
+        AdditionalDict: [],
         /*circuitGameModes: [
             {
                 uniqueName: "Survival",
@@ -469,7 +473,7 @@ const getItemListsController: RequestHandler = (req, response) => {
             name: getString(syndicate.name, lang)
         });
     }
-    for (const [uniqueName, key] of Object.entries(ExportKeys)) {
+    for (const [uniqueName, key] of Object.entries({ ...ExportKeys, ...supplementalKeys })) {
         if (key.chainStages) {
             res.QuestKeys.push({
                 uniqueName,
@@ -601,6 +605,12 @@ const getItemListsController: RequestHandler = (req, response) => {
             fusionLimit: 0,
             fits: mod.fits,
             upgrades: mod.upgrades
+        });
+    }
+    for (const uniqueName of supplementalDict) {
+        res.AdditionalDict.push({
+            uniqueName,
+            name: getString(uniqueName, lang)
         });
     }
 

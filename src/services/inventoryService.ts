@@ -38,9 +38,11 @@ import { logger } from "../utils/logger.ts";
 import {
     convertInboxMessage,
     fromStoreItem,
+    getKey,
     getKeyChainItems,
     getPowerSuit,
     getSyndicate,
+    supplementalKeys,
     supplementalRecipes,
     supplementalUpgrades,
     U5ModsWeights,
@@ -919,9 +921,9 @@ export const addItem = async (
             FusionPoints: fusionPointsTotal
         };
     }
-    if (typeName in ExportKeys) {
+    if (typeName in ExportKeys || typeName in supplementalKeys) {
         // Note: "/Lotus/Types/Keys/" contains some EmailItems
-        const key = ExportKeys[typeName];
+        const key = getKey(typeName, buildLabel)!;
 
         if (key.chainStages) {
             if (quantity != 1) {
