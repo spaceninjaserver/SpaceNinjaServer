@@ -985,7 +985,7 @@ export const getInventoryResponse = async (
 
         for (const x of [...inventoryResponse.Cards, ...inventoryResponse.Upgrades]) {
             const itemType = x.ItemType;
-            console.log(itemType);
+            //console.log(itemType);
             if (
                 !itemType.includes("/Lotus/Upgrades/Mods/Aura/") ||
                 !supportedAuraMods.has(itemType.slice(itemType.lastIndexOf("/") + 1))
