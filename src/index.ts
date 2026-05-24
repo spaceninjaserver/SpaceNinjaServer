@@ -47,8 +47,8 @@ if (typeof mongodUri != "string") {
         },
         instance: {
             dbPath: dataDir,
-            port: 27017, // Prefer 27017
-            portGeneration: true // If 27017 is not available, use another port
+            port: 27117, // Prefer 27117 just to have a steady port for Compass, etc.
+            portGeneration: true // If 27117 is not available, another port is fine.
         }
     });
     mongodUri = mongod.getUri();
