@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-deprecated */
 import chokidar from "chokidar";
-import { logger } from "../utils/logger.ts";
+import { deinitLogger, initLogger, logger } from "../utils/logger.ts";
 import {
     config,
     configPath,
@@ -29,6 +29,7 @@ import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 
 chokidar.watch(configPath).on("change", () => {
     if (shouldReloadConfig()) {
+        const prevLogLevel = `${config.logger.fileLevel}:${config.logger.consoleLevel}`;
         const prevLogFormat = config.logger.format ?? "%timestamp% [%level%] %message%";
         const prevWorldState = JSON.stringify(config.worldState);
         const prevTunables = JSON.stringify(config.tunables);
@@ -43,6 +44,12 @@ chokidar.watch(configPath).on("change", () => {
         }
         validateConfig();
         syncConfigWithDatabase();
+
+        if (`${config.logger.fileLevel}:${config.logger.consoleLevel}` != prevLogLevel) {
+            logger.info("Reiniting logger to apply changes.");
+            deinitLogger();
+            initLogger();
+        }
 
         if ((config.logger.format ?? "%timestamp% [%level%] %message%") != prevLogFormat) {
             logger.info("Log format changed.");
@@ -105,6 +112,12 @@ export const validateConfig = (): void => {
             config.database = config.mongodbUrl;
         }
         delete config.mongodbUrl;
+        modified = true;
+    }
+    if (config.logger.level) {
+        config.logger.fileLevel = config.logger.level; // "trace"
+        config.logger.consoleLevel = "debug";
+        delete config.logger.level;
         modified = true;
     }
     for (const key of configRemovedOptionsKeys) {

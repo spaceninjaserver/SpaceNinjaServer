@@ -2,15 +2,16 @@ import type { LeveledLogMethod } from "winston";
 import type { Format } from "logform";
 import { createLogger, format, transports, addColors } from "winston";
 import "winston-daily-rotate-file";
+import type DailyRotateFile from "winston-daily-rotate-file";
 import * as util from "node:util";
 import { isEmptyObject } from "../helpers/general.ts";
-import { config } from "../services/configService.ts";
+import { config, type TLogLevel } from "../services/configService.ts";
 
 const createFormat = (colors: boolean, localTime: boolean): Format =>
     format.combine(
         colors ? format.colorize() : format.uncolorize(),
         localTime ? format.timestamp({ format: "YYYY-MM-DDTHH:mm:ss:SSS" }) : format.timestamp(),
-        format.metadata({ fillExcept: ["message", "level", "timestamp", "version"] }),
+        format.metadata({ fillExcept: ["message", "level", "timestamp"] }),
         format.printf(info =>
             (config.logger.format ?? "%timestamp% [%level%] %message%")
                 .replaceAll("%timestamp%", info.timestamp as string)
@@ -23,59 +24,80 @@ const createFormat = (colors: boolean, localTime: boolean): Format =>
                             : " " +
                               util.inspect(info.metadata, {
                                   showHidden: false,
-                                  depth: null,
+                                  depth: Infinity,
                                   colors
                               }))
                 )
         )
     );
 
-const fileLog = new transports.DailyRotateFile({
-    filename: `logs/${config.logger.level}.log`,
-    format: createFormat(false, false),
-    datePattern: "YYYY-MM-DD"
-});
-
-const consoleLog = new transports.Console({
-    forceConsole: false,
-    format: createFormat(true, true)
-});
-
-const transportOptions = config.logger.files ? [consoleLog, fileLog] : [consoleLog];
-
-//possible log levels: { fatal: 0, error: 1, warn: 2, info: 3, http: 4, debug: 5, trace: 6 },
 const logLevels = {
     levels: {
-        fatal: 0,
-        error: 1,
-        warn: 2,
-        info: 3,
-        http: 4,
-        debug: 5,
-        trace: 6
-    },
+        error: 0,
+        warn: 1,
+        info: 2,
+        http: 3,
+        debug: 4,
+        trace: 5
+    } satisfies Record<TLogLevel, number>,
     colors: {
-        fatal: "red",
         error: "red",
         warn: "yellow",
         info: "green",
         http: "green",
         debug: "magenta",
         trace: "cyan"
-    }
+    } satisfies Record<TLogLevel, string>
 };
 
-export const logger = createLogger({
+const realLogger = createLogger({
     levels: logLevels.levels,
-    level: config.logger.level,
-    defaultMeta: { version: process.env.npm_package_version },
-    transports: transportOptions
-}) as unknown as Record<keyof typeof logLevels.levels, LeveledLogMethod>;
+    level: "trace"
+});
+export const logger = realLogger as unknown as Record<TLogLevel, LeveledLogMethod>;
 
 addColors(logLevels.colors);
 
-fileLog.on("new", filename => logger.info(`Using log file: ${filename}`));
-fileLog.on("rotate", filename => logger.info(`Rotated log file: ${filename}`));
+let fileLog: DailyRotateFile | undefined;
+let consoleLog: transports.ConsoleTransportInstance | undefined;
+
+export const initLogger = (): void => {
+    if (config.logger.files) {
+        fileLog = new transports.DailyRotateFile({
+            filename: `logs/${config.logger.fileLevel ?? "trace"}.log`,
+            format: createFormat(false, false),
+            datePattern: "YYYY-MM-DD",
+            level: config.logger.fileLevel ?? "trace"
+        });
+        realLogger.add(fileLog);
+        fileLog.on("new", filename => logger.info(`Using log file: ${filename}`));
+        fileLog.on("rotate", filename => logger.info(`Rotated log file: ${filename}`));
+    }
+
+    consoleLog = new transports.Console({
+        forceConsole: false,
+        format: createFormat(true, true),
+        level: config.logger.consoleLevel ?? "debug"
+    });
+    realLogger.add(consoleLog);
+
+    /*logger.debug(`guess what it's called when you put an object after a message:`, {
+        thatsRight: "it's called metadata (:"
+    });
+    logError(new Error("I'm not feeling so good"), "starting up");*/
+};
+
+export const deinitLogger = (): void => {
+    if (fileLog) {
+        realLogger.remove(fileLog);
+        fileLog = undefined;
+    }
+
+    if (consoleLog) {
+        realLogger.remove(consoleLog);
+        consoleLog = undefined;
+    }
+};
 
 export const logError = (err: Error, context: string): void => {
     if (err.stack) {
@@ -86,8 +108,3 @@ export const logError = (err: Error, context: string): void => {
         logger.error(`uncaught error while ${context}: ${err.message}`);
     }
 };
-
-/*logger.debug(`guess what it's called when you put an object after a message:`, {
-    thatsRight: "it's called metadata (:"
-});
-logError(new Error("I'm not feeling so good"), "starting up");*/

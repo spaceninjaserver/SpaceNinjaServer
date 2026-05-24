@@ -3157,7 +3157,7 @@ export const checkCalendarAutoAdvance = (
             if (calendarProgress.SeasonProgress.LastCompletedChallengeDayIdx < dayIndex) {
                 break;
             }
-            //logger.debug(`already completed the challenge, skipping ahead`);
+            logger.trace(`already completed the challenge, skipping ahead`);
             calendarProgress.SeasonProgress.LastCompletedDayIdx++;
         } else {
             break;

@@ -3,12 +3,13 @@ import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 import type { IInventoryClient, IDialogueResetDateClient } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { unixTimesInMs } from "../../constants/timeConstants.ts";
+import { logger } from "../../utils/logger.ts";
 
 export const clearDialogueHistoryController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId, "DialogueHistory noKimCooldowns");
     const request = JSON.parse(String(req.body)) as IClearDialogueRequest;
-    //logger.debug(`clearDialogueHistory:`, request);
+    logger.trace("clearDialogueHistory request:", request);
     if (inventory.DialogueHistory && inventory.DialogueHistory.Dialogues) {
         inventory.DialogueHistory.Resets ??= 0;
         inventory.DialogueHistory.Resets += 1;

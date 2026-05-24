@@ -3,11 +3,12 @@ import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { ICompletedDialogue, IDialogueCounter } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
+import { logger } from "../../utils/logger.ts";
 
 export const saveDialogueController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const request = JSON.parse(String(req.body)) as SaveDialogueRequest;
-    //logger.debug(`saveDialogue:`, request);
+    logger.trace("saveDialogue request:", request);
     if ("YearIteration" in request) {
         const inventory = await getInventory2(accountId, "DialogueHistory");
         inventory.DialogueHistory ??= {};

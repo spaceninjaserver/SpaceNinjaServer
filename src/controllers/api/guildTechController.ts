@@ -42,7 +42,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const accountId = account._id.toString();
     const data = JSON.parse(String(req.body)) as TGuildTechRequest;
-    //logger.debug(`guildTech:`, data);
+    logger.trace("guildTech request:", data);
     if (data.Action == "Sync") {
         let needSave = false;
         const techProjects: ITechProjectClient[] = [];

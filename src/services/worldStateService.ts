@@ -605,7 +605,7 @@ const pushTilesetModifiers = (modifiers: string[], tileset: TSortieTileset): voi
 export const getSortie = (day: number, buildLabel: string): ISortie => {
     // Seeds featuring CorpusIcePlanet to test seed validation: 23418, 71281
     const seed = new SRng(day).randomInt(0, 100_000);
-    //logger.debug(`sortie seed: ${seed}`);
+    logger.trace(`sortie seed: ${seed}`);
     const rng = new SRng(seed);
 
     const boss = rng.randomElement(sortieBosses)!;
@@ -1230,7 +1230,7 @@ const getCalendarSeason = (week: number): ICalendarSeason => {
         if (day >= seasonDay91) {
             break;
         }
-        //logger.debug(`birthday on day ${day}`);
+        logger.trace(`birthday on day ${day}`);
         eventDays.push({ day, events: [] }); // This is how CET_PLOT looks in worldState as of around 38.5.0
     }
     const rng = new SRng(new SRng(week).randomInt(0, 100_000));
@@ -1288,7 +1288,7 @@ const getCalendarSeason = (week: number): ICalendarSeason => {
         } while (i < 2 && !challenge.endsWith("Easy")); // First 2 challenges should be easy
         challenges.splice(challengeIndex, 1);
 
-        //logger.debug(`challenge on day ${challengeDay}`);
+        logger.trace(`challenge on day ${challengeDay}`);
         eventDays.push({
             day: challengeDay,
             events: [{ type: "CET_CHALLENGE", challenge }]
@@ -1339,7 +1339,7 @@ const getCalendarSeason = (week: number): ICalendarSeason => {
             rewards.splice(rewardIndex, 1);
         }
 
-        //logger.debug(`trying to fit rewards between day ${rewardRanges[i]} and ${rewardRanges[i + 1]}`);
+        logger.trace(`trying to fit rewards between day ${rewardRanges[i]} and ${rewardRanges[i + 1]}`);
         let day: number;
         do {
             day = rng.randomInt(rewardRanges[i] + 1, rewardRanges[i + 1] - 1);
@@ -1420,7 +1420,7 @@ const getCalendarSeason = (week: number): ICalendarSeason => {
             upgrades.splice(upgradeIndex, 1);
         }
 
-        //logger.debug(`trying to fit upgrades between day ${upgradeRanges[i]} and ${upgradeRanges[i + 1]}`);
+        logger.trace(`trying to fit upgrades between day ${upgradeRanges[i]} and ${upgradeRanges[i + 1]}`);
         let day: number;
         do {
             day = rng.randomInt(upgradeRanges[i] + 1, upgradeRanges[i + 1] - 1);
@@ -1614,7 +1614,7 @@ const getIdealTimeSatsifyingConstraints = (constraints: ITimeConstraint[]): numb
         allGood = true;
         for (const constraint of constraints) {
             if (!constraint.isValidTime(timeSecs)) {
-                //logger.debug(`${constraint.name} is not happy with ${timeSecs}`);
+                logger.trace(`${constraint.name} is not happy with ${timeSecs}`);
                 const prevTimeSecs = timeSecs;
                 const suggestion = constraint.getIdealTimeBefore(timeSecs);
                 timeSecs = suggestion;

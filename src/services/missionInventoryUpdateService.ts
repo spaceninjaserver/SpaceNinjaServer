@@ -1448,7 +1448,7 @@ export const addMissionRewards = async (
 
     if (levelKeyName) {
         const fixedLevelRewards = getLevelKeyRewards(levelKeyName, buildLabel);
-        //logger.debug(`fixedLevelRewards ${fixedLevelRewards}`);
+        logger.trace("fixedLevelRewards", fixedLevelRewards);
         if (fixedLevelRewards.levelKeyRewards) {
             missionCompletionCredits += await addFixedLevelRewards(
                 fixedLevelRewards.levelKeyRewards,

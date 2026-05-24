@@ -1,21 +1,6 @@
-// First, init config.
 import { config, configPath, loadConfig } from "./services/configService.ts";
 import fs from "fs";
-try {
-    loadConfig();
-} catch (e) {
-    if (fs.existsSync("config.json")) {
-        console.log("Failed to load " + configPath + ": " + (e as Error).message);
-    } else {
-        console.log("Failed to load " + configPath + ". You can copy config-vanilla.json to create your config file.");
-    }
-    process.exit(1);
-}
-
-// Now we can init the logger with the settings provided in the config.
-import { logger } from "./utils/logger.ts";
-
-// Proceed with normal startup: bring up config watcher service, validate config, connect to MongoDB, and finally start listening for HTTP.
+import { initLogger, logger } from "./utils/logger.ts";
 import mongoose from "mongoose";
 import path from "path";
 import child_process from "child_process";
@@ -27,9 +12,22 @@ import { repoDir } from "./helpers/pathHelper.ts";
 import { MongoMemoryServer } from "mongodb-memory-server-core";
 import { args } from "./helpers/commandLineArguments.ts";
 
+try {
+    loadConfig();
+} catch (e) {
+    if (fs.existsSync("config.json")) {
+        console.log("Failed to load " + configPath + ": " + (e as Error).message);
+    } else {
+        console.log("Failed to load " + configPath + ". You can copy config-vanilla.json to create your config file.");
+    }
+    process.exit(1);
+}
+
+initLogger(); // depends on config
+
 JSON.stringify = JSONStringify; // Patch JSON.stringify to work flawlessly with Bigints.
 
-validateConfig();
+validateConfig(); // depends on logger
 
 fs.readFile(path.join(repoDir, "BUILD_DATE"), "utf-8", (err, data) => {
     if (!err) {
@@ -52,7 +50,7 @@ if (typeof mongodUri != "string") {
         }
     });
     mongodUri = mongod.getUri();
-    logger.debug(`MongoDB server running at ${mongodUri}`);
+    logger.info(`MongoDB server running at ${mongodUri}`);
     mongodUri += "openWF";
 }
 
@@ -107,7 +105,7 @@ for (const [what, key] of [
 }
 
 if (args.dev) {
-    logger.debug(
+    logger.info(
         "Developer mode is enabled. Note that this project is where it is now due to code contributions; please pay it forward with pull requests."
     );
 }

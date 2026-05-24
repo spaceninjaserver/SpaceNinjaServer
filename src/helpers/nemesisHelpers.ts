@@ -1,4 +1,4 @@
-import { ExportRegions } from "warframe-public-export-plus";
+import { dict_en, ExportRegions } from "warframe-public-export-plus";
 import type { IInfNode, INemesisDatabase, TNemesisFaction } from "../types/inventoryTypes/inventoryTypes.ts";
 import { generateRewardSeed, getRewardAtPercentage, SRng } from "../services/rngService.ts";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
@@ -8,6 +8,7 @@ import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import type { INemesisTaxInfo } from "../types/missionTypes.ts";
 import { lerp } from "./general.ts";
 import { getPowerSuit } from "../services/itemDataService.ts";
+import { logger } from "../utils/logger.ts";
 
 type TInnateDamageTag =
     | "InnateElectricityDamage"
@@ -249,7 +250,7 @@ export const getInfNodes = (manifest: INemesisManifest, rank: number): IInfNode[
             value.name.indexOf("1999NodeJ") == -1 && // not lich bounty
             !isArchwingMission(value)
         ) {
-            //console.log(dict_en[value.name]);
+            logger.trace(`adding inf node ${dict_en[value.name]}`);
             infNodes.push({ Node: key, Influence: 1 });
         }
     }

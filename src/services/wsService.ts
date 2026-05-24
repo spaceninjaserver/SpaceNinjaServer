@@ -140,7 +140,7 @@ const wsOnConnect = (ws: WebSocket, req: http.IncomingMessage): void => {
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     ws.on("message", async msg => {
         try {
-            //console.log(String(msg));
+            logger.trace(`incoming websocket message: ${String(msg)}`);
             const data = JSON.parse(String(msg)) as IWsMsgFromClient;
             if (data.auth) {
                 let account: IDatabaseAccountJson | null = await Account.findOne({ email: data.auth.email });

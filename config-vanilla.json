@@ -5,7 +5,8 @@
   },
   "logger": {
     "files": true,
-    "level": "trace",
+    "fileLevel": "trace",
+    "consoleLevel": "debug",
     "format": "%timestamp% [%level%] %message%"
   },
   "myAddress": "localhost",

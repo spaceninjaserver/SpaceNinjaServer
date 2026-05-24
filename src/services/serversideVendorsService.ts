@@ -162,7 +162,11 @@ export const applyStandingToVendorManifest = (
                     const title: number = affiliations.find(x => x.Tag == offer.Affiliation)?.Title ?? 0;
                     const factor =
                         1 + (title < 0 ? offer.IncreasePerNegativeRank : offer.ReductionPerPositiveRank) * title * -1;
-                    //console.log(offer.Affiliation, title, factor);
+                    logger.trace(`applying standing to vendor offer`, {
+                        Affiliations: offer.Affiliation,
+                        title,
+                        factor
+                    });
                     if (factor) {
                         offer = { ...offer };
                         if (offer.RegularPrice) {

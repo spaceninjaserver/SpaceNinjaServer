@@ -164,7 +164,7 @@ export const updateSession = async (
     }
 
     session.lastUpdate = new Date();
-    //logger.debug(`session after update:`, session);
+    logger.trace(`session after update:`, session);
     await session.save();
 
     return true;

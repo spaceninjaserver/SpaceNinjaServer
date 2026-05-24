@@ -8,6 +8,7 @@ import type { IDroneClient } from "../../types/inventoryTypes/inventoryTypes.ts"
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
 import { ExportDrones, ExportResources, ExportSystems } from "warframe-public-export-plus";
+import { logger } from "../../utils/logger.ts";
 
 export const dronesController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -65,7 +66,7 @@ export const dronesController: RequestHandler = async (req, res) => {
                 ? getRandomInt(system.droneDamage.minValue, system.droneDamage.maxValue)
                 : 0;
         const resource = getRandomWeightedRewardUc(system.resources, droneMeta.probabilities)!;
-        //logger.debug(`drone rolled`, resource);
+        logger.trace("drone rolled", resource);
         drone.ResourceType = fromStoreItem(resource.StoreItem);
         const resourceMeta = ExportResources[drone.ResourceType];
         if (resourceMeta.pickupQuantity) {

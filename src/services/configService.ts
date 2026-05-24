@@ -19,6 +19,8 @@ export interface IWebuiConfig {
     nonAdminPermissions?: Record<string, boolean | Record<string, boolean>>;
 }
 
+export type TLogLevel = "error" | "warn" | "info" | "http" | "debug" | "trace";
+
 export interface IConfig {
     /** @deprecated */ mongodbUrl?: string;
     database:
@@ -29,7 +31,9 @@ export interface IConfig {
           };
     logger: {
         files: boolean;
-        level: string; // "fatal" | "error" | "warn" | "info" | "http" | "debug" | "trace";
+        /** @deprecated */ level?: TLogLevel;
+        fileLevel?: TLogLevel;
+        consoleLevel?: TLogLevel;
         format?: string;
     };
     myAddress: string;

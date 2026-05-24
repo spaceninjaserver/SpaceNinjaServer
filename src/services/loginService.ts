@@ -107,8 +107,8 @@ export const getAccountForQuery = async (
             .createHmac("sha256", account.Nonce.toString())
             .update(`accountId=${query.accountId}&ct=${(query.ct as string | undefined) ?? ""}`)
             .digest("hex");
-        //console.log(`expected token: ${token}`);
         if (query.token.toLowerCase() != token) {
+            logger.trace(`expected token: ${token}`);
             throw new Error("Invalid accountId-token pair");
         }
         return account;

@@ -118,8 +118,8 @@ export const focusController: RequestHandler = async (req, res) => {
         }
     }
 
-    //logger.debug(`focus op: ${op}`);
-    //logger.debug(String(req.body));
+    logger.trace(`focus op: ${op}`);
+    logger.trace(String(req.body));
 
     switch (op) {
         default:

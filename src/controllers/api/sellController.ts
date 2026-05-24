@@ -23,7 +23,7 @@ import { logger } from "../../utils/logger.ts";
 
 export const sellController: RequestHandler = async (req, res) => {
     const payload = JSON.parse(String(req.body)) as ISellRequest;
-    //console.log(JSON.stringify(payload, null, 2));
+    logger.trace("sell request:", payload);
     const accountId = await getAccountIdForRequest(req);
     const requiredFields = new Set<keyof TInventoryDatabaseDocument>();
     let sellCurrency = "SC_RegularCredits";

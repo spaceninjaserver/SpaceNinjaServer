@@ -114,7 +114,7 @@ export const handleInventoryItemConfigChange = async (
                             const oldLoadoutConfig = loadout[loadoutSlot].id(loadoutId);
 
                             const loadoutConfigDatabase = importLoadOutConfig(loadoutConfig);
-                            //logger.debug(`imported loadout config:`, loadoutConfigDatabase);
+                            logger.trace(`imported loadout config:`, loadoutConfigDatabase);
 
                             // if no config with this id exists, create a new one
                             if (!oldLoadoutConfig) {

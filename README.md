@@ -14,8 +14,8 @@ SpaceNinjaServer requires a `config.json`. To set it up, you can copy the [confi
 
 - `skipTutorial` affects only newly created accounts, so you may wish to change it before logging in for the first time.
 - `database` defaults to an object to configure the _embedded_ mongod, but can be a string like `"mongodb://127.0.0.1:27017/openWF"` to simply connect to an existing MongoDB instance.
-- `logger.level` can be `fatal`, `error`, `warn`, `info`, `http`, `debug`, or `trace`.
-- `bindAddress`, `httpPort`, `httpsPort` are related to how SpaceNinjaServer is reached on the network. Under Docker, these options are unchangable; modify your `docker-compose.yml`, instead.
+- `logger.fileLevel` and `logger.consoleLevel` can be `error`, `warn`, `info`, `http`, `debug`, or `trace`. Messages with lower priorities than the configured level will not be seen in the respective output.
+- `bindAddress`, `httpPort`, and `httpsPort` are related to how SpaceNinjaServer is reached on the network. Under Docker, these options are unchangable; modify your `docker-compose.yml`, instead.
 - `ircExecutable` and `hubExecutable` can be provided with relative paths to executables which will be ran as child processes of SpaceNinjaServer.
 - `ircAddress`, `hubServers`, and `nrsAddresses` configure how clients contact these secondary servers. For `ircAddress`, a null value is equivalent to `%THIS_MACHINE%`, which should just work when SpaceNinjaServer and the secondary servers are on the same machine.
 - `worldState.eidolonOverride` can be set to `day` or `night` to lock the time to day/fass and night/vome on Plains of Eidolon/Cambion Drift.

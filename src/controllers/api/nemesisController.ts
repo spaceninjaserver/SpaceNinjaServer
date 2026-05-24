@@ -223,7 +223,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
                     const dataknifeConfigIndex = dataknifeLoadout?.s?.mod ?? 0;
                     const dataknifeUpgrades = inventory.DataKnives[0].Configs[dataknifeConfigIndex].Upgrades!;
                     for (let i = 3; i != 6; ++i) {
-                        //logger.debug(`subtracting a charge from ${dataknifeUpgrades[i]}`);
+                        logger.trace(`subtracting a charge from ${dataknifeUpgrades[i]}`);
                         const upgrade = parseUpgrade(inventory, dataknifeUpgrades[i]);
                         consumeModCharge(response, inventory, upgrade, dataknifeUpgrades);
                     }

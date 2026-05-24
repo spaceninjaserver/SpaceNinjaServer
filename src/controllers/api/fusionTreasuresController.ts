@@ -4,6 +4,7 @@ import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { addFusionTreasures, addMiscItem, addMiscItems, getInventory } from "../../services/inventoryService.ts";
 import type { IFusionTreasureClientLegacy, IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { fromOid, parseFusionTreasure } from "../../helpers/inventoryHelpers.ts";
+import { logger } from "../../utils/logger.ts";
 
 interface IFusionTreasureRequest {
     oldTreasureName: string;
@@ -25,7 +26,7 @@ export const fusionTreasuresController: RequestHandler = async (req, res) => {
         // Remove consumed stars
         for (let i = 0; filledSockets >> i; ++i) {
             if ((filledSockets >> i) & 1) {
-                //console.log("Socket", i, "has been filled with", ExportResources[fusex.ItemType].sockets![i]);
+                logger.trace(`Socket ${i} has been filled with ${ExportResources[fusex.ItemType].sockets![i]}`);
                 addMiscItem(inventory, ExportResources[fusex.ItemType].sockets![i], -1);
             }
         }
@@ -44,7 +45,7 @@ export const fusionTreasuresController: RequestHandler = async (req, res) => {
         const filledSockets = newTreasure.Sockets & ~oldTreasure.Sockets;
         for (let i = 0; filledSockets >> i; ++i) {
             if ((filledSockets >> i) & 1) {
-                //console.log("Socket", i, "has been filled with", ExportResources[oldTreasure.ItemType].sockets![i]);
+                logger.trace(`Socket ${i} has been filled with ${ExportResources[oldTreasure.ItemType].sockets![i]}`);
                 miscItemChanges.push({
                     ItemType: ExportResources[oldTreasure.ItemType].sockets![i],
                     ItemCount: -1
