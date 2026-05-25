@@ -9,11 +9,22 @@ import {
 import { getInventory2, updatePlatinum } from "../../services/inventoryService.ts";
 import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import type { IDojoContributable } from "../../types/guildTypes.ts";
-import type { RequestHandler } from "express";
+import type { RequestHandler, Request, Response } from "express";
 import type { IDojoBuild } from "warframe-public-export-plus";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
 
-type IDojoComponentRushRequest =
+export const dojoComponentRushGetController: RequestHandler = (req, res) => {
+    return processDojoComponentRush(
+        req,
+        res,
+        req.query.componentId as string,
+        req.query.decoId as string | undefined,
+        parseInt(req.query.contributionAmount as string),
+        parseInt(req.query.vaultContributionAmount as string)
+    );
+};
+
+type IDojoComponentRushPostRequest =
     | {
           DecoType?: string;
           DecoId?: string;
@@ -29,7 +40,22 @@ type IDojoComponentRushRequest =
           vaultAmount: number;
       };
 
-export const dojoComponentRushController: RequestHandler = async (req, res) => {
+export const dojoComponentRushPostController: RequestHandler = (req, res) => {
+    const request = JSON.parse(String(req.body)) as IDojoComponentRushPostRequest;
+    return "ComponentId" in request
+        ? processDojoComponentRush(req, res, request.ComponentId, request.DecoId, request.Amount, request.VaultAmount)
+        : processDojoComponentRush(req, res, request.componentId, request.decoId, request.amount, request.vaultAmount);
+};
+
+// TODO: Contributions from alliance vault?
+const processDojoComponentRush = async (
+    req: Request,
+    res: Response,
+    componentId: string,
+    decoId: string | undefined,
+    amount: number,
+    vaultAmount: number
+): Promise<void> => {
     const account = await getAccountForRequest(req);
     const inventory = await getInventory2(
         account._id,
@@ -44,20 +70,16 @@ export const dojoComponentRushController: RequestHandler = async (req, res) => {
         return;
     }
     const guild = await getGuildForRequestEx(req, inventory);
-    const request = JSON.parse(String(req.body)) as IDojoComponentRushRequest;
-    const component = guild.DojoComponents.id("ComponentId" in request ? request.ComponentId : request.componentId)!;
+    const component = guild.DojoComponents.id(componentId)!;
 
-    const amount = "Amount" in request ? request.Amount : request.amount;
     let platinumDonated = amount;
     const inventoryChanges = updatePlatinum(inventory, amount);
 
-    const vaultAmount = "VaultAmount" in request ? request.VaultAmount : request.vaultAmount;
     if (vaultAmount) {
         platinumDonated += vaultAmount;
         guild.VaultPremiumCredits! -= vaultAmount;
     }
 
-    const decoId = "DecoId" in request ? request.DecoId : "decoId" in request ? request.decoId : undefined;
     if (decoId) {
         const deco = component.Decos!.find(x => x._id.equals(decoId))!;
         const meta = Object.values(ExportDojoRecipes.decos).find(x => x.resultType == deco.Type)!;

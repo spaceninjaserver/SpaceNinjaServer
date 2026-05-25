@@ -52,7 +52,7 @@ import { deleteSessionController } from "../controllers/api/deleteSessionControl
 import { descentRewardsController } from "../controllers/api/descentRewardsController.ts";
 import { destroyDojoDecoController } from "../controllers/api/destroyDojoDecoController.ts";
 import { divvyAllianceVaultController } from "../controllers/api/divvyAllianceVaultController.ts";
-import { dojoComponentRushController } from "../controllers/api/dojoComponentRushController.ts";
+import { dojoComponentRushGetController, dojoComponentRushPostController } from "../controllers/api/dojoComponentRushController.ts";
 import { dronesController } from "../controllers/api/dronesController.ts";
 import { endlessXpController } from "../controllers/api/endlessXpController.ts";
 import { entratiLabConquestModeController } from "../controllers/api/entratiLabConquestModeController.ts";
@@ -218,6 +218,7 @@ apiRouter.get("/declineAllianceInvite.php", declineAllianceInviteController);
 apiRouter.get("/declineGuildInvite.php", declineGuildInviteController);
 apiRouter.get("/deleteSession.php", deleteSessionController);
 apiRouter.get("/divvyAllianceVault.php", divvyAllianceVaultController);
+apiRouter.get("/dojoComponentRush.php", dojoComponentRushGetController); // ~U9
 apiRouter.get("/drones.php", dronesController);
 apiRouter.get("/getAccountId.php", getAccountIdGetController); // U11
 apiRouter.get("/getAlliance.php", getAllianceController);
@@ -312,7 +313,7 @@ apiRouter.post("/customizeGuildRanks.php", customizeGuildRanksController);
 apiRouter.post("/customObstacleCourseLeaderboard.php", customObstacleCourseLeaderboardController);
 apiRouter.post("/descentRewards.php", descentRewardsController);
 apiRouter.post("/destroyDojoDeco.php", destroyDojoDecoController);
-apiRouter.post("/dojoComponentRush.php", dojoComponentRushController);
+apiRouter.post("/dojoComponentRush.php", dojoComponentRushPostController);
 apiRouter.post("/drones.php", dronesController);
 apiRouter.post("/endlessXp.php", endlessXpController);
 apiRouter.post("/entratiLabConquestMode.php", entratiLabConquestModeController);
