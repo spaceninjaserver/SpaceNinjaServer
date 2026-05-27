@@ -39,9 +39,21 @@ let mongodUri = config.database;
 if (typeof mongodUri != "string") {
     const dataDir = path.resolve(mongodUri.dbPath);
     fs.mkdirSync(dataDir, { recursive: true });
+
+    const downloadDir = "node_modules/.cache";
+
+    // Breaking MongoMemoryServer is as easy as pressing Ctrl+C while it's extracting and it has no "cache integrity checking" of its own (https://github.com/typegoose/mongodb-memory-server/issues/991)
+    if (fs.existsSync(`${downloadDir}/mongod-x64-win32-7.0.34.exe`)) {
+        if (fs.statSync(`${downloadDir}/mongod-x64-win32-7.0.34.exe`).size != 65191936) {
+            logger.debug(`${downloadDir}/mongod-x64-win32-7.0.34.exe has invalid size, deleting it`);
+            fs.unlinkSync(`${downloadDir}/mongod-x64-win32-7.0.34.exe`);
+        }
+    }
+
     const mongod = await MongoMemoryServer.create({
         binary: {
-            version: mongodUri.engine == "MongoDB 8.0" ? undefined : "7.0.34" // Check https://www.mongodb.com/docs/v7.0/release-notes/7.0/ for updates :)
+            version: mongodUri.engine == "MongoDB 8.0" ? undefined : "7.0.34", // Check https://www.mongodb.com/docs/v7.0/release-notes/7.0/ for updates :)
+            downloadDir
         },
         instance: {
             dbPath: dataDir,
