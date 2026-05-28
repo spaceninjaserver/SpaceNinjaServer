@@ -1,5 +1,4 @@
 import { unixTimesInMs } from "../constants/timeConstants.ts";
-import { args } from "../helpers/commandLineArguments.ts";
 import { catBreadHash } from "../helpers/stringHelpers.ts";
 import { mixSeeds, SRng } from "./rngService.ts";
 import type { IItemManifest, IVendorInfo, IVendorManifest } from "../types/vendorTypes.ts";
@@ -489,7 +488,7 @@ const getLegacyNightwaveManifestType = (buildLabel: string): string | undefined 
     return season >= 0 && season < manifests.length ? manifests[season] : undefined;
 };
 
-if (args.dev) {
+export const selfTestServersideVendors = (): void => {
     if (
         getCycleDuration(ExportVendors["/Lotus/Types/Game/VendorManifests/Hubs/TeshinHardModeVendorManifest"]) !=
         unixTimesInMs.week
@@ -565,4 +564,4 @@ if (args.dev) {
     if (loid.length != 3) {
         logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/EntratiLabs/EntratiLabsCommisionsManifest`);
     }
-}
+};
