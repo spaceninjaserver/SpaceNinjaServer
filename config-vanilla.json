@@ -118,7 +118,8 @@
     "circuitGameModes": null,
     "darvoStockMultiplier": 1,
     "communitySynthesisTarget": 0,
-    "communitySynthesisProgress": 0
+    "communitySynthesisProgress": 0,
+    "snowdayShowdown": false
   },
   "serversideQualityOfLife": {
     "twentythreeHourMasteryRankCooldown": true,

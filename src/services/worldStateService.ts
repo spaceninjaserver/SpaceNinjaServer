@@ -4396,6 +4396,45 @@ export const getWorldState = (buildLabel: string = BL_LATEST): IWorldState => {
         }
     }
 
+    if (config.worldState?.snowdayShowdown && version_compare(buildLabel, gameToBuildVersion["19.4.1"]) >= 0) {
+        worldState.PVPAlternativeModes.push({
+            TargetMode: "PVPMODE_TEAMDEATHMATCH",
+            TitleLoc: "/Lotus/Language/G1Quests/TacAlertSnowballFightTitle",
+            DescriptionLoc: "/Lotus/Language/G1Quests/TacAlertSnowballFightToolTip",
+            DisableEnergyPickups: true,
+            DisableEnergySurge: true,
+            DisableAmmoPickups: true,
+            DisableWeaponSwitching: true,
+            DisableWeaponHud: false,
+            EnergyCapOverride: 0,
+            ForceChangeLoadoutOnDeath: false,
+            MatchTimeOverride: 600,
+            MaxPlayersOverride: 8,
+            MinPlayersPerTeamOverride: 2,
+            MaxTeamCountDifferenceOverride: 2,
+            WeaponOverrides: [
+                { Override: false, UseFirstAsDefault: true, Resources: [], OriginalVersions: [] },
+                {
+                    Override: true,
+                    UseFirstAsDefault: true,
+                    Resources: ["/Lotus/Weapons/Tenno/ThrowingWeapons/VariantSnowBalls"],
+                    OriginalVersions: []
+                },
+                { Override: true, UseFirstAsDefault: true, Resources: [], OriginalVersions: [] }
+            ],
+            MeleeWeaponOverride: {
+                Override: true,
+                UseFirstAsDefault: true,
+                Resources: ["/Lotus/Weapons/Tenno/Melee/Scythe/ParisScythe/VariantXmasScythe"],
+                OriginalVersions: [],
+                IsModularMeleeWeapon: false,
+                BalancesPool: [],
+                HandlesPool: [],
+                TipsPool: []
+            }
+        });
+    }
+
     if (version_compare(buildLabel, gameToBuildVersion["17.7.1"]) >= 0) {
         if (version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0) {
             const conclaveWeekStart = weekStart + 40 * unixTimesInMs.minute - 2 * unixTimesInMs.day;

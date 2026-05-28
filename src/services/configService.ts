@@ -128,6 +128,7 @@ export interface IConfig {
         darvoStockMultiplier?: number;
         communitySynthesisTarget?: number;
         communitySynthesisProgress?: number;
+        snowdayShowdown?: boolean;
     };
     serversideQualityOfLife?: {
         twentythreeHourMasteryRankCooldown?: boolean;
