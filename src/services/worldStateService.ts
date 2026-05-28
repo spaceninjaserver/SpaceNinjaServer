@@ -755,11 +755,10 @@ const validateSortieSeed = (seed: number, variants: ISortieMission[]): boolean =
         if (variant.missionType != "MT_ASSASSINATION") {
             const tileset = ExportTilesets[variant.tileset];
             let missionPermutation = tileset.missions[variant.missionType];
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (!missionPermutation) {
                 const options = SORTIE_FALLBACK_MISSION_TYPES.filter(missionType => missionType in tileset.missions);
                 const replacementType = options[rng.randomInt(0, options.length - 1)];
-                missionPermutation = tileset.missions[replacementType];
+                missionPermutation = tileset.missions[replacementType]!;
                 /*logger.debug(
                     `${variant.missionType} not supported by ${variant.tileset}; picking ${replacementType} instead`
                 );*/
