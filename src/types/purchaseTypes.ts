@@ -1,3 +1,4 @@
+import type { TFocusSchool } from "warframe-public-export-plus";
 import type { IOid, ITypeCount } from "./commonTypes.ts";
 import type { IEquipmentClient } from "./equipmentTypes.ts";
 import type {
@@ -133,6 +134,7 @@ export interface IPurchaseResponse {
     BoosterPackItems?: string;
     Body?: string;
     DailyDealUsed?: string;
+    FocusCost?: { Polarity: TFocusSchool; Cost: number };
 }
 
 export type IBinChanges = {

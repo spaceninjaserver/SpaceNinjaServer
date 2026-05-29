@@ -340,6 +340,17 @@ export const handlePurchase = async (
                             purchaseResponse.InventoryChanges
                         );
                     }
+                    if (offer.focusXpCost) {
+                        const polarity = offer.focusXpCost.polarity;
+                        const cost = offer.focusXpCost.cost * purchaseRequest.PurchaseParams.Quantity;
+                        inventory.FocusXP ??= {};
+                        inventory.FocusXP[polarity] ??= 0;
+                        inventory.FocusXP[polarity] -= cost;
+                        purchaseResponse.FocusCost = {
+                            Polarity: polarity,
+                            Cost: cost
+                        };
+                    }
                 }
             } else {
                 let manifest = getVendorManifestByOid(
