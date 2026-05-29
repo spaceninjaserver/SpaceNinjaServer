@@ -450,14 +450,6 @@ function updateLocElements() {
     document.querySelectorAll("[data-loc-title]").forEach(elm => {
         elm.title = loc(elm.getAttribute("data-loc-title"));
     });
-    document.querySelectorAll("[data-loc-inc]").forEach(elm => {
-        const incWith = elm
-            .getAttribute("data-loc-inc")
-            .split("|")
-            .map(key => loc(key).replace(/<[^>]+>/g, ""))
-            .join(", ");
-        elm.title = `${loc("worldState_incompatibleWith")} ${incWith}`;
-    });
     document.querySelectorAll("[data-loc-replace]").forEach(elm => {
         elm.innerHTML = elm.innerHTML.replace("|VAL|", elm.getAttribute("data-loc-replace"));
         if (elm.getAttribute("data-loc") == "worldState_lunarNewYearEntry") {
@@ -480,6 +472,24 @@ function updateLocElements() {
             const key = elm.getAttribute("data-loc-itemMap-norm");
             const item = itemMap[key];
             elm.innerHTML = item && item.name ? normalizeText(item.name) : key;
+        });
+        document.querySelectorAll("[data-loc-itemMap-tc]").forEach(elm => {
+            const key = elm.getAttribute("data-loc-itemMap-tc");
+            const item = itemMap[key];
+            elm.innerHTML = item && item.name ? toTitleCase(item.name) : key;
+        });
+        document.querySelectorAll("[data-loc-inc]").forEach(elm => {
+            const incWith = elm
+                .getAttribute("data-loc-inc")
+                .split("|")
+                .map(key => {
+                    if (key.startsWith("/")) {
+                        return toTitleCase(itemMap[key]?.name ?? key);
+                    }
+                    return loc(key).replace(/<[^>]+>/g, "");
+                })
+                .join(", ");
+            elm.title = `${loc("worldState_incompatibleWith")} ${incWith}`;
         });
     });
 }
@@ -4438,7 +4448,7 @@ single.getRoute("#guild-route").on("beforeload", function () {
                                 event.preventDefault();
                                 changeGuildRank(guildId, member._id.$oid, member.Rank - 1);
                             };
-                            a.title = loc("guildView_promote");
+                            a.title = itemMap["/Lotus/Language/Menu/SocialOverlay_Promote"].name;
                             a.innerHTML = icons.angleUp;
                             td.appendChild(a);
                         }
@@ -4455,7 +4465,7 @@ single.getRoute("#guild-route").on("beforeload", function () {
                                 event.preventDefault();
                                 changeGuildRank(guildId, member._id.$oid, member.Rank + 1);
                             };
-                            a.title = loc("guildView_demote");
+                            a.title = itemMap["/Lotus/Language/Menu/SocialOverlay_Demote"].name;
                             a.innerHTML = icons.angleDown;
                             td.appendChild(a);
                         }
@@ -5039,7 +5049,22 @@ function createUpgradeInput(targetDiv, itemMap, itemType, upgrade) {
                 up.type == "WEAPON_FIRE_RATE"
                     ? "WEAPON_MELEE_FIRE_RATE"
                     : up.type;
-            option.textContent = loc(locType);
+            if (
+                [
+                    "AVATAR_ABILITY_DURATION",
+                    "AVATAR_ABILITY_EFFICIENCY",
+                    "AVATAR_ABILITY_RANGE",
+                    "AVATAR_ABILITY_STRENGTH",
+                    "WEAPON_ARMOR_PIERCING_DAMAGE",
+                    "WEAPON_MELEE_CHARGE_RATE",
+                    "WEAPON_MELEE_HEAVY_DAMAGE",
+                    "WEAPON_STUN_CHANCE"
+                ].includes(locType)
+            ) {
+                option.textContent = loc(locType);
+            } else {
+                option.textContent = toTitleCase(itemMap["/Lotus/Language/Labels/" + locType]?.name) ?? locType;
+            }
             select.appendChild(option);
         });
         if (upgrade) {
@@ -5519,4 +5544,12 @@ async function doAdminBroadcastInbox() {
 
 function normalizeText(str) {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+function toTitleCase(srt) {
+    return srt
+        .replace(/[_-]+/g, " ")
+        .trim()
+        .toLocaleLowerCase()
+        .replace(/(^|[\s])\p{L}/gu, match => match.toLocaleUpperCase());
 }
