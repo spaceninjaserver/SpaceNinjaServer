@@ -312,7 +312,7 @@ dict = {
     cheats_nemesisHintProgressMultiplierGrineer: `解密进度倍率 (Grineer)`,
     cheats_nemesisHintProgressMultiplierCorpus: `解密进度倍率 (Corpus)`,
     cheats_nemesisExtraWeapon: `额外玄骸武器/代币 (0为禁用)`,
-    cheats_noHubDiscrimination: `无中心歧视`,
+    cheats_noHubDiscrimination: `中继站无地区限制`,
 
     worldState: `世界状态配置`,
     worldState_creditBoost: `现金加成`,
