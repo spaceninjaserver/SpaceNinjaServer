@@ -1,4 +1,4 @@
-import { fromOid, toOid2 } from "../../helpers/inventoryHelpers.ts";
+import { fromOid, toOid2, version_compare } from "../../helpers/inventoryHelpers.ts";
 import { createVeiledRivenFingerprint, rivenRawToRealWeighted } from "../../helpers/rivenHelper.ts";
 import {
     addFusionPoints,
@@ -17,6 +17,7 @@ import { ExportBoosterPacks, ExportUpgrades } from "warframe-public-export-plus"
 
 export const artifactTransmutationController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const inventory = await getInventory2(
         account._id,
         "infiniteCredits",
@@ -59,7 +60,6 @@ export const artifactTransmutationController: RequestHandler = async (req, res) 
             }) - 1;
         await inventory.save();
 
-        const buildLabel = getBuildLabel(req, account);
         res.json({
             NewMods: [
                 {
@@ -117,10 +117,21 @@ export const artifactTransmutationController: RequestHandler = async (req, res) 
                 LEGENDARY: 0
             };
 
-            let options = ExportBoosterPacks["/Lotus/Types/BoosterPacks/ModFuserResult"].components;
-            if (forcedPolarity) {
-                options = options.filter(({ Item }) => ExportUpgrades[Item].polarity == forcedPolarity);
-            }
+            const options = ExportBoosterPacks["/Lotus/Types/BoosterPacks/ModFuserResult"].components.filter(
+                ({ Item }) => {
+                    const meta = getUpgrade(Item)!;
+                    if ((forcedPolarity && meta.polarity != forcedPolarity) || !meta.introducedAt) {
+                        return false;
+                    }
+                    const date = new Date(meta.introducedAt * 1000);
+                    return (
+                        version_compare(
+                            buildLabel,
+                            `${date.getUTCFullYear()}.${date.getUTCMonth()}.${date.getUTCDate()}.${date.getUTCHours()}.${date.getUTCMinutes()}`
+                        ) >= 0
+                    );
+                }
+            );
             newModType = getRandomWeightedRewardUc(options, weights)!.Item;
         }
 
