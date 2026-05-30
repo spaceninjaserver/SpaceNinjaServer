@@ -825,6 +825,7 @@ export const addItem = async (
                     {
                         _id: defaultOverwrites.AltWeaponModeId,
                         AltWeaponModeId: defaultOverwrites._id,
+                        Features: defaultOverwrites.Features, // premium purchase puts potato in both parts
                         IsNew: false // Not 100% sure if this is faithful, but the client seems to act a bit weird when it's set on the melee weapon.
                     },
                     inventoryChanges

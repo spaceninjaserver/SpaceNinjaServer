@@ -129,10 +129,19 @@ export const focusController: RequestHandler = async (req, res) => {
             break;
         case "InstallLens": {
             const request = JSON.parse(String(req.body)) as ILensInstallRequest;
-            const inventory = await getInventory2(account._id, request.Category, "MiscItems");
+            const response: IInstallLensResponse = {
+                weaponId: request.WeaponId,
+                lensType: request.LensType
+            };
+            const bayonetOtherCategory = request.Category == "Melee" ? "LongGuns" : "Melee";
+            const inventory = await getInventory2(account._id, request.Category, bayonetOtherCategory, "MiscItems");
             const item = inventory[request.Category].id(request.WeaponId);
             if (item) {
                 item.FocusLens = request.LensType;
+                if (item.AltWeaponModeId) {
+                    inventory[bayonetOtherCategory].id(item.AltWeaponModeId)!.FocusLens = request.LensType;
+                    response.altWeaponModeId = item.AltWeaponModeId.toString();
+                }
                 addMiscItems(inventory, [
                     {
                         ItemType: request.LensType,
@@ -141,10 +150,7 @@ export const focusController: RequestHandler = async (req, res) => {
                 ]);
             }
             await inventory.save();
-            res.json({
-                weaponId: request.WeaponId,
-                lensType: request.LensType
-            });
+            res.json(response);
             break;
         }
         case "UnlockWay": {
@@ -545,6 +551,11 @@ interface ILensInstallRequest {
     LensType: string;
     Category: TEquipmentKey;
     WeaponId: string;
+}
+interface IInstallLensResponse {
+    weaponId: string;
+    altWeaponModeId?: string;
+    lensType: string;
 }
 
 // Works for ways & upgrades

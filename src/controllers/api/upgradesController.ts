@@ -184,9 +184,11 @@ export const upgradesController: RequestHandler = async (req, res) => {
         }
     } else {
         const payload = JSON.parse(String(req.body)) as IUpgradesRequest;
+        const bayonetOtherCategory = payload.ItemCategory == "Melee" ? "LongGuns" : "Melee";
         const inventory = await getInventory2(
             accountId,
             payload.ItemCategory,
+            bayonetOtherCategory,
             "MiscItems",
             "infinitePlatinum",
             "PremiumCredits",
@@ -262,6 +264,11 @@ export const upgradesController: RequestHandler = async (req, res) => {
                         const item = inventory[payload.ItemCategory].id(payload.ItemId.$oid)!;
                         item.Features ??= 0;
                         item.Features |= eEquipmentFeatures.DOUBLE_CAPACITY;
+                        if (item.AltWeaponModeId) {
+                            const otherItem = inventory[bayonetOtherCategory].id(item.AltWeaponModeId)!;
+                            otherItem.Features ??= 0;
+                            otherItem.Features |= eEquipmentFeatures.DOUBLE_CAPACITY;
+                        }
                         break;
                     }
                     case "/Lotus/Types/Items/MiscItems/UtilityUnlocker":
@@ -269,6 +276,11 @@ export const upgradesController: RequestHandler = async (req, res) => {
                         const item = inventory[payload.ItemCategory].id(payload.ItemId.$oid)!;
                         item.Features ??= 0;
                         item.Features |= eEquipmentFeatures.UTILITY_SLOT;
+                        if (item.AltWeaponModeId) {
+                            const otherItem = inventory[bayonetOtherCategory].id(item.AltWeaponModeId)!;
+                            otherItem.Features ??= 0;
+                            otherItem.Features |= eEquipmentFeatures.UTILITY_SLOT;
+                        }
                         break;
                     }
                     case "/Lotus/Types/Items/MiscItems/HeavyWeaponCatalyst": {
@@ -307,6 +319,13 @@ export const upgradesController: RequestHandler = async (req, res) => {
                         setSlotPolarity(item, operation.PolarizeSlot, operation.PolarizeValue);
                         item.Polarized ??= 0;
                         item.Polarized += 1;
+                        if (item.AltWeaponModeId) {
+                            const otherItem = inventory[bayonetOtherCategory].id(item.AltWeaponModeId)!;
+                            otherItem.XP = 0;
+                            setSlotPolarity(otherItem, operation.PolarizeSlot, operation.PolarizeValue);
+                            otherItem.Polarized ??= 0;
+                            otherItem.Polarized += 1;
+                        }
                         sendWsBroadcastTo(accountId, { update_inventory: true }); // webui may need to to re-add "max rank" button
                         break;
                     }

@@ -1402,6 +1402,10 @@ async function populateInventoryRoute() {
                             revalidateAuthz().then(async () => {
                                 if (item.XP < maxXP) {
                                     await addGearExp(category, item.ItemId.$oid, maxXP - item.XP);
+                                    if (item.AltWeaponModeId) {
+                                        const otherCategory = category == "Melee" ? "LongGuns" : "Melee";
+                                        await addGearExp(otherCategory, item.AltWeaponModeId.$oid, maxXP - item.XP);
+                                    }
                                 }
                                 if ("exalted" in itemMap[item.ItemType]) {
                                     for (const exaltedType of itemMap[item.ItemType].exalted) {
