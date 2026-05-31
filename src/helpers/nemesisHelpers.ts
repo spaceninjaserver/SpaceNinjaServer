@@ -260,7 +260,7 @@ export const getInfNodes = (manifest: INemesisManifest, rank: number): IInfNode[
 // Get a parazon 'passcode' based on the nemesis fingerprint so it's always the same for the same nemesis.
 export const getNemesisPasscode = (nemesis: { fp: bigint; Faction: TNemesisFaction }): number[] => {
     const rng = new SRng(nemesis.fp);
-    const choices = [0, 1, 2, 3, 5, 6, 7];
+    const choices = [0, 1, 2, 3, 4, 5, 6, 7];
     let choiceIndex = rng.randomInt(0, choices.length - 1);
     const passcode = [choices[choiceIndex]];
     if (nemesis.Faction != "FC_INFESTATION") {
