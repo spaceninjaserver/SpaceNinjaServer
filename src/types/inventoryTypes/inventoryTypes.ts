@@ -1061,7 +1061,7 @@ export interface IGoalProgressClient {
     Best?: number;
     Count: number;
     Tag: string;
-    _id: IOid;
+    _id: IOidWithLegacySupport;
     //ReceivedClanReward0?: boolean;
     //ReceivedClanReward1?: boolean;
 }

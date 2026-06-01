@@ -337,6 +337,8 @@ dict = {
     worldState_lunarNewYearAnimal12: `[UNTRANSLATED] Pig`,
     worldState_anniversary: `Річниця Warframe`,
     worldState_useAnniversaryTagForOldGoals: `Використати <code>Tag</code> з річниці Warframe для старих подій`,
+    worldState_giveBreedingGroundsRewardsAtSum: `[UNTRANSLATED] Give rewards based on Total Score`,
+    worldState_giveBreedingGroundsRewardsAtSumDesc: `[UNTRANSLATED] For some reason game doesn't increase difficulty based on total score, so it's impossible to get rewards for best score.`,
     worldState_dogDaysRewards: `Нагороди Спекотних днів`,
     worldState_voidCorruption: `Викривлення Порожнечі (|VAL|)`,
     worldState_dagathAlerts: `Виклики Даґат (|VAL|)`,

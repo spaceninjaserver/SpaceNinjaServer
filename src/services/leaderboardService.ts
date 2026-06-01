@@ -39,7 +39,7 @@ export const submitLeaderboardScore = async (
                     { $inc: { score: delta }, $set: { displayName: guild.Name, guildTier: guild.Tier } },
                     { upsert: true }
                 );
-                const goal = getWorldState().Goals.find(x => x.ScoreMaxTag == leaderboard);
+                const goal = getWorldState(undefined, false, false).Goals.find(x => x.ScoreMaxTag == leaderboard);
                 if (goal) {
                     await handleGuildGoalProgress(guild, {
                         Count: delta,

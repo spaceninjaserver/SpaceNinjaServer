@@ -54,7 +54,8 @@
   "unfaithfulBugFixes": {
     "ignore1999LastRegionPlayed": false,
     "fixXtraCheeseTimer": false,
-    "useAnniversaryTagForOldGoals": true
+    "useAnniversaryTagForOldGoals": true,
+    "giveBreedingGroundsRewardsAtSum": true
   },
   "worldState": {
     "creditBoost": false,
@@ -119,7 +120,8 @@
     "darvoStockMultiplier": 1,
     "communitySynthesisTarget": 0,
     "communitySynthesisProgress": 0,
-    "snowdayShowdown": false
+    "snowdayShowdown": false,
+    "breedingGrounds": false
   },
   "serversideQualityOfLife": {
     "twentythreeHourMasteryRankCooldown": true,

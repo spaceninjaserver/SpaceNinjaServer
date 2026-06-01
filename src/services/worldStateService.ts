@@ -37,7 +37,8 @@ import type {
     TCircuitGameMode,
     IFlashSale,
     IAlertMissionInfo,
-    IEndlessXpChoice
+    IEndlessXpChoice,
+    IGoalV9
 } from "../types/worldStateTypes.ts";
 import { toMongoDate2, toOid, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
@@ -1816,7 +1817,11 @@ export const getInvasionByOid = (oid: string): IInvasion | undefined => {
     return undefined;
 };
 
-export const getWorldState = (buildLabel: string = BL_LATEST): IWorldState => {
+export const getWorldState = (
+    buildLabel: string = BL_LATEST,
+    convertGoals: boolean = true,
+    changeLegacyTags: boolean = config.unfaithfulBugFixes?.useAnniversaryTagForOldGoals || false
+): IWorldState => {
     const constraints: ITimeConstraint[] = [];
     if (config.worldState?.eidolonOverride) {
         constraints.push(config.worldState.eidolonOverride == "day" ? eidolonDayConstraint : eidolonNightConstraint);
@@ -3000,7 +3005,7 @@ export const getWorldState = (buildLabel: string = BL_LATEST): IWorldState => {
                 Faction: "FC_INFESTATION",
                 Desc: "/Lotus/Language/Events/TacAlertHalloweenLantern",
                 Icon: "/Lotus/Interface/Icons/JackOLanternColour.png",
-                Tag: config.unfaithfulBugFixes?.useAnniversaryTagForOldGoals ? tagsForOlderGoals[0] : "Halloween19",
+                Tag: changeLegacyTags ? tagsForOlderGoals[0] : "Halloween19",
                 InterimRewards: [
                     { items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst"] },
                     { items: ["/Lotus/StoreItems/Types/Items/MiscItems/Forma"] }
@@ -3026,9 +3031,7 @@ export const getWorldState = (buildLabel: string = BL_LATEST): IWorldState => {
                 Desc: "/Lotus/Language/Events/TacAlertHalloweenLanternEndless",
                 Icon: "/Lotus/Interface/Icons/JackOLanternColour.png",
                 Tag: "Halloween19Endless",
-                PrereqGoalTags: [
-                    config.unfaithfulBugFixes?.useAnniversaryTagForOldGoals ? tagsForOlderGoals[0] : "Halloween19"
-                ],
+                PrereqGoalTags: [changeLegacyTags ? tagsForOlderGoals[0] : "Halloween19"],
                 Reward: {
                     items: [
                         "/Lotus/StoreItems/Upgrades/Skins/Effects/BatsEphemera",
@@ -3092,7 +3095,7 @@ export const getWorldState = (buildLabel: string = BL_LATEST): IWorldState => {
             Success: 0,
             Personal: true,
             Bounty: true,
-            Tag: config.unfaithfulBugFixes?.useAnniversaryTagForOldGoals ? tagsForOlderGoals[0] : "Halloween",
+            Tag: changeLegacyTags ? tagsForOlderGoals[0] : "Halloween",
             Faction: "FC_INFESTATION",
             Desc: "/Lotus/Language/G1Quests/TacAlertHalloweenTitle",
             ToolTip: "/Lotus/Language/G1Quests/TacAlertHalloweenToolTip",
@@ -3118,9 +3121,7 @@ export const getWorldState = (buildLabel: string = BL_LATEST): IWorldState => {
                 Bounty: true,
                 Best: true,
                 Tag: "Halloween",
-                PrereqGoalTags: [
-                    config.unfaithfulBugFixes?.useAnniversaryTagForOldGoals ? tagsForOlderGoals[0] : "Halloween"
-                ],
+                PrereqGoalTags: [changeLegacyTags ? tagsForOlderGoals[0] : "Halloween"],
                 Faction: "FC_INFESTATION",
                 Desc: "Hallowed Nightmares - Time Attack",
                 ToolTip: "/Lotus/Language/G1Quests/TacAlertHalloweenToolTip",
@@ -3206,7 +3207,7 @@ export const getWorldState = (buildLabel: string = BL_LATEST): IWorldState => {
             Faction: "FC_CORPUS",
             Desc: "/Lotus/Language/Alerts/TacAlertProxyRebellion",
             Icon: "/Lotus/Materials/Emblems/BountyBadge_e.png",
-            Tag: config.unfaithfulBugFixes?.useAnniversaryTagForOldGoals ? tagsForOlderGoals[1] : "ProxyRebellion",
+            Tag: changeLegacyTags ? tagsForOlderGoals[1] : "ProxyRebellion",
             InterimRewards: rewards[year].slice(0, 2),
             Reward: rewards[year][2],
             BonusReward: rewards[year][3]
@@ -3225,7 +3226,7 @@ export const getWorldState = (buildLabel: string = BL_LATEST): IWorldState => {
             Success: 0,
             Personal: true,
             Bounty: true,
-            Tag: config.unfaithfulBugFixes?.useAnniversaryTagForOldGoals ? tagsForOlderGoals[2] : "NightwatchTacAlert",
+            Tag: changeLegacyTags ? tagsForOlderGoals[2] : "NightwatchTacAlert",
             Faction: "FC_GRINEER",
             Desc: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertTitle",
             Icon: "/Lotus/Materials/Emblems/BountyBadge_e.png",
@@ -4171,6 +4172,39 @@ export const getWorldState = (buildLabel: string = BL_LATEST): IWorldState => {
         });
     }
 
+    if (config.worldState?.breedingGrounds && version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
+        worldState.Goals.push({
+            _id: toOid2("53a35a043f9a5b16e0308ea7", buildLabel),
+            Activation: toMongoDate2(1753204900185, buildLabel),
+            Count: 0,
+            Desc: "/Lotus/Language/G1Quests/InfestedCorpusHiveEventName",
+            Expiry: toMongoDate2(2000000000000, buildLabel),
+            Goal: 48,
+            InterimGoals: [6, 17],
+            MissionKeyName: "/Lotus/Types/Keys/InfestedCorpusHiveEventKey",
+            Node: "EventNode10",
+            Success: 0,
+            ToolTip: "/Lotus/Language/G1Quests/InfestedCorpusHiveEventToolTip",
+            Personal: true,
+            Best: !config.unfaithfulBugFixes?.giveBreedingGroundsRewardsAtSum,
+            Tag: changeLegacyTags ? tagsForOlderGoals[3] : "HiveEvent", // Madeup tag
+            InterimRewards: [
+                { items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/HiveSabotageEventBadgeItem"] },
+                {
+                    items: [
+                        "/Lotus/StoreItems/Upgrades/Mods/Rifle/DualStat/FireEventRifleMod",
+                        "/Lotus/StoreItems/Upgrades/Mods/Shotgun/DualStat/FireEventShotgunMod",
+                        "/Lotus/StoreItems/Upgrades/Mods/Pistol/DualStat/FireEventPistolMod",
+                        "/Lotus/StoreItems/Upgrades/Mods/Melee/DualStat/FireEventMeleeMod"
+                    ]
+                }
+            ],
+            Reward: { items: ["/Lotus/StoreItems/Weapons/ClanTech/Energy/VandalElectroProd"] },
+            ScoreSumTag: "HiveEventScoreSum",
+            ScoreMaxTag: "HiveEvent"
+        });
+    }
+
     if (config.worldState?.creditBoost) {
         worldState.GlobalUpgrades.push({
             _id: toOid2("5b23106f283a555109666672", buildLabel),
@@ -4574,6 +4608,11 @@ export const getWorldState = (buildLabel: string = BL_LATEST): IWorldState => {
     }
     worldState.Tmp = JSON.stringify(tmp);
 
+    if (convertGoals && version_compare(buildLabel, gameToBuildVersion["20.4.0"]) < 0) {
+        worldState.Version = 9;
+        convertGoalsToV9(worldState.Goals);
+    }
+
     // This must be the last field in these versions.
     if (
         version_compare(buildLabel, gameToBuildVersion["18.18.0"]) >= 0 &&
@@ -4583,6 +4622,96 @@ export const getWorldState = (buildLabel: string = BL_LATEST): IWorldState => {
     }
 
     return worldState;
+};
+
+const convertGoalsToV9 = (goals: IGoal[]): void => {
+    for (let i = 0; i < goals.length; i++) {
+        const g = goals[i];
+        goals[i] = {
+            _id: g._id,
+            Activation: g.Activation,
+            AltActivation: g.AltActivation,
+            Expiry: g.Expiry,
+
+            Count: g.Count,
+            CountAlt: g.CountAlt,
+            ParentCountClamp: g.ParentCountClamp,
+            HealthPct: g.HealthPct,
+
+            Icon: g.Icon,
+            Desc: g.Desc,
+            CommunityReqDesc: g.CommunityReqDesc,
+            ToolTip: g.ToolTip,
+            Faction: g.Faction,
+
+            Goal: g.Goal,
+            GoalInterim: g.InterimGoals && g.InterimGoals[0] ? g.InterimGoals[0] : undefined,
+            GoalInterim2: g.InterimGoals && g.InterimGoals[1] ? g.InterimGoals[1] : undefined,
+            BonusGoal: g.BonusGoal,
+
+            Success: g.Success,
+            Personal: g.Personal,
+            Best: g.Best,
+            Ongoing: g.Ongoing,
+            Bounty: g.Bounty,
+            Fomorian: g.Fomorian,
+            Invasion: g.Invasion,
+            ClampNodeScores: g.ClampNodeScores,
+            Roaming: g.Roaming,
+            PvpRep: g.PvpRep,
+
+            Transmission: g.Transmission,
+            ItemType: g.ItemType,
+
+            Tag: g.Tag,
+            ParentTag: g.ParentTag,
+            PrereqGoalTags: g.PrereqGoalTags,
+
+            Node: g.Node,
+            VictimNode: g.VictimNode,
+            InvasionNode: g.InvasionNode,
+
+            ConcurrentMissionKeyNames: g.ConcurrentMissionKeyNames,
+            ConcurrentMissionInfo: g.ConcurrentMissionInfo,
+            ConcurrentNodeReqs: g.ConcurrentNodeReqs,
+            ConcurrentNodes: g.ConcurrentNodes,
+            MissionKeyName: g.MissionKeyName,
+            KeyRequired: g.KeyRequired,
+
+            Reward: g.Reward,
+            RewardInterim: g.InterimRewards && g.InterimRewards[0] ? g.InterimRewards[0] : undefined,
+            RewardInterim2: g.InterimRewards && g.InterimRewards[1] ? g.InterimRewards[1] : undefined,
+            BonusReward: g.BonusReward,
+
+            ScoreVar: g.ScoreVar,
+            ScoreLocTag: g.ScoreLocTag,
+            ScoreSumTag: g.ScoreSumTag,
+            ScoreMaxTag: g.ScoreMaxTag,
+            ScoreMaxNode: g.ScoreMaxNode,
+            ArchiveTag: g.JobAffiliationTag,
+
+            MissionInfo: g.MissionInfo,
+
+            SuccessHubEvent: g.SuccessHubEvent,
+            FailureHubEvent: g.FailureHubEvent,
+            ContinuousHubEvent: g.ContinuousHubEvent,
+
+            Types: g.Types,
+            RewardRegion: g.RewardRegion,
+
+            RegionDrops: g.RegionDrops,
+            ArchwingDrops: g.ArchwingDrops,
+
+            Diorama: g.Diorama,
+            RadioSound: g.RadioSound,
+
+            MaxConclave: g.MaxConclave,
+            BonusMaxConclave: g.BonusMaxConclave,
+
+            BonusLevelModifier: g.BonusLevelModifier,
+            BonusWaveModifier: g.BonusWaveModifier
+        } as IGoalV9;
+    }
 };
 
 export const populateFissures = async (worldState: IWorldState): Promise<void> => {

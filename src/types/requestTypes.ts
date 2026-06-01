@@ -154,14 +154,7 @@ export type IMissionInventoryUpdateRequest = {
     };
     wagerTier?: number; // the index
     creditsFee?: number; // the index
-    GoalProgress?: {
-        _id: IOid;
-        Count: number;
-        Best: number;
-        Tag: string;
-        IsMultiProgress: boolean;
-        MultiProgress: unknown[];
-    }[];
+    GoalProgress?: IGoalsProgress[];
     InvasionProgress?: IInvasionProgressClient[];
     ConquestMissionsCompleted?: number;
     duviriSuitSelection?: string;
@@ -238,6 +231,15 @@ export interface IRewardInfo extends IBountyRewardInfo {
     PVPChallengeInstancesCompleted?: {
         ChallengeInstanceIDs: IOidWithLegacySupport[];
     };
+}
+
+export interface IGoalsProgress {
+    _id: IOidWithLegacySupport;
+    Count: number;
+    Best: number;
+    Tag?: string;
+    IsMultiProgress?: boolean;
+    MultiProgress?: unknown[];
 }
 
 type IMissionStatus = "GS_SUCCESS" | "GS_FAILURE" | "GS_DUMPED" | "GS_QUIT" | "GS_INTERRUPTED";

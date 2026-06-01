@@ -44,6 +44,7 @@ interface IDatabaseAccount extends IAccountCreationData {
     receivedEventMessage_bloodOfPerita?: boolean;
     receivedEventMessage_longShadow?: boolean;
     receivedEventMessage_operationAtramentum?: boolean;
+    receivedEventMessage_breedingGrounds?: boolean;
 }
 
 // Includes virtual ID

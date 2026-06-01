@@ -91,6 +91,7 @@ import { giveLoginRewardController } from "../controllers/api/giveLoginRewardCon
 import { giveQuestKeyRewardController } from "../controllers/api/giveQuestKeyRewardController.ts";
 import { giveShipDecoAndLoreFragmentController } from "../controllers/api/giveShipDecoAndLoreFragmentController.ts";
 import { giveStartingGearGetController, giveStartingGearPostController } from "../controllers/api/giveStartingGearController.ts";
+import { goalsController } from "../controllers/api/goalsController.ts";
 import { guildTechController } from "../controllers/api/guildTechController.ts";
 import { hostSessionController } from "../controllers/api/hostSessionController.ts";
 import { hubBlessingController } from "../controllers/api/hubBlessingController.ts";
@@ -341,6 +342,7 @@ apiRouter.post("/giveLoginReward.php", giveLoginRewardController); // ~U18
 apiRouter.post("/giveQuestKeyReward.php", giveQuestKeyRewardController);
 apiRouter.post("/giveShipDecoAndLoreFragment.php", giveShipDecoAndLoreFragmentController);
 apiRouter.post("/giveStartingGear.php", giveStartingGearPostController);
+apiRouter.post("/goals.php", goalsController);
 apiRouter.post("/guildTech.php", guildTechController);
 apiRouter.post("/hostSession.php", hostSessionController);
 apiRouter.post("/hubBlessing.php", hubBlessingController);

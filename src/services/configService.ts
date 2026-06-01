@@ -62,6 +62,7 @@ export interface IConfig {
         ignore1999LastRegionPlayed?: boolean;
         fixXtraCheeseTimer?: boolean;
         useAnniversaryTagForOldGoals?: boolean;
+        giveBreedingGroundsRewardsAtSum?: boolean;
     };
     worldState?: {
         creditBoost?: boolean;
@@ -129,6 +130,7 @@ export interface IConfig {
         communitySynthesisTarget?: number;
         communitySynthesisProgress?: number;
         snowdayShowdown?: boolean;
+        breedingGrounds?: boolean;
     };
     serversideQualityOfLife?: {
         twentythreeHourMasteryRankCooldown?: boolean;

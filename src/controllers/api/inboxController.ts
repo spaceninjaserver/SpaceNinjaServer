@@ -308,6 +308,18 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
             minBuildVersion: buildVersionToInt(gameToBuildVersion["42.0.0"])
         });
     }
+    if (config.worldState?.breedingGrounds && !account.receivedEventMessage_breedingGrounds) {
+        account.receivedEventMessage_breedingGrounds = true;
+        newEventMessages.push({
+            sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+            sub: "/Lotus/Language/G1Quests/HiveEventLotusInboxTitle",
+            msg: "/Lotus/Language/G1Quests/HiveEventLotusInboxDesc",
+            icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+            startDate: new Date(),
+            CrossPlatform: true,
+            minBuildVersion: buildVersionToInt(gameToBuildVersion["14.0.0"])
+        });
+    }
 
     if (newEventMessages.length === 0) {
         return;

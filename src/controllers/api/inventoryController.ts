@@ -855,6 +855,12 @@ export const getInventoryResponse = async (
     toLegacyDate(inventoryResponse.TrainingDate);
     toLegacyDate(inventoryResponse.NextRefill!);
 
+    if (inventoryResponse.PersonalGoalProgress) {
+        for (const progress of inventoryResponse.PersonalGoalProgress) {
+            toLegacyOid(progress._id);
+        }
+    }
+
     // Pre-U18.18 builds use a different UpgradeFingerprint format
     if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) >= 0) {
         return inventoryResponse;

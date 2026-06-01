@@ -9,7 +9,7 @@ export interface IWorldState {
     BuildLabel: string;
     Time: number;
     Events: IEvent[];
-    Goals: IGoal[];
+    Goals: IGoal[] | IGoalV9[];
     Alerts: IAlert[];
     Sorties: ISortie[];
     LiteSorties: ILiteSortie[];
@@ -118,62 +118,33 @@ export interface IAlertMissionInfo {
     maxRotations?: number; // SNS specific field
 }
 
-export interface IGoal {
-    _id: IOidWithLegacySupport;
-    Activation: IMongoDateWithLegacySupport;
-    Expiry: IMongoDateWithLegacySupport;
+export interface IGoal extends Omit<IGoalV9, "GoalInterim" | "GoalInterim2" | "RewardInterim" | "RewardInterim2"> {
     GracePeriod?: IMongoDate; // U41+
 
-    Count?: number;
-    HealthPct?: number;
-
-    Icon?: string;
-    Desc: string;
-    ToolTip?: string;
-    Faction?: string;
-
-    Goal?: number;
     InterimGoals?: number[];
-    BonusGoal?: number;
     ClanGoal?: number[];
 
-    Success?: number;
-    Personal?: boolean;
     Community?: boolean;
-    Best?: boolean; // Use Best instead of Count to check for reward
-    Bounty?: boolean; // Tactical Alert
-    ClampNodeScores?: boolean;
 
-    Transmission?: string;
+    RelayReconstruction?: boolean;
+    RoamingVIP?: boolean;
+    HideWhenComplete?: boolean;
+    ScoreTagBlocksGuildTierChanges?: boolean;
+    ShowTotalAtEOM?: boolean;
+    IsMultiProgress?: boolean;
+
     InstructionalItem?: string;
-    ItemType?: string;
 
-    Tag: string;
-    PrereqGoalTags?: string[];
-
-    Node?: string;
-    VictimNode?: string;
-
-    ConcurrentMissionKeyNames?: string[];
-    ConcurrentNodeReqs?: number[];
-    ConcurrentNodes?: string[];
     RegionIdx?: number;
     Regions?: number[];
-    MissionKeyName?: string;
 
-    Reward?: IMissionReward;
     InterimRewards?: IMissionReward[];
-    BonusReward?: IMissionReward;
 
     JobAffiliationTag?: string;
     Jobs?: ISyndicateJob[];
     PreviousJobs?: ISyndicateJob[];
     JobCurrentVersion?: IOid;
     JobPreviousVersion?: IOid;
-
-    ScoreVar?: string;
-    ScoreMaxTag?: string; // Field in leaderboard
-    ScoreLocTag?: string;
 
     MissionKeyRotation?: string[];
     MissionKeyRotationInterval?: number;
@@ -186,13 +157,105 @@ export interface IGoal {
     Metadata?: string;
     CompletionBonus?: number[];
     AltExpiry?: IMongoDate;
-    AltActivation?: IMongoDate;
     EpochNum?: number;
     NextAltActivation?: IMongoDate;
     NextAltExpiry?: IMongoDate;
     PauseAutoScheduling?: boolean;
 }
 
+export interface IGoalV9 {
+    _id: IOidWithLegacySupport;
+    Activation: IMongoDateWithLegacySupport;
+    AltActivation?: IMongoDateWithLegacySupport;
+    Expiry: IMongoDateWithLegacySupport;
+
+    Count?: number;
+    CountAlt?: number;
+    ParentCountClamp?: number;
+    HealthPct?: number;
+
+    Icon?: string;
+    Desc: string;
+    CommunityReqDesc?: string;
+    ToolTip?: string;
+    Faction?: TFaction;
+
+    Goal?: number;
+    GoalInterim?: number;
+    GoalInterim2?: number;
+    BonusGoal?: number;
+
+    Success?: number;
+    Personal?: boolean;
+    Best?: boolean; // Use Best instead of Count to check for reward
+    Ongoing?: boolean;
+    Bounty?: boolean; // Tactical Alert
+    Fomorian?: boolean;
+    Invasion?: boolean;
+    ClampNodeScores?: boolean;
+    Roaming?: boolean;
+    PvpRep?: boolean;
+
+    Transmission?: string;
+    ItemType?: string;
+
+    Tag: string;
+    ParentTag?: string;
+    PrereqGoalTags?: string[];
+
+    Node?: string;
+    VictimNode?: string;
+    InvasionNode?: string;
+
+    ConcurrentMissionKeyNames?: string[];
+    ConcurrentMissionInfo?: IAlertMissionInfo[];
+    ConcurrentNodeReqs?: number[];
+    ConcurrentNodes?: string[];
+    MissionKeyName?: string;
+    KeyRequired?: boolean;
+
+    Reward?: IMissionReward;
+    RewardInterim?: IMissionReward;
+    RewardInterim2?: IMissionReward;
+    BonusReward?: IMissionReward;
+
+    ScoreVar?: string;
+    ScoreLocTag?: string;
+    ScoreSumTag?: string;
+    ScoreMaxTag?: string; // Field in leaderboard
+    ScoreMaxNode?: string;
+    ArchiveTag?: string;
+
+    MissionInfo?: IAlertMissionInfo;
+
+    SuccessHubEvent?: IHubEvent;
+    FailureHubEvent?: IHubEvent;
+    ContinuousHubEvent?: IHubEvent;
+
+    Types?: string[];
+    RewardRegion?: number;
+
+    RegionDrops?: string[];
+    ArchwingDrops?: string[];
+
+    WebUrl?: string;
+
+    Diorama?: string;
+    RadioSound?: string;
+
+    MaxConclave?: number;
+    BonusMaxConclave?: number;
+
+    BonusLevelModifier?: number;
+    BonusWaveModifier?: number;
+}
+
+interface IHubEvent {
+    Transmissions: string[];
+    Activation: IMongoDateWithLegacySupport;
+    Expiry: IMongoDateWithLegacySupport;
+    RepeatInterval: number;
+}
 export interface ISyndicateJob {
     jobType?: string;
     rewards: string;

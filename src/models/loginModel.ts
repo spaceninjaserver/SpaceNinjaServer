@@ -37,7 +37,8 @@ const databaseAccountSchema = new Schema<IDatabaseAccountJson>(
         receivedEventMessage_galleonOfGhouls: Boolean,
         receivedEventMessage_bloodOfPerita: Boolean,
         receivedEventMessage_longShadow: Boolean,
-        receivedEventMessage_operationAtramentum: Boolean
+        receivedEventMessage_operationAtramentum: Boolean,
+        receivedEventMessage_breedingGrounds: Boolean
     },
     opts
 );

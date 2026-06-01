@@ -215,6 +215,11 @@ export const updateStats = async (
                             }
                             break;
 
+                        case "HiveEventScoreSum":
+                            playerStats[category] ??= 0;
+                            playerStats[category] += data as number;
+                            break;
+
                         default:
                             if (!ignoredCategories.includes(category)) {
                                 unknownCategories[action] ??= [];
@@ -415,17 +420,22 @@ export const updateStats = async (
                         case "FlotillaGroundBadgesTier2":
                         case "FlotillaGroundBadgesTier3":
                         case "MechSurvivalScoreMax":
+                        case "HiveEventScore": {
                             playerStats[category] ??= 0;
                             if (data > playerStats[category]) playerStats[category] = data as number;
+                            const lCategory = ["HiveEventScore"].includes(category)
+                                ? category.replace("Score", "")
+                                : category;
                             await submitLeaderboardScore(
                                 "events",
-                                category,
+                                lCategory,
                                 accountOwnerId,
                                 payload.displayName,
                                 data as number,
                                 payload.guildId
                             );
                             break;
+                        }
 
                         default:
                             if (!ignoredCategories.includes(category)) {

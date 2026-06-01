@@ -337,6 +337,8 @@ dict = {
     worldState_lunarNewYearAnimal12: `猪`,
     worldState_anniversary: `12周年纪念活动`,
     worldState_useAnniversaryTagForOldGoals: `使用纪念活动<code>Tag</code>解决旧活动不显示问题`,
+    worldState_giveBreedingGroundsRewardsAtSum: `[UNTRANSLATED] Give rewards based on Total Score`,
+    worldState_giveBreedingGroundsRewardsAtSumDesc: `[UNTRANSLATED] For some reason game doesn't increase difficulty based on total score, so it's impossible to get rewards for best score.`,
     worldState_dogDaysRewards: `三伏天奖励设置`,
     worldState_voidCorruption: `虚空堕落 (|VAL|)`,
     worldState_dagathAlerts: `Dagath 警报 (|VAL|)`,

@@ -109,6 +109,10 @@ const statsSchema = new Schema<IStatsDatabase>({
     OlliesCrashCourseScore: Number,
     DojoObstacleScore: Number,
 
+    // add
+    HiveEventScoreSum: Number,
+
+    // max
     Halloween16: Number,
     AmalgamEventScoreMax: Number,
     Halloween19ScoreMax: Number,
@@ -119,7 +123,8 @@ const statsSchema = new Schema<IStatsDatabase>({
     FlotillaGroundBadgesTier1: Number,
     FlotillaGroundBadgesTier2: Number,
     FlotillaGroundBadgesTier3: Number,
-    MechSurvivalScoreMax: Number
+    MechSurvivalScoreMax: Number,
+    HiveEventScore: Number
 });
 
 statsSchema.set("toJSON", {
