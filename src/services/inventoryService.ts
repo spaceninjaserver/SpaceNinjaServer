@@ -2,8 +2,7 @@ import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inven
 import { Inventory } from "../models/inventoryModels/inventoryModel.ts";
 import { config } from "./configService.ts";
 import { Types } from "mongoose";
-import type { SlotNames, IInventoryChanges, IBinChanges, IAffiliationMods } from "../types/purchaseTypes.ts";
-import { slotNames } from "../types/purchaseTypes.ts";
+import type { IInventoryChanges, IBinChanges, IAffiliationMods } from "../types/purchaseTypes.ts";
 import type {
     IChallengeProgress,
     IMiscItem,
@@ -31,7 +30,7 @@ import type {
     ICollectibleEntry,
     TInventorySlot
 } from "../types/inventoryTypes/inventoryTypes.ts";
-import { eInventorySlot, equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
+import { eInventorySlot, equipmentKeys, slotNames } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdateTypes.ts";
 import type { IGoalsProgress, IKeyChainRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes.ts";
 import { logger } from "../utils/logger.ts";
@@ -404,9 +403,9 @@ export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, del
             for (const item of right) {
                 left.push(item);
             }
-        } else if (slotNames.indexOf(key as SlotNames) != -1) {
-            const left = InventoryChanges[key as SlotNames]!;
-            const right = delta[key as SlotNames]!;
+        } else if (slotNames.indexOf(key as TInventorySlot) != -1) {
+            const left = InventoryChanges[key as TInventorySlot]!;
+            const right = delta[key as TInventorySlot]!;
             if (right.count) {
                 left.count ??= 0;
                 left.count += right.count;
@@ -1700,7 +1699,7 @@ export const addKubrowPetPrint = (
     );
 };
 
-export const updateSlots = <ST extends SlotNames>(
+export const updateSlots = <ST extends TInventorySlot>(
     inventory: Pick<TInventoryDatabaseDocument, ST>,
     slotName: ST,
     slotAmount: number,

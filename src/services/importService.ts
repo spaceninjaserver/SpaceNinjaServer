@@ -37,7 +37,7 @@ import type {
     INemesisBaseDatabase,
     IFusionTreasure
 } from "../types/inventoryTypes/inventoryTypes.ts";
-import { equipmentKeys, type IStepSequencerDatabase } from "../types/inventoryTypes/inventoryTypes.ts";
+import { equipmentKeys, slotNames, type IStepSequencerDatabase } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 import type {
     ILoadoutConfigClient,
@@ -45,7 +45,6 @@ import type {
     ILoadoutDatabase,
     ILoadOutPresets
 } from "../types/saveLoadoutTypes.ts";
-import { slotNames } from "../types/purchaseTypes.ts";
 import {
     eStatus,
     type ICrewShipMemberClient,

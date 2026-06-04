@@ -15,7 +15,8 @@ import type {
     IRawUpgrade,
     IFocusUpgrade,
     IFocusLoadoutClient,
-    IWeaponSkinClient
+    IWeaponSkinClient,
+    TInventorySlot
 } from "./inventoryTypes/inventoryTypes.ts";
 
 export const ePurchaseSource = {
@@ -77,7 +78,7 @@ export interface IPurchaseParams {
 }
 
 export type IInventoryChanges = {
-    [_ in SlotNames]?: IBinChanges;
+    [_ in TInventorySlot]?: IBinChanges;
 } & {
     [_ in TEquipmentKey]?: IEquipmentClient[];
 } & {
@@ -108,7 +109,7 @@ export type IInventoryChanges = {
 } & Record<
         Exclude<
             string,
-            | SlotNames
+            | TInventorySlot
             | TEquipmentKey
             | "RegularCredits"
             | "PremiumCredits"
@@ -143,21 +144,3 @@ export type IBinChanges = {
     Slots: number;
     Extra?: number;
 };
-
-export const slotNames = [
-    "SuitBin",
-    "WeaponBin",
-    "MechBin",
-    "PveBonusLoadoutBin",
-    "PvpBonusLoadoutBin",
-    "SentinelBin",
-    "SpaceSuitBin",
-    "SpaceWeaponBin",
-    "OperatorAmpBin",
-    "RandomModBin",
-    "CrewShipSalvageBin",
-    "CrewMemberBin",
-    "PetBin"
-] as const;
-
-export type SlotNames = (typeof slotNames)[number];

@@ -28,7 +28,6 @@ import type {
 } from "../equipmentTypes.ts";
 import type { ILoadoutConfigClientLegacy, ILoadOutPresets } from "../saveLoadoutTypes.ts";
 import type { CalendarSeasonType } from "../worldStateTypes.ts";
-import type { SlotNames } from "../purchaseTypes.ts";
 import type { IPendingTradeClient } from "../tradingTypes.ts";
 
 type InventoryDatabaseEquipment = {
@@ -368,7 +367,7 @@ type InventoryClientEquipment = {
 };
 
 type InventorySlots = {
-    [_ in SlotNames]: ISlots;
+    [_ in TInventorySlot]: ISlots;
 };
 
 export interface IInventoryAccolades {
@@ -708,6 +707,7 @@ export const eInventorySlot = {
     SPACEWEAPONS: "SpaceWeaponBin",
     MECHSUITS: "MechBin",
     PVE_LOADOUTS: "PveBonusLoadoutBin",
+    PVP_LOADOUTS: "PvpBonusLoadoutBin",
     SENTINELS: "SentinelBin",
     AMPS: "OperatorAmpBin",
     RJ_COMPONENT_AND_ARMAMENTS: "CrewShipSalvageBin",
@@ -716,6 +716,7 @@ export const eInventorySlot = {
     PETS: "PetBin"
 } as const;
 export type TInventorySlot = (typeof eInventorySlot)[keyof typeof eInventorySlot];
+export const slotNames = Object.values(eInventorySlot);
 
 export interface ISlots {
     Extra?: number;

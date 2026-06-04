@@ -28,6 +28,7 @@ export const inventorySlotsController: RequestHandler = async (req, res) => {
         case eInventorySlot.SUITS:
         case eInventorySlot.MECHSUITS:
         case eInventorySlot.PVE_LOADOUTS:
+        case eInventorySlot.PVP_LOADOUTS:
         case eInventorySlot.CREWMEMBERS:
             price = 20;
             amount = 1;

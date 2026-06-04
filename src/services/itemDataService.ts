@@ -77,6 +77,7 @@ import { getWorldState } from "./worldStateService.ts";
 import { promises as fs } from "fs";
 import path from "path";
 import { BL_LATEST } from "../constants/gameVersions.ts";
+import type { TInventorySlot } from "../types/inventoryTypes/inventoryTypes.ts";
 
 export type WeaponTypeInternal =
     | "LongGuns"
@@ -3166,6 +3167,22 @@ const u7WeaponCosts: Record<string, number> = {
     "/Lotus/Weapons/Tenno/Melee/Staff/Staff": 15_000
 };
 
+export const slotPurchaseData: Record<string, { bin: TInventorySlot; price: number | undefined; amount: number }> = {
+    SuitSlotItem: { bin: "SuitBin", price: 20, amount: 1 },
+    TwoSentinelSlotItem: { bin: "SentinelBin", price: 12, amount: 2 },
+    WeaponSlotItem: { bin: "WeaponBin", price: undefined, amount: 1 },
+    TwoWeaponSlotItem: { bin: "WeaponBin", price: 12, amount: 2 },
+    SpaceSuitSlotItem: { bin: "SpaceSuitBin", price: 12, amount: 1 },
+    TwoSpaceWeaponSlotItem: { bin: "SpaceWeaponBin", price: 12, amount: 2 },
+    MechSlotItem: { bin: "MechBin", price: 20, amount: 1 },
+    TwoOperatorWeaponSlotItem: { bin: "OperatorAmpBin", price: 12, amount: 2 },
+    RandomModSlotItem: { bin: "RandomModBin", price: 60, amount: 3 },
+    TwoCrewShipSalvageSlotItem: { bin: "CrewShipSalvageBin", price: 12, amount: 2 },
+    CrewMemberSlotItem: { bin: "CrewMemberBin", price: 20, amount: 1 },
+    PvPLoadoutSlotItem: { bin: "PvpBonusLoadoutBin", price: undefined, amount: 1 },
+    KubrowSlotItem: { bin: "PetBin", price: 10, amount: 1 }
+};
+
 export const getPrice = (
     storeItemName: string,
     quantity: number = 1,
@@ -3194,6 +3211,13 @@ export const getPrice = (
 
     if (!usePremium && version_compare(buildLabel, gameToBuildVersion["8.0.0"]) < 0 && internalName in u7WeaponCosts) {
         return u7WeaponCosts[internalName];
+    }
+
+    if (usePremium) {
+        const internalNameShort = internalName.substring(internalName.lastIndexOf("/") + 1);
+        if (internalNameShort in slotPurchaseData && slotPurchaseData[internalNameShort].price !== undefined) {
+            return slotPurchaseData[internalNameShort].price;
+        }
     }
 
     // Hardcoded sale in this version

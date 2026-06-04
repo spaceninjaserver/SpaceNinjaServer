@@ -15,8 +15,7 @@ import type {
     IPurchaseRequest,
     IPurchaseResponse,
     IInventoryChanges,
-    IPurchaseParams,
-    SlotNames
+    IPurchaseParams
 } from "../types/purchaseTypes.ts";
 import { ePurchaseSource } from "../types/purchaseTypes.ts";
 import { logger } from "../utils/logger.ts";
@@ -30,7 +29,15 @@ import {
     ExportVendors
 } from "warframe-public-export-plus";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
-import { fromStoreItem, getBoosterPack, getBundle, getPrice, getSyndicate, toStoreItem } from "./itemDataService.ts";
+import {
+    fromStoreItem,
+    getBoosterPack,
+    getBundle,
+    getPrice,
+    getSyndicate,
+    slotPurchaseData,
+    toStoreItem
+} from "./itemDataService.ts";
 import { DailyDeal } from "../models/worldStateModel.ts";
 import { fromMongoDate, fromOid, toMongoDate } from "../helpers/inventoryHelpers.ts";
 import { Guild } from "../models/guildModel.ts";
@@ -570,22 +577,6 @@ export const handleStoreItemAcquisition = async (
     return purchaseResponse;
 };
 
-const slotPurchaseNameToSlotName: Record<string, { name: SlotNames; purchaseQuantity: number }> = {
-    SuitSlotItem: { name: "SuitBin", purchaseQuantity: 1 },
-    TwoSentinelSlotItem: { name: "SentinelBin", purchaseQuantity: 2 },
-    WeaponSlotItem: { name: "WeaponBin", purchaseQuantity: 1 },
-    TwoWeaponSlotItem: { name: "WeaponBin", purchaseQuantity: 2 },
-    SpaceSuitSlotItem: { name: "SpaceSuitBin", purchaseQuantity: 1 },
-    TwoSpaceWeaponSlotItem: { name: "SpaceWeaponBin", purchaseQuantity: 2 },
-    MechSlotItem: { name: "MechBin", purchaseQuantity: 1 },
-    TwoOperatorWeaponSlotItem: { name: "OperatorAmpBin", purchaseQuantity: 2 },
-    RandomModSlotItem: { name: "RandomModBin", purchaseQuantity: 3 },
-    TwoCrewShipSalvageSlotItem: { name: "CrewShipSalvageBin", purchaseQuantity: 2 },
-    CrewMemberSlotItem: { name: "CrewMemberBin", purchaseQuantity: 1 },
-    PvPLoadoutSlotItem: { name: "PvpBonusLoadoutBin", purchaseQuantity: 1 },
-    KubrowSlotItem: { name: "PetBin", purchaseQuantity: 1 }
-};
-
 // // extra = everything above the base +2 slots (depending on slot type)
 // // new slot above base = extra + 1 and slots +1
 // // new frame = slots -1
@@ -598,23 +589,24 @@ const handleSlotPurchase = (
 ): IPurchaseResponse => {
     logger.debug(`slot name ${slotPurchaseNameFull}`);
     const slotPurchaseName = slotPurchaseNameFull.substring(slotPurchaseNameFull.lastIndexOf("/") + 1);
-    if (!(slotPurchaseName in slotPurchaseNameToSlotName)) {
+    if (!(slotPurchaseName in slotPurchaseData)) {
         throw new Error(`invalid slot purchase name ${slotPurchaseName}`);
     }
     logger.debug(`slot purchase name ${slotPurchaseName}`);
 
-    const slotName = slotPurchaseNameToSlotName[slotPurchaseName].name;
+    const data = slotPurchaseData[slotPurchaseName];
+
     let slotsPurchased = quantity;
     if (!ignorePurchaseQuantity) {
-        slotsPurchased *= slotPurchaseNameToSlotName[slotPurchaseName].purchaseQuantity;
+        slotsPurchased *= data.amount;
     }
 
-    updateSlots(inventory, slotName, slotsPurchased, slotsPurchased);
+    updateSlots(inventory, data.bin, slotsPurchased, slotsPurchased);
 
-    logger.debug(`added ${slotsPurchased} slot ${slotName}`);
+    logger.debug(`added ${slotsPurchased} slot ${data.bin}`);
 
     const inventoryChanges: IInventoryChanges = {};
-    inventoryChanges[slotName] = {
+    inventoryChanges[data.bin] = {
         count: 0,
         platinum: 1,
         Slots: slotsPurchased,
