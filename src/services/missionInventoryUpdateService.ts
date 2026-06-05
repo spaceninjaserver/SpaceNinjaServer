@@ -296,7 +296,13 @@ export const addMissionInventoryUpdates = async (
                 if (inventory.Nemesis.HintProgress >= progressNeeded) {
                     inventory.Nemesis.HintProgress -= progressNeeded;
                     const passcode = getNemesisPasscode(inventory.Nemesis);
-                    inventory.Nemesis.Hints.push(passcode[inventory.Nemesis.Hints.length]);
+                    const Hints = inventory.Nemesis.Hints;
+                    const rng = new SRng(inventory.Nemesis.fp);
+                    inventory.Nemesis.Hints.push(
+                        passcode.filter(code => !Hints.includes(code))[
+                            rng.randomInt(0, 2 - inventory.Nemesis.Hints.length)
+                        ]
+                    );
                 }
             }
         }
