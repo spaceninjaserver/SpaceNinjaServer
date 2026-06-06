@@ -17,7 +17,7 @@ export interface IEquipmentSelectionClient {
 }
 
 export interface IEquipmentSelectionDatabase extends Omit<IEquipmentSelectionClient, "ItemId"> {
-    ItemId?: Types.ObjectId;
+    ItemId?: Types.ObjectId | IOid; // should be Types.ObjectId but might not be :(
 }
 
 export const eEquipmentFeatures = {

@@ -23,7 +23,7 @@ EquipmentSelectionSchema.set("toJSON", {
         const db = ret as IEquipmentSelectionDatabase;
         const client = ret as IEquipmentSelectionClient;
 
-        if (db.ItemId) {
+        if (db.ItemId && !("$oid" in db.ItemId)) {
             client.ItemId = toOid(db.ItemId);
         }
     }
