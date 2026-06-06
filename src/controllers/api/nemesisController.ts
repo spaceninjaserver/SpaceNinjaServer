@@ -20,7 +20,7 @@ import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/in
 import { Loadout } from "../../models/inventoryModels/loadoutModel.ts";
 import { addMods, freeUpSlot, getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
-import { SRng } from "../../services/rngService.ts";
+import { generateRewardSeed, SRng } from "../../services/rngService.ts";
 import type { IMongoDate, IOid, IOidWithLegacySupport } from "../../types/commonTypes.ts";
 import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
 import type {
@@ -251,7 +251,8 @@ export const nemesisController: RequestHandler = async (req, res) => {
             logger.warn(`overwriting an existing nemesis as a new one is being requested`);
         }
         const body = getJSONfromString<INemesisStartRequest>(String(req.body));
-        body.target.fp = BigInt(body.target.fp);
+        logger.trace(`nemesis start request:`, body);
+        body.target.fp = BigInt(body.target.fp) || generateRewardSeed();
 
         const manifest = getNemesisManifest(body.target.manifest);
         if (version_compare(buildLabel, manifest.minBuild) < 0) {
@@ -286,7 +287,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
                 WeaponIdx: weaponIdx,
                 AgentIdx: body.target.AgentIdx,
                 BirthNode: body.target.BirthNode,
-                Faction: body.target.Faction,
+                Faction: body.target.Faction ?? "FC_GRINEER",
                 Rank: 0,
                 k: false,
                 Traded: false,
@@ -354,30 +355,30 @@ interface IValenceFusionRequest {
 
 interface INemesisStartRequest {
     target: {
-        fp: number | bigint;
+        fp: number | bigint; // 0 in U26
         manifest: string;
         KillingSuit: string;
         killingDamageType: number;
         ShoulderHelmet: string;
         DisallowedWeapons?: string[];
-        WeaponIdx: number;
+        WeaponIdx?: number;
         AgentIdx: number;
         BirthNode: string;
-        Faction: TNemesisFaction;
+        Faction?: TNemesisFaction;
         Rank: number;
         k: boolean;
-        Traded: boolean;
+        Traded?: boolean;
         d: IMongoDate;
         InfNodes: [];
         GuessHistory: [];
         Hints: [];
         HintProgress: number;
-        Weakened: boolean;
-        PrevOwners: number;
+        Weakened?: boolean;
+        PrevOwners?: number;
         HenchmenKilled: number;
         MissionCount?: number; // Added in 38.5.0
         LastEnc?: number; // Added in 38.5.0
-        SecondInCommand: boolean;
+        SecondInCommand?: boolean;
     };
 }
 
