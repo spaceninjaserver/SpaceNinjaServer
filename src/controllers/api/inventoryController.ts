@@ -102,13 +102,11 @@ export const inventoryController: RequestHandler = async (request, response) => 
             const lastLoginDay = Math.trunc(inventory.NextRefill.getTime() / 86400000) - 1;
             const daysPassed = today - lastLoginDay;
 
-            if (inventory.noArgonCrystalDecay) {
-                inventory.FoundToday = undefined;
-            } else {
+            if (!inventory.noArgonCrystalDecay) {
+                let numArgonCrystals =
+                    inventory.MiscItems.find(x => x.ItemType == "/Lotus/Types/Items/MiscItems/ArgonCrystal")
+                        ?.ItemCount ?? 0;
                 for (let i = 0; i != daysPassed; ++i) {
-                    const numArgonCrystals =
-                        inventory.MiscItems.find(x => x.ItemType == "/Lotus/Types/Items/MiscItems/ArgonCrystal")
-                            ?.ItemCount ?? 0;
                     if (numArgonCrystals == 0) {
                         break;
                     }
@@ -132,6 +130,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
                             ItemCount: numDecayingArgonCrystalsToRemove * -1
                         }
                     ]);
+                    numArgonCrystals -= numDecayingArgonCrystalsToRemove;
                     // All stable argon crystals are now decaying
                     inventory.FoundToday = undefined;
                 }
