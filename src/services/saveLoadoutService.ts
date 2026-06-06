@@ -296,11 +296,7 @@ export const handleInventoryItemConfigChange = async (
                             continue;
                         }
 
-                        const prevAbilityOverrides = JSON.stringify(
-                            inventoryItem.Configs.map(x => x.AbilityOverride?.Ability)
-                                .filter(x => x)
-                                .sort()
-                        );
+                        const prevAbilityOverrides = inventoryItem.Configs.map(x => x.AbilityOverride);
 
                         let abilityMapping: Record<string, string> | undefined;
                         if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) < 0) {
@@ -315,71 +311,75 @@ export const handleInventoryItemConfigChange = async (
                         for (const [configId, config] of Object.entries(itemConfigEntries)) {
                             if (/^[0-9]+$/.test(configId)) {
                                 const c = config as IItemConfig;
-                                if (version_compare(buildLabel, gameToBuildVersion["16.0.2"]) <= 0) {
-                                    const legacyColors = c.Customization?.Colors ?? c.Colors;
-                                    if (legacyColors) {
-                                        if (legacyColors.length == 10) {
-                                            c.pricol = convertLegacyColorsToIColor(legacyColors.splice(0, 5));
-                                            c.attcol = convertLegacyColorsToIColor(legacyColors);
-                                        } else {
-                                            c.pricol = convertLegacyColorsToIColor(legacyColors);
+                                if (version_compare(buildLabel, gameToBuildVersion["29.0.0"]) >= 0) {
+                                    if (abilityMapping && c.AbilityOverride) {
+                                        c.AbilityOverride.Ability =
+                                            abilityMapping[c.AbilityOverride.Ability.split("/").pop()!];
+                                    }
+                                } else {
+                                    c.AbilityOverride = prevAbilityOverrides[parseInt(configId)];
+                                    if (version_compare(buildLabel, gameToBuildVersion["16.0.2"]) <= 0) {
+                                        const legacyColors = c.Customization?.Colors ?? c.Colors;
+                                        if (legacyColors) {
+                                            if (legacyColors.length == 10) {
+                                                c.pricol = convertLegacyColorsToIColor(legacyColors.splice(0, 5));
+                                                c.attcol = convertLegacyColorsToIColor(legacyColors);
+                                            } else {
+                                                c.pricol = convertLegacyColorsToIColor(legacyColors);
+                                            }
                                         }
-                                    }
-                                    const legacySkins = c.Customization?.Skins;
-                                    if (legacySkins) {
-                                        c.Skins = legacySkins;
-                                    }
-                                    if (version_compare(buildLabel, gameToBuildVersion["12.1.2"]) < 0) {
-                                        if (c.Upgrades) {
-                                            // U10-U11 store mods in the item config as $id instead of a string, need to convert that here
-                                            const convertedUpgrades: string[] = [];
-                                            c.Upgrades.forEach(upgrade => {
-                                                const upgradeId = upgrade as { $id: string };
-                                                const rawUpgrade = inventory.RawUpgrades.id(upgradeId.$id);
-                                                if (rawUpgrade) {
-                                                    const newId = new Types.ObjectId();
-                                                    convertedUpgrades.push(newId.toString());
-                                                    addMods(inventory, [
-                                                        {
+                                        const legacySkins = c.Customization?.Skins;
+                                        if (legacySkins) {
+                                            c.Skins = legacySkins;
+                                        }
+                                        if (version_compare(buildLabel, gameToBuildVersion["12.1.2"]) < 0) {
+                                            if (c.Upgrades) {
+                                                // U10-U11 store mods in the item config as $id instead of a string, need to convert that here
+                                                const convertedUpgrades: string[] = [];
+                                                c.Upgrades.forEach(upgrade => {
+                                                    const upgradeId = upgrade as { $id: string };
+                                                    const rawUpgrade = inventory.RawUpgrades.id(upgradeId.$id);
+                                                    if (rawUpgrade) {
+                                                        const newId = new Types.ObjectId();
+                                                        convertedUpgrades.push(newId.toString());
+                                                        addMods(inventory, [
+                                                            {
+                                                                ItemType: rawUpgrade.ItemType,
+                                                                ItemCount: -1
+                                                            }
+                                                        ]);
+                                                        inventory.Upgrades.push({
+                                                            UpgradeFingerprint: `{"lvl":0}`,
                                                             ItemType: rawUpgrade.ItemType,
-                                                            ItemCount: -1
-                                                        }
-                                                    ]);
-                                                    inventory.Upgrades.push({
-                                                        UpgradeFingerprint: `{"lvl":0}`,
-                                                        ItemType: rawUpgrade.ItemType,
-                                                        _id: newId
-                                                    });
-                                                } else {
-                                                    convertedUpgrades.push(upgradeId.$id);
-                                                }
-                                            });
-                                            c.Upgrades = convertedUpgrades;
+                                                            _id: newId
+                                                        });
+                                                    } else {
+                                                        convertedUpgrades.push(upgradeId.$id);
+                                                    }
+                                                });
+                                                c.Upgrades = convertedUpgrades;
+                                            }
                                         }
                                     }
-                                }
-                                if (abilityMapping && c.AbilityOverride) {
-                                    c.AbilityOverride.Ability =
-                                        abilityMapping[c.AbilityOverride.Ability.split("/").pop()!];
                                 }
                                 inventoryItem.Configs[parseInt(configId)] = c as IItemConfigDatabase;
                             }
                         }
 
-                        const newAbilityOverrides = JSON.stringify(
+                        const prevAbilityOverridesString = JSON.stringify(
+                            prevAbilityOverrides
+                                .map(x => x?.Ability)
+                                .filter(x => x)
+                                .sort()
+                        );
+                        const newAbilityOverridesString = JSON.stringify(
                             inventoryItem.Configs.map(x => x.AbilityOverride?.Ability)
                                 .filter(x => x)
                                 .sort()
                         );
-                        if (
-                            JSON.stringify(
-                                inventoryItem.Configs.map(x => x.AbilityOverride?.Ability)
-                                    .filter(x => x)
-                                    .sort()
-                            ) != prevAbilityOverrides
-                        ) {
+                        if (prevAbilityOverridesString != newAbilityOverridesString) {
                             throw new Error(
-                                `refusing saveLoadout with different abilityOverrides: before=${prevAbilityOverrides}, after=${newAbilityOverrides}`
+                                `refusing saveLoadout with different abilityOverrides: before=${prevAbilityOverridesString}, after=${newAbilityOverridesString}`
                             );
                         }
 
