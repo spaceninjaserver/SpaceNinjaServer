@@ -1,4 +1,4 @@
-// German translation by Animan8000
+// German translation by Animan8000, Shadow
 dict = {
     general_inventoryUpdateNote: `Hinweis: Um Änderungen im Spiel zu sehen, musst du dein Inventar neu synchronisieren, z. B. durch Besuch eines Dojo/Relais oder durch erneutes Anmelden.`,
     general_inventoryUpdateNoteGameWs: `Hinweis: Möglicherweise musst du ein Menü neu öffnen, damit die Änderungen sichtbar werden.`,
@@ -337,8 +337,8 @@ dict = {
     worldState_lunarNewYearAnimal12: `des Schweines`,
     worldState_anniversary: `Warframe Jubiläum`,
     worldState_useAnniversaryTagForOldGoals: `Verwende <code>Tag</code> vom Warframe Jubiläum für alte Events`,
-    worldState_giveBreedingGroundsRewardsAtSum: `Verteile Belohnungen basierend auf dem Punktestand`,
-    worldState_giveBreedingGroundsRewardsAtSumDesc: `Aus irgendeinem Grund erhöht das Spiel den Schwierigkeitsgrad nicht basierend auf der Gesamtpunktzahl, sodass es unmöglich ist, Belohnungen für die beste Punktzahl zu erhalten.`,
+    worldState_giveBreedingGroundsRewardsAtSum: `Belohnungen nach Gesamtpunktzahl vergeben`,
+    worldState_giveBreedingGroundsRewardsAtSumDesc: `Aus irgendeinem Grund erhöht das Spiel den Schwierigkeitsgrad nicht anhand der Gesamtpunktzahl, wodurch Belohnungen für die höchste Punktzahl nicht erreichbar sind.`,
     worldState_dogDaysRewards: `Hitzefrei-Belohnungen`,
     worldState_voidCorruption: `Void-Korruption (|VAL|)`,
     worldState_dagathAlerts: `Dagath Alarmierungen (|VAL|)`,
@@ -441,7 +441,7 @@ dict = {
     upgrade_AvatarAbilityRange: `+7.5% Fähigkeitsreichweite`,
     upgrade_AvatarAbilityEfficiency: `+5% Fähigkeitseffizienz`,
     upgrade_AvatarEnergyRegen: `+0.5 Energieregeneration pro Sekunde`,
-    upgrade_AvatarEnemyRadar: `+5m Gegnerradar`,
+    upgrade_AvatarEnemyRadar: `+5m Feindradar`,
     upgrade_AvatarLootRadar: `+7m Beuteradar`,
     upgrade_WeaponAmmoMax: `+15% Max. Munition`,
     upgrade_EnemyArmorReductionAura: `-3% Rüstung für Gegner`,
