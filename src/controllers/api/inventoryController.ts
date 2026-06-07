@@ -506,8 +506,9 @@ export const getInventoryResponse = async (
         inventoryResponse.PlayerLevel = inventory.spoofMasteryRank;
         if (!xpBasedLevelCapDisabled) {
             // This client has not been patched to accept any mastery rank, need to fake the XP.
+            // Limiting this to MR 100 to avoid breakage: https://onlyg.it/OpenWF/SpaceNinjaServer/issues/4244
             inventoryResponse.XPInfo = [];
-            let numFrames = getExpRequiredForMr(Math.min(inventory.spoofMasteryRank, 5030)) / (30 * 200);
+            let numFrames = getExpRequiredForMr(Math.min(inventory.spoofMasteryRank, 100)) / (30 * 200);
             while (numFrames-- > 0) {
                 inventoryResponse.XPInfo.push({
                     ItemType: "/Lotus/Powersuits/Mag/Mag",
