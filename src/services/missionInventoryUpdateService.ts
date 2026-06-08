@@ -2265,7 +2265,7 @@ async function getRandomMissionDrops(
                 5: "/Lotus/Types/Game/MissionDecks/RailjackMissionRewards/VoidStormSaturnRewards",
                 7: "/Lotus/Types/Game/MissionDecks/RailjackMissionRewards/VoidStormNeptuneRewards",
                 8: "/Lotus/Types/Game/MissionDecks/RailjackMissionRewards/VoidStormPlutoRewards",
-                14: "/Lotus/Types/Game/MissionDecks/RailjackMissionRewards/VoidStormVeilRewards"
+                20: "/Lotus/Types/Game/MissionDecks/RailjackMissionRewards/VoidStormVeilRewards"
             };
             if (region.systemIndex in systemIndexToVoidStormRewardTable) {
                 const reward = getRandomRewardByChance(
@@ -2275,6 +2275,19 @@ async function getRandomMissionDrops(
                     StoreItem: reward.type,
                     ItemCount: reward.itemCount
                 });
+                if (version_compare(buildLabel, gameToBuildVersion["39.0.0"]) >= 0) {
+                    if (region.systemIndex == 20) {
+                        drops.push({
+                            StoreItem: "/Lotus/StoreItems/Types/Items/MiscItems/GranumBucks",
+                            ItemCount: 2
+                        });
+                    } else {
+                        drops.push({
+                            StoreItem: "/Lotus/StoreItems/Types/Items/MiscItems/GranumBucks",
+                            ItemCount: 1
+                        });
+                    }
+                }
             }
         }
 
