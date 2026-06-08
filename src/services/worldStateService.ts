@@ -604,7 +604,7 @@ const pushTilesetModifiers = (modifiers: string[], tileset: TSortieTileset): voi
 };
 
 export const getSortie = (day: number, buildLabel: string): ISortie => {
-    // Seeds featuring CorpusIcePlanet to test seed validation: 23418, 71281
+    // Seeds featuring CorpusIcePlanet to test seed validation: 14197, 23418, 71281
     const seed = new SRng(day).randomInt(0, 100_000);
     logger.trace(`sortie seed: ${seed}`);
     const rng = new SRng(seed);
@@ -717,7 +717,7 @@ export const getSortie = (day: number, buildLabel: string): ISortie => {
     }
 
     let clientSeed = rng.randomInt(0, 100_000);
-    while (!validateSortieSeed(clientSeed, selectedNodes)) {
+    while (!validateSortieSeed(clientSeed, enemyFaction, selectedNodes)) {
         clientSeed = rng.randomInt(0, 100_000);
     }
 
@@ -750,19 +750,20 @@ const SORTIE_FALLBACK_MISSION_TYPES: TMissionType[] = [
     "MT_ARTIFACT"
 ];
 
-const validateSortieSeed = (seed: number, variants: ISortieMission[]): boolean => {
+const validateSortieSeed = (seed: number, enemyFaction: TFaction, variants: ISortieMission[]): boolean => {
     const rng = new SRng(seed);
     for (const variant of variants) {
-        if (variant.missionType != "MT_ASSASSINATION") {
-            const tileset = ExportTilesets[variant.tileset];
+        let missionType = variant.missionType;
+        const tileset = ExportTilesets[variant.tileset];
+        if (missionType != "MT_ASSASSINATION") {
             let missionPermutation = tileset.missions[variant.missionType];
             if (!missionPermutation) {
                 const options = SORTIE_FALLBACK_MISSION_TYPES.filter(missionType => missionType in tileset.missions);
-                const replacementType = options[rng.randomInt(0, options.length - 1)];
-                missionPermutation = tileset.missions[replacementType]!;
-                /*logger.debug(
-                    `${variant.missionType} not supported by ${variant.tileset}; picking ${replacementType} instead`
-                );*/
+                missionType = options[rng.randomInt(0, options.length - 1)];
+                missionPermutation = tileset.missions[missionType]!;
+                logger.trace(
+                    `${variant.missionType} not supported by ${variant.tileset}; picking ${missionType} instead`
+                );
             }
             if (missionPermutation.enemySpecs?.length) {
                 rng.randomInt(1, missionPermutation.enemySpecs.length);
@@ -770,8 +771,17 @@ const validateSortieSeed = (seed: number, variants: ISortieMission[]): boolean =
             if (missionPermutation.extraEnemySpecs?.length) {
                 rng.randomInt(1, missionPermutation.extraEnemySpecs.length);
             }
+            rng.randomFloat(); // difficulty
         }
-        if (variant.missionType != "MT_ARENA" && variant.missionType != "MT_JUNCTION") {
+        if (enemyFaction == "FC_INFESTATION" && tileset.faction != "FC_INFESTATION") {
+            // infested enemySpec
+            if (missionType == "MT_DEFENSE" || missionType == "MT_TERRITORY" || missionType == "MT_SURVIVAL") {
+                rng.randomInt(0, 1);
+            } else if (missionType != "MT_EXCAVATE") {
+                rng.randomInt(0, 3);
+            }
+        }
+        if (missionType != "MT_ARENA" && missionType != "MT_JUNCTION") {
             const locationTextureIndex = rng.randomInt(0, 1);
             if (variant.tileset == "CorpusIcePlanetTileset" || variant.tileset == "CorpusIcePlanetTilesetCaves") {
                 if (locationTextureIndex != 0) {
