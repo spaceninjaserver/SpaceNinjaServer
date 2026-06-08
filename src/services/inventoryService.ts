@@ -1267,6 +1267,27 @@ export const addItem = async (
             break;
         case "Weapons": {
             if (typeName.substring(1).split("/")[4] == "MeleeTrees") break;
+            if (typeName.substring(1).split("/")[2] == "CrewShip") {
+                const itemTypeToCount: Record<string, number> = {
+                    "/Lotus/Weapons/CrewShip/MultitoolAmmoItem": 50,
+                    "/Lotus/Weapons/CrewShip/EnergyAmmoItem": 100,
+                    "/Lotus/Weapons/CrewShip/Missiles/MissileAmmoItem": 5,
+                    "/Lotus/Weapons/CrewShip/Laser/MegaLaserAmmoItem": 1
+                };
+                if (typeName in itemTypeToCount) {
+                    const inventoryChanges = {
+                        CrewShipAmmo: [
+                            {
+                                ItemType: typeName.replace("AmmoItem", "Ammo"),
+                                ItemCount: itemTypeToCount[typeName] * quantity
+                            }
+                        ]
+                    };
+
+                    addCrewShipAmmo(inventory, inventoryChanges.CrewShipAmmo);
+                    return inventoryChanges;
+                }
+            }
             const productCategory = typeName.substring(1).split("/")[3];
             switch (productCategory) {
                 case "Pistols":

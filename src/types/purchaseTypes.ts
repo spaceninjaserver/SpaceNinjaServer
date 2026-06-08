@@ -94,6 +94,7 @@ export type IInventoryChanges = {
     ShipDecorations?: ITypeCount[];
     EmailItems?: ITypeCount[];
     CrewShipRawSalvage?: ITypeCount[];
+    CrewShipAmmo?: ITypeCount[];
     Nemesis?: Partial<INemesisClient>;
     NewVendorPurchase?: IRecentVendorPurchaseClient; // >= 38.5.0
     RecentVendorPurchases?: IRecentVendorPurchaseClient; // < 38.5.0

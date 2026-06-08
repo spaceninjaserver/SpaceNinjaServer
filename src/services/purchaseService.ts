@@ -35,7 +35,9 @@ import {
     getBundle,
     getPrice,
     getSyndicate,
+    getVendor,
     slotPurchaseData,
+    supplementalVendors,
     toStoreItem
 } from "./itemDataService.ts";
 import { DailyDeal } from "../models/worldStateModel.ts";
@@ -210,8 +212,7 @@ export const handlePurchase = async (
             }
             purchaseRequest.PurchaseParams.Quantity *= offer.QuantityMultiplier;
         } else {
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            if (!ExportVendors[purchaseRequest.PurchaseParams.SourceId!]) {
+            if (!getVendor(purchaseRequest.PurchaseParams.SourceId!)) {
                 throw new Error(`unknown vendor: ${purchaseRequest.PurchaseParams.SourceId!}`);
             }
         }
@@ -329,8 +330,11 @@ export const handlePurchase = async (
             if (purchaseRequest.PurchaseParams.ExpectedPrice) {
                 throw new Error(`vendor purchase should not have an expected price`);
             }
-            if (purchaseRequest.PurchaseParams.SourceId! in ExportVendors) {
-                const vendor = ExportVendors[purchaseRequest.PurchaseParams.SourceId!];
+            if (
+                purchaseRequest.PurchaseParams.SourceId! in ExportVendors ||
+                purchaseRequest.PurchaseParams.SourceId! in supplementalVendors
+            ) {
+                const vendor = getVendor(purchaseRequest.PurchaseParams.SourceId!)!;
                 const offer = vendor.items.find(x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem);
                 if (offer) {
                     if (typeof offer.credits == "number" && !inventory.dontSubtractPurchaseCreditCost) {

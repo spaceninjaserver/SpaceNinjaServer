@@ -11,6 +11,7 @@ import type {
     IRegion,
     ISyndicate,
     IUpgrade,
+    IVendor,
     TMissionDeck,
     TRarity,
     TReward
@@ -50,6 +51,7 @@ import {
     ExportSentinels,
     ExportSyndicates,
     ExportUpgrades,
+    ExportVendors,
     ExportWarframes,
     ExportWeapons
 } from "warframe-public-export-plus";
@@ -1465,6 +1467,82 @@ export const supplementalKeys: Record<string, IKey> = {
             minEnemyLevel: 25,
             maxEnemyLevel: 35
         }
+    }
+};
+
+export const supplementalVendors: Record<string, IVendor> = {
+    "/Lotus/Types/Game/VendorManifests/Hubs/RailjackResourcesVendorManifest": {
+        isDynamic: false,
+        items: [
+            {
+                storeItem: "/Lotus/StoreItems/Weapons/CrewShip/MultitoolAmmoItem",
+                quantity: 1,
+                alwaysOffered: true,
+                bin: 0,
+                duplicates: 0,
+                itemPrices: [
+                    {
+                        ItemType: "/Lotus/Types/Items/RailjackMiscItems/PustrelsRailjackItem",
+                        ItemCount: 5
+                    },
+                    {
+                        ItemType: "/Lotus/Types/Items/RailjackMiscItems/CubicsRailjackItem",
+                        ItemCount: 5
+                    }
+                ]
+            },
+            {
+                storeItem: "/Lotus/StoreItems/Weapons/CrewShip/EnergyAmmoItem",
+                quantity: 1,
+                alwaysOffered: true,
+                bin: 0,
+                duplicates: 0,
+                itemPrices: [
+                    {
+                        ItemType: "/Lotus/Types/Items/RailjackMiscItems/CopernicsRailjackItem",
+                        ItemCount: 15
+                    },
+                    {
+                        ItemType: "/Lotus/Types/Items/RailjackMiscItems/CubicsRailjackItem",
+                        ItemCount: 15
+                    }
+                ]
+            },
+            {
+                storeItem: "/Lotus/StoreItems/Weapons/CrewShip/Missiles/MissileAmmoItem",
+                quantity: 1,
+                alwaysOffered: true,
+                bin: 0,
+                duplicates: 0,
+                itemPrices: [
+                    {
+                        ItemType: "/Lotus/Types/Items/RailjackMiscItems/CarbidesRailjackItem",
+                        ItemCount: 10
+                    },
+                    {
+                        ItemType: "/Lotus/Types/Items/RailjackMiscItems/CopernicsRailjackItem",
+                        ItemCount: 10
+                    }
+                ]
+            },
+            {
+                storeItem: "/Lotus/StoreItems/Weapons/CrewShip/Laser/MegaLaserAmmoItem",
+                quantity: 1,
+                alwaysOffered: true,
+                bin: 0,
+                duplicates: 0,
+                itemPrices: [
+                    {
+                        ItemType: "/Lotus/Types/Items/RailjackMiscItems/PustrelsRailjackItem",
+                        ItemCount: 25
+                    },
+                    {
+                        ItemType: "/Lotus/Types/Items/RailjackMiscItems/CarbidesRailjackItem",
+                        ItemCount: 20
+                    }
+                ]
+            }
+        ]
     }
 };
 
@@ -3343,4 +3421,8 @@ export const getShipDecoByNameTag = (name: string): string => {
 
 export const getUpgrade = (uniqueName: string): IUpgrade | undefined => {
     return ExportUpgrades[uniqueName] ?? supplementalUpgrades[uniqueName];
+};
+
+export const getVendor = (uniqueName: string): IVendor | undefined => {
+    return ExportVendors[uniqueName] ?? supplementalVendors[uniqueName];
 };

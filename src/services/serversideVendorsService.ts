@@ -10,6 +10,7 @@ import type { IAffiliation } from "../types/inventoryTypes/inventoryTypes.ts";
 import { getNightwaveSyndicateTag, nightwaveTagToSeason } from "./worldStateService.ts";
 import { legacyNightwaveVendorManifest } from "../constants/legacyNightwaveVendorManifest.ts";
 import { BL_LATEST } from "../constants/gameVersions.ts";
+import { getVendor, supplementalVendors } from "./itemDataService.ts";
 
 interface IGeneratableVendorInfo extends Omit<IVendorInfo, "ItemManifest" | "Expiry"> {
     cycleOffset?: number;
@@ -92,8 +93,8 @@ export const getVendorManifestByTypeName = (
             );
         }
     }
-    if (typeName in ExportVendors) {
-        const manifest = ExportVendors[typeName];
+    if (typeName in ExportVendors || typeName in supplementalVendors) {
+        const manifest = getVendor(typeName)!;
         return generateVendorManifest(
             {
                 _id: { $oid: getVendorOid(typeName) },
@@ -114,6 +115,20 @@ export const getVendorManifestByOid = (oid: string, buildLabel: string): IVendor
         }
     }
     for (const [typeName, manifest] of Object.entries(ExportVendors)) {
+        const typeNameOid = getVendorOid(typeName);
+        if (typeNameOid == oid) {
+            return generateVendorManifest(
+                {
+                    _id: { $oid: typeNameOid },
+                    TypeName: typeName,
+                    RandomSeedType: manifest.randomSeedType,
+                    cycleDuration: getCycleDuration(manifest)
+                },
+                config.fullyStockedVendors
+            );
+        }
+    }
+    for (const [typeName, manifest] of Object.entries(supplementalVendors)) {
         const typeNameOid = getVendorOid(typeName);
         if (typeNameOid == oid) {
             return generateVendorManifest(
@@ -266,7 +281,7 @@ const generateVendorManifest = (
     }
     const cacheEntry = vendorManifestCache[vendorInfo.TypeName];
     const info = cacheEntry.VendorInfo;
-    if (!manifest) manifest = ExportVendors[vendorInfo.TypeName];
+    if (!manifest) manifest = getVendor(vendorInfo.TypeName)!;
     const cycleDurationRange = getCycleDurationRange(manifest);
     let now = Date.now();
     if (cycleDurationRange && cycleDurationRange.minValue != cycleDurationRange.maxValue) {
