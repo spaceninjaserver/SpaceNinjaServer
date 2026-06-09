@@ -3409,6 +3409,34 @@ export const getRegion = async (uniqueName: string, buildLabel: string): Promise
     return ExportRegions[uniqueName];
 };
 
+export const isRegionAvailableIn = (key: string, value: IRegion, buildLabel: string): boolean => {
+    // Zeipel, Lua (Rescue)
+    if (version_compare(buildLabel, gameToBuildVersion["32.2.0"]) >= 0) {
+        return true;
+    }
+    if (key == "SolNode307") {
+        return false;
+    }
+
+    // Apollo, Lua (Disruption)
+    if (version_compare(buildLabel, gameToBuildVersion["25.7.0"]) >= 0) {
+        return true;
+    }
+    if (key == "SolNode308") {
+        return false;
+    }
+
+    // Kuva Fortress
+    if (version_compare(buildLabel, gameToBuildVersion["19.0.1"]) >= 0) {
+        return true;
+    }
+    if (value.systemIndex == 18) {
+        return false;
+    }
+
+    return true;
+};
+
 // For prex cards
 export const getShipDecoByNameTag = (name: string): string => {
     for (const [uniqueName, data] of Object.entries(ExportResources)) {

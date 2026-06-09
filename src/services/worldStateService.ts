@@ -50,6 +50,7 @@ import { catBreadHash } from "../helpers/stringHelpers.ts";
 import { Guild } from "../models/guildModel.ts";
 import { libraryTargetToAvatar } from "../constants/synthesis.ts";
 import { BL_LATEST } from "../constants/gameVersions.ts";
+import { isRegionAvailableIn } from "./itemDataService.ts";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -613,14 +614,13 @@ export const getSortie = (day: number, buildLabel: string): ISortie => {
     const enemyFaction = sortieBossToFaction[boss];
 
     const nodes: string[] = [];
-    const canUseKuvaFortress = version_compare(buildLabel, gameToBuildVersion["19.0.1"]) >= 0;
     for (const [key, value] of Object.entries(ExportRegions)) {
         if (
-            (canUseKuvaFortress || value.systemIndex != 18) &&
+            key in sortieTilesets &&
+            (key != "SolNode228" || enemyFaction == "FC_GRINEER") && // PoE only works for grineer enemies
             sortieFactionToSystemIndexes[enemyFaction].includes(value.systemIndex) &&
             sortieFactionToFactions[enemyFaction].includes(value.faction!) &&
-            key in sortieTilesets &&
-            (key != "SolNode228" || enemyFaction == "FC_GRINEER") // PoE only works for grineer enemies
+            isRegionAvailableIn(key, value, buildLabel)
         ) {
             nodes.push(key);
         }
