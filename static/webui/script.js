@@ -2223,6 +2223,7 @@ dictPromise.then(() => {
 });
 
 function updateGuild() {
+    guild_data = null;
     if (single.getCurrentPath() == "/webui/clan") {
         single.loadRoute(single.getCurrentPath());
     }
@@ -4175,7 +4176,7 @@ let guild_data;
 // Assumes that caller revalidates authz
 function getGuildData() {
     return new Promise(resolve => {
-        if (guild_data !== undefined) {
+        if (guild_data) {
             resolve(guild_data);
         } else {
             $.get("/custom/getGuild?" + window.authz).done(guildData => {
