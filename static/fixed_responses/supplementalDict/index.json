@@ -132,5 +132,10 @@
   "/Lotus/Language/Menu/SocialOverlay_Demote",
   "/Lotus/Language/Items/ReviveBoosterName",
   "/Lotus/Language/G1Quests/TacAlertSnowballFightTitle",
-  "/Lotus/Language/G1Quests/InfestedCorpusHiveEventName"
+  "/Lotus/Language/G1Quests/InfestedCorpusHiveEventName",
+  "/Lotus/Language/Menu/CrewShipFusionPointsName",
+  "/Lotus/Language/Items/FusionBundle",
+  "/Lotus/Language/PrimeStore/Store_PrimeTokens",
+  "/Lotus/Language/Dojo/TradeTypePlatinum",
+  "/Lotus/Language/Menu/Store_BuyWithCredits"
 ]

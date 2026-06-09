@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
 import { getAccountForRequest, hasPermission } from "../../services/loginService.ts";
-import { addFusionPoints, getInventory } from "../../services/inventoryService.ts";
+import { addCrewShipFusionPoints, addFusionPoints, getInventory } from "../../services/inventoryService.ts";
 import { getGuildForRequestEx, hasGuildPermission } from "../../services/guildService.ts";
 import { eGuildPermission } from "../../types/guildTypes.ts";
 import { broadcastGuildUpdate, broadcastInventoryUpdate } from "../../services/wsService.ts";
@@ -22,10 +22,16 @@ export const addCurrencyController: RequestHandler = async (req, res) => {
         }
     } else {
         if (hasPermission(account, currencyToPermission[request.currency])) {
-            if (request.currency == "FusionPoints") {
-                addFusionPoints(inventory, request.delta);
-            } else {
-                inventory[request.currency] += request.delta;
+            switch (request.currency) {
+                case "FusionPoints":
+                    addFusionPoints(inventory, request.delta);
+                    break;
+                case "CrewShipFusionPoints":
+                    addCrewShipFusionPoints(inventory, request.delta);
+                    break;
+                default:
+                    inventory[request.currency] += request.delta;
+                    break;
             }
         }
         res.json(inventory[request.currency]);
@@ -42,6 +48,7 @@ interface IAddCurrencyRequest {
         | "RegularCredits"
         | "PremiumCredits"
         | "FusionPoints"
+        | "CrewShipFusionPoints"
         | "PrimeTokens"
         | "VaultRegularCredits"
         | "VaultPremiumCredits";
@@ -52,5 +59,6 @@ const currencyToPermission: Record<string, string> = {
     RegularCredits: "addCredits",
     PremiumCredits: "addPlatinum",
     FusionPoints: "addEndo",
+    CrewShipFusionPoints: "addDirac",
     PrimeTokens: "addRegalAya"
 };

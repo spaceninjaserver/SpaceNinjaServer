@@ -1821,7 +1821,10 @@ export const addFusionPoints = (
     return add;
 };
 
-export const addCrewShipFusionPoints = (inventory: TInventoryDatabaseDocument, add: number): number => {
+export const addCrewShipFusionPoints = (
+    inventory: Pick<TInventoryDatabaseDocument, "CrewShipFusionPoints">,
+    add: number
+): number => {
     if (inventory.CrewShipFusionPoints + add > 2147483647) {
         logger.warn(`capping CrewShipFusionPoints balance at 2147483647`);
         add = 2147483647 - inventory.CrewShipFusionPoints;

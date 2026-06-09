@@ -1284,7 +1284,7 @@ async function populateInventoryRoute() {
     document.getElementById("miscItems-tab").classList.add("active");
     document.getElementById("miscItems-tab-content").classList.add("active", "show");
 
-    ["RegularCredits", "PremiumCredits", "FusionPoints", "PrimeTokens"].forEach(currency => {
+    ["RegularCredits", "PremiumCredits", "FusionPoints", "PrimeTokens", "CrewShipFusionPoints"].forEach(currency => {
         document.getElementById(currency + "-owned").textContent = loc("currency_owned").replaceAll(
             "|COUNT|",
             data[currency].toLocaleString()

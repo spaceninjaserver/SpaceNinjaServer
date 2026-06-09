@@ -3,6 +3,7 @@ import { getAccountForRequest, getBuildLabel } from "../../services/loginService
 import type { RequestHandler } from "express";
 import type { IUpgradeClient, IUpgradeFromClient } from "../../types/inventoryTypes/inventoryTypes.ts";
 import {
+    addCrewShipFusionPoints,
     addFusionPoints,
     addMiscItem,
     addMods,
@@ -27,13 +28,17 @@ export const artifactsController: RequestHandler = async (req, res) => {
         "infiniteCredits",
         "RegularCredits",
         "infiniteEndo",
-        "FusionPoints"
+        "FusionPoints",
+        "CrewShipFusionPoints"
     );
     const { Upgrades } = inventory;
     const { ItemType, UpgradeFingerprint, ItemId } = Upgrade;
 
     const buildLabel = getBuildLabel(req, account);
     if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) >= 0) {
+        const useDiracForFusion =
+            version_compare(buildLabel, gameToBuildVersion["29.10.0"]) < 0 &&
+            Upgrade.ItemType.startsWith("/Lotus/Upgrades/Mods/Railjack/");
         const safeUpgradeFingerprint = UpgradeFingerprint || '{"lvl":0}';
         const parsedUpgradeFingerprint = JSON.parse(safeUpgradeFingerprint) as { lvl: number; variant?: number };
         parsedUpgradeFingerprint.lvl += LevelDiff;
@@ -60,7 +65,12 @@ export const artifactsController: RequestHandler = async (req, res) => {
         }
 
         updateCredits(inventory, Cost);
-        addFusionPoints(inventory, -FusionPointCost);
+
+        if (useDiracForFusion) {
+            addCrewShipFusionPoints(inventory, -FusionPointCost);
+        } else {
+            addFusionPoints(inventory, -FusionPointCost);
+        }
 
         if (artifactsData.LegendaryFusion) {
             addMods(inventory, [

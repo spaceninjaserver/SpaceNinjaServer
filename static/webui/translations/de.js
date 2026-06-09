@@ -156,10 +156,6 @@ dict = {
     inventory_bulkReset: `Alle zurücksetzen`,
     inventory_removeIsNew: `Entferne Ausrufezeichen bei neuem Equipment`,
 
-    currency_RegularCredits: `Credits`,
-    currency_PremiumCredits: `Platinum`,
-    currency_FusionPoints: `Endo`,
-    currency_PrimeTokens: `Reines Aya`,
     currency_owned: `Du hast |COUNT|.`,
 
     detailedView_archonShardsLabel: `Archon-Scherben-Slots`,

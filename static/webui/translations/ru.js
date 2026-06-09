@@ -156,10 +156,6 @@ dict = {
     inventory_bulkReset: `Сбросить прогресс всего`,
     inventory_removeIsNew: `Удалить значок восклицательного знака нового снаряжения`,
 
-    currency_RegularCredits: `Кредиты`,
-    currency_PremiumCredits: `Платина`,
-    currency_FusionPoints: `Эндо`,
-    currency_PrimeTokens: `Королевские Айя`,
     currency_owned: `У тебя |COUNT|.`,
 
     detailedView_archonShardsLabel: `Ячейки осколков Архонта`,

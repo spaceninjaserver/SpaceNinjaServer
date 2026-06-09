@@ -130,9 +130,9 @@
                     </div>
                 </div>
                 <div class="row g-3 mb-3">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="card">
-                            <h5 class="card-header" data-loc="currency_RegularCredits"></h5>
+                            <h5 class="card-header" data-loc-itemMap="/Lotus/Language/Menu/Store_BuyWithCredits"></h5>
                             <div class="card-body">
                                 <p class="card-text" id="RegularCredits-owned"></p>
                                 <form class="input-group" onsubmit="doAddCurrency('RegularCredits');return false;">
@@ -142,9 +142,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="card">
-                            <h5 class="card-header" data-loc="currency_PremiumCredits"></h5>
+                            <h5 class="card-header" data-loc-itemMap="/Lotus/Language/Dojo/TradeTypePlatinum"></h5>
                             <div class="card-body">
                                 <p class="card-text" id="PremiumCredits-owned"></p>
                                 <form class="input-group" onsubmit="doAddCurrency('PremiumCredits');return false;">
@@ -154,9 +154,23 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="card">
-                            <h5 class="card-header" data-loc="currency_FusionPoints"></h5>
+                            <h5 class="card-header" data-loc-itemMap="/Lotus/Language/PrimeStore/Store_PrimeTokens"></h5>
+                            <div class="card-body">
+                                <p class="card-text" id="PrimeTokens-owned"></p>
+                                <form class="input-group" onsubmit="doAddCurrency('PrimeTokens');return false;">
+                                    <input class="form-control" id="PrimeTokens-delta" type="number" value="1" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addRegalAya"></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <h5 class="card-header" data-loc-itemMap="/Lotus/Language/Items/FusionBundle"></h5>
                             <div class="card-body">
                                 <p class="card-text" id="FusionPoints-owned"></p>
                                 <form class="input-group" onsubmit="doAddCurrency('FusionPoints');return false;">
@@ -166,14 +180,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="card">
-                            <h5 class="card-header" data-loc="currency_PrimeTokens"></h5>
+                            <h5 class="card-header" data-loc-itemMap-norm="/Lotus/Language/Menu/CrewShipFusionPointsName"></h5>
                             <div class="card-body">
-                                <p class="card-text" id="PrimeTokens-owned"></p>
-                                <form class="input-group" onsubmit="doAddCurrency('PrimeTokens');return false;">
-                                    <input class="form-control" id="PrimeTokens-delta" type="number" value="1" />
-                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addRegalAya"></button>
+                                <p class="card-text" id="CrewShipFusionPoints-owned"></p>
+                                <form class="input-group" onsubmit="doAddCurrency('CrewShipFusionPoints');return false;">
+                                    <input class="form-control" id="CrewShipFusionPoints-delta" type="number" value="1000" />
+                                    <button class="btn btn-primary" type="submit" data-loc="general_addButton" data-enabling-permission="addDirac"></button>
                                 </form>
                             </div>
                         </div>

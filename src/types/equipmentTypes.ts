@@ -60,6 +60,7 @@ export interface IEquipmentDatabase {
     Weapon?: ICrewShipWeaponDatabase;
     Customization?: ICrewShipCustomization;
     RailjackImage?: IFlavourItem;
+    SlotLevels?: number[];
     CrewMembers?: ICrewShipMembersDatabase;
     Favorite?: boolean;
     IsNew?: boolean;

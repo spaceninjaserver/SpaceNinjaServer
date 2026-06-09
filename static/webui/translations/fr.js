@@ -156,10 +156,6 @@ dict = {
     inventory_bulkReset: `Tout réinitialiser`,
     inventory_removeIsNew: `Supprimer "!" sur les nouveaux équipements`,
 
-    currency_RegularCredits: `Crédits`,
-    currency_PremiumCredits: `Platinum`,
-    currency_FusionPoints: `Endo`,
-    currency_PrimeTokens: `Aya Raffiné`,
     currency_owned: `|COUNT| possédés.`,
 
     detailedView_archonShardsLabel: `Emplacements de fragments d'Archonte`,

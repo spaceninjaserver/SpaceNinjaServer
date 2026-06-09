@@ -155,10 +155,6 @@ dict = {
     inventory_bulkReset: `Reset All`,
     inventory_removeIsNew: `Remove New Equipment Exclamation Icon`,
 
-    currency_RegularCredits: `Credits`,
-    currency_PremiumCredits: `Platinum`,
-    currency_FusionPoints: `Endo`,
-    currency_PrimeTokens: `Regal Aya`,
     currency_owned: `You have |COUNT|.`,
 
     detailedView_archonShardsLabel: `Archon Shard Slots`,

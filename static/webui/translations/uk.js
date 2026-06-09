@@ -156,10 +156,6 @@ dict = {
     inventory_bulkReset: `[UNTRANSLATED] Reset All`,
     inventory_removeIsNew: `Видалити значок вигуку нового обладнання`,
 
-    currency_RegularCredits: `Кредити`,
-    currency_PremiumCredits: `Платина`,
-    currency_FusionPoints: `Ендо`,
-    currency_PrimeTokens: `Королівські Ая`,
     currency_owned: `У тебе |COUNT|.`,
 
     detailedView_archonShardsLabel: `Комірки уламків Архонта`,

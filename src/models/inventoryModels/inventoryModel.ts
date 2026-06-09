@@ -1149,6 +1149,7 @@ const EquipmentSchema = new Schema<IEquipmentDatabase>(
         Weapon: crewShipWeaponSchema,
         Customization: crewShipCustomizationSchema,
         RailjackImage: FlavourItemSchema,
+        SlotLevels: { type: [Number], default: undefined },
         CrewMembers: crewShipMembersSchema,
         Favorite: Boolean,
         IsNew: Boolean,

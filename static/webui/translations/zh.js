@@ -156,10 +156,6 @@ dict = {
     inventory_bulkReset: `全部重置`,
     inventory_removeIsNew: `移除所有新装备上的感叹号图标`,
 
-    currency_RegularCredits: `现金`,
-    currency_PremiumCredits: `白金`,
-    currency_FusionPoints: `内融核心`,
-    currency_PrimeTokens: `御品阿耶`,
     currency_owned: `当前拥有 |COUNT|`,
 
     detailedView_archonShardsLabel: `执刑官源力石槽位`,

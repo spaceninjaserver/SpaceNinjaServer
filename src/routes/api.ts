@@ -184,6 +184,7 @@ import { updateQuestController } from "../controllers/api/updateQuestController.
 import { updateSessionGetController, updateSessionPostController } from "../controllers/api/updateSessionController.ts";
 import { updateSongChallengeController } from "../controllers/api/updateSongChallengeController.ts";
 import { updateThemeController } from "../controllers/api/updateThemeController.ts";
+import { upgradeCrewShipController } from "../controllers/api/upgradeCrewShipController.ts";
 import { upgradeOperatorController } from "../controllers/api/upgradeOperatorController.ts";
 import { upgradesController } from "../controllers/api/upgradesController.ts";
 import { valenceSwapController } from "../controllers/api/valenceSwapController.ts";
@@ -422,6 +423,7 @@ apiRouter.post("/updateQuest.php", updateQuestController);
 apiRouter.post("/updateSession.php", updateSessionPostController);
 apiRouter.post("/updateSongChallenge.php", updateSongChallengeController);
 apiRouter.post("/updateTheme.php", updateThemeController);
+apiRouter.post("/upgradeCrewShip.php", upgradeCrewShipController);
 apiRouter.post("/upgrades.php", upgradesController);
 apiRouter.post("/valenceSwap.php", valenceSwapController);
 apiRouter.post("/wishlist.php", wishlistController);

@@ -156,10 +156,6 @@ dict = {
     inventory_bulkReset: `[UNTRANSLATED] Reset All`,
     inventory_removeIsNew: `[UNTRANSLATED] Remove New Equipment Exclamation Icon`,
 
-    currency_RegularCredits: `Créditos`,
-    currency_PremiumCredits: `Platino`,
-    currency_FusionPoints: `Endo`,
-    currency_PrimeTokens: `Aya Real`,
     currency_owned: `Tienes |COUNT|.`,
 
     detailedView_archonShardsLabel: `Ranuras de Fragmento de Arconte`,
