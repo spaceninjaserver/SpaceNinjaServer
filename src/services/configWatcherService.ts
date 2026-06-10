@@ -24,8 +24,7 @@ import { getTunablesForClient } from "./tunablesService.ts";
 import { Account } from "../models/loginModel.ts";
 import { Inbox } from "../models/inboxModel.ts";
 import { createMessage } from "./inboxService.ts";
-import { buildVersionToInt } from "./loginService.ts";
-import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../constants/gameToBuildVersionInt.ts";
 
 chokidar.watch(configPath).on("change", () => {
     if (shouldReloadConfig()) {
@@ -272,7 +271,7 @@ export const syncConfigWithDatabase = (): void => {
                         // startDate & endDate would be present with the event dates but MongoDB would delete the message if we set an endDate in the past.
                         transmission: "/Lotus/Sounds/Dialog/Tau/RoatheEventOutroInbox/DRoatheEventOutroInbox0020Roathe",
                         QuestReq: "/Lotus/Types/Keys/TauPrequel/TauPrequelQuestKeyChain",
-                        minBuildVersion: buildVersionToInt(gameToBuildVersion["41.0.0"])
+                        minBuildVersion: gameToBuildVersionInt["41.0.0"]
                     }
                 ]);
             }
@@ -296,7 +295,7 @@ export const syncConfigWithDatabase = (): void => {
                         QuestReq: "/Lotus/Types/Keys/PriestFrameQuest/PriestQuestKeyChain",
                         att: ["/Lotus/Types/Items/ShipDecos/Props/ShadowgrapherEaselShipDeco"],
                         CrossPlatform: true,
-                        minBuildVersion: buildVersionToInt(gameToBuildVersion["42.0.0"])
+                        minBuildVersion: gameToBuildVersionInt["42.0.0"]
                     }
                 ]);
             }

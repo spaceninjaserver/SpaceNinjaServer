@@ -3,7 +3,7 @@ import type { IMessageClient, IMessageDatabase } from "../types/inboxTypes.ts";
 import type { TMessageDocument } from "../models/inboxModel.ts";
 import { Inbox } from "../models/inboxModel.ts";
 import type { QueryFilter, Types } from "mongoose";
-import { buildVersionToInt } from "./loginService.ts";
+import { buildVersionToInt } from "../helpers/versionHelper.ts";
 
 export const getInboxFilter = (
     accountId: string | Types.ObjectId,

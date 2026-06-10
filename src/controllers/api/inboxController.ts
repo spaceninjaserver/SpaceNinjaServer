@@ -11,7 +11,6 @@ import {
     type IMessageCreationTemplate
 } from "../../services/inboxService.ts";
 import {
-    buildVersionToInt,
     getAccountForRequest,
     getAccountFromSuffixedName,
     getBuildLabel,
@@ -34,8 +33,8 @@ import type { IOid } from "../../types/commonTypes.ts";
 import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import { config } from "../../services/configService.ts";
 import { Types } from "mongoose";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 
 export const inboxController: RequestHandler = async (req, res) => {
     const { deleteId, lastMessage: latestClientMessageId, messageId } = req.query;
@@ -198,10 +197,7 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
                 }
             ],
             date: new Date(baroActualStart),
-            minBuildVersion:
-                evilBaroStage > 0
-                    ? buildVersionToInt(gameToBuildVersion["40.0.0"])
-                    : buildVersionToInt(gameToBuildVersion["18.18.0"]) // Baro was introduced in U15.6. Unclear when exactly this inbox message was introduced, tho.
+            minBuildVersion: evilBaroStage > 0 ? gameToBuildVersionInt["40.0.0"] : gameToBuildVersionInt["18.18.0"] // Baro was introduced in U15.6. Unclear when exactly this inbox message was introduced, tho.
         });
     }
     if (Date.now() >= prevBaroEnd && account.LatestEventMessageDate.getTime() < prevBaroEnd && evilBaroStage == 4) {
@@ -216,7 +212,7 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
             att: ["/Lotus/Types/StoreItems/AvatarImages/ImageBaroKiteerEvil"],
             CrossPlatform: true,
             date: new Date(prevBaroEnd),
-            minBuildVersion: buildVersionToInt(gameToBuildVersion["40.0.0"])
+            minBuildVersion: gameToBuildVersionInt["40.0.0"]
         });
     }
 
@@ -267,7 +263,7 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
             att: ["/Lotus/Upgrades/Skins/Events/OgrisOldSchool"],
             startDate: new Date(),
             goalTag: "GalleonRobbery",
-            minBuildVersion: buildVersionToInt(gameToBuildVersion["38.5.11"])
+            minBuildVersion: gameToBuildVersionInt["38.5.11"]
         });
     }
     if (config.worldState?.bloodOfPerita && !account.receivedEventMessage_bloodOfPerita) {
@@ -280,7 +276,7 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
             startDate: new Date(),
             transmission: "/Lotus/Sounds/Dialog/Tau/RoatheEventOutroInbox/DRoatheEventIntroInbox0010Roathe",
             QuestReq: "/Lotus/Types/Keys/TauPrequel/TauPrequelQuestKeyChain",
-            minBuildVersion: buildVersionToInt(gameToBuildVersion["41.0.0"])
+            minBuildVersion: gameToBuildVersionInt["41.0.0"]
         });
     }
     if (config.worldState?.longShadow && !account.receivedEventMessage_longShadow) {
@@ -305,7 +301,7 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
             startDate: new Date(),
             QuestReq: "/Lotus/Types/Keys/PriestFrameQuest/PriestQuestKeyChain",
             CrossPlatform: true,
-            minBuildVersion: buildVersionToInt(gameToBuildVersion["42.0.0"])
+            minBuildVersion: gameToBuildVersionInt["42.0.0"]
         });
     }
     if (config.worldState?.breedingGrounds && !account.receivedEventMessage_breedingGrounds) {
@@ -317,7 +313,7 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
             icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
             startDate: new Date(),
             CrossPlatform: true,
-            minBuildVersion: buildVersionToInt(gameToBuildVersion["14.0.0"])
+            minBuildVersion: gameToBuildVersionInt["14.0.0"]
         });
     }
 

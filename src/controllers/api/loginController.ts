@@ -4,7 +4,6 @@ import { config, getReflexiveAddress } from "../../services/configService.ts";
 
 import { Account } from "../../models/loginModel.ts";
 import {
-    buildVersionToInt,
     createAccount,
     createNonce,
     getBuildLabelForUnauthenticatedRequest,
@@ -28,6 +27,8 @@ import { getTokenForClient, getTunablesForClient } from "../../services/tunables
 import type { AddressInfo } from "node:net";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 import { args } from "../../helpers/commandLineArguments.ts";
+import { buildLabelToVersionInt } from "../../helpers/versionHelper.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 
 export const loginController: RequestHandler = async (request, response) => {
     const loginRequest = JSON.parse(String(request.body)) as ILoginRequest; // parse octet stream of json data to json object
@@ -173,10 +174,11 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
         DisplayName: account.DisplayName,
         Nonce: account.Nonce
     };
-    if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0) {
+    const buildVersionInt = buildLabelToVersionInt(buildLabel);
+    if (buildVersionInt >= gameToBuildVersionInt["7.3.0"]) {
         resp.BuildLabel = buildLabel; // U5 no likey
     }
-    if (version_compare(buildLabel, gameToBuildVersion["12.5.2"]) >= 0) {
+    if (buildVersionInt >= gameToBuildVersionInt["12.5.2"]) {
         // U12.5 and up
 
         // CountryCode should be based on the IP address so the client can pick a good matchmaking region automatically.
@@ -192,28 +194,28 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
             .join("")
             .padEnd(128, "0");
 
-        if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0) {
+        if (buildVersionInt >= gameToBuildVersionInt["7.3.0"]) {
             resp.SteamId = "0"; // U5 no likey
         }
     }
-    if (version_compare(buildLabel, gameToBuildVersion["15.14.1"]) >= 0) {
+    if (buildVersionInt >= gameToBuildVersionInt["15.14.1"]) {
         resp.NRS = (config.nrsAddresses ?? []).map(x => x.replaceAll("%THIS_MACHINE%", myAddress));
         // U16 ~ U28 are known to show an "Internal error." popup with an empty array.
-        if (resp.NRS.length == 0 && version_compare(buildLabel, gameToBuildVersion["29.0.0"]) < 0) {
+        if (resp.NRS.length == 0 && buildVersionInt < gameToBuildVersionInt["29.0.0"]) {
             resp.NRS.push(myAddress);
         }
     }
-    if (version_compare(buildLabel, gameToBuildVersion["16.5.5"]) >= 0) {
+    if (buildVersionInt >= gameToBuildVersionInt["16.5.5"]) {
         resp.IRC = [(config.ircAddress || "%THIS_MACHINE%").replaceAll("%THIS_MACHINE%", myAddress)];
     }
-    if (version_compare(buildLabel, gameToBuildVersion["24.0.0"]) >= 0) {
+    if (buildVersionInt >= gameToBuildVersionInt["24.0.0"]) {
         resp.ConsentNeeded = false;
         resp.TrackedSettings = [];
     }
-    if (version_compare(buildLabel, gameToBuildVersion["25.7.0"]) >= 0) {
+    if (buildVersionInt >= gameToBuildVersionInt["25.7.0"]) {
         resp.ForceLogoutVersion = 0;
     }
-    if (version_compare(buildLabel, gameToBuildVersion["26.0.0"]) >= 0) {
+    if (buildVersionInt >= gameToBuildVersionInt["26.0.0"]) {
         // Example values from live:
         // - [{"experiment":"landingPageAB2368","experimentGroup":"control"},{"experiment":"InGameMarketRelatedItemsData","experimentGroup":"related_items_priority_control"},{"experiment":"GamesightAB","experimentGroup":"b"}]
         // - [{"experiment":"LandingPageAB2368","experimentGroup":"control"},{"experiment":"GamesightAB","experimentGroup":"b"},{"experiment":"InGameMarketRelatedItemsData","experimentGroup":"related_items_priority_control"},{"experiment":"InGameMarketRelatedItemsDisplay","experimentGroup":"related_items_preview_control"},{"experiment":"ConsoleBonusPlatLowGDP","experimentGroup":"LowGDP_FewerLargerBonuses"}]
@@ -227,24 +229,24 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
             //{ experiment: "quick_buy_visible", experimentGroup: "quick_buy_visible" } // Shows "quick buy" market section for MR 4+ players
         ];
     }
-    if (version_compare(buildLabel, gameToBuildVersion["30.0.0"]) >= 0) {
+    if (buildVersionInt >= gameToBuildVersionInt["30.0.0"]) {
         resp.DTLS = config.dtls ?? 0; // bit 0 enables DTLS. if enabled, additional bits can be set, e.g. bit 2 to enable logging. on live, the value is 99.
     }
-    if (version_compare(buildLabel, gameToBuildVersion["31.5.0"]) >= 0) {
+    if (buildVersionInt >= gameToBuildVersionInt["31.5.0"]) {
         resp.ClientType = account.ClientType;
     }
-    if (version_compare(buildLabel, gameToBuildVersion["32.0.0"]) >= 0) {
+    if (buildVersionInt >= gameToBuildVersionInt["32.0.0"]) {
         resp.CrossPlatformAllowed = true;
         resp.HUB = `${myUrlBase}/api/`;
 
         // The MatchmakingBuildId is a 64-bit integer represented as a decimal string. On live, the value is seemingly random per build, but really any value that is different across builds should work.
-        resp.MatchmakingBuildId = buildVersionToInt(buildLabel).toString();
+        resp.MatchmakingBuildId = buildVersionInt.toString();
     }
-    if (version_compare(buildLabel, gameToBuildVersion["33.0.0"]) >= 0) {
-        if (version_compare(buildLabel, gameToBuildVersion["40.0.0"]) >= 0) {
+    if (buildVersionInt >= gameToBuildVersionInt["33.0.0"]) {
+        if (buildVersionInt >= gameToBuildVersionInt["40.0.0"]) {
             // U40 is when they changed this from content.warframe.com/dynamic/ to api.warframe.com/cdn/
             resp.platformCDNs = [`${myUrlBase}/cdn/`];
-        } else if (version_compare(buildLabel, gameToBuildVersion["39.1.0"]) >= 0) {
+        } else if (buildVersionInt >= gameToBuildVersionInt["39.1.0"]) {
             // U39.1 is when they made dynamic/ explicit
             resp.platformCDNs = [`${myUrlBase}/dynamic/`];
         } else {
@@ -252,7 +254,7 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
             resp.platformCDNs = [`${myUrlBase}/`];
         }
     }
-    if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0) {
+    if (buildVersionInt >= gameToBuildVersionInt["42.0.0"]) {
         resp.Token =
             Math.trunc(Date.now() / 1000)
                 .toString(16)

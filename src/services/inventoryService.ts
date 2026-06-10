@@ -107,7 +107,7 @@ import { getNightwaveSyndicateTag, getWorldState } from "./worldStateService.ts"
 import type { ICalendarSeason } from "../types/worldStateTypes.ts";
 import type { INemesisProfile } from "../helpers/nemesisHelpers.ts";
 import { generateNemesisProfile } from "../helpers/nemesisHelpers.ts";
-import { buildVersionToInt, type TAccountDocument } from "./loginService.ts";
+import { type TAccountDocument } from "./loginService.ts";
 import { KAHL_EPOCH, unixTimesInMs } from "../constants/timeConstants.ts";
 import { addString } from "../helpers/stringHelpers.ts";
 import type {
@@ -128,6 +128,7 @@ import kuriaMessage100 from "../../static/fixed_responses/kuriaMessages/oneHundr
 import { BL_LATEST } from "../constants/gameVersions.ts";
 import { Guild } from "../models/guildModel.ts";
 import { handleGuildGoalProgress } from "./guildService.ts";
+import { buildVersionToInt } from "../helpers/versionHelper.ts";
 
 type OperatorAntiqueMeta = {
     focusAbility: string;

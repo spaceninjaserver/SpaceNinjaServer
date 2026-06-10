@@ -5,6 +5,7 @@ import type { IFusionTreasure } from "../types/inventoryTypes/inventoryTypes.ts"
 import type { IColor } from "../types/inventoryTypes/commonInventoryTypes.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 
+// TODO: Move to versionHelper?
 export const version_compare = (a: string, b: string): number => {
     const a_digits = a
         .split("/")[0]

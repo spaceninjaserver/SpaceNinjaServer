@@ -86,6 +86,7 @@ const createPersonalRooms = async (accountId: Types.ObjectId, shipId: Types.Obje
     await personalRooms.save();
 };
 
+// TODO: Move to loginModel
 export type TAccountDocument = Document<unknown, {}, IDatabaseAccountJson> &
     IDatabaseAccountJson & { _id: Types.ObjectId; __v: number };
 
@@ -245,9 +246,4 @@ export const stripUnicodeSuffix = (name: string): string => {
         name = name.substring(0, name.length - 1);
     }
     return name;
-};
-
-export const buildVersionToInt = (buildVersion: string): number => {
-    const [year, month, day, hour, minute] = buildVersion.split(".").map(x => parseInt(x));
-    return year * 1_00_00_00_00 + month * 1_00_00_00 + day * 1_00_00 + hour * 1_00 + minute;
 };
