@@ -2266,8 +2266,7 @@ export const getWorldState = (
         });
     }
 
-    // < U38.6.0
-    if (version_compare(buildLabel, "2025.05.20.10.18") >= 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["38.6.0"]) >= 0) {
         // The client gets kinda confused when multiple goals have the same tag, so considering these mutually exclusive.
         if (config.worldState?.galleonOfGhouls == 1) {
             worldState.Goals.push({
@@ -3439,7 +3438,7 @@ export const getWorldState = (
         pushFlashSales(worldState, storeItems, activation, expiry, "SEASONAL", buildLabel);
     }
 
-    if (config.worldState?.bellyOfTheBeast && version_compare(buildLabel, "2024.06.12.18.42") >= 0) {
+    if (config.worldState?.bellyOfTheBeast && version_compare(buildLabel, gameToBuildVersion["36.0.0"]) >= 0) {
         worldState.Goals.push({
             _id: toOid2("67a5035c2a198564d62e165e", buildLabel),
             Activation: toMongoDate2(1738868400000, buildLabel),
@@ -3487,7 +3486,7 @@ export const getWorldState = (
     }
 
     // <U39
-    if (config.worldState?.eightClaw && version_compare(buildLabel, "2025.06.23.11.39") >= 0) {
+    if (config.worldState?.eightClaw && version_compare(buildLabel, gameToBuildVersion["39.0.0"]) >= 0) {
         worldState.Goals.push({
             _id: toOid2("685c15f80000000000000000", buildLabel),
             Activation: toMongoDate2(1750865400000, buildLabel),
@@ -3509,7 +3508,7 @@ export const getWorldState = (
         });
     }
 
-    if (config.worldState?.scarletSpear) {
+    if (config.worldState?.scarletSpear && version_compare(buildLabel, gameToBuildVersion["27.3.0"]) >= 0) {
         worldState.Goals.push({
             _id: toOid2("5e7a3e2389e3090b0c6a998b", buildLabel),
             Activation: {
@@ -4051,39 +4050,45 @@ export const getWorldState = (
     do {
         const bountyCycleStart = Math.trunc((bountyEpoch + bountyCycle * eidolonCycleDuration) * 1000);
         bountyCycleEnd = Math.trunc(bountyCycleStart + eidolonCycleDuration * 1000);
-        worldState.SyndicateMissions.push({
-            _id: toOid2(
-                ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000029",
-                buildLabel
-            ),
-            Activation: toMongoDate2(bountyCycleStart, buildLabel),
-            Expiry: toMongoDate2(bountyCycleEnd, buildLabel),
-            Tag: "ZarimanSyndicate",
-            Seed: bountyCycle,
-            Nodes: []
-        });
-        worldState.SyndicateMissions.push({
-            _id: toOid2(
-                ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000004",
-                buildLabel
-            ),
-            Activation: toMongoDate2(bountyCycleStart, buildLabel),
-            Expiry: toMongoDate2(bountyCycleEnd, buildLabel),
-            Tag: "EntratiLabSyndicate",
-            Seed: bountyCycle,
-            Nodes: []
-        });
-        worldState.SyndicateMissions.push({
-            _id: toOid2(
-                ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000006",
-                buildLabel
-            ),
-            Activation: toMongoDate2(bountyCycleStart, buildLabel),
-            Expiry: toMongoDate2(bountyCycleEnd, buildLabel),
-            Tag: "HexSyndicate",
-            Seed: bountyCycle,
-            Nodes: []
-        });
+        if (version_compare(buildLabel, gameToBuildVersion["29.0.0"]) >= 0) {
+            worldState.SyndicateMissions.push({
+                _id: toOid2(
+                    ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000004",
+                    buildLabel
+                ),
+                Activation: toMongoDate2(bountyCycleStart, buildLabel),
+                Expiry: toMongoDate2(bountyCycleEnd, buildLabel),
+                Tag: "EntratiLabSyndicate",
+                Seed: bountyCycle,
+                Nodes: []
+            });
+        }
+        if (version_compare(buildLabel, gameToBuildVersion["31.5.0"]) >= 0) {
+            worldState.SyndicateMissions.push({
+                _id: toOid2(
+                    ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000029",
+                    buildLabel
+                ),
+                Activation: toMongoDate2(bountyCycleStart, buildLabel),
+                Expiry: toMongoDate2(bountyCycleEnd, buildLabel),
+                Tag: "ZarimanSyndicate",
+                Seed: bountyCycle,
+                Nodes: []
+            });
+        }
+        if (version_compare(buildLabel, gameToBuildVersion["38.0.0"]) >= 0) {
+            worldState.SyndicateMissions.push({
+                _id: toOid2(
+                    ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000006",
+                    buildLabel
+                ),
+                Activation: toMongoDate2(bountyCycleStart, buildLabel),
+                Expiry: toMongoDate2(bountyCycleEnd, buildLabel),
+                Tag: "HexSyndicate",
+                Seed: bountyCycle,
+                Nodes: []
+            });
+        }
 
         pushClassicBounties(worldState.SyndicateMissions, bountyCycle, buildLabel);
     } while (isBeforeNextExpectedWorldStateRefresh(timeMs, bountyCycleEnd) && ++bountyCycle);
@@ -4270,7 +4275,8 @@ export const getWorldState = (
     }
 
     // Baro
-    {
+    // Introdused in U15.6
+    if (version_compare(buildLabel, gameToBuildVersion["15.5.0"]) > 0) {
         const baroIndex = Math.trunc((Date.now() - 910800000) / (unixTimesInMs.day * 14));
         const baroStart = baroIndex * (unixTimesInMs.day * 14) + 910800000;
         const baroActualStart = baroStart + unixTimesInMs.day * (config.worldState?.baroAlwaysAvailable ? 0 : 12);
@@ -4387,19 +4393,21 @@ export const getWorldState = (
     }
 
     // Void Storms
-    const hour = Math.trunc(timeMs / unixTimesInMs.hour);
-    const overLastHourStormExpiry = hour * unixTimesInMs.hour + 10 * unixTimesInMs.minute;
-    const thisHourStormActivation = hour * unixTimesInMs.hour + 40 * unixTimesInMs.minute;
-    if (overLastHourStormExpiry > timeMs) {
-        pushVoidStorms(worldState.VoidStorms, hour - 2);
-    }
-    pushVoidStorms(worldState.VoidStorms, hour - 1);
-    if (isBeforeNextExpectedWorldStateRefresh(timeMs, thisHourStormActivation)) {
-        pushVoidStorms(worldState.VoidStorms, hour);
+    if (version_compare(buildLabel, gameToBuildVersion["30.0.0"]) >= 0) {
+        const hour = Math.trunc(timeMs / unixTimesInMs.hour);
+        const overLastHourStormExpiry = hour * unixTimesInMs.hour + 10 * unixTimesInMs.minute;
+        const thisHourStormActivation = hour * unixTimesInMs.hour + 40 * unixTimesInMs.minute;
+        if (overLastHourStormExpiry > timeMs) {
+            pushVoidStorms(worldState.VoidStorms, hour - 2);
+        }
+        pushVoidStorms(worldState.VoidStorms, hour - 1);
+        if (isBeforeNextExpectedWorldStateRefresh(timeMs, thisHourStormActivation)) {
+            pushVoidStorms(worldState.VoidStorms, hour);
+        }
     }
 
     // Sortie & syndicate missions cycling every day (at 16:00 or 17:00 UTC depending on if London, OT is observing DST)
-    {
+    if (version_compare(buildLabel, gameToBuildVersion["15.0.0"]) >= 0) {
         const rollover = getSortieTime(day);
 
         // Omit sorties for pre-Star Chart 3.0 clients to avoid breaking them.
@@ -4503,9 +4511,11 @@ export const getWorldState = (
     }
 
     // Archon Hunt cycling every week
-    worldState.LiteSorties.push(getLiteSortie(week));
-    if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
-        worldState.LiteSorties.push(getLiteSortie(week + 1));
+    if (version_compare(buildLabel, gameToBuildVersion["32.0.0"]) >= 0) {
+        worldState.LiteSorties.push(getLiteSortie(week));
+        if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
+            worldState.LiteSorties.push(getLiteSortie(week + 1));
+        }
     }
 
     // Circuit choices cycling every week
@@ -4524,14 +4534,16 @@ export const getWorldState = (
                 CategoryChoices: getEndlessXpChoices(week + 1)
             });
         }
-    } else {
+    } else if (version_compare(buildLabel, gameToBuildVersion["33.0.0"]) >= 0) {
         worldState.EndlessXpChoices = getEndlessXpChoices(week);
     }
 
     // 1999 Calendar Season cycling every week + YearIteration every 4 weeks
-    worldState.KnownCalendarSeasons.push(getCalendarSeason(week));
-    if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
-        worldState.KnownCalendarSeasons.push(getCalendarSeason(week + 1));
+    if (version_compare(buildLabel, gameToBuildVersion["38.0.0"]) >= 0) {
+        worldState.KnownCalendarSeasons.push(getCalendarSeason(week));
+        if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
+            worldState.KnownCalendarSeasons.push(getCalendarSeason(week + 1));
+        }
     }
 
     const season = (["CST_WINTER", "CST_SPRING", "CST_SUMMER", "CST_FALL"] as const)[week % 4];
@@ -4725,6 +4737,7 @@ const convertGoalsToV9 = (goals: IGoal[]): void => {
 };
 
 export const populateFissures = async (worldState: IWorldState): Promise<void> => {
+    if (version_compare(worldState.BuildLabel, gameToBuildVersion["18.16.0"]) < 0) return;
     if (config.worldState?.allTheFissures) {
         let i = 0;
         for (const [tier, nodes] of Object.entries(fissureMissions)) {
