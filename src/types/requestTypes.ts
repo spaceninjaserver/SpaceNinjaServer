@@ -60,6 +60,7 @@ export type IMissionInventoryUpdateRequest = {
     CMI?: boolean;
     EJC?: boolean;
 
+    CollectedQuestKeys?: string[]; // versions with client-side drops puts quests here
     SyndicateId?: string;
     SortieId?: string;
     CalendarProgress?: { challenge: string }[];

@@ -57,7 +57,7 @@ import {
     updateIncentiveStates,
     updateSyndicate
 } from "./inventoryService.ts";
-import { updateQuestKey } from "./questService.ts";
+import { addQuestKey, updateQuestKey } from "./questService.ts";
 import { Types } from "mongoose";
 import type { IAffiliationMods, IInventoryChanges } from "../types/purchaseTypes.ts";
 import {
@@ -394,6 +394,11 @@ export const addMissionInventoryUpdates = async (
                 break;
             case "RawUpgrades":
                 addMods(inventory, value);
+                break;
+            case "CollectedQuestKeys":
+                for (const questKey of value) {
+                    addQuestKey(inventory, { ItemType: questKey });
+                }
                 break;
             case "MiscItems":
             case "BonusMiscItems": {
