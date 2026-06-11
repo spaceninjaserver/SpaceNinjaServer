@@ -52,6 +52,7 @@ export const accountCheatBooleans = [
     "infiniteCredits",
     "infinitePlatinum",
     "infiniteEndo",
+    "infiniteDirac",
     "infiniteRegalAya",
     "infiniteRevives",
     "infiniteTrades",
@@ -396,7 +397,7 @@ export interface IInventoryClient
     PremiumCredits: number;
     PremiumCreditsFree: number;
     FusionPoints: number;
-    CrewShipFusionPoints: number; //Dirac (pre-rework Railjack)
+    CrewShipFusionPoints: number; // Dirac (pre-rework Railjack)
     PrimeTokens: number;
     TradesRemaining: number;
     DailyFocus: number;

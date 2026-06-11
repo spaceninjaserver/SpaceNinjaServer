@@ -29,6 +29,7 @@ export const artifactsController: RequestHandler = async (req, res) => {
         "RegularCredits",
         "infiniteEndo",
         "FusionPoints",
+        "infiniteDirac",
         "CrewShipFusionPoints"
     );
     const { Upgrades } = inventory;

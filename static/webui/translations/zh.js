@@ -228,6 +228,7 @@ dict = {
     cheats_infiniteCredits: `无限现金`,
     cheats_infinitePlatinum: `无限白金`,
     cheats_infiniteEndo: `无限内融核心`,
+    cheats_infiniteDirac: `[UNTRANSLATED] Infinite Dirac`,
     cheats_infiniteRegalAya: `无限御品阿耶`,
     cheats_infiniteRevives: `无限复活次数 (U18前版本)`,
     cheats_infiniteTrades: `无限交易次数`,

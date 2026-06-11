@@ -51,7 +51,11 @@ export const setAccountCheatController: RequestHandler = async (req, res) => {
 
     res.end();
 
-    if (["infiniteCredits", "infinitePlatinum", "infiniteEndo", "infiniteRegalAya"].indexOf(payload.key) != -1) {
+    if (
+        ["infiniteCredits", "infinitePlatinum", "infiniteEndo", "infiniteDirac", "infiniteRegalAya"].indexOf(
+            payload.key
+        ) != -1
+    ) {
         // Game and all webui tabs need to refresh the inventory
         sendWsBroadcastTo(account._id.toString(), { update_inventory: true, sync_inventory: true });
     } else if (

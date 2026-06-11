@@ -8,7 +8,7 @@ import { logger } from "../../utils/logger.ts";
 export const upgradeCrewShipController: RequestHandler = async (request, response) => {
     const accountId = await getAccountIdForRequest(request);
     const data = getJSONfromString<IUpgradeCrewShipRequest>(String(request.body));
-    const inventory = await getInventory2(accountId, "CrewShips", "CrewShipFusionPoints");
+    const inventory = await getInventory2(accountId, "CrewShips", "CrewShipFusionPoints", "infiniteDirac");
     const crewShip = inventory.CrewShips.find(ship => ship._id.equals(data.ShipId.$oid));
     if (crewShip) {
         crewShip.SlotLevels ??= [];

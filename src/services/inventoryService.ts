@@ -1823,14 +1823,18 @@ export const addFusionPoints = (
 };
 
 export const addCrewShipFusionPoints = (
-    inventory: Pick<TInventoryDatabaseDocument, "CrewShipFusionPoints">,
+    inventory: Pick<TInventoryDatabaseDocument, "infiniteDirac" | "CrewShipFusionPoints">,
     add: number
 ): number => {
-    if (inventory.CrewShipFusionPoints + add > 2147483647) {
-        logger.warn(`capping CrewShipFusionPoints balance at 2147483647`);
-        add = 2147483647 - inventory.CrewShipFusionPoints;
+    if (inventory.infiniteDirac) {
+        add = 0;
+    } else {
+        if (inventory.CrewShipFusionPoints + add > 2147483647) {
+            logger.warn(`capping CrewShipFusionPoints balance at 2147483647`);
+            add = 2147483647 - inventory.CrewShipFusionPoints;
+        }
+        inventory.CrewShipFusionPoints += add;
     }
-    inventory.CrewShipFusionPoints += add;
     return add;
 };
 

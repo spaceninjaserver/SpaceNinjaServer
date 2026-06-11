@@ -228,6 +228,7 @@ dict = {
     cheats_infiniteCredits: `Бесконечные Кредиты`,
     cheats_infinitePlatinum: `Бесконечная Платина`,
     cheats_infiniteEndo: `Бесконечное Эндо`,
+    cheats_infiniteDirac: `[UNTRANSLATED] Infinite Dirac`,
     cheats_infiniteRegalAya: `Бесконечная Королевская Айя`,
     cheats_infiniteRevives: `[UNTRANSLATED] Infinite Revives (Pre-U18)`,
     cheats_infiniteTrades: `Бесконечные обмены`,

@@ -432,6 +432,9 @@ export const getInventoryResponse = async (
     if (inventory.infiniteEndo) {
         inventoryResponse.FusionPoints = 999999999;
     }
+    if (inventory.infiniteDirac) {
+        inventoryResponse.CrewShipFusionPoints = 999999999;
+    }
     if (inventory.infiniteRegalAya) {
         inventoryResponse.PrimeTokens = 999999999;
     }
