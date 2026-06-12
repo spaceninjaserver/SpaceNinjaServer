@@ -3,6 +3,7 @@
 echo Updating SpaceNinjaServer...
 git fetch --prune
 if %errorlevel% == 0 (
+	git restore package-lock.json
 	git stash
 	git checkout -f origin/main
 
@@ -16,10 +17,10 @@ if %errorlevel% == 0 (
 	echo Updating dependencies...
 	node scripts/raw-precheck.js > NUL
 	if %errorlevel% == 0 (
-		call npm ci --omit=dev --omit=optional --no-audit
+		call npm i --omit=dev --omit=optional --no-audit
 		call npm run raw
 	) else (
-		call npm ci --omit=dev --no-audit
+		call npm i --omit=dev --no-audit
 		call npm run build
 		if %errorlevel% == 0 (
 			call npm run start
