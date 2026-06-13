@@ -7,8 +7,15 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug and Watch",
-      "args": ["${workspaceFolder}/scripts/dev.js"],
+      "name": "Run With Hot Reloading",
+      "args": ["${workspaceFolder}/scripts/dev.cjs"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run",
+      "args": ["${workspaceFolder}/src/index.ts"],
       "console": "integratedTerminal"
     }
   ]
