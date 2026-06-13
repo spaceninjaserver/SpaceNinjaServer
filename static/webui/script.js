@@ -396,9 +396,12 @@ function changeAccountEmail() {
 }
 
 function updateTitle() {
-    const tag = single.getCurrentRoute().elm.getAttribute("data-title-tag");
-    if (tag) {
-        document.querySelector("title").textContent = loc(tag) + " | OpenWF WebUI";
+    const route = single.getCurrentRoute();
+    if (route) {
+        const tag = route.elm.getAttribute("data-title-tag");
+        if (tag) {
+            document.querySelector("title").textContent = loc(tag) + " | OpenWF WebUI";
+        }
     }
 }
 
