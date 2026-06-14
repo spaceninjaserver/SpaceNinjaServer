@@ -54,8 +54,7 @@ import {
     processGoalProgressUpdates,
     updateCurrency,
     updateEntratiVault,
-    updateIncentiveStates,
-    updateSyndicate
+    updateIncentiveStates
 } from "./inventoryService.ts";
 import { addQuestKey, updateQuestKey } from "./questService.ts";
 import { Types } from "mongoose";
@@ -358,7 +357,17 @@ export const addMissionInventoryUpdates = async (
                 await updateQuestKey(inventory, value);
                 break;
             case "AffiliationChanges":
-                await updateSyndicate(inventory, buildLabel, value);
+                for (const affiliation of value) {
+                    await addStanding(
+                        inventory,
+                        buildLabel,
+                        affiliation.Tag,
+                        affiliation.Standing,
+                        undefined,
+                        false, // affiliation bin changes are handled by the client, no need to do it twice
+                        false
+                    );
+                }
                 break;
             // Incarnon Challenges
             case "EvolutionProgress": {

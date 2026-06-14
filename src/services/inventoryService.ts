@@ -32,7 +32,7 @@ import type {
 } from "../types/inventoryTypes/inventoryTypes.ts";
 import { eInventorySlot, equipmentKeys, slotNames } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdateTypes.ts";
-import type { IGoalsProgress, IKeyChainRequest, IMissionInventoryUpdateRequest } from "../types/requestTypes.ts";
+import type { IGoalsProgress, IKeyChainRequest } from "../types/requestTypes.ts";
 import { logger } from "../utils/logger.ts";
 import {
     convertInboxMessage,
@@ -1883,7 +1883,7 @@ export const addStanding = async (
     syndicateTag: string,
     gainedStanding: number,
     affiliationMods: IAffiliationMods[] = [],
-    isMedallion: boolean = false,
+    applyDailyCap: boolean = false,
     propagateAlignments: boolean = true
 ): Promise<void> => {
     let syndicate = inventory.Affiliations.find(x => x.Tag == syndicateTag);
@@ -1901,7 +1901,7 @@ export const addStanding = async (
         gainedStanding = -71000 - syndicate.Standing;
     }
 
-    if (!isMedallion || syndicateMeta.medallionsCappedByDailyLimit) {
+    if (!applyDailyCap || syndicateMeta.medallionsCappedByDailyLimit) {
         if (gainedStanding > getStandingLimit(inventory, syndicateMeta.dailyLimitBin)) {
             gainedStanding = getStandingLimit(inventory, syndicateMeta.dailyLimitBin);
         }
@@ -1924,7 +1924,7 @@ export const addStanding = async (
                     tag,
                     gainedStanding * factor,
                     affiliationMods,
-                    isMedallion,
+                    applyDailyCap,
                     false
                 );
             }
@@ -2843,33 +2843,6 @@ export const setBooster = (ItemType: string, expiryTimeSecs: number, inventory: 
         existingBooster.ExpiryDate = Math.max(existingBooster.ExpiryDate, expiryTimeSecs);
     } else {
         Boosters.push({ ItemType, ExpiryDate: expiryTimeSecs });
-    }
-};
-
-export const updateSyndicate = async (
-    inventory: TInventoryDatabaseDocument,
-    buildLabel: string,
-    syndicateUpdate: IMissionInventoryUpdateRequest["AffiliationChanges"]
-): Promise<void> => {
-    if (!syndicateUpdate) return;
-
-    for (const affiliation of syndicateUpdate) {
-        const syndicate = inventory.Affiliations.find(x => x.Tag == affiliation.Tag);
-        const syndicateMeta = await getSyndicate(affiliation.Tag, buildLabel);
-        if (syndicate !== undefined) {
-            syndicate.Standing += affiliation.Standing;
-            syndicate.Title = syndicate.Title === undefined ? affiliation.Title : syndicate.Title + affiliation.Title;
-        } else {
-            inventory.Affiliations.push({
-                Standing: affiliation.Standing,
-                Title: affiliation.Title,
-                Tag: affiliation.Tag,
-                FreeFavorsEarned: [],
-                FreeFavorsUsed: []
-            });
-        }
-
-        updateStandingLimit(inventory, syndicateMeta!.dailyLimitBin, affiliation.Standing);
     }
 };
 
