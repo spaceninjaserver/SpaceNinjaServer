@@ -2,6 +2,7 @@ import { fromMongoDate, fromOid } from "../../helpers/inventoryHelpers.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { addMiscItem, getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { sendWsBroadcastToWebui } from "../../services/wsService.ts";
 import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
 import type { RequestHandler } from "express";
 
@@ -20,6 +21,7 @@ export const umbraController: RequestHandler = async (req, res) => {
     }
     await inventory.save();
     res.end();
+    sendWsBroadcastToWebui({ update_inventory: true }, accountId); // Update Echoes Of Umbra removal to WebUI when clicking on "Remove Cyst" in-game
 };
 
 interface IUmbraRequest {

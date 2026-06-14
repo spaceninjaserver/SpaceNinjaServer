@@ -26,7 +26,7 @@ import {
     applyCheatsToInfestedFoundry,
     handleSubsumeCompletion
 } from "../../services/infestedFoundryService.ts";
-import { sendWsBroadcastToGame } from "../../services/wsService.ts";
+import { sendWsBroadcastToGame, sendWsBroadcastToWebui } from "../../services/wsService.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 
 export const infestedFoundryController: RequestHandler = async (req, res) => {
@@ -58,6 +58,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                     MiscItems: miscItemChanges
                 }
             });
+            sendWsBroadcastToWebui({ update_inventory: true }, account._id.toString());
             break;
         }
 
@@ -118,6 +119,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                     InfestedFoundry: infestedFoundry
                 }
             });
+            sendWsBroadcastToWebui({ update_inventory: true }, account._id.toString());
             break;
         }
 
@@ -324,6 +326,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                     InfestedFoundry: infestedFoundry
                 }
             });
+            sendWsBroadcastToWebui({ update_inventory: true }, account._id.toString());
             break;
         }
 
@@ -390,6 +393,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                     InfestedFoundry: infestedFoundry
                 }
             });
+            sendWsBroadcastToWebui({ update_inventory: true }, account._id.toString());
             break;
         }
 

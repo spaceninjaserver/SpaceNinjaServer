@@ -14,7 +14,7 @@ import {
 } from "../../services/inventoryService.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import { addInfestedFoundryXP, applyCheatsToInfestedFoundry } from "../../services/infestedFoundryService.ts";
-import { sendWsBroadcastTo } from "../../services/wsService.ts";
+import { sendWsBroadcastTo, sendWsBroadcastToWebui } from "../../services/wsService.ts";
 import type { IEquipmentDatabase } from "../../types/equipmentTypes.ts";
 import { eEquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { Types } from "mongoose";
@@ -358,6 +358,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
         await inventory.save();
     }
     res.json({ InventoryChanges: inventoryChanges });
+    sendWsBroadcastToWebui({ update_inventory: true }, accountId);
 };
 
 const setSlotPolarity = (item: IEquipmentDatabase, slot: number, polarity: TArtifactPolarity): void => {
