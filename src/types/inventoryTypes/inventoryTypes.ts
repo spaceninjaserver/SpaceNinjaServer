@@ -1132,8 +1132,8 @@ export interface ISettings {
 
 export interface IShipInventory {
     ItemType: string;
-    ShipExterior: IShipCustomization;
-    AirSupportPower: string;
+    ShipExterior?: IShipCustomization;
+    AirSupportPower?: string;
     ItemId: IOidWithLegacySupport;
 }
 

@@ -5,7 +5,7 @@ export interface IShipDatabase {
     ItemType: string;
     ShipOwnerId: Types.ObjectId;
     ShipExteriorColors?: IColor;
-    AirSupportPower: string;
+    AirSupportPower?: string;
     ShipAttachments?: IShipAttachments;
     SkinFlavourItem?: string;
 }

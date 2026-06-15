@@ -28,6 +28,7 @@ import {
 } from "../../services/infestedFoundryService.ts";
 import { sendWsBroadcastToGame, sendWsBroadcastToWebui } from "../../services/wsService.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 
 export const infestedFoundryController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -114,11 +115,12 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
             const infestedFoundry = inventory.toJSON<IInventoryClient>().InfestedFoundry!;
             applyCheatsToInfestedFoundry(inventory, infestedFoundry);
             res.json({
+                ...request,
                 InventoryChanges: {
                     MiscItems: miscItemChanges,
                     InfestedFoundry: infestedFoundry
                 }
-            });
+            } satisfies IShardUninstallResponse);
             sendWsBroadcastToWebui({ update_inventory: true }, account._id.toString());
             break;
         }
@@ -430,6 +432,9 @@ interface IShardInstallRequest {
 interface IShardUninstallRequest {
     SuitId: IOid;
     Slot: number;
+}
+interface IShardUninstallResponse extends IShardUninstallRequest {
+    InventoryChanges: IInventoryChanges;
 }
 
 interface IHelminthNameRequest {

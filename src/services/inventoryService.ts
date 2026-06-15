@@ -388,7 +388,8 @@ export const addStartingGear = async (
 export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, delta: IInventoryChanges): void => {
     for (const key in delta) {
         if (!(key in InventoryChanges)) {
-            InventoryChanges[key] = delta[key];
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            (InventoryChanges as Record<string, any>)[key] = (delta as Record<string, any>)[key];
         } else if (key == "MiscItems") {
             for (const deltaItem of delta[key]!) {
                 const existing = InventoryChanges[key]!.find(x => x.ItemType == deltaItem.ItemType);
@@ -398,9 +399,9 @@ export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, del
                     InventoryChanges[key]!.push(deltaItem);
                 }
             }
-        } else if (Array.isArray(delta[key])) {
-            const left = InventoryChanges[key] as object[];
-            const right: object[] = delta[key];
+        } else if (Array.isArray(delta[key as keyof IInventoryChanges])) {
+            const left = InventoryChanges[key as keyof IInventoryChanges] as any[];
+            const right = delta[key as keyof IInventoryChanges] as any[];
             for (const item of right) {
                 left.push(item);
             }
@@ -420,8 +421,10 @@ export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, del
                 left.Extra ??= 0;
                 left.Extra += right.Extra;
             }
-        } else if (typeof delta[key] === "number") {
-            (InventoryChanges[key] as number) += delta[key];
+        } else if (typeof delta[key as keyof IInventoryChanges] === "number") {
+            (InventoryChanges[key as keyof IInventoryChanges] as number) += delta[
+                key as keyof IInventoryChanges
+            ] as number;
         } else {
             throw new Error(`inventory change not merged: unhandled type for inventory key ${key}`);
         }
@@ -2058,11 +2061,8 @@ const addCustomization = (
 ): IInventoryChanges => {
     if (!inventory.FlavourItems.some(x => x.ItemType == customizationName)) {
         const flavourItemIndex = inventory.FlavourItems.push({ ItemType: customizationName }) - 1;
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         inventoryChanges.FlavourItems ??= [];
-        (inventoryChanges.FlavourItems as IFlavourItem[]).push(
-            inventory.FlavourItems[flavourItemIndex].toJSON<IFlavourItem>()
-        );
+        inventoryChanges.FlavourItems.push(inventory.FlavourItems[flavourItemIndex].toJSON<IFlavourItem>());
     }
     return inventoryChanges;
 };
@@ -2109,11 +2109,8 @@ export const addCrewShipWeaponSkin = (
 ): IInventoryChanges => {
     const index =
         inventory.CrewShipWeaponSkins.push({ ItemType: typeName, UpgradeFingerprint: upgradeFingerprint }) - 1;
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     inventoryChanges.CrewShipWeaponSkins ??= [];
-    (inventoryChanges.CrewShipWeaponSkins as IUpgradeClient[]).push(
-        inventory.CrewShipWeaponSkins[index].toJSON<IUpgradeClient>()
-    );
+    inventoryChanges.CrewShipWeaponSkins.push(inventory.CrewShipWeaponSkins[index].toJSON<IUpgradeClient>());
     return inventoryChanges;
 };
 
@@ -2125,9 +2122,8 @@ export const addCrewShipSalvagedWeaponSkin = (
 ): IInventoryChanges => {
     const index =
         inventory.CrewShipSalvagedWeaponSkins.push({ ItemType: typeName, UpgradeFingerprint: upgradeFingerprint }) - 1;
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     inventoryChanges.CrewShipSalvagedWeaponSkins ??= [];
-    (inventoryChanges.CrewShipSalvagedWeaponSkins as IUpgradeClient[]).push(
+    inventoryChanges.CrewShipSalvagedWeaponSkins.push(
         inventory.CrewShipSalvagedWeaponSkins[index].toJSON<IUpgradeClient>()
     );
     return inventoryChanges;

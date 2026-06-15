@@ -1,22 +1,10 @@
 import type { TFocusSchool } from "warframe-public-export-plus";
-import type { IOid, ITypeCount } from "./commonTypes.ts";
-import type { IEquipmentClient } from "./equipmentTypes.ts";
+import type { IOid } from "./commonTypes.ts";
 import type {
-    IDroneClient,
-    IInfestedFoundryClient,
-    IMiscItem,
-    INemesisClient,
     IRecentVendorPurchaseClient,
-    TEquipmentKey,
-    ICrewMemberClient,
-    IKubrowPetPrintClient,
-    IUpgradeClient,
-    IQuestKeyClient,
-    IRawUpgrade,
-    IFocusUpgrade,
-    IFocusLoadoutClient,
-    IWeaponSkinClient,
-    TInventorySlot
+    TInventorySlot,
+    IInventoryClient,
+    INemesisClient
 } from "./inventoryTypes/inventoryTypes.ts";
 
 export const ePurchaseSource = {
@@ -77,51 +65,16 @@ export interface IPurchaseParams {
     IsWeekly?: boolean; // Vendor
 }
 
-export type IInventoryChanges = {
+export type IInventoryChanges = Partial<
+    Omit<IInventoryClient, TInventorySlot | "Nemesis" | "RecentVendorPurchases">
+> & {
     [_ in TInventorySlot]?: IBinChanges;
 } & {
-    [_ in TEquipmentKey]?: IEquipmentClient[];
-} & {
-    RemovedIdItems?: { ItemId: IOid }[];
-    RegularCredits?: number;
-    PremiumCredits?: number;
-    PremiumCreditsFree?: number;
-    FusionPoints?: number;
-    PrimeTokens?: number;
-    InfestedFoundry?: IInfestedFoundryClient;
-    Drones?: IDroneClient[];
-    MiscItems?: IMiscItem[];
-    ShipDecorations?: ITypeCount[];
-    EmailItems?: ITypeCount[];
-    CrewShipRawSalvage?: ITypeCount[];
-    CrewShipAmmo?: ITypeCount[];
     Nemesis?: Partial<INemesisClient>;
+    RemovedIdItems?: { ItemId: IOid }[];
     NewVendorPurchase?: IRecentVendorPurchaseClient; // >= 38.5.0
     RecentVendorPurchases?: IRecentVendorPurchaseClient; // < 38.5.0
-    CrewMembers?: ICrewMemberClient[];
-    KubrowPetPrints?: IKubrowPetPrintClient[];
-    RawUpgrades?: IRawUpgrade[];
-    Upgrades?: IUpgradeClient[]; // TOVERIFY
-    QuestKeys?: IQuestKeyClient[];
-    OneTimePurchases?: string[];
-    FocusUpgrades?: IFocusUpgrade[];
-    FocusLoadouts?: IFocusLoadoutClient[];
-    WeaponSkins?: IWeaponSkinClient[];
-} & Record<
-        Exclude<
-            string,
-            | TInventorySlot
-            | TEquipmentKey
-            | "RegularCredits"
-            | "PremiumCredits"
-            | "PremiumCreditsFree"
-            | "InfestedFoundry"
-            | "Drones"
-            | "MiscItems"
-            | "EmailItems"
-        >,
-        number | object[]
-    >;
+};
 
 export interface IAffiliationMods {
     Tag: string;
