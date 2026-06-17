@@ -62,7 +62,7 @@ export const loginController: RequestHandler = async (request, response) => {
 
     const buildLabel = getBuildLabelForUnauthenticatedRequest(request);
 
-    if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0 && !args.dev) {
+    if (version_compare(buildLabel, "2026.05.13.13.07") > 0 && !args.dev) {
         response.status(400).json({ error: "I'm making a list and checking it twice" });
         return;
     }
