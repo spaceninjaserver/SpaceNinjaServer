@@ -1880,14 +1880,20 @@ const updateStandingLimit = (
     }
 };
 
+export const eStandingSource = {
+    Medallion: 0,
+    Mission: 1, // in mission report, the client provides both the affiliation & bin changes, so when using this source with addStanding, it does not update the daily cap.
+    Misc: 2
+};
+type TStandingSource = (typeof eStandingSource)[keyof typeof eStandingSource];
+
 export const addStanding = async (
     inventory: TInventoryDatabaseDocument,
     buildLabel: string,
     syndicateTag: string,
     gainedStanding: number,
     affiliationMods: IAffiliationMods[] = [],
-    applyDailyCap: boolean = false,
-    propagateAlignments: boolean = true
+    source: TStandingSource = eStandingSource.Misc
 ): Promise<void> => {
     let syndicate = inventory.Affiliations.find(x => x.Tag == syndicateTag);
     const syndicateMeta = (await getSyndicate(syndicateTag, buildLabel))!;
@@ -1904,7 +1910,10 @@ export const addStanding = async (
         gainedStanding = -71000 - syndicate.Standing;
     }
 
-    if (!applyDailyCap || syndicateMeta.medallionsCappedByDailyLimit) {
+    if (
+        source == eStandingSource.Misc ||
+        (source == eStandingSource.Medallion && syndicateMeta.medallionsCappedByDailyLimit)
+    ) {
         if (gainedStanding > getStandingLimit(inventory, syndicateMeta.dailyLimitBin)) {
             gainedStanding = getStandingLimit(inventory, syndicateMeta.dailyLimitBin);
         }
@@ -1919,17 +1928,9 @@ export const addStanding = async (
     affiliationMods.push(affiliationMod);
 
     if (syndicateMeta.alignments) {
-        if (propagateAlignments) {
+        if (source != eStandingSource.Mission) {
             for (const [tag, factor] of Object.entries(syndicateMeta.alignments)) {
-                await addStanding(
-                    inventory,
-                    buildLabel,
-                    tag,
-                    gainedStanding * factor,
-                    affiliationMods,
-                    applyDailyCap,
-                    false
-                );
+                await addStanding(inventory, buildLabel, tag, gainedStanding * factor, affiliationMods, source);
             }
         } else {
             while (syndicate.Standing < getMinStanding(syndicateMeta, syndicate.Title ?? 0)) {

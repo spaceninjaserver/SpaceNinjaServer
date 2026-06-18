@@ -1,6 +1,12 @@
 import type { RequestHandler } from "express";
 import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
-import { addMiscItems, addStanding, freeUpSlot, getInventory } from "../../services/inventoryService.ts";
+import {
+    addMiscItems,
+    addStanding,
+    eStandingSource,
+    freeUpSlot,
+    getInventory
+} from "../../services/inventoryService.ts";
 import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { eInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IOid } from "../../types/commonTypes.ts";
@@ -64,7 +70,14 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
     }
 
     const affiliationMods: IAffiliationMods[] = [];
-    await addStanding(inventory, buildLabel, affiliationTag, gainedStanding, affiliationMods, true);
+    await addStanding(
+        inventory,
+        buildLabel,
+        affiliationTag,
+        gainedStanding,
+        affiliationMods,
+        eStandingSource.Medallion
+    );
 
     await inventory.save();
 

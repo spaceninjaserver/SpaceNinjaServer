@@ -46,6 +46,7 @@ import {
     combineInventoryChanges,
     CurrencyType,
     ensureUserHasSteelPathRewards,
+    eStandingSource,
     getDialogue,
     giveNemesisPetRecipe,
     giveNemesisWeaponRecipe,
@@ -364,8 +365,7 @@ export const addMissionInventoryUpdates = async (
                         affiliation.Tag,
                         affiliation.Standing,
                         undefined,
-                        false, // affiliation bin changes are handled by the client, no need to do it twice
-                        false
+                        eStandingSource.Mission
                     );
                 }
                 break;
