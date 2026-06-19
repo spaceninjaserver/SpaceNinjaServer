@@ -2033,6 +2033,9 @@ async function getRandomMissionDrops(
             } else {
                 rewardManifests = [];
             }
+        } else if (RewardInfo.node == "SolNode257") {
+            //  The Perita Rebellion Hard mode "The Guilty" drops a random Tektolyst Artifact Arcane as same as Dactolyst rotations C
+            rewardManifests = ["/Lotus/Types/Game/MissionDecks/TauMissionRewards/OldPeaceTwelveRewardsDactolyst"];
         } else if (RewardInfo.T == 13) {
             // Undercroft extra/side portal (normal mode), gives 1 Pathos Clamp + Duviri Arcane.
             drops.push({
