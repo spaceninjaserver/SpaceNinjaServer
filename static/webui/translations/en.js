@@ -346,6 +346,7 @@ dict = {
     worldState_thermiaFracturesProgressOverride: `Thermia Fractures Progress`,
     worldState_operationAtramentumProgressOverride: `Operation: Atramentum Progress`,
     worldState_qtccAlerts: `Quest to Conquer Cancer Alerts`,
+    worldState_destiny2TributeAlert: `Destiny 2 Tribute Alert`,
     worldState_evilBaroStage: `Evil Baro`,
     worldState_baroRelayOverride: `Baro Relay Override`,
     worldState_from_year: `From |VAL|`,

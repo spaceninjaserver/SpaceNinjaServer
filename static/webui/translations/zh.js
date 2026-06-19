@@ -347,6 +347,7 @@ dict = {
     worldState_thermiaFracturesProgressOverride: `热美亚裂缝进度`,
     worldState_operationAtramentumProgressOverride: `行动代号:墨痕 进度`,
     worldState_qtccAlerts: `癌症征服任务警报`,
+    worldState_destiny2TributeAlert: `[UNTRANSLATED] Destiny 2 Tribute Alert`,
     worldState_evilBaroStage: `邪恶Baro`,
     worldState_baroRelayOverride: `Baro 中继站覆盖`,
     worldState_from_year: `|VAL|`,

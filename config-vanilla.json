@@ -93,6 +93,7 @@
     "starDaysAlerts2026Week3": false,
     "starDaysAlerts2026Week4": false,
     "qtccAlerts": false,
+    "destiny2TributeAlert": false,
     "galleonOfGhouls": 0,
     "ghoulEmergenceOverride": null,
     "plagueStarOverride": null,

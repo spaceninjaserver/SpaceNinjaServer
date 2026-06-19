@@ -51,6 +51,8 @@ import { Guild } from "../models/guildModel.ts";
 import { libraryTargetToAvatar } from "../constants/synthesis.ts";
 import { BL_LATEST } from "../constants/gameVersions.ts";
 import { isRegionAvailableIn } from "./itemDataService.ts";
+import gameToBuildVersionInt from "../constants/gameToBuildVersionInt.ts";
+import { buildVersionToInt } from "../helpers/versionHelper.ts";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -126,7 +128,7 @@ const sortieBossNode: Record<Exclude<TSortieBoss, "SORTIE_BOSS_CORRUPTED_VOR">, 
 
 const sortieAssassinationOnlyNodes: string[] = ["SolNode193", "SolNode105", "SolNode108"];
 
-const configAlerts: Record<string, IAlert> = {
+const configAlerts: Record<string, IAlert & { minBuildVersion?: number }> = {
     voidCorruption2025Week1: {
         _id: { $oid: "677d452e2f324ee7b90f8ccf" },
         Activation: { $date: { $numberLong: "1736524800000" } },
@@ -390,6 +392,30 @@ const configAlerts: Record<string, IAlert> = {
         },
         Tag: "LotusGift",
         ForceUnlock: true
+    },
+    destiny2TributeAlert: {
+        _id: { $oid: "6a29b21c614c39ecbb0aa925" },
+        Activation: { $date: { $numberLong: "1781708400000" } },
+        Expiry: { $date: { $numberLong: "2000000000000" } },
+        MissionInfo: {
+            location: "SolNode20",
+            missionType: "MT_EXTERMINATION",
+            faction: "FC_GRINEER",
+            difficulty: 1,
+            missionReward: {
+                credits: 10000,
+                countedItems: [{ ItemType: "/Lotus/Types/Items/Titles/GuardianTitle", ItemCount: 1 }]
+            },
+            levelOverride: "/Lotus/Levels/Proc/Grineer/GrineerGalleonExterminate",
+            enemySpec: "/Lotus/Types/Game/EnemySpecs/GrineerExterminateSimple",
+            minEnemyLevel: 10,
+            maxEnemyLevel: 15,
+            descText: "/Lotus/Language/Alerts/LotusGiftDesc",
+            maxWaveNum: 167
+        },
+        Tag: "LotusGift",
+        ForceUnlock: true,
+        minBuildVersion: gameToBuildVersionInt["43.0.0"]
     }
 };
 
@@ -2116,11 +2142,15 @@ export const getWorldState = (
     if (config.worldState) {
         for (const [key, alert] of Object.entries(configAlerts)) {
             if (config.worldState[key as keyof typeof config.worldState]) {
-                if (alert.MissionInfo.missionType == "MT_DEFENSE") {
-                    alert.MissionInfo.maxWaveNum = defenseWavesPerRotation * (alert.MissionInfo.maxRotations ?? 1);
-                    alert.MissionInfo.maxRotations = undefined;
+                const { minBuildVersion, ...wsAlert } = alert;
+                if (!minBuildVersion || minBuildVersion >= buildVersionToInt(buildLabel)) {
+                    if (wsAlert.MissionInfo.missionType == "MT_DEFENSE") {
+                        wsAlert.MissionInfo.maxWaveNum =
+                            defenseWavesPerRotation * (wsAlert.MissionInfo.maxRotations ?? 1);
+                        wsAlert.MissionInfo.maxRotations = undefined;
+                    }
+                    worldState.Alerts.push(wsAlert);
                 }
-                worldState.Alerts.push(alert);
             }
         }
     }

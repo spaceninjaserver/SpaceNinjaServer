@@ -101,6 +101,7 @@ export interface IConfig {
         starDaysAlerts2026Week3?: boolean;
         starDaysAlerts2026Week4?: boolean;
         qtccAlerts?: boolean;
+        destiny2TributeAlert?: boolean;
         galleonOfGhouls?: number;
         ghoulEmergenceOverride?: boolean;
         plagueStarOverride?: boolean;
