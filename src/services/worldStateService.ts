@@ -5073,7 +5073,9 @@ const updateFissures = async (): Promise<void> => {
         VoidT6Hard: 0
     };
     for (const fissure of fissures) {
-        activeNodes.add(fissure.Node);
+        if (fissure.Expiry.getTime() > Date.now()) {
+            activeNodes.add(fissure.Node);
+        }
 
         const key = fissure.Modifier + (fissure.Hard ? "Hard" : "");
         tierToFurthestExpiry[key] = Math.max(tierToFurthestExpiry[key], fissure.Expiry.getTime());
@@ -5083,6 +5085,7 @@ const updateFissures = async (): Promise<void> => {
     for (const [tier, expiry] of Object.entries(tierToFurthestExpiry)) {
         if (expiry < deadline) {
             const numFissures = getRandomInt(1, 3);
+            logger.trace(`${tier} fissures expire soon, generating ${numFissures} new ones`);
             for (let i = 0; i != numFissures; ++i) {
                 const modifier = tier.replace("Hard", "") as
                     | "VoidT1"
@@ -5091,10 +5094,11 @@ const updateFissures = async (): Promise<void> => {
                     | "VoidT4"
                     | "VoidT5"
                     | "VoidT6";
-                let node: string;
-                do {
+                let node: string = getRandomElement(fissureMissions[modifier])!;
+                while (activeNodes.has(node)) {
+                    logger.trace(`tried to use ${node} for a fissure, but it's already in use`);
                     node = getRandomElement(fissureMissions[modifier])!;
-                } while (activeNodes.has(node));
+                }
                 activeNodes.add(node);
                 await Fissure.insertOne({
                     Activation: new Date(),
