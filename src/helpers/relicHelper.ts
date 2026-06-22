@@ -125,6 +125,7 @@ export const ensureRelicRewardIsCorrect = async (
                 x => x.AccountId == userParticipantInfo.ChosenRewardOwner
             )!;
             const chosenReward = getTypeCountForParticiantReward(chosenParticipantInfo);
+            chosenReward.ItemCount *= inventory.relicRewardItemCountMultiplier ?? 1;
             if (chosenReward.ItemType != userReward.ItemType || chosenReward.ItemCount != userReward.ItemCount) {
                 logger.debug(`fixing up wave ${wi.Wave} reward for ${inventory.accountOwnerId.toString()}`, {
                     toRemove: userReward,
