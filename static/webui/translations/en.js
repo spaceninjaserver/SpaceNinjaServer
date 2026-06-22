@@ -227,7 +227,7 @@ dict = {
     cheats_infiniteCredits: `Infinite Credits`,
     cheats_infinitePlatinum: `Infinite Platinum`,
     cheats_infiniteEndo: `Infinite Endo`,
-    cheats_infiniteDirac: `Infinite Dirac`,
+    cheats_infiniteDirac: `Infinite Dirac (U27-U29.10)`,
     cheats_infiniteRegalAya: `Infinite Regal Aya`,
     cheats_infiniteRevives: `Infinite Revives (Pre-U18)`,
     cheats_infiniteTrades: `Infinite Trades`,
