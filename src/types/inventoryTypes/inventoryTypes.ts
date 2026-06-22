@@ -690,7 +690,7 @@ export interface ICrewMemberClient {
     WeaponConfigIdx: number;
     WeaponId: IOid;
     XP: number;
-    PowersuitType: string;
+    PowersuitType?: string;
     Configs: IItemConfig[];
     SecondInCommand: boolean; // on call
     ItemId: IOid;

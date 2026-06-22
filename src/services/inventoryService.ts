@@ -1085,7 +1085,8 @@ export const addItem = async (
                     }
                     return addSentinel(inventory, typeName, premiumPurchase);
                 }
-                case "Game": {
+                case "Game":
+                case "JadeShadowsPart2Mission": {
                     if (typeName.substring(1).split("/")[3] == "Projections") {
                         // Void Relics, e.g. /Lotus/Types/Game/Projections/T2VoidProjectionGaussPrimeDBronze
                         const miscItemChanges = [
@@ -1149,7 +1150,10 @@ export const addItem = async (
                             }
                             return addKubrowPet(inventory, typeName, undefined, premiumPurchase, {}, buildLabel);
                         }
-                    } else if (typeName.startsWith("/Lotus/Types/Game/CrewShip/CrewMember/")) {
+                    } else if (
+                        typeName.startsWith("/Lotus/Types/Game/CrewShip/CrewMember/") ||
+                        typeName.startsWith("/Lotus/Types/JadeShadowsPart2Mission/CrewMembers/")
+                    ) {
                         if (quantity != 1) {
                             throw new Error(
                                 `unexpected acquisition quantity of CrewMember: got ${quantity}, expected 1`
@@ -2253,10 +2257,12 @@ const addCrewMember = (
     // Perrin = male
     // RedVeil = male
     // SteelMeridian = female
-    const powersuitType =
-        itemType.indexOf("Arbiters") != -1 || itemType.indexOf("Perrin") != -1 || itemType.indexOf("RedVeil") != -1
+    // JadeShadowsPart2Mission doesn't have powersuit type
+    const powersuitType = !itemType.includes("JadeShadowsPart2Mission")
+        ? itemType.includes("Arbiters") || itemType.includes("Perrin") || itemType.includes("RedVeil")
             ? "/Lotus/Powersuits/NpcPowersuits/CrewMemberMaleSuit"
-            : "/Lotus/Powersuits/NpcPowersuits/CrewMemberFemaleSuit";
+            : "/Lotus/Powersuits/NpcPowersuits/CrewMemberFemaleSuit"
+        : undefined;
 
     const index =
         inventory.CrewMembers.push({

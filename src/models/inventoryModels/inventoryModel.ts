@@ -344,7 +344,7 @@ const crewMemberSchema = new Schema<ICrewMemberDatabase>(
         WeaponConfigIdx: Number,
         WeaponId: { type: Schema.Types.ObjectId, default: "000000000000000000000000" },
         XP: { type: Number, default: 0 },
-        PowersuitType: { type: String, required: true },
+        PowersuitType: { type: String, required: false },
         Configs: [ItemConfigSchema],
         SecondInCommand: { type: Boolean, default: false }
     },
