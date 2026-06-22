@@ -1858,6 +1858,7 @@ export const getWorldState = (
     convertGoals: boolean = true,
     changeLegacyTags: boolean = config.unfaithfulBugFixes?.useAnniversaryTagForOldGoals || false
 ): IWorldState => {
+    const buildVersionInt = buildVersionToInt(buildLabel);
     const constraints: ITimeConstraint[] = [];
     if (config.worldState?.eidolonOverride) {
         constraints.push(config.worldState.eidolonOverride == "day" ? eidolonDayConstraint : eidolonNightConstraint);
@@ -2143,7 +2144,7 @@ export const getWorldState = (
         for (const [key, alert] of Object.entries(configAlerts)) {
             if (config.worldState[key as keyof typeof config.worldState]) {
                 const { minBuildVersion, ...wsAlert } = alert;
-                if (!minBuildVersion || minBuildVersion >= buildVersionToInt(buildLabel)) {
+                if (!minBuildVersion || minBuildVersion >= buildVersionInt) {
                     if (wsAlert.MissionInfo.missionType == "MT_DEFENSE") {
                         wsAlert.MissionInfo.maxWaveNum =
                             defenseWavesPerRotation * (wsAlert.MissionInfo.maxRotations ?? 1);
@@ -4549,23 +4550,23 @@ export const getWorldState = (
     }
 
     // Circuit choices cycling every week
-    if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0) {
+    if (buildVersionInt >= gameToBuildVersionInt["42.0.0"]) {
         worldState.EndlessXpSchedule = [
             {
                 Activation: { $date: { $numberLong: weekStart.toString() } },
                 Expiry: { $date: { $numberLong: weekEnd.toString() } },
-                CategoryChoices: getEndlessXpChoices(week)
+                CategoryChoices: getEndlessXpChoices(week, buildVersionInt)
             }
         ];
         if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
             worldState.EndlessXpSchedule.push({
                 Activation: { $date: { $numberLong: (weekStart + 604800000).toString() } },
                 Expiry: { $date: { $numberLong: (weekEnd + 604800000).toString() } },
-                CategoryChoices: getEndlessXpChoices(week + 1)
+                CategoryChoices: getEndlessXpChoices(week + 1, buildVersionInt)
             });
         }
-    } else if (version_compare(buildLabel, gameToBuildVersion["33.0.0"]) >= 0) {
-        worldState.EndlessXpChoices = getEndlessXpChoices(week);
+    } else if (buildVersionInt >= gameToBuildVersionInt["33.0.0"]) {
+        worldState.EndlessXpChoices = getEndlessXpChoices(week, buildVersionInt);
     }
 
     // 1999 Calendar Season cycling every week + YearIteration every 4 weeks
@@ -4946,36 +4947,41 @@ export const getLiteSortie = (week: number): ILiteSortie => {
     };
 };
 
-const getEndlessXpChoices = (week: number): IEndlessXpChoice[] => {
+const getEndlessXpChoices = (week: number, buildVersionInt: number): IEndlessXpChoice[] => {
+    const normalChoices = [
+        ["Nidus", "Octavia", "Harrow"],
+        ["Gara", "Khora", "Revenant"],
+        ["Garuda", "Baruuk", "Hildryn"],
+        ["Excalibur", "Trinity", "Ember"],
+        ["Loki", "Mag", "Rhino"],
+        ["Ash", "Frost", "Nyx"],
+        ["Saryn", "Vauban", "Nova"],
+        ["Nekros", "Valkyr", "Oberon"],
+        ["Hydroid", "Mirage", "Limbo"],
+        ["Mesa", "Chroma", "Atlas"],
+        ["Ivara", "Inaros", "Titania"]
+    ];
+    const hardChoices = [
+        ["Boar", "Gammacor", "Angstrum", "Gorgon", "Anku"],
+        ["Bo", "Latron", "Furis", "Furax", "Strun"],
+        ["Lex", "Magistar", "Boltor", "Bronco", "CeramicDagger"],
+        ["Torid", "DualToxocyst", "DualIchor", "Miter", "Atomos"],
+        ["AckAndBrunt", "Soma", "Vasto", "NamiSolo", "Burston"],
+        ["Zylok", "Sibear", "Dread", "Despair", "Hate"],
+        ["Dera", "Sybaris", "Cestra", "Sicarus", "Okina"],
+        ...(buildVersionInt >= gameToBuildVersionInt["43.0.0"]
+            ? [["Vectis", "Stug", "Ballistica", "Destreza", "Obex"]]
+            : []),
+        ["Braton", "Lato", "Skana", "Paris", "Kunai"]
+    ];
     return [
         {
             Category: "EXC_NORMAL",
-            Choices: [
-                ["Nidus", "Octavia", "Harrow"],
-                ["Gara", "Khora", "Revenant"],
-                ["Garuda", "Baruuk", "Hildryn"],
-                ["Excalibur", "Trinity", "Ember"],
-                ["Loki", "Mag", "Rhino"],
-                ["Ash", "Frost", "Nyx"],
-                ["Saryn", "Vauban", "Nova"],
-                ["Nekros", "Valkyr", "Oberon"],
-                ["Hydroid", "Mirage", "Limbo"],
-                ["Mesa", "Chroma", "Atlas"],
-                ["Ivara", "Inaros", "Titania"]
-            ][week % 11]
+            Choices: normalChoices[week % normalChoices.length]
         },
         {
             Category: "EXC_HARD",
-            Choices: [
-                ["Boar", "Gammacor", "Angstrum", "Gorgon", "Anku"],
-                ["Bo", "Latron", "Furis", "Furax", "Strun"],
-                ["Lex", "Magistar", "Boltor", "Bronco", "CeramicDagger"],
-                ["Torid", "DualToxocyst", "DualIchor", "Miter", "Atomos"],
-                ["AckAndBrunt", "Soma", "Vasto", "NamiSolo", "Burston"],
-                ["Zylok", "Sibear", "Dread", "Despair", "Hate"],
-                ["Dera", "Sybaris", "Cestra", "Sicarus", "Okina"],
-                ["Braton", "Lato", "Skana", "Paris", "Kunai"]
-            ][week % 8]
+            Choices: hardChoices[week % hardChoices.length]
         }
     ];
 };
