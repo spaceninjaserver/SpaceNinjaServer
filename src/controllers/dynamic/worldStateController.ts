@@ -3,7 +3,8 @@ import {
     getWorldState,
     populateDailyDeal,
     populateFeaturedGuilds,
-    populateFissures
+    populateFissures,
+    populateAlerts
 } from "../../services/worldStateService.ts";
 import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { BL_LATEST } from "../../constants/gameVersions.ts";
@@ -34,7 +35,8 @@ export const worldStateController: RequestHandler = async (req, res) => {
     await Promise.all([
         populateDailyDeal(worldState),
         populateFeaturedGuilds(worldState),
-        populateFissures(worldState)
+        populateFissures(worldState),
+        populateAlerts(worldState)
     ]);
 
     if (elionWorkaroundNeeded) {

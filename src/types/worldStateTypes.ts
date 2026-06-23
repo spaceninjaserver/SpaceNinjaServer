@@ -114,8 +114,29 @@ export interface IAlertMissionInfo {
     leadersAlwaysAllowed?: true;
     seed?: number;
     enemyCacheOverride?: string;
+    nightmare?: boolean;
 
     maxRotations?: number; // SNS specific field
+}
+
+export interface IAlertDatabase {
+    Activation: Date;
+    Expiry: Date;
+    MissionInfo: {
+        location: string;
+        missionType: string;
+        faction: string;
+        difficulty: number;
+        missionReward: {
+            credits: number;
+            items?: string[];
+            countedItems?: { ItemType: string; ItemCount: number }[];
+        };
+        minEnemyLevel: number;
+        maxEnemyLevel: number;
+        descText?: string;
+        nightmare?: boolean;
+    };
 }
 
 export interface IGoal extends Omit<IGoalV9, "GoalInterim" | "GoalInterim2" | "RewardInterim" | "RewardInterim2"> {

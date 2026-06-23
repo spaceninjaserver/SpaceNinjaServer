@@ -13,12 +13,13 @@ import { EPOCH, unixTimesInMs } from "../constants/timeConstants.ts";
 import { config } from "./configService.ts";
 import { getRandomElement, getRandomInt, sequentiallyUniqueRandomElement, SRng } from "./rngService.ts";
 import type { IMissionReward, IRegion, ITilesetMission, TFaction, TMissionType } from "warframe-public-export-plus";
-import { ExportRegions, ExportSyndicates, ExportTilesets } from "warframe-public-export-plus";
+import { ExportRegions, ExportSyndicates, ExportTilesets, ExportRecipes } from "warframe-public-export-plus";
 import type {
     ICalendarDay,
     ICalendarEvent,
     ICalendarSeason,
     IAlert,
+    IAlertDatabase,
     IGoal,
     IInvasion,
     ILiteSortie,
@@ -42,7 +43,8 @@ import type {
 } from "../types/worldStateTypes.ts";
 import { toMongoDate2, toOid, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
-import { DailyDeal, Fissure } from "../models/worldStateModel.ts";
+import { DailyDeal, Fissure, Alert } from "../models/worldStateModel.ts";
+import { toStoreItem, fromStoreItem } from "./itemDataService.ts";
 import { factionToInt, getConquest, getMissionTypeForLegacyOverride } from "./conquestService.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import { getDescent } from "./descentService.ts";
@@ -5149,8 +5151,495 @@ const updateDailyDeal = async (): Promise<void> => {
     } while (darvoEnd < Date.now() + 6 * unixTimesInMs.minute && ++darvoIndex);
 };
 
+const alertStandardResources = [
+    { path: "/Lotus/Types/Items/MiscItems/AlloyPlate", qty: 1500 },
+    { path: "/Lotus/Types/Items/MiscItems/Circuits", qty: 1500 },
+    { path: "/Lotus/Types/Items/MiscItems/ControlModule", qty: 1 },
+    { path: "/Lotus/Types/Items/MiscItems/Ferrite", qty: 3000 },
+    { path: "/Lotus/Types/Items/MiscItems/Gallium", qty: 1 },
+    { path: "/Lotus/Types/Items/MiscItems/Morphic", qty: 1 },
+    { path: "/Lotus/Types/Items/MiscItems/Nanospores", qty: 3000 },
+    { path: "/Lotus/Types/Items/MiscItems/NeuralSensor", qty: 1 },
+    { path: "/Lotus/Types/Items/MiscItems/Neurode", qty: 1 },
+    { path: "/Lotus/Types/Items/MiscItems/OrokinCell", qty: 1 },
+    { path: "/Lotus/Types/Items/MiscItems/Plastids", qty: 300 },
+    { path: "/Lotus/Types/Items/MiscItems/PolymerBundle", qty: 300 },
+    { path: "/Lotus/Types/Items/MiscItems/Rubedo", qty: 450 },
+    { path: "/Lotus/Types/Items/MiscItems/Salvage", qty: 300 },
+    { path: "/Lotus/Types/Items/MiscItems/ArgonCrystal", qty: 1 },
+    { path: "/Lotus/Types/Items/MiscItems/OxiumAlloy", qty: 300 },
+    { path: "/Lotus/Types/Items/MiscItems/Tellurium", qty: 1 }
+];
+
+const alertSpecialResources = [
+    { path: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg", qty: 1 },
+    { path: "/Lotus/Types/Game/CatbrowPet/CatbrowGeneticSignature", qty: 5 },
+    { path: "/Lotus/Types/Items/MiscItems/Eventium", qty: 5 },
+    { path: "/Lotus/Types/Items/MiscItems/Alertium", qty: 1 },
+    { path: "/Lotus/Types/Items/MiscItems/VoidTearDrop", qty: 20 }
+];
+
+const alertAuras = [
+    "/Lotus/Upgrades/Mods/Aura/PlayerEnemyRadarAuraMod",
+    "/Lotus/Upgrades/Mods/Aura/PlayerEnergyRegenAuraMod",
+    "/Lotus/Upgrades/Mods/Aura/PlayerHealthRegenAuraMod",
+    "/Lotus/Upgrades/Mods/Aura/PlayerMeleeAuraMod",
+    "/Lotus/Upgrades/Mods/Aura/PlayerPistolAmmoAuraMod",
+    "/Lotus/Upgrades/Mods/Aura/PlayerRifleAmmoAuraMod",
+    "/Lotus/Upgrades/Mods/Aura/PlayerRifleDamageAuraMod",
+    "/Lotus/Upgrades/Mods/Aura/PlayerShellAmmoAuraMod",
+    "/Lotus/Upgrades/Mods/Aura/PlayerSniperAmmoAuraMod",
+    "/Lotus/Upgrades/Mods/Aura/PlayerHealthAuraMod",
+    "/Lotus/Upgrades/Mods/Aura/EnemyArmorReductionAuraMod",
+    "/Lotus/Upgrades/Mods/Aura/EnemyShieldReductionAuraMod",
+    "/Lotus/Upgrades/Mods/Aura/InfestationSpeedReductionAuraMod",
+    "/Lotus/Upgrades/Mods/Aura/PlayerHolsterSpeedAuraMod",
+    "/Lotus/Upgrades/Mods/Aura/PlayerSprintAuraMod",
+    "/Lotus/Upgrades/Mods/Aura/PlayerSniperDamageAuraMod",
+    "/Lotus/Upgrades/Mods/Aura/PlayerLootRadarAuraMod",
+    "/Lotus/Upgrades/Mods/Aura/RobotPoorAimAuraMod"
+];
+
+const alertHelmets = [
+    "/Lotus/Types/Recipes/Helmets/StatlessAshAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessBansheeAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessEmberAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessExcaliburAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessFrostAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessLokiAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessMagAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessNyxAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessRhinoAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessSarynAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessTrinityAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessVoltAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/ValkyrBastetHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/OberonAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/ZephyrCierzoHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/HarlequinAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/LimboAltBHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/MirageAltBHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessV2AshAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessV2BansheeAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessV2EmberAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessV2ExcaliburAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessV2FrostAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessV2LokiAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessV2MagAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessV2NyxAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessV2RhinoAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessV2SarynAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessV2TrinityAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessV2VoltAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/OberonAltBHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/ValkyrAltBHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/PirateAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/LimboAristeasHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/ZephyrTenguHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/CowgirlAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/MesaAltBHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/DragonAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/ChromaAltBHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/VaubanHelmetSoldierBlueprint",
+    "/Lotus/Types/Recipes/Helmets/ExcaliburMordredHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/AnimaAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/RangerAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/NezhaAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/SandmanAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/BrawlerAltTwoHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessVaubanAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessV2VaubanAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/StatlessNovaAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/NekrosAraknidHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/NovaQuantumHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/NekrosShroudHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/NovaSlipstreamHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/LokiEnigmaHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/PirateAltBHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/BrawlerAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/WukongAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/FairyAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/NidusAltHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/SandmanAltBHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/RangerAltBHelmetBlueprint",
+    "/Lotus/Types/Recipes/Helmets/BardAltHelmetBlueprint"
+];
+
+const alertVaubanParts = [
+    "/Lotus/Types/Recipes/WarframeRecipes/TrapperChassisBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/TrapperSystemsBlueprint",
+    "/Lotus/Types/Recipes/WarframeRecipes/TrapperHelmetBlueprint"
+];
+
+const alertWeapons = [
+    "/Lotus/Types/Recipes/Weapons/CeramicDaggerBlueprint",
+    "/Lotus/Types/Recipes/Weapons/DarkDaggerBlueprint",
+    "/Lotus/Types/Recipes/Weapons/HeatDaggerBlueprint",
+    "/Lotus/Types/Recipes/Weapons/HeatSwordBlueprint",
+    "/Lotus/Types/Recipes/Weapons/JawBlueprint",
+    "/Lotus/Types/Recipes/Weapons/PangolinSwordBlueprint",
+    "/Lotus/Types/Recipes/Weapons/PlasmaSwordBlueprint",
+    "/Lotus/Types/Recipes/Weapons/GlaiveBlueprint",
+    "/Lotus/Types/Recipes/DarkSwordBlueprint",
+    "/Lotus/Types/Recipes/Weapons/Skins/DaggerAxeBlueprint",
+    "/Lotus/Types/Recipes/Weapons/Skins/DualDaggerAxeBlueprint",
+    "/Lotus/Types/Recipes/Weapons/Skins/GrnHammerBlueprint",
+    "/Lotus/Types/Recipes/Weapons/Skins/GrnAxeBlueprint"
+];
+
+const alertNightmareMods = [
+    "/Lotus/Upgrades/Mods/Pistol/DualStat/StunningSpeedMod",
+    "/Lotus/Upgrades/Mods/Shotgun/DualStat/BlazeMod",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/WildfireMod",
+    "/Lotus/Upgrades/Mods/Shotgun/DualStat/AcceleratedBlastMod",
+    "/Lotus/Upgrades/Mods/Warframe/DualStat/ConstitutionMod",
+    "/Lotus/Upgrades/Mods/Pistol/DualStat/IceStormMod",
+    "/Lotus/Upgrades/Mods/Warframe/DualStat/FortitudeMod",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/HammerShotMod",
+    "/Lotus/Upgrades/Mods/Melee/DualStat/FocusEnergyMod",
+    "/Lotus/Upgrades/Mods/Melee/DualStat/RendingStrikeMod",
+    "/Lotus/Upgrades/Mods/Rifle/DualStat/ShredMod",
+    "/Lotus/Upgrades/Mods/Pistol/DualStat/GrinderMod",
+    "/Lotus/Upgrades/Mods/Warframe/DualStat/VigorMod",
+    "/Lotus/Upgrades/Mods/Warframe/DualStat/RunSpeedArmorMod",
+    "/Lotus/Upgrades/Mods/Shotgun/DualStat/ReloadSpeedPunchThroughMod"
+];
+
+const alertOrokinBP = [
+    "/Lotus/Types/Recipes/Components/OrokinCatalystBlueprint",
+    "/Lotus/Types/Recipes/Components/OrokinReactorBlueprint",
+    "/Lotus/Types/Recipes/Components/FormaBlueprint"
+];
+
+const alertDurationMultipliers = new Map<string, number>([
+    ["/Lotus/Types/Recipes/Components/OrokinCatalystBlueprint", 2],
+    ["/Lotus/Types/Recipes/Components/OrokinReactorBlueprint", 2],
+    ["/Lotus/Types/Recipes/Components/FormaBlueprint", 2],
+    ["/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg", 2],
+    ["/Lotus/Types/Recipes/WarframeRecipes/TrapperChassisBlueprint", 2],
+    ["/Lotus/Types/Recipes/WarframeRecipes/TrapperSystemsBlueprint", 2],
+    ["/Lotus/Types/Recipes/WarframeRecipes/TrapperHelmetBlueprint", 2],
+    ["/Lotus/Types/Game/CatbrowPet/CatbrowGeneticSignature", 2],
+    ["/Lotus/Types/Items/MiscItems/Eventium", 2]
+]);
+
+const getVersionAppropriateHelmet = (helmetPath: string, buildLabel: string): string => {
+    let isStore = false;
+    let typePath = helmetPath;
+    if (helmetPath.startsWith("/Lotus/StoreItems/")) {
+        isStore = true;
+        typePath = "/Lotus/" + helmetPath.substring("/Lotus/StoreItems/".length);
+    }
+
+    const isPreU13_2_3 = version_compare(buildLabel, gameToBuildVersion["13.2.3"]) < 0; // arcane helmets were available until U13.2.3
+    let resultPath = typePath;
+
+    if (isPreU13_2_3) {
+        if (typePath.includes("Statless")) {
+            const arcanePath = typePath.replace("Statless", "");
+            if (arcanePath in ExportRecipes) {
+                resultPath = arcanePath;
+            }
+        }
+    } else {
+        if (!typePath.includes("Statless")) {
+            const baseName = typePath.replace("/Lotus/Types/Recipes/Helmets/", "");
+            const statlessPath = "/Lotus/Types/Recipes/Helmets/Statless" + baseName;
+            if (statlessPath in ExportRecipes) {
+                resultPath = statlessPath;
+            }
+        }
+    }
+
+    return isStore ? toStoreItem(resultPath) : resultPath;
+};
+
+const getEligibleAlertNodes = (): string[] => {
+    const eligibleNodes: string[] = [];
+    const validMissionTypes = new Set([
+        "MT_SURVIVAL",
+        "MT_DEFENSE",
+        "MT_RESCUE",
+        "MT_CAPTURE",
+        "MT_EXTERMINATION",
+        "MT_SABOTAGE",
+        "MT_MOBILE_DEFENSE",
+        "MT_EXCAVATE",
+        "MT_INTEL"
+    ]);
+    const validFactions = new Set(["FC_GRINEER", "FC_CORPUS", "FC_INFESTATION", "FC_CORRUPTED", "FC_OROKIN"]);
+    const invalidSystems = new Set([
+        "/Lotus/Language/Locations/Moon",
+        "/Lotus/Language/Locations/Derelict",
+        "/Lotus/Language/Locations/Fortress",
+        "/Lotus/Language/Locations/RelayStationSanctuary"
+    ]);
+
+    for (const [nodeId, nodeData] of Object.entries(ExportRegions)) {
+        if (!nodeId.startsWith("SolNode") && !nodeId.startsWith("SettlementNode")) {
+            continue;
+        }
+        if (nodeData.nodeType !== 0) {
+            continue;
+        }
+        if (!validMissionTypes.has(nodeData.missionType)) {
+            continue;
+        }
+        if (!nodeData.faction || !validFactions.has(nodeData.faction)) {
+            continue;
+        }
+        if (invalidSystems.has(nodeData.systemName) || nodeData.systemName.endsWith("_SPACE")) {
+            continue;
+        }
+        eligibleNodes.push(nodeId);
+    }
+    return eligibleNodes;
+};
+
+const spawnAlert = async (activeNodes: Set<string>): Promise<any> => {
+    const eligibleNodes = getEligibleAlertNodes();
+    if (eligibleNodes.length === 0) return null;
+
+    const availableNodes = eligibleNodes.filter(node => !activeNodes.has(node));
+    const nodeId = getRandomElement(availableNodes.length > 0 ? availableNodes : eligibleNodes)!;
+    const nodeData = ExportRegions[nodeId];
+
+    const missionTypes = [
+        "MT_SURVIVAL",
+        "MT_DEFENSE",
+        "MT_RESCUE",
+        "MT_CAPTURE",
+        "MT_EXTERMINATION",
+        "MT_SABOTAGE",
+        "MT_MOBILE_DEFENSE",
+        "MT_EXCAVATE",
+        "MT_INTEL"
+    ];
+    const missionType = Math.random() < 0.7 ? nodeData.missionType : getRandomElement(missionTypes)!;
+
+    const factions = ["FC_GRINEER", "FC_CORPUS", "FC_INFESTATION", "FC_CORRUPTED"];
+    let faction = Math.random() < 0.7 ? nodeData.faction : getRandomElement(factions)!;
+    if (faction === "FC_OROKIN") {
+        faction = "FC_CORRUPTED";
+    }
+
+    const difficulty = parseFloat((0.1 + Math.random() * 0.9).toFixed(2));
+    const minEnemyLevel = Math.round(10 + difficulty * 20);
+    const maxEnemyLevel = minEnemyLevel + Math.round(5 + Math.random() * 5);
+
+    let rewardCredits = Math.floor(2000 + difficulty * 18000);
+
+    let rewardItems: string[] | undefined = undefined;
+    let rewardCountedItems: { ItemType: string; ItemCount: number }[] | undefined = undefined;
+    let isNightmare = false;
+
+    const categories = [
+        { name: "CREDITS", weight: 60 },
+        { name: "STANDARD_RESOURCES", weight: 120 },
+        { name: "ENDO", weight: 40 },
+        { name: "ALT_HELMETS", weight: 80 },
+        { name: "WEAPONS", weight: 35 },
+        { name: "NIGHTMARE_MODS", weight: 30 },
+        { name: "AURAS", weight: 18 },
+        { name: "SPECIAL_RESOURCES", weight: 10 },
+        { name: "VAUBAN_PARTS", weight: 7 },
+        { name: "OROKIN_BP", weight: 4 }
+    ];
+
+    let totalWeight = 0;
+    for (const cat of categories) {
+        totalWeight += cat.weight;
+    }
+
+    let roll = Math.random() * totalWeight;
+    let selectedCategory = "STANDARD_RESOURCES";
+    for (const cat of categories) {
+        if (roll < cat.weight) {
+            selectedCategory = cat.name;
+            break;
+        }
+        roll -= cat.weight;
+    }
+
+    switch (selectedCategory) {
+        case "CREDITS": {
+            rewardCredits = Math.floor(5000 + difficulty * 15000);
+            break;
+        }
+        case "STANDARD_RESOURCES": {
+            const res = getRandomElement(alertStandardResources)!;
+            rewardCountedItems = [{ ItemType: res.path, ItemCount: res.qty }];
+            break;
+        }
+        case "ENDO": {
+            const endoRoll = Math.random() * 100;
+            let endoPath = "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/AlertFusionBundleSmall";
+            if (endoRoll < 60) {
+                endoPath = "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/AlertFusionBundleSmall";
+            } else if (endoRoll < 90) {
+                endoPath = "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/AlertFusionBundleMedium";
+            } else {
+                endoPath = "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/AlertFusionBundleLarge";
+            }
+            rewardItems = [endoPath];
+            break;
+        }
+        case "SPECIAL_RESOURCES": {
+            const res = getRandomElement(alertSpecialResources)!;
+            rewardCountedItems = [{ ItemType: res.path, ItemCount: res.qty }];
+            break;
+        }
+        case "AURAS": {
+            const aura = getRandomElement(alertAuras)!;
+            rewardItems = [toStoreItem(aura)];
+            break;
+        }
+        case "ALT_HELMETS": {
+            const helmet = getRandomElement(alertHelmets)!;
+            rewardItems = [toStoreItem(helmet)];
+            break;
+        }
+        case "VAUBAN_PARTS": {
+            const part = getRandomElement(alertVaubanParts)!;
+            rewardItems = [toStoreItem(part)];
+            break;
+        }
+        case "WEAPONS": {
+            const weapon = getRandomElement(alertWeapons)!;
+            rewardItems = [toStoreItem(weapon)];
+            break;
+        }
+        case "NIGHTMARE_MODS": {
+            const nmMod = getRandomElement(alertNightmareMods)!;
+            rewardItems = [toStoreItem(nmMod)];
+            isNightmare = true;
+            break;
+        }
+        case "OROKIN_BP": {
+            const specialBP = getRandomElement(alertOrokinBP)!;
+            rewardItems = [toStoreItem(specialBP)];
+            break;
+        }
+    }
+
+    let durationMin = 30 + Math.random() * 40;
+    let multiplier = 1;
+    if (rewardItems && rewardItems.length > 0) {
+        multiplier = alertDurationMultipliers.get(fromStoreItem(rewardItems[0])) ?? 1;
+    } else if (rewardCountedItems && rewardCountedItems.length > 0) {
+        multiplier = alertDurationMultipliers.get(rewardCountedItems[0].ItemType) ?? 1;
+    }
+    durationMin *= multiplier;
+
+    const activationDate = new Date(Date.now() - 10 * 60 * 1000);
+    const expiryDate = new Date(activationDate.getTime() + durationMin * 60 * 1000);
+
+    const newAlert = new Alert({
+        Activation: activationDate,
+        Expiry: expiryDate,
+        MissionInfo: {
+            location: nodeId,
+            missionType: missionType,
+            faction: faction,
+            difficulty: difficulty,
+            missionReward: {
+                credits: rewardCredits,
+                items: rewardItems,
+                countedItems: rewardCountedItems
+            },
+            minEnemyLevel: minEnemyLevel,
+            maxEnemyLevel: maxEnemyLevel,
+            nightmare: isNightmare || undefined
+        }
+    });
+    return await newAlert.save();
+};
+
+const updateAlerts = async (): Promise<void> => {
+    const alerts = await Alert.find();
+    const activeAlerts: any[] = [];
+    const activeNodes = new Set<string>();
+    let latestActivation = 0;
+
+    for (const alert of alerts) {
+        if (alert.Expiry.getTime() > Date.now()) {
+            activeAlerts.push(alert);
+            activeNodes.add(alert.MissionInfo.location);
+        }
+        latestActivation = Math.max(latestActivation, alert.Activation.getTime());
+    }
+
+    while (activeAlerts.length < 3) {
+        const newAlert = (await spawnAlert(activeNodes)) as IAlertDatabase | null;
+        if (newAlert) {
+            activeAlerts.push(newAlert);
+            activeNodes.add(newAlert.MissionInfo.location);
+            latestActivation = Math.max(latestActivation, newAlert.Activation.getTime());
+        } else {
+            break;
+        }
+    }
+
+    if (activeAlerts.length < 5 && latestActivation > 0) {
+        const timeSinceLastSpawn = Date.now() - latestActivation;
+        const interval = 20 + Math.random() * 20;
+        if (timeSinceLastSpawn > interval * 60 * 1000) {
+            const newAlert = (await spawnAlert(activeNodes)) as IAlertDatabase | null;
+            if (newAlert) {
+                activeAlerts.push(newAlert);
+                activeNodes.add(newAlert.MissionInfo.location);
+            }
+        }
+    }
+};
+
+export const populateAlerts = async (worldState: IWorldState): Promise<void> => {
+    const buildLabel = worldState.BuildLabel;
+    if (
+        version_compare(buildLabel, gameToBuildVersion["5.1.0"]) >= 0 &&
+        version_compare(buildLabel, gameToBuildVersion["24.3.0"]) < 0 // alerts were retired with 23.3.0
+    ) {
+        const activeAlerts = await Alert.find({ Expiry: { $gt: new Date() } });
+        for (const dbAlert of activeAlerts) {
+            let mappedItems: string[] | undefined = undefined;
+            if (dbAlert.MissionInfo.missionReward.items) {
+                mappedItems = dbAlert.MissionInfo.missionReward.items.map(item => {
+                    if (item.includes("/Recipes/Helmets/")) {
+                        return getVersionAppropriateHelmet(item, buildLabel);
+                    }
+                    return item;
+                });
+            }
+
+            worldState.Alerts.push({
+                _id: toOid2(dbAlert._id.toString(), buildLabel),
+                Activation:
+                    dbAlert.Activation.getTime() < Date.now()
+                        ? toMongoDate2(1000000000000, buildLabel)
+                        : toMongoDate2(dbAlert.Activation.getTime(), buildLabel),
+                Expiry: toMongoDate2(dbAlert.Expiry.getTime(), buildLabel),
+                MissionInfo: {
+                    location: dbAlert.MissionInfo.location,
+                    missionType: dbAlert.MissionInfo.missionType as TMissionType,
+                    faction: dbAlert.MissionInfo.faction as TFaction,
+                    difficulty: dbAlert.MissionInfo.difficulty,
+                    missionReward: {
+                        credits: dbAlert.MissionInfo.missionReward.credits,
+                        items: mappedItems,
+                        countedItems: dbAlert.MissionInfo.missionReward.countedItems
+                    },
+                    minEnemyLevel: dbAlert.MissionInfo.minEnemyLevel,
+                    maxEnemyLevel: dbAlert.MissionInfo.maxEnemyLevel,
+                    descText: dbAlert.MissionInfo.descText,
+                    nightmare: dbAlert.MissionInfo.nightmare || undefined
+                }
+            });
+        }
+    }
+};
+
 export const updateWorldStateCollections = async (): Promise<void> => {
-    await Promise.all([updateFissures(), updateDailyDeal()]);
+    await Promise.all([updateFissures(), updateDailyDeal(), updateAlerts()]);
 };
 
 const pushConclaveDaily = (
