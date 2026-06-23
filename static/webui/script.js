@@ -779,6 +779,14 @@ function fetchItemList() {
                     name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Mods/PerculiarCyoteMod").name
                 },
                 {
+                    uniqueName: "/Lotus/Upgrades/Mods/Warframe/Intermediate/AvatarPickupBonusModIntermediate",
+                    name:
+                        data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/WarframeModPickupBonus")
+                            .name +
+                        " " +
+                        loc("code_badItem")
+                },
+                {
                     uniqueName: "/Lotus/Upgrades/Mods/Warframe/AvatarStaminaCostMultiplierMod",
                     name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/WarframeModStaminaCost")
                         .name
