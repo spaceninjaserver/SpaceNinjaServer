@@ -561,6 +561,7 @@ export interface IInventoryClient
     RetroPlayAllConvos?: boolean;
     RetroDisableKissInboxMessage?: boolean;
     Sketches?: ISketch[];
+    WeeklyGuildVaultBonusInfo?: IWeeklyGuildVaultBonusInfo;
 }
 
 export interface IAffiliation {
@@ -1408,4 +1409,18 @@ type TSketches =
 export interface ISketch {
     decoId: TSketches;
     canvas?: string;
+}
+
+export interface IWeeklyGuildVaultBonusInfo {
+    Progress: number;
+    WeekCount: number;
+    BonusRegion: string;
+    Rewards: IWeekGuildVaultBonusReward[];
+}
+
+export interface IWeekGuildVaultBonusReward {
+    RewardClaimed: boolean;
+    PointThreshold: number;
+    ItemCount: number;
+    Reward: string;
 }

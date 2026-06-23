@@ -644,6 +644,9 @@ export const getInventoryResponse = async (
         inventoryResponse.Nemesis = undefined;
     }
 
+    // On live, this is just empty in inventory response. Seems like the client sends a roll request request even with this given.
+    inventoryResponse.WeeklyGuildVaultBonusInfo = undefined;
+
     // U42 migrated ability paths so translate them back for older versions
     if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0) {
         return inventoryResponse;

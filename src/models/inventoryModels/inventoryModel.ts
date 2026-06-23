@@ -100,7 +100,9 @@ import type {
     IParam,
     IDialogueCounter,
     ISketch,
-    IHybridFusionTreasure
+    IHybridFusionTreasure,
+    IWeeklyGuildVaultBonusInfo,
+    IWeekGuildVaultBonusReward
 } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IOid, ITypeCount } from "../../types/commonTypes.ts";
@@ -1575,6 +1577,26 @@ const sketchSchema = new Schema<ISketch>(
     { _id: false }
 );
 
+const weekGuildVaultBonusRewardSchema = new Schema<IWeekGuildVaultBonusReward>(
+    {
+        RewardClaimed: { type: Boolean, required: true },
+        PointThreshold: { type: Number, required: true },
+        ItemCount: { type: Number, required: true },
+        Reward: { type: String, required: true }
+    },
+    { _id: false }
+);
+
+const weeklyGuildVaultBonusInfoSchema = new Schema<IWeeklyGuildVaultBonusInfo>(
+    {
+        Progress: { type: Number, required: true },
+        WeekCount: { type: Number, required: true },
+        BonusRegion: { type: String, required: true },
+        Rewards: { type: [weekGuildVaultBonusRewardSchema], required: true }
+    },
+    { _id: false }
+);
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
@@ -2037,7 +2059,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         RetroPlayAllConvos: Boolean,
         RetroDisableKissInboxMessage: Boolean,
 
-        Sketches: { type: [sketchSchema], default: undefined }
+        Sketches: { type: [sketchSchema], default: undefined },
+
+        WeeklyGuildVaultBonusInfo: weeklyGuildVaultBonusInfoSchema
     },
     { timestamps: { createdAt: "Created", updatedAt: false } }
 );

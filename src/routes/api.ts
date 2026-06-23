@@ -93,6 +93,7 @@ import { giveShipDecoAndLoreFragmentController } from "../controllers/api/giveSh
 import { giveStartingGearGetController, giveStartingGearPostController } from "../controllers/api/giveStartingGearController.ts";
 import { goalsController } from "../controllers/api/goalsController.ts";
 import { guildTechController } from "../controllers/api/guildTechController.ts";
+import { guildVaultBonusRewardsController } from "../controllers/api/guildVaultBonusRewardsController.ts";
 import { hostSessionController } from "../controllers/api/hostSessionController.ts";
 import { hubBlessingController } from "../controllers/api/hubBlessingController.ts";
 import { inboxController } from "../controllers/api/inboxController.ts";
@@ -345,6 +346,7 @@ apiRouter.post("/giveShipDecoAndLoreFragment.php", giveShipDecoAndLoreFragmentCo
 apiRouter.post("/giveStartingGear.php", giveStartingGearPostController);
 apiRouter.post("/goals.php", goalsController);
 apiRouter.post("/guildTech.php", guildTechController);
+apiRouter.post("/guildVaultBonusRewards.php", guildVaultBonusRewardsController); // U42+
 apiRouter.post("/hostSession.php", hostSessionController);
 apiRouter.post("/hubBlessing.php", hubBlessingController);
 apiRouter.post("/inbox.php", inboxController); // from ~U15, don't know when they changed it to GET
