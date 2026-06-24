@@ -2782,7 +2782,7 @@ export const addCalendarProgress = (inventory: TInventoryDatabaseDocument, value
 };
 
 export const addKahlProgress = (
-    inventory: TInventoryDatabaseDocument,
+    inventory: Pick<TInventoryDatabaseDocument, "Affiliations" | "MiscItems">,
     value: IWeeklyMissionChallengeInfo[],
     inventoryChanges: IInventoryChanges
 ): void => {
@@ -3097,7 +3097,9 @@ export const getDialogue = (
     return dialogue;
 };
 
-export const getCalendarProgress = (inventory: TInventoryDatabaseDocument): ICalendarProgress => {
+export const getCalendarProgress = (
+    inventory: Pick<TInventoryDatabaseDocument, "CalendarProgress">
+): ICalendarProgress => {
     const currentSeason = getWorldState().KnownCalendarSeasons[0];
 
     if (!inventory.CalendarProgress) {

@@ -16,10 +16,7 @@ export const updateChallengeProgressController: RequestHandler = async (req, res
     const account = await getAccountForRequest(req);
     logger.debug(`challenge report:`, challenges);
 
-    const inventory = await getInventory(
-        account._id,
-        "ChallengesFixVersion ChallengeProgress SeasonChallengeHistory Affiliations CalendarProgress nightwaveStandingMultiplier FlavourItems"
-    );
+    const inventory = await getInventory(account._id, undefined); // Challenge completion can give any item in theory
     let affiliationMods: IAffiliationMods[] = [];
     const inventoryChanges: IInventoryChanges = {};
     if (challenges.ChallengeProgress) {
