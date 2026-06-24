@@ -154,7 +154,10 @@ export const guildTechController: RequestHandler = async (req, res) => {
             });
         }
     } else if (data.Action == "Contribute") {
-        if ("guildId" in req.query && (req.query.guildId as string) == "000000000000000000000000") {
+        if (
+            ("guildId" in req.query && (req.query.guildId as string) == "000000000000000000000000") ||
+            (data.RecipeType && isPersonalResearch(data.RecipeType)) // For U28: https://onlyg.it/OpenWF/SpaceNinjaServer/issues/4312
+        ) {
             const inventory = await getInventory2(
                 accountId,
                 "PersonalTechProjects",
@@ -502,6 +505,13 @@ interface IGuildTechContributeRequest {
     VaultMiscItems?: IMiscItem[];
 }
 
+const isPersonalResearch = (uniqueName: string): boolean | null => {
+    if (!(uniqueName in ExportDojoRecipes.research)) {
+        return null;
+    }
+    return uniqueName in ExportDojoRecipes.fabrications || !!ExportDojoRecipes.research[uniqueName].resultType;
+};
+
 const getSalvageCategory = (
     category: "CrewShipWeapons" | "CrewShipWeaponSkins"
 ): "CrewShipSalvagedWeapons" | "CrewShipSalvagedWeaponSkins" => {
@@ -566,4 +576,10 @@ const finishComponentRepair = (
     ];
 
     return inventoryChanges;
+};
+
+export const selfTestGuildTech = (): void => {
+    if (isPersonalResearch("/Lotus/Types/Items/ShipFeatureItems/Railjack/RailjackHullFeatureItemBlueprint") !== true) {
+        logger.warn(`isPersonalResearch self-test failed for RailjackHullFeatureItemBlueprint`);
+    }
 };

@@ -11,7 +11,7 @@ import { updateWorldStateCollections } from "./services/worldStateService.ts";
 import { repoDir } from "./helpers/pathHelper.ts";
 import { MongoMemoryServer } from "mongodb-memory-server-core";
 import { args } from "./helpers/commandLineArguments.ts";
-import { selfTestServersideVendors } from "./services/serversideVendorsService.ts";
+import { runSelfTests } from "./services/selfTestService.ts";
 
 try {
     loadConfig();
@@ -121,7 +121,7 @@ if (args.dev) {
     logger.info(
         "Developer mode is enabled. Note that this project is where it is now due to code contributions; please pay it forward with pull requests."
     );
-    selfTestServersideVendors();
+    runSelfTests();
 }
 
 void updateWorldStateCollections();
