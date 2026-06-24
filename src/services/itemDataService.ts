@@ -80,6 +80,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { BL_LATEST } from "../constants/gameVersions.ts";
 import type { TInventorySlot } from "../types/inventoryTypes/inventoryTypes.ts";
+import { config } from "./configService.ts";
 
 export type WeaponTypeInternal =
     | "LongGuns"
@@ -1545,6 +1546,51 @@ export const supplementalVendors: Record<string, IVendor> = {
         ]
     }
 };
+
+const preU42YinYangRewards: TMissionDeck = [
+    [
+        {
+            type: "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/AnimaBlueprint",
+            itemCount: 1,
+            probability: 0.1128
+        },
+        {
+            type: "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/AnimaChassisBlueprint",
+            itemCount: 1,
+            probability: 0.1291
+        },
+        {
+            type: "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/AnimaHelmetBlueprint",
+            itemCount: 1,
+            probability: 0.1291
+        },
+        {
+            type: "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/AnimaSystemsBlueprint",
+            itemCount: 1,
+            probability: 0.1291
+        },
+        {
+            type: "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/AnimusBlueprint",
+            itemCount: 1,
+            probability: 0.1128
+        },
+        {
+            type: "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/AnimusChassisBlueprint",
+            itemCount: 1,
+            probability: 0.1291
+        },
+        {
+            type: "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/AnimusHelmetBlueprint",
+            itemCount: 1,
+            probability: 0.1291
+        },
+        {
+            type: "/Lotus/StoreItems/Types/Recipes/WarframeRecipes/AnimusSystemsBlueprint",
+            itemCount: 1,
+            probability: 0.1291
+        }
+    ]
+];
 
 interface IU5FingerprintData {
     fits: { type: string; rarity: TRarity; statAtten?: number }[];
@@ -3217,6 +3263,12 @@ export const getKey = (uniqueName: string, buildLabel: string = BL_LATEST): IKey
 };
 
 export const getMissionDeck = (uniqueName: string): TMissionDeck | undefined => {
+    if (
+        uniqueName == "/Lotus/Types/Game/MissionDecks/BossMissionRewards/YinYangRewards" &&
+        !(config.serversideQualityOfLife?.tylRegorDropsTwoEquinoxParts ?? true)
+    ) {
+        return preU42YinYangRewards;
+    }
     return ExportRewards[uniqueName];
 };
 

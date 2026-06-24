@@ -164,6 +164,12 @@ const getRotations = async (rewardInfo: IRewardInfo, buildLabel: string, tierOve
         }
     }
 
+    if (rewardInfo.node == "SolNode105" && (config.serversideQualityOfLife?.tylRegorDropsTwoEquinoxParts ?? true)) {
+        // U42 QoL change:
+        // Defeating Tyl Regor now rewards two Equinox Component Blueprints — one guaranteed for the Night and Day Aspect each.
+        return [0, 1];
+    }
+
     // 'rewardQualifications' may stick from previous missions for non-endless missions done after them
     // - via railjack (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2586, https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2612)
     // - via lab conquest (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2768)
@@ -2230,8 +2236,7 @@ async function getRandomMissionDrops(
         }*/
         const rng = new SRng(BigInt(RewardInfo.rewardSeed ?? generateRewardSeed()) ^ 0xffffffffffffffffn);
         rewardManifests.forEach(name => {
-            const table = ExportRewards[name];
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            const table = getMissionDeck(name);
             if (!table) {
                 logger.error(`unknown droptable: ${name}`);
                 return;

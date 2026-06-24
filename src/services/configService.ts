@@ -137,6 +137,7 @@ export interface IConfig {
     serversideQualityOfLife?: {
         twentythreeHourMasteryRankCooldown?: boolean;
         doubleDailySynthesisEndoReward?: boolean;
+        tylRegorDropsTwoEquinoxParts?: boolean;
     };
     inventoryDefaults?: Record<string, any>;
     tunables?: {

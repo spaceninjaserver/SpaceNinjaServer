@@ -128,7 +128,8 @@
   },
   "serversideQualityOfLife": {
     "twentythreeHourMasteryRankCooldown": true,
-    "doubleDailySynthesisEndoReward": true
+    "doubleDailySynthesisEndoReward": true,
+    "tylRegorDropsTwoEquinoxParts": true
   },
   "inventoryDefaults": {},
   "tunables": {
