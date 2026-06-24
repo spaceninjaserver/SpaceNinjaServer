@@ -2682,6 +2682,95 @@ export const getWorldState = (
         pushFlashSales(worldState, storeItems, activation, expiry, "SEASONAL", buildLabel);
     }
 
+    // Pride Month - June
+    const isJune = date.getUTCMonth() == 5;
+    if (
+        (config.worldState?.prideOverride ?? isJune) &&
+        version_compare(buildLabel, gameToBuildVersion["29.5.0"]) >= 0
+    ) {
+        const activation = config.worldState?.prideOverride ? 1772467200000 : Date.UTC(date.getUTCFullYear(), 5, 1);
+        const expiry = config.worldState?.prideOverride ? 2000000000000 : Date.UTC(date.getUTCFullYear(), 6, 1);
+        const storeItems: (Partial<IFlashSale> & { TypeName: string; minBuildLabel?: string })[] = [
+            // Color palettes
+            { TypeName: "/Lotus/Types/StoreItems/SuitCustomizations/ColourPickerPrideItemA", RegularOverride: 1 },
+            {
+                TypeName: "/Lotus/Types/StoreItems/SuitCustomizations/ColourPickerPrideItemB",
+                RegularOverride: 1,
+                minBuildLabel: gameToBuildVersion["31.5.0"]
+            },
+            // Glyphs
+            {
+                TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImagePrideLotusSymbolGlyph",
+                RegularOverride: 1,
+                minBuildLabel: gameToBuildVersion["42.0.0"]
+            },
+            {
+                TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImagePrideCommunity",
+                RegularOverride: 1,
+                minBuildLabel: gameToBuildVersion["31.6.0"]
+            },
+            {
+                TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageHildrynPrideCommunity",
+                RegularOverride: 1,
+                minBuildLabel: gameToBuildVersion["33.5.0"]
+            },
+            {
+                TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImagePrideGlyph",
+                RegularOverride: 1,
+                minBuildLabel: gameToBuildVersion["35.5.0"]
+            },
+            {
+                TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImagePride2025Glyph",
+                RegularOverride: 1,
+                minBuildLabel: gameToBuildVersion["38.5.0"]
+            },
+            // Ship decorations
+            {
+                TypeName: "/Lotus/Types/Items/ShipDecos/Venus/PrideCommunityDisplay",
+                RegularOverride: 1,
+                minBuildLabel: gameToBuildVersion["31.6.0"]
+            },
+            {
+                TypeName: "/Lotus/Types/Items/ShipDecos/Pride2023Display",
+                RegularOverride: 1,
+                minBuildLabel: gameToBuildVersion["33.5.0"]
+            },
+            {
+                TypeName: "/Lotus/Types/Items/ShipDecos/Venus/Pride2024Display",
+                RegularOverride: 1,
+                minBuildLabel: gameToBuildVersion["35.5.0"]
+            },
+            {
+                TypeName: "/Lotus/Types/Items/ShipDecos/Pride2in1Display",
+                RegularOverride: 1,
+                minBuildLabel: gameToBuildVersion["38.6.0"]
+            },
+            {
+                TypeName: "/Lotus/Types/Items/ShipDecos/Events/NeonPrideWings",
+                RegularOverride: 1,
+                minBuildLabel: gameToBuildVersion["35.5.0"]
+            },
+            {
+                TypeName: "/Lotus/Types/Items/ShipDecos/HeartOroRainbowDeco",
+                RegularOverride: 1,
+                minBuildLabel: gameToBuildVersion["38.6.0"]
+            },
+            // 2026 items
+            {
+                TypeName: "/Lotus/Types/Items/ShipDecos/Pride2026Poster",
+                RegularOverride: 1,
+                minBuildLabel: gameToBuildVersion["42.0.0"]
+            },
+            {
+                TypeName: "/Lotus/Types/Items/ShipDecos/Props/Seasonal/Pride2026SquarePictureFrame",
+                RegularOverride: 1,
+                minBuildLabel: gameToBuildVersion["42.0.0"]
+            }
+        ];
+
+        pushFlashSales(worldState, storeItems, activation, expiry, "SEASONAL", buildLabel);
+    }
+
     const xmasStart = Date.UTC(date.getUTCFullYear(), 11, 1);
     const xmasEnd = Date.UTC(date.getUTCFullYear() + 1, 1, 1);
     const isXmas = timeMs >= xmasStart && timeMs < xmasEnd;

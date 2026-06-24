@@ -318,6 +318,7 @@ dict = {
     worldState_tennoLiveRelay: `TennoLive中继站`,
     worldState_baroTennoConRelay: `Baro的TennoCon中继站`,
     worldState_saintPatrick: `圣帕特里克节`,
+    worldState_prideOverride: `[UNTRANSLATED] Pride Month`,
     worldState_xmas: `活动:Tennobaum`,
     worldState_lunarNewYearEntry: `|VAL|:|ANIMAL|年`,
     worldState_lunarNewYearAnimal1: `鼠`,

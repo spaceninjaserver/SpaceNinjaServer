@@ -318,6 +318,7 @@ dict = {
     worldState_tennoLiveRelay: `Repetidor de TennoLive`,
     worldState_baroTennoConRelay: `Repetidor de Baro de la TennoCon`,
     worldState_saintPatrick: `Día de San Patricio`,
+    worldState_prideOverride: `[UNTRANSLATED] Pride Month`,
     worldState_xmas: `[UNTRANSLATED] Tennobaum`,
     worldState_lunarNewYearEntry: `[UNTRANSLATED] |VAL|: Year of the |ANIMAL|`,
     worldState_lunarNewYearAnimal1: `[UNTRANSLATED] Rat`,

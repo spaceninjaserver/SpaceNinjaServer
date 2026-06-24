@@ -107,6 +107,7 @@ export interface IConfig {
         plagueStarOverride?: boolean;
         starDaysOverride?: boolean;
         saintPatrickOverride?: boolean;
+        prideOverride?: boolean;
         xmasOverride?: boolean;
         lunarNewYear?: string;
         dogDaysOverride?: boolean;
