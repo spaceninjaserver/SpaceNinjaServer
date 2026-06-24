@@ -5685,8 +5685,9 @@ const updateAlerts = async (): Promise<void> => {
 export const populateAlerts = async (worldState: IWorldState): Promise<void> => {
     const buildLabel = worldState.BuildLabel;
     if (
-        version_compare(buildLabel, gameToBuildVersion["5.1.0"]) >= 0 &&
-        version_compare(buildLabel, gameToBuildVersion["24.3.0"]) < 0 // alerts were retired with 23.3.0
+        config.worldState?.classicAlerts ??
+        (version_compare(buildLabel, gameToBuildVersion["5.1.0"]) >= 0 &&
+            version_compare(buildLabel, gameToBuildVersion["24.3.0"]) < 0) // alerts were retired with U24.3.0
     ) {
         const activeAlerts = await Alert.find({ Expiry: { $gt: new Date() } });
         const regions = await getRegions(buildLabel);

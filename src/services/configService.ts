@@ -125,6 +125,7 @@ export interface IConfig {
         duviriOverride?: string;
         nightwaveOverride?: string;
         nightwaveEpisode?: number;
+        classicAlerts?: boolean;
         allTheFissures?: string;
         varziaOverride?: string;
         circuitGameModes?: string[];
