@@ -1,5 +1,6 @@
 import type { IAlertDatabase, IDailyDealDatabase, IFissureDatabase } from "../types/worldStateTypes.ts";
 import { model, Schema } from "mongoose";
+import { typeCountSchema } from "./inventoryModels/inventoryModel.ts";
 
 const fissureSchema = new Schema<IFissureDatabase>({
     Activation: Date,
@@ -40,12 +41,7 @@ const alertSchema = new Schema<IAlertDatabase>({
         missionReward: {
             credits: { type: Number, required: true },
             items: [String],
-            countedItems: [
-                {
-                    ItemType: String,
-                    ItemCount: Number
-                }
-            ]
+            countedItems: [typeCountSchema]
         },
         minEnemyLevel: { type: Number, required: true },
         maxEnemyLevel: { type: Number, required: true },

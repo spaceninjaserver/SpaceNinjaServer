@@ -44,7 +44,7 @@ import type {
 import { toMongoDate2, toOid, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
 import { DailyDeal, Fissure, Alert } from "../models/worldStateModel.ts";
-import { toStoreItem, fromStoreItem } from "./itemDataService.ts";
+import { toStoreItem, fromStoreItem, getRegions } from "./itemDataService.ts";
 import { factionToInt, getConquest, getMissionTypeForLegacyOverride } from "./conquestService.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import { getDescent } from "./descentService.ts";
@@ -5689,7 +5689,9 @@ export const populateAlerts = async (worldState: IWorldState): Promise<void> => 
         version_compare(buildLabel, gameToBuildVersion["24.3.0"]) < 0 // alerts were retired with 23.3.0
     ) {
         const activeAlerts = await Alert.find({ Expiry: { $gt: new Date() } });
+        const regions = await getRegions(buildLabel);
         for (const dbAlert of activeAlerts) {
+            if (!(dbAlert.MissionInfo.location in regions)) continue;
             let mappedItems: string[] | undefined = undefined;
             if (dbAlert.MissionInfo.missionReward.items) {
                 mappedItems = dbAlert.MissionInfo.missionReward.items.map(item => {

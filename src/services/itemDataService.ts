@@ -2406,7 +2406,7 @@ const getLegacyDataVersion = async (target: string, buildLabel: string): Promise
 const getLegacyData = async <T>(cache: WeakMap<legacyCacheKey, T>, target: string, buildLabel: string): Promise<T> => {
     const key = getLegacyCacheKey(target, buildLabel);
     if (cache.has(key)) {
-        logger.debug(`Using cached ${buildLabel} data for ${target}`);
+        logger.trace(`Using cached ${buildLabel} data for ${target}`);
         return cache.get(key)!;
     }
 
@@ -2415,7 +2415,7 @@ const getLegacyData = async <T>(cache: WeakMap<legacyCacheKey, T>, target: strin
     const json = JSON.parse(raw) as T;
     cache.set(key, json);
 
-    logger.debug(`Cached ${buildLabel} data for ${target}`);
+    logger.trace(`Cached ${buildLabel} data for ${target}`);
 
     return json;
 };
@@ -3444,6 +3444,11 @@ export const getPrice = (
 };
 
 export const getRegion = async (uniqueName: string, buildLabel: string): Promise<IRegion | undefined> => {
+    const regions = await getRegions(buildLabel);
+    return regions[uniqueName];
+};
+
+export const getRegions = async (buildLabel: string): Promise<Record<string, IRegion>> => {
     // after U27.2.0 OriginSolarMapRedux moved to binary format, so we don't have data for it
     if (version_compare(buildLabel, gameToBuildVersion["27.2.0"]) <= 0) {
         const target =
@@ -3454,11 +3459,10 @@ export const getRegion = async (uniqueName: string, buildLabel: string): Promise
                   : "OriginSolarMapRedux";
         const version = await getLegacyDataVersion(target, buildLabel);
         if (version) {
-            const legacyData = await getLegacySolarMapData(target, version);
-            return legacyData[uniqueName];
+            return await getLegacySolarMapData(target, version);
         }
     }
-    return ExportRegions[uniqueName];
+    return ExportRegions;
 };
 
 export const isRegionAvailableIn = (key: string, value: IRegion, buildLabel: string): boolean => {
