@@ -85,19 +85,19 @@ export const addInfestedFoundryXP = (infestedFoundry: IInfestedFoundryDatabase, 
 export const handleSubsumeCompletion = (
     inventory: Pick<TInventoryDatabaseDocument, "InfestedFoundry" | "Recipes">
 ): ITypeCount[] => {
-    const [recipeType] = Object.entries(ExportRecipes).find(
-        ([_recipeType, recipe]) =>
-            recipe.secretIngredientAction == "SIA_WARFRAME_ABILITY" &&
-            recipe.secretIngredients![0].ItemType == inventory.InfestedFoundry!.LastConsumedSuit!.ItemType
-    )!;
+    const recipeTypes = Object.entries(ExportRecipes)
+        .filter(
+            ([_recipeType, recipe]) =>
+                recipe.secretIngredientAction == "SIA_WARFRAME_ABILITY" &&
+                recipe.secretIngredients![0].ItemType == inventory.InfestedFoundry!.LastConsumedSuit!.ItemType
+        )
+        .map(([recipeType]) => recipeType);
     inventory.InfestedFoundry!.LastConsumedSuit = undefined;
     inventory.InfestedFoundry!.AbilityOverrideUnlockCooldown = undefined;
-    const recipeChanges: ITypeCount[] = [
-        {
-            ItemType: recipeType,
-            ItemCount: 1
-        }
-    ];
+    const recipeChanges: ITypeCount[] = recipeTypes.map(recipeType => ({
+        ItemType: recipeType,
+        ItemCount: 1
+    }));
     addRecipes(inventory, recipeChanges);
     return recipeChanges;
 };
