@@ -1968,8 +1968,23 @@ export const updateGeneric = async (
         if (inventory.NodeIntrosCompleted.indexOf(node) != -1) {
             continue;
         }
-        inventory.NodeIntrosCompleted.push(node);
-        logger.debug(`completed popup/dialogue/cutscene for ${node}`);
+
+        // [OLD]BabyName_A[NEW]BabyName_B_1782322823
+        if (node.startsWith("[OLD]") && node.includes("[NEW]")) {
+            const parts = node.slice(5).split("[NEW]");
+            if (parts.length === 2) {
+                const oldNode = parts[0];
+                const newNode = parts[1];
+                const index = inventory.NodeIntrosCompleted.indexOf(oldNode);
+                if (index !== -1) {
+                    inventory.NodeIntrosCompleted[index] = newNode;
+                    logger.debug(`changed ${oldNode} to ${newNode}`);
+                }
+            }
+        } else {
+            inventory.NodeIntrosCompleted.push(node);
+            logger.debug(`completed popup/dialogue/cutscene for ${node}`);
+        }
 
         if (node == "TL21Start") {
             await createMessage(accountId, [
