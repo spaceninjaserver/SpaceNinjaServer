@@ -127,360 +127,300 @@
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle60",
       "minStanding": 600000,
       "maxStanding": 610000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 59,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle59",
       "minStanding": 590000,
       "maxStanding": 600000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 58,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle58",
       "minStanding": 580000,
       "maxStanding": 590000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 57,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle57",
       "minStanding": 570000,
       "maxStanding": 580000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 56,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle56",
       "minStanding": 560000,
       "maxStanding": 570000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 55,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle55",
       "minStanding": 550000,
       "maxStanding": 560000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 54,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle54",
       "minStanding": 540000,
       "maxStanding": 550000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 53,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle53",
       "minStanding": 530000,
       "maxStanding": 540000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 52,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle52",
       "minStanding": 520000,
       "maxStanding": 530000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 51,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle51",
       "minStanding": 510000,
       "maxStanding": 520000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 50,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle50",
       "minStanding": 500000,
       "maxStanding": 510000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 49,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle49",
       "minStanding": 490000,
       "maxStanding": 500000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 48,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle48",
       "minStanding": 480000,
       "maxStanding": 490000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 47,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle47",
       "minStanding": 470000,
       "maxStanding": 480000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 46,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle46",
       "minStanding": 460000,
       "maxStanding": 470000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 45,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle45",
       "minStanding": 450000,
       "maxStanding": 460000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 44,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle44",
       "minStanding": 440000,
       "maxStanding": 450000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 43,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle43",
       "minStanding": 430000,
       "maxStanding": 440000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 42,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle42",
       "minStanding": 420000,
       "maxStanding": 430000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 41,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle41",
       "minStanding": 410000,
       "maxStanding": 420000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 40,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle40",
       "minStanding": 400000,
       "maxStanding": 410000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 39,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle39",
       "minStanding": 390000,
       "maxStanding": 400000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 38,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle38",
       "minStanding": 380000,
       "maxStanding": 390000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 37,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle37",
       "minStanding": 370000,
       "maxStanding": 380000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 36,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle36",
       "minStanding": 360000,
       "maxStanding": 370000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 35,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle35",
       "minStanding": 350000,
       "maxStanding": 360000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 34,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle34",
       "minStanding": 340000,
       "maxStanding": 350000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 33,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle33",
       "minStanding": 330000,
       "maxStanding": 340000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 32,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle32",
       "minStanding": 320000,
       "maxStanding": 330000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 31,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle31",
       "minStanding": 310000,
       "maxStanding": 320000,
-      "reward": [
-        {
-          "ItemCount": 15,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 15,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 30,
@@ -494,12 +434,6 @@
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle29",
       "minStanding": 290000,
       "maxStanding": 300000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": ""
-        }
-      ],
       "storeItemReward": "/Lotus/StoreItems/Upgrades/Skins/Armor/NWIIIBossArmor/NWIIIBossAArmor"
     },
     {
@@ -507,48 +441,36 @@
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle28",
       "minStanding": 280000,
       "maxStanding": 290000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Upgrades/Skins/Scarves/CephSyandana"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Upgrades/Skins/Scarves/CephSyandana"
+      }
     },
     {
       "level": 27,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle27",
       "minStanding": 270000,
       "maxStanding": 280000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Types/StoreItems/SlotItems/SuitSlotItem"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Types/StoreItems/SlotItems/SuitSlotItem"
+      }
     },
     {
       "level": 26,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle26",
       "minStanding": 260000,
       "maxStanding": 270000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Types/Items/MiscItems/FormaUmbra"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Types/Items/MiscItems/FormaUmbra"
+      }
     },
     {
       "level": 25,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle25",
       "minStanding": 250000,
       "maxStanding": 260000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": ""
-        }
-      ],
       "storeItemReward": "/Lotus/Types/StoreItems/Packages/FormaPack"
     },
     {
@@ -556,24 +478,20 @@
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle24",
       "minStanding": 240000,
       "maxStanding": 250000,
-      "reward": [
-        {
-          "ItemCount": 50,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 50,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 23,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle23",
       "minStanding": 230000,
       "maxStanding": 240000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Upgrades/Mods/Rifle/Event/Arbitration/GrnGrenadeLauncherArbitrationMod"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Upgrades/Mods/Rifle/Event/Arbitration/GrnGrenadeLauncherArbitrationMod"
+      }
     },
     {
       "level": 22,
@@ -587,36 +505,30 @@
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle21",
       "minStanding": 210000,
       "maxStanding": 220000,
-      "reward": [
-        {
-          "ItemCount": 50,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 50,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 20,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle20",
       "minStanding": 200000,
       "maxStanding": 210000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Upgrades/Mods/Nightwave/BroncoNightwaveMod"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Upgrades/Mods/Nightwave/BroncoNightwaveMod"
+      }
     },
     {
       "level": 19,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle19",
       "minStanding": 190000,
       "maxStanding": 200000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Upgrades/Skins/Nightwave/CephPolearmSkin"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Upgrades/Skins/Nightwave/CephPolearmSkin"
+      }
     },
     {
       "level": 18,
@@ -630,96 +542,80 @@
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle17",
       "minStanding": 170000,
       "maxStanding": 180000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Types/Items/MiscItems/UtilityUnlocker"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Types/Items/MiscItems/UtilityUnlocker"
+      }
     },
     {
       "level": 16,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle16",
       "minStanding": 160000,
       "maxStanding": 170000,
-      "reward": [
-        {
-          "ItemCount": 50,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 50,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 15,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle15",
       "minStanding": 150000,
       "maxStanding": 160000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Upgrades/Skins/Operator/Accessories/NightWaveEyePieceA"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Upgrades/Skins/Operator/Accessories/NightWaveEyePieceA"
+      }
     },
     {
       "level": 14,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle14",
       "minStanding": 140000,
       "maxStanding": 150000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Upgrades/Mods/Randomized/PlayerMeleeWeaponRandomModRare"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Upgrades/Mods/Randomized/PlayerMeleeWeaponRandomModRare"
+      }
     },
     {
       "level": 13,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle13",
       "minStanding": 130000,
       "maxStanding": 140000,
-      "reward": [
-        {
-          "ItemCount": 20000,
-          "ItemType": "/Lotus/Types/Items/MiscItems/Kuva"
-        }
-      ]
+      "reward": {
+        "ItemCount": 20000,
+        "ItemType": "/Lotus/Types/Items/MiscItems/Kuva"
+      }
     },
     {
       "level": 12,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle12",
       "minStanding": 120000,
       "maxStanding": 130000,
-      "reward": [
-        {
-          "ItemCount": 50,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 50,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 11,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle11",
       "minStanding": 110000,
       "maxStanding": 120000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Types/Items/MiscItems/OrokinReactor"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Types/Items/MiscItems/OrokinReactor"
+      }
     },
     {
       "level": 10,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle10",
       "minStanding": 100000,
       "maxStanding": 110000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Upgrades/Skins/Operator/Accessories/NightWaveEarPieceA"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Upgrades/Skins/Operator/Accessories/NightWaveEarPieceA"
+      }
     },
     {
       "level": 9,
@@ -740,36 +636,30 @@
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle7",
       "minStanding": 70000,
       "maxStanding": 80000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Upgrades/Mods/Nightwave/MagnusNightwaveMod"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Upgrades/Mods/Nightwave/MagnusNightwaveMod"
+      }
     },
     {
       "level": 6,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle6",
       "minStanding": 60000,
       "maxStanding": 70000,
-      "reward": [
-        {
-          "ItemCount": 50,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 50,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     },
     {
       "level": 5,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle5",
       "minStanding": 50000,
       "maxStanding": 60000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Upgrades/Skins/MeleeDangles/CephalonSugatraDangle"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Upgrades/Skins/MeleeDangles/CephalonSugatraDangle"
+      }
     },
     {
       "level": 4,
@@ -797,12 +687,10 @@
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle1",
       "minStanding": 10000,
       "maxStanding": 20000,
-      "reward": [
-        {
-          "ItemCount": 150,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 150,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraSeasonThreeCreds"
+      }
     }
   ],
   "favours": [

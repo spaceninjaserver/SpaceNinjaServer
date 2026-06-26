@@ -95,72 +95,60 @@
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle15",
       "minStanding": 150000,
       "maxStanding": 160000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Upgrades/Skins/Effects/FootstepsEidolon"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Upgrades/Skins/Effects/FootstepsEidolon"
+      }
     },
     {
       "level": 14,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle14",
       "minStanding": 140000,
       "maxStanding": 150000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Types/Items/MiscItems/FormaAura"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Types/Items/MiscItems/FormaAura"
+      }
     },
     {
       "level": 13,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle13",
       "minStanding": 130000,
       "maxStanding": 140000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Types/Items/MiscItems/OrokinCatalyst"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Types/Items/MiscItems/OrokinCatalyst"
+      }
     },
     {
       "level": 12,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle12",
       "minStanding": 120000,
       "maxStanding": 130000,
-      "reward": [
-        {
-          "ItemCount": 10000,
-          "ItemType": "/Lotus/Types/Items/MiscItems/Kuva"
-        }
-      ]
+      "reward": {
+        "ItemCount": 10000,
+        "ItemType": "/Lotus/Types/Items/MiscItems/Kuva"
+      }
     },
     {
       "level": 11,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle11",
       "minStanding": 110000,
       "maxStanding": 120000,
-      "reward": [
-        {
-          "ItemCount": 50,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraWolfTwoCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 50,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraWolfTwoCreds"
+      }
     },
     {
       "level": 10,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle10",
       "minStanding": 100000,
       "maxStanding": 110000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Types/Items/MiscItems/OrokinReactor"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Types/Items/MiscItems/OrokinReactor"
+      }
     },
     {
       "level": 9,
@@ -174,96 +162,80 @@
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle8",
       "minStanding": 80000,
       "maxStanding": 90000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Upgrades/Skins/Sigils/EnergySigilA"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Upgrades/Skins/Sigils/EnergySigilA"
+      }
     },
     {
       "level": 7,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle7",
       "minStanding": 70000,
       "maxStanding": 80000,
-      "reward": [
-        {
-          "ItemCount": 10000,
-          "ItemType": "/Lotus/Types/Items/MiscItems/Kuva"
-        }
-      ]
+      "reward": {
+        "ItemCount": 10000,
+        "ItemType": "/Lotus/Types/Items/MiscItems/Kuva"
+      }
     },
     {
       "level": 6,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle6",
       "minStanding": 60000,
       "maxStanding": 70000,
-      "reward": [
-        {
-          "ItemCount": 50,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraWolfTwoCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 50,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraWolfTwoCreds"
+      }
     },
     {
       "level": 5,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle5",
       "minStanding": 50000,
       "maxStanding": 60000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Types/StoreItems/SuitCustomizations/ColourPickerGammaItemA"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Types/StoreItems/SuitCustomizations/ColourPickerGammaItemA"
+      }
     },
     {
       "level": 4,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle4",
       "minStanding": 40000,
       "maxStanding": 50000,
-      "reward": [
-        {
-          "ItemCount": 3,
-          "ItemType": "/Lotus/Types/Items/MiscItems/OrokinCell"
-        }
-      ]
+      "reward": {
+        "ItemCount": 3,
+        "ItemType": "/Lotus/Types/Items/MiscItems/OrokinCell"
+      }
     },
     {
       "level": 3,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle3",
       "minStanding": 30000,
       "maxStanding": 40000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Types/StoreItems/SlotItems/TwoSentinelSlotItem"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Types/StoreItems/SlotItems/TwoSentinelSlotItem"
+      }
     },
     {
       "level": 2,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle2",
       "minStanding": 20000,
       "maxStanding": 30000,
-      "reward": [
-        {
-          "ItemCount": 1,
-          "ItemType": "/Lotus/Upgrades/Mods/FusionBundles/EliteAlertFusionBundleLarge"
-        }
-      ]
+      "reward": {
+        "ItemCount": 1,
+        "ItemType": "/Lotus/Upgrades/Mods/FusionBundles/EliteAlertFusionBundleLarge"
+      }
     },
     {
       "level": 1,
       "name": "/Lotus/Language/Syndicates/RadioLegionTitle1",
       "minStanding": 10000,
       "maxStanding": 20000,
-      "reward": [
-        {
-          "ItemCount": 100,
-          "ItemType": "/Lotus/Types/Items/MiscItems/NoraWolfTwoCreds"
-        }
-      ]
+      "reward": {
+        "ItemCount": 100,
+        "ItemType": "/Lotus/Types/Items/MiscItems/NoraWolfTwoCreds"
+      }
     }
   ],
   "favours": [
