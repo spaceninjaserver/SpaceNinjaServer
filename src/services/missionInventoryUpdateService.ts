@@ -2246,6 +2246,11 @@ async function getRandomMissionDrops(
                 const drop = getRandomRewardByChance(rotationRewards, rng);
                 if (drop) {
                     drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount });
+
+                    // Spy mission rewards should show as "Identified"
+                    if (RewardInfo.VaultsCracked) {
+                        drops[drops.length - 1].FromEnemyCache = true;
+                    }
                 }
             }
         });
