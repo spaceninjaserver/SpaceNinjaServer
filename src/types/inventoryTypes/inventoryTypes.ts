@@ -561,7 +561,7 @@ export interface IInventoryClient
     RetroPlayAllConvos?: boolean;
     RetroDisableKissInboxMessage?: boolean;
     Sketches?: ISketch[];
-    WeeklyGuildVaultBonusInfo?: IWeeklyGuildVaultBonusInfo;
+    WeeklyGuildVaultBonusInfo?: IWeeklyGuildVaultBonus[] | IWeeklyGuildVaultBonus; // should be an array
 }
 
 export interface IAffiliation {
@@ -1411,7 +1411,7 @@ export interface ISketch {
     canvas?: string;
 }
 
-export interface IWeeklyGuildVaultBonusInfo {
+export interface IWeeklyGuildVaultBonus {
     Progress: number;
     WeekCount: number;
     BonusRegion: string;

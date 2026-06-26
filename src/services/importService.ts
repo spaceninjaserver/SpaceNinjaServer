@@ -596,7 +596,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     if (client.Sketches !== undefined) {
         db.Sketches = client.Sketches;
     }
-    if (typeof client.WeeklyGuildVaultBonusInfo == "object") {
+    if (client.WeeklyGuildVaultBonusInfo !== undefined) {
         db.WeeklyGuildVaultBonusInfo = client.WeeklyGuildVaultBonusInfo;
     }
 

@@ -101,7 +101,7 @@ import type {
     IDialogueCounter,
     ISketch,
     IHybridFusionTreasure,
-    IWeeklyGuildVaultBonusInfo,
+    IWeeklyGuildVaultBonus,
     IWeekGuildVaultBonusReward
 } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
@@ -1587,7 +1587,7 @@ const weekGuildVaultBonusRewardSchema = new Schema<IWeekGuildVaultBonusReward>(
     { _id: false }
 );
 
-const weeklyGuildVaultBonusInfoSchema = new Schema<IWeeklyGuildVaultBonusInfo>(
+const weeklyGuildVaultBonusSchema = new Schema<IWeeklyGuildVaultBonus>(
     {
         Progress: { type: Number, required: true },
         WeekCount: { type: Number, required: true },
@@ -2061,7 +2061,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         Sketches: { type: [sketchSchema], default: undefined },
 
-        WeeklyGuildVaultBonusInfo: weeklyGuildVaultBonusInfoSchema
+        WeeklyGuildVaultBonusInfo: { type: [weeklyGuildVaultBonusSchema], default: undefined }
     },
     { timestamps: { createdAt: "Created", updatedAt: false } }
 );

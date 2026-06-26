@@ -2,7 +2,7 @@ import type { RequestHandler } from "express";
 import { logger } from "../../utils/logger.ts";
 import { getRandomElement } from "../../services/rngService.ts";
 import type { ITypeCount } from "../../types/commonTypes.ts";
-import type { IWeekGuildVaultBonusReward } from "../../types/inventoryTypes/inventoryTypes.ts";
+import type { IWeekGuildVaultBonusReward, IWeeklyGuildVaultBonus } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getInventory2 } from "../../services/inventoryService.ts";
 
@@ -12,48 +12,48 @@ export const guildVaultBonusRewardsController: RequestHandler = async (req, res)
         const payload = JSON.parse(String(req.body)) as IRollGuildVaultBonusRequest;
 
         const inventory = await getInventory2(accountId, "WeeklyGuildVaultBonusInfo");
-        if (inventory.WeeklyGuildVaultBonusInfo?.WeekCount != payload.WeekCount) {
-            const tierAReward = getRandomElement(tierARewards)!;
-            const tierBReward = getRandomElement(tierBRewards)!;
-            const tierCReward = getRandomElement(tierCRewards)!;
-            const tierDReward = getRandomElement(tierDRewards)!;
-            inventory.WeeklyGuildVaultBonusInfo = {
-                Progress: 0,
-                WeekCount: payload.WeekCount,
-                BonusRegion: "/Lotus/Language/Locations/Earth", // TODO: Is this the correct format? What planets are eligible? Does the server need to handle anything for this "bonus"?
-                Rewards: [
-                    {
-                        RewardClaimed: false,
-                        PointThreshold: 500,
-                        ItemCount: tierAReward.ItemCount,
-                        Reward: tierAReward.ItemType
-                    },
-                    {
-                        RewardClaimed: false,
-                        PointThreshold: 1000,
-                        ItemCount: tierBReward.ItemCount,
-                        Reward: tierBReward.ItemType
-                    },
-                    {
-                        RewardClaimed: false,
-                        PointThreshold: 1500,
-                        ItemCount: tierCReward.ItemCount,
-                        Reward: tierCReward.ItemType
-                    },
-                    {
-                        RewardClaimed: false,
-                        PointThreshold: 2000,
-                        ItemCount: tierDReward.ItemCount,
-                        Reward: tierDReward.ItemType
-                    }
-                ]
-            };
-            await inventory.save();
-        }
+        const tierAReward = getRandomElement(tierARewards)!;
+        const tierBReward = getRandomElement(tierBRewards)!;
+        const tierCReward = getRandomElement(tierCRewards)!;
+        const tierDReward = getRandomElement(tierDRewards)!;
+        const weeklyBonus: IWeeklyGuildVaultBonus = {
+            Progress: 0,
+            WeekCount: payload.WeekCount,
+            BonusRegion: "/Lotus/Language/Locations/Earth", // TODO: What planets are eligible? Does the server need to handle anything for this "bonus"?
+            Rewards: [
+                {
+                    RewardClaimed: false,
+                    PointThreshold: 500,
+                    ItemCount: tierAReward.ItemCount,
+                    Reward: tierAReward.ItemType
+                },
+                {
+                    RewardClaimed: false,
+                    PointThreshold: 1000,
+                    ItemCount: tierBReward.ItemCount,
+                    Reward: tierBReward.ItemType
+                },
+                {
+                    RewardClaimed: false,
+                    PointThreshold: 1500,
+                    ItemCount: tierCReward.ItemCount,
+                    Reward: tierCReward.ItemType
+                },
+                {
+                    RewardClaimed: false,
+                    PointThreshold: 2000,
+                    ItemCount: tierDReward.ItemCount,
+                    Reward: tierDReward.ItemType
+                }
+            ]
+        };
+
+        inventory.WeeklyGuildVaultBonusInfo = [weeklyBonus]; // TODO: Probably should not replace the entire array if there were unclaimed rewards or something?
+        await inventory.save();
 
         res.json({
-            NewRewards: inventory.WeeklyGuildVaultBonusInfo.Rewards,
-            BonusRegion: inventory.WeeklyGuildVaultBonusInfo.BonusRegion
+            NewRewards: weeklyBonus.Rewards,
+            BonusRegion: weeklyBonus.BonusRegion
         } satisfies IRollGuildVaultBonusResponse);
     } else {
         logger.debug(`data provided to ${req.path}: ${String(req.body)}`);
