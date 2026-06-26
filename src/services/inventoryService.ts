@@ -2803,8 +2803,8 @@ export const addKahlProgress = (
 ): void => {
     for (const info of value) {
         let stockEarned = 0;
-        const affiliation = inventory.Affiliations.find(x => x.Tag == info.Syndicate);
-        const mission = affiliation!.WeeklyMissions![0];
+        const kahl = inventory.Affiliations.find(x => x.Tag == info.Syndicate)!;
+        const mission = kahl.WeeklyMissions![kahl.WeeklyMissions!.length - 1];
         if (info.ResetChallenges) {
             mission.CompletedMission = true;
         }
