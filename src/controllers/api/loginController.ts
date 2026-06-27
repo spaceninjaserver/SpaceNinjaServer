@@ -27,7 +27,7 @@ import { getTokenForClient, getTunablesForClient } from "../../services/tunables
 import type { AddressInfo } from "node:net";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 import { args } from "../../helpers/commandLineArguments.ts";
-import { buildLabelToVersionInt } from "../../helpers/versionHelper.ts";
+import { buildLabelToVersionInt, buildVersionToInt } from "../../helpers/versionHelper.ts";
 import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 
 export const loginController: RequestHandler = async (request, response) => {
@@ -229,7 +229,10 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
             //{ experiment: "quick_buy_visible", experimentGroup: "quick_buy_visible" } // Shows "quick buy" market section for MR 4+ players
         ];
     }
-    if (buildVersionInt >= gameToBuildVersionInt["30.0.0"]) {
+    if (
+        buildVersionInt >= gameToBuildVersionInt["30.0.0"] &&
+        buildVersionInt <= buildVersionToInt("2026.05.13.13.07")
+    ) {
         resp.DTLS = config.dtls ?? 0; // bit 0 enables DTLS. if enabled, additional bits can be set, e.g. bit 2 to enable logging. on live, the value is 99.
     }
     if (buildVersionInt >= gameToBuildVersionInt["31.5.0"]) {
