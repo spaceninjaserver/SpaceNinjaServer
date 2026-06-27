@@ -803,7 +803,8 @@ export const getInventoryResponse = async (
             }
         }
     }
-    if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) < 0) {
+    // Deferring ids conversions for upgrades & skins for pre-U18.18 clients
+    if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) >= 0) {
         for (const upgrade of inventoryResponse.Upgrades) {
             toLegacyOid(upgrade.ItemId);
         }
@@ -869,7 +870,7 @@ export const getInventoryResponse = async (
         return inventoryResponse;
     }
     for (const upgrade of inventoryResponse.Upgrades) {
-        toLegacyOid(upgrade.ItemId);
+        toLegacyOid(upgrade.ItemId); // deferred conversions of ids
         const json = JSON.parse(upgrade.UpgradeFingerprint || '{"lvl":0}') as { lvl?: number };
         const rank: number = json.lvl ?? 0;
         upgrade.UpgradeFingerprint = convertToLegacyFingerprint(upgrade.UpgradeFingerprint || '{"lvl":0}');
@@ -888,7 +889,7 @@ export const getInventoryResponse = async (
         }
     }
     for (const skin of inventoryResponse.WeaponSkins) {
-        toLegacyOid(skin.ItemId);
+        toLegacyOid(skin.ItemId); // deferred conversions of ids
         if (skin.UpgradeType) {
             skin.UpgradeFingerprint = convertToLegacyFingerprint(skin.UpgradeFingerprint || '{"lvl":0}');
         }
