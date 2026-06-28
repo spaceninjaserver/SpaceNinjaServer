@@ -1589,7 +1589,7 @@ const weekGuildVaultBonusRewardSchema = new Schema<IWeekGuildVaultBonusReward>(
 
 const weeklyGuildVaultBonusSchema = new Schema<IWeeklyGuildVaultBonus>(
     {
-        Progress: { type: Number, required: true },
+        Progress: Number,
         WeekCount: { type: Number, required: true },
         BonusRegion: { type: String, required: true },
         Rewards: { type: [weekGuildVaultBonusRewardSchema], required: true }

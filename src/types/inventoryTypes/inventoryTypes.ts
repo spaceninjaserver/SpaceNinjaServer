@@ -1412,7 +1412,7 @@ export interface ISketch {
 }
 
 export interface IWeeklyGuildVaultBonus {
-    Progress: number;
+    Progress?: number;
     WeekCount: number;
     BonusRegion: string;
     Rewards: IWeekGuildVaultBonusReward[];
