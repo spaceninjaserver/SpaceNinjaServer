@@ -3433,36 +3433,45 @@ document.querySelectorAll(".config-form .input-group").forEach(grp => {
 });
 
 function doSaveConfigInt(id) {
+    const value = parseInt(document.getElementById(id).value);
     $.post({
         url: "/custom/setConfig?" + window.authz,
         contentType: "application/json",
         data: JSON.stringify({
-            [id]: parseInt(document.getElementById(id).value)
+            [id]: value
         })
+    }).done(function () {
+        config_data[id] = value;
     });
 }
 
 function doSaveConfigFloat(id) {
+    const value = parseFloat(document.getElementById(id).value);
     $.post({
         url: "/custom/setConfig?" + window.authz,
         contentType: "application/json",
         data: JSON.stringify({
-            [id]: parseFloat(document.getElementById(id).value)
+            [id]: value
         })
+    }).done(function () {
+        config_data[id] = value;
     });
 }
 
 function doSaveConfigStringArray(id) {
+    const value = document
+        .getElementById(id)
+        .getAttribute("data-tags-value")
+        .split(", ")
+        .filter(x => x);
     $.post({
         url: "/custom/setConfig?" + window.authz,
         contentType: "application/json",
         data: JSON.stringify({
-            [id]: document
-                .getElementById(id)
-                .getAttribute("data-tags-value")
-                .split(", ")
-                .filter(x => x)
+            [id]: value
         })
+    }).done(function () {
+        config_data[id] = value;
     });
 }
 
