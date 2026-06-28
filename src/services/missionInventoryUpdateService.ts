@@ -46,7 +46,6 @@ import {
     combineInventoryChanges,
     CurrencyType,
     ensureUserHasSteelPathRewards,
-    eStandingSource,
     getDialogue,
     giveNemesisPetRecipe,
     giveNemesisWeaponRecipe,
@@ -55,7 +54,8 @@ import {
     processGoalProgressUpdates,
     updateCurrency,
     updateEntratiVault,
-    updateIncentiveStates
+    updateIncentiveStates,
+    updateSyndicate
 } from "./inventoryService.ts";
 import { addQuestKey, updateQuestKey } from "./questService.ts";
 import { Types } from "mongoose";
@@ -364,16 +364,8 @@ export const addMissionInventoryUpdates = async (
                 await updateQuestKey(inventory, value);
                 break;
             case "AffiliationChanges":
-                for (const affiliation of value) {
-                    await addStanding(
-                        inventory,
-                        buildLabel,
-                        affiliation.Tag,
-                        affiliation.Standing,
-                        undefined,
-                        eStandingSource.Mission
-                    );
-                }
+                // Update 'Standing' and 'Title'. Associated alignment & limit bin updates are also provided by the client.
+                updateSyndicate(inventory, value);
                 break;
             // Incarnon Challenges
             case "EvolutionProgress": {

@@ -32,7 +32,7 @@ import type { ILoadOutPresets } from "./saveLoadoutTypes.ts";
 import type { IEquipmentClient } from "./equipmentTypes.ts";
 import type { TMissionType } from "warframe-public-export-plus";
 
-interface IAffiliationChange {
+export interface IAffiliationChange {
     Tag: string;
     Standing: number;
     Title: number;

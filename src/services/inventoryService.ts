@@ -32,7 +32,7 @@ import type {
 } from "../types/inventoryTypes/inventoryTypes.ts";
 import { eInventorySlot, equipmentKeys, slotNames } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdateTypes.ts";
-import type { IGoalsProgress, IKeyChainRequest } from "../types/requestTypes.ts";
+import type { IAffiliationChange, IGoalsProgress, IKeyChainRequest } from "../types/requestTypes.ts";
 import { logger } from "../utils/logger.ts";
 import {
     convertInboxMessage,
@@ -1886,7 +1886,6 @@ const updateStandingLimit = (
 
 export const eStandingSource = {
     Medallion: 0b101, // Effect on daily cap depends on syndicate. Propagates to aligned syndicates.
-    Mission: 0b000, // Does not apply/update daily cap. Does not propagate to aligned syndicates. (In mission report, the client provides all the affiliation & bin changes.)
     Alignment: 0b010, // Applies & updates daily cap. Does not propagate to aligned syndicates (to avoid infinite recursion).
     Misc: 0b011 // Applies & updates daily cap. Propagates to aligned syndicates.
 };
@@ -2866,6 +2865,27 @@ export const setBooster = (ItemType: string, expiryTimeSecs: number, inventory: 
         existingBooster.ExpiryDate = Math.max(existingBooster.ExpiryDate, expiryTimeSecs);
     } else {
         Boosters.push({ ItemType, ExpiryDate: expiryTimeSecs });
+    }
+};
+
+export const updateSyndicate = (
+    inventory: Pick<TInventoryDatabaseDocument, "Affiliations">,
+    syndicateUpdate: IAffiliationChange[]
+): void => {
+    for (const affiliation of syndicateUpdate) {
+        const syndicate = inventory.Affiliations.find(x => x.Tag == affiliation.Tag);
+        if (syndicate !== undefined) {
+            syndicate.Standing += affiliation.Standing;
+            syndicate.Title = syndicate.Title === undefined ? affiliation.Title : syndicate.Title + affiliation.Title;
+        } else {
+            inventory.Affiliations.push({
+                Standing: affiliation.Standing,
+                Title: affiliation.Title,
+                Tag: affiliation.Tag,
+                FreeFavorsEarned: [],
+                FreeFavorsUsed: []
+            });
+        }
     }
 };
 
