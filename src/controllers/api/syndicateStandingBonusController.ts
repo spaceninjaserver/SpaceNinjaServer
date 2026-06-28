@@ -79,6 +79,8 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
         eStandingSource.Medallion
     );
 
+    logger.debug(`affiliationMods:`, affiliationMods);
+
     await inventory.save();
 
     res.json({

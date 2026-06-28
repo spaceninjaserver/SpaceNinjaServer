@@ -1885,9 +1885,10 @@ const updateStandingLimit = (
 };
 
 export const eStandingSource = {
-    Medallion: 0,
-    Mission: 1, // in mission report, the client provides both the affiliation & bin changes, so when using this source with addStanding, it does not update the daily cap.
-    Misc: 2
+    Medallion: 0b101, // Effect on daily cap depends on syndicate. Propagates to aligned syndicates.
+    Mission: 0b000, // Does not apply/update daily cap. Does not propagate to aligned syndicates. (In mission report, the client provides all the affiliation & bin changes.)
+    Alignment: 0b010, // Applies & updates daily cap. Does not propagate to aligned syndicates (to avoid infinite recursion).
+    Misc: 0b011 // Applies & updates daily cap. Propagates to aligned syndicates.
 };
 type TStandingSource = (typeof eStandingSource)[keyof typeof eStandingSource];
 
@@ -1914,10 +1915,7 @@ export const addStanding = async (
         gainedStanding = -71000 - syndicate.Standing;
     }
 
-    if (
-        source == eStandingSource.Misc ||
-        (source == eStandingSource.Medallion && syndicateMeta.medallionsCappedByDailyLimit)
-    ) {
+    if ((source == eStandingSource.Medallion && syndicateMeta.medallionsCappedByDailyLimit) || source & 0b010) {
         if (gainedStanding > getStandingLimit(inventory, syndicateMeta.dailyLimitBin)) {
             gainedStanding = getStandingLimit(inventory, syndicateMeta.dailyLimitBin);
         }
@@ -1932,9 +1930,16 @@ export const addStanding = async (
     affiliationMods.push(affiliationMod);
 
     if (syndicateMeta.alignments) {
-        if (source != eStandingSource.Mission) {
+        if (source & 0b001) {
             for (const [tag, factor] of Object.entries(syndicateMeta.alignments)) {
-                await addStanding(inventory, buildLabel, tag, gainedStanding * factor, affiliationMods, source);
+                await addStanding(
+                    inventory,
+                    buildLabel,
+                    tag,
+                    gainedStanding * factor,
+                    affiliationMods,
+                    eStandingSource.Alignment
+                );
             }
         } else {
             while (syndicate.Standing < getMinStanding(syndicateMeta, syndicate.Title ?? 0)) {
