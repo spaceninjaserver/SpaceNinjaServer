@@ -509,7 +509,7 @@ const isPersonalResearch = (uniqueName: string): boolean | null => {
     if (!(uniqueName in ExportDojoRecipes.research)) {
         return null;
     }
-    return uniqueName in ExportDojoRecipes.fabrications || !!ExportDojoRecipes.research[uniqueName].resultType;
+    return !!ExportDojoRecipes.research[uniqueName].resultType;
 };
 
 const getSalvageCategory = (
@@ -581,5 +581,13 @@ const finishComponentRepair = (
 export const selfTestGuildTech = (): void => {
     if (isPersonalResearch("/Lotus/Types/Items/ShipFeatureItems/Railjack/RailjackHullFeatureItemBlueprint") !== true) {
         logger.warn(`isPersonalResearch self-test failed for RailjackHullFeatureItemBlueprint`);
+    }
+
+    if (isPersonalResearch("/Lotus/Types/Recipes/Railjack/Weapons/MissileLauncherEMPTierABlueprint") !== false) {
+        logger.warn(`isPersonalResearch self-test failed for MissileLauncherEMPTierABlueprint`);
+    }
+
+    if (isPersonalResearch("I am not a recipe") !== null) {
+        logger.warn(`isPersonalResearch self-test failed for non-existent recipe`);
     }
 };
