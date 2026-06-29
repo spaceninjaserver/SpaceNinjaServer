@@ -175,12 +175,14 @@ const getItemListsController: RequestHandler = (req, response) => {
         ...Object.values(ExportDojoRecipes.decos).flatMap(d => d.ingredients.map(i => i.ItemType))
     ]);
     for (const [uniqueName, item] of Object.entries(ExportWarframes)) {
-        res[item.productCategory].push({
-            uniqueName,
-            name: getString(item.name, lang),
-            exalted: item.exalted,
-            maxLevelCap: item.maxLevelCap
-        });
+        if (item.productCategory != "SpecialItems") {
+            res[item.productCategory].push({
+                uniqueName,
+                name: getString(item.name, lang),
+                exalted: item.exalted,
+                maxLevelCap: item.maxLevelCap
+            });
+        }
         item.abilities.forEach(ability => {
             if (!res.Abilities.some(x => x.uniqueName == ability.uniqueName)) {
                 res.Abilities.push({

@@ -359,7 +359,7 @@ export interface IWarframe {
     masteryReq: number;
     sprintSpeed: number;
     abilities: IAbility[];
-    productCategory: "MechSuits" | "SpaceSuits" | "Suits";
+    productCategory: string;
     passiveDescription?: string;
     exalted?: string[];
     longDescription?: string;
