@@ -304,15 +304,17 @@ const generateVendorManifest = (
         const cycleIndex = Math.trunc((now - cycleOffset) / cycleDuration);
         const rng = new SRng(mixSeeds(vendorSeed, cycleIndex));
         const offersToAdd: IVendorOffer[] = [];
-        if (fullStock) {
-            for (const rawItem of manifest.items) {
-                offersToAdd.push(rawItem);
-            }
-        } else if (manifest.isOneBinPerCycle) {
-            const binThisCycle = cycleIndex % 2; // Note: May want to check the actual number of bins, but this is only used for coda weapons right now.
-            for (const rawItem of manifest.items) {
-                if (rawItem.bin == binThisCycle) {
+        if (manifest.isOneBinPerCycle) {
+            if (fullStock) {
+                for (const rawItem of manifest.items) {
                     offersToAdd.push(rawItem);
+                }
+            } else {
+                const binThisCycle = cycleIndex % 2; // Note: May want to check the actual number of bins, but this is only used for coda weapons right now.
+                for (const rawItem of manifest.items) {
+                    if (rawItem.bin == binThisCycle) {
+                        offersToAdd.push(rawItem);
+                    }
                 }
             }
         } else {
@@ -365,15 +367,23 @@ const generateVendorManifest = (
                 manifest.numItems &&
                 (manifest.numItems.minValue != manifest.numItems.maxValue ||
                     manifest.numItems.minValue != numCountedOffers);
-            const numItemsTarget = manifest.numItems
+            const numItemsTarget = fullStock
                 ? numUncountedOffers +
-                  Math.min(
+                  Math.max(
                       Object.values(remainingItemCapacity).reduce((a, b) => a + b, 0),
-                      useRng
-                          ? rng.randomInt(manifest.numItems.minValue, manifest.numItems.maxValue)
-                          : manifest.numItems.minValue
+                      numOffersThatNeedToMatchABin == 0
+                          ? 0
+                          : Object.values(missingItemsPerBin).reduce((a, b) => a + b, 0)
                   )
-                : manifest.items.length;
+                : manifest.numItems
+                  ? numUncountedOffers +
+                    Math.min(
+                        Object.values(remainingItemCapacity).reduce((a, b) => a + b, 0),
+                        useRng
+                            ? rng.randomInt(manifest.numItems.minValue, manifest.numItems.maxValue)
+                            : manifest.numItems.minValue
+                    )
+                  : manifest.items.length;
             let i = 0;
             const rollableOffers = manifest.items.filter(x => x.probability !== undefined) as (Omit<
                 IVendorOffer,
@@ -581,4 +591,11 @@ export const selfTestServersideVendors = (): void => {
         "/Lotus/Types/Game/VendorManifests/Events/RadioLegionIntermission15VendorManifest",
         true
     );
+    // But this shouldn't be crazy. (Note that client may break even if item count is low if items are not generated well.)
+    if (
+        getVendorManifestByTypeName("/Lotus/Types/Game/VendorManifests/Duviri/AcrithisVendorManifest", true)!.VendorInfo
+            .ItemManifest.length > 200
+    ) {
+        logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/Duviri/AcrithisVendorManifest`);
+    }
 };
