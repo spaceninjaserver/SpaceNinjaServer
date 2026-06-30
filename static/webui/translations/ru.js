@@ -312,9 +312,10 @@ dict = {
     cheats_noHubDiscrimination: `Без дискриминации по хабам`,
 
     worldState: `Состояние мира`,
-    worldState_creditBoost: `Глобальный бустер Кредитов`,
-    worldState_affinityBoost: `Глобальный бустер Синтеза`,
-    worldState_resourceBoost: `Глобальный бустер Ресурсов`,
+    worldState_creditBoostMultiplier: `[UNTRANSLATED] Credit Boost Multiplier (0 to disable)`,
+    worldState_affinityBoostMultiplier: `[UNTRANSLATED] Affinity Boost Multiplier (0 to disable)`,
+    worldState_resourceBoostMultiplier: `[UNTRANSLATED] Resource Boost Multiplier (0 to disable)`,
+    worldState_resourceBoostMultiplierDesc: `[UNTRANSLATED] Values other than 0, 1, 2, 5, or 10 break Reactant pickups in Void Fissure missions.`,
     worldState_tennoLiveRelay: `Реле TennoLive`,
     worldState_baroTennoConRelay: `Реле Баро TennoCon`,
     worldState_saintPatrick: `День Святого Патрика`,

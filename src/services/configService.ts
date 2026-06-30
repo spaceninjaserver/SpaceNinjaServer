@@ -65,9 +65,9 @@ export interface IConfig {
         giveBreedingGroundsRewardsAtSum?: boolean;
     };
     worldState?: {
-        creditBoost?: boolean;
-        affinityBoost?: boolean;
-        resourceBoost?: boolean;
+        creditBoostMultiplier?: number;
+        affinityBoostMultiplier?: number;
+        resourceBoostMultiplier?: number;
         tennoLiveRelay?: boolean;
         baroTennoConRelay?: boolean;
         baroAlwaysAvailable?: boolean;

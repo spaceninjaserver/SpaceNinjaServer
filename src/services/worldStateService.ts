@@ -4342,38 +4342,38 @@ export const getWorldState = (
         });
     }
 
-    if (config.worldState?.creditBoost) {
+    if (config.worldState?.creditBoostMultiplier) {
         worldState.GlobalUpgrades.push({
             _id: toOid2("5b23106f283a555109666672", buildLabel),
             Activation: toMongoDate2(1740164400000, buildLabel),
             ExpiryDate: toMongoDate2(2000000000000, buildLabel),
             UpgradeType: "GAMEPLAY_MONEY_REWARD_AMOUNT",
             OperationType: "MULTIPLY",
-            Value: 2,
+            Value: config.worldState.creditBoostMultiplier,
             LocalizeTag: "",
             LocalizeDescTag: ""
         });
     }
-    if (config.worldState?.affinityBoost) {
+    if (config.worldState?.affinityBoostMultiplier) {
         worldState.GlobalUpgrades.push({
             _id: toOid2("5b23106f283a555109666673", buildLabel),
             Activation: toMongoDate2(1740164400000, buildLabel),
             ExpiryDate: toMongoDate2(2000000000000, buildLabel),
             UpgradeType: "GAMEPLAY_KILL_XP_AMOUNT",
             OperationType: "MULTIPLY",
-            Value: 2,
+            Value: config.worldState.affinityBoostMultiplier,
             LocalizeTag: "",
             LocalizeDescTag: ""
         });
     }
-    if (config.worldState?.resourceBoost) {
+    if (config.worldState?.resourceBoostMultiplier) {
         worldState.GlobalUpgrades.push({
             _id: toOid2("5b23106f283a555109666674", buildLabel),
             Activation: toMongoDate2(1740164400000, buildLabel),
             ExpiryDate: toMongoDate2(2000000000000, buildLabel),
             UpgradeType: "GAMEPLAY_PICKUP_AMOUNT",
             OperationType: "MULTIPLY",
-            Value: 2,
+            Value: config.worldState.resourceBoostMultiplier,
             LocalizeTag: "",
             LocalizeDescTag: ""
         });

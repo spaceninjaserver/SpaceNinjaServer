@@ -235,15 +235,15 @@ export const validateConfig = (): void => {
 export const syncConfigWithDatabase = (): void => {
     // Event messages are deleted after endDate. Since we don't use beginDate/endDate and instead have config toggles, we need to delete the messages once those bools are false.
     // Also, for some reason, I can't just do `Inbox.deleteMany(...)`; - it needs this whole circus.
-    if (!config.worldState?.creditBoost) {
+    if (!config.worldState?.creditBoostMultiplier) {
         void Account.updateMany({}, { $unset: { receivedEventMessage_creditBoost: 1 } }).then(() => {});
         void Inbox.deleteMany({ globaUpgradeId: "5b23106f283a555109666672" }).then(() => {});
     }
-    if (!config.worldState?.affinityBoost) {
+    if (!config.worldState?.affinityBoostMultiplier) {
         void Account.updateMany({}, { $unset: { receivedEventMessage_affinityBoost: 1 } }).then(() => {});
         void Inbox.deleteMany({ globaUpgradeId: "5b23106f283a555109666673" }).then(() => {});
     }
-    if (!config.worldState?.resourceBoost) {
+    if (!config.worldState?.resourceBoostMultiplier) {
         void Account.updateMany({}, { $unset: { receivedEventMessage_resourceBoost: 1 } }).then(() => {});
         void Inbox.deleteMany({ globaUpgradeId: "5b23106f283a555109666674" }).then(() => {});
     }

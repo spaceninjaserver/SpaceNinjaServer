@@ -311,9 +311,10 @@ dict = {
     cheats_noHubDiscrimination: `No Hub Discrimination`,
 
     worldState: `World State`,
-    worldState_creditBoost: `Credit Boost`,
-    worldState_affinityBoost: `Affinity Boost`,
-    worldState_resourceBoost: `Resource Boost`,
+    worldState_creditBoostMultiplier: `Credit Boost Multiplier (0 to disable)`,
+    worldState_affinityBoostMultiplier: `Affinity Boost Multiplier (0 to disable)`,
+    worldState_resourceBoostMultiplier: `Resource Boost Multiplier (0 to disable)`,
+    worldState_resourceBoostMultiplierDesc: `Values other than 0, 1, 2, 5, or 10 break Reactant pickups in Void Fissure missions.`,
     worldState_tennoLiveRelay: `TennoLive Relay`,
     worldState_baroTennoConRelay: `Baro's TennoCon Relay`,
     worldState_saintPatrick: `St. Patrick’s Day`,

@@ -1829,9 +1829,9 @@ const addCredits = async (
     const totalCredits = finalCredits.MissionCredits[1] + finalCredits.CreditsBonus[1] + rngRewardCredits;
     finalCredits.TotalCredits = [totalCredits, totalCredits];
 
-    if (config.worldState?.creditBoost) {
-        inventory.RegularCredits += finalCredits.TotalCredits[1];
-        finalCredits.TotalCredits[1] += finalCredits.TotalCredits[1];
+    if (config.worldState?.creditBoostMultiplier) {
+        inventory.RegularCredits += finalCredits.TotalCredits[1] * (config.worldState.creditBoostMultiplier - 1);
+        finalCredits.TotalCredits[1] *= config.worldState.creditBoostMultiplier;
     }
     const now = Math.trunc(Date.now() / 1000); // TOVERIFY: Should we maybe subtract mission time as to apply credit boosters that expired during mission?
     if ((inventory.Boosters.find(x => x.ItemType == "/Lotus/Types/Boosters/CreditBooster")?.ExpiryDate ?? 0) > now) {

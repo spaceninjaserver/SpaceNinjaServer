@@ -312,9 +312,10 @@ dict = {
     cheats_noHubDiscrimination: `Hubs unifiés`,
 
     worldState: `Carte Solaire`,
-    worldState_creditBoost: `Booster de Crédit`,
-    worldState_affinityBoost: `Booster d'Affinité`,
-    worldState_resourceBoost: `Booster de Ressource`,
+    worldState_creditBoostMultiplier: `[UNTRANSLATED] Credit Boost Multiplier (0 to disable)`,
+    worldState_affinityBoostMultiplier: `[UNTRANSLATED] Affinity Boost Multiplier (0 to disable)`,
+    worldState_resourceBoostMultiplier: `[UNTRANSLATED] Resource Boost Multiplier (0 to disable)`,
+    worldState_resourceBoostMultiplierDesc: `[UNTRANSLATED] Values other than 0, 1, 2, 5, or 10 break Reactant pickups in Void Fissure missions.`,
     worldState_tennoLiveRelay: `Relais TennoLive`,
     worldState_baroTennoConRelay: `Relais Baro TennoCon`,
     worldState_saintPatrick: `Saint-Patrick`,

@@ -59,9 +59,9 @@
     "giveBreedingGroundsRewardsAtSum": true
   },
   "worldState": {
-    "creditBoost": false,
-    "affinityBoost": false,
-    "resourceBoost": false,
+    "creditBoostMultiplier": 0,
+    "affinityBoostMultiplier": 0,
+    "resourceBoostMultiplier": 0,
     "tennoLiveRelay": false,
     "baroTennoConRelay": false,
     "baroAlwaysAvailable": false,

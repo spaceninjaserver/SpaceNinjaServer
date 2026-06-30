@@ -312,9 +312,10 @@ dict = {
     cheats_noHubDiscrimination: `Keine Hub-Trennung`,
 
     worldState: `Weltstatus`,
-    worldState_creditBoost: `Event Booster: Credit`,
-    worldState_affinityBoost: `Event Booster: Erfahrung`,
-    worldState_resourceBoost: `Event Booster: Ressourcen`,
+    worldState_creditBoostMultiplier: `Credit-Booster-Multiplikator (0 zum deaktivieren)`,
+    worldState_affinityBoostMultiplier: `Erfahrungs-Booster-Multiplikator (0 zum deaktivieren)`,
+    worldState_resourceBoostMultiplier: `Ressourcen-Booster-Multiplikator (0 zum deaktivieren)`,
+    worldState_resourceBoostMultiplierDesc: `Werte außer 0, 1, 2, 5 oder 10 brechen Reaktant-Drops in Void-Riss-Missionen.`,
     worldState_tennoLiveRelay: `TennoLive Relais`,
     worldState_baroTennoConRelay: `Baros TennoCon-Relais`,
     worldState_saintPatrick: `St. Patrick’s Day`,

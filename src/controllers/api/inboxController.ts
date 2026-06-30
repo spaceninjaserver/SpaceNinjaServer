@@ -216,7 +216,7 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
         });
     }
 
-    if (config.worldState?.creditBoost && !account.receivedEventMessage_creditBoost) {
+    if (config.worldState?.creditBoostMultiplier && !account.receivedEventMessage_creditBoost) {
         account.receivedEventMessage_creditBoost = true;
         newEventMessages.push({
             globaUpgradeId: new Types.ObjectId("5b23106f283a555109666672"),
@@ -228,7 +228,7 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
             CrossPlatform: true
         });
     }
-    if (config.worldState?.affinityBoost && !account.receivedEventMessage_affinityBoost) {
+    if (config.worldState?.affinityBoostMultiplier && !account.receivedEventMessage_affinityBoost) {
         account.receivedEventMessage_affinityBoost = true;
         newEventMessages.push({
             globaUpgradeId: new Types.ObjectId("5b23106f283a555109666673"),
@@ -240,7 +240,7 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
             CrossPlatform: true
         });
     }
-    if (config.worldState?.resourceBoost && !account.receivedEventMessage_resourceBoost) {
+    if (config.worldState?.resourceBoostMultiplier && !account.receivedEventMessage_resourceBoost) {
         account.receivedEventMessage_resourceBoost = true;
         newEventMessages.push({
             globaUpgradeId: new Types.ObjectId("5b23106f283a555109666674"),

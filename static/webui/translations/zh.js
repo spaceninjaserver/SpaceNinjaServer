@@ -312,9 +312,10 @@ dict = {
     cheats_noHubDiscrimination: `中继站无地区限制`,
 
     worldState: `世界状态配置`,
-    worldState_creditBoost: `现金加成`,
-    worldState_affinityBoost: `经验加成`,
-    worldState_resourceBoost: `资源加成`,
+    worldState_creditBoostMultiplier: `[UNTRANSLATED] Credit Boost Multiplier (0 to disable)`,
+    worldState_affinityBoostMultiplier: `[UNTRANSLATED] Affinity Boost Multiplier (0 to disable)`,
+    worldState_resourceBoostMultiplier: `[UNTRANSLATED] Resource Boost Multiplier (0 to disable)`,
+    worldState_resourceBoostMultiplierDesc: `[UNTRANSLATED] Values other than 0, 1, 2, 5, or 10 break Reactant pickups in Void Fissure missions.`,
     worldState_tennoLiveRelay: `TennoLive中继站`,
     worldState_baroTennoConRelay: `Baro的TennoCon中继站`,
     worldState_saintPatrick: `圣帕特里克节`,
