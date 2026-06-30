@@ -3130,7 +3130,7 @@ export const getBoosterPack = async (
         ].includes(uniqueName)
     ) {
         // PE+ already have latest data - so there is no need to do anything
-        if (version_compare(buildLabel, gameToBuildVersion["42.0.6"]) < 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["43.0.4"]) < 0) {
             const target = "RandomProjection";
             const version = await getLegacyDataVersion(target, buildLabel);
             if (version) {
