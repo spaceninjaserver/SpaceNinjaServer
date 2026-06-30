@@ -347,7 +347,7 @@ const crewMemberSchema = new Schema<ICrewMemberDatabase>(
         WeaponId: { type: Schema.Types.ObjectId, default: "000000000000000000000000" },
         XP: { type: Number, default: 0 },
         PowersuitType: { type: String, required: false },
-        Configs: [ItemConfigSchema],
+        Configs: [{ type: ItemConfigSchema, required: true }],
         SecondInCommand: { type: Boolean, default: false }
     },
     { id: false }
@@ -1125,7 +1125,7 @@ detailsSchema.set("toJSON", {
 const EquipmentSchema = new Schema<IEquipmentDatabase>(
     {
         ItemType: String,
-        Configs: { type: [ItemConfigSchema], default: [] },
+        Configs: { type: [{ type: ItemConfigSchema, required: true }], default: [] },
         UpgradeVer: { type: Number, default: 101 },
         XP: { type: Number, default: 0 },
         Features: Number,
