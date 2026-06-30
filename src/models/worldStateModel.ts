@@ -43,6 +43,9 @@ const alertSchema = new Schema<IAlertDatabase>({
             items: [String],
             countedItems: [typeCountSchema]
         },
+        levelOverride: String,
+        enemySpec: String,
+        extraEnemySpec: String,
         minEnemyLevel: { type: Number, required: true },
         maxEnemyLevel: { type: Number, required: true },
         descText: String,
@@ -51,5 +54,3 @@ const alertSchema = new Schema<IAlertDatabase>({
 });
 
 alertSchema.index({ Expiry: 1 }, { expireAfterSeconds: 0 });
-
-export const Alert = model<IAlertDatabase>("Alert", alertSchema);

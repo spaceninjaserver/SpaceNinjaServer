@@ -93,7 +93,8 @@ import {
     idToBountyCycle,
     idToDay,
     idToWeek,
-    pushClassicBounties
+    pushClassicBounties,
+    populateAlerts
 } from "./worldStateService.ts";
 import { config } from "./configService.ts";
 import libraryDailyTasks from "../../static/fixed_responses/libraryDailyTasks.json" with { type: "json" };
@@ -1217,7 +1218,9 @@ export const addMissionRewards = async (
     let missionCompletionCredits = 0;
 
     if (rewardInfo.alertId) {
-        const alert = getWorldState(buildLabel).Alerts.find(x => x._id.$oid == rewardInfo.alertId);
+        const worldState = getWorldState(buildLabel);
+        await populateAlerts(worldState);
+        const alert = worldState.Alerts.find(x => x._id.$oid == rewardInfo.alertId);
         if (!alert) {
             logger.warn(`mission completed unknown alert`, { alertId: rewardInfo.alertId });
         } else {
@@ -2519,7 +2522,9 @@ async function getRandomMissionDrops(
                 }
             }
         } else if (RewardInfo.alertId) {
-            const alert = getWorldState(buildLabel).Alerts.find(x => x._id.$oid == RewardInfo.alertId);
+            const worldState = getWorldState(buildLabel);
+            await populateAlerts(worldState);
+            const alert = worldState.Alerts.find(x => x._id.$oid == RewardInfo.alertId);
             if (alert && alert.MissionInfo.enemyCacheOverride) {
                 const deck = ExportRewards[alert.MissionInfo.enemyCacheOverride];
                 for (let rotation = 0; rotation != RewardInfo.EnemyCachesFound; ++rotation) {

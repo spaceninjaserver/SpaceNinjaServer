@@ -132,6 +132,9 @@ export interface IAlertDatabase {
             items?: string[];
             countedItems?: { ItemType: string; ItemCount: number }[];
         };
+        levelOverride?: string;
+        enemySpec?: string;
+        extraEnemySpec?: string;
         minEnemyLevel: number;
         maxEnemyLevel: number;
         descText?: string;

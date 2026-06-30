@@ -19,7 +19,6 @@ import type {
     ICalendarEvent,
     ICalendarSeason,
     IAlert,
-    IAlertDatabase,
     IGoal,
     IInvasion,
     ILiteSortie,
@@ -43,7 +42,7 @@ import type {
 } from "../types/worldStateTypes.ts";
 import { toMongoDate2, toOid, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
-import { DailyDeal, Fissure, Alert } from "../models/worldStateModel.ts";
+import { DailyDeal, Fissure } from "../models/worldStateModel.ts";
 import { toStoreItem, fromStoreItem, getRegions } from "./itemDataService.ts";
 import { factionToInt, getConquest, getMissionTypeForLegacyOverride } from "./conquestService.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
@@ -2146,7 +2145,7 @@ export const getWorldState = (
         for (const [key, alert] of Object.entries(configAlerts)) {
             if (config.worldState[key as keyof typeof config.worldState]) {
                 const { minBuildVersion, ...wsAlert } = alert;
-                if (!minBuildVersion || minBuildVersion >= buildVersionInt) {
+                if (!minBuildVersion || buildVersionInt >= minBuildVersion) {
                     if (wsAlert.MissionInfo.missionType == "MT_DEFENSE") {
                         wsAlert.MissionInfo.maxWaveNum =
                             defenseWavesPerRotation * (wsAlert.MissionInfo.maxRotations ?? 1);
@@ -5254,18 +5253,7 @@ const alertStandardResources = [
     { path: "/Lotus/Types/Items/MiscItems/Plastids", qty: 300 },
     { path: "/Lotus/Types/Items/MiscItems/PolymerBundle", qty: 300 },
     { path: "/Lotus/Types/Items/MiscItems/Rubedo", qty: 450 },
-    { path: "/Lotus/Types/Items/MiscItems/Salvage", qty: 300 },
-    { path: "/Lotus/Types/Items/MiscItems/ArgonCrystal", qty: 1 },
-    { path: "/Lotus/Types/Items/MiscItems/OxiumAlloy", qty: 300 },
-    { path: "/Lotus/Types/Items/MiscItems/Tellurium", qty: 1 }
-];
-
-const alertSpecialResources = [
-    { path: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg", qty: 1 },
-    { path: "/Lotus/Types/Game/CatbrowPet/CatbrowGeneticSignature", qty: 5 },
-    { path: "/Lotus/Types/Items/MiscItems/Eventium", qty: 5 },
-    { path: "/Lotus/Types/Items/MiscItems/Alertium", qty: 1 },
-    { path: "/Lotus/Types/Items/MiscItems/VoidTearDrop", qty: 20 }
+    { path: "/Lotus/Types/Items/MiscItems/Salvage", qty: 300 }
 ];
 
 const alertAuras = [
@@ -5485,15 +5473,187 @@ const getEligibleAlertNodes = (): string[] => {
     return eligibleNodes;
 };
 
-const spawnAlert = async (activeNodes: Set<string>): Promise<any> => {
-    const eligibleNodes = getEligibleAlertNodes();
-    if (eligibleNodes.length === 0) return null;
+const ALERT_INTERVAL_MS = 25 * 60 * 1000;
+const ALERT_BASE_DURATION_MS = 40 * 60 * 1000;
 
-    const availableNodes = eligibleNodes.filter(node => !activeNodes.has(node));
-    const nodeId = getRandomElement(availableNodes.length > 0 ? availableNodes : eligibleNodes)!;
-    const nodeData = ExportRegions[nodeId];
+const alertDescTexts: Record<string, string[] | undefined> = {
+    MT_ASSASSINATION: [
+        "/Lotus/Language/Alerts/AssassinationDesc1",
+        "/Lotus/Language/Alerts/AssassinationDesc9",
+        "/Lotus/Language/Alerts/AssassinationDesc10",
+        "/Lotus/Language/Alerts/AssassinationDesc11",
+        "/Lotus/Language/Alerts/AssassinationDesc14"
+    ],
+    MT_EXTERMINATION: [
+        "/Lotus/Language/Alerts/ExterminationDesc3",
+        "/Lotus/Language/Alerts/ExterminationDesc4",
+        "/Lotus/Language/Alerts/ExterminationDesc5",
+        "/Lotus/Language/Alerts/ExterminationDesc6",
+        "/Lotus/Language/Alerts/ExterminationDesc7",
+        "/Lotus/Language/Alerts/ExterminationDesc8",
+        "/Lotus/Language/Alerts/ExterminationDesc9",
+        "/Lotus/Language/Alerts/ExterminationDesc11",
+        "/Lotus/Language/Alerts/ExterminationDesc13",
+        "/Lotus/Language/Alerts/ExterminationDesc14"
+    ],
+    MT_SURVIVAL: [
+        "/Lotus/Language/Alerts/RaidDesc15",
+        "/Lotus/Language/Alerts/RaidDesc19",
+        "/Lotus/Language/Alerts/RaidDesc22",
+        "/Lotus/Language/Alerts/RaidDesc23",
+        "/Lotus/Language/Alerts/DefenseDesc9",
+        "/Lotus/Language/Alerts/DefenseDesc15"
+    ],
+    MT_RESCUE: [
+        "/Lotus/Language/Alerts/RescueDesc1",
+        "/Lotus/Language/Alerts/RescueDesc2",
+        "/Lotus/Language/Alerts/RescueDesc3",
+        "/Lotus/Language/Alerts/RescueDesc4",
+        "/Lotus/Language/Alerts/RescueDesc5",
+        "/Lotus/Language/Alerts/RescueDesc6",
+        "/Lotus/Language/Alerts/RescueDesc7",
+        "/Lotus/Language/Alerts/RescueDesc8",
+        "/Lotus/Language/Alerts/RescueDesc9",
+        "/Lotus/Language/Alerts/RescueDesc10",
+        "/Lotus/Language/Alerts/RescueDesc11",
+        "/Lotus/Language/Alerts/RescueDesc12",
+        "/Lotus/Language/Alerts/RescueDesc14"
+    ],
+    MT_SABOTAGE: [
+        "/Lotus/Language/Alerts/SabotageDesc2",
+        "/Lotus/Language/Alerts/SabotageDesc6",
+        "/Lotus/Language/Alerts/SabotageDesc7",
+        "/Lotus/Language/Alerts/SabotageDesc15",
+        "/Lotus/Language/Alerts/SabotageDesc16",
+        "/Lotus/Language/Alerts/SabotageDesc17",
+        "/Lotus/Language/Alerts/SabotageDesc18",
+        "/Lotus/Language/Alerts/SabotageDesc21",
+        "/Lotus/Language/Alerts/SabotageDesc23",
+        "/Lotus/Language/Alerts/SabotageDesc24",
+        "/Lotus/Language/Alerts/SabotageDesc26",
+        "/Lotus/Language/Alerts/SabotageDesc28"
+    ],
+    MT_CAPTURE: [
+        "/Lotus/Language/Alerts/CaptureDesc1",
+        "/Lotus/Language/Alerts/CaptureDesc2",
+        "/Lotus/Language/Alerts/CaptureDesc3",
+        "/Lotus/Language/Alerts/CaptureDesc4",
+        "/Lotus/Language/Alerts/CaptureDesc5",
+        "/Lotus/Language/Alerts/CaptureDesc9",
+        "/Lotus/Language/Alerts/CaptureDesc10",
+        "/Lotus/Language/Alerts/CaptureDesc12",
+        "/Lotus/Language/Alerts/CaptureDesc14"
+    ],
+    MT_COUNTER_INTEL: [
+        "/Lotus/Language/Alerts/CounterIntelDesc1",
+        "/Lotus/Language/Alerts/CounterIntelDesc2",
+        "/Lotus/Language/Alerts/CounterIntelDesc4",
+        "/Lotus/Language/Alerts/CounterIntelDesc5",
+        "/Lotus/Language/Alerts/CounterIntelDesc10",
+        "/Lotus/Language/Alerts/CounterIntelDesc14",
+        "/Lotus/Language/Alerts/CounterIntelDesc15",
+        "/Lotus/Language/Alerts/CounterIntelDesc20",
+        "/Lotus/Language/Alerts/CounterIntelDesc22",
+        "/Lotus/Language/Alerts/CounterIntelDesc25"
+    ],
+    MT_INTEL: [
+        "/Lotus/Language/Alerts/IntelDesc1",
+        "/Lotus/Language/Alerts/IntelDesc3",
+        "/Lotus/Language/Alerts/IntelDesc10",
+        "/Lotus/Language/Alerts/IntelDesc15",
+        "/Lotus/Language/Alerts/IntelDesc20",
+        "/Lotus/Language/Alerts/IntelDesc21",
+        "/Lotus/Language/Alerts/IntelDesc24",
+        "/Lotus/Language/Alerts/IntelDesc25",
+        "/Lotus/Language/Alerts/IntelDesc29",
+        "/Lotus/Language/Alerts/IntelDesc30",
+        "/Lotus/Language/Alerts/IntelDesc31",
+        "/Lotus/Language/Alerts/IntelDesc32",
+        "/Lotus/Language/Alerts/IntelDesc33",
+        "/Lotus/Language/Alerts/IntelDesc34",
+        "/Lotus/Language/Alerts/IntelDesc36",
+        "/Lotus/Language/Alerts/IntelDesc37",
+        "/Lotus/Language/Alerts/IntelDesc39",
+        "/Lotus/Language/Alerts/IntelDesc40",
+        "/Lotus/Language/Alerts/IntelDesc42",
+        "/Lotus/Language/Alerts/IntelDesc43",
+        "/Lotus/Language/Alerts/IntelDesc44",
+        "/Lotus/Language/Alerts/IntelDesc47"
+    ],
+    MT_DEFENSE: ["/Lotus/Language/Alerts/DefenseDesc9", "/Lotus/Language/Alerts/DefenseDesc15"],
+    MT_MOBILE_DEFENSE: [
+        "/Lotus/Language/Alerts/DefenseDesc2",
+        "/Lotus/Language/Alerts/DefenseDesc15",
+        "/Lotus/Language/Alerts/DefenseDesc19"
+    ],
+    MT_TERRITORY: [
+        "/Lotus/Language/Alerts/IntelDesc26",
+        "/Lotus/Language/Alerts/IntelDesc25",
+        "/Lotus/Language/Alerts/CounterIntelDesc2"
+    ],
+    MT_RETRIEVAL: [
+        "/Lotus/Language/Alerts/RaidDesc15",
+        "/Lotus/Language/Alerts/IntelDesc39",
+        "/Lotus/Language/Alerts/IntelDesc34"
+    ],
+    MT_HIVE: ["/Lotus/Language/Alerts/SabotageDesc6"],
+    MT_EXCAVATE: ["/Lotus/Language/Alerts/IntelDesc4", "/Lotus/Language/Alerts/IntelDesc22"]
+};
 
-    const missionTypes = [
+const getFilteredAlertHelmets = (buildLabel: string): string[] => {
+    return alertHelmets.filter(helmet => {
+        if (helmet.includes("BardAlt")) return version_compare(buildLabel, gameToBuildVersion["20.0.0"]) >= 0;
+        if (helmet.includes("NidusAlt")) return version_compare(buildLabel, gameToBuildVersion["19.5.3"]) >= 0;
+        if (helmet.includes("FairyAlt")) return version_compare(buildLabel, gameToBuildVersion["19.0.1"]) >= 0;
+        if (helmet.includes("WukongAlt")) return version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0;
+        if (helmet.includes("BrawlerAlt")) return version_compare(buildLabel, gameToBuildVersion["17.7.1"]) >= 0;
+        if (helmet.includes("SandmanAlt")) return version_compare(buildLabel, gameToBuildVersion["18.5.0"]) >= 0;
+        if (helmet.includes("NezhaAlt")) return version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0;
+        if (helmet.includes("RangerAlt")) return version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0;
+        if (helmet.includes("AnimaAlt")) return version_compare(buildLabel, gameToBuildVersion["17.7.1"]) >= 0;
+        if (helmet.includes("ChromaAlt") || helmet.includes("DragonAlt"))
+            return version_compare(buildLabel, gameToBuildVersion["16.0.2"]) >= 0;
+        if (helmet.includes("MesaAlt") || helmet.includes("CowgirlAlt"))
+            return version_compare(buildLabel, gameToBuildVersion["15.5.0"]) >= 0;
+        if (helmet.includes("LimboAlt") || helmet.includes("LimboAristeas"))
+            return version_compare(buildLabel, gameToBuildVersion["15.0.0"]) >= 0;
+        if (helmet.includes("HarlequinAlt") || helmet.includes("MirageAlt"))
+            return version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0;
+        if (helmet.includes("PirateAlt")) return version_compare(buildLabel, gameToBuildVersion["13.0.0"]) >= 0;
+        if (helmet.includes("Zephyr")) return version_compare(buildLabel, gameToBuildVersion["12.1.2"]) >= 0;
+        if (helmet.includes("Oberon")) return version_compare(buildLabel, gameToBuildVersion["11.1.3"]) >= 0;
+        if (helmet.includes("Valkyr")) return version_compare(buildLabel, gameToBuildVersion["11.1.3"]) >= 0;
+        if (helmet.includes("Vauban")) return version_compare(buildLabel, gameToBuildVersion["8.0.0"]) >= 0;
+        return true;
+    });
+};
+
+const generateSeededAlert = (
+    alertIndex: number,
+    eligibleNodes: string[],
+    usedNodes: Set<string>,
+    buildLabel: string,
+    regions: Record<string, IRegion>
+): IAlert | undefined => {
+    const seed = new SRng(alertIndex * 2654435761).randomInt(0, 100_000);
+    const rng = new SRng(seed);
+
+    const availableNodes = eligibleNodes.filter(n => !usedNodes.has(n));
+    if (availableNodes.length === 0) return undefined;
+
+    const nodeId = rng.randomElement(availableNodes)!;
+    const nodeData = regions[nodeId];
+
+    const isPreU14 = version_compare(buildLabel, gameToBuildVersion["14.0.0"]) < 0;
+    const isPostU18 = version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0;
+
+    const factions: TFaction[] = ["FC_GRINEER", "FC_CORPUS", "FC_INFESTATION"];
+    let faction: TFaction = rng.randomInt(0, 9) < 7 ? (nodeData.faction as TFaction) : rng.randomElement(factions)!;
+    if (faction === "FC_OROKIN" && isPostU18) {
+        faction = "FC_CORRUPTED" as TFaction;
+    }
+
+    const missionTypes: TMissionType[] = [
         "MT_SURVIVAL",
         "MT_DEFENSE",
         "MT_RESCUE",
@@ -5501,46 +5661,110 @@ const spawnAlert = async (activeNodes: Set<string>): Promise<any> => {
         "MT_EXTERMINATION",
         "MT_SABOTAGE",
         "MT_MOBILE_DEFENSE",
-        "MT_EXCAVATE",
         "MT_INTEL"
     ];
-    const missionType = Math.random() < 0.7 ? nodeData.missionType : getRandomElement(missionTypes)!;
+    let missionType: TMissionType;
+    let levelOverride = nodeData.levelOverride;
+    let enemySpec = nodeData.enemySpec;
+    let extraEnemySpec = nodeData.extraEnemySpec;
 
-    const factions = ["FC_GRINEER", "FC_CORPUS", "FC_INFESTATION", "FC_CORRUPTED"];
-    let faction = Math.random() < 0.7 ? nodeData.faction : getRandomElement(factions)!;
-    if (faction === "FC_OROKIN") {
-        faction = "FC_CORRUPTED";
+    if (isPreU14) {
+        missionType = nodeData.missionType;
+    } else {
+        missionType = rng.randomInt(0, 9) < 7 ? nodeData.missionType : rng.randomElement(missionTypes)!;
     }
 
-    const difficulty = parseFloat((0.1 + Math.random() * 0.9).toFixed(2));
-    const minEnemyLevel = Math.round(10 + difficulty * 20);
-    const maxEnemyLevel = minEnemyLevel + Math.round(5 + Math.random() * 5);
+    if (missionType !== nodeData.missionType) {
+        levelOverride = undefined;
+    }
 
-    let rewardCredits = Math.floor(2000 + difficulty * 18000);
+    if (missionType !== nodeData.missionType || faction !== nodeData.faction) {
+        let foundEnemySpec: string | undefined = undefined;
+        let foundExtraEnemySpec: string | undefined = undefined;
+        const searchFaction = (faction as string) === "FC_CORRUPTED" ? "FC_OROKIN" : faction;
 
+        for (const node of Object.values(regions)) {
+            if (node.faction === searchFaction && node.missionType === missionType && node.enemySpec) {
+                foundEnemySpec = node.enemySpec;
+                foundExtraEnemySpec = node.extraEnemySpec;
+                break;
+            }
+        }
+
+        if (!foundEnemySpec) {
+            for (const node of Object.values(regions)) {
+                if (node.faction === searchFaction && node.enemySpec) {
+                    foundEnemySpec = node.enemySpec;
+                    foundExtraEnemySpec = node.extraEnemySpec;
+                    break;
+                }
+            }
+        }
+
+        enemySpec = foundEnemySpec;
+        extraEnemySpec = foundExtraEnemySpec;
+    }
+
+    const difficulty = rng.randomInt(10, 99) / 100;
+    const minEnemyLevel = 10 + Math.round(difficulty * 20);
+    const maxEnemyLevel = minEnemyLevel + rng.randomInt(5, 10);
+
+    let rewardCredits = 2000 + Math.round(difficulty * 18000);
     let rewardItems: string[] | undefined = undefined;
     let rewardCountedItems: { ItemType: string; ItemCount: number }[] | undefined = undefined;
     let isNightmare = false;
 
-    const categories = [
+    const filteredStdRes = [...alertStandardResources];
+    if (version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
+        filteredStdRes.push({ path: "/Lotus/Types/Items/MiscItems/ArgonCrystal", qty: 1 });
+    }
+    if (version_compare(buildLabel, gameToBuildVersion["10.8.0"]) >= 0) {
+        filteredStdRes.push({ path: "/Lotus/Types/Items/MiscItems/OxiumAlloy", qty: 300 });
+    }
+    if (version_compare(buildLabel, gameToBuildVersion["15.5.0"]) >= 0) {
+        filteredStdRes.push({ path: "/Lotus/Types/Items/MiscItems/Tellurium", qty: 1 });
+    }
+
+    const filteredSpecRes: { path: string; qty: number }[] = [];
+    if (version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
+        filteredSpecRes.push({ path: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg", qty: 1 });
+    }
+    if (version_compare(buildLabel, gameToBuildVersion["18.5.0"]) >= 0) {
+        filteredSpecRes.push({ path: "/Lotus/Types/Game/CatbrowPet/CatbrowGeneticSignature", qty: 5 });
+    }
+    if (version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
+        filteredSpecRes.push({ path: "/Lotus/Types/Items/MiscItems/Eventium", qty: 5 });
+    }
+    if (version_compare(buildLabel, gameToBuildVersion["18.5.0"]) >= 0) {
+        filteredSpecRes.push({ path: "/Lotus/Types/Items/MiscItems/Alertium", qty: 1 });
+    }
+    if (version_compare(buildLabel, gameToBuildVersion["18.13.3"]) >= 0) {
+        filteredSpecRes.push({ path: "/Lotus/Types/Items/MiscItems/VoidTearDrop", qty: 20 });
+    }
+
+    const hasNightmare = version_compare(buildLabel, gameToBuildVersion["9.1.0"]) >= 0;
+    const hasExcavate = version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0;
+
+    const categories: { name: string; weight: number }[] = [
         { name: "CREDITS", weight: 60 },
         { name: "STANDARD_RESOURCES", weight: 120 },
         { name: "ENDO", weight: 40 },
         { name: "ALT_HELMETS", weight: 80 },
         { name: "WEAPONS", weight: 35 },
-        { name: "NIGHTMARE_MODS", weight: 30 },
         { name: "AURAS", weight: 18 },
-        { name: "SPECIAL_RESOURCES", weight: 10 },
-        { name: "VAUBAN_PARTS", weight: 7 },
         { name: "OROKIN_BP", weight: 4 }
     ];
+    if (hasNightmare) categories.push({ name: "NIGHTMARE_MODS", weight: 30 });
+    if (filteredSpecRes.length > 0) categories.push({ name: "SPECIAL_RESOURCES", weight: 10 });
+    if (version_compare(buildLabel, gameToBuildVersion["5.2.0"]) >= 0) {
+        categories.push({ name: "VAUBAN_PARTS", weight: 7 });
+    }
 
     let totalWeight = 0;
     for (const cat of categories) {
         totalWeight += cat.weight;
     }
-
-    let roll = Math.random() * totalWeight;
+    let roll = rng.randomInt(0, totalWeight * 100) / 100;
     let selectedCategory = "STANDARD_RESOURCES";
     for (const cat of categories) {
         if (roll < cat.weight) {
@@ -5552,80 +5776,108 @@ const spawnAlert = async (activeNodes: Set<string>): Promise<any> => {
 
     switch (selectedCategory) {
         case "CREDITS": {
-            rewardCredits = Math.floor(5000 + difficulty * 15000);
+            rewardCredits = 5000 + Math.round(difficulty * 15000);
             break;
         }
         case "STANDARD_RESOURCES": {
-            const res = getRandomElement(alertStandardResources)!;
+            const res = rng.randomElement(filteredStdRes)!;
             rewardCountedItems = [{ ItemType: res.path, ItemCount: res.qty }];
             break;
         }
         case "ENDO": {
-            const endoRoll = Math.random() * 100;
-            let endoPath = "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/AlertFusionBundleSmall";
-            if (endoRoll < 60) {
-                endoPath = "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/AlertFusionBundleSmall";
-            } else if (endoRoll < 90) {
-                endoPath = "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/AlertFusionBundleMedium";
+            const isPreU19 = version_compare(buildLabel, gameToBuildVersion["19.0.1"]) < 0;
+            const endoRoll = rng.randomInt(0, 99);
+            if (isPreU19) {
+                let corePath = "/Lotus/Upgrades/Mods/FusionCores/CoreClassCommonThree";
+                if (endoRoll < 60) {
+                    corePath = "/Lotus/Upgrades/Mods/FusionCores/CoreClassCommonThree";
+                } else if (endoRoll < 90) {
+                    corePath = "/Lotus/Upgrades/Mods/FusionCores/CoreClassUncommonFive";
+                } else {
+                    corePath = "/Lotus/Upgrades/Mods/FusionCores/CoreClassRareFive";
+                }
+                rewardItems = [toStoreItem(corePath)];
             } else {
-                endoPath = "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/AlertFusionBundleLarge";
+                let endoPath = "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/AlertFusionBundleSmall";
+                if (endoRoll < 60) {
+                    endoPath = "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/AlertFusionBundleSmall";
+                } else if (endoRoll < 90) {
+                    endoPath = "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/AlertFusionBundleMedium";
+                } else {
+                    endoPath = "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/AlertFusionBundleLarge";
+                }
+                rewardItems = [endoPath];
             }
-            rewardItems = [endoPath];
             break;
         }
         case "SPECIAL_RESOURCES": {
-            const res = getRandomElement(alertSpecialResources)!;
+            const res = rng.randomElement(filteredSpecRes)!;
             rewardCountedItems = [{ ItemType: res.path, ItemCount: res.qty }];
             break;
         }
         case "AURAS": {
-            const aura = getRandomElement(alertAuras)!;
+            const aura = rng.randomElement(alertAuras)!;
             rewardItems = [toStoreItem(aura)];
             break;
         }
         case "ALT_HELMETS": {
-            const helmet = getRandomElement(alertHelmets)!;
+            const filteredHelmets = getFilteredAlertHelmets(buildLabel);
+            const helmet = rng.randomElement(filteredHelmets)!;
             rewardItems = [toStoreItem(helmet)];
             break;
         }
         case "VAUBAN_PARTS": {
-            const part = getRandomElement(alertVaubanParts)!;
+            const part = rng.randomElement(alertVaubanParts)!;
             rewardItems = [toStoreItem(part)];
             break;
         }
         case "WEAPONS": {
-            const weapon = getRandomElement(alertWeapons)!;
+            const weapon = rng.randomElement(alertWeapons)!;
             rewardItems = [toStoreItem(weapon)];
             break;
         }
         case "NIGHTMARE_MODS": {
-            const nmMod = getRandomElement(alertNightmareMods)!;
+            const nmMod = rng.randomElement(alertNightmareMods)!;
             rewardItems = [toStoreItem(nmMod)];
             isNightmare = true;
             break;
         }
         case "OROKIN_BP": {
-            const specialBP = getRandomElement(alertOrokinBP)!;
+            const specialBP = rng.randomElement(alertOrokinBP)!;
             rewardItems = [toStoreItem(specialBP)];
             break;
         }
     }
 
-    let durationMin = 30 + Math.random() * 40;
+    let durationMs = ALERT_BASE_DURATION_MS + rng.randomInt(0, 40) * 60 * 1000;
     let multiplier = 1;
     if (rewardItems && rewardItems.length > 0) {
         multiplier = alertDurationMultipliers.get(fromStoreItem(rewardItems[0])) ?? 1;
     } else if (rewardCountedItems && rewardCountedItems.length > 0) {
         multiplier = alertDurationMultipliers.get(rewardCountedItems[0].ItemType) ?? 1;
     }
-    durationMin *= multiplier;
+    durationMs = Math.round(durationMs * multiplier);
 
-    const activationDate = new Date(Date.now() - 10 * 60 * 1000);
-    const expiryDate = new Date(activationDate.getTime() + durationMin * 60 * 1000);
+    const activation = EPOCH + alertIndex * ALERT_INTERVAL_MS;
+    const expiry = activation + durationMs;
 
-    const newAlert = new Alert({
-        Activation: activationDate,
-        Expiry: expiryDate,
+    const oid =
+        ((activation / 1000) & 0xffffffff).toString(16).padStart(8, "0") +
+        "a1e4" +
+        seed.toString(16).padStart(5, "0").substring(0, 5) +
+        (alertIndex & 0xffffff).toString(16).padStart(7, "0");
+
+    const descTexts = alertDescTexts[missionType];
+    const descText = isPreU14 && descTexts ? rng.randomElement(descTexts) : undefined;
+
+    if (!hasExcavate && missionType === "MT_EXCAVATE") {
+        return undefined;
+    }
+
+    const alert: IAlert = {
+        _id: toOid2(oid, buildLabel),
+        Activation: toMongoDate2(activation, buildLabel),
+        Expiry: toMongoDate2(expiry, buildLabel),
         MissionInfo: {
             location: nodeId,
             missionType: missionType,
@@ -5636,50 +5888,17 @@ const spawnAlert = async (activeNodes: Set<string>): Promise<any> => {
                 items: rewardItems,
                 countedItems: rewardCountedItems
             },
+            levelOverride: levelOverride,
+            enemySpec: enemySpec,
+            extraEnemySpec: extraEnemySpec,
             minEnemyLevel: minEnemyLevel,
             maxEnemyLevel: maxEnemyLevel,
+            descText: descText,
             nightmare: isNightmare || undefined
         }
-    });
-    return await newAlert.save();
-};
+    };
 
-const updateAlerts = async (): Promise<void> => {
-    const alerts = await Alert.find();
-    const activeAlerts: any[] = [];
-    const activeNodes = new Set<string>();
-    let latestActivation = 0;
-
-    for (const alert of alerts) {
-        if (alert.Expiry.getTime() > Date.now()) {
-            activeAlerts.push(alert);
-            activeNodes.add(alert.MissionInfo.location);
-        }
-        latestActivation = Math.max(latestActivation, alert.Activation.getTime());
-    }
-
-    while (activeAlerts.length < 3) {
-        const newAlert = (await spawnAlert(activeNodes)) as IAlertDatabase | null;
-        if (newAlert) {
-            activeAlerts.push(newAlert);
-            activeNodes.add(newAlert.MissionInfo.location);
-            latestActivation = Math.max(latestActivation, newAlert.Activation.getTime());
-        } else {
-            break;
-        }
-    }
-
-    if (activeAlerts.length < 5 && latestActivation > 0) {
-        const timeSinceLastSpawn = Date.now() - latestActivation;
-        const interval = 20 + Math.random() * 20;
-        if (timeSinceLastSpawn > interval * 60 * 1000) {
-            const newAlert = (await spawnAlert(activeNodes)) as IAlertDatabase | null;
-            if (newAlert) {
-                activeAlerts.push(newAlert);
-                activeNodes.add(newAlert.MissionInfo.location);
-            }
-        }
-    }
+    return alert;
 };
 
 export const populateAlerts = async (worldState: IWorldState): Promise<void> => {
@@ -5689,49 +5908,53 @@ export const populateAlerts = async (worldState: IWorldState): Promise<void> => 
         (version_compare(buildLabel, gameToBuildVersion["5.1.0"]) >= 0 &&
             version_compare(buildLabel, gameToBuildVersion["24.3.0"]) < 0) // alerts were retired with U24.3.0
     ) {
-        const activeAlerts = await Alert.find({ Expiry: { $gt: new Date() } });
+        const eligibleNodes = getEligibleAlertNodes();
         const regions = await getRegions(buildLabel);
-        for (const dbAlert of activeAlerts) {
-            if (!(dbAlert.MissionInfo.location in regions)) continue;
-            let mappedItems: string[] | undefined = undefined;
-            if (dbAlert.MissionInfo.missionReward.items) {
-                mappedItems = dbAlert.MissionInfo.missionReward.items.map(item => {
-                    if (item.includes("/Recipes/Helmets/")) {
-                        return getVersionAppropriateHelmet(item, buildLabel);
-                    }
-                    return item;
-                });
-            }
+        const validNodes = eligibleNodes.filter(nodeId => {
+            const region = regions[nodeId] as (typeof regions)[string] | undefined;
+            return region && isRegionAvailableIn(nodeId, region, buildLabel);
+        });
 
-            worldState.Alerts.push({
-                _id: toOid2(dbAlert._id.toString(), buildLabel),
-                Activation:
-                    dbAlert.Activation.getTime() < Date.now()
-                        ? toMongoDate2(1000000000000, buildLabel)
-                        : toMongoDate2(dbAlert.Activation.getTime(), buildLabel),
-                Expiry: toMongoDate2(dbAlert.Expiry.getTime(), buildLabel),
-                MissionInfo: {
-                    location: dbAlert.MissionInfo.location,
-                    missionType: dbAlert.MissionInfo.missionType as TMissionType,
-                    faction: dbAlert.MissionInfo.faction as TFaction,
-                    difficulty: dbAlert.MissionInfo.difficulty,
-                    missionReward: {
-                        credits: dbAlert.MissionInfo.missionReward.credits,
-                        items: mappedItems,
-                        countedItems: dbAlert.MissionInfo.missionReward.countedItems
-                    },
-                    minEnemyLevel: dbAlert.MissionInfo.minEnemyLevel,
-                    maxEnemyLevel: dbAlert.MissionInfo.maxEnemyLevel,
-                    descText: dbAlert.MissionInfo.descText,
-                    nightmare: dbAlert.MissionInfo.nightmare || undefined
+        if (validNodes.length === 0) return;
+
+        const timeMs = worldState.Time * 1000;
+        const currentAlertIndex = Math.floor((timeMs - EPOCH) / ALERT_INTERVAL_MS);
+        const activeAlerts: IAlert[] = [];
+        const usedNodes = new Set<string>();
+
+        for (let idx = currentAlertIndex - 8; idx <= currentAlertIndex + 1; idx++) {
+            const alert = generateSeededAlert(idx, validNodes, usedNodes, buildLabel, regions);
+            if (alert) {
+                const activationTime =
+                    "$date" in alert.Activation
+                        ? Number(alert.Activation.$date.$numberLong)
+                        : alert.Activation.sec * 1000;
+                const expiryTime =
+                    "$date" in alert.Expiry ? Number(alert.Expiry.$date.$numberLong) : alert.Expiry.sec * 1000;
+
+                if (timeMs >= activationTime && timeMs < expiryTime) {
+                    usedNodes.add(alert.MissionInfo.location);
+
+                    if (alert.MissionInfo.missionReward?.items) {
+                        alert.MissionInfo.missionReward.items = alert.MissionInfo.missionReward.items.map(item => {
+                            if (item.includes("/Recipes/Helmets/")) {
+                                return getVersionAppropriateHelmet(item, buildLabel);
+                            }
+                            return item;
+                        });
+                    }
+
+                    activeAlerts.push(alert);
                 }
-            });
+            }
         }
+
+        worldState.Alerts.push(...activeAlerts);
     }
 };
 
 export const updateWorldStateCollections = async (): Promise<void> => {
-    await Promise.all([updateFissures(), updateDailyDeal(), updateAlerts()]);
+    await Promise.all([updateFissures(), updateDailyDeal()]);
 };
 
 const pushConclaveDaily = (
