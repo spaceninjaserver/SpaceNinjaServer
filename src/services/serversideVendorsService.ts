@@ -509,12 +509,15 @@ const getLegacyNightwaveManifestType = (buildLabel: string): string | undefined 
     return season >= 0 && season < manifests.length ? manifests[season] : undefined;
 };
 
-export const selfTestServersideVendors = (): void => {
+export const selfTestServersideVendors = (): boolean => {
+    let allGood = true;
+
     if (
         getCycleDuration(ExportVendors["/Lotus/Types/Game/VendorManifests/Hubs/TeshinHardModeVendorManifest"]) !=
         unixTimesInMs.week
     ) {
         logger.warn(`getCycleDuration self test failed`);
+        allGood = false;
     }
 
     for (let i = 0; i != 2; ++i) {
@@ -535,6 +538,7 @@ export const selfTestServersideVendors = (): void => {
             logger.warn(
                 `self test failed for /Lotus/Types/Game/VendorManifests/Hubs/GuildAdvertisementVendorManifest with fullStock=${fullStock}`
             );
+            allGood = false;
         }
     }
 
@@ -551,6 +555,7 @@ export const selfTestServersideVendors = (): void => {
         cms.reduce((a, x) => a + (x.Bin == "BIN_0" ? 1 : 0), 0) < 4
     ) {
         logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/Hubs/RailjackCrewMemberVendorManifest`);
+        allGood = false;
     }
 
     const temple = getVendorManifestByTypeName(
@@ -559,6 +564,7 @@ export const selfTestServersideVendors = (): void => {
     )!.VendorInfo.ItemManifest;
     if (!temple.find(x => x.StoreItem == "/Lotus/StoreItems/Types/Items/MiscItems/Kuva")) {
         logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/TheHex/Temple1999VendorManifest`);
+        allGood = false;
     }
 
     const nakak = getVendorManifestByTypeName("/Lotus/Types/Game/VendorManifests/Ostron/MaskSalesmanManifest", false)!
@@ -575,6 +581,7 @@ export const selfTestServersideVendors = (): void => {
         // The remaining offers should be computed by weighted RNG.
     ) {
         logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/Ostron/MaskSalesmanManifest`);
+        allGood = false;
     }
 
     // strange case where numItems is 5 even tho only 3 offers can possibly be generated
@@ -584,6 +591,7 @@ export const selfTestServersideVendors = (): void => {
     )!.VendorInfo.ItemManifest;
     if (loid.length != 3) {
         logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/EntratiLabs/EntratiLabsCommisionsManifest`);
+        allGood = false;
     }
 
     // This should not produce an infinite loop.
@@ -597,5 +605,8 @@ export const selfTestServersideVendors = (): void => {
             .ItemManifest.length > 200
     ) {
         logger.warn(`self test failed for /Lotus/Types/Game/VendorManifests/Duviri/AcrithisVendorManifest`);
+        allGood = false;
     }
+
+    return allGood;
 };
