@@ -347,6 +347,16 @@ export const inventoryController: RequestHandler = async (request, response) => 
     }
     await handleTauMemories(inventory);
 
+    if (
+        inventory.QuestKeys.some(
+            q => q.ItemType === "/Lotus/Types/Keys/JadeShadows/JadeShadowQuestKeyChain" && q.Completed == true
+        ) &&
+        !inventory.NodeIntrosCompleted.some(i => i.startsWith("BabyName_"))
+    ) {
+        inventory.NodeIntrosCompleted.push("BabyName_A");
+        logger.debug(`forcing baby name to Sirius`);
+    }
+
     if (version_compare(buildLabel, gameToBuildVersion["15.0.0"]) < 0) {
         const suitTypes = inventory.Suits.map(s => s.ItemType);
         const rawUpgradeTypes = inventory.RawUpgrades.map(s => s.ItemType);

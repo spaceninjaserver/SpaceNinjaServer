@@ -218,6 +218,12 @@ export const completeQuest = async (
             // This would be set by the client during the equilogue, but since we're cheating through, we have to do it ourselves.
             addString(inventory.NodeIntrosCompleted, "ModQuestTeshinAccess");
         }
+        if (
+            questKey == "/Lotus/Types/Keys/JadeShadows/JadeShadowQuestKeyChain" &&
+            !inventory.NodeIntrosCompleted.some(i => i.startsWith("BabyName_"))
+        ) {
+            inventory.NodeIntrosCompleted.push("BabyName_A");
+        }
     }
 
     return existingQuestKey.toJSON<IQuestKeyClient>();
