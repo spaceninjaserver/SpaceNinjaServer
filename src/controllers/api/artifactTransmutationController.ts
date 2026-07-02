@@ -14,6 +14,7 @@ import type { IUpgradeFromClient } from "../../types/inventoryTypes/inventoryTyp
 import type { RequestHandler } from "express";
 import type { TRarity } from "warframe-public-export-plus";
 import { ExportBoosterPacks, ExportUpgrades } from "warframe-public-export-plus";
+import { logger } from "../../utils/logger.ts";
 
 export const artifactTransmutationController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -119,6 +120,7 @@ export const artifactTransmutationController: RequestHandler = async (req, res) 
 
             const options = ExportBoosterPacks["/Lotus/Types/BoosterPacks/ModFuserResult"].components.filter(
                 ({ Item }) => {
+                    // When changing this logic, please ensure the self-test below stays useful.
                     const meta = getUpgrade(Item)!;
                     if ((forcedPolarity && meta.polarity != forcedPolarity) || !meta.introducedAt) {
                         return false;
@@ -198,3 +200,12 @@ const specialModSets: string[][] = [
         "/Lotus/Upgrades/Mods/DataSpike/Potency/GainAntivirusSmallOnSingleUseMod"
     ]
 ];
+
+export const selfTestTransmutation = (): void => {
+    // Ensure we don't error during the .filter logic above.
+    for (const { Item } of ExportBoosterPacks["/Lotus/Types/BoosterPacks/ModFuserResult"].components) {
+        if (!getUpgrade(Item)) {
+            logger.warn(`Transmutation result is not a known upgrade: ${Item}`);
+        }
+    }
+};

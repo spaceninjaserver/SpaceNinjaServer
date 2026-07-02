@@ -37,7 +37,7 @@
     "mongoose": "^9.6.2",
     "morgan": "^1.10.0",
     "undici": "^7.10.0",
-    "warframe-public-export-plus": "^0.6.3",
+    "warframe-public-export-plus": "^0.6.4",
     "warframe-riven-info": "^0.1.2",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0",
