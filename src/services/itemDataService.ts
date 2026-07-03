@@ -2560,6 +2560,25 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
                 buildTime: 259200
             };
         }
+    } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/DualAxeBlueprint") {
+        // Undocumented change, might be U9.1.0
+        if (version_compare(buildLabel, gameToBuildVersion["9.1.2"]) < 0) {
+            data = {
+                ...data,
+                ingredients: [
+                    data.ingredients[0],
+                    data.ingredients[1],
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Ferrite",
+                        ItemCount: 600
+                    },
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/AlloyPlate",
+                        ItemCount: 80
+                    }
+                ]
+            };
+        }
     }
 
     if (uniqueName.startsWith("/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/")) {
