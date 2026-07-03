@@ -15,7 +15,8 @@ jobs:
                   node-version: "20.19.0"
             - run: npm ci --no-audit
             - run: cp config-vanilla.json config.json
-            - run: npm run verify
+            - run: npm run build
+            - run: npm run start -- --test
             - run: npm run lint:ci
             - run: npm run knip
             - run: npm run prettier

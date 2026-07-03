@@ -1,5 +1,6 @@
 interface IArguments {
     configPath?: string;
+    test?: boolean;
     dev?: boolean;
     secret?: string;
     docker?: boolean;
@@ -11,6 +12,10 @@ for (let i = 2; i < process.argv.length; ) {
     switch (process.argv[i++]) {
         case "--configPath":
             args.configPath = process.argv[i++];
+            break;
+
+        case "--test":
+            args.test = true;
             break;
 
         case "--dev":

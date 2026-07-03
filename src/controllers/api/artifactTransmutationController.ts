@@ -201,11 +201,16 @@ const specialModSets: string[][] = [
     ]
 ];
 
-export const selfTestTransmutation = (): void => {
+export const selfTestTransmutation = (): boolean => {
+    let allGood = true;
+
     // Ensure we don't error during the .filter logic above.
     for (const { Item } of ExportBoosterPacks["/Lotus/Types/BoosterPacks/ModFuserResult"].components) {
         if (!getUpgrade(Item)) {
             logger.warn(`Transmutation result is not a known upgrade: ${Item}`);
+            allGood = false;
         }
     }
+
+    return allGood;
 };

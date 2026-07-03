@@ -578,16 +578,23 @@ const finishComponentRepair = (
     return inventoryChanges;
 };
 
-export const selfTestGuildTech = (): void => {
+export const selfTestGuildTech = (): boolean => {
+    let allGood = true;
+
     if (isPersonalResearch("/Lotus/Types/Items/ShipFeatureItems/Railjack/RailjackHullFeatureItemBlueprint") !== true) {
         logger.warn(`isPersonalResearch self-test failed for RailjackHullFeatureItemBlueprint`);
+        allGood = false;
     }
 
     if (isPersonalResearch("/Lotus/Types/Recipes/Railjack/Weapons/MissileLauncherEMPTierABlueprint") !== false) {
         logger.warn(`isPersonalResearch self-test failed for MissileLauncherEMPTierABlueprint`);
+        allGood = false;
     }
 
     if (isPersonalResearch("I am not a recipe") !== null) {
         logger.warn(`isPersonalResearch self-test failed for non-existent recipe`);
+        allGood = false;
     }
+
+    return allGood;
 };
