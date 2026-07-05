@@ -312,6 +312,22 @@ const claimCompletedRecipe = async (
                 ItemType: "/Lotus/Weapons/Tenno/Melee/Swords/UmbraKatana/UmbraKatana",
                 XP: 450_000
             });
+        } else if (
+            recipe.resultType == "/Lotus/Types/JadeShadowsPart2Mission/Gameplay/Resources/HunhowTrinketMiscItem"
+        ) {
+            combineInventoryChanges(
+                resp.InventoryChanges,
+                await addItem(
+                    inventory,
+                    "/Lotus/Weapons/Tenno/Melee/Swords/PrimeWar/PrimeWarWeapon",
+                    recipe.num,
+                    true,
+                    undefined,
+                    pendingRecipe.TargetFingerprint,
+                    undefined,
+                    buildLabel
+                )
+            );
         } else {
             combineInventoryChanges(
                 resp.InventoryChanges,
