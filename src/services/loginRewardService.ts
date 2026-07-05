@@ -15,6 +15,7 @@ import { fromStoreItem, getBoosterPack, toStoreItem } from "./itemDataService.ts
 import { logger } from "../utils/logger.ts";
 import { version_compare } from "../helpers/inventoryHelpers.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
+import { wikiDateToBuildVersion } from "../helpers/versionHelper.ts";
 
 export interface ILoginRewardsReponse {
     DailyTributeInfo: {
@@ -120,26 +121,16 @@ const getRandomLoginReward = async (
                 !masteredItems.has(uniqueName) &&
                 data.introducedAt
             ) {
-                const date = new Date(data.introducedAt * 1000);
-                if (
-                    version_compare(
-                        buildLabel,
-                        `${date.getUTCFullYear()}.${date.getUTCMonth()}.${date.getUTCDate()}.${date.getUTCHours()}.${date.getUTCMinutes()}`
-                    ) >= 0
-                ) {
+                const introducedAtBuildVersion = wikiDateToBuildVersion(data.introducedAt);
+                if (version_compare(buildLabel, introducedAtBuildVersion) >= 0) {
                     unmasteredItems.add(uniqueName);
                 }
             }
         }
         for (const [uniqueName, data] of Object.entries(ExportWarframes)) {
             if (data.variantType == "VT_NORMAL" && !masteredItems.has(uniqueName) && data.introducedAt) {
-                const date = new Date(data.introducedAt * 1000);
-                if (
-                    version_compare(
-                        buildLabel,
-                        `${date.getUTCFullYear()}.${date.getUTCMonth()}.${date.getUTCDate()}.${date.getUTCHours()}.${date.getUTCMinutes()}`
-                    ) >= 0
-                ) {
+                const introducedAtBuildVersion = wikiDateToBuildVersion(data.introducedAt);
+                if (version_compare(buildLabel, introducedAtBuildVersion) >= 0) {
                     unmasteredItems.add(uniqueName);
                 }
             }

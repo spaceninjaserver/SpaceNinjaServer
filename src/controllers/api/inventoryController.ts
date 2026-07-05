@@ -75,6 +75,7 @@ import { supplementalSuits } from "../../services/itemDataService.ts";
 import suitDefaultUpgrades from "../../constants/suitDefaultUpgrades.ts";
 import type { ITypeCount } from "../../types/commonTypes.ts";
 import { sendWsBroadcastToWebui } from "../../services/wsService.ts";
+import { wikiDateToBuildVersion } from "../../helpers/versionHelper.ts";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);
@@ -766,13 +767,8 @@ export const getInventoryResponse = async (
             if (!introducedAt) {
                 return false;
             }
-            const date = new Date(introducedAt * 1000);
-            return (
-                version_compare(
-                    buildLabel,
-                    `${date.getUTCFullYear()}.${date.getUTCMonth()}.${date.getUTCDate()}.${date.getUTCHours()}.${date.getUTCMinutes()}`
-                ) >= 0
-            );
+            const introducedAtBuildVersion = wikiDateToBuildVersion(introducedAt);
+            return version_compare(buildLabel, introducedAtBuildVersion) >= 0;
         });
         if (prevLength != inventoryResponse.XPInfo.length) {
             logger.debug(`omitting mastery info for ${prevLength - inventoryResponse.XPInfo.length} item(s)`);

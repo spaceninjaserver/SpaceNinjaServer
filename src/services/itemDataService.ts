@@ -1,6 +1,7 @@
 import type { IKeyChainRequest } from "../types/requestTypes.ts";
 import type {
     IBoosterPack,
+    IBoosterPackComponent,
     IBundle,
     IDefaultUpgrade,
     IInboxMessage,
@@ -46,6 +47,7 @@ import {
     ExportRailjackWeapons,
     ExportRecipes,
     ExportRegions,
+    ExportRelics,
     ExportResources,
     ExportRewards,
     ExportSentinels,
@@ -81,6 +83,8 @@ import path from "path";
 import { BL_LATEST } from "../constants/gameVersions.ts";
 import type { TInventorySlot } from "../types/inventoryTypes/inventoryTypes.ts";
 import { config } from "./configService.ts";
+import { buildLabelToVersionInt, wikiDateToBuildVersionInt } from "../helpers/versionHelper.ts";
+import baro from "../../static/fixed_responses/worldState/baro.json" with { type: "json" };
 
 export type WeaponTypeInternal =
     | "LongGuns"
@@ -2429,6 +2433,109 @@ const getLegacySolarMapData = async (target: string, buildLabel: string): Promis
 const getLegacySyndicateData = async (target: string, buildLabel: string): Promise<ISyndicate> =>
     await getLegacyData<ISyndicate>(legacySyndicatesCache, target, buildLabel);
 
+const getLegacyRandomProjectionData = (buildLabel: string): Partial<IBoosterPack> => {
+    const buildVersion = buildLabelToVersionInt(buildLabel);
+    const key = getLegacyCacheKey("RandomProjection", buildLabel);
+    if (legacyBoosterPacksCache.has(key)) {
+        logger.trace(`Using cached ${buildLabel} data for RandomProjection`);
+        return legacyBoosterPacksCache.get(key)!;
+    }
+    const relics: IBoosterPackComponent[] = Object.entries(ExportRelics)
+        .filter(([ItemType, relic]) => {
+            if (!relic.introducedAt) return false;
+            const iBuildVersion = wikiDateToBuildVersionInt(relic.introducedAt);
+            const vBuildVersion = relic.vaultedAt ? wikiDateToBuildVersionInt(relic.vaultedAt) : undefined;
+            const baroRelics = baro.rest
+                .filter(o => o.ItemType.startsWith("/Lotus/StoreItems/Types/Game/Projections/"))
+                .map(o => fromStoreItem(o.ItemType));
+            return (
+                !baroRelics.includes(ItemType) &&
+                !["Railjack", "Baro"].some(x => ItemType.includes(x)) &&
+                ["Axi", "Neo", "Meso", "Lith"].includes(relic.era) &&
+                relic.quality === "VPQ_BRONZE" &&
+                iBuildVersion <= buildVersion &&
+                (!vBuildVersion || vBuildVersion > buildVersion)
+            );
+        })
+        .map(([ItemType, relic]) => ({
+            Item: ItemType,
+            Amount: 1,
+            Rarity: relic.era === "Axi" ? "RARE" : relic.era === "Neo" ? "UNCOMMON" : "COMMON"
+        }));
+    const isAyaAvailable =
+        (buildVersion >= buildLabelToVersionInt("2021.11.16.00.00") && // U30.9.4
+            buildVersion < buildLabelToVersionInt("2022.01.25.24.00")) || // U31.0.11
+        buildVersion >= buildLabelToVersionInt("2022.09.14.00.00"); // U32.0.3
+    if (isAyaAvailable) {
+        for (const rarity of ["COMMON", "UNCOMMON", "RARE"] as TRarity[]) {
+            relics.push({
+                Item: "/Lotus/Types/Items/MiscItems/SchismKey",
+                Amount: 1,
+                Rarity: rarity
+            });
+        }
+    }
+
+    legacyBoosterPacksCache.set(key, { components: relics });
+    logger.trace(`Cached ${buildLabel} data for RandomProjection`);
+    return { components: relics };
+};
+
+export const selfTestRandomProjection = (): boolean => {
+    let allGood = true;
+
+    const lcomponents = getLegacyRandomProjectionData(BL_LATEST).components;
+    if (!("/Lotus/Types/BoosterPacks/RandomProjection" in ExportBoosterPacks) || !lcomponents) {
+        logger.warn("RandomProjection validation failed: clound't get components from either PE+ or legacy data");
+        allGood = false;
+        return allGood;
+    }
+    const pcomponents = ExportBoosterPacks["/Lotus/Types/BoosterPacks/RandomProjection"].components;
+
+    const componentEntries = Object.entries(pcomponents);
+    const legacyEntries = Object.entries(lcomponents);
+    const usedLegacy = new Set<string>();
+    const usedComponent = new Set<string>();
+
+    for (const [keyC, valC] of componentEntries) {
+        for (const [keyL, valL] of legacyEntries) {
+            if (usedLegacy.has(keyL)) continue;
+            if (
+                valC.Item === valL.Item &&
+                valC.Amount === valL.Amount &&
+                valC.Probability === valL.Probability &&
+                valC.PityIncreaseRate === valL.PityIncreaseRate &&
+                valC.Rarity === valL.Rarity
+            ) {
+                usedComponent.add(keyC);
+                usedLegacy.add(keyL);
+                break;
+            }
+        }
+    }
+
+    const remainingComponents = componentEntries.filter(([k]) => !usedComponent.has(k));
+    const remainingLegacy = legacyEntries.filter(([k]) => !usedLegacy.has(k));
+
+    if (remainingComponents.length > 0) {
+        allGood = false;
+        logger.warn(
+            "RandomProjection validation failed: extra components in PE+",
+            remainingComponents.map(([_, v]) => v)
+        );
+    }
+
+    if (remainingLegacy.length > 0) {
+        allGood = false;
+        logger.warn(
+            "RandomProjection validation failed: missing legacy matches",
+            remainingLegacy.map(([_, v]) => v)
+        );
+    }
+
+    return allGood;
+};
+
 export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | undefined => {
     let data = ExportRecipes[uniqueName] ?? supplementalRecipes[uniqueName];
     if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/RhinoBlueprint") {
@@ -3148,18 +3255,10 @@ export const getBoosterPack = async (
             "/Lotus/Types/BoosterPacks/GreaterRandomProjection"
         ].includes(uniqueName)
     ) {
-        // PE+ already have latest data - so there is no need to do anything
-        if (version_compare(buildLabel, gameToBuildVersion["43.0.4"]) < 0) {
-            const target = "RandomProjection";
-            const version = await getLegacyDataVersion(target, buildLabel);
-            if (version) {
-                const legacyData = await getLegacyBoosterPackData(target, version);
-                return {
-                    ...ExportBoosterPacks[uniqueName],
-                    ...legacyData
-                };
-            }
-        }
+        return {
+            ...ExportBoosterPacks[uniqueName],
+            ...getLegacyRandomProjectionData(buildLabel)
+        };
     }
     if (
         [

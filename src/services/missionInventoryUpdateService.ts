@@ -115,6 +115,8 @@ import { importLoadOutConfig } from "./importService.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import { corpusDeathSquadInfo, grineerDeathSquadInfo } from "./invasionService.ts";
 import { libraryTargetToAvatar } from "../constants/synthesis.ts";
+import { buildVersionToInt, wikiDateToBuildVersionInt } from "../helpers/versionHelper.ts";
+import baro from "../../static/fixed_responses/worldState/baro.json" with { type: "json" };
 
 const getRotations = async (rewardInfo: IRewardInfo, buildLabel: string, tierOverride?: number): Promise<number[]> => {
     // For Spy missions, e.g. 3 vaults cracked = A, B, C
@@ -2562,18 +2564,47 @@ async function getRandomMissionDrops(
         }
     }
 
-    if (inventory.missionsCanGiveAllRelics) {
-        for (const drop of drops) {
+    {
+        const buildVersion = buildVersionToInt(buildLabel);
+        for (let i = drops.length - 1; i >= 0; i--) {
+            const drop = drops[i];
             const itemType = fromStoreItem(drop.StoreItem);
             if (itemType in ExportRelics) {
-                const relic = ExportRelics[itemType];
-                const replacement = getRandomElement(
-                    Object.entries(ExportRelics).filter(
-                        arr => arr[1].era == relic.era && arr[1].quality == relic.quality
-                    )
-                )!;
-                logger.debug(`replacing ${relic.era} ${relic.category} with ${replacement[1].category}`);
-                drop.StoreItem = toStoreItem(replacement[0]);
+                const oRelic = ExportRelics[itemType];
+                const needsReplacement =
+                    inventory.missionsCanGiveAllRelics ||
+                    !oRelic.introducedAt ||
+                    (wikiDateToBuildVersionInt(oRelic.introducedAt) > buildVersion &&
+                        (!oRelic.vaultedAt || wikiDateToBuildVersionInt(oRelic.vaultedAt) > buildVersion));
+                if (needsReplacement) {
+                    const replacement = getRandomElement(
+                        Object.entries(ExportRelics).filter(([ItemType, relic]) => {
+                            if (relic.era !== oRelic.era || relic.quality !== oRelic.quality || !relic.introducedAt) {
+                                return false;
+                            }
+                            const baroRelics = baro.rest
+                                .filter(o => o.ItemType.startsWith("/Lotus/StoreItems/Types/Game/Projections/"))
+                                .map(o => fromStoreItem(o.ItemType));
+                            if (
+                                !inventory.missionsCanGiveAllRelics &&
+                                relic.vaultedAt &&
+                                wikiDateToBuildVersionInt(relic.vaultedAt) <= buildVersion &&
+                                !baroRelics.includes(ItemType) &&
+                                !["Railjack", "Baro"].some(x => ItemType.includes(x))
+                            ) {
+                                return false;
+                            }
+                            return wikiDateToBuildVersionInt(relic.introducedAt) <= buildVersion;
+                        })
+                    );
+                    if (!replacement) {
+                        logger.debug(`removing ${oRelic.era} ${oRelic.category}: no replacement found`);
+                        drops.splice(i, 1);
+                        continue;
+                    }
+                    logger.debug(`replacing ${oRelic.era} ${oRelic.category} with ${replacement[1].category}`);
+                    drop.StoreItem = toStoreItem(replacement[0]);
+                }
             }
         }
     }
