@@ -410,6 +410,7 @@ dict = {
     import_samples_maxFocus: `Alle Fokus-Schulen maximiert (Fokus |VAL|)`,
     import_samples_accolades: `Auszeichnungen & Council Chat Zugang`,
     import_samples_maxStratos: `Max. Rang-Symbol für Stratos Emblem`,
+    import_samples_resetSortieCompletion: `Einsatz- & Archon Jagd-Abschluss zurücksetzen`,
     import_samples_clearWishlist: `Wunschliste leeren`,
     import_samples_clearLocPins: `Lok-Pins leeren`,
     import_samples_eidolonLocPins: `Eidolon Jagd Lok-Pins`,

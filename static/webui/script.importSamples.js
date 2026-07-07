@@ -806,6 +806,11 @@ window.importSamples = {
     maxStratos: {
         BountyScore: 39
     },
+    resetSortieCompletion: {
+        CompletedSorties: [],
+        LastSortieReward: [],
+        LastLiteSortieReward: []
+    },
     clearWishlist: {
         Wishlist: []
     },

@@ -410,6 +410,7 @@ dict = {
     import_samples_maxFocus: `[UNTRANSLATED] All Focus Schools Maxed Out (Focus |VAL|)`,
     import_samples_accolades: `[UNTRANSLATED] Accolades & Council Chat Access`,
     import_samples_maxStratos: `[UNTRANSLATED] Max Rank Stratos Emblem Icon`,
+    import_samples_resetSortieCompletion: `[UNTRANSLATED] Reset Sortie & Archon Hunt Completion`,
     import_samples_clearWishlist: `[UNTRANSLATED] Clear Wishlist`,
     import_samples_clearLocPins: `[UNTRANSLATED] Clear Loc-Pins`,
     import_samples_eidolonLocPins: `[UNTRANSLATED] Eidolon Hunt Loc-Pins`,

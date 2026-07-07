@@ -410,6 +410,7 @@ dict = {
     import_samples_maxFocus: `Maxer toutes les écoles de focus (Focus |VAL|)`,
     import_samples_accolades: `Accolades et accès au tchat Design Council`,
     import_samples_maxStratos: `Badge Stratos rang max`,
+    import_samples_resetSortieCompletion: `[UNTRANSLATED] Reset Sortie & Archon Hunt Completion`,
     import_samples_clearWishlist: `Effacer la liste de souhaits`,
     import_samples_clearLocPins: `Effacer les loc-pins`,
     import_samples_eidolonLocPins: `Loc-pins pour la chasse d'Eidolon`,

@@ -410,6 +410,7 @@ dict = {
     import_samples_maxFocus: `Всі школи Фокусу макс. рівня (Фокус |VAL|)`,
     import_samples_accolades: `Нагороди та доступ до чату Ради`,
     import_samples_maxStratos: `Максимальний рівень відзнаки Страта`,
+    import_samples_resetSortieCompletion: `[UNTRANSLATED] Reset Sortie & Archon Hunt Completion`,
     import_samples_clearWishlist: `Очистити список бажаного`,
     import_samples_clearLocPins: `[UNTRANSLATED] Clear Loc-Pins`,
     import_samples_eidolonLocPins: `[UNTRANSLATED] Eidolon Hunt Loc-Pins`,

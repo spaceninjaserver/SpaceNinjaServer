@@ -410,6 +410,7 @@ dict = {
     import_samples_maxFocus: `Все школы Фокуса макс. уровня (Фокус |VAL|)`,
     import_samples_accolades: `Акколады и доступ к чату Совета`,
     import_samples_maxStratos: `Максимальный ранг значка Стратос`,
+    import_samples_resetSortieCompletion: `[UNTRANSLATED] Reset Sortie & Archon Hunt Completion`,
     import_samples_clearWishlist: `Очистить список желаний`,
     import_samples_clearLocPins: `Очистить местные указатели`,
     import_samples_eidolonLocPins: `Местные указатели для Охоты на Эйдолонов`,

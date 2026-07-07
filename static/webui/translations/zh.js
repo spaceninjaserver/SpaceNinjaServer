@@ -410,6 +410,7 @@ dict = {
     import_samples_maxFocus: `全专精学派满级 (专精|VAL|版本)`,
     import_samples_accolades: `荣誉与议会聊天权限`,
     import_samples_maxStratos: `最大 Stratos Emblem Icon等级`,
+    import_samples_resetSortieCompletion: `[UNTRANSLATED] Reset Sortie & Archon Hunt Completion`,
     import_samples_clearWishlist: `清空心愿单`,
     import_samples_clearLocPins: `清空定位信标`,
     import_samples_eidolonLocPins: `夜灵狩猎定位信标`,

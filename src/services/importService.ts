@@ -16,6 +16,8 @@ import type {
     IFocusLoadoutClient,
     IFocusLoadoutDatabase,
     IInventoryClient,
+    ILastSortieRewardClient,
+    ILastSortieRewardDatabase,
     INemesisClient,
     INemesisDatabase,
     IRecentVendorPurchaseClient,
@@ -267,6 +269,13 @@ const convertPendingRecipe = (client: IPendingRecipeClient): IPendingRecipeDatab
     };
 };
 
+const convertLastSortieReward = (client: ILastSortieRewardClient): ILastSortieRewardDatabase => {
+    return {
+        ...client,
+        SortieId: new Types.ObjectId(fromOid(client.SortieId))
+    };
+};
+
 const convertNemesisBase = (client: INemesisBaseClient): INemesisBaseDatabase => {
     return {
         ...client,
@@ -428,6 +437,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "NodeIntrosCompleted",
         "CompletedAlerts",
         "CompletedSyndicates",
+        "CompletedSorties",
         "DeathMarks",
         "UsedDailyDeals",
         "Wishlist",
@@ -543,6 +553,11 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     if (client.CompletedJobChains !== undefined) {
         db.CompletedJobChains = client.CompletedJobChains;
+    }
+    for (const key of ["LastSortieReward", "LastLiteSortieReward"] as const) {
+        if (client[key] !== undefined) {
+            db[key] = client[key].map(convertLastSortieReward);
+        }
     }
     if (client.Nemesis !== undefined) {
         db.Nemesis = convertNemesis(client.Nemesis);
