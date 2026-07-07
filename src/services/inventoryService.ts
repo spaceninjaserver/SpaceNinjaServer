@@ -25,7 +25,6 @@ import type {
     IDialogueDatabase,
     IKubrowPetPrintClient,
     IWeeklyMissionChallengeInfo,
-    IKubrowPetEgg,
     ITauPrequelQuestCustomData,
     ICollectibleEntry,
     TInventorySlot
@@ -210,12 +209,7 @@ const setupAntique = (
         throw new Error(`unknown antique: ${weaponType}`);
     }
 
-    inventory.OneTimePurchases ??= [];
-    if (!inventory.OneTimePurchases.includes(weaponType)) {
-        inventory.OneTimePurchases.push(weaponType);
-        inventoryChanges.OneTimePurchases ??= [];
-        inventoryChanges.OneTimePurchases.push(weaponType);
-    }
+    handleOneTimePurchasable(inventory, weaponType, inventoryChanges);
 
     if (!inventory.FocusUpgrades.some(x => x.ItemType === meta.focusAbility)) {
         inventory.FocusUpgrades.push({ ItemType: meta.focusAbility });
@@ -543,26 +537,35 @@ export const addItem = async (
 
     // Strict typing
     if (typeName in ExportRecipes || typeName in supplementalRecipes) {
-        const recipeChanges = [
+        const inventoryChanges: IInventoryChanges = {};
+        inventoryChanges.Recipes = [
             {
                 ItemType: typeName,
                 ItemCount: quantity
             } satisfies ITypeCount
         ];
-        addRecipes(inventory, recipeChanges);
-        return {
-            Recipes: recipeChanges
-        };
+        if (
+            (typeName in ExportRecipes && ExportRecipes[typeName].oneTimePurchasable) ||
+            (typeName in supplementalRecipes && supplementalRecipes[typeName].oneTimePurchasable)
+        ) {
+            handleOneTimePurchasable(inventory, typeName, inventoryChanges);
+        }
+        addRecipes(inventory, inventoryChanges.Recipes);
+        return inventoryChanges;
     }
     if (typeName in ExportResources) {
+        const inventoryChanges: IInventoryChanges = {};
+        if (ExportResources[typeName].oneTimePurchasable) {
+            handleOneTimePurchasable(inventory, typeName, inventoryChanges);
+        }
         if (ExportResources[typeName].productCategory == "MiscItems") {
-            const miscItemChanges = [
+            inventoryChanges.MiscItems = [
                 {
                     ItemType: typeName,
                     ItemCount: quantity
                 } satisfies IMiscItem
             ];
-            addMiscItems(inventory, miscItemChanges);
+            addMiscItems(inventory, inventoryChanges.MiscItems);
 
             if (
                 typeName == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg" &&
@@ -578,69 +581,61 @@ export const addItem = async (
                         ?.ItemCount ?? 0,
                     PRE_U40_MAX_KUBROW_EGGS
                 );
-                const changes: IKubrowPetEgg[] = [];
+                inventoryChanges.KubrowPetEggs ??= [];
+                delete inventoryChanges.MiscItems;
                 for (let i = 0; i != quantity; ++i) {
-                    changes.push({
+                    inventoryChanges.KubrowPetEggs.push({
                         ItemType: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg",
                         ExpirationDate: toMongoDate2(2000000000000, buildLabel),
                         ItemId: toOid2((idBase + i).toString().padStart(24, "0"), buildLabel)
                     });
                 }
-                return { KubrowPetEggs: changes };
             }
 
-            return {
-                MiscItems: miscItemChanges
-            };
+            return inventoryChanges;
         } else if (ExportResources[typeName].productCategory == "FusionTreasures") {
-            const fusionTreasureChanges = [
+            inventoryChanges.FusionTreasures = [
                 {
                     ItemType: typeName,
                     ItemCount: quantity,
                     Sockets: 0
                 } satisfies IFusionTreasure
             ];
-            addFusionTreasures(inventory, fusionTreasureChanges);
-            return {
-                FusionTreasures: fusionTreasureChanges
-            };
+            addFusionTreasures(inventory, inventoryChanges.FusionTreasures);
+            return inventoryChanges;
         } else if (ExportResources[typeName].productCategory == "Ships") {
             if (quantity != 1) {
                 throw new Error(`unexpected acquisition quantity of Ships: got ${quantity}, expected 1`);
             }
             const oid = await createShip(inventory.accountOwnerId, typeName);
             inventory.Ships.push(oid);
-            return {
-                Ships: [
-                    {
-                        ItemId: { $oid: oid.toString() },
-                        ItemType: typeName
-                    }
-                ]
-            };
+            inventoryChanges.Ships = [
+                {
+                    ItemId: { $oid: oid.toString() },
+                    ItemType: typeName
+                }
+            ];
+            return inventoryChanges;
         } else if (ExportResources[typeName].productCategory == "CrewShips") {
             if (quantity != 1) {
                 throw new Error(`unexpected acquisition quantity of CrewShips: got ${quantity}, expected 1`);
             }
-            return {
-                ...(await addCrewShip(inventory, typeName)),
-                // fix to unlock railjack modding, item bellow supposed to be obtained from archwing quest
-                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-                ...(!inventory.CrewShipHarnesses?.length
-                    ? addCrewShipHarness(inventory, "/Lotus/Types/Game/CrewShip/RailJack/DefaultHarness")
-                    : {})
-            };
+            await addCrewShip(inventory, typeName, inventoryChanges);
+            // fix to unlock railjack modding, item bellow supposed to be obtained from archwing quest
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            if (!inventory.CrewShipHarnesses?.length) {
+                addCrewShipHarness(inventory, "/Lotus/Types/Game/CrewShip/RailJack/DefaultHarness", inventoryChanges);
+            }
+            return inventoryChanges;
         } else if (ExportResources[typeName].productCategory == "ShipDecorations") {
-            const changes = [
+            inventoryChanges.ShipDecorations = [
                 {
                     ItemType: typeName,
                     ItemCount: quantity
                 } satisfies IMiscItem
             ];
-            addShipDecorations(inventory, changes);
-            return {
-                ShipDecorations: changes
-            };
+            addShipDecorations(inventory, inventoryChanges.ShipDecorations);
+            return inventoryChanges;
         } else {
             throw new Error(`unknown product category: ${ExportResources[typeName].productCategory}`);
         }
@@ -769,6 +764,10 @@ export const addItem = async (
     }
     if (typeName in ExportWeapons) {
         const weapon = ExportWeapons[typeName];
+        const inventoryChanges: IInventoryChanges = {};
+        if (weapon.oneTimePurchasable) {
+            handleOneTimePurchasable(inventory, typeName, inventoryChanges);
+        }
         if (weapon.totalDamage != 0) {
             if (quantity != 1) {
                 throw new Error(
@@ -816,7 +815,6 @@ export const addItem = async (
                 defaultOverwrites.UpgradeFingerprint = JSON.stringify(targetFingerprintObj.UpgradeFingerprint);
                 defaultOverwrites.ItemName = targetFingerprintObj.Name;
             }
-            const inventoryChanges: IInventoryChanges = {};
             defaultOverwrites.Configs = applyDefaultUpgrades(inventory, weapon.defaultUpgrades, inventoryChanges);
             if (
                 weapon.bayonetOtherWeaponType && // Is this a bayonet?
@@ -858,7 +856,6 @@ export const addItem = async (
             }
             const targetFingerprintObj = JSON.parse(targetFingerprint) as INemesisPetTargetFingerprint;
             const head = targetFingerprintObj.Parts[0];
-            const inventoryChanges: IInventoryChanges = {};
             const defaultOverwrites: Partial<IEquipmentDatabase> = {
                 ModularParts: targetFingerprintObj.Parts,
                 ItemName: targetFingerprintObj.Name,
@@ -879,16 +876,14 @@ export const addItem = async (
             };
         } else {
             // Modular weapon parts
-            const miscItemChanges = [
+            inventoryChanges.MiscItems = [
                 {
                     ItemType: typeName,
                     ItemCount: quantity
                 } satisfies IMiscItem
             ];
-            addMiscItems(inventory, miscItemChanges);
-            return {
-                MiscItems: miscItemChanges
-            };
+            addMiscItems(inventory, inventoryChanges.MiscItems);
+            return inventoryChanges;
         }
     }
     if (typeName in ExportRailjackWeapons) {
@@ -3760,6 +3755,22 @@ export const processGoalProgressUpdates = async (
             }
         }
     }
+};
+
+export const handleOneTimePurchasable = (
+    inventory: Pick<TInventoryDatabaseDocument, "OneTimePurchases">,
+    typeName: string,
+    inventoryChanges: IInventoryChanges = {}
+): IInventoryChanges => {
+    inventory.OneTimePurchases ??= [];
+    if (!inventory.OneTimePurchases.includes(typeName)) {
+        inventory.OneTimePurchases.push(typeName);
+        inventoryChanges.OneTimePurchases ??= [];
+        inventoryChanges.OneTimePurchases.push(typeName);
+    } else {
+        logger.warn(`${typeName} is already in OneTimePurchases`);
+    }
+    return inventoryChanges;
 };
 
 const goalMessagesByKey: Record<

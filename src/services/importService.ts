@@ -432,7 +432,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
         "UsedDailyDeals",
         "Wishlist",
         "NemesisAbandonedRewards",
-        //"OneTimePurchases", // TODO: Import Antiques
+        "OneTimePurchases",
         "EntratiLabConquestActiveFrameVariants",
         "EchoesHexConquestActiveFrameVariants",
         "EchoesHexConquestActiveStickers",

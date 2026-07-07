@@ -5,6 +5,7 @@ import {
     addItems,
     addMiscItems,
     combineInventoryChanges,
+    handleOneTimePurchasable,
     updateCurrency,
     updateSlots
 } from "./inventoryService.ts";
@@ -491,6 +492,9 @@ export const handleBundleAcquisition = async (
 ): Promise<IInventoryChanges> => {
     const bundle = getBundle(storeItemName, buildLabel)!;
     logger.debug("acquiring bundle", bundle);
+    if (bundle.oneTimePurchasable) {
+        handleOneTimePurchasable(inventory, storeItemName, inventoryChanges);
+    }
     for (const component of bundle.components) {
         combineInventoryChanges(
             inventoryChanges,
