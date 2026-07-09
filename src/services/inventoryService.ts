@@ -1,6 +1,6 @@
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 import { Inventory } from "../models/inventoryModels/inventoryModel.ts";
-import { config } from "./configService.ts";
+import { config, shouldDoServerQol } from "./configService.ts";
 import { Types } from "mongoose";
 import type { IInventoryChanges, IBinChanges, IAffiliationMods } from "../types/purchaseTypes.ts";
 import type {
@@ -251,7 +251,7 @@ export const createInventory = async (
             Ships: [defaultItemReferences.ship]
         });
 
-        inventory.LibraryAvailableDailyTaskInfo = createLibraryDailyTask();
+        inventory.LibraryAvailableDailyTaskInfo = createLibraryDailyTask(BL_LATEST);
         inventory.RewardSeed = generateRewardSeed();
         inventory.DuviriInfo = {
             Seed: generateRewardSeed(),
@@ -2910,12 +2910,17 @@ export const addKeyChainItems = async (
     return inventoryChanges;
 };
 
-export const createLibraryDailyTask = (): ILibraryDailyTaskInfo => {
+export const createLibraryDailyTask = (buildLabel: string): ILibraryDailyTaskInfo => {
     const enemyTypes = getRandomElement(libraryDailyTasks)!;
     const enemyAvatar = ExportEnemies.avatars[enemyTypes[0]];
     const scansRequired = getRandomInt(2, 4);
-    const rewardQuantityMultiplier =
-        (config.serversideQualityOfLife?.doubleDailySynthesisEndoReward ?? true) ? 2.5 : 1.25;
+    const rewardQuantityMultiplier = shouldDoServerQol(
+        "doubleDailySynthesisEndoReward",
+        buildLabel,
+        gameToBuildVersion["22.13.4"] // change actually made in 22.13.3
+    )
+        ? 2.5
+        : 1.25;
     return {
         EnemyTypes: enemyTypes,
         EnemyLocTag: enemyAvatar.name,

@@ -97,7 +97,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
             inventory.TradesRemaining += 2;
         }
 
-        inventory.LibraryAvailableDailyTaskInfo = createLibraryDailyTask();
+        inventory.LibraryAvailableDailyTaskInfo = createLibraryDailyTask(buildLabel);
 
         if (inventory.NextRefill) {
             const lastLoginDay = Math.trunc(inventory.NextRefill.getTime() / 86400000) - 1;

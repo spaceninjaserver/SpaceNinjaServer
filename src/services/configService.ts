@@ -3,6 +3,7 @@ import path from "path";
 import { repoDir } from "../helpers/pathHelper.ts";
 import { args } from "../helpers/commandLineArguments.ts";
 import type { Request } from "express";
+import { version_compare } from "../helpers/inventoryHelpers.ts";
 
 export type TRegionId = "ASIA" | "OCEANIA" | "EUROPE" | "RUSSIA" | "NORTH_AMERICA" | "SOUTH_AMERICA";
 
@@ -20,6 +21,11 @@ export interface IWebuiConfig {
 }
 
 export type TLogLevel = "error" | "warn" | "info" | "http" | "debug" | "trace";
+
+type TQolConfigKey =
+    | "twentythreeHourMasteryRankCooldown"
+    | "doubleDailySynthesisEndoReward"
+    | "tylRegorDropsTwoEquinoxParts";
 
 export interface IConfig {
     /** @deprecated */ mongodbUrl?: string;
@@ -135,11 +141,7 @@ export interface IConfig {
         snowdayShowdown?: boolean;
         breedingGrounds?: boolean;
     };
-    serversideQualityOfLife?: {
-        twentythreeHourMasteryRankCooldown?: boolean;
-        doubleDailySynthesisEndoReward?: boolean;
-        tylRegorDropsTwoEquinoxParts?: boolean;
-    };
+    serversideQualityOfLife?: Record<TQolConfigKey, boolean | null>;
     inventoryDefaults?: Record<string, any>;
     tunables?: {
         useLoginToken?: boolean;
@@ -319,4 +321,18 @@ export const getNrsAddresses = (): [string, number][] => {
         }
         return [nrsAddr, nrsPort];
     });
+};
+
+export const shouldDoServerQol = (
+    key: TQolConfigKey,
+    clientBuildLabel: string,
+    introducedInBuildLabel: string
+): boolean => {
+    if (config.serversideQualityOfLife) {
+        if (config.serversideQualityOfLife[key] === null) {
+            return version_compare(clientBuildLabel, introducedInBuildLabel) >= 0;
+        }
+        return config.serversideQualityOfLife[key];
+    }
+    return true;
 };

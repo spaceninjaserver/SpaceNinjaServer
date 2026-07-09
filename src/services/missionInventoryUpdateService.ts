@@ -96,7 +96,7 @@ import {
     pushClassicBounties,
     populateAlerts
 } from "./worldStateService.ts";
-import { config } from "./configService.ts";
+import { config, shouldDoServerQol } from "./configService.ts";
 import libraryDailyTasks from "../../static/fixed_responses/libraryDailyTasks.json" with { type: "json" };
 import type { IGoal, ISyndicateJob, ISyndicateMissionInfo } from "../types/worldStateTypes.ts";
 import {
@@ -167,7 +167,10 @@ const getRotations = async (rewardInfo: IRewardInfo, buildLabel: string, tierOve
         }
     }
 
-    if (rewardInfo.node == "SolNode105" && (config.serversideQualityOfLife?.tylRegorDropsTwoEquinoxParts ?? true)) {
+    if (
+        rewardInfo.node == "SolNode105" &&
+        shouldDoServerQol("tylRegorDropsTwoEquinoxParts", buildLabel, gameToBuildVersion["42.0.0"])
+    ) {
         // U42 QoL change:
         // Defeating Tyl Regor now rewards two Equinox Component Blueprints — one guaranteed for the Night and Day Aspect each.
         return [0, 1];
@@ -1883,7 +1886,7 @@ export const addFixedLevelRewards = async (
         }
     }
     if (rewards.droptable) {
-        const droptable = getMissionDeck(rewards.droptable);
+        const droptable = getMissionDeck(rewards.droptable, buildLabel);
         if (droptable) {
             const rotations: number[] = rewardInfo ? await getRotations(rewardInfo, buildLabel) : [0];
             if (rewards.droptable.startsWith("/Lotus/Types/Game/MissionDecks/VoidKeyMissionRewards/")) {
@@ -2233,7 +2236,7 @@ async function getRandomMissionDrops(
         }*/
         const rng = new SRng(BigInt(RewardInfo.rewardSeed ?? generateRewardSeed()) ^ 0xffffffffffffffffn);
         rewardManifests.forEach(name => {
-            const table = getMissionDeck(name);
+            const table = getMissionDeck(name, buildLabel);
             if (!table) {
                 logger.error(`unknown droptable: ${name}`);
                 return;
@@ -2503,7 +2506,7 @@ async function getRandomMissionDrops(
                     if (!keyMeta) {
                         logger.error(`unknown levelKey ${currentMissionKey} while proccesing EnemyCachesFound`);
                     } else if (keyMeta.cacheRewardManifest) {
-                        const deck = getMissionDeck(keyMeta.cacheRewardManifest);
+                        const deck = getMissionDeck(keyMeta.cacheRewardManifest, buildLabel);
                         if (!deck) {
                             logger.error(
                                 `unknown droptable ${keyMeta.cacheRewardManifest} while proccesing EnemyCachesFound`
@@ -2545,7 +2548,7 @@ async function getRandomMissionDrops(
             if (!keyMeta) {
                 logger.error(`unknown levelKey ${levelKeyName} while proccesing EnemyCachesFound`);
             } else if (keyMeta.cacheRewardManifest) {
-                const deck = getMissionDeck(keyMeta.cacheRewardManifest);
+                const deck = getMissionDeck(keyMeta.cacheRewardManifest, buildLabel);
                 if (!deck) {
                     logger.error(`unknown droptable ${keyMeta.cacheRewardManifest} while proccesing EnemyCachesFound`);
                 } else {

@@ -82,7 +82,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { BL_LATEST } from "../constants/gameVersions.ts";
 import type { TInventorySlot } from "../types/inventoryTypes/inventoryTypes.ts";
-import { config } from "./configService.ts";
+import { shouldDoServerQol } from "./configService.ts";
 import { buildLabelToVersionInt, wikiDateToBuildVersionInt } from "../helpers/versionHelper.ts";
 import baro from "../../static/fixed_responses/worldState/baro.json" with { type: "json" };
 
@@ -3380,10 +3380,10 @@ export const getKey = (uniqueName: string, buildLabel: string = BL_LATEST): IKey
     return ExportKeys[uniqueName] ?? supplementalKeys[uniqueName];
 };
 
-export const getMissionDeck = (uniqueName: string): TMissionDeck | undefined => {
+export const getMissionDeck = (uniqueName: string, buildLabel: string): TMissionDeck | undefined => {
     if (
         uniqueName == "/Lotus/Types/Game/MissionDecks/BossMissionRewards/YinYangRewards" &&
-        !(config.serversideQualityOfLife?.tylRegorDropsTwoEquinoxParts ?? true)
+        !shouldDoServerQol("tylRegorDropsTwoEquinoxParts", buildLabel, gameToBuildVersion["42.0.0"])
     ) {
         return preU42YinYangRewards;
     }

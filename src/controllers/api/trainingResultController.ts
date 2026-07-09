@@ -7,7 +7,8 @@ import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import { createMessage } from "../../services/inboxService.ts";
 import { toMongoDate2 } from "../../helpers/inventoryHelpers.ts";
-import { config } from "../../services/configService.ts";
+import { shouldDoServerQol } from "../../services/configService.ts";
+import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 
 interface ITrainingResultsRequest {
@@ -35,7 +36,9 @@ const handleTrainingProgress = async (
         if (!inventory.noMasteryRankUpCooldown) {
             time +=
                 unixTimesInMs.hour *
-                ((config.serversideQualityOfLife?.twentythreeHourMasteryRankCooldown ?? true) ? 23 : 24);
+                (shouldDoServerQol("twentythreeHourMasteryRankCooldown", buildLabel, gameToBuildVersion["38.0.0"])
+                    ? 23
+                    : 24);
         }
         inventory.TrainingDate = new Date(time);
 
