@@ -4,6 +4,7 @@ import { repoDir } from "../helpers/pathHelper.ts";
 import { args } from "../helpers/commandLineArguments.ts";
 import type { Request } from "express";
 import { version_compare } from "../helpers/inventoryHelpers.ts";
+import configDefaults from "../../config-vanilla.json" with { type: "json" };
 
 export type TRegionId = "ASIA" | "OCEANIA" | "EUROPE" | "RUSSIA" | "NORTH_AMERICA" | "SOUTH_AMERICA";
 
@@ -23,6 +24,7 @@ export interface IWebuiConfig {
 export type TLogLevel = "error" | "warn" | "info" | "http" | "debug" | "trace";
 
 type TQolConfigKey =
+    | "tutorialGivesStanceMods"
     | "twentythreeHourMasteryRankCooldown"
     | "doubleDailySynthesisEndoReward"
     | "tylRegorDropsTwoEquinoxParts";
@@ -328,11 +330,12 @@ export const shouldDoServerQol = (
     clientBuildLabel: string,
     introducedInBuildLabel: string
 ): boolean => {
-    if (config.serversideQualityOfLife) {
-        if (config.serversideQualityOfLife[key] === null) {
-            return version_compare(clientBuildLabel, introducedInBuildLabel) >= 0;
-        }
-        return config.serversideQualityOfLife[key];
+    let value = config.serversideQualityOfLife?.[key];
+    if (value === undefined) {
+        value = configDefaults.serversideQualityOfLife[key];
     }
-    return true;
+    if (value === null) {
+        return version_compare(clientBuildLabel, introducedInBuildLabel) >= 0;
+    }
+    return value;
 };

@@ -324,7 +324,11 @@ export const addStartingGear = async (
     const inventoryChanges: IInventoryChanges = {};
     addEquipment(inventory, "LongGuns", LongGuns[0].ItemType, { IsNew: false }, inventoryChanges);
     addEquipment(inventory, "Pistols", Pistols[0].ItemType, { IsNew: false }, inventoryChanges);
-    combineInventoryChanges(inventoryChanges, await addItem(inventory, Melee[0].ItemType)); // defaultUpgrades need to respected because as of U38.5, Skana & Bo come with stances by default.
+    if (shouldDoServerQol("tutorialGivesStanceMods", buildLabel, gameToBuildVersion["38.5.0"])) {
+        combineInventoryChanges(inventoryChanges, await addItem(inventory, Melee[0].ItemType)); // This respects defaultUpgrades
+    } else {
+        addEquipment(inventory, "Melee", Melee[0].ItemType, { IsNew: false }, inventoryChanges);
+    }
     await addPowerSuit(inventory, Suits[0].ItemType, { IsNew: false }, buildLabel, inventoryChanges);
     addEquipment(
         inventory,
