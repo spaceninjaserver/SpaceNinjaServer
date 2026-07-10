@@ -7,11 +7,13 @@ cacheRouter.get(/^\/origin\/[a-zA-Z0-9]+\/[0-9]+\/H\.Cache\.bin.*$/, (_req, res)
     res.sendFile(`static/data/H.Cache.bin`, { root: "./" });
 });
 
-cacheRouter.get(/^\/0\/.+!.+$/, async (req, res) => {
+const strippedAssetsDir = "static/data/0"; // If users have the stripped assets repo checked out, it's at this path.
+
+cacheRouter.get(/^\/0(?:_[a-z]{2})?\/.+!.+$/, async (req, res) => {
     try {
         const dir = req.path.substring(0, req.path.lastIndexOf("/"));
         const file = req.path.substring(dir.length + 1);
-        const filePath = `static/data${dir}/${file}`;
+        const filePath = `${strippedAssetsDir}${dir}/${file}`;
 
         // Return file if we have it
         await fs.access(filePath);
