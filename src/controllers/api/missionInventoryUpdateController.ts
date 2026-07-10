@@ -82,7 +82,8 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         )
     ) {
         logger.debug(`aborted or failed mission, just syncing inventory`);
-        if (missionReport.EndOfMatchUpload) {
+        if (missionReport.EndOfMatchUpload || missionReport.RJ) {
+            logger.debug(`refreshing reward seed`);
             inventory.RewardSeed = generateRewardSeed();
         }
         await inventory.save();
@@ -112,7 +113,8 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         //await inventory.save();
     }
 
-    if (missionReport.EndOfMatchUpload) {
+    if (missionReport.EndOfMatchUpload || missionReport.RJ) {
+        logger.debug(`refreshing reward seed`);
         inventory.RewardSeed = generateRewardSeed();
     }
     await inventory.save();
