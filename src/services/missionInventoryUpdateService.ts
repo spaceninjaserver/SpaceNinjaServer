@@ -1515,7 +1515,9 @@ export const addMissionRewards = async (
             const currentJob = result.currentJob;
             const syndicateTag = result.syndicateTag;
             if (syndicateTag === "EntratiSyndicate") {
-                let medallionAmount = Math.floor(currentJob.xpAmounts[rewardInfo.JobStage] / (rewardInfo.Q ? 0.8 : 1));
+                let medallionAmount = Math.floor(
+                    currentJob.xpAmounts[currentJob.isVault ? 0 : rewardInfo.JobStage] / (rewardInfo.Q ? 0.8 : 1)
+                );
                 if (currentJob.endless) {
                     const index = rewardInfo.JobStage % currentJob.xpAmounts.length;
                     const excess = Math.floor(rewardInfo.JobStage / (currentJob.xpAmounts.length - 1));
@@ -1528,11 +1530,11 @@ export const addMissionRewards = async (
                     });
                     SyndicateXPItemReward = medallionAmount;
                     logger.debug(
-                        `Giving ${medallionAmount} medallions for the ${rewardInfo.JobStage} stage of the ${rewardInfo.JobTier} tier bounty`
+                        `Giving ${medallionAmount} medallions for the ${rewardInfo.JobStage} stage of the ${rewardInfo.JobTier} tier ${currentJob.isVault ? "vault bounty" : "bounty"}`
                     );
                 } else {
                     logger.warn(
-                        `${currentJob.jobType} tried to give ${medallionAmount} medallions for the ${rewardInfo.JobStage} stage of the ${rewardInfo.JobTier} tier bounty`
+                        `${currentJob.jobType} tried to give ${medallionAmount} medallions for the ${rewardInfo.JobStage} stage of the ${rewardInfo.JobTier} tier ${currentJob.isVault ? "vault bounty" : "bounty"}`
                     );
                     logger.warn(`currentJob`, { currentJob: currentJob });
                 }
