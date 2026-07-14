@@ -2834,7 +2834,8 @@ export const addMissionComplete = (
         if (Completes && Tier) {
             Missions[itemIndex].Tier = Tier;
         }
-    } else {
+    } else if (Tag !== "") {
+        //Prevent "Chains of Harrow" pushing "Tag":"" into inventory.Missions displaying incorrect steel path progress
         Missions.push({ Tag, Completes });
     }
 };
