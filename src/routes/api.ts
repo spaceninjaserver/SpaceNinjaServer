@@ -138,6 +138,7 @@ import { retrievePetFromStasisController } from "../controllers/api/retrievePetF
 import { reverseQuestProgressController } from "../controllers/api/reverseQuestProgressController.ts";
 import { saveDialogueController } from "../controllers/api/saveDialogueController.ts";
 import { saveLoadoutController } from "../controllers/api/saveLoadoutController.ts";
+import { saveMiscDataController } from "../controllers/api/saveMiscDataController.ts";
 import { saveSettingsController } from "../controllers/api/saveSettingsController.ts";
 import { saveVaultAutoContributeController } from "../controllers/api/saveVaultAutoContributeController.ts";
 import { sellController } from "../controllers/api/sellController.ts";
@@ -384,6 +385,7 @@ apiRouter.post("/retrievePetFromStasis.php", retrievePetFromStasisController);
 apiRouter.post("/reverseQuestProgress.php", reverseQuestProgressController);
 apiRouter.post("/saveDialogue.php", saveDialogueController);
 apiRouter.post("/saveLoadout.php", saveLoadoutController);
+apiRouter.post("/saveMiscData.php", saveMiscDataController);
 apiRouter.post("/saveSettings.php", saveSettingsController);
 apiRouter.post("/saveVaultAutoContribute.php", saveVaultAutoContributeController);
 apiRouter.post("/sell.php", sellController);

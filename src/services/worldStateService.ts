@@ -4744,7 +4744,9 @@ export const getWorldState = (
             c: hexConquest.Missions.map(x => x.difficulties[1].risks),
             fv: hexConquest.Variables
         },
-        sfn: [550, 553, 554, 555][halfHour % 4]
+        sfn: [550, 553, 554, 555][halfHour % 4],
+        tcend26: true,
+        tcaz: 3
     };
     if (Array.isArray(config.worldState?.circuitGameModes)) {
         tmp.edg = config.worldState.circuitGameModes as TCircuitGameMode[];

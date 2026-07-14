@@ -2019,6 +2019,14 @@ export const updateGeneric = async (
                 }
             ];
             addShipDecorations(inventory, inventoryChanges.ShipDecorations);
+        } else if (node == "TC2026") {
+            inventoryChanges.ShipDecorations = [
+                {
+                    ItemType: "/Lotus/Types/Items/ShipDecos/LisetPropCleaningDroneGrineer",
+                    ItemCount: 1
+                }
+            ];
+            addShipDecorations(inventory, inventoryChanges.ShipDecorations);
         } else if (node == "KayaFirstVisitPack") {
             inventoryChanges.MiscItems = [
                 {

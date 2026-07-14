@@ -102,7 +102,8 @@ import type {
     ISketch,
     IHybridFusionTreasure,
     IWeeklyGuildVaultBonus,
-    IWeekGuildVaultBonusReward
+    IWeekGuildVaultBonusReward,
+    IMiscAccountData
 } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IOid, ITypeCount } from "../../types/commonTypes.ts";
@@ -1597,6 +1598,14 @@ const weeklyGuildVaultBonusSchema = new Schema<IWeeklyGuildVaultBonus>(
     { _id: false }
 );
 
+const miscAccountDataSchema = new Schema<IMiscAccountData>(
+    {
+        PropertyName: { type: String, required: true },
+        Json: { type: String, required: true }
+    },
+    { _id: false }
+);
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
@@ -2061,7 +2070,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         Sketches: { type: [sketchSchema], default: undefined },
 
-        WeeklyGuildVaultBonusInfo: { type: [weeklyGuildVaultBonusSchema], default: undefined }
+        WeeklyGuildVaultBonusInfo: { type: [weeklyGuildVaultBonusSchema], default: undefined },
+
+        MiscAccountData: { type: [miscAccountDataSchema], default: undefined }
     },
     { timestamps: { createdAt: "Created", updatedAt: false } }
 );

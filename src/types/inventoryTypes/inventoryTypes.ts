@@ -562,6 +562,7 @@ export interface IInventoryClient
     RetroDisableKissInboxMessage?: boolean;
     Sketches?: ISketch[];
     WeeklyGuildVaultBonusInfo?: IWeeklyGuildVaultBonus[] | IWeeklyGuildVaultBonus; // should be an array
+    MiscAccountData?: IMiscAccountData[];
 }
 
 export interface IAffiliation {
@@ -1423,4 +1424,9 @@ export interface IWeekGuildVaultBonusReward {
     PointThreshold: number;
     ItemCount: number;
     Reward: string;
+}
+
+export interface IMiscAccountData {
+    PropertyName: string;
+    Json: string;
 }
