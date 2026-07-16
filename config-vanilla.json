@@ -131,7 +131,8 @@
     "tutorialGivesStanceMods": null,
     "twentythreeHourMasteryRankCooldown": true,
     "doubleDailySynthesisEndoReward": true,
-    "tylRegorDropsTwoEquinoxParts": true
+    "tylRegorDropsTwoEquinoxParts": true,
+    "railjackExtraResourceBundlesReward": true
   },
   "inventoryDefaults": {},
   "tunables": {

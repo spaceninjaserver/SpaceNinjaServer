@@ -27,7 +27,8 @@ type TQolConfigKey =
     | "tutorialGivesStanceMods"
     | "twentythreeHourMasteryRankCooldown"
     | "doubleDailySynthesisEndoReward"
-    | "tylRegorDropsTwoEquinoxParts";
+    | "tylRegorDropsTwoEquinoxParts"
+    | "railjackExtraResourceBundlesReward";
 
 export interface IConfig {
     /** @deprecated */ mongodbUrl?: string;

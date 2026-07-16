@@ -2,6 +2,7 @@ import type {
     IMissionReward as IMissionRewardExternal,
     IRegion,
     IReward,
+    TMissionDeck,
     TMissionType,
     TRarity
 } from "warframe-public-export-plus";
@@ -2284,6 +2285,50 @@ async function getRandomMissionDrops(
                 }
             } else {
                 logger.error(`Loot dungeon completed, but there was no cache reward manifest at ${RewardInfo.node}`);
+            }
+        }
+
+        //Railjack Extra End-Of-Mission Reward. Extra resource bundles rewarded on mission completion.
+        if (
+            region.missionType == "MT_RAILJACK" &&
+            shouldDoServerQol("railjackExtraResourceBundlesReward", buildLabel, gameToBuildVersion["27.2.0"])
+        ) {
+            if (
+                ![
+                    "CrewBattleNode557", //NemesisShowdownNodeGrineer
+                    "CrewBattleNode558", //NemesisShowdownNodeCorpus
+                    "CrewBattleNode559" //NemesisShowdownNodeInfested
+                ].includes(RewardInfo.node)
+            ) {
+                let table: TMissionDeck | undefined;
+                let droptimes = 0;
+                if (region.faction == "FC_GRINEER") {
+                    table = getMissionDeck(
+                        "/Lotus/Types/Game/MissionDecks/RailjackMissionRewards/GrineerRailjackResourceRewards",
+                        buildLabel
+                    );
+                    droptimes = 2;
+                }
+                if (region.faction == "FC_CORPUS") {
+                    table = getMissionDeck(
+                        "/Lotus/Types/Game/MissionDecks/RailjackMissionRewards/CorpusRailjackResourceRewards",
+                        buildLabel
+                    );
+                    droptimes = 2;
+                }
+                if (["CrewBattleNode560", "CrewBattleNode561"].includes(RewardInfo.node)) {
+                    table = getMissionDeck(
+                        "/Lotus/Types/Game/MissionDecks/JadeShadowsConstellationsRewards/JS2ScoriasAngelRewardsExtra",
+                        buildLabel
+                    );
+                    droptimes = 1;
+                }
+                //Players receive two items on the list.
+                for (let dropitem = 0; dropitem < droptimes; ++dropitem) {
+                    const drop = getRandomRewardByChance(table![0], rng);
+                    drops.push({ StoreItem: drop!.type, ItemCount: drop!.itemCount });
+                    table![0] = table![0].filter((item: IReward) => item.type !== drop!.type);
+                }
             }
         }
 
