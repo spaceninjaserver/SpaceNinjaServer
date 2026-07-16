@@ -149,6 +149,10 @@ export const validateConfig = (): void => {
         delete config.nrsAddress;
         modified = true;
     }
+    if (config.dtls && config.dtls < 0) {
+        config.dtls = 99;
+        modified = true;
+    }
     if (config.administratorNames) {
         if (!Array.isArray(config.administratorNames)) {
             config.administratorNames = [config.administratorNames];
