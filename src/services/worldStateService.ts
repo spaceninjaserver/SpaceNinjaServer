@@ -1692,6 +1692,9 @@ const fullyStockBaro = (vt: IVoidTrader, buildLabel: string): void => {
     for (const item of baro.rest) {
         vt.Manifest.push(item);
     }
+    for (const item of baro.evergreen) {
+        vt.Manifest.push(item);
+    }
 };
 
 const getVarziaRotation = (week: number, buildLabel: string): string => {
@@ -4478,9 +4481,9 @@ export const getWorldState = (
                         )
                     );
                 }
-            }
-            for (const item of baro.evergreen) {
-                vt.Manifest.push(item);
+                for (const item of baro.evergreen) {
+                    vt.Manifest.push(item);
+                }
             }
         }
     }
