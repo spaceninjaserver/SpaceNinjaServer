@@ -5126,6 +5126,40 @@ export const getNightwaveSyndicateTag = (buildLabel: string = BL_LATEST): string
     if (version_compare(buildLabel, gameToBuildVersion["34.0.8"]) >= 0) {
         return "RadioLegionIntermission9Syndicate";
     }
+    // Actual version is U33.0.11
+    if (version_compare(buildLabel, gameToBuildVersion["33.0.10"]) > 0) {
+        return "RadioLegionIntermission8Syndicate";
+    }
+    if (version_compare(buildLabel, gameToBuildVersion["32.2.0"]) >= 0) {
+        return "RadioLegionIntermission7Syndicate";
+    }
+    if (version_compare(buildLabel, gameToBuildVersion["31.6.4"]) >= 0) {
+        return "RadioLegionIntermission6Syndicate";
+    }
+    if (version_compare(buildLabel, gameToBuildVersion["31.2.0"]) >= 0) {
+        return "RadioLegionIntermission5Syndicate";
+    }
+    if (version_compare(buildLabel, gameToBuildVersion["30.6.0"]) >= 0) {
+        return "RadioLegionIntermission4Syndicate";
+    }
+    if (version_compare(buildLabel, gameToBuildVersion["29.7.0"]) >= 0) {
+        return "RadioLegionIntermission3Syndicate";
+    }
+    if (version_compare(buildLabel, gameToBuildVersion["28.3.2"]) >= 0) {
+        return "RadioLegion3Syndicate";
+    }
+    if (version_compare(buildLabel, gameToBuildVersion["25.8.2"]) >= 0) {
+        return "RadioLegionIntermission2Syndicate";
+    }
+    if (version_compare(buildLabel, gameToBuildVersion["25.3.0"]) >= 0) {
+        return "RadioLegion2Syndicate";
+    }
+    if (version_compare(buildLabel, gameToBuildVersion["25.1.2"]) >= 0) {
+        return "RadioLegionIntermissionSyndicate";
+    }
+    if (version_compare(buildLabel, gameToBuildVersion["24.3.0"]) >= 0) {
+        return "RadioLegionSyndicate";
+    }
     return undefined;
 };
 
