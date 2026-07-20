@@ -3487,6 +3487,7 @@ const steelPathSystems: [number, string][] = [
     [16, "Deimos"],
     [17, "Lua"],
     [18, "KuvaFortress"],
+    [20, "DeepSpace"],
     [21, "Zariman"],
     [22, "Duviri"],
     [23, "1999"],
@@ -3494,7 +3495,15 @@ const steelPathSystems: [number, string][] = [
 ];
 
 const isRequiredForSteelPathTrophy = (region: IRegion): boolean => {
-    return region.missionType != "MT_RAILJACK" && region.missionType != "MT_PVP";
+    return region.missionType != "MT_PVP";
+};
+
+const isRequiredForRailjackSteelPathTrophy = (region: IRegion): boolean => {
+    return (
+        region.systemIndex != 6 && // ash & garuda nodes
+        !region.hidden && // nemesis nodes
+        region.maxEnemyLevel != 1 // freeroam node
+    );
 };
 
 export const ensureUserHasSteelPathRewards = async (
@@ -3510,8 +3519,11 @@ export const ensureUserHasSteelPathRewards = async (
 
     const eligibleSystems = new Set<number>(steelPathSystems.map(x => x[0]));
     for (const [tag, region] of Object.entries(ExportRegions)) {
-        if (!completedNodes.has(tag) && isRequiredForSteelPathTrophy(region)) {
-            eligibleSystems.delete(region.systemIndex);
+        if (!completedNodes.has(tag)) {
+            const isRailjack = region.missionType == "MT_RAILJACK";
+            if (isRailjack ? isRequiredForRailjackSteelPathTrophy(region) : isRequiredForSteelPathTrophy(region)) {
+                eligibleSystems.delete(isRailjack ? 20 : region.systemIndex);
+            }
         }
     }
 
