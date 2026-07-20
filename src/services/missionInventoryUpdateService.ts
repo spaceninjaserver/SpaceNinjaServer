@@ -118,7 +118,7 @@ import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import { corpusDeathSquadInfo, grineerDeathSquadInfo } from "./invasionService.ts";
 import { libraryTargetToAvatar } from "../constants/synthesis.ts";
 import { buildVersionToInt, wikiDateToBuildVersionInt } from "../helpers/versionHelper.ts";
-import baro from "../../static/fixed_responses/worldState/baro.json" with { type: "json" };
+import baro from "../constants/baro.ts";
 
 const getRotations = async (rewardInfo: IRewardInfo, buildLabel: string, tierOverride?: number): Promise<number[]> => {
     // For Spy missions, e.g. 3 vaults cracked = A, B, C

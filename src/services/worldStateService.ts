@@ -1,4 +1,4 @@
-import baro from "../../static/fixed_responses/worldState/baro.json" with { type: "json" };
+import baro, { type IBaroDataTradeOffer } from "../constants/baro.ts";
 import varzia from "../constants/varzia.ts";
 import fissureMissions from "../../static/fixed_responses/worldState/fissureMissions.json" with { type: "json" };
 import sortieTilesets from "../../static/fixed_responses/worldState/sortieTilesets.json" with { type: "json" };
@@ -32,7 +32,6 @@ import type {
     ITmp,
     IVoidStorm,
     IVoidTrader,
-    IVoidTraderOffer,
     IWorldState,
     TCircuitGameMode,
     IFlashSale,
@@ -1671,30 +1670,28 @@ const getIdealTimeSatsifyingConstraints = (constraints: ITimeConstraint[]): numb
 };
 
 const fullyStockBaro = (vt: IVoidTrader, buildLabel: string): void => {
-    if (version_compare(buildLabel, gameToBuildVersion["40.0.0"]) >= 0) {
-        for (const item of baro.evilBaro as IVoidTraderOffer[]) {
-            vt.Manifest.push(item);
-        }
+    const tempManifest: IBaroDataTradeOffer[] = [];
+    for (const item of baro.evilBaro) {
+        tempManifest.push(item);
     }
     for (const armorSet of baro.armorSets) {
-        if (Array.isArray(armorSet[0])) {
-            for (const set of armorSet as IVoidTraderOffer[][]) {
-                for (const item of set) {
-                    vt.Manifest.push(item);
-                }
-            }
-        } else {
-            for (const item of armorSet as IVoidTraderOffer[]) {
-                vt.Manifest.push(item);
-            }
+        if (armorSet.bundle) {
+            tempManifest.push(armorSet.bundle);
         }
+        tempManifest.push(...armorSet.items);
     }
     for (const item of baro.rest) {
-        vt.Manifest.push(item);
+        tempManifest.push(item);
     }
     for (const item of baro.evergreen) {
-        vt.Manifest.push(item);
+        tempManifest.push(item);
     }
+    vt.Manifest.push(
+        ...tempManifest
+            .filter(({ minBuildLabel }) => version_compare(buildLabel, minBuildLabel) >= 0)
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            .map(({ minBuildLabel, ...offer }) => offer)
+    );
 };
 
 const getVarziaRotation = (week: number, buildLabel: string): string => {
@@ -4433,34 +4430,32 @@ export const getWorldState = (
             if (config.worldState?.baroFullyStocked) {
                 fullyStockBaro(vt, buildLabel);
             } else {
+                const tempManifest: IBaroDataTradeOffer[] = [];
                 const rng = new SRng(new SRng(baroIndex).randomInt(0, 100_000));
                 // TOVERIFY: Constraint for upgrades amount?
                 // TOVERIFY: Constraint for weapon amount?
                 // TOVERIFY: Constraint for relics amount?
-                let armorSet = rng.randomElement(baro.armorSets)!;
-                if (Array.isArray(armorSet[0])) {
-                    armorSet = rng.randomElement(baro.armorSets)!;
-                }
-                while (vt.Manifest.length + armorSet.length < 31) {
+                const armorSet = rng.randomElement(baro.armorSets)!;
+                const armorItems = armorSet.bundle && rng.randomInt(0, 1) == 0 ? [armorSet.bundle] : armorSet.items;
+
+                while (tempManifest.length + armorItems.length < 31) {
                     const item = rng.randomElement(baro.rest)!;
-                    if (vt.Manifest.indexOf(item) == -1) {
+                    if (tempManifest.indexOf(item) == -1) {
                         const set = baro.allIfAny.find(set => set.indexOf(item.ItemType) != -1);
                         if (set) {
                             for (const itemType of set) {
-                                vt.Manifest.push(baro.rest.find(x => x.ItemType == itemType)!);
+                                tempManifest.push(baro.rest.find(x => x.ItemType == itemType)!);
                             }
                         } else {
-                            vt.Manifest.push(item);
+                            tempManifest.push(item);
                         }
                     }
                 }
-                const overflow = 31 - (vt.Manifest.length + armorSet.length);
+                const overflow = 31 - (tempManifest.length + armorItems.length);
                 if (overflow > 0) {
-                    vt.Manifest.splice(0, overflow);
+                    tempManifest.splice(0, overflow);
                 }
-                for (const armor of armorSet) {
-                    vt.Manifest.push(armor as IVoidTraderOffer);
-                }
+                tempManifest.push(...armorItems);
 
                 {
                     const evilBaroStock: string[] = [];
@@ -4475,15 +4470,19 @@ export const getWorldState = (
                         );
                     }
 
-                    vt.Manifest.unshift(
-                        ...(baro.evilBaro as IVoidTraderOffer[]).filter(item =>
-                            evilBaroStock.some(end => item.ItemType.endsWith(end))
-                        )
+                    tempManifest.unshift(
+                        ...baro.evilBaro.filter(item => evilBaroStock.some(end => item.ItemType.endsWith(end)))
                     );
                 }
                 for (const item of baro.evergreen) {
-                    vt.Manifest.push(item);
+                    tempManifest.push(item);
                 }
+                vt.Manifest.push(
+                    ...tempManifest
+                        .filter(({ minBuildLabel }) => version_compare(buildLabel, minBuildLabel) >= 0)
+                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                        .map(({ minBuildLabel, ...offer }) => offer)
+                );
             }
         }
     }

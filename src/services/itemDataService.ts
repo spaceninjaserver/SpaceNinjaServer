@@ -84,7 +84,7 @@ import { BL_LATEST } from "../constants/gameVersions.ts";
 import type { TInventorySlot } from "../types/inventoryTypes/inventoryTypes.ts";
 import { shouldDoServerQol } from "./configService.ts";
 import { buildLabelToVersionInt, wikiDateToBuildVersionInt } from "../helpers/versionHelper.ts";
-import baro from "../../static/fixed_responses/worldState/baro.json" with { type: "json" };
+import baro from "../constants/baro.ts";
 
 export type WeaponTypeInternal =
     | "LongGuns"
