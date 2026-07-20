@@ -28,7 +28,6 @@
   },
   "type": "module",
   "dependencies": {
-    "body-parser": "^2.2.0",
     "chokidar": "^4.0.3",
     "express": "^5",
     "google-auth-library": "^10.5.0",

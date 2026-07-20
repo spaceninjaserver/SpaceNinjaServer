@@ -1,6 +1,5 @@
 import express from "express";
 
-import bodyParser from "body-parser";
 import { unknownEndpointHandler } from "./middleware/middleware.ts";
 import { requestLogger } from "./middleware/morgenMiddleware.ts";
 import { errorHandler } from "./middleware/errorHandler.ts";
@@ -33,9 +32,11 @@ app.use((req, _res, next) => {
     next();
 });
 
-app.use(bodyParser.raw());
+// Use body-parser middleware (exported by express)
+app.use(express.raw());
 app.use(express.json({ limit: "4mb" }));
-app.use(bodyParser.text({ limit: "4mb" }));
+app.use(express.text({ limit: "4mb" }));
+
 app.use(requestLogger);
 
 app.use("/api", apiRouter);
