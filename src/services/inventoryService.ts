@@ -569,7 +569,7 @@ export const addItem = async (
                     ItemCount: quantity
                 } satisfies IMiscItem
             ];
-            addMiscItems(inventory, inventoryChanges.MiscItems);
+            addMiscItemsComplex(inventory, inventoryChanges.MiscItems);
 
             if (
                 typeName == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg" &&
@@ -2462,8 +2462,9 @@ export const applyClientEquipmentUpdates = <K extends TEquipmentKey>(
     });
 };
 
+// May not be used for adding argon or void traces (subtracting these is fine).
 export const addMiscItem = (
-    inventory: Pick<TInventoryDatabaseDocument, "MiscItems" | "FoundToday">,
+    inventory: Pick<TInventoryDatabaseDocument, "MiscItems">,
     type: string,
     count: number,
     inventoryChanges: IInventoryChanges = {}
@@ -2478,8 +2479,9 @@ export const addMiscItem = (
     combineInventoryChanges(inventoryChanges, { MiscItems: miscItemChanges });
 };
 
+// May not be used for adding argon or void traces (subtracting these is fine).
 export const addMiscItems = (
-    inventory: Pick<TInventoryDatabaseDocument, "MiscItems" | "FoundToday">,
+    inventory: Pick<TInventoryDatabaseDocument, "MiscItems">,
     itemsArray: IMiscItem[]
 ): void => {
     const { MiscItems } = inventory;
@@ -2496,18 +2498,59 @@ export const addMiscItems = (
 
         MiscItems[itemIndex].ItemCount += ItemCount;
 
-        if (ItemType == "/Lotus/Types/Items/MiscItems/ArgonCrystal" && ItemCount > 0) {
-            inventory.FoundToday ??= [];
-            let foundTodayIndex = inventory.FoundToday.findIndex(x => x.ItemType == ItemType);
-            if (foundTodayIndex == -1) {
-                foundTodayIndex = inventory.FoundToday.push({ ItemType, ItemCount: 0 }) - 1;
-            }
-            inventory.FoundToday[foundTodayIndex].ItemCount += ItemCount;
-            if (inventory.FoundToday[foundTodayIndex].ItemCount <= 0) {
-                inventory.FoundToday.splice(foundTodayIndex, 1);
-            }
-            if (inventory.FoundToday.length == 0) {
-                inventory.FoundToday = undefined;
+        if (MiscItems[itemIndex].ItemCount == 0) {
+            MiscItems.splice(itemIndex, 1);
+        } else if (MiscItems[itemIndex].ItemCount < 0) {
+            throw new Error(
+                `Cannot remove ${ItemCount * -1}x ${ItemType} from MiscItems, would be left with ${MiscItems[itemIndex].ItemCount}`
+            );
+        }
+    });
+};
+
+// Correctly handles acquisition of argon and void traces.
+export const addMiscItemsComplex = (
+    inventory: Pick<TInventoryDatabaseDocument, "MiscItems" | "FoundToday" | "PlayerLevel" | "spoofMasteryRank">,
+    itemsArray: IMiscItem[]
+): void => {
+    const { MiscItems } = inventory;
+
+    itemsArray.forEach(({ ItemCount, ItemType }) => {
+        if (ItemCount == 0) {
+            return;
+        }
+
+        let itemIndex = MiscItems.findIndex(x => x.ItemType === ItemType);
+        if (itemIndex == -1) {
+            itemIndex = MiscItems.push({ ItemType, ItemCount: 0 }) - 1;
+        }
+
+        MiscItems[itemIndex].ItemCount += ItemCount;
+
+        if (ItemCount > 0) {
+            if (ItemType == "/Lotus/Types/Items/MiscItems/ArgonCrystal") {
+                inventory.FoundToday ??= [];
+                let foundTodayIndex = inventory.FoundToday.findIndex(x => x.ItemType == ItemType);
+                if (foundTodayIndex == -1) {
+                    foundTodayIndex = inventory.FoundToday.push({ ItemType, ItemCount: 0 }) - 1;
+                }
+                inventory.FoundToday[foundTodayIndex].ItemCount += ItemCount;
+                if (inventory.FoundToday[foundTodayIndex].ItemCount <= 0) {
+                    inventory.FoundToday.splice(foundTodayIndex, 1);
+                }
+                if (inventory.FoundToday.length == 0) {
+                    inventory.FoundToday = undefined;
+                }
+            } else if (ItemType == "/Lotus/Types/Items/MiscItems/VoidTearDrop") {
+                const masteryRank =
+                    inventory.spoofMasteryRank && inventory.spoofMasteryRank >= 0
+                        ? inventory.spoofMasteryRank
+                        : inventory.PlayerLevel;
+                const maxVoidTraces = 100 + masteryRank * 50;
+                if (MiscItems[itemIndex].ItemCount > maxVoidTraces) {
+                    MiscItems[itemIndex].ItemCount = maxVoidTraces;
+                    logger.debug(`capped void traces to ${maxVoidTraces} for mastery rank ${masteryRank}`);
+                }
             }
         }
 

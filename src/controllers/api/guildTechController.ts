@@ -18,6 +18,7 @@ import {
     addCrewShipWeaponSkin,
     addEquipment,
     addItem,
+    addMiscItem,
     addMiscItems,
     addRecipes,
     combineInventoryChanges,
@@ -460,13 +461,7 @@ export const guildTechController: RequestHandler = async (req, res) => {
             "MiscItems"
         );
         const inventoryChanges = finishComponentRepair(inventory, data.TechProductCategory, data.CategoryItemId!);
-        inventoryChanges.MiscItems = [
-            {
-                ItemType: "/Lotus/Types/Items/MiscItems/InstantSalvageRepairItem",
-                ItemCount: -1
-            }
-        ];
-        addMiscItems(inventory, inventoryChanges.MiscItems);
+        addMiscItem(inventory, "/Lotus/Types/Items/MiscItems/InstantSalvageRepairItem", -1, inventoryChanges);
         await inventory.save();
         res.json({
             inventoryChanges: inventoryChanges

@@ -36,6 +36,7 @@ import {
     addLoreFragmentScans,
     addMiscItem,
     addMiscItems,
+    addMiscItemsComplex,
     addMissionComplete,
     addMods,
     addRecipes,
@@ -428,7 +429,7 @@ export const addMissionInventoryUpdates = async (
                     }
                 }
                 if (miscItems.length > 0) {
-                    addMiscItems(inventory, miscItems);
+                    addMiscItemsComplex(inventory, miscItems);
                 }
                 if (recipes.length > 0) {
                     addRecipes(inventory, recipes);

@@ -516,7 +516,7 @@ export interface IInventoryClient
     NemesisAbandonedRewards: string[];
     LastInventorySync?: IOid;
     NextRefill?: IMongoDateWithLegacySupport;
-    FoundToday?: IMiscItem[]; // for Argon Crystals
+    FoundToday: IMiscItem[] | undefined; // for Argon Crystals
     CustomMarkers?: ICustomMarkers[];
     //ActiveLandscapeTraps: any[];
     EvolutionProgress?: IEvolutionProgress[];
