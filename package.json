@@ -43,7 +43,6 @@
     "ws": "^8.18.2"
   },
   "optionalDependencies": {
-    "@types/body-parser": "^1.19.6",
     "@types/express": "^5",
     "@types/morgan": "^1.9.9",
     "@types/websocket": "^1.0.10",
