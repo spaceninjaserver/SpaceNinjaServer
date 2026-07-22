@@ -2125,7 +2125,10 @@ export const getWorldState = (
             //"Faction": "FC_GRINEER",
             Desc: "/Lotus/Language/Locations/RelayStationTennoCon",
             ToolTip: "/Lotus/Language/Locations/RelayStationTennoConDesc",
-            Icon: "/Lotus/Interface/Icons/Categories/IconTennoConSigil.png",
+            Icon:
+                buildVersionInt >= gameToBuildVersionInt["43.0.0"]
+                    ? "/Lotus/Interface/Icons/Categories/IconTennoConBaroVip.png"
+                    : "/Lotus/Interface/Icons/Categories/IconTennoConSigil.png",
             Tag: "TennoConRelay",
             Node: "TennoConHUB2"
         });
