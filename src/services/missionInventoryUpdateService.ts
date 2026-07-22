@@ -787,7 +787,7 @@ export const addMissionInventoryUpdates = async (
                         clientProgress.DefenderScore *= 3;
                     }
                     const dbProgress = inventory.QualifyingInvasions.find(x =>
-                        x.invasionId.equals(clientProgress._id.$oid)
+                        x.invasionId.equals(fromOid(clientProgress._id))
                     );
                     if (dbProgress) {
                         dbProgress.Delta += clientProgress.Delta;
@@ -795,13 +795,13 @@ export const addMissionInventoryUpdates = async (
                         dbProgress.DefenderScore += clientProgress.DefenderScore;
                     } else {
                         inventory.QualifyingInvasions.push({
-                            invasionId: new Types.ObjectId(clientProgress._id.$oid),
+                            invasionId: new Types.ObjectId(fromOid(clientProgress._id)),
                             Delta: clientProgress.Delta,
                             AttackerScore: clientProgress.AttackerScore,
                             DefenderScore: clientProgress.DefenderScore
                         });
                     }
-                    const invasion = getInvasionByOid(clientProgress._id.$oid)!;
+                    const invasion = getInvasionByOid(fromOid(clientProgress._id))!;
                     const factionSidedWith = clientProgress.AttackerScore ? invasion.Faction : invasion.DefenderFaction;
                     if (invasion.Faction != "FC_INFESTATION") {
                         const info = factionSidedWith != "FC_GRINEER" ? grineerDeathSquadInfo : corpusDeathSquadInfo;
@@ -1227,7 +1227,7 @@ export const addMissionRewards = async (
     if (rewardInfo.alertId) {
         const worldState = getWorldState(buildLabel);
         await populateAlerts(worldState);
-        const alert = worldState.Alerts.find(x => x._id.$oid == rewardInfo.alertId);
+        const alert = worldState.Alerts.find(x => fromOid(x._id) == rewardInfo.alertId);
         if (!alert) {
             logger.warn(`mission completed unknown alert`, { alertId: rewardInfo.alertId });
         } else {
@@ -1260,7 +1260,9 @@ export const addMissionRewards = async (
 
     if (invasionProgress) {
         for (const clientProgress of invasionProgress) {
-            const dbProgress = inventory.QualifyingInvasions.find(x => x.invasionId.equals(clientProgress._id.$oid));
+            const dbProgress = inventory.QualifyingInvasions.find(x =>
+                x.invasionId.equals(fromOid(clientProgress._id))
+            );
             if (dbProgress) {
                 const run =
                     (clientProgress.AttackerScore > clientProgress.DefenderScore
@@ -1272,7 +1274,7 @@ export const addMissionRewards = async (
     }
 
     if (rewardInfo.goalId) {
-        const goal = getWorldState(buildLabel).Goals.find(x => x._id.$oid == rewardInfo.goalId);
+        const goal = getWorldState(buildLabel).Goals.find(x => fromOid(x._id) == rewardInfo.goalId);
         if (goal) {
             if (rewardInfo.node == goal.Node && goal.MissionKeyName) levelKeyName = goal.MissionKeyName;
             if (goal.ConcurrentNodes && goal.ConcurrentMissionKeyNames) {
@@ -1315,7 +1317,7 @@ export const addMissionRewards = async (
                     await handleGuildGoalProgress(guild, {
                         Count: 10,
                         Tag: goal.Tag,
-                        goalId: new Types.ObjectId(goal._id.$oid)
+                        goalId: new Types.ObjectId(fromOid(goal._id))
                     });
                 }
             }
@@ -2536,7 +2538,7 @@ async function getRandomMissionDrops(
 
     if (RewardInfo.EnemyCachesFound) {
         if (RewardInfo.goalId) {
-            const goal = getWorldState(buildLabel).Goals.find(x => x._id.$oid == RewardInfo.goalId);
+            const goal = getWorldState(buildLabel).Goals.find(x => fromOid(x._id) == RewardInfo.goalId);
             if (goal) {
                 let currentMissionKey: string | undefined;
                 if (RewardInfo.node == goal.Node) {
@@ -2577,7 +2579,7 @@ async function getRandomMissionDrops(
         } else if (RewardInfo.alertId) {
             const worldState = getWorldState(buildLabel);
             await populateAlerts(worldState);
-            const alert = worldState.Alerts.find(x => x._id.$oid == RewardInfo.alertId);
+            const alert = worldState.Alerts.find(x => fromOid(x._id) == RewardInfo.alertId);
             if (alert && alert.MissionInfo.enemyCacheOverride) {
                 const deck = ExportRewards[alert.MissionInfo.enemyCacheOverride];
                 for (let rotation = 0; rotation != RewardInfo.EnemyCachesFound; ++rotation) {
@@ -2731,12 +2733,12 @@ const getSyndicateJob = (
 
     let syndicateEntry: ISyndicateMissionInfo | IGoal | undefined;
     if (isGoalJob) {
-        syndicateEntry = getWorldState(buildLabel).Goals.find(g => g._id.$oid === syndicateMissionId);
+        syndicateEntry = getWorldState(buildLabel).Goals.find(g => fromOid(g._id) === syndicateMissionId);
         if (syndicateEntry) syndicateTag = syndicateEntry.JobAffiliationTag!;
     } else if (syndicateMissionId) {
         const syndicateMissions: ISyndicateMissionInfo[] = [];
         pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId), buildLabel);
-        syndicateEntry = syndicateMissions.find(m => m._id.$oid == syndicateMissionId);
+        syndicateEntry = syndicateMissions.find(m => fromOid(m._id) == syndicateMissionId);
         if (syndicateEntry) syndicateTag = syndicateEntry.Tag;
     }
 

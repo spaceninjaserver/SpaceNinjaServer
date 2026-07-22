@@ -5773,7 +5773,7 @@ const generateSeededAlert = (
     if (version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
         filteredSpecRes.push({ path: "/Lotus/Types/Items/MiscItems/Eventium", qty: 5 });
     }
-    if (version_compare(buildLabel, gameToBuildVersion["18.5.0"]) >= 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["17.12.0"]) >= 0) {
         filteredSpecRes.push({ path: "/Lotus/Types/Items/MiscItems/Alertium", qty: 1 });
     }
     if (version_compare(buildLabel, gameToBuildVersion["18.13.3"]) >= 0) {
@@ -5794,7 +5794,7 @@ const generateSeededAlert = (
     ];
     if (hasNightmare) categories.push({ name: "NIGHTMARE_MODS", weight: 30 });
     if (filteredSpecRes.length > 0) categories.push({ name: "SPECIAL_RESOURCES", weight: 10 });
-    if (version_compare(buildLabel, gameToBuildVersion["5.2.0"]) >= 0) {
+    if (version_compare(buildLabel, gameToBuildVersion["7.11.0"]) >= 0) {
         categories.push({ name: "VAUBAN_PARTS", weight: 7 });
     }
 
@@ -5973,13 +5973,87 @@ export const populateAlerts = async (worldState: IWorldState): Promise<void> => 
                 if (timeMs >= activationTime && timeMs < expiryTime) {
                     usedNodes.add(alert.MissionInfo.location);
 
-                    if (alert.MissionInfo.missionReward?.items) {
-                        alert.MissionInfo.missionReward.items = alert.MissionInfo.missionReward.items.map(item => {
-                            if (item.includes("/Recipes/Helmets/")) {
-                                return getVersionAppropriateHelmet(item, buildLabel);
+                    const isPreU14 = version_compare(buildLabel, gameToBuildVersion["14.0.0"]) < 0;
+                    if (alert.MissionInfo.missionReward) {
+                        if (alert.MissionInfo.missionReward.items) {
+                            alert.MissionInfo.missionReward.items = alert.MissionInfo.missionReward.items.map(item => {
+                                let processedItem = item;
+                                if (processedItem.includes("/Recipes/Helmets/")) {
+                                    processedItem = getVersionAppropriateHelmet(processedItem, buildLabel);
+                                }
+
+                                if (isPreU14) {
+                                    const parts = processedItem.split("/");
+                                    const filename = parts[parts.length - 1];
+
+                                    if (processedItem.includes("/Recipes/WarframeRecipes/")) {
+                                        return `/Lotus/Types/Recipes/WarframeRecipes/${filename}StoreItem`;
+                                    }
+
+                                    const isPreU13 = version_compare(buildLabel, gameToBuildVersion["13.0.0"]) < 0;
+                                    if (filename === "FormaBlueprint") {
+                                        if (isPreU13) {
+                                            return "/Lotus/Types/StoreItems/Recipes/OrokinCatalystBlueprintStoreItem";
+                                        }
+                                        return "/Lotus/Types/Recipes/Components/FormaBlueprintStoreItem";
+                                    }
+                                    if (filename === "Forma") {
+                                        if (isPreU13) {
+                                            return "/Lotus/Types/StoreItems/Recipes/OrokinCatalystStoreItem";
+                                        }
+                                        return "/Lotus/Types/Recipes/Components/FormaStoreItem";
+                                    }
+                                    if (filename === "OrokinReactorBlueprint") {
+                                        if (isPreU13) {
+                                            return "/Lotus/Types/StoreItems/Recipes/OrokinReactorBlueprintStoreItem";
+                                        }
+                                        return "/Lotus/Types/Recipes/Components/OrokinReactorBlueprintStoreItem";
+                                    }
+                                    if (filename === "OrokinCatalystBlueprint") {
+                                        return "/Lotus/Types/StoreItems/Recipes/OrokinCatalystBlueprintStoreItem";
+                                    }
+                                    if (filename.endsWith("Blueprint")) {
+                                        return `/Lotus/Types/StoreItems/Recipes/${filename}StoreItem`;
+                                    }
+                                    return processedItem;
+                                }
+
+                                return processedItem;
+                            });
+                        }
+
+                        if (alert.MissionInfo.missionReward.countedItems) {
+                            if (isPreU14) {
+                                alert.MissionInfo.missionReward.countedItems =
+                                    alert.MissionInfo.missionReward.countedItems.map(ci => {
+                                        if (ci.ItemType === "/Lotus/Types/Items/MiscItems/ArgonCrystal") {
+                                            return {
+                                                ItemType: "/Lotus/Types/Items/MiscItems/OrokinCell",
+                                                ItemCount: ci.ItemCount
+                                            };
+                                        }
+                                        if (ci.ItemType === "/Lotus/Types/Items/MiscItems/OxiumAlloy") {
+                                            return {
+                                                ItemType: "/Lotus/Types/Items/MiscItems/Gallium",
+                                                ItemCount: Math.max(1, Math.round(ci.ItemCount / 10))
+                                            };
+                                        }
+                                        if (ci.ItemType === "/Lotus/Types/Items/MiscItems/Tellurium") {
+                                            return {
+                                                ItemType: "/Lotus/Types/Items/MiscItems/Morphic",
+                                                ItemCount: ci.ItemCount
+                                            };
+                                        }
+                                        if (ci.ItemType === "/Lotus/Types/Items/MiscItems/Alertium") {
+                                            return {
+                                                ItemType: "/Lotus/Types/Items/MiscItems/Neurode",
+                                                ItemCount: ci.ItemCount
+                                            };
+                                        }
+                                        return ci;
+                                    });
                             }
-                            return item;
-                        });
+                        }
                     }
 
                     activeAlerts.push(alert);
