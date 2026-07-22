@@ -1136,6 +1136,10 @@ function fetchItemList() {
                         if (nameMap[item.name]) {
                             item.name = nameMap[item.name];
                         }
+                        if (item.name == "") {
+                            //console.log(`changed ${item.uniqueName} name to path`);
+                            item.name = item.uniqueName;
+                        }
                         if ("badReason" in item) {
                             if (item.badReason == "starter") {
                                 item.name = loc("code_starter").replaceAll("|MOD|", item.name);
