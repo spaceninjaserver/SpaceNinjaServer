@@ -87,12 +87,6 @@
       "creditsCost": 0,
       "requiredLevel": 0,
       "rankUpReward": false
-    },
-    {
-      "storeItem": "",
-      "creditsCost": 0,
-      "requiredLevel": 0,
-      "rankUpReward": true
     }
   ]
 }

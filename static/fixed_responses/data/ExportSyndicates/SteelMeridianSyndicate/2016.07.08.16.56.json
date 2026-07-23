@@ -251,6 +251,7 @@
     },
     {
       "storeItem": "/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/ArchRocketCrossbowReceiver",
+      "standingCost": 0,
       "creditsCost": 0,
       "requiredLevel": 0,
       "rankUpReward": true

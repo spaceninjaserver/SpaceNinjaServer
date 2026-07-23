@@ -1884,18 +1884,21 @@
   "favours": [
     {
       "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Sigils/LoginSigilA",
+      "standingCost": 0,
       "creditsCost": 0,
       "requiredLevel": 1,
       "rankUpReward": false
     },
     {
       "storeItem": "/Lotus/Types/StoreItems/Packages/ColorPackB",
+      "standingCost": 0,
       "creditsCost": 0,
       "requiredLevel": 2,
       "rankUpReward": false
     },
     {
       "storeItem": "/Lotus/StoreItems/Upgrades/Skins/Camo/DesertMarelokSkin",
+      "standingCost": 0,
       "creditsCost": 0,
       "requiredLevel": 3,
       "rankUpReward": true
