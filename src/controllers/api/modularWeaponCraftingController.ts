@@ -11,14 +11,15 @@ import {
     occupySlot,
     productCategoryToInventoryBin,
     combineInventoryChanges,
-    addSpecialItem
+    addSpecialItem,
+    giveMoaPetDefaultWeapon
 } from "../../services/inventoryService.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import { getDefaultUpgrades } from "../../services/itemDataService.ts";
 import { modularWeaponTypes } from "../../helpers/modularWeaponHelper.ts";
 import { getRandomInt } from "../../services/rngService.ts";
 import type { IDefaultUpgrade } from "warframe-public-export-plus";
-import { ExportSentinels, ExportWeapons } from "warframe-public-export-plus";
+import { ExportSentinels } from "warframe-public-export-plus";
 import type { IKubrowPetDatabase } from "../../types/equipmentTypes.ts";
 import { eStatus } from "../../types/equipmentTypes.ts";
 
@@ -144,15 +145,7 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
     }
 
     if (category == "MoaPets") {
-        const weapon = ExportSentinels[data.WeaponType].defaultWeapon;
-        if (weapon) {
-            const category = ExportWeapons[weapon].productCategory;
-            addEquipment(inventory, category, weapon, undefined, inventoryChanges);
-            combineInventoryChanges(
-                inventoryChanges,
-                occupySlot(inventory, productCategoryToInventoryBin(category)!, !!data.isWebUi)
-            );
-        }
+        giveMoaPetDefaultWeapon(inventory, data.WeaponType, !!data.isWebUi, inventoryChanges);
     }
     defaultOverwrites.Configs = applyDefaultUpgrades(inventory, defaultUpgrades, inventoryChanges);
     addEquipment(inventory, category, data.WeaponType, defaultOverwrites, inventoryChanges);

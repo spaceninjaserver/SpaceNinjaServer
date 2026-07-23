@@ -45,7 +45,8 @@ import {
     supplementalRecipes,
     supplementalUpgrades,
     U5ModsWeights,
-    U5Modules
+    U5Modules,
+    getDefaultUpgrades
 } from "./itemDataService.ts";
 import type { IFlavourItem, IItemConfig, IItemConfigDatabase } from "../types/inventoryTypes/commonInventoryTypes.ts";
 import type { IDefaultUpgrade, IRegion, ISentinel, TStandingLimitBin } from "warframe-public-export-plus";
@@ -863,7 +864,11 @@ export const addItem = async (
             const defaultOverwrites: Partial<IEquipmentDatabase> = {
                 ModularParts: targetFingerprintObj.Parts,
                 ItemName: targetFingerprintObj.Name,
-                Configs: applyDefaultUpgrades(inventory, ExportWeapons[head].defaultUpgrades, inventoryChanges)
+                Configs: applyDefaultUpgrades(
+                    inventory,
+                    getDefaultUpgrades(targetFingerprintObj.Parts),
+                    inventoryChanges
+                )
             };
             const itemType = {
                 "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadA":
@@ -873,6 +878,7 @@ export const addItem = async (
                 "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadC":
                     "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetCPowerSuit"
             }[head] as string;
+            giveMoaPetDefaultWeapon(inventory, itemType, premiumPurchase, inventoryChanges);
             return {
                 ...inventoryChanges,
                 ...addEquipment(inventory, "MoaPets", itemType, defaultOverwrites),
@@ -1412,6 +1418,23 @@ export const applyDefaultUpgrades = (
         }
     }
     return configs;
+};
+
+export const giveMoaPetDefaultWeapon = (
+    inventory: TInventoryDatabaseDocument,
+    moaPetsItemType: string,
+    premiumPurchase: boolean,
+    inventoryChanges: IInventoryChanges
+): void => {
+    const weapon = ExportSentinels[moaPetsItemType].defaultWeapon;
+    if (weapon) {
+        const category = ExportWeapons[weapon].productCategory;
+        addEquipment(inventory, category, weapon, undefined, inventoryChanges);
+        combineInventoryChanges(
+            inventoryChanges,
+            occupySlot(inventory, productCategoryToInventoryBin(category)!, premiumPurchase)
+        );
+    }
 };
 
 //TODO: maybe genericMethod for all the add methods, they share a lot of logic
