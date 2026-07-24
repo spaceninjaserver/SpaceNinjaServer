@@ -3168,6 +3168,12 @@ export const cleanupInventory = (inventory: TInventoryDatabaseDocument): void =>
     if (inventory.WeeklyGuildVaultBonusInfo && !Array.isArray(inventory.WeeklyGuildVaultBonusInfo)) {
         inventory.WeeklyGuildVaultBonusInfo = [inventory.WeeklyGuildVaultBonusInfo];
     }
+
+    for (const challenge of inventory.ChallengeProgress) {
+        if (challenge.Completed?.length === 0) {
+            challenge.Completed = undefined;
+        }
+    }
 };
 
 export const migrateFusionTreasures = (
