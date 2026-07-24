@@ -18,7 +18,12 @@ import type { IMissionInventoryUpdateRequest, IRewardInfo } from "../types/reque
 import { logger } from "../utils/logger.ts";
 import type { IRngResult } from "./rngService.ts";
 import { SRng, generateRewardSeed, getRandomElement, getRandomInt, getRandomReward } from "./rngService.ts";
-import type { IDailyAffiliations, IMission, TEquipmentKey } from "../types/inventoryTypes/inventoryTypes.ts";
+import type {
+    IDailyAffiliations,
+    IMission,
+    IWeeklyMissionChallengeInfo,
+    TEquipmentKey
+} from "../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
 import {
     addBooster,
@@ -227,13 +232,20 @@ const getRandomRewardByChance = (pool: IReward[], rng?: SRng): IRngResult | unde
 //type TignoredInventoryUpdateKeys = (typeof ignoredInventoryUpdateKeys)[number];
 //const knownUnhandledKeys: readonly string[] = ["test"] as const; // for unimplemented but important keys
 
+interface MissionInventoryUpdatesReturnType {
+    InventoryChanges: IInventoryChanges;
+    ProcessedWeeklyMissionChallengeInfos?: IWeeklyMissionChallengeInfo[];
+}
+
 export const addMissionInventoryUpdates = async (
     account: TAccountDocument,
     buildLabel: string,
     inventory: TInventoryDatabaseDocument,
     inventoryUpdates: IMissionInventoryUpdateRequest
-): Promise<IInventoryChanges> => {
-    const inventoryChanges: IInventoryChanges = {};
+): Promise<MissionInventoryUpdatesReturnType> => {
+    const ret: MissionInventoryUpdatesReturnType = {
+        InventoryChanges: {}
+    };
     if (inventoryUpdates.Missions && inventoryUpdates.EndOfMatchUpload) {
         const node = await getRegion(inventoryUpdates.Missions.Tag, buildLabel);
         if (
@@ -455,7 +467,7 @@ export const addMissionInventoryUpdates = async (
                     inventory,
                     value,
                     inventoryUpdates.SeasonChallengeCompletions,
-                    inventoryChanges
+                    ret.InventoryChanges
                 );
                 break;
             case "FusionTreasures":
@@ -500,7 +512,7 @@ export const addMissionInventoryUpdates = async (
                         ExportFusionBundles[fusionBundle.ItemType].fusionPoints * fusionBundle.ItemCount
                     );
                 }
-                inventoryChanges.FusionPoints = fusionPointsDelta;
+                ret.InventoryChanges.FusionPoints = fusionPointsDelta;
                 break;
             }
             case "EmailItems": {
@@ -764,7 +776,7 @@ export const addMissionInventoryUpdates = async (
             }
             case "creditsFee": {
                 if (!inventory.noNodeEntryFees) {
-                    updateCurrency(inventory, value, CurrencyType.CREDITS, inventoryChanges);
+                    updateCurrency(inventory, value, CurrencyType.CREDITS, ret.InventoryChanges);
                 }
                 break;
             }
@@ -833,7 +845,8 @@ export const addMissionInventoryUpdates = async (
                 break;
             }
             case "WeeklyMissionChallengeInfo": {
-                addKahlProgress(inventory, value, inventoryChanges);
+                addKahlProgress(inventory, value, ret.InventoryChanges);
+                ret.ProcessedWeeklyMissionChallengeInfos = value;
                 break;
             }
             case "duviriCaveOffers": {
@@ -995,7 +1008,7 @@ export const addMissionInventoryUpdates = async (
         }
     }
 
-    return inventoryChanges;
+    return ret;
 };
 
 interface AddMissionRewardsReturnType {

@@ -7,7 +7,11 @@ import {
     addMissionRewards,
     handleConservation
 } from "../../services/missionInventoryUpdateService.ts";
-import { dispatchPendingPremiumCredits, getInventory } from "../../services/inventoryService.ts";
+import {
+    combineInventoryChanges,
+    dispatchPendingPremiumCredits,
+    getInventory
+} from "../../services/inventoryService.ts";
 import { getInventoryResponse } from "./inventoryController.ts";
 import { logger } from "../../utils/logger.ts";
 import type {
@@ -125,8 +129,10 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     }
 
     //TODO: figure out when to send inventory. it is needed for many cases.
+    if (inventoryChanges) {
+        combineInventoryChanges(inventoryUpdates.InventoryChanges, inventoryChanges);
+    }
     const deltas: IMissionInventoryUpdateResponseRailjackInterstitial = {
-        InventoryChanges: inventoryChanges,
         MissionRewards,
         ...credits,
         ...inventoryUpdates,

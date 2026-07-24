@@ -17,16 +17,18 @@ export const updateChallengeProgressController: RequestHandler = async (req, res
     logger.debug(`challenge report:`, challenges);
 
     const inventory = await getInventory(account._id, undefined); // Challenge completion can give any item in theory
-    let affiliationMods: IAffiliationMods[] = [];
-    const inventoryChanges: IInventoryChanges = {};
+    const response: IUpdateChallengeProgressResponse = {
+        AffiliationMods: [],
+        InventoryChanges: {}
+    };
     if (challenges.ChallengeProgress) {
         const buildLabel = getBuildLabel(req, account);
-        affiliationMods = await addChallenges(
+        response.AffiliationMods = await addChallenges(
             buildLabel,
             inventory,
             challenges.ChallengeProgress,
             challenges.SeasonChallengeCompletions,
-            inventoryChanges
+            response.InventoryChanges
         );
     }
     for (const [key, value] of getEntriesUnsafe(challenges)) {
@@ -55,7 +57,8 @@ export const updateChallengeProgressController: RequestHandler = async (req, res
                 break;
 
             case "WeeklyMissionChallengeInfo":
-                addKahlProgress(inventory, value, inventoryChanges);
+                addKahlProgress(inventory, value, response.InventoryChanges);
+                response.ProcessedWeeklyMissionChallengeInfos = value;
                 break;
 
             case "ChallengeProgress":
@@ -69,10 +72,7 @@ export const updateChallengeProgressController: RequestHandler = async (req, res
     }
     await inventory.save();
 
-    res.json({
-        AffiliationMods: affiliationMods,
-        InventoryChanges: inventoryChanges // U41+
-    });
+    res.json(response);
 };
 
 interface IUpdateChallengeProgressRequest {
@@ -84,4 +84,10 @@ interface IUpdateChallengeProgressRequest {
     CalendarProgress?: { challenge: string }[];
     WeeklyMissionChallengeInfo?: IWeeklyMissionChallengeInfo[];
     crossPlaySetting?: string;
+}
+
+interface IUpdateChallengeProgressResponse {
+    AffiliationMods: IAffiliationMods[];
+    InventoryChanges: IInventoryChanges; // U41+
+    ProcessedWeeklyMissionChallengeInfos?: IWeeklyMissionChallengeInfo[];
 }
