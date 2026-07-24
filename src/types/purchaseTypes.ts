@@ -10,7 +10,7 @@ import type {
 export const ePurchaseSource = {
     Market: 0, // platinum, from metadata
     VoidTrader: 1, // ducat + credits
-    SyndicateFavor: 2, // standing
+    SyndicateFavor: 2, // standing or credits
     DailyDeal: 3, // platinum, from server
     Arsenal: 4, // platinum, from metadata
     Profile: 5, // ???

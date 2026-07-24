@@ -6,6 +6,7 @@ import {
     addMiscItems,
     combineInventoryChanges,
     handleOneTimePurchasable,
+    updateCredits,
     updateCurrency,
     updateSlots
 } from "./inventoryService.ts";
@@ -306,15 +307,25 @@ export const handlePurchase = async (
                             x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem
                         );
                         if (favour) {
-                            const affiliation = inventory.Affiliations.find(x => x.Tag == syndicateTag);
-                            if (affiliation) {
-                                purchaseResponse.Standing = [
-                                    {
-                                        Tag: syndicateTag,
-                                        Standing: favour.standingCost * purchaseRequest.PurchaseParams.Quantity
-                                    }
-                                ];
-                                affiliation.Standing -= favour.standingCost * purchaseRequest.PurchaseParams.Quantity;
+                            if (favour.creditsCost) {
+                                updateCredits(
+                                    inventory,
+                                    favour.creditsCost * purchaseRequest.PurchaseParams.Quantity,
+                                    purchaseResponse.InventoryChanges
+                                );
+                            }
+                            if (favour.standingCost) {
+                                const affiliation = inventory.Affiliations.find(x => x.Tag == syndicateTag);
+                                if (affiliation) {
+                                    purchaseResponse.Standing = [
+                                        {
+                                            Tag: syndicateTag,
+                                            Standing: favour.standingCost * purchaseRequest.PurchaseParams.Quantity
+                                        }
+                                    ];
+                                    affiliation.Standing -=
+                                        favour.standingCost * purchaseRequest.PurchaseParams.Quantity;
+                                }
                             }
                         }
                     }
