@@ -652,7 +652,7 @@ export const addMissionInventoryUpdates = async (
                 });
                 break;
             case "SyndicateId": {
-                if (!inventory.syndicateMissionsRepeatable) {
+                if (!inventory.syndicateMissionsRepeatable && !inventory.CompletedSyndicates.includes(value)) {
                     inventory.CompletedSyndicates.push(value);
                 }
                 break;
