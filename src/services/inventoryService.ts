@@ -3052,6 +3052,12 @@ export const cleanupInventory = (inventory: TInventoryDatabaseDocument): void =>
         setupKahlSyndicate(inventory);
     }
 
+    index = inventory.Missions.findIndex(x => x.Tag == "");
+    if (index != -1) {
+        inventory.Missions.splice(index, 1);
+        logger.debug(`removed mission completion of ""`);
+    }
+
     const set = new Set<string>();
     for (let i = 0; i != inventory.Affiliations.length; ) {
         if (set.has(inventory.Affiliations[i].Tag)) {
