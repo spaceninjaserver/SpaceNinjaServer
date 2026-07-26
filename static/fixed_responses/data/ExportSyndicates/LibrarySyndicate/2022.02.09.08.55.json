@@ -20,12 +20,14 @@
   "favours": [
     {
       "storeItem": "/Lotus/StoreItems/Types/Restoratives/Consumable/LibraryScanner",
+      "standingCost": 0,
       "creditsCost": 5000,
       "requiredLevel": 0,
       "rankUpReward": true
     },
     {
       "storeItem": "/Lotus/StoreItems/Types/Restoratives/Consumable/HunterTool",
+      "standingCost": 0,
       "creditsCost": 5000,
       "requiredLevel": 0,
       "rankUpReward": false
