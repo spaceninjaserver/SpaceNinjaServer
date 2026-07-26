@@ -132,7 +132,8 @@
     "twentythreeHourMasteryRankCooldown": true,
     "doubleDailySynthesisEndoReward": true,
     "tylRegorDropsTwoEquinoxParts": true,
-    "railjackExtraResourceBundlesReward": true
+    "railjackExtraResourceBundlesReward": true,
+    "railjackSteelEssencesReward": true
   },
   "inventoryDefaults": {},
   "tunables": {

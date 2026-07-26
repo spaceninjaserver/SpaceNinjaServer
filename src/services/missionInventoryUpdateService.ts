@@ -2035,6 +2035,17 @@ async function getRandomMissionDrops(
             ItemCount: 5
         });
     }
+    //RailJack Steel Essences Reward (43.0.6)
+    if (
+        RewardInfo.node.includes("CrewBattleNode") &&
+        mission?.Tier &&
+        shouldDoServerQol("railjackSteelEssencesReward", buildLabel, "2026.06.30.09.08")
+    ) {
+        drops.push({
+            StoreItem: "/Lotus/StoreItems/Types/Items/MiscItems/SteelEssence",
+            ItemCount: 2
+        });
+    }
     const region = await getRegion(RewardInfo.node, buildLabel);
     if (region) {
         let rewardManifests: string[];
