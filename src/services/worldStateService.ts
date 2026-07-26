@@ -779,6 +779,7 @@ const SORTIE_FALLBACK_MISSION_TYPES: TMissionType[] = [
 const validateSortieSeed = (seed: number, enemyFaction: TFaction, variants: ISortieMission[]): boolean => {
     const rng = new SRng(seed);
     for (const variant of variants) {
+        // Gather variant data as the client would
         let missionType = variant.missionType;
         const tileset = ExportTilesets[variant.tileset];
         if (missionType != "MT_ASSASSINATION") {
@@ -807,13 +808,18 @@ const validateSortieSeed = (seed: number, enemyFaction: TFaction, variants: ISor
                 rng.randomInt(0, 3);
             }
         }
-        if (missionType != "MT_ARENA" && missionType != "MT_JUNCTION") {
-            const locationTextureIndex = rng.randomInt(0, 1);
-            if (variant.tileset == "CorpusIcePlanetTileset" || variant.tileset == "CorpusIcePlanetTilesetCaves") {
-                if (locationTextureIndex != 0) {
-                    return false; // For the corpus ice planet tileset, index 1 is an infested corpus ship image, which we don't want.
-                }
-            }
+        const locationTextureIndex =
+            missionType == "MT_ARENA" || missionType == "MT_JUNCTION" ? 0 : rng.randomInt(0, 1);
+
+        // Reject this seed if the data looks bad
+        if (missionType == "MT_RETRIEVAL" && enemyFaction == "FC_INFESTATION") {
+            return false;
+        }
+        if (
+            (variant.tileset == "CorpusIcePlanetTileset" || variant.tileset == "CorpusIcePlanetTilesetCaves") &&
+            locationTextureIndex != 0
+        ) {
+            return false; // For the corpus ice planet tileset, index 1 is an infested corpus ship image, which we don't want.
         }
     }
     return true;
