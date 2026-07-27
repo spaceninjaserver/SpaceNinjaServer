@@ -228,16 +228,45 @@ const getCycleDurationRange = (manifest: IVendor): IRange | undefined => {
     return res.maxValue != 0 ? res : undefined;
 };
 
+interface IOfferIdentifiers {
+    storeItem: string;
+    quantity: number;
+    firstItemPriceType?: string;
+}
+
+const getOfferIdentifiers = (offer: IVendorOffer | IItemManifest): IOfferIdentifiers => {
+    let obj: IOfferIdentifiers;
+    if ("storeItem" in offer) {
+        // IVendorOffer
+        obj = {
+            storeItem: offer.storeItem,
+            quantity: offer.quantity
+        };
+        if ((offer.itemPrices?.length ?? 0) > 0) {
+            obj.firstItemPriceType = offer.itemPrices![0].ItemType;
+        }
+    } else {
+        // IItemManifest
+        obj = {
+            storeItem: offer.StoreItem,
+            quantity: offer.QuantityMultiplier
+        };
+        if ((offer.ItemPrices?.length ?? 0) > 0) {
+            obj.firstItemPriceType = offer.ItemPrices![0].ItemType;
+        }
+    }
+    return obj;
+};
+
 type TOfferId = string;
 
 const getOfferId = (offer: IVendorOffer | IItemManifest): TOfferId => {
-    if ("storeItem" in offer) {
-        // IVendorOffer
-        return offer.storeItem + "x" + offer.quantity;
-    } else {
-        // IItemManifest
-        return offer.StoreItem + "x" + offer.QuantityMultiplier;
+    const { storeItem, quantity, firstItemPriceType } = getOfferIdentifiers(offer);
+    let str = storeItem + "x" + quantity;
+    if (firstItemPriceType) {
+        str += ":" + firstItemPriceType;
     }
+    return str;
 };
 
 let vendorManifestsUsingFullStock = false;
