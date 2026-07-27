@@ -277,17 +277,25 @@ export const addMissionInventoryUpdates = async (
         }
     }
     if (inventoryUpdates.RewardInfo) {
-        if (inventoryUpdates.RewardInfo.periodicMissionTag && !inventory.alertsRepeatable) {
+        if (inventoryUpdates.RewardInfo.periodicMissionTag) {
             const tag = inventoryUpdates.RewardInfo.periodicMissionTag;
-            const existingCompletion = inventory.PeriodicMissionCompletions.find(completion => completion.tag === tag);
+            if (!inventory.alertsRepeatable) {
+                const existingCompletion = inventory.PeriodicMissionCompletions.find(
+                    completion => completion.tag === tag
+                );
 
-            if (existingCompletion) {
-                existingCompletion.date = new Date();
-            } else {
-                inventory.PeriodicMissionCompletions.push({
-                    tag: tag,
-                    date: new Date()
-                });
+                if (existingCompletion) {
+                    existingCompletion.date = new Date();
+                } else {
+                    inventory.PeriodicMissionCompletions.push({
+                        tag: tag,
+                        date: new Date()
+                    });
+                }
+            }
+            if (tag.startsWith("TreasureHunt")) {
+                // client supposed send it at its own, but some of them have problem with that
+                await addChallenges(buildLabel, inventory, [{ Name: "MCCompleteTreasureHunt", Progress: 1 }]);
             }
         }
         if (inventoryUpdates.RewardInfo.NemesisAbandonedRewards) {

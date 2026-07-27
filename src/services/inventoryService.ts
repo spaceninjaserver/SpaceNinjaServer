@@ -3175,6 +3175,22 @@ export const cleanupInventory = (inventory: TInventoryDatabaseDocument): void =>
         inventory.WeeklyGuildVaultBonusInfo = [inventory.WeeklyGuildVaultBonusInfo];
     }
 
+    if (inventory.PeriodicMissionCompletions.some(x => x.tag.startsWith("TreasureHunt"))) {
+        const challenge = inventory.ChallengeProgress.find(x => x.Name == "MCCompleteTreasureHunt");
+        if (challenge) {
+            if (challenge.Progress != 1) {
+                challenge.Progress = 1;
+                logger.debug("fixed broken MCCompleteTreasureHunt challenge");
+            }
+        } else {
+            inventory.ChallengeProgress.push({
+                Name: "MCCompleteTreasureHunt",
+                Progress: 1
+            });
+            logger.debug("pushed MCCompleteTreasureHunt challenge because we alredy completed Treasure Hunt in past");
+        }
+    }
+
     for (const challenge of inventory.ChallengeProgress) {
         if (challenge.Completed?.length === 0) {
             challenge.Completed = undefined;
