@@ -33,6 +33,7 @@ export default [
             "@typescript-eslint/no-empty-object-type": "off",
             "@typescript-eslint/no-explicit-any": "off",
             "@typescript-eslint/no-unnecessary-condition": "error",
+            "@typescript-eslint/no-unnecessary-type-assertion": "off",
             "@typescript-eslint/no-unsafe-argument": "error",
             "@typescript-eslint/no-unsafe-assignment": "error",
             "@typescript-eslint/no-unsafe-call": "error",
