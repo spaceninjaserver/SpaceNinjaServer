@@ -40,7 +40,7 @@ export interface IFlavour {
     description: string;
     codexSecret: boolean;
     excludeFromCodex?: boolean;
-    hexColours?: IColour[];
+    hexColours?: readonly IColour[];
 }
 
 export interface IExportFusionBundles {
@@ -106,7 +106,7 @@ export interface IRecipe {
         ItemCount: number;
         ProductCategory: string;
     }[];
-    secretIngredients: {
+    secretIngredients: readonly {
         ItemType: string;
         ItemCount: number;
     }[];
@@ -296,23 +296,23 @@ export interface IUpgrade {
     fusionLimit: number;
     compatName?: string;
     type?: string;
-    description?: string[];
+    description?: readonly string[];
     isUtility?: boolean;
-    levelStats?: {
-        stats: string[];
+    levelStats?: readonly {
+        stats: readonly string[];
     }[];
     modSet?: string;
-    modSetValues?: number[];
+    modSetValues?: readonly number[];
     subtype?: string;
     excludeFromCodex?: boolean;
-    upgradeEntries?: UpgradeEntry[];
-    availableChallenges?: AvailableChallenge[];
+    upgradeEntries?: readonly UpgradeEntry[];
+    availableChallenges?: readonly AvailableChallenge[];
 }
 
 interface AvailableChallenge {
     fullName: string;
     description: string;
-    complications: Complication[];
+    complications: readonly Complication[];
 }
 
 interface Complication {
@@ -325,7 +325,7 @@ interface UpgradeEntry {
     tag: string;
     prefixTag: string;
     suffixTag: string;
-    upgradeValues: UpgradeValue[];
+    upgradeValues: readonly UpgradeValue[];
 }
 
 interface UpgradeValue {
@@ -358,10 +358,10 @@ export interface IWarframe {
     codexSecret: boolean;
     masteryReq: number;
     sprintSpeed: number;
-    abilities: IAbility[];
+    abilities: readonly IAbility[];
     productCategory: string;
     passiveDescription?: string;
-    exalted?: string[];
+    exalted?: readonly string[];
     longDescription?: string;
 }
 
@@ -378,7 +378,7 @@ export interface IRailjackWeapon {
     name: string;
     uniqueName: string;
     codexSecret: boolean;
-    damagePerShot: number[];
+    damagePerShot: readonly number[];
     totalDamage: number;
     description: string;
     criticalChance: number;
@@ -402,7 +402,7 @@ export interface IWeapon {
     name: string;
     uniqueName: string;
     codexSecret: boolean;
-    damagePerShot: number[];
+    damagePerShot: readonly number[];
     totalDamage: number;
     description: string;
     criticalChance: number;

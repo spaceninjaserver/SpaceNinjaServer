@@ -38,7 +38,7 @@ export const modularWeaponCraftingController: RequestHandler = async (req, res) 
     const category = modularWeaponTypes[data.WeaponType];
     const inventory = await getInventory(accountId, undefined); // Projection is complicated a bit by defaultWeapon for MoaPets
 
-    let defaultUpgrades: IDefaultUpgrade[] | undefined;
+    let defaultUpgrades: readonly IDefaultUpgrade[] | undefined;
     const defaultOverwrites: Partial<IKubrowPetDatabase> = {
         ModularParts: data.Parts
     };

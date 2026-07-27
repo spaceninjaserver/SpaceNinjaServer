@@ -464,7 +464,7 @@ export const handlePurchase = async (
 
 const handleItemPrices = async (
     inventory: TInventoryDatabaseDocument,
-    itemPrices: IMiscItem[],
+    itemPrices: readonly IMiscItem[],
     purchaseQuantity: number,
     inventoryChanges: IInventoryChanges
 ): Promise<void> => {

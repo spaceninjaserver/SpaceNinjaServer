@@ -11,3 +11,7 @@ export const getObjectValues = <T extends object>(obj: T): Values<T>[] => {
 };
 
 export const exhaustive = (_: never): void => {};
+
+export type Mutable<T> = {
+    -readonly [P in keyof T]: Mutable<T[P]>;
+};

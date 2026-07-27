@@ -104,7 +104,7 @@ export interface IAlertMissionInfo {
     levelOverride?: string;
     enemySpec?: string;
     extraEnemySpec?: string;
-    customAdvancedSpawners?: string[];
+    customAdvancedSpawners?: readonly string[];
     minEnemyLevel?: number;
     maxEnemyLevel?: number;
     maxWaveNum?: number;

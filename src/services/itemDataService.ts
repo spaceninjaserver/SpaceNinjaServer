@@ -85,6 +85,7 @@ import type { TInventorySlot } from "../types/inventoryTypes/inventoryTypes.ts";
 import { shouldDoServerQol } from "./configService.ts";
 import { buildLabelToVersionInt, wikiDateToBuildVersionInt } from "../helpers/versionHelper.ts";
 import baro from "../constants/baro.ts";
+import type { Mutable } from "../utils/ts-utils.ts";
 
 export type WeaponTypeInternal =
     | "LongGuns"
@@ -3574,85 +3575,86 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
 
     if (uniqueName.startsWith("/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/")) {
         if (version_compare(buildLabel, gameToBuildVersion["22.2.4"]) >= 0) {
+            const wdata = structuredClone(data) as Mutable<IRecipe>;
             if (uniqueName.endsWith("ArmourOnOperatorModeBlueprint")) {
-                data.ingredients[0].ItemCount = 20;
-                data.ingredients[3] = {
+                wdata.ingredients[0].ItemCount = 20;
+                wdata.ingredients[3] = {
                     ItemType: "/Lotus/Types/Items/MiscItems/Cryotic",
                     ItemCount: 7100
                 };
             } else if (uniqueName.endsWith("AttackSpeedOnKillBlueprint")) {
-                data.ingredients[0].ItemCount = 20;
-                data.ingredients[3] = {
+                wdata.ingredients[0].ItemCount = 20;
+                wdata.ingredients[3] = {
                     ItemType: "/Lotus/Types/Items/MiscItems/Plastids",
                     ItemCount: 3500
                 };
             } else if (uniqueName.endsWith("CriticalChanceOnHeadshotBlueprint")) {
-                data.ingredients[0].ItemCount = 3;
-                data.ingredients[3] = {
+                wdata.ingredients[0].ItemCount = 3;
+                wdata.ingredients[3] = {
                     ItemType: "/Lotus/Types/Items/MiscItems/Rubedo",
                     ItemCount: 5200
                 };
             } else if (uniqueName.endsWith("HealOnTransferenceInBlueprint")) {
-                data.ingredients[0].ItemCount = 3;
-                data.ingredients[1].ItemCount = 3;
-                data.ingredients[3] = {
+                wdata.ingredients[0].ItemCount = 3;
+                wdata.ingredients[1].ItemCount = 3;
+                wdata.ingredients[3] = {
                     ItemType: "/Lotus/Types/Items/MiscItems/OxiumAlloy",
                     ItemCount: 2300
                 };
             } else if (uniqueName.endsWith("HealOnTransferenceOutBlueprint")) {
-                data.ingredients[0].ItemCount = 3;
-                data.ingredients[1].ItemCount = 3;
-                data.ingredients[3] = {
+                wdata.ingredients[0].ItemCount = 3;
+                wdata.ingredients[1].ItemCount = 3;
+                wdata.ingredients[3] = {
                     ItemType: "/Lotus/Types/Items/MiscItems/PolymerBundle",
                     ItemCount: 8700
                 };
             } else if (uniqueName.endsWith("HealOnVoidDashBlueprint")) {
-                data.ingredients[0].ItemCount = 3;
-                data.ingredients[1].ItemCount = 3;
-                data.ingredients[3] = {
+                wdata.ingredients[0].ItemCount = 3;
+                wdata.ingredients[1].ItemCount = 3;
+                wdata.ingredients[3] = {
                     ItemType: "/Lotus/Types/Items/MiscItems/Salvage",
                     ItemCount: 9200
                 };
             } else if (uniqueName.endsWith("HealthOnOperatorModeBlueprint")) {
-                data.ingredients[0].ItemCount = 20;
-                data.ingredients[3] = {
+                wdata.ingredients[0].ItemCount = 20;
+                wdata.ingredients[3] = {
                     ItemType: "/Lotus/Types/Items/MiscItems/AlloyPlate",
                     ItemCount: 6400
                 };
             } else if (uniqueName.endsWith("ImmunityFallDamageOnVoidDashBlueprint")) {
-                data.ingredients[0].ItemCount = 3;
-                data.ingredients[3] = {
+                wdata.ingredients[0].ItemCount = 3;
+                wdata.ingredients[3] = {
                     ItemType: "/Lotus/Types/Items/MiscItems/Ferrite",
                     ItemCount: 7600
                 };
             } else if (uniqueName.endsWith("IncreasedCriticalDamageOnCriticalStrikeBlueprint")) {
-                data.ingredients[0].ItemCount = 3;
-                data.ingredients[3] = {
+                wdata.ingredients[0].ItemCount = 3;
+                wdata.ingredients[3] = {
                     ItemType: "/Lotus/Types/Items/MiscItems/Circuits",
                     ItemCount: 4400
                 };
             } else if (uniqueName.endsWith("IncreasedDamageOnStatusProcBlueprint")) {
-                data.ingredients[0].ItemCount = 3;
-                data.ingredients[3] = {
+                wdata.ingredients[0].ItemCount = 3;
+                wdata.ingredients[3] = {
                     ItemType: "/Lotus/Types/Items/MiscItems/Rubedo",
                     ItemCount: 4100
                 };
             } else if (uniqueName.endsWith("OperatorAmmoRegenOnKillBlueprint")) {
-                data.ingredients[0].ItemCount = 20;
-                data.ingredients[3] = {
+                wdata.ingredients[0].ItemCount = 20;
+                wdata.ingredients[3] = {
                     ItemType: "/Lotus/Types/Items/MiscItems/Circuits",
                     ItemCount: 3200
                 };
             } else if (uniqueName.endsWith("SpeedOnVoidDashBlueprint")) {
-                data.ingredients[0].ItemCount = 3;
-                data.ingredients[1].ItemCount = 3;
-                data.ingredients[3] = {
+                wdata.ingredients[0].ItemCount = 3;
+                wdata.ingredients[1].ItemCount = 3;
+                wdata.ingredients[3] = {
                     ItemType: "/Lotus/Types/Items/MiscItems/Nanospores",
                     ItemCount: 8100
                 };
             } else if (uniqueName.endsWith("StatusChanceOnHeadshotBlueprint")) {
-                data.ingredients[0].ItemCount = 3;
-                data.ingredients[3] = {
+                wdata.ingredients[0].ItemCount = 3;
+                wdata.ingredients[3] = {
                     ItemType: "/Lotus/Types/Items/MiscItems/Plastids",
                     ItemCount: 4800
                 };
@@ -3660,16 +3662,17 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
                 uniqueName.endsWith("ChannelKillEnergyRateBlueprint") ||
                 uniqueName.endsWith("CritChannelingDamageBlueprint")
             ) {
-                data.ingredients[0].ItemCount = 10;
+                wdata.ingredients[0].ItemCount = 10;
             } else if (
                 uniqueName.endsWith("FinisherLifestealBlueprint") ||
                 uniqueName.endsWith("GroundSlamPullBlueprint") ||
                 uniqueName.endsWith("StatusChannelingDamageBlueprint") ||
                 uniqueName.endsWith("StatusTriggerRadialDamageBlueprint")
             ) {
-                data.ingredients[0].ItemCount = 10;
-                data.ingredients[2].ItemCount = 5;
+                wdata.ingredients[0].ItemCount = 10;
+                wdata.ingredients[2].ItemCount = 5;
             }
+            data = wdata;
         }
         if (version_compare(buildLabel, "2017.12.08.15.29") >= 0) {
             // Should be 22.3.4 - 2017-11-16
@@ -3815,7 +3818,7 @@ export const getNormalizedString = (key: string, dict: Record<string, string>): 
     return getString(key, dict).replaceAll("‘", "'").replaceAll("’", "'").replaceAll("\r\n", " ");
 };
 
-export const getKeyChainItems = ({ KeyChain, ChainStage }: IKeyChainRequest, buildLabel: string): string[] => {
+export const getKeyChainItems = ({ KeyChain, ChainStage }: IKeyChainRequest, buildLabel: string): readonly string[] => {
     const chainStages = getKey(KeyChain, buildLabel)?.chainStages;
     if (!chainStages) {
         throw new Error(`KeyChain ${KeyChain} does not contain chain stages`);
@@ -3839,7 +3842,7 @@ export const getKeyChainItems = ({ KeyChain, ChainStage }: IKeyChainRequest, bui
 export const getLevelKeyRewards = (
     levelKey: string,
     buildLabel: string
-): { levelKeyRewards?: IMissionReward; levelKeyRewards2?: TReward[]; levelMission?: Partial<IRegion> } => {
+): { levelKeyRewards?: IMissionReward; levelKeyRewards2?: readonly TReward[]; levelMission?: Partial<IRegion> } => {
     const key = getKey(levelKey, buildLabel);
 
     const levelKeyRewards = key?.missionReward;
@@ -4024,7 +4027,7 @@ export const getBoosterPack = async (
         version_compare(buildLabel, gameToBuildVersion["18.16.0"]) < 0 &&
         uniqueName == "/Lotus/Types/BoosterPacks/RandomKey"
     ) {
-        const boosterPack: IBoosterPack = {
+        const boosterPack: Mutable<IBoosterPack> = {
             name: "/Lotus/Language/Items/RandomKey",
             description: "/Lotus/Language/Items/RandomKeyDesc",
             icon: "/Lotus/Interface/Icons/Store/OrokinKey.png",
@@ -4264,7 +4267,7 @@ export const getKey = (uniqueName: string, buildLabel: string = BL_LATEST): IKey
     return ExportKeys[uniqueName] ?? supplementalKeys[uniqueName];
 };
 
-export const getMissionDeck = (uniqueName: string, buildLabel: string): TMissionDeck | undefined => {
+export const getMissionDeck = (uniqueName: string, buildLabel: string): Readonly<TMissionDeck> | undefined => {
     if (
         uniqueName == "/Lotus/Types/Game/MissionDecks/BossMissionRewards/YinYangRewards" &&
         !shouldDoServerQol("tylRegorDropsTwoEquinoxParts", buildLabel, gameToBuildVersion["42.0.0"])

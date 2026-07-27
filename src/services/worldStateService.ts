@@ -826,7 +826,7 @@ const validateSortieSeed = (seed: number, enemyFaction: TFaction, variants: ISor
 };
 
 interface IRotatingSeasonChallengePools {
-    daily: string[];
+    daily: readonly string[];
     weekly: string[];
     hardWeekly: string[];
     weeklyPermanent: string[];

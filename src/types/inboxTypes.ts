@@ -40,8 +40,8 @@ export interface IMessage {
     highPriority?: boolean;
     lowPrioNewPlayers?: boolean;
     transmission?: string;
-    att?: string[];
-    countedAtt?: ITypeCount[];
+    att?: readonly string[];
+    countedAtt?: readonly ITypeCount[];
     startDate?: Date;
     endDate?: Date;
     QuestReq?: string;

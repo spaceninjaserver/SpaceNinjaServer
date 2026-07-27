@@ -46,7 +46,7 @@ interface ListedItem {
     name: string;
     subtype?: string;
     fusionLimit?: number;
-    exalted?: string[];
+    exalted?: readonly string[];
     badReason?: "starter" | "frivolous" | "notraw";
     partType?: string;
     chainLength?: number;

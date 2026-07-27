@@ -34,7 +34,7 @@ export const generateRewardSeed = (): bigint => {
 };
 
 export const getRewardAtPercentage = <T extends { probability: number }>(
-    pool: T[],
+    pool: readonly T[],
     percentage: number
 ): T | undefined => {
     if (pool.length == 0) return;
@@ -52,7 +52,7 @@ export const getRewardAtPercentage = <T extends { probability: number }>(
     return pool[pool.length - 1];
 };
 
-export const getRandomReward = <T extends { probability: number }>(pool: T[]): T | undefined => {
+export const getRandomReward = <T extends { probability: number }>(pool: readonly T[]): T | undefined => {
     return getRewardAtPercentage(pool, Math.random());
 };
 
@@ -75,7 +75,7 @@ export const getRandomWeightedReward = <T extends { rarity: TRarity }>(
 };
 
 export const getRandomWeightedRewardUc = <T extends { Rarity: TRarity }>(
-    pool: T[],
+    pool: readonly T[],
     weights: Record<TRarity, number>
 ): (T & { probability: number }) | undefined => {
     const resultPool: (T & { probability: number })[] = [];
@@ -137,7 +137,7 @@ export class SRng {
         return (Number(this.state >> 38n) & 0xffffff) * 0.000000059604645;
     }
 
-    randomReward<T extends { probability: number }>(pool: T[]): T | undefined {
+    randomReward<T extends { probability: number }>(pool: readonly T[]): T | undefined {
         return getRewardAtPercentage(pool, this.randomFloat());
     }
 

@@ -218,13 +218,13 @@ const getRotations = async (rewardInfo: IRewardInfo, buildLabel: string, tierOve
     return rotatedValues;
 };
 
-const getRandomRewardByChance = (pool: IReward[], rng?: SRng): IRngResult | undefined => {
+const getRandomRewardByChance = (pool: readonly IReward[], rng?: SRng): IRngResult | undefined => {
     if (rng) {
-        const res = rng.randomReward(pool as IRngResult[]);
+        const res = rng.randomReward(pool as readonly IRngResult[]);
         rng.randomFloat(); // something related to rewards multiplier
         return res;
     }
-    return getRandomReward(pool as IRngResult[]);
+    return getRandomReward(pool as readonly IRngResult[]);
 };
 
 //type TMissionInventoryUpdateKeys = keyof IMissionInventoryUpdateRequest;
@@ -2056,7 +2056,7 @@ async function getRandomMissionDrops(
     }
     const region = await getRegion(RewardInfo.node, buildLabel);
     if (region) {
-        let rewardManifests: string[];
+        let rewardManifests: readonly string[];
         if (RewardInfo.periodicMissionTag == "EliteAlert" || RewardInfo.periodicMissionTag == "EliteAlertB") {
             rewardManifests = ["/Lotus/Types/Game/MissionDecks/EliteAlertMissionRewards/EliteAlertMissionRewards"];
         } else if (RewardInfo.invasionId && region.missionType == "MT_ASSASSINATION") {
@@ -2362,7 +2362,7 @@ async function getRandomMissionDrops(
                 for (let dropitem = 0; dropitem < droptimes; ++dropitem) {
                     const drop = getRandomRewardByChance(table![0], rng);
                     drops.push({ StoreItem: drop!.type, ItemCount: drop!.itemCount });
-                    table![0] = table![0].filter((item: IReward) => item.type !== drop!.type);
+                    //table![0] = table![0].filter((item: IReward) => item.type !== drop!.type);
                 }
             }
         }

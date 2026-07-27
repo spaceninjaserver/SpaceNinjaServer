@@ -282,7 +282,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
         }
         if (invasion.Completed) {
             let factionSidedWith: string | undefined;
-            let battlePay: ICountedItem[] | undefined;
+            let battlePay: readonly ICountedItem[] | undefined;
             if (qi.AttackerScore >= 3) {
                 factionSidedWith = invasion.Faction;
                 battlePay = invasion.AttackerReward.countedItems;

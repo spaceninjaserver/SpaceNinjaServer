@@ -1373,7 +1373,7 @@ export const addItem = async (
 
 export const addItems = async (
     inventory: TInventoryDatabaseDocument,
-    items: ITypeCount[] | string[],
+    items: readonly ITypeCount[] | readonly string[],
     inventoryChanges: IInventoryChanges = {}
 ): Promise<IInventoryChanges> => {
     let inventoryDelta;
@@ -1390,7 +1390,7 @@ export const addItems = async (
 
 export const applyDefaultUpgrades = (
     inventory: TInventoryDatabaseDocument,
-    defaultUpgrades: IDefaultUpgrade[] | undefined,
+    defaultUpgrades: readonly IDefaultUpgrade[] | undefined,
     inventoryChanges: IInventoryChanges
 ): IItemConfigDatabase[] => {
     const modsToGive: IRawUpgrade[] = [];
