@@ -2737,6 +2737,30 @@ const baro: IBaro = {
             PrimePrice: 75,
             RegularPrice: 300000,
             minBuildLabel: "2023.06.21.07.11"
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Types/Items/ShipDecos/LisetPropCleaningDroneGrineer",
+            PrimePrice: 500,
+            RegularPrice: 650000,
+            minBuildLabel: gameToBuildVersion["43.0.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Types/Items/SongItems/CorpusLichLoginSongItem",
+            PrimePrice: 150,
+            RegularPrice: 155000,
+            minBuildLabel: gameToBuildVersion["38.0.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Odalisk/ProteaImmortalSkin",
+            PrimePrice: 550,
+            RegularPrice: 100000,
+            minBuildLabel: gameToBuildVersion["42.0.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Dagath/DagathImmortalSkin",
+            PrimePrice: 550,
+            RegularPrice: 100000,
+            minBuildLabel: gameToBuildVersion["42.0.0"]
         }
     ],
     allIfAny: [
