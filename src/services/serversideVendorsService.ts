@@ -1,7 +1,7 @@
 import { unixTimesInMs } from "../constants/timeConstants.ts";
 import { catBreadHash } from "../helpers/stringHelpers.ts";
 import { mixSeeds, SRng } from "./rngService.ts";
-import type { IItemManifest, IVendorInfo, IVendorManifest } from "../types/vendorTypes.ts";
+import type { ICachedVendorManifest, IItemManifest, IVendorInfo, IVendorManifest } from "../types/vendorTypes.ts";
 import { logger } from "../utils/logger.ts";
 import type { IRange, IVendor, IVendorOffer } from "warframe-public-export-plus";
 import { ExportVendors } from "warframe-public-export-plus";
@@ -68,7 +68,7 @@ export const getVendorManifestByTypeName = (
     typeName: string,
     fullStock?: boolean,
     buildLabel: string = BL_LATEST
-): IVendorManifest | undefined => {
+): ICachedVendorManifest | undefined => {
     for (const vendorInfo of generatableVendors) {
         if (vendorInfo.TypeName == typeName) {
             return generateVendorManifest(vendorInfo, fullStock ?? config.fullyStockedVendors);
@@ -108,7 +108,7 @@ export const getVendorManifestByTypeName = (
     return undefined;
 };
 
-export const getVendorManifestByOid = (oid: string, buildLabel: string): IVendorManifest | undefined => {
+export const getVendorManifestByOid = (oid: string, buildLabel: string): ICachedVendorManifest | undefined => {
     for (const vendorInfo of generatableVendors) {
         if (vendorInfo._id.$oid == oid) {
             return generateVendorManifest(vendorInfo, config.fullyStockedVendors);
@@ -164,10 +164,11 @@ export const getVendorManifestByOid = (oid: string, buildLabel: string): IVendor
     return undefined;
 };
 
+// Returned manifest is a partial copy, but some readonly refs are retained, hence ICachedVendorManifest.
 export const applyStandingToVendorManifest = (
-    vendorManifest: IVendorManifest,
+    vendorManifest: ICachedVendorManifest,
     affiliations: IAffiliation[]
-): IVendorManifest => {
+): ICachedVendorManifest => {
     return {
         VendorInfo: {
             ...vendorManifest.VendorInfo,
@@ -282,7 +283,7 @@ const generateVendorManifest = (
     vendorInfo: IGeneratableVendorInfo,
     fullStock: boolean | undefined,
     manifest?: IVendor
-): IVendorManifest => {
+): ICachedVendorManifest => {
     fullStock ??= config.fullyStockedVendors;
     fullStock ??= false;
     if (vendorManifestsUsingFullStock != fullStock) {

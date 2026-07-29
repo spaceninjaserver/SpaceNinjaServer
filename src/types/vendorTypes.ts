@@ -42,3 +42,13 @@ export interface IVendorInfo {
 export interface IVendorManifest {
     VendorInfo: IVendorInfo;
 }
+
+interface ICachedVendorInfo extends Omit<IVendorInfo, "IItemPrice" | "ItemManifest" | "ItemPricesBeforeDiscount"> {
+    ItemPrices?: readonly IItemPrice[];
+    ItemManifest: readonly IItemManifest[];
+    ItemPricesBeforeDiscount?: readonly IItemPrice[];
+}
+
+export interface ICachedVendorManifest {
+    VendorInfo: ICachedVendorInfo;
+}
