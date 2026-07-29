@@ -100,6 +100,7 @@ export interface IAlertMissionInfo {
     missionType: TMissionType;
     faction: TFaction;
     difficulty: number;
+    archwingRequired?: true;
     missionReward?: IMissionReward;
     levelOverride?: string;
     enemySpec?: string;

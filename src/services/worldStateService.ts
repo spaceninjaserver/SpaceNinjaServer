@@ -5478,7 +5478,7 @@ const getVersionAppropriateHelmet = (helmetPath: string, buildLabel: string): st
     return isStore ? toStoreItem(resultPath) : resultPath;
 };
 
-const getEligibleAlertNodes = (): string[] => {
+const getEligibleAlertNodes = (regions: Record<string, IRegion>, buildLabel: string): string[] => {
     const eligibleNodes: string[] = [];
     const validMissionTypes = new Set([
         "MT_SURVIVAL",
@@ -5489,17 +5489,18 @@ const getEligibleAlertNodes = (): string[] => {
         "MT_SABOTAGE",
         "MT_MOBILE_DEFENSE",
         "MT_EXCAVATE",
-        "MT_INTEL"
+        "MT_INTEL",
+        "MT_TERRITORY",
+        "MT_PURSUIT",
+        "MT_SABOTAGE",
+        "MT_RACE"
     ]);
     const validFactions = new Set(["FC_GRINEER", "FC_CORPUS", "FC_INFESTATION", "FC_CORRUPTED", "FC_OROKIN"]);
-    const invalidSystems = new Set([
-        "/Lotus/Language/Locations/Moon",
-        "/Lotus/Language/Locations/Derelict",
-        "/Lotus/Language/Locations/Fortress",
-        "/Lotus/Language/Locations/RelayStationSanctuary"
-    ]);
 
-    for (const [nodeId, nodeData] of Object.entries(ExportRegions)) {
+    for (const [nodeId, nodeData] of Object.entries(regions)) {
+        if (!isRegionAvailableIn(nodeId, nodeData, buildLabel)) {
+            continue;
+        }
         if (!nodeId.startsWith("SolNode") && !nodeId.startsWith("SettlementNode")) {
             continue;
         }
@@ -5512,7 +5513,11 @@ const getEligibleAlertNodes = (): string[] => {
         if (!nodeData.faction || !validFactions.has(nodeData.faction)) {
             continue;
         }
-        if (invalidSystems.has(nodeData.systemName) || nodeData.systemName.endsWith("_SPACE")) {
+
+        if (
+            nodeData.systemIndex == 16 || // Deimos/Derelict
+            nodeData.systemIndex > 18 // Kuva fortress and more modern things
+        ) {
             continue;
         }
         eligibleNodes.push(nodeId);
@@ -5693,8 +5698,9 @@ const generateSeededAlert = (
 
     const isPreU14 = version_compare(buildLabel, gameToBuildVersion["14.0.0"]) < 0;
     const isPostU18 = version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0;
+    const isArch = isArchwingMission(nodeData);
 
-    const factions: TFaction[] = ["FC_GRINEER", "FC_CORPUS", "FC_INFESTATION"];
+    const factions: TFaction[] = isArch ? ["FC_GRINEER", "FC_CORPUS"] : ["FC_GRINEER", "FC_CORPUS", "FC_INFESTATION"];
     let faction: TFaction = rng.randomInt(0, 9) < 7 ? (nodeData.faction as TFaction) : rng.randomElement(factions)!;
     if (faction === "FC_OROKIN" && isPostU18) {
         faction = "FC_CORRUPTED" as TFaction;
@@ -5725,27 +5731,31 @@ const generateSeededAlert = (
         levelOverride = undefined;
     }
 
+    if (isArch) {
+        missionType = rng.randomElement(
+            faction == "FC_GRINEER"
+                ? ["MT_EXTERMINATION", "MT_MOBILE_DEFENSE", "MT_TERRITORY", "MT_PURSUIT"]
+                : ["MT_EXTERMINATION", "MT_MOBILE_DEFENSE", "MT_SABOTAGE", "MT_RACE"]
+        )!;
+    }
+
     if (missionType !== nodeData.missionType || faction !== nodeData.faction) {
         let foundEnemySpec: string | undefined = undefined;
         let foundExtraEnemySpec: string | undefined = undefined;
         const searchFaction = (faction as string) === "FC_CORRUPTED" ? "FC_OROKIN" : faction;
 
-        for (const node of Object.values(regions)) {
-            if (node.faction === searchFaction && node.missionType === missionType && node.enemySpec) {
-                foundEnemySpec = node.enemySpec;
-                foundExtraEnemySpec = node.extraEnemySpec;
-                break;
-            }
+        if (isArch) {
+            const targetTileset =
+                faction == "FC_GRINEER" ? "ArchwingGrineerSpaceTileset" : "ArchwingCorpusTrenchrunTileset";
+            foundEnemySpec = rng.randomElement(ExportTilesets[targetTileset].missions[missionType]!.enemySpecs!)!;
         }
 
         if (!foundEnemySpec) {
-            for (const node of Object.values(regions)) {
-                if (node.faction === searchFaction && node.enemySpec) {
-                    foundEnemySpec = node.enemySpec;
-                    foundExtraEnemySpec = node.extraEnemySpec;
-                    break;
-                }
-            }
+            const nodes = Object.values(regions).filter(node => node.faction == searchFaction && node.enemySpec);
+            const node = nodes.find(node => node.missionType == missionType) ?? nodes[0];
+
+            foundEnemySpec = node.enemySpec;
+            foundExtraEnemySpec = node.extraEnemySpec;
         }
 
         enemySpec = foundEnemySpec;
@@ -5941,7 +5951,8 @@ const generateSeededAlert = (
             minEnemyLevel: minEnemyLevel,
             maxEnemyLevel: maxEnemyLevel,
             descText: descText,
-            nightmare: isNightmare || undefined
+            nightmare: isNightmare || undefined,
+            archwingRequired: isArchwingMission(nodeData) || undefined
         }
     };
 
@@ -5955,12 +5966,8 @@ export const populateAlerts = async (worldState: IWorldState): Promise<void> => 
         (version_compare(buildLabel, gameToBuildVersion["5.1.0"]) >= 0 &&
             version_compare(buildLabel, gameToBuildVersion["24.3.0"]) < 0) // alerts were retired with U24.3.0
     ) {
-        const eligibleNodes = getEligibleAlertNodes();
         const regions = await getRegions(buildLabel);
-        const validNodes = eligibleNodes.filter(nodeId => {
-            const region = regions[nodeId] as (typeof regions)[string] | undefined;
-            return region && isRegionAvailableIn(nodeId, region, buildLabel);
-        });
+        const validNodes = getEligibleAlertNodes(regions, buildLabel);
 
         if (validNodes.length === 0) return;
 
