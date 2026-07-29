@@ -4546,8 +4546,13 @@ export const getWorldState = (
         if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) >= 0) {
             if (timeMs < rollover) {
                 worldState.Sorties.push(getSortie(day - 1, buildLabel));
-            }
-            if (isBeforeNextExpectedWorldStateRefresh(timeMs, rollover)) {
+                if (
+                    version_compare(buildLabel, gameToBuildVersion["25.7.0"]) >= 0 &&
+                    isBeforeNextExpectedWorldStateRefresh(timeMs, rollover)
+                ) {
+                    worldState.Sorties.push(getSortie(day, buildLabel));
+                }
+            } else {
                 worldState.Sorties.push(getSortie(day, buildLabel));
             }
         }
