@@ -453,15 +453,6 @@ function updateLocElements() {
     document.querySelectorAll("[data-loc-title]").forEach(elm => {
         elm.title = loc(elm.getAttribute("data-loc-title"));
     });
-    document.querySelectorAll("[data-loc-replace]").forEach(elm => {
-        elm.innerHTML = elm.innerHTML.replace("|VAL|", elm.getAttribute("data-loc-replace"));
-        if (elm.getAttribute("data-loc") == "worldState_lunarNewYearEntry") {
-            const animal = loc(
-                `worldState_lunarNewYearAnimal${((parseInt(elm.getAttribute("data-loc-replace")) - 4) % 12) + 1}`
-            );
-            elm.innerHTML = elm.innerHTML.replace("|ANIMAL|", animal);
-        }
-    });
     $(".inventory-update-note").text(
         loc(window.have_game_ws ? "general_inventoryUpdateNoteGameWs" : "general_inventoryUpdateNote")
     );
@@ -493,6 +484,20 @@ function updateLocElements() {
                 })
                 .join(", ");
             elm.title = `${loc("worldState_incompatibleWith")} ${incWith}`;
+        });
+        document.querySelectorAll("[data-loc-replace]").forEach(elm => {
+            elm.innerHTML = elm.innerHTML
+                .replaceAll("|val|", "|VAL|")
+                // de and uk for no reason adds space between value and %
+                .replaceAll("|VAL| %", "|VAL|%") // de
+                .replaceAll("|VAL|&nbsp;%", "|VAL|%"); // uk
+            elm.innerHTML = elm.innerHTML.replace("|VAL|", elm.getAttribute("data-loc-replace"));
+            if (elm.getAttribute("data-loc") == "worldState_lunarNewYearEntry") {
+                const animal = loc(
+                    `worldState_lunarNewYearAnimal${((parseInt(elm.getAttribute("data-loc-replace")) - 4) % 12) + 1}`
+                );
+                elm.innerHTML = elm.innerHTML.replace("|ANIMAL|", animal);
+            }
         });
     });
 }
@@ -631,7 +636,10 @@ function fetchItemList() {
             document.getElementById("changeSyndicate").appendChild(syndicateNone);
 
             document.getElementById("valenceBonus-innateDamage").innerHTML = "";
+            const rememberedVarziaOverride = document.getElementById("worldState.varziaOverride").value;
             document.getElementById("worldState.varziaOverride").innerHTML = "";
+            const rememberedNWOverride = document.getElementById("worldState.nightwaveOverride").value;
+            document.getElementById("worldState.nightwaveOverride").innerHTML = "";
 
             // prettier-ignore
             data.archonCrystalUpgrades = {
@@ -1027,12 +1035,48 @@ function fetchItemList() {
                         document.getElementById("valenceBonus-innateDamage").appendChild(option);
                     });
                 } else if (type == "VarziaOffers") {
+                    const select = document.getElementById("worldState.varziaOverride");
                     items.forEach(item => {
                         const option = document.createElement("option");
                         option.value = item.uniqueName;
                         option.textContent = item.name;
-                        document.getElementById("worldState.varziaOverride").appendChild(option);
+                        select.appendChild(option);
                     });
+                    select.value = rememberedVarziaOverride;
+                } else if (type == "NightwaveTags") {
+                    const select = document.getElementById("worldState.nightwaveOverride");
+                    let oldNWIntermissionLeft = 3;
+                    {
+                        const nwDisabledOption = document.createElement("option");
+                        nwDisabledOption.value = "";
+                        nwDisabledOption.textContent = loc("disabled");
+                        nwDisabledOption.setAttribute("data-loc", "disabled");
+                        select.appendChild(nwDisabledOption);
+                    }
+                    items.forEach(item => {
+                        const option = document.createElement("option");
+                        option.value = item.uniqueName;
+                        option.textContent = item.name;
+                        if (
+                            [
+                                "RadioLegionIntermissionSyndicate",
+                                "RadioLegionIntermission2Syndicate",
+                                "RadioLegionIntermission3Syndicate"
+                            ].includes(item.uniqueName)
+                        ) {
+                            option.textContent += ` ${"I".repeat(oldNWIntermissionLeft)}`;
+                            oldNWIntermissionLeft--;
+                        }
+                        select.appendChild(option);
+                    });
+                    {
+                        const nwDisableOption = document.createElement("option");
+                        nwDisableOption.value = "disable";
+                        nwDisableOption.textContent = loc("worldState_nightwaveOff");
+                        nwDisableOption.setAttribute("data-loc", "worldState_nightwaveOff");
+                        select.appendChild(nwDisableOption);
+                    }
+                    select.value = rememberedNWOverride;
                 } else if (type == "Syndicates") {
                     items.forEach(item => {
                         if (["ConclaveSyndicate", "NightcapJournalSyndicate"].includes(item.uniqueName)) {

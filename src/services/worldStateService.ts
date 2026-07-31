@@ -5197,6 +5197,27 @@ export const nightwaveTagToSeason: Record<string, number> = {
     RadioLegionSyndicate: 0 // The Wolf of Saturn Six
 };
 
+export const nightwaveTagToSeasonName: Record<string, string> = {
+    RadioLegionIntermission15Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceTwelveSeasonTitle",
+    RadioLegionIntermission14Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceElevenSeasonTitle",
+    RadioLegionIntermission13Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceTenSeasonTitle",
+    RadioLegionIntermission12Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceNineSeasonTitle",
+    RadioLegionIntermission11Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceEightSeasonTitle",
+    RadioLegionIntermission10Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceSevenSeasonTitle",
+    RadioLegionIntermission9Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceSixSeasonTitle",
+    RadioLegionIntermission8Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceFiveSeasonTitle",
+    RadioLegionIntermission7Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceFourSeasonTitle",
+    RadioLegionIntermission6Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceThreeSeasonTitle",
+    RadioLegionIntermission5Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceTwoSeasonTitle",
+    RadioLegionIntermission4Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceSeasonTitle",
+    RadioLegionIntermission3Syndicate: "/Lotus/Language/Syndicates/RadioLegionShortSeasonTitle1",
+    RadioLegion3Syndicate: "/Lotus/Language/Syndicates/RadioLegionSeasonTitle3",
+    RadioLegionIntermission2Syndicate: "/Lotus/Language/Syndicates/RadioLegionShortSeasonTitle1",
+    RadioLegion2Syndicate: "/Lotus/Language/Syndicates/RadioLegionSeasonTitle2",
+    RadioLegionIntermissionSyndicate: "/Lotus/Language/Syndicates/RadioLegionShortSeasonTitle1",
+    RadioLegionSyndicate: "/Lotus/Language/Syndicates/RadioLegionSeasonTitle1"
+};
+
 const nightwaveTagToActivation: Record<string, number> = {
     RadioLegionIntermission15Syndicate: 1775662200000,
     RadioLegionIntermission14Syndicate: 1761589199000

@@ -40,6 +40,7 @@ import supplementalDict from "../../../static/fixed_responses/supplementalDict/i
 import varzia from "../../constants/varzia.ts";
 import suitDefaultUpgrades from "../../constants/suitDefaultUpgrades.ts";
 import { pseudoRecipeToOwnedRecipeMap } from "../../services/foundryService.ts";
+import { nightwaveTagToSeasonName } from "../../services/worldStateService.ts";
 
 interface ListedItem {
     uniqueName: string;
@@ -88,6 +89,7 @@ interface ItemLists {
     WeaponSkins: ListedItem[];
     MissionTypes: ListedItem[];
     Nodes: ListedItem[];
+    NightwaveTags: ListedItem[];
     AdditionalDict: ListedItem[];
     //circuitGameModes: ListedItem[];
     blueprintAndItem: string;
@@ -135,6 +137,7 @@ const getItemListsController: RequestHandler = (req, response) => {
         WeaponSkins: [],
         MissionTypes: [],
         Nodes: [],
+        NightwaveTags: [],
         AdditionalDict: [],
         /*circuitGameModes: [
             {
@@ -609,6 +612,14 @@ const getItemListsController: RequestHandler = (req, response) => {
             upgrades: mod.upgrades
         });
     }
+
+    for (const [uniqueName, name] of Object.entries(nightwaveTagToSeasonName)) {
+        res.NightwaveTags.push({
+            uniqueName,
+            name: getString(name, lang) || name
+        });
+    }
+
     for (const uniqueName of supplementalDict) {
         res.AdditionalDict.push({
             uniqueName,
