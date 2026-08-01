@@ -206,7 +206,7 @@ dict = {
     cheats_infiniteCredits: `Unendlich Credits`,
     cheats_infinitePlatinum: `Unendlich Platinum`,
     cheats_infiniteEndo: `Unendlich Endo`,
-    cheats_infiniteDirac: `Unendlich Dirac`,
+    cheats_infiniteDirac: `Unendlich Dirac (U27-U29.10)`,
     cheats_infiniteRegalAya: `Unendlich Reines Aya`,
     cheats_infiniteRevives: `Unendlich Wiederbelebungen (vor U18)`,
     cheats_infiniteTrades: `Unendlich handeln`,
