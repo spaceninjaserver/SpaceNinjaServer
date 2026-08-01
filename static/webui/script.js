@@ -4715,33 +4715,43 @@ function doAddCurrency(currency) {
     });
 }
 
-function doQuestUpdate(operation, itemType) {
-    revalidateAuthz().then(() => {
+async function doQuestUpdate(operation, itemType) {
+    await revalidateAuthz();
+    await new Promise(resolve => {
         $.post({
             url: "/custom/manageQuests?" + window.authz + "&operation=" + operation + "&itemType=" + itemType,
             contentType: "application/json"
-        }).then(function (didAnything) {
-            if (didAnything) {
-                updateInventory();
-            } else {
-                toast(loc("code_nothingToDo"));
-            }
-        });
+        })
+            .then(function (didAnything) {
+                if (didAnything) {
+                    updateInventory();
+                } else {
+                    toast(loc("code_nothingToDo"));
+                }
+            })
+            .always(() => {
+                resolve();
+            });
     });
 }
 
-function doBulkQuestUpdate(operation) {
-    revalidateAuthz().then(() => {
+async function doBulkQuestUpdate(operation) {
+    await revalidateAuthz();
+    await new Promise(resolve => {
         $.post({
             url: "/custom/manageQuests?" + window.authz + "&operation=" + operation,
             contentType: "application/json"
-        }).then(function (didAnything) {
-            if (didAnything) {
-                updateInventory();
-            } else {
-                toast(loc("code_nothingToDo"));
-            }
-        });
+        })
+            .then(function (didAnything) {
+                if (didAnything) {
+                    updateInventory();
+                } else {
+                    toast(loc("code_nothingToDo"));
+                }
+            })
+            .always(() => {
+                resolve();
+            });
     });
 }
 
