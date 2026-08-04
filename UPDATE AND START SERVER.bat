@@ -7,7 +7,12 @@ if %errorlevel% == 0 (
 	git stash
 	git checkout -f origin/main
 
-	if exist static\data\0\ (
+	if exist static\data\stripped-assets\ (
+		echo Updating stripped assets...
+		cd static\data\stripped-assets\
+		git pull
+		cd ..\..\..\
+	) else if exist static\data\0\ (
 		echo Updating stripped assets...
 		cd static\data\0\
 		git pull

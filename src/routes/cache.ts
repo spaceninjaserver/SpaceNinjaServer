@@ -1,5 +1,5 @@
 import express from "express";
-import fs from "fs/promises";
+import fs from "node:fs";
 
 const cacheRouter = express.Router();
 
@@ -7,7 +7,7 @@ cacheRouter.get(/^\/origin\/[a-zA-Z0-9]+\/[0-9]+\/H\.Cache\.bin.*$/, (_req, res)
     res.sendFile(`static/data/H.Cache.bin`, { root: "./" });
 });
 
-const strippedAssetsDir = "static/data/0"; // If users have the stripped assets repo checked out, it's at this path.
+const strippedAssetsDir = fs.existsSync("static/data/0") ? "static/data/0" : "static/data/stripped-assets";
 
 cacheRouter.get(/^\/0(?:_[a-z]{2})?\/.+!.+$/, async (req, res) => {
     try {
@@ -16,8 +16,8 @@ cacheRouter.get(/^\/0(?:_[a-z]{2})?\/.+!.+$/, async (req, res) => {
         const filePath = `${strippedAssetsDir}${dir}/${file}`;
 
         // Return file if we have it
-        await fs.access(filePath);
-        const data = await fs.readFile(filePath, null);
+        await fs.promises.access(filePath);
+        const data = await fs.promises.readFile(filePath, null);
         res.send(data);
     } catch (err) {
         // 404 if we don't
@@ -40,8 +40,8 @@ cacheRouter.get(/^(\/\/|\/)(SplitCaches|Lotus|Tools|7|7_en)\/.*$/, async (req, r
         const file = req.path.substring(dir.length + 1);
         const filePath = `static/data/content${dir}/${file}`;
         // Return file if we have it
-        await fs.access(filePath);
-        const data = await fs.readFile(filePath, null);
+        await fs.promises.access(filePath);
+        const data = await fs.promises.readFile(filePath, null);
         res.send(data);
     } catch (err) {
         // 404 if we don't

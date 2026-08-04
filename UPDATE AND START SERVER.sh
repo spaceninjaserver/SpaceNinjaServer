@@ -7,7 +7,12 @@ if [ $? -eq 0 ]; then
     git stash
     git checkout -f origin/main
 
-    if [ -d "static/data/0/" ]; then
+    if [ -d "static/data/stripped-assets/" ]; then
+        echo "Updating stripped assets..."
+        cd static/data/stripped-assets/
+        git pull
+        cd ../../../
+    elif [ -d "static/data/0/" ]; then
         echo "Updating stripped assets..."
         cd static/data/0/
         git pull
