@@ -641,109 +641,115 @@ function fetchItemList() {
             const rememberedNWOverride = document.getElementById("worldState.nightwaveOverride").value;
             document.getElementById("worldState.nightwaveOverride").innerHTML = "";
 
+            const missingAdditionalDict = new Set();
+
+            const getAddDict = locTag => {
+                const item = data.AdditionalDict.find(i => i.uniqueName === locTag);
+                if (!item) {
+                    missingAdditionalDict.add(locTag);
+                    return locTag;
+                }
+                return item.name
+                    .replaceAll("|OPEN_COLOR|", "") // ArchonCrystal
+                    .replaceAll("|CLOSE_COLOR|", "") // ArchonCrystal
+                    .replaceAll(/<.+>/g, "") // Icons
+                    .replaceAll("| %", "|%") // de
+                    .replaceAll("| %", "|%") // uk
+                    .replaceAll("| с", "|с") // uk
+                    .replaceAll("| м ", "|м ") // uk
+                    .replaceAll("| m ", "|m "); // pl
+            };
+
             // prettier-ignore
             data.archonCrystalUpgrades = {
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeEquilibrium": loc("upgrade_Equilibrium").replaceAll("|VAL|", "20"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeEquilibriumMythic": loc("upgrade_Equilibrium").replaceAll("|VAL|", "30"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeMeleeCritDamage": loc("upgrade_MeleeCritDamage").replaceAll("|VAL|", "25"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeMeleeCritDamageMythic": loc("upgrade_MeleeCritDamage").replaceAll("|VAL|", "37.5"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradePrimaryStatusChance": loc("upgrade_PrimaryStatusChance").replaceAll("|VAL|", "25"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradePrimaryStatusChanceMythic": loc("upgrade_PrimaryStatusChance").replaceAll("|VAL|", "37.5"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeSecondaryCritChance": loc("upgrade_SecondaryCritChance").replaceAll("|VAL|", "25"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeSecondaryCritChanceMythic": loc("upgrade_SecondaryCritChance").replaceAll("|VAL|", "37.5"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeAbilityDuration": loc("upgrade_WarframeAbilityDuration").replaceAll("|VAL|", "10"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeAbilityDurationMythic": loc("upgrade_WarframeAbilityDuration").replaceAll("|VAL|", "15"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeAbilityStrength": loc("upgrade_WarframeAbilityStrength").replaceAll("|VAL|", "10"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeAbilityStrengthMythic": loc("upgrade_WarframeAbilityStrength").replaceAll("|VAL|", "15"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeArmourMax": loc("upgrade_WarframeArmorMax").replaceAll("|VAL|", "150"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeArmourMaxMythic": loc("upgrade_WarframeArmorMax").replaceAll("|VAL|", "225"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeBlastProc": loc("upgrade_WarframeBlastProc").replaceAll("|VAL|", "5"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeBlastProcMythic": loc("upgrade_WarframeBlastProc").replaceAll("|VAL|", "7.5"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCastingSpeed": loc("upgrade_WarframeCastingSpeed").replaceAll("|VAL|", "25"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCastingSpeedMythic": loc("upgrade_WarframeCastingSpeed").replaceAll("|VAL|", "37.5"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCorrosiveDamageBoost": loc("upgrade_WarframeCorrosiveDamageBoost").replaceAll("|VAL|", "10"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCorrosiveDamageBoostMythic": loc("upgrade_WarframeCorrosiveDamageBoost").replaceAll("|VAL|", "15"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCorrosiveStack": loc("upgrade_WarframeCorrosiveStack").replaceAll("|VAL|", "2"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCorrosiveStackMythic": loc("upgrade_WarframeCorrosiveStack").replaceAll("|VAL|", "3"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCritDamageBoost": loc("upgrade_WarframeCritDamageBoost").replaceAll("|VAL|", "25"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCritDamageBoostMythic": loc("upgrade_WarframeCritDamageBoost").replaceAll("|VAL|", "37"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeElectricDamage": loc("upgrade_WarframeElectricDamage").replaceAll("|VAL1|", "30").replaceAll("|VAL2|", "10"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeElectricDamageMythic": loc("upgrade_WarframeElectricDamage").replaceAll("|VAL1|", "45").replaceAll("|VAL2|", "15"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeElectricDamageBoost": loc("upgrade_WarframeElectricDamageBoost").replaceAll("|VAL|", "10"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeElectricDamageBoostMythic": loc("upgrade_WarframeElectricDamageBoost").replaceAll("|VAL|", "15"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeEnergyMax": loc("upgrade_WarframeEnergyMax").replaceAll("|VAL|", "50"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeEnergyMaxMythic": loc("upgrade_WarframeEnergyMax").replaceAll("|VAL|", "75"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeGlobeEffectEnergy": loc("upgrade_WarframeGlobeEffectEnergy").replaceAll("|VAL|", "50"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeGlobeEffectEnergyMythic": loc("upgrade_WarframeGlobeEffectEnergy").replaceAll("|VAL|", "75"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeGlobeEffectHealth": loc("upgrade_WarframeGlobeEffectHealth").replaceAll("|VAL|", "100"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeGlobeEffectHealthMythic": loc("upgrade_WarframeGlobeEffectHealth").replaceAll("|VAL|", "150"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeHealthMax": loc("upgrade_WarframeHealthMax").replaceAll("|VAL|", "150"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeHealthMaxMythic": loc("upgrade_WarframeHealthMax").replaceAll("|VAL|", "225"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeHPBoostFromImpact": loc("upgrade_WarframeHPBoostFromImpact").replaceAll("|VAL1|", "1").replaceAll("|VAL2|", "300"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeHPBoostFromImpactMythic": loc("upgrade_WarframeHPBoostFromImpact").replaceAll("|VAL1|", "2").replaceAll("|VAL2|", "450"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeParkourVelocity": loc("upgrade_WarframeParkourVelocity").replaceAll("|VAL|", "15"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeParkourVelocityMythic": loc("upgrade_WarframeParkourVelocity").replaceAll("|VAL|", "22.5"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRadiationDamageBoost": loc("upgrade_WarframeRadiationDamageBoost").replaceAll("|VAL|", "10"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRadiationDamageBoostMythic": loc("upgrade_WarframeRadiationDamageBoost").replaceAll("|VAL|", "15"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRegen": loc("upgrade_WarframeHealthRegen").replaceAll("|VAL|", "5"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRegenMythic": loc("upgrade_WarframeHealthRegen").replaceAll("|VAL|", "7.5"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeShieldMax": loc("upgrade_WarframeShieldMax").replaceAll("|VAL|", "150"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeShieldMaxMythic": loc("upgrade_WarframeShieldMax").replaceAll("|VAL|", "225"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeStartingEnergy": loc("upgrade_WarframeStartingEnergy").replaceAll("|VAL|", "30"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeStartingEnergyMythic": loc("upgrade_WarframeStartingEnergy").replaceAll("|VAL|", "45"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeToxinDamage": loc("upgrade_WarframeToxinDamage").replaceAll("|VAL|", "30"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeToxinDamageMythic": loc("upgrade_WarframeToxinDamage").replaceAll("|VAL|", "45"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeToxinHeal": loc("upgrade_WarframeToxinHeal").replaceAll("|VAL|", "2"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeToxinHealMythic": loc("upgrade_WarframeToxinHeal").replaceAll("|VAL|", "3"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWeaponCritBoostFromHeat": loc("upgrade_WeaponCritBoostFromHeat").replaceAll("|VAL1|", "1").replaceAll("|VAL2|", "50"),
-                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWeaponCritBoostFromHeatMythic": loc("upgrade_WeaponCritBoostFromHeat").replaceAll("|VAL1|", "1.5").replaceAll("|VAL2|", "75"),
-                "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityRangeMod": loc("upgrade_AvatarAbilityRange"),
-                "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityEfficiencyMod": loc("upgrade_AvatarAbilityEfficiency"),
-                "/Lotus/Upgrades/Mods/Warframe/AvatarEnergyRegenMod": loc("upgrade_AvatarEnergyRegen"),
-                "/Lotus/Upgrades/Mods/Warframe/AvatarEnemyRadarMod": loc("upgrade_AvatarEnemyRadar"),
-                "/Lotus/Upgrades/Mods/Warframe/AvatarLootRadarMod": loc("upgrade_AvatarLootRadar"),
-                "/Lotus/Upgrades/Mods/Rifle/WeaponAmmoMaxMod": loc("upgrade_WeaponAmmoMax"),
-                "/Lotus/Upgrades/Mods/Aura/EnemyArmorReductionAuraMod": loc("upgrade_EnemyArmorReductionAura"),
-                "/Lotus/Upgrades/Mods/DataSpike/Assassin/OnExecutionAmmoMod": loc("upgrade_OnExecutionAmmo"),
-                "/Lotus/Upgrades/Mods/DataSpike/Assassin/OnExecutionHealthDropMod": loc("upgrade_OnExecutionHealthDrop"),
-                "/Lotus/Upgrades/Mods/DataSpike/Assassin/OnExecutionEnergyDropMod": loc("upgrade_OnExecutionEnergyDrop"),
-                "/Lotus/Upgrades/Mods/DataSpike/Cipher/OnFailHackResetMod": loc("upgrade_OnFailHackReset"),
-                "/Lotus/Upgrades/Mods/DataSpike/Cipher/DamageReductionOnHackMod": loc("upgrade_DamageReductionOnHack"),
-                "/Lotus/Upgrades/Mods/DataSpike/Assassin/OnExecutionReviveCompanionMod": loc("upgrade_OnExecutionReviveCompanion"),
-                "/Lotus/Upgrades/Mods/DataSpike/Assassin/OnExecutionParkourSpeedMod": loc("upgrade_OnExecutionParkourSpeed"),
-                "/Lotus/Upgrades/Mods/Warframe/AvatarTimeLimitIncreaseMod": loc("upgrade_AvatarTimeLimitIncrease"),
-                "/Lotus/Upgrades/Mods/DataSpike/Cipher/ElectrifyOnHackMod": loc("upgrade_ElectrifyOnHack"),
-                "/Lotus/Upgrades/Mods/DataSpike/Assassin/OnExecutionTerrifyMod": loc("upgrade_OnExecutionTerrify"),
-                "/Lotus/Upgrades/Mods/DataSpike/Cipher/OnHackLockersMod": loc("upgrade_OnHackLockers"),
-                "/Lotus/Upgrades/Mods/DataSpike/Assassin/OnExecutionBlindMod": loc("upgrade_OnExecutionBlind"),
-                "/Lotus/Upgrades/Mods/DataSpike/Assassin/OnExecutionDrainPowerMod": loc("upgrade_OnExecutionDrainPower"),
-                "/Lotus/Upgrades/Mods/DataSpike/Cipher/OnHackSprintSpeedMod": loc("upgrade_OnHackSprintSpeed"),
-                "/Lotus/Upgrades/Mods/DataSpike/Assassin/SwiftExecuteMod": loc("upgrade_SwiftExecute"),
-                "/Lotus/Upgrades/Mods/DataSpike/Cipher/OnHackInvisMod": loc("upgrade_OnHackInvis"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeEquilibrium": getAddDict("/Lotus/Language/Items/WarframeModPickupBonusDesc").replaceAll("|val|", "+20"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeEquilibriumMythic": getAddDict("/Lotus/Language/Items/WarframeModPickupBonusDesc").replaceAll("|val|", "+30"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeMeleeCritDamage": getAddDict("/Lotus/Language/Upgrades/MeleeCritDamage").replaceAll("|val|", "+25"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeMeleeCritDamageMythic": getAddDict("/Lotus/Language/Upgrades/MeleeCritDamage").replaceAll("|val|", "+37.5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradePrimaryStatusChance": getAddDict("/Lotus/Language/Upgrades/PrimaryStatusChance").replaceAll("|val|", "+25"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradePrimaryStatusChanceMythic": getAddDict("/Lotus/Language/Upgrades/PrimaryStatusChance").replaceAll("|val|", "+37.5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeSecondaryCritChance": getAddDict("/Lotus/Language/Upgrades/SecondaryCritChance").replaceAll("|val|", "+25"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeSecondaryCritChanceMythic": getAddDict("/Lotus/Language/Upgrades/SecondaryCritChance").replaceAll("|val|", "+37.5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeAbilityDuration": getAddDict("/Lotus/Language/Upgrades/AvatarAbilityDurationModDesc").replaceAll("|val|", "+10"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeAbilityDurationMythic": getAddDict("/Lotus/Language/Upgrades/AvatarAbilityDurationModDesc").replaceAll("|val|", "+15"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeAbilityStrength": getAddDict("/Lotus/Language/Upgrades/AvatarAbilityStrengthModDesc").replaceAll("|val|", "+10"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeAbilityStrengthMythic": getAddDict("/Lotus/Language/Upgrades/AvatarAbilityStrengthModDesc").replaceAll("|val|", "+15"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeArmourMax": getAddDict("/Lotus/Language/Upgrades/WarframeArmourMaxFlat").replaceAll("|val|", "+150"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeArmourMaxMythic": getAddDict("/Lotus/Language/Upgrades/WarframeArmourMaxFlat").replaceAll("|val|", "+225"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeBlastProc": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeBlastProcShieldRegen").replaceAll("|val|", "+5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeBlastProcMythic": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeBlastProcShieldRegen").replaceAll("|val|", "+7.5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCastingSpeed": getAddDict("/Lotus/Language/Upgrades/AvatarCastingSpeedModDesc").replaceAll("|val|", "+25"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCastingSpeedMythic": getAddDict("/Lotus/Language/Upgrades/AvatarCastingSpeedModDesc").replaceAll("|val|", "+37.5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCorrosiveDamageBoost": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeDamageBoostFromCorrosive").replaceAll("|val|", "+10"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCorrosiveDamageBoostMythic": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeDamageBoostFromCorrosive").replaceAll("|val|", "+15"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCorrosiveStack": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeMaxCorrosiveStack").replaceAll("|val|", "+2"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCorrosiveStackMythic": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeMaxCorrosiveStack").replaceAll("|val|", "+3"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCritDamageBoost": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeMeleeCritDoubledWithMaxEnergy").replaceAll("|val|", "25").replaceAll("|AMOUNT|", "500"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeCritDamageBoostMythic": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeMeleeCritDoubledWithMaxEnergy").replaceAll("|val|", "37").replaceAll("|AMOUNT|", "500"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeElectricDamage": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeElectricDamageFromShards").replaceAll("|val|", "30").replaceAll("|val2|", "+10"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeElectricDamageMythic": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeElectricDamageFromShards").replaceAll("|val|", "45").replaceAll("|val2|", "+15"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeElectricDamageBoost": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeDamageBoostFromElectricity").replaceAll("|val|", "+10"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeElectricDamageBoostMythic": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeDamageBoostFromElectricity").replaceAll("|val|", "+15"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeEnergyMax": getAddDict("/Lotus/Language/Upgrades/WarframeEnergyMaxFlat").replaceAll("|val|", "+50"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeEnergyMaxMythic": getAddDict("/Lotus/Language/Upgrades/WarframeEnergyMaxFlat").replaceAll("|val|", "+75"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeGlobeEffectEnergy": getAddDict("/Lotus/Language/Upgrades/WarframeGlobeEffectEnergy").replaceAll("|val|", "+50"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeGlobeEffectEnergyMythic": getAddDict("/Lotus/Language/Upgrades/WarframeGlobeEffectEnergy").replaceAll("|val|", "+75"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeGlobeEffectHealth": getAddDict("/Lotus/Language/Upgrades/WarframeGlobeEffectHealth").replaceAll("|val|", "+100"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeGlobeEffectHealthMythic": getAddDict("/Lotus/Language/Upgrades/WarframeGlobeEffectHealth").replaceAll("|val|", "+150"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeHealthMax": getAddDict("/Lotus/Language/Upgrades/WarframeHealthMaxFlat").replaceAll("|val|", "+150"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeHealthMaxMythic": getAddDict("/Lotus/Language/Upgrades/WarframeHealthMaxFlat").replaceAll("|val|", "+225"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeHPBoostFromImpact": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeImpactHPIncrease").replaceAll("|val|", "1").replaceAll("|max|", "300"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeHPBoostFromImpactMythic": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeImpactHPIncrease").replaceAll("|val|", "2").replaceAll("|max|", "450"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeParkourVelocity": getAddDict("/Lotus/Language/Upgrades/AvatarParkourBoostModDesc").replaceAll("|val|", "+15"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeParkourVelocityMythic": getAddDict("/Lotus/Language/Upgrades/AvatarParkourBoostModDesc").replaceAll("|val|", "+22.5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRadiationDamageBoost": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeDamageBoostFromRadiation").replaceAll("|val|", "+10"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRadiationDamageBoostMythic": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeDamageBoostFromRadiation").replaceAll("|val|", "+15"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRegen": getAddDict("/Lotus/Language/Upgrades/WarframeHealthRegenFlat").replaceAll("|val|", "+5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeRegenMythic": getAddDict("/Lotus/Language/Upgrades/WarframeHealthRegenFlat").replaceAll("|val|", "+7.5"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeShieldMax": getAddDict("/Lotus/Language/Upgrades/WarframeShieldMaxFlat").replaceAll("|val|", "+150"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeShieldMaxMythic": getAddDict("/Lotus/Language/Upgrades/WarframeShieldMaxFlat").replaceAll("|val|", "+225"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeStartingEnergy": getAddDict("/Lotus/Language/Upgrades/AvatarSpawnEnergyPercent").replaceAll("|val|", "+30"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeStartingEnergyMythic": getAddDict("/Lotus/Language/Upgrades/AvatarSpawnEnergyPercent").replaceAll("|val|", "+45"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeToxinDamage": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeToxinProcDamage").replaceAll("|val|", "+30"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeToxinDamageMythic": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeToxinProcDamage").replaceAll("|val|", "+45"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeToxinHeal": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeRegenHPOnToxinProc").replaceAll("|val|", "+2"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWarframeToxinHealMythic": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeRegenHPOnToxinProc").replaceAll("|val|", "+3"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWeaponCritBoostFromHeat": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeCritBoostFromHeat").replaceAll("|val|", "1").replaceAll("|max|", "50"),
+                "/Lotus/Upgrades/Invigorations/ArchonCrystalUpgrades/ArchonCrystalUpgradeWeaponCritBoostFromHeatMythic": getAddDict("/Lotus/Language/Alchemy/ArchonUpgradeWarframeCritBoostFromHeat").replaceAll("|val|", "1.5").replaceAll("|max|", "75"),
+                "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityRangeMod": getAddDict("/Lotus/Language/Upgrades/AvatarAbilityRangeModDesc").replaceAll("|val|", "+7.5"),
+                "/Lotus/Upgrades/Mods/Warframe/AvatarAbilityEfficiencyMod": getAddDict("/Lotus/Language/Upgrades/AvatarAbilityEfficiencyModDesc").replaceAll("|val|", "+5"),
+                "/Lotus/Upgrades/Mods/Warframe/AvatarEnergyRegenMod": getAddDict("/Lotus/Language/Upgrades/EnergyRegen").replaceAll("|val|", "+0.5"),
+                "/Lotus/Upgrades/Mods/Warframe/AvatarEnemyRadarMod": getAddDict("/Lotus/Language/Upgrades/AvatarEnemyRadarModDesc").replaceAll("|val|", "+5"),
+                "/Lotus/Upgrades/Mods/Warframe/AvatarLootRadarMod": getAddDict("/Lotus/Language/Upgrades/AvatarLootRadarModDesc").replaceAll("|val|", "+7"),
+                "/Lotus/Upgrades/Mods/Rifle/WeaponAmmoMaxMod": getAddDict("/Lotus/Language/Upgrades/WeaponMaxAmmoModDesc").replaceAll("|val|", "+15"),
+                "/Lotus/Upgrades/Mods/Aura/EnemyArmorReductionAuraMod": getAddDict("/Lotus/Language/Upgrades/EnemyArmorReductionAuraDesc").replaceAll("|val|", "-3"),
+                "/Lotus/Upgrades/Mods/DataSpike/Assassin/OnExecutionAmmoMod": getAddDict("/Lotus/Language/Upgrades/DataSpikeOnExecutionAmmo").replaceAll("|AMMO|", "100"),
+                "/Lotus/Upgrades/Mods/DataSpike/Assassin/OnExecutionHealthDropMod": getAddDict("/Lotus/Language/Upgrades/DataSpikeOnExecutionHealth").replaceAll("|CHANCE|", "100"),
+                "/Lotus/Upgrades/Mods/DataSpike/Assassin/OnExecutionEnergyDropMod": getAddDict("/Lotus/Language/Upgrades/DataSpikeOnExecutionEnergy").replaceAll("|CHANCE|", "50"),
+                "/Lotus/Upgrades/Mods/DataSpike/Cipher/OnFailHackResetMod": getAddDict("/Lotus/Language/Upgrades/DataSpikeOnFailRehack").replaceAll("|val|", "+50"),
+                "/Lotus/Upgrades/Mods/DataSpike/Cipher/DamageReductionOnHackMod": getAddDict("/Lotus/Language/Upgrades/DataSpikeDamageReduceOnHack").replaceAll("|VAL|", "75"),
+                "/Lotus/Upgrades/Mods/DataSpike/Assassin/OnExecutionReviveCompanionMod": getAddDict("/Lotus/Language/Upgrades/DataSpikeOnExecutionReviveCompanion").replaceAll("|TIME|", "15"),
+                "/Lotus/Upgrades/Mods/DataSpike/Assassin/OnExecutionParkourSpeedMod": getAddDict("/Lotus/Language/Upgrades/DataSpikeOnExecutionParkour").replaceAll("|VAL|", "75").replaceAll("|DURATION|", "12"),
+                "/Lotus/Upgrades/Mods/Warframe/AvatarTimeLimitIncreaseMod": getAddDict("/Lotus/Language/Upgrades/TimeLimitIncreaseDesc").replaceAll("|val|", "+8"),
+                "/Lotus/Upgrades/Mods/DataSpike/Cipher/ElectrifyOnHackMod": getAddDict("/Lotus/Language/Upgrades/DataSpikeElectrifyHack").replaceAll("|RANGE|", "20"),
+                "/Lotus/Upgrades/Mods/DataSpike/Assassin/OnExecutionTerrifyMod": getAddDict("/Lotus/Language/Upgrades/DataSpikeOnExecutionTerrify").replaceAll("|CHANCE|", "50").replaceAll("|RANGE|", "15").replaceAll("|DURATION|", "8"),
+                "/Lotus/Upgrades/Mods/DataSpike/Cipher/OnHackLockersMod": getAddDict("/Lotus/Language/Upgrades/DataSpikeOnHackLockers").replaceAll("|COUNT|", "5").replaceAll("|RANGE|", "20"),
+                "/Lotus/Upgrades/Mods/DataSpike/Assassin/OnExecutionBlindMod": getAddDict("/Lotus/Language/Upgrades/DataSpikeOnExecutionBlind").replaceAll("|RANGE|", "18"),
+                "/Lotus/Upgrades/Mods/DataSpike/Assassin/OnExecutionDrainPowerMod": getAddDict("/Lotus/Language/Upgrades/DataSpikeOnExecutionDrainPower").replaceAll("|STRENGTH|", "50"),
+                "/Lotus/Upgrades/Mods/DataSpike/Cipher/OnHackSprintSpeedMod": getAddDict("/Lotus/Language/Upgrades/DataSpikeOnHackSprintSpeed").replaceAll("|VAL|", "75").replaceAll("|DURATION|", "15"),
+                "/Lotus/Upgrades/Mods/DataSpike/Assassin/SwiftExecuteMod": getAddDict("/Lotus/Language/Upgrades/DataSpikeSwiftMercy").replaceAll("|SPEED|", "50"),
+                "/Lotus/Upgrades/Mods/DataSpike/Cipher/OnHackInvisMod": getAddDict("/Lotus/Language/Upgrades/DataSpikeOnHackInvis").replaceAll("|DURATION|", "15")
             };
             window.archonCrystalUpgrades = data.archonCrystalUpgrades;
 
             data.innateDamages = {
-                InnateElectricityDamage: data.AdditionalDict.find(
-                    i => i.uniqueName == "/Lotus/Language/Game/DT_ELECTRICITY_NoIcon"
-                ).name,
-                InnateFreezeDamage: data.AdditionalDict.find(
-                    i => i.uniqueName == "/Lotus/Language/Game/DT_FREEZE_NoIcon"
-                ).name,
-                InnateHeatDamage: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Game/DT_FIRE_NoIcon")
-                    .name,
-                InnateImpactDamage: data.AdditionalDict.find(
-                    i => i.uniqueName == "/Lotus/Language/Game/DT_IMPACT_NoIcon"
-                ).name,
-                InnateMagDamage: data.AdditionalDict.find(
-                    i => i.uniqueName == "/Lotus/Language/Game/DT_MAGNETIC_NoIcon"
-                ).name,
-                InnateRadDamage: data.AdditionalDict.find(
-                    i => i.uniqueName == "/Lotus/Language/Game/DT_RADIATION_NoIcon"
-                ).name,
-                InnateToxinDamage: data.AdditionalDict.find(
-                    i => i.uniqueName == "/Lotus/Language/Game/DT_POISON_NoIcon"
-                ).name
+                InnateElectricityDamage: getAddDict("/Lotus/Language/Game/DT_ELECTRICITY_NoIcon"),
+                InnateFreezeDamage: getAddDict("/Lotus/Language/Game/DT_FREEZE_NoIcon"),
+                InnateHeatDamage: getAddDict("/Lotus/Language/Game/DT_FIRE_NoIcon"),
+                InnateImpactDamage: getAddDict("/Lotus/Language/Game/DT_IMPACT_NoIcon"),
+                InnateMagDamage: getAddDict("/Lotus/Language/Game/DT_MAGNETIC_NoIcon"),
+                InnateRadDamage: getAddDict("/Lotus/Language/Game/DT_RADIATION_NoIcon"),
+                InnateToxinDamage: getAddDict("/Lotus/Language/Game/DT_POISON_NoIcon")
             };
 
             // Add mods missing in data sources
@@ -778,107 +784,92 @@ function fetchItemList() {
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser",
-                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/LegendaryFusionPart")
-                        .name,
+                    name: getAddDict("/Lotus/Language/Items/LegendaryFusionPart"),
                     fusionLimit: 0
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/CosmeticEnhancers/Peculiars/CyoteMod",
-                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Mods/PerculiarCyoteMod").name
+                    name: getAddDict("/Lotus/Language/Mods/PerculiarCyoteMod")
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Warframe/Intermediate/AvatarPickupBonusModIntermediate",
-                    name:
-                        data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/WarframeModPickupBonus")
-                            .name +
-                        " " +
-                        loc("code_badItem")
+                    name: getAddDict("/Lotus/Language/Items/WarframeModPickupBonus") + " " + loc("code_badItem")
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Warframe/AvatarStaminaCostMultiplierMod",
-                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/WarframeModStaminaCost")
-                        .name
+                    name: getAddDict("/Lotus/Language/Items/WarframeModStaminaCost")
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Warframe/AvatarShieldToStaminaMod",
-                    name: data.AdditionalDict.find(
-                        i => i.uniqueName == "/Lotus/Language/Items/WarframeModShieldToStamina"
-                    ).name,
+                    name: getAddDict("/Lotus/Language/Items/WarframeModShieldToStamina"),
                     fusionLimit: 3
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Warframe/AvatarStaminaMaxMod",
-                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/WarframeModStaminaMax")
-                        .name
+                    name: getAddDict("/Lotus/Language/Items/WarframeModStaminaMax")
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Warframe/AvatarStaminaRechargeRateMod",
-                    name: data.AdditionalDict.find(
-                        i => i.uniqueName == "/Lotus/Language/Items/WarframeModStaminaRechargeRate"
-                    ).name
+                    name: getAddDict("/Lotus/Language/Items/WarframeModStaminaRechargeRate")
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Melee/WeaponStaminaBonusMod",
-                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/MeleeModStaminaBonus")
-                        .name
+                    name: getAddDict("/Lotus/Language/Items/MeleeModStaminaBonus")
                 }
             );
 
             // Add modular weapons
             data.OperatorAmps.push({
                 uniqueName: "/Lotus/Weapons/Sentients/OperatorAmplifiers/OperatorAmpWeapon",
-                name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/OperatorVoidBeam").name
+                name: getAddDict("/Lotus/Language/Items/OperatorVoidBeam")
             });
             data.OperatorAmps.push({
                 uniqueName:
                     "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/OperatorTrainingAmpWeapon",
-                name: data.AdditionalDict.find(
-                    i => i.uniqueName == "/Lotus/Language/OstronCrafting/OperatorTrainingAmpName"
-                ).name
+                name: getAddDict("/Lotus/Language/OstronCrafting/OperatorTrainingAmpName")
             });
             data.Melee.push({
                 uniqueName: "/Lotus/Weapons/Ostron/Melee/LotusModularWeapon",
-                name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/OstronCrafting/Zaw_Singular").name
+                name: getAddDict("/Lotus/Language/OstronCrafting/Zaw_Singular")
             });
             data.LongGuns.push({
                 uniqueName: "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
-                name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/SolarisVenus/Kitgun_Singular").name
+                name: getAddDict("/Lotus/Language/SolarisVenus/Kitgun_Singular")
             });
             data.Pistols.push({
                 uniqueName: "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
-                name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/SolarisVenus/Kitgun_Singular").name
+                name: getAddDict("/Lotus/Language/SolarisVenus/Kitgun_Singular")
             });
             data.MoaPets ??= [];
             data.MoaPets.push({
                 uniqueName: "/Lotus/Types/Friendly/Pets/MoaPets/MoaPetPowerSuit",
-                name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/SolarisVenus/MoaPet_Singular").name
+                name: getAddDict("/Lotus/Language/SolarisVenus/MoaPet_Singular")
             });
             data.MoaPets.push({
                 uniqueName: "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetPowerSuit",
-                name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Pets/ZanukaPetItemName").name
+                name: getAddDict("/Lotus/Language/Pets/ZanukaPetItemName")
             });
 
             data.miscitems.push(
                 {
                     uniqueName: "/Lotus/Types/Recipes/CosmeticUnenhancerItem",
-                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/CosmeticUnenhancerName")
-                        .name
+                    name: getAddDict("/Lotus/Language/Items/CosmeticUnenhancerName")
                 },
                 {
                     uniqueName: "/Lotus/Types/Items/Research/DojoColors/GenericDojoColorPigment",
                     name: normalizeText(
-                        data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/DojoColorPigment")
-                            .name.replaceAll("|COLOUR_NAME|", "")
+                        getAddDict("/Lotus/Language/Items/DojoColorPigment")
+                            .replaceAll("|COLOUR_NAME|", "")
                             .replaceAll(" ", "")
                     )
                 },
                 {
                     uniqueName: "/Lotus/Types/Items/MiscItems/BossNavCode",
-                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/BossNavCode").name
+                    name: getAddDict("/Lotus/Language/Items/BossNavCode")
                 },
                 {
                     uniqueName: "/Lotus/Types/Items/MiscItems/Actuator",
-                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/Actuator").name
+                    name: getAddDict("/Lotus/Language/Items/Actuator")
                 }
             );
 
@@ -950,7 +941,7 @@ function fetchItemList() {
             data.Boosters ??= [];
             data.Boosters.push({
                 uniqueName: "/Lotus/Types/Boosters/ReviveBooster",
-                name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Items/ReviveBoosterName").name
+                name: getAddDict("/Lotus/Language/Items/ReviveBoosterName")
             });
 
             const itemMap = {
@@ -962,33 +953,25 @@ function fetchItemList() {
                 "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": { name: loc("code_shotgun") },
                 // Modular weapons
                 "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam": {
-                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/SolarisVenus/Kitgun_Singular")
-                        .name
+                    name: getAddDict("/Lotus/Language/SolarisVenus/Kitgun_Singular")
                 },
                 "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryLauncher": {
-                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/SolarisVenus/Kitgun_Singular")
-                        .name
+                    name: getAddDict("/Lotus/Language/SolarisVenus/Kitgun_Singular")
                 },
                 "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryShotgun": {
-                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/SolarisVenus/Kitgun_Singular")
-                        .name
+                    name: getAddDict("/Lotus/Language/SolarisVenus/Kitgun_Singular")
                 },
                 "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimarySniper": {
-                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/SolarisVenus/Kitgun_Singular")
-                        .name
+                    name: getAddDict("/Lotus/Language/SolarisVenus/Kitgun_Singular")
                 },
                 "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam": {
-                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/SolarisVenus/Kitgun_Singular")
-                        .name
+                    name: getAddDict("/Lotus/Language/SolarisVenus/Kitgun_Singular")
                 },
                 "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun": {
-                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/SolarisVenus/Kitgun_Singular")
-                        .name
+                    name: getAddDict("/Lotus/Language/SolarisVenus/Kitgun_Singular")
                 },
                 "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": {
-                    name: data.AdditionalDict.find(
-                        i => i.uniqueName == "/Lotus/Language/Hoverboards/Hoverboard_Singular"
-                    ).name
+                    name: getAddDict("/Lotus/Language/Hoverboards/Hoverboard_Singular")
                 },
                 "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetAPowerSuit": {
                     name: data.ModularParts.find(
@@ -1006,7 +989,7 @@ function fetchItemList() {
                     ).name
                 },
                 "/Lotus/Powersuits/Stalker/Stalker": {
-                    name: data.AdditionalDict.find(i => i.uniqueName == "/Lotus/Language/Game/Stalker").name
+                    name: getAddDict("/Lotus/Language/Game/Stalker")
                 },
                 "/Lotus/Powersuits/Excalibur/DarkExcalibur": {
                     name: loc("code_darkExcalibur").replace(
@@ -1109,9 +1092,10 @@ function fetchItemList() {
                                 }
                             }
                         } else if (item.uniqueName.includes("ColourPicker")) {
-                            item.name = data.AdditionalDict.find(
-                                i => i.uniqueName == "/Lotus/Language/Store/ItemColorPalette"
-                            ).name.replaceAll("|ITEM|", item.name);
+                            item.name = getAddDict("/Lotus/Language/Store/ItemColorPalette").replaceAll(
+                                "|ITEM|",
+                                item.name
+                            );
                         }
                         if (!item.alwaysAvailable) {
                             const option = document.createElement("option");
@@ -1126,9 +1110,9 @@ function fetchItemList() {
                     items.forEach(item => {
                         if (item.name == "") {
                             if (item.uniqueName.includes("/Beards/")) {
-                                item.name = data.AdditionalDict.find(
-                                    i => i.uniqueName == "/Lotus/Language/Operator/TennoCustomization_DrifterBeardName"
-                                ).name.replaceAll("|INDEX|", beardNumber.toString().padStart(3, "0"));
+                                item.name = getAddDict(
+                                    "/Lotus/Language/Operator/TennoCustomization_DrifterBeardName"
+                                ).replaceAll("|INDEX|", beardNumber.toString().padStart(3, "0"));
                                 beardNumber++;
                             } else {
                                 item.name = item.uniqueName;
@@ -1261,6 +1245,10 @@ function fetchItemList() {
                 }
             }
             resolve(itemMap);
+
+            if (missingAdditionalDict.size) {
+                console.warn("Missing in AdditionalDict:", [...missingAdditionalDict]);
+            }
         });
     });
 }
