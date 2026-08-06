@@ -2873,6 +2873,31 @@ export const addCalendarProgress = (inventory: TInventoryDatabaseDocument, value
     checkCalendarAutoAdvance(inventory, currentSeason);
 };
 
+export const resetKahlWeeklyMission = (
+    inventory: Pick<TInventoryDatabaseDocument, "Affiliations">,
+    value: string
+): void => {
+    const currentWeek = Math.trunc((Date.now() - KAHL_EPOCH) / unixTimesInMs.week);
+    const kahl = inventory.Affiliations.find(x => x.Tag == "KahlSyndicate");
+    if (kahl && kahl.WeeklyMissions) {
+        const index = kahl.WeeklyMissions.findIndex(i => i.WeekCount == Number(value.slice("KahlSyndicate_".length)));
+        if (index !== -1) {
+            logger.debug(`kahl weekly mission completed, handling weekly reset`);
+            kahl.WeeklyMissions[index].CompletedMission = true;
+            if (kahl.WeeklyMissions.findIndex(i => i.WeekCount == currentWeek + 1) == -1) {
+                kahl.WeeklyMissions.splice(0, kahl.WeeklyMissions.length, kahl.WeeklyMissions[index]);
+                kahl.WeeklyMissions.push({
+                    MissionIndex: kahl.WeeklyMissions[kahl.WeeklyMissions.length - 1].MissionIndex + 1,
+                    CompletedMission: false,
+                    JobManifest: "/Lotus/Syndicates/Kahl/KahlJobManifestVersionThree",
+                    Challenges: [],
+                    WeekCount: currentWeek + 1
+                });
+            }
+        }
+    }
+};
+
 export const addKahlProgress = (
     inventory: Pick<TInventoryDatabaseDocument, "Affiliations" | "MiscItems">,
     value: IWeeklyMissionChallengeInfo[],
@@ -2881,9 +2906,9 @@ export const addKahlProgress = (
     for (const info of value) {
         let stockEarned = 0;
         const kahl = inventory.Affiliations.find(x => x.Tag == info.Syndicate)!;
-        const mission = kahl.WeeklyMissions![kahl.WeeklyMissions!.length - 1];
+        const mission = kahl.WeeklyMissions!.find(i => i.WeekCount == info.WeekCount)!;
         if (info.ResetChallenges) {
-            mission.CompletedMission = true;
+            mission.ChallengesReset = true;
         }
         for (const challenge of info.CompletedChallenges) {
             if (mission.Challenges.indexOf(challenge) == -1) {

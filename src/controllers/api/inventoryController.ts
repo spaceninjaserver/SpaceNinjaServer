@@ -62,7 +62,7 @@ import {
     version_compare
 } from "../../helpers/inventoryHelpers.ts";
 import { Inbox } from "../../models/inboxModel.ts";
-import { KAHL_EPOCH, unixTimesInMs } from "../../constants/timeConstants.ts";
+import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import { DailyDeal } from "../../models/worldStateModel.ts";
 import { eEquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { generateRewardSeed } from "../../services/rngService.ts";
@@ -158,31 +158,6 @@ export const inventoryController: RequestHandler = async (request, response) => 
             for (const suit of inventory.Suits) {
                 if (suit.ExtraRemaining !== undefined) {
                     suit.ExtraRemaining = undefined;
-                }
-            }
-
-            // Handle weekly reset
-            const lastLoginWeek = Math.trunc(
-                (inventory.NextRefill.getTime() - (86400000 + KAHL_EPOCH)) / unixTimesInMs.week
-            );
-            const currentWeek = Math.trunc((Date.now() - KAHL_EPOCH) / unixTimesInMs.week);
-            if (lastLoginWeek != currentWeek) {
-                const kahl = inventory.Affiliations.find(x => x.Tag == "KahlSyndicate");
-                if (kahl && kahl.WeeklyMissions) {
-                    const mission = kahl.WeeklyMissions[kahl.WeeklyMissions.length - 1];
-                    if (mission.CompletedMission) {
-                        if (kahl.WeeklyMissions.length == 2) {
-                            kahl.WeeklyMissions.splice(0, 1);
-                        }
-                        mission.ChallengesReset = true;
-                        kahl.WeeklyMissions.push({
-                            MissionIndex: mission.MissionIndex + 1,
-                            CompletedMission: false,
-                            JobManifest: "/Lotus/Syndicates/Kahl/KahlJobManifestVersionThree",
-                            Challenges: [],
-                            WeekCount: currentWeek
-                        });
-                    }
                 }
             }
         }

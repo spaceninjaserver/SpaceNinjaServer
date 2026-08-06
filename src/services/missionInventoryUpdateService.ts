@@ -59,6 +59,7 @@ import {
     giveThousandYearFishDeco,
     isEligibleForThousandYearFishDeco,
     processGoalProgressUpdates,
+    resetKahlWeeklyMission,
     updateCurrency,
     updateEntratiVault,
     updateIncentiveStates,
@@ -674,6 +675,9 @@ export const addMissionInventoryUpdates = async (
             case "SyndicateId": {
                 if (!inventory.syndicateMissionsRepeatable && !inventory.CompletedSyndicates.includes(value)) {
                     inventory.CompletedSyndicates.push(value);
+                }
+                if (value.includes("KahlSyndicate")) {
+                    resetKahlWeeklyMission(inventory, value);
                 }
                 break;
             }
