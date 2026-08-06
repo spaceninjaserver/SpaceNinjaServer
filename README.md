@@ -1,6 +1,6 @@
 # Space Ninja Server
 
-More information for the moment here: [https://discord.gg/PNNZ3asUuY](https://discord.gg/PNNZ3asUuY)
+A source-available reimplementation of Warframe's web services. This project is part of the larger community preservation project "OpenWF": [Website](https://about.openwf.io/), [Discord](https://discord.gg/PNNZ3asUuY).
 
 ## Project Status
 
