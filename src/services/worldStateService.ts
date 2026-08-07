@@ -2489,7 +2489,7 @@ export const getWorldState = (
             [
                 {
                     credits: 50000,
-                    items: ["/Lotus/StoreItems/Upgrades/Skins/Sigils/DogDays2023ASigil"],
+                    items: ["/Lotus/StoreItems/Upgrades/Skins/Sigils/DogDays2023ASigil"], // 2023.07.26.16.38
                     countedItems: [
                         {
                             ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
@@ -2499,7 +2499,7 @@ export const getWorldState = (
                 },
                 {
                     credits: 50000,
-                    items: ["/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyBeachKavat"],
+                    items: ["/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyBeachKavat"], // 2024.02.16.17.13
                     countedItems: [
                         {
                             ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
@@ -2509,7 +2509,7 @@ export const getWorldState = (
                 },
                 {
                     credits: 50000,
-                    items: ["/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyRucksackKubrow"],
+                    items: ["/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyRucksackKubrow"], // 2024.02.16.17.13
                     countedItems: [
                         {
                             ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
@@ -2518,7 +2518,7 @@ export const getWorldState = (
                     ]
                 },
                 {
-                    items: ["/Lotus/StoreItems/Types/Items/ShipDecos/LisetPropCleaningDroneBeachcomber"],
+                    items: ["/Lotus/StoreItems/Types/Items/ShipDecos/LisetPropCleaningDroneBeachcomber"], // 2023.07.26.16.38
                     countedItems: [
                         {
                             ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
@@ -2530,7 +2530,7 @@ export const getWorldState = (
             [
                 {
                     credits: 50000,
-                    items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/Seasonal/AvatarImageDogDays2024Glyph"],
+                    items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/Seasonal/AvatarImageDogDays2024Glyph"], // 2024.07.17.17.07
                     countedItems: [
                         {
                             ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
@@ -2540,7 +2540,7 @@ export const getWorldState = (
                 },
                 {
                     credits: 50000,
-                    items: ["/Lotus/StoreItems/Types/Items/ShipDecos/DogDays2024Poster"],
+                    items: ["/Lotus/StoreItems/Types/Items/ShipDecos/DogDays2024Poster"], // 2024.07.17.17.07
                     countedItems: [
                         {
                             ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
@@ -2550,7 +2550,7 @@ export const getWorldState = (
                 },
                 {
                     credits: 50000,
-                    items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/DogDaysKubrowBadgeItem"],
+                    items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/DogDaysKubrowBadgeItem"], // 2024.07.17.17.07
                     countedItems: [
                         {
                             ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
@@ -2559,7 +2559,7 @@ export const getWorldState = (
                     ]
                 },
                 {
-                    items: ["/Lotus/StoreItems/Types/Items/ShipDecos/DogDays2024LisetPropCleaningDroneBeachcomber"],
+                    items: ["/Lotus/StoreItems/Types/Items/ShipDecos/DogDays2024LisetPropCleaningDroneBeachcomber"], // 2024.07.17.17.07
                     countedItems: [
                         {
                             ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
@@ -2571,7 +2571,7 @@ export const getWorldState = (
             [
                 {
                     credits: 50000,
-                    items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageDogDaysHydroidGlyph"],
+                    items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageDogDaysHydroidGlyph"], // 2025.06.23.11.39
                     countedItems: [
                         {
                             ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
@@ -2581,7 +2581,7 @@ export const getWorldState = (
                 },
                 {
                     credits: 50000,
-                    items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageDogDaysLokiGlyph"],
+                    items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageDogDaysLokiGlyph"], // 2025.06.23.11.39
                     countedItems: [
                         {
                             ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
@@ -2591,7 +2591,7 @@ export const getWorldState = (
                 },
                 {
                     credits: 50000,
-                    items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageDogDaysNovaGlyph"],
+                    items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageDogDaysNovaGlyph"], // 2025.06.23.11.39
                     countedItems: [
                         {
                             ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
@@ -2601,7 +2601,49 @@ export const getWorldState = (
                 },
                 {
                     credits: 50000,
-                    items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageDogDaysValkyrGlyph"],
+                    items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageDogDaysValkyrGlyph"], // 2025.06.23.11.39
+                    countedItems: [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
+                            ItemCount: 100
+                        }
+                    ]
+                }
+            ],
+            [
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageDogDaysKelaGlyph"], // 2026.07.09.15.36
+                    countedItems: [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
+                            ItemCount: 25
+                        }
+                    ]
+                },
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageDogDaysRusalkaGlyph"], // 2026.07.09.15.36
+                    countedItems: [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
+                            ItemCount: 50
+                        }
+                    ]
+                },
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageDogDaysErraGlyph"], // 2026.07.09.15.36
+                    countedItems: [
+                        {
+                            ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
+                            ItemCount: 75
+                        }
+                    ]
+                },
+                {
+                    credits: 50000,
+                    items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageDogDaysGareshGlyph"], // 2026.07.09.15.36
                     countedItems: [
                         {
                             ItemType: "/Lotus/Types/Items/MiscItems/WaterFightBucks",
@@ -2612,7 +2654,18 @@ export const getWorldState = (
             ]
         ];
 
-        const year = config.worldState?.dogDaysRewardsOverride ?? 3;
+        const fallbackYear =
+            buildVersionInt >= gameToBuildVersionInt["43.0.0"]
+                ? 4
+                : buildVersionInt >= gameToBuildVersionInt["39.0.0"]
+                  ? 3
+                  : buildVersionInt >= gameToBuildVersionInt["36.1.2"]
+                    ? 2
+                    : buildVersionInt >= gameToBuildVersionInt["33.6.0"]
+                      ? 1
+                      : 0;
+
+        const year = config.worldState?.dogDaysRewardsOverride ?? fallbackYear;
 
         worldState.Goals.push({
             _id: {
