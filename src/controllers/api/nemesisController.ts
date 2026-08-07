@@ -101,6 +101,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
             "Nemesis LoadOutPresets CurrentLoadOutIds DataKnives Upgrades RawUpgrades"
         );
         const body = getJSONfromString<INemesisRequiemRequest>(String(req.body));
+        logger.debug(`nemesis guess request:`, body);
         if (inventory.Nemesis!.Faction == "FC_INFESTATION") {
             const guess: number[] = [body.guess & 0xf, (body.guess >> 4) & 0xf, (body.guess >> 8) & 0xf];
             const passcode = getNemesisPasscode(inventory.Nemesis!)[0];
@@ -193,17 +194,24 @@ export const nemesisController: RequestHandler = async (req, res) => {
                 );
             }
 
+            const entry = decodeNemesisGuess(
+                inventory.Nemesis!.GuessHistory[inventory.Nemesis!.GuessHistory.length - 1]
+            );
+
+            for (let i = 0; i != body.position; ++i) {
+                if (entry[i].result == GUESS_INCORRECT) {
+                    throw new Error(`you were already wrong, don't keep pushing, lil bro`);
+                }
+            }
+
             // Evaluate guess
             const correct =
                 body.guess == GUESS_WILDCARD || getNemesisPasscode(inventory.Nemesis!)[body.position] == body.guess;
 
             // Update entry
-            const guess = decodeNemesisGuess(
-                inventory.Nemesis!.GuessHistory[inventory.Nemesis!.GuessHistory.length - 1]
-            );
-            guess[body.position].symbol = body.guess;
-            guess[body.position].result = correct ? GUESS_CORRECT : GUESS_INCORRECT;
-            inventory.Nemesis!.GuessHistory[inventory.Nemesis!.GuessHistory.length - 1] = encodeNemesisGuess(guess);
+            entry[body.position].symbol = body.guess;
+            entry[body.position].result = correct ? GUESS_CORRECT : GUESS_INCORRECT;
+            inventory.Nemesis!.GuessHistory[inventory.Nemesis!.GuessHistory.length - 1] = encodeNemesisGuess(entry);
 
             const response: INemesisRequiemResponse = {};
             if (correct) {
@@ -383,7 +391,7 @@ interface INemesisStartRequest {
 }
 
 interface INemesisPrespawnCheckRequest {
-    guess: number[]; // .length == 3
+    guess: [number, number, number];
     potency?: number[];
 }
 
