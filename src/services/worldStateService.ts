@@ -2627,13 +2627,13 @@ export const getWorldState = (
         ];
 
         const fallbackYear =
-            buildVersionInt >= gameToBuildVersionInt["43.0.0"]
+            buildVersion >= gameToBuildVersionInt["43.0.0"]
                 ? 4
-                : buildVersionInt >= gameToBuildVersionInt["39.0.0"]
+                : buildVersion >= gameToBuildVersionInt["39.0.0"]
                   ? 3
-                  : buildVersionInt >= gameToBuildVersionInt["36.1.2"]
+                  : buildVersion >= gameToBuildVersionInt["36.1.2"]
                     ? 2
-                    : buildVersionInt >= gameToBuildVersionInt["33.6.0"]
+                    : buildVersion >= gameToBuildVersionInt["33.6.0"]
                       ? 1
                       : 0;
 
