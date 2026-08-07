@@ -48,6 +48,7 @@ import { Guild } from "../models/guildModel.ts";
 import { handleGuildGoalProgress } from "./guildService.ts";
 import { Types } from "mongoose";
 import { BL_LATEST } from "../constants/gameVersions.ts";
+import { buildVersionToInt } from "../helpers/versionHelper.ts";
 
 const getStoreItemCategory = (storeItem: string): string => {
     const storeItemString = getSubstringFromKeyword(storeItem, "StoreItems/");
@@ -121,6 +122,7 @@ export const handlePurchase = async (
     inventory: TInventoryDatabaseDocument
 ): Promise<IPurchaseResponse> => {
     logger.debug("purchase request", purchaseRequest);
+    const buildVersion = buildVersionToInt(purchaseRequest.buildLabel);
 
     // Fix this path for pre-U25
     if (
@@ -132,7 +134,7 @@ export const handlePurchase = async (
     const prePurchaseInventoryChanges: IInventoryChanges = {};
     let seed: bigint | undefined;
     if (purchaseRequest.PurchaseParams.Source == ePurchaseSource.Vendor) {
-        let manifest = getVendorManifestByOid(purchaseRequest.PurchaseParams.SourceId!, purchaseRequest.buildLabel);
+        let manifest = getVendorManifestByOid(purchaseRequest.PurchaseParams.SourceId!, buildVersion);
         if (manifest) {
             manifest = applyStandingToVendorManifest(manifest, inventory.Affiliations);
             let ItemId: string | undefined;
@@ -376,10 +378,7 @@ export const handlePurchase = async (
                     }
                 }
             } else {
-                let manifest = getVendorManifestByOid(
-                    purchaseRequest.PurchaseParams.SourceId!,
-                    purchaseRequest.buildLabel
-                );
+                let manifest = getVendorManifestByOid(purchaseRequest.PurchaseParams.SourceId!, buildVersion);
                 if (manifest) {
                     manifest = applyStandingToVendorManifest(manifest, inventory.Affiliations);
                     let ItemId: string | undefined;

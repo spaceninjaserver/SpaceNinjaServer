@@ -1,5 +1,5 @@
 import type { IPrimeVaultTraderOffer } from "../types/worldStateTypes.ts";
-import gameToBuildVersion from "./gameToBuildVersion.ts";
+import gameToBuildVersionInt from "./gameToBuildVersionInt.ts";
 
 const varzia: IVarzia = {
     evergreen: [
@@ -638,7 +638,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionRevenantBaruukVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionRevenantBaruukVaultBBronze"
             ],
-            minBuildLabel: gameToBuildVersion["38.6.0"]
+            minBuildVersionInt: gameToBuildVersionInt["38.6.0"]
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVNekrosOberonPrimeDualPack": {
             SinglePacks: [
@@ -653,7 +653,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionOberonNekrosVaultBBronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionOberonNekrosVaultABronze"
             ],
-            minBuildLabel: gameToBuildVersion["31.0.0"] // Should be 30.9.4
+            minBuildVersionInt: gameToBuildVersionInt["31.0.0"] // Should be 30.9.4
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVBansheeMiragePrimeDualPack": {
             SinglePacks: [
@@ -668,7 +668,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionBansheeMirageVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionBansheeMirageVaultBBronze"
             ],
-            minBuildLabel: gameToBuildVersion["33.5.0"]
+            minBuildVersionInt: gameToBuildVersionInt["33.5.0"]
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVNidusSarynPrimeDualPack": {
             SinglePacks: [
@@ -683,7 +683,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionNidusSarynVaultBBronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionNidusSarynVaultABronze"
             ],
-            minBuildLabel: gameToBuildVersion["38.5.0"]
+            minBuildVersionInt: gameToBuildVersionInt["38.5.0"]
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVEmberRhinoPrimeDualPack": {
             SinglePacks: [
@@ -697,7 +697,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionEmberRhinoVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionEmberRhinoVaultABronze"
             ],
-            minBuildLabel: "2024.06.12.18.42" // < 36.0.0
+            minBuildVersionInt: gameToBuildVersionInt["36.0.0"]
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVInarosAshPrimeDualPack": {
             SinglePacks: [
@@ -712,7 +712,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionInarosAshVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionInarosAshVaultBBronze"
             ],
-            minBuildLabel: gameToBuildVersion["33.5.0"]
+            minBuildVersionInt: gameToBuildVersionInt["33.5.0"]
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVFrostMagPrimeDualPack": {
             SinglePacks: [
@@ -726,7 +726,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionFrostMagVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionFrostMagVaultABronze"
             ],
-            minBuildLabel: gameToBuildVersion["33.6.0"]
+            minBuildVersionInt: gameToBuildVersionInt["33.6.0"]
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVEquinoxWukongPrimeDualPack": {
             SinglePacks: [
@@ -741,7 +741,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionWukongEquinoxVaultBBronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionWukongEquinoxVaultABronze"
             ],
-            minBuildLabel: gameToBuildVersion["33.5.0"]
+            minBuildVersionInt: gameToBuildVersionInt["33.5.0"]
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVTitaniaGaraPrimeDualPack": {
             SinglePacks: [
@@ -757,7 +757,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionTitaniaGaraVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionTitaniaGaraVaultBBronze"
             ],
-            minBuildLabel: gameToBuildVersion["35.5.0"]
+            minBuildVersionInt: gameToBuildVersionInt["35.5.0"]
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVMesaHydroidPrimeDualPack": {
             SinglePacks: [
@@ -772,7 +772,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionMesaHydroidVaultBBronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionMesaHydroidVaultABronze"
             ],
-            minBuildLabel: gameToBuildVersion["31.0.0"] // Should be 30.9.4
+            minBuildVersionInt: gameToBuildVersionInt["31.0.0"] // Should be 30.9.4
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVAtlasVaubanPrimeDualPack": {
             SinglePacks: [
@@ -788,7 +788,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionAtlasVaubanVaultBBronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionAtlasVaubanVaultABronze"
             ],
-            minBuildLabel: gameToBuildVersion["33.5.0"]
+            minBuildVersionInt: gameToBuildVersionInt["33.5.0"]
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVVoltLokiPrimeDualPack": {
             SinglePacks: [
@@ -801,7 +801,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionLokiVoltVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionLokiVoltVaultABronze"
             ],
-            minBuildLabel: gameToBuildVersion["31.0.0"] // Should be 30.9.4
+            minBuildVersionInt: gameToBuildVersionInt["31.0.0"] // Should be 30.9.4
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVRhinoNyxPrimeDualPack": {
             SinglePacks: [
@@ -814,7 +814,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionRhinoNyxVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionRhinoNyxVaultABronze"
             ],
-            minBuildLabel: gameToBuildVersion["31.0.0"] // Should be 30.9.4
+            minBuildVersionInt: gameToBuildVersionInt["31.0.0"] // Should be 30.9.4
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVLimboTrinityPrimeDualPack": {
             SinglePacks: [
@@ -828,7 +828,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionLimboTrinityVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionLimboTrinityVaultABronze"
             ],
-            minBuildLabel: gameToBuildVersion["31.0.0"] // Should be 30.9.4
+            minBuildVersionInt: gameToBuildVersionInt["31.0.0"] // Should be 30.9.4
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVIvaraOberonPrimeDualPack": {
             SinglePacks: [
@@ -843,7 +843,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionIvaraOberonVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionIvaraOberonVaultBBronze"
             ],
-            minBuildLabel: gameToBuildVersion["33.5.0"]
+            minBuildVersionInt: gameToBuildVersionInt["33.5.0"]
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVGarudaKhoraPrimeDualPack": {
             SinglePacks: [
@@ -858,7 +858,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionGarudaKhoraVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionGarudaKhoraVaultBBronze"
             ],
-            minBuildLabel: gameToBuildVersion["37.0.0"]
+            minBuildVersionInt: gameToBuildVersionInt["37.0.0"]
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVZephyrChromaPrimeDualPack": {
             SinglePacks: [
@@ -873,7 +873,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionChromaZephyrVaultBBronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionChromaZephyrVaultABronze"
             ],
-            minBuildLabel: gameToBuildVersion["35.1.0"]
+            minBuildVersionInt: gameToBuildVersionInt["35.1.0"]
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVNovaTrinityPrimeDualPack": {
             SinglePacks: [
@@ -886,7 +886,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionNovaTrinityVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionNovaTrinityVaultABronze"
             ],
-            minBuildLabel: gameToBuildVersion["33.5.0"]
+            minBuildVersionInt: gameToBuildVersionInt["33.5.0"]
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVNezhaOctaviaPrimeDualPack": {
             SinglePacks: [
@@ -901,7 +901,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionNezhaOctaviaVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionNezhaOctaviaVaultABronze"
             ],
-            minBuildLabel: gameToBuildVersion["35.1.0"]
+            minBuildVersionInt: gameToBuildVersionInt["35.1.0"]
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVMesaLimboPrimeDualPack": {
             SinglePacks: [
@@ -916,7 +916,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionMesaLimboVaultBBronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionMesaLimboVaultABronze"
             ],
-            minBuildLabel: gameToBuildVersion["33.5.0"]
+            minBuildVersionInt: gameToBuildVersionInt["33.5.0"]
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVHarrowNekrosPrimeDualPack": {
             SinglePacks: [
@@ -932,7 +932,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionHarrowNekrosVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionHarrowNekrosVaultBBronze"
             ],
-            minBuildLabel: "2024.06.12.18.42" // < 36.0.0
+            minBuildVersionInt: gameToBuildVersionInt["36.0.0"]
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVValkyrSarynPrimeDualPack": {
             SinglePacks: [
@@ -947,7 +947,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionSarynValkyrVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionSarynValkyrVaultBBronze"
             ],
-            minBuildLabel: gameToBuildVersion["31.0.0"] // Should be 30.9.4
+            minBuildVersionInt: gameToBuildVersionInt["31.0.0"] // Should be 30.9.4
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVMagRhinoPrimeDualPack": {
             SinglePacks: [
@@ -960,7 +960,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionYVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionYVaultABronze"
             ],
-            minBuildLabel: gameToBuildVersion["33.5.0"]
+            minBuildVersionInt: gameToBuildVersionInt["33.5.0"]
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVEmberFrostPrimeDualPack": {
             SinglePacks: [
@@ -973,7 +973,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionQVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionQVaultABronze"
             ],
-            minBuildLabel: gameToBuildVersion["31.0.0"] // Should be 30.9.4
+            minBuildVersionInt: gameToBuildVersionInt["31.0.0"] // Should be 30.9.4
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVAshVaubanPrimeDualPack": {
             SinglePacks: [
@@ -987,7 +987,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionAshVaubanVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionAshVaubanVaultABronze"
             ],
-            minBuildLabel: gameToBuildVersion["31.0.0"] // Should be 30.9.4
+            minBuildVersionInt: gameToBuildVersionInt["31.0.0"] // Should be 30.9.4
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVMagNovaPrimeDualPack": {
             SinglePacks: [
@@ -1001,7 +1001,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionMagNovaVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionMagNovaVaultBBronze"
             ],
-            minBuildLabel: gameToBuildVersion["31.0.0"] // Should be 30.9.4
+            minBuildVersionInt: gameToBuildVersionInt["31.0.0"] // Should be 30.9.4
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVWispHildrynPrimeDualPack": {
             SinglePacks: [
@@ -1016,7 +1016,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionWispHildrynVaultABronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionWispHildrynVaultBBronze"
             ],
-            minBuildLabel: "2025.10.14.16.10" // < 40.0.0
+            minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
         },
         "/Lotus/Types/StoreItems/Packages/MegaPrimeVault/MPVGaussGrendelPrimeDualPack": {
             SinglePacks: [
@@ -1031,7 +1031,7 @@ const varzia: IVarzia = {
                 "/Lotus/StoreItems/Types/Game/Projections/T3VoidProjectionGaussGrendelVaultBBronze",
                 "/Lotus/StoreItems/Types/Game/Projections/T4VoidProjectionGaussGrendelVaultABronze"
             ],
-            minBuildLabel: gameToBuildVersion["42.0.0"]
+            minBuildVersionInt: gameToBuildVersionInt["42.0.0"]
         }
     },
     vanguardVaultRelics: [
@@ -1056,7 +1056,7 @@ interface IVarzia {
         {
             SinglePacks: string[];
             Relics: string[];
-            minBuildLabel: string;
+            minBuildVersionInt: number;
         }
     >;
     vanguardVaultRelics: IPrimeVaultTraderOffer[];

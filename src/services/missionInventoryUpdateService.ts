@@ -244,6 +244,7 @@ export const addMissionInventoryUpdates = async (
     inventory: TInventoryDatabaseDocument,
     inventoryUpdates: IMissionInventoryUpdateRequest
 ): Promise<MissionInventoryUpdatesReturnType> => {
+    const buildVersion = buildVersionToInt(buildLabel);
     const ret: MissionInventoryUpdatesReturnType = {
         InventoryChanges: {}
     };
@@ -296,7 +297,7 @@ export const addMissionInventoryUpdates = async (
             }
             if (tag.startsWith("TreasureHunt")) {
                 // client supposed send it at its own, but some of them have problem with that
-                await addChallenges(buildLabel, inventory, [{ Name: "MCCompleteTreasureHunt", Progress: 1 }]);
+                await addChallenges(buildVersion, inventory, [{ Name: "MCCompleteTreasureHunt", Progress: 1 }]);
             }
         }
         if (inventoryUpdates.RewardInfo.NemesisAbandonedRewards) {
@@ -472,7 +473,7 @@ export const addMissionInventoryUpdates = async (
                 break;
             case "ChallengeProgress":
                 await addChallenges(
-                    buildLabel,
+                    buildVersion,
                     inventory,
                     value,
                     inventoryUpdates.SeasonChallengeCompletions,
@@ -2074,7 +2075,7 @@ async function getRandomMissionDrops(
                 const arr = RewardInfo.sortieId.split("_");
                 let giveNodeReward = false;
                 if (arr[1] != "Lite") {
-                    const sortie = getSortie(idToDay(arr[1]), buildLabel);
+                    const sortie = getSortie(idToDay(arr[1]), buildVersionToInt(buildLabel));
                     giveNodeReward = sortie.Variants.find(x => x.node == arr[0])!.missionType == "MT_ASSASSINATION";
                 }
                 rewardManifests = giveNodeReward ? region.rewardManifests : [];
@@ -2773,7 +2774,7 @@ const getSyndicateJob = (
         if (syndicateEntry) syndicateTag = syndicateEntry.JobAffiliationTag!;
     } else if (syndicateMissionId) {
         const syndicateMissions: ISyndicateMissionInfo[] = [];
-        pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId), buildLabel);
+        pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId), buildVersionToInt(buildLabel));
         syndicateEntry = syndicateMissions.find(m => fromOid(m._id) == syndicateMissionId);
         if (syndicateEntry) syndicateTag = syndicateEntry.Tag;
     }

@@ -2771,7 +2771,7 @@ for (const path of Object.keys(ExportChallenges)) {
 }
 
 export const addChallenges = async (
-    buildLabel: string,
+    buildVersion: number,
     inventory: TInventoryDatabaseDocument,
     ChallengeProgress: IChallengeProgress[],
     SeasonChallengeCompletions?: ISeasonChallenge[],
@@ -2833,7 +2833,7 @@ export const addChallenges = async (
             }
 
             const meta = ExportChallenges[challenge.challenge];
-            const nightwaveSyndicateTag = getNightwaveSyndicateTag(buildLabel);
+            const nightwaveSyndicateTag = getNightwaveSyndicateTag(buildVersion);
             logger.debug("Completed season challenge", {
                 uniqueName: challenge.challenge,
                 syndicateTag: nightwaveSyndicateTag,

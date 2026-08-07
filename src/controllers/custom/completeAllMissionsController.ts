@@ -1,4 +1,4 @@
-import { BL_LATEST } from "../../constants/gameVersions.ts";
+import { BL_LATEST, BV_LATEST } from "../../constants/gameVersions.ts";
 import { addString } from "../../helpers/stringHelpers.ts";
 import { addChallenges, ensureUserHasSteelPathRewards, getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
@@ -35,7 +35,7 @@ export const completeAllMissionsController: RequestHandler = async (req, res) =>
     for (const reward of MissionRewards) {
         await handleStoreItemAcquisition(reward.StoreItem, inventory, reward.ItemCount, undefined, true);
     }
-    await addChallenges(BL_LATEST, inventory, [
+    await addChallenges(BV_LATEST, inventory, [
         {
             Progress: 1,
             Name: `KillPhorid`

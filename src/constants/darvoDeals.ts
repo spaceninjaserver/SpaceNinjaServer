@@ -1,4 +1,4 @@
-import gameToBuildVersion from "./gameToBuildVersion.ts";
+import gameToBuildVersionInt from "./gameToBuildVersionInt.ts";
 
 const darvoDeals: IDarvoDeal[] = [
     {
@@ -8,7 +8,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 110,
         AmountTotal: 300,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["15.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["15.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Powersuits/Bard/Bard",
@@ -17,7 +17,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 157,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["20.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["20.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Powersuits/Ember/Ember",
@@ -26,7 +26,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 157,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Powersuits/Ember/Ember",
@@ -35,7 +35,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 90,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Powersuits/Magician/Magician",
@@ -44,7 +44,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 160,
         AmountTotal: 200,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["15.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["15.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Powersuits/Magician/Magician",
@@ -53,7 +53,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 140,
         AmountTotal: 200,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["15.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["15.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Powersuits/Magician/Magician",
@@ -62,7 +62,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 120,
         AmountTotal: 200,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["15.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["15.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Powersuits/Magician/Magician",
@@ -71,7 +71,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 100,
         AmountTotal: 200,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["15.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["15.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Powersuits/Sandman/Sandman",
@@ -80,7 +80,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 180,
         AmountTotal: 100,
         probability: 4,
-        minBuildLabel: gameToBuildVersion["18.5.0"]
+        minBuildVersionInt: gameToBuildVersionInt["18.5.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Powersuits/Sandman/Sandman",
@@ -89,7 +89,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 157,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["18.5.0"]
+        minBuildVersionInt: gameToBuildVersionInt["18.5.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Powersuits/Trapper/Trapper",
@@ -98,7 +98,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 180,
         AmountTotal: 150,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Powersuits/Trapper/Trapper",
@@ -107,7 +107,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 150,
         AmountTotal: 100,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Types/Game/CatbrowPet/CatbrowGeneticSignature",
@@ -116,7 +116,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 4,
         AmountTotal: 500,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["18.16.0"]
+        minBuildVersionInt: gameToBuildVersionInt["18.16.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Types/Game/CatbrowPet/CatbrowGeneticSignature",
@@ -125,7 +125,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 3,
         AmountTotal: 415,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["18.16.0"]
+        minBuildVersionInt: gameToBuildVersionInt["18.16.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Types/Game/KubrowPet/Eggs/KubrowEgg",
@@ -134,7 +134,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 5,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["14.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["14.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Types/Game/KubrowPet/Eggs/KubrowEgg",
@@ -143,7 +143,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 4,
         AmountTotal: 100,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["14.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["14.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Types/Items/MiscItems/Forma",
@@ -152,7 +152,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 14,
         AmountTotal: 150,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Types/Items/MiscItems/Forma",
@@ -161,7 +161,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 11,
         AmountTotal: 150,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Types/Items/MiscItems/OrokinReactor",
@@ -170,7 +170,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 12,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Types/Items/Research/BioComponent",
@@ -179,7 +179,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 9,
         AmountTotal: 200,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Types/Items/Research/BioComponent",
@@ -188,7 +188,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 8,
         AmountTotal: 165,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Types/Items/Research/BioComponent",
@@ -197,7 +197,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 7,
         AmountTotal: 135,
         probability: 5,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Types/Items/Research/BioComponent",
@@ -206,7 +206,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 6,
         AmountTotal: 100,
         probability: 5,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Types/Items/Research/ChemComponent",
@@ -215,7 +215,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 9,
         AmountTotal: 200,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Types/Items/Research/ChemComponent",
@@ -224,7 +224,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 8,
         AmountTotal: 165,
         probability: 5,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Types/Items/Research/ChemComponent",
@@ -233,7 +233,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 7,
         AmountTotal: 135,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Types/Items/Research/EnergyComponent",
@@ -242,7 +242,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 9,
         AmountTotal: 200,
         probability: 5,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Types/Items/Research/EnergyComponent",
@@ -251,7 +251,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 8,
         AmountTotal: 165,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Types/Items/Research/EnergyComponent",
@@ -260,7 +260,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 7,
         AmountTotal: 135,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Types/Items/Research/EnergyComponent",
@@ -269,7 +269,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 6,
         AmountTotal: 100,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Upgrades/Focus/AttackLensGreater",
@@ -278,7 +278,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 36,
         AmountTotal: 150,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Upgrades/Focus/AttackLensGreater",
@@ -287,7 +287,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 32,
         AmountTotal: 125,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["18.0.2"]
+        minBuildVersionInt: gameToBuildVersionInt["18.0.2"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Upgrades/Focus/AttackLensGreater",
@@ -296,7 +296,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 24,
         AmountTotal: 75,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["18.0.2"]
+        minBuildVersionInt: gameToBuildVersionInt["18.0.2"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Upgrades/Focus/DefenseLensGreater",
@@ -305,7 +305,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 36,
         AmountTotal: 150,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["18.0.2"]
+        minBuildVersionInt: gameToBuildVersionInt["18.0.2"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Upgrades/Focus/DefenseLensGreater",
@@ -314,7 +314,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 24,
         AmountTotal: 75,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["18.0.2"]
+        minBuildVersionInt: gameToBuildVersionInt["18.0.2"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Upgrades/Focus/DefenseLensGreater",
@@ -323,7 +323,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 20,
         AmountTotal: 50,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["18.0.2"]
+        minBuildVersionInt: gameToBuildVersionInt["18.0.2"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Upgrades/Focus/PowerLensGreater",
@@ -332,7 +332,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 20,
         AmountTotal: 50,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["18.0.2"]
+        minBuildVersionInt: gameToBuildVersionInt["18.0.2"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Upgrades/Focus/TacticLensGreater",
@@ -341,7 +341,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 36,
         AmountTotal: 150,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["18.0.2"]
+        minBuildVersionInt: gameToBuildVersionInt["18.0.2"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Upgrades/Focus/TacticLensGreater",
@@ -350,7 +350,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 32,
         AmountTotal: 125,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["18.0.2"]
+        minBuildVersionInt: gameToBuildVersionInt["18.0.2"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Upgrades/Focus/TacticLensGreater",
@@ -359,7 +359,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 28,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["18.0.2"]
+        minBuildVersionInt: gameToBuildVersionInt["18.0.2"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Upgrades/Focus/TacticLensGreater",
@@ -368,7 +368,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 24,
         AmountTotal: 75,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["18.0.2"]
+        minBuildVersionInt: gameToBuildVersionInt["18.0.2"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Upgrades/Focus/TacticLensGreater",
@@ -377,7 +377,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 20,
         AmountTotal: 50,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["18.0.2"]
+        minBuildVersionInt: gameToBuildVersionInt["18.0.2"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Upgrades/Focus/WardLensGreater",
@@ -386,7 +386,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 24,
         AmountTotal: 75,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["18.0.2"]
+        minBuildVersionInt: gameToBuildVersionInt["18.0.2"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Corpus/Bow/Longbow/CrpBow",
@@ -395,7 +395,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 188,
         AmountTotal: 300,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["22.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["22.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Corpus/Bow/Longbow/CrpBow",
@@ -404,7 +404,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 164,
         AmountTotal: 250,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["22.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["22.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Corpus/Bow/Longbow/CrpBow",
@@ -413,7 +413,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 117,
         AmountTotal: 150,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["22.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["22.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Corpus/Bow/Longbow/CrpBow",
@@ -422,7 +422,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 94,
         AmountTotal: 100,
         probability: 5,
-        minBuildLabel: gameToBuildVersion["22.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["22.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Corpus/Melee/KickAndPunch/KickPunchWeapon",
@@ -431,7 +431,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 100,
         AmountTotal: 100,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Corpus/Melee/KickAndPunch/KickPunchWeapon",
@@ -440,7 +440,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 87,
         AmountTotal: 90,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Corpus/Melee/KickAndPunch/KickPunchWeapon",
@@ -449,7 +449,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 50,
         AmountTotal: 65,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Corpus/Pistols/CorpusMinigun/CorpusMinigun",
@@ -458,7 +458,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 122,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Corpus/Pistols/CorpusMinigun/CorpusMinigun",
@@ -467,7 +467,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 105,
         AmountTotal: 90,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Corpus/Pistols/CorpusMinigun/CorpusMinigun",
@@ -476,7 +476,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 87,
         AmountTotal: 80,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Corpus/Pistols/CorpusMinigun/CorpusMinigun",
@@ -485,7 +485,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 70,
         AmountTotal: 70,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Corpus/Pistols/CorpusMinigun/CorpusMinigun",
@@ -494,7 +494,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 52,
         AmountTotal: 60,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Grineer/GrineerPistol/GrineerLightPistol",
@@ -503,7 +503,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 67,
         AmountTotal: 100,
         probability: 6,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Grineer/GrineerPistol/GrineerLightPistol",
@@ -512,7 +512,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 60,
         AmountTotal: 100,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Grineer/GrineerPistol/GrineerLightPistol",
@@ -521,7 +521,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 52,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Grineer/LongGuns/BurstRifle/GrnBurstRifle",
@@ -530,7 +530,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 157,
         AmountTotal: 500,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Grineer/LongGuns/BurstRifle/GrnBurstRifle",
@@ -539,7 +539,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 135,
         AmountTotal: 500,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Grineer/LongGuns/BurstRifle/GrnBurstRifle",
@@ -548,7 +548,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 90,
         AmountTotal: 500,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Grineer/LongGuns/GrnSpark/GrnSparkRifle",
@@ -557,7 +557,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 120,
         AmountTotal: 300,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["14.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["14.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Grineer/LongGuns/GrnSpark/GrnSparkRifle",
@@ -566,7 +566,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 105,
         AmountTotal: 250,
         probability: 4,
-        minBuildLabel: gameToBuildVersion["14.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["14.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Grineer/LongGuns/GrnSpark/GrnSparkRifle",
@@ -575,7 +575,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 75,
         AmountTotal: 150,
         probability: 4,
-        minBuildLabel: gameToBuildVersion["14.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["14.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Grineer/Melee/GrineerMachetteAndCleaver/DualCleaverWeapon",
@@ -584,7 +584,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 157,
         AmountTotal: 200,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Grineer/Melee/GrineerMachetteAndCleaver/DualCleaverWeapon",
@@ -593,7 +593,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 135,
         AmountTotal: 175,
         probability: 4,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Grineer/Melee/GrineerMachetteAndCleaver/DualCleaverWeapon",
@@ -602,7 +602,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 112,
         AmountTotal: 150,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Grineer/Melee/GrineerMachetteAndCleaver/DualCleaverWeapon",
@@ -611,7 +611,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 90,
         AmountTotal: 125,
         probability: 5,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Grineer/Melee/GrineerMachetteAndCleaver/DualCleaverWeapon",
@@ -620,7 +620,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 67,
         AmountTotal: 100,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Infested/Melee/Swords/Mire/MireSword",
@@ -629,7 +629,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 135,
         AmountTotal: 300,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Infested/Melee/Swords/Mire/MireSword",
@@ -638,7 +638,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 120,
         AmountTotal: 270,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Infested/Melee/Swords/Mire/MireSword",
@@ -647,7 +647,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 105,
         AmountTotal: 240,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Infested/Melee/Swords/Mire/MireSword",
@@ -656,7 +656,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 90,
         AmountTotal: 205,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Infested/Melee/Swords/Mire/MireSword",
@@ -665,7 +665,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 60,
         AmountTotal: 145,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Infested/Melee/Swords/Mire/MireSword",
@@ -674,7 +674,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 30,
         AmountTotal: 80,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Akimbo/AkimboShotGun",
@@ -683,7 +683,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 180,
         AmountTotal: 200,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Akimbo/AkimboShotGun",
@@ -692,7 +692,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 135,
         AmountTotal: 165,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Akimbo/AkimboShotGun",
@@ -701,7 +701,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 112,
         AmountTotal: 150,
         probability: 5,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Dagger/Dagger",
@@ -710,7 +710,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 52,
         AmountTotal: 350,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Dagger/Dagger",
@@ -719,7 +719,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 45,
         AmountTotal: 300,
         probability: 7,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Dagger/Dagger",
@@ -728,7 +728,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 37,
         AmountTotal: 250,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Dagger/Dagger",
@@ -737,7 +737,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 30,
         AmountTotal: 200,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/DualShortSword/DualHeatSwords",
@@ -746,7 +746,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 122,
         AmountTotal: 200,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/DualShortSword/DualHeatSwords",
@@ -755,7 +755,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 52,
         AmountTotal: 200,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Fist/Fist",
@@ -764,7 +764,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 112,
         AmountTotal: 500,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Fist/Fist",
@@ -773,7 +773,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 100,
         AmountTotal: 250,
         probability: 6,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Gauntlet/Gauntlet",
@@ -782,7 +782,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 100,
         AmountTotal: 100,
         probability: 5,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Gauntlet/Gauntlet",
@@ -791,7 +791,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 87,
         AmountTotal: 125,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Gauntlet/Gauntlet",
@@ -800,7 +800,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 75,
         AmountTotal: 150,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Glaives/Boomerang/BoomerangWeapon",
@@ -809,7 +809,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 105,
         AmountTotal: 300,
         probability: 4,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Glaives/Boomerang/BoomerangWeapon",
@@ -818,7 +818,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 90,
         AmountTotal: 250,
         probability: 4,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Glaives/Boomerang/BoomerangWeapon",
@@ -827,7 +827,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 75,
         AmountTotal: 200,
         probability: 5,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Hammer/IceHammer/IceHammer",
@@ -836,7 +836,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 132,
         AmountTotal: 300,
         probability: 4,
-        minBuildLabel: gameToBuildVersion["18.5.0"]
+        minBuildVersionInt: gameToBuildVersionInt["18.5.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Hammer/IceHammer/IceHammer",
@@ -845,7 +845,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 115,
         AmountTotal: 250,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["18.5.0"]
+        minBuildVersionInt: gameToBuildVersionInt["18.5.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Hammer/IceHammer/IceHammer",
@@ -854,7 +854,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 99,
         AmountTotal: 200,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["18.5.0"]
+        minBuildVersionInt: gameToBuildVersionInt["18.5.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Hammer/IceHammer/IceHammer",
@@ -863,7 +863,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 82,
         AmountTotal: 150,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["18.5.0"]
+        minBuildVersionInt: gameToBuildVersionInt["18.5.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Hammer/IceHammer/IceHammer",
@@ -872,7 +872,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 66,
         AmountTotal: 100,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["18.5.0"]
+        minBuildVersionInt: gameToBuildVersionInt["18.5.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/LongSword/LongSword",
@@ -881,7 +881,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 75,
         AmountTotal: 300,
         probability: 4,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/LongSword/LongSword",
@@ -890,7 +890,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 60,
         AmountTotal: 265,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/LongSword/LongSword",
@@ -899,7 +899,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 45,
         AmountTotal: 225,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/LongSword/LongSword",
@@ -908,7 +908,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 15,
         AmountTotal: 150,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Scythe/EtherScytheWeapon",
@@ -917,7 +917,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 138,
         AmountTotal: 250,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Scythe/EtherScytheWeapon",
@@ -926,7 +926,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 92,
         AmountTotal: 150,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Swords/GreatSword/TennoGreatSword",
@@ -935,7 +935,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 140,
         AmountTotal: 100,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Swords/GreatSword/TennoGreatSword",
@@ -944,7 +944,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 122,
         AmountTotal: 100,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Swords/GreatSword/TennoGreatSword",
@@ -953,7 +953,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 105,
         AmountTotal: 100,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/Swords/GreatSword/TennoGreatSword",
@@ -962,7 +962,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 17,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/SwordsAndBoards/MeleeContestWinnerOne/TennoSwordShield",
@@ -971,7 +971,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 105,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["14.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["14.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/SwordsAndBoards/MeleeContestWinnerOne/TennoSwordShield",
@@ -980,7 +980,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 45,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["14.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["14.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Melee/SwordsAndBoards/MeleeContestWinnerOne/TennoSwordShield",
@@ -989,7 +989,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 15,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["14.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["14.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Pistol/CrossBow",
@@ -998,7 +998,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 122,
         AmountTotal: 300,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Pistol/CrossBow",
@@ -1007,7 +1007,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 105,
         AmountTotal: 250,
         probability: 6,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Pistol/CrossBow",
@@ -1016,7 +1016,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 87,
         AmountTotal: 200,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Pistol/CrossBow",
@@ -1025,7 +1025,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 70,
         AmountTotal: 150,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Pistol/HandShotGun",
@@ -1034,7 +1034,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 152,
         AmountTotal: 300,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Pistol/HandShotGun",
@@ -1043,7 +1043,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 133,
         AmountTotal: 200,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Pistol/HandShotGun",
@@ -1052,7 +1052,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 114,
         AmountTotal: 100,
         probability: 5,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Pistol/RevolverPistol",
@@ -1061,7 +1061,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 152,
         AmountTotal: 200,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Pistol/RevolverPistol",
@@ -1070,7 +1070,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 133,
         AmountTotal: 150,
         probability: 4,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Pistol/RevolverPistol",
@@ -1079,7 +1079,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 114,
         AmountTotal: 100,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Pistol/RevolverPistol",
@@ -1088,7 +1088,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 95,
         AmountTotal: 50,
         probability: 4,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Pistols/TnBardPistol/TnBardPistolGun",
@@ -1097,7 +1097,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 152,
         AmountTotal: 300,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["20.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["20.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Pistols/TnBardPistol/TnBardPistolGun",
@@ -1106,7 +1106,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 133,
         AmountTotal: 250,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["20.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["20.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Pistols/TnBardPistol/TnBardPistolGun",
@@ -1115,7 +1115,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 114,
         AmountTotal: 200,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["20.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["20.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Pistols/TnBardPistol/TnBardPistolGun",
@@ -1124,7 +1124,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 95,
         AmountTotal: 150,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["20.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["20.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Pistols/TnBardPistol/TnBardPistolGun",
@@ -1133,7 +1133,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 76,
         AmountTotal: 100,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["20.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["20.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Rifle/TennoSniperRifle",
@@ -1142,7 +1142,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 225,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Rifle/TennoSniperRifle",
@@ -1151,7 +1151,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 175,
         AmountTotal: 100,
         probability: 3,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Rifle/TennoSniperRifle",
@@ -1160,7 +1160,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 125,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Shotgun/QuadShotgun",
@@ -1169,7 +1169,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 112,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/Shotgun/QuadShotgun",
@@ -1178,7 +1178,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 67,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/ThrowingWeapons/Kunai",
@@ -1187,7 +1187,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 157,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/ThrowingWeapons/Kunai",
@@ -1196,7 +1196,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 140,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/ThrowingWeapons/Kunai",
@@ -1205,7 +1205,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 122,
         AmountTotal: 100,
         probability: 1,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     },
     {
         StoreItem: "/Lotus/StoreItems/Weapons/Tenno/ThrowingWeapons/Kunai",
@@ -1214,7 +1214,7 @@ const darvoDeals: IDarvoDeal[] = [
         SalePrice: 105,
         AmountTotal: 100,
         probability: 2,
-        minBuildLabel: gameToBuildVersion["13.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["13.0.0"]
     }
 ];
 
@@ -1225,7 +1225,7 @@ interface IDarvoDeal {
     SalePrice: number;
     AmountTotal: number;
     probability: number;
-    minBuildLabel: string;
+    minBuildVersionInt: number;
 }
 
 export default darvoDeals;

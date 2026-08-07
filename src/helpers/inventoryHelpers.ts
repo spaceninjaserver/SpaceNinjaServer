@@ -3,7 +3,8 @@ import { Types } from "mongoose";
 import type { TRarity } from "warframe-public-export-plus";
 import type { IFusionTreasure } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IColor } from "../types/inventoryTypes/commonInventoryTypes.ts";
-import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../constants/gameToBuildVersionInt.ts";
+import { buildVersionToInt } from "./versionHelper.ts";
 
 // TODO: Move to versionHelper?
 export const version_compare = (a: string, b: string): number => {
@@ -32,17 +33,19 @@ export const toOid = (objectId: Types.ObjectId): IOid => {
     return { $oid: objectId.toString() };
 };
 
-export function toOid2(objectId: Types.ObjectId | string, buildLabel: string): IOidWithLegacySupport {
+export function toOid2(objectId: Types.ObjectId | string, buildLabel: string | number): IOidWithLegacySupport {
     const oid = typeof objectId == "string" ? objectId : objectId.toString();
-    if (version_compare(buildLabel, gameToBuildVersion["19.5.3"]) <= 0) {
+    const bl = typeof buildLabel == "number" ? buildLabel : buildVersionToInt(buildLabel);
+    if (bl <= gameToBuildVersionInt["19.5.3"]) {
         return { $id: oid };
     }
     return { $oid: oid };
 }
 
-export function toMongoDate2(value: Date | number, buildLabel: string): IMongoDateWithLegacySupport {
+export function toMongoDate2(value: Date | number, buildLabel: string | number): IMongoDateWithLegacySupport {
     const ms = value instanceof Date ? value.getTime() : value;
-    if (version_compare(buildLabel, gameToBuildVersion["19.5.3"]) <= 0) {
+    const bl = typeof buildLabel == "number" ? buildLabel : buildVersionToInt(buildLabel);
+    if (bl <= gameToBuildVersionInt["19.5.3"]) {
         return { sec: Math.floor(ms / 1000), usec: (ms % 1000) * 1000 };
     }
 

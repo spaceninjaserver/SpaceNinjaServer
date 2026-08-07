@@ -1,25 +1,25 @@
 import type { RequestHandler } from "express";
 import { applyStandingToVendorManifest, getVendorManifestByTypeName } from "../../services/serversideVendorsService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { config } from "../../services/configService.ts";
-import { toMongoDate, version_compare } from "../../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
-import { BL_LATEST } from "../../constants/gameVersions.ts";
+import { toMongoDate } from "../../helpers/inventoryHelpers.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
+import { BV_LATEST } from "../../constants/gameVersions.ts";
 
 export const getVendorInfoController: RequestHandler = async (req, res) => {
-    let buildLabel: string;
+    let buildVersion: number;
     let accountId: string | undefined;
 
     if (req.query.accountId) {
         const account = await getAccountForRequest(req);
-        buildLabel = getBuildLabel(req, account);
+        buildVersion = getBuildVersion(req, account);
         accountId = account._id.toString();
     } else {
-        buildLabel = BL_LATEST;
+        buildVersion = BV_LATEST;
     }
 
-    let manifest = getVendorManifestByTypeName(req.query.vendor as string, undefined, buildLabel);
+    let manifest = getVendorManifestByTypeName(req.query.vendor as string, undefined, buildVersion);
     if (!manifest) {
         throw new Error(`Unknown vendor: ${req.query.vendor as string}`);
     }
@@ -37,7 +37,7 @@ export const getVendorInfoController: RequestHandler = async (req, res) => {
             };
         }
 
-        if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) < 0) {
+        if (buildVersion < gameToBuildVersionInt["42.0.0"]) {
             // Coda shop breaks if an item is unknown.
             manifest.VendorInfo.ItemManifest = manifest.VendorInfo.ItemManifest.filter(
                 item =>

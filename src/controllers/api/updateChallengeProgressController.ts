@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { addCalendarProgress, addChallenges, addKahlProgress, getInventory } from "../../services/inventoryService.ts";
 import type {
     IChallengeProgress,
@@ -22,9 +22,9 @@ export const updateChallengeProgressController: RequestHandler = async (req, res
         InventoryChanges: {}
     };
     if (challenges.ChallengeProgress) {
-        const buildLabel = getBuildLabel(req, account);
+        const buildVersion = getBuildVersion(req, account);
         response.AffiliationMods = await addChallenges(
-            buildLabel,
+            buildVersion,
             inventory,
             challenges.ChallengeProgress,
             challenges.SeasonChallengeCompletions,

@@ -9,7 +9,7 @@ import { config } from "./configService.ts";
 import type { IAffiliation } from "../types/inventoryTypes/inventoryTypes.ts";
 import { getNightwaveSyndicateTag, nightwaveTagToSeason } from "./worldStateService.ts";
 import { legacyNightwaveVendorManifest } from "../constants/legacyNightwaveVendorManifest.ts";
-import { BL_LATEST } from "../constants/gameVersions.ts";
+import { BV_LATEST } from "../constants/gameVersions.ts";
 import { getVendor, supplementalVendors } from "./itemDataService.ts";
 
 interface IGeneratableVendorInfo extends Omit<IVendorInfo, "ItemManifest" | "Expiry"> {
@@ -67,7 +67,7 @@ const getCycleDuration = (manifest: IVendor): number => {
 export const getVendorManifestByTypeName = (
     typeName: string,
     fullStock?: boolean,
-    buildLabel: string = BL_LATEST
+    buildVersion: number = BV_LATEST
 ): ICachedVendorManifest | undefined => {
     for (const vendorInfo of generatableVendors) {
         if (vendorInfo.TypeName == typeName) {
@@ -75,7 +75,7 @@ export const getVendorManifestByTypeName = (
         }
     }
     if (typeName.startsWith("/Lotus/Types/Game/VendorManifests/Events/RadioLegion")) {
-        const manifestType = getLegacyNightwaveManifestType(buildLabel);
+        const manifestType = getLegacyNightwaveManifestType(buildVersion);
         if (manifestType) {
             const manifest = legacyNightwaveVendorManifest[manifestType];
             if (typeName != manifestType) {
@@ -108,7 +108,7 @@ export const getVendorManifestByTypeName = (
     return undefined;
 };
 
-export const getVendorManifestByOid = (oid: string, buildLabel: string): ICachedVendorManifest | undefined => {
+export const getVendorManifestByOid = (oid: string, buildVersion: number): ICachedVendorManifest | undefined => {
     for (const vendorInfo of generatableVendors) {
         if (vendorInfo._id.$oid == oid) {
             return generateVendorManifest(vendorInfo, config.fullyStockedVendors);
@@ -143,7 +143,7 @@ export const getVendorManifestByOid = (oid: string, buildLabel: string): ICached
         }
     }
     {
-        const manifestType = getLegacyNightwaveManifestType(buildLabel);
+        const manifestType = getLegacyNightwaveManifestType(buildVersion);
         if (manifestType) {
             const nightwaveOid = getVendorOid(manifestType);
             if (nightwaveOid == oid) {
@@ -531,8 +531,8 @@ const generateVendorManifest = (
     return cacheEntry;
 };
 
-const getLegacyNightwaveManifestType = (buildLabel: string): string | undefined => {
-    const affiliationTag = getNightwaveSyndicateTag(buildLabel);
+const getLegacyNightwaveManifestType = (buildVersion: number): string | undefined => {
+    const affiliationTag = getNightwaveSyndicateTag(buildVersion);
     const manifests = Object.keys(legacyNightwaveVendorManifest);
     if (!affiliationTag) return undefined;
     const season = nightwaveTagToSeason[affiliationTag];

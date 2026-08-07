@@ -8,7 +8,6 @@ import darvoDeals from "../constants/darvoDeals.ts";
 import invasionNodes from "../../static/fixed_responses/worldState/invasionNodes.json" with { type: "json" };
 import invasionRewards from "../../static/fixed_responses/worldState/invasionRewards.json" with { type: "json" };
 import pvpChallenges from "../../static/fixed_responses/worldState/pvpChallenges.json" with { type: "json" };
-import tennobaumFlashSales from "../../static/fixed_responses/worldState/tennobaumFlashSales.json" with { type: "json" };
 import { EPOCH, unixTimesInMs } from "../constants/timeConstants.ts";
 import { config } from "./configService.ts";
 import { getRandomElement, getRandomInt, sequentiallyUniqueRandomElement, SRng } from "./rngService.ts";
@@ -39,20 +38,28 @@ import type {
     IEndlessXpChoice,
     IGoalV9
 } from "../types/worldStateTypes.ts";
-import { toMongoDate2, toOid, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
+import { toMongoDate2, toOid, toOid2 } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
 import { DailyDeal, Fissure } from "../models/worldStateModel.ts";
 import { toStoreItem, fromStoreItem, getRegions } from "./itemDataService.ts";
 import { factionToInt, getConquest, getMissionTypeForLegacyOverride } from "./conquestService.ts";
-import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import { getDescent } from "./descentService.ts";
 import { catBreadHash } from "../helpers/stringHelpers.ts";
 import { Guild } from "../models/guildModel.ts";
 import { libraryTargetToAvatar } from "../constants/synthesis.ts";
-import { BL_LATEST } from "../constants/gameVersions.ts";
+import { BL_LATEST, BV_LATEST } from "../constants/gameVersions.ts";
 import { isRegionAvailableIn } from "./itemDataService.ts";
 import gameToBuildVersionInt from "../constants/gameToBuildVersionInt.ts";
 import { buildVersionToInt } from "../helpers/versionHelper.ts";
+import {
+    dogDaysFlashSales,
+    naberusNightsFlashSales,
+    prideMonthFlashSales,
+    qqtcFlashSales,
+    saintPatrickDayFlashSales,
+    tennobaumFlashSales,
+    type IFlashSaleData
+} from "../constants/flashSales.ts";
 
 const sortieBosses = [
     "SORTIE_BOSS_HYENA",
@@ -630,7 +637,7 @@ const pushTilesetModifiers = (modifiers: string[], tileset: TSortieTileset): voi
     }
 };
 
-export const getSortie = (day: number, buildLabel: string): ISortie => {
+export const getSortie = (day: number, buildVersion: number): ISortie => {
     // Seeds featuring CorpusIcePlanet to test seed validation: 14197, 23418, 71281
     const seed = new SRng(day).randomInt(0, 100_000);
     logger.trace(`sortie seed: ${seed}`);
@@ -646,7 +653,7 @@ export const getSortie = (day: number, buildLabel: string): ISortie => {
             (key != "SolNode228" || enemyFaction == "FC_GRINEER") && // PoE only works for grineer enemies
             sortieFactionToSystemIndexes[enemyFaction].includes(value.systemIndex) &&
             sortieFactionToFactions[enemyFaction].includes(value.faction!) &&
-            isRegionAvailableIn(key, value, buildLabel)
+            isRegionAvailableIn(key, value, buildVersion)
         ) {
             nodes.push(key);
         }
@@ -968,7 +975,7 @@ const generateXpAmounts = (rng: SRng, stageCount: number, minXp: number, maxXp: 
 export const pushClassicBounties = (
     syndicateMissions: ISyndicateMissionInfo[],
     bountyCycle: number,
-    buildLabel: string
+    buildVersion: number
 ): void => {
     const table = String.fromCharCode(65 + (bountyCycle % 3));
     const vaultTable = String.fromCharCode(65 + ((bountyCycle + 1) % 3));
@@ -978,7 +985,7 @@ export const pushClassicBounties = (
     const bountyCycleStart = Math.trunc((bountyEpoch + bountyCycle * eidolonCycleDuration) * 1000);
     const bountyCycleEnd = Math.trunc(bountyCycleStart + eidolonCycleDuration * 1000);
 
-    if (version_compare(buildLabel, gameToBuildVersion["22.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["22.0.0"]) {
         const rng = new SRng(seed);
         const pool = [...eidolonJobs];
         syndicateMissions.push({
@@ -995,7 +1002,7 @@ export const pushClassicBounties = (
                     jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierATable${table}Rewards`,
                     // Should be U22.10
-                    ...(version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0 && {
+                    ...(buildVersion >= gameToBuildVersionInt["22.13.4"] && {
                         masteryReq: 0
                     }),
                     minEnemyLevel: 5,
@@ -1005,7 +1012,7 @@ export const pushClassicBounties = (
                 {
                     jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierBTable${table}Rewards`,
-                    ...(version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0 && {
+                    ...(buildVersion >= gameToBuildVersionInt["22.13.4"] && {
                         masteryReq: 1
                     }),
                     minEnemyLevel: 10,
@@ -1015,7 +1022,7 @@ export const pushClassicBounties = (
                 {
                     jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierCTable${table}Rewards`,
-                    ...(version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0 && {
+                    ...(buildVersion >= gameToBuildVersionInt["22.13.4"] && {
                         masteryReq: 2
                     }),
                     minEnemyLevel: 20,
@@ -1025,7 +1032,7 @@ export const pushClassicBounties = (
                 {
                     jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierDTable${table}Rewards`,
-                    ...(version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0 && {
+                    ...(buildVersion >= gameToBuildVersionInt["22.13.4"] && {
                         masteryReq: 3
                     }),
                     minEnemyLevel: 30,
@@ -1035,7 +1042,7 @@ export const pushClassicBounties = (
                 {
                     jobType: rng.randomElementPop(pool),
                     rewards: `/Lotus/Types/Game/MissionDecks/EidolonJobMissionRewards/TierETable${table}Rewards`,
-                    ...(version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0 && {
+                    ...(buildVersion >= gameToBuildVersionInt["22.13.4"] && {
                         masteryReq: 4
                     }),
                     minEnemyLevel: 40,
@@ -1043,7 +1050,7 @@ export const pushClassicBounties = (
                     xpAmounts: generateXpAmounts(rng, 5, 4000, 4500)
                 },
                 // U28.1
-                ...(version_compare(buildLabel, gameToBuildVersion["28.3.0"]) >= 0
+                ...(buildVersion >= gameToBuildVersionInt["28.3.0"]
                     ? [
                           {
                               jobType: rng.randomElementPop(pool),
@@ -1055,7 +1062,7 @@ export const pushClassicBounties = (
                           }
                       ]
                     : []),
-                ...(version_compare(buildLabel, gameToBuildVersion["31.0.0"]) >= 0
+                ...(buildVersion >= gameToBuildVersionInt["31.0.0"]
                     ? [
                           {
                               jobType: rng.randomElement(eidolonNarmerJobs),
@@ -1071,7 +1078,7 @@ export const pushClassicBounties = (
         });
     }
 
-    if (version_compare(buildLabel, gameToBuildVersion["24.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["24.0.0"]) {
         const rng = new SRng(seed);
         const pool = [...venusJobs];
         syndicateMissions.push({
@@ -1125,7 +1132,7 @@ export const pushClassicBounties = (
                     xpAmounts: generateXpAmounts(rng, 5, 4000, 4500)
                 },
                 // U28.1
-                ...(version_compare(buildLabel, gameToBuildVersion["28.3.0"]) >= 0
+                ...(buildVersion >= gameToBuildVersionInt["28.3.0"]
                     ? [
                           {
                               jobType: rng.randomElementPop(pool),
@@ -1137,7 +1144,7 @@ export const pushClassicBounties = (
                           }
                       ]
                     : []),
-                ...(version_compare(buildLabel, gameToBuildVersion["31.0.0"]) >= 0
+                ...(buildVersion >= gameToBuildVersionInt["31.0.0"]
                     ? [
                           {
                               jobType: rng.randomElement(venusNarmerJobs),
@@ -1153,7 +1160,7 @@ export const pushClassicBounties = (
         });
     }
 
-    if (version_compare(buildLabel, gameToBuildVersion["29.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["29.0.0"]) {
         const rng = new SRng(seed);
         const pool = [...microplanetJobs];
         syndicateMissions.push({
@@ -1675,7 +1682,7 @@ const getIdealTimeSatsifyingConstraints = (constraints: ITimeConstraint[]): numb
     return timeSecs;
 };
 
-const fullyStockBaro = (vt: IVoidTrader, buildLabel: string): void => {
+const fullyStockBaro = (vt: IVoidTrader, buildVersion: number): void => {
     const tempManifest: IBaroDataTradeOffer[] = [];
     for (const item of baro.evilBaro) {
         tempManifest.push(item);
@@ -1694,27 +1701,27 @@ const fullyStockBaro = (vt: IVoidTrader, buildLabel: string): void => {
     }
     vt.Manifest.push(
         ...tempManifest
-            .filter(({ minBuildLabel }) => version_compare(buildLabel, minBuildLabel) >= 0)
+            .filter(({ minBuildVersionInt }) => buildVersion >= minBuildVersionInt)
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            .map(({ minBuildLabel, ...offer }) => offer)
+            .map(({ minBuildVersionInt, ...offer }) => offer)
     );
 };
 
-const getVarziaRotation = (week: number, buildLabel: string): string => {
+const getVarziaRotation = (week: number, buildVersion: number): string => {
     const seed = new SRng(week).randomInt(0, 100_000);
     const rng = new SRng(seed);
     const [itemType, rotation] = rng.randomElement(Object.entries(varzia.primeDualPacks))!;
-    if (version_compare(buildLabel, rotation.minBuildLabel) >= 0) {
+    if (buildVersion < rotation.minBuildVersionInt) {
         return itemType;
     } else {
         return "/Lotus/StoreItems/Types/StoreItems/Packages/MegaPrimeVault/LastChanceItemC";
     }
 };
 
-const getVarziaManifest = (dualPack: string, buildLabel: string): IPrimeVaultTraderOffer[] => {
+const getVarziaManifest = (dualPack: string, buildVersion: number): IPrimeVaultTraderOffer[] => {
     const rotationManifest = varzia.primeDualPacks[dualPack];
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (!rotationManifest || version_compare(buildLabel, rotationManifest.minBuildLabel) < 0) {
+    if (!rotationManifest || buildVersion < rotationManifest.minBuildVersionInt) {
         return [];
     }
     const mainPack = [{ ItemType: dualPack, PrimePrice: 10 }];
@@ -1723,7 +1730,7 @@ const getVarziaManifest = (dualPack: string, buildLabel: string): IPrimeVaultTra
     const items: IPrimeVaultTraderOffer[] = [];
     const bobbleHeads: IPrimeVaultTraderOffer[] = [];
 
-    if (config.worldState?.vanguardVaultRelics && version_compare(buildLabel, gameToBuildVersion["41.0.0"]) >= 0) {
+    if (config.worldState?.vanguardVaultRelics && buildVersion >= gameToBuildVersionInt["41.0.0"]) {
         vanguardRelics.push(...varzia.vanguardVaultRelics);
     }
 
@@ -1742,7 +1749,7 @@ const getVarziaManifest = (dualPack: string, buildLabel: string): IPrimeVaultTra
     return [singlePacks[0], ...mainPack, singlePacks[1], ...vanguardRelics, ...items, ...bobbleHeads, ...relics];
 };
 
-const getAllVarziaManifests = (buildLabel: string): IPrimeVaultTraderOffer[] => {
+const getAllVarziaManifests = (buildVersion: number): IPrimeVaultTraderOffer[] => {
     const dualPacks: IPrimeVaultTraderOffer[] = [];
     const singlePacks: IPrimeVaultTraderOffer[] = [];
     const vanguardRelics: IPrimeVaultTraderOffer[] = [];
@@ -1754,12 +1761,12 @@ const getAllVarziaManifests = (buildLabel: string): IPrimeVaultTraderOffer[] => 
     const itemsSet = new Set<string>();
     const bobbleHeadsSet = new Set<string>();
 
-    if (config.worldState?.vanguardVaultRelics && version_compare(buildLabel, gameToBuildVersion["41.0.0"]) >= 0) {
+    if (config.worldState?.vanguardVaultRelics && buildVersion >= gameToBuildVersionInt["41.0.0"]) {
         vanguardRelics.push(...varzia.vanguardVaultRelics);
     }
 
     Object.entries(varzia.primeDualPacks)
-        .filter(([_, dualPack]) => version_compare(buildLabel, dualPack.minBuildLabel) >= 0)
+        .filter(([_, dualPack]) => buildVersion >= dualPack.minBuildVersionInt)
         .forEach(([dualPackItemType, dualPack]) => {
             dualPacks.push({ ItemType: dualPackItemType, PrimePrice: 10 });
 
@@ -1792,7 +1799,7 @@ const getAllVarziaManifests = (buildLabel: string): IPrimeVaultTraderOffer[] => 
     return [...dualPacks, ...vanguardRelics, ...singlePacks, ...items, ...bobbleHeads, ...relics];
 };
 
-const createInvasion = (day: number, idx: number, buildLabel: string): IInvasion => {
+const createInvasion = (day: number, idx: number, buildVersion: number): IInvasion => {
     const id = day * 3 + idx;
     const defender = (["FC_GRINEER", "FC_CORPUS", day % 2 ? "FC_GRINEER" : "FC_CORPUS"] as const)[idx];
     const rng = new SRng(new SRng(id).randomInt(0, 1_000_000));
@@ -1820,7 +1827,7 @@ const createInvasion = (day: number, idx: number, buildLabel: string): IInvasion
         defenderReward.countedItems = [rng.randomElement(invasionRewards[defender][rewardTier])!];
     }
     return {
-        _id: toOid2(oid, buildLabel),
+        _id: toOid2(oid, buildVersion),
         Faction: attacker,
         DefenderFaction: defender,
         Node: node,
@@ -1848,14 +1855,14 @@ const createInvasion = (day: number, idx: number, buildLabel: string): IInvasion
             seed: rng.randomInt(0, 1_000_000),
             faction: attacker
         },
-        Activation: toMongoDate2(startMs, buildLabel)
+        Activation: toMongoDate2(startMs, buildVersion)
     };
 };
 
 export const getInvasionByOid = (oid: string): IInvasion | undefined => {
     const arr = oid.split("fd148cb8");
     if (arr.length == 2 && arr[0].length == 8 && arr[1].length == 8) {
-        return createInvasion(idToDay(oid), parseInt(arr[1], 16), BL_LATEST);
+        return createInvasion(idToDay(oid), parseInt(arr[1], 16), BV_LATEST);
     }
     return undefined;
 };
@@ -1865,7 +1872,7 @@ export const getWorldState = (
     convertGoals: boolean = true,
     changeLegacyTags: boolean = config.unfaithfulBugFixes?.useAnniversaryTagForOldGoals || false
 ): IWorldState => {
-    const buildVersionInt = buildVersionToInt(buildLabel);
+    const buildVersion = buildVersionToInt(buildLabel);
     const constraints: ITimeConstraint[] = [];
     if (config.worldState?.eidolonOverride) {
         constraints.push(config.worldState.eidolonOverride == "day" ? eidolonDayConstraint : eidolonNightConstraint);
@@ -1912,7 +1919,7 @@ export const getWorldState = (
     const weekStart = EPOCH + week * 604800000;
     const weekEnd = weekStart + 604800000;
     const date = new Date(timeMs);
-    const defenseWavesPerRotation = version_compare(buildLabel, gameToBuildVersion["38.5.0"]) < 0 ? 5 : 3;
+    const defenseWavesPerRotation = buildVersion < gameToBuildVersionInt["38.5.0"] ? 5 : 3;
 
     const worldState: IWorldState = {
         Version: 10,
@@ -2105,9 +2112,9 @@ export const getWorldState = (
 
     if (config.worldState?.tennoLiveRelay) {
         worldState.Goals.push({
-            _id: toOid2("687bf9400000000000000000", buildLabel),
-            Activation: toMongoDate2(1752955200000, buildLabel),
-            Expiry: toMongoDate2(2000000000000, buildLabel),
+            _id: toOid2("687bf9400000000000000000", buildVersion),
+            Activation: toMongoDate2(1752955200000, buildVersion),
+            Expiry: toMongoDate2(2000000000000, buildVersion),
             Count: 0,
             Goal: 0,
             Success: 0,
@@ -2121,9 +2128,9 @@ export const getWorldState = (
     }
     if (config.worldState?.baroTennoConRelay) {
         worldState.Goals.push({
-            _id: toOid2("687bb2f00000000000000000", buildLabel),
-            Activation: toMongoDate2(1752937200000, buildLabel),
-            Expiry: toMongoDate2(2000000000000, buildLabel),
+            _id: toOid2("687bb2f00000000000000000", buildVersion),
+            Activation: toMongoDate2(1752937200000, buildVersion),
+            Expiry: toMongoDate2(2000000000000, buildVersion),
             Count: 0,
             Goal: 0,
             Success: 0,
@@ -2132,29 +2139,29 @@ export const getWorldState = (
             Desc: "/Lotus/Language/Locations/RelayStationTennoCon",
             ToolTip: "/Lotus/Language/Locations/RelayStationTennoConDesc",
             Icon:
-                buildVersionInt >= gameToBuildVersionInt["43.0.0"]
+                buildVersion >= gameToBuildVersionInt["43.0.0"]
                     ? "/Lotus/Interface/Icons/Categories/IconTennoConBaroVip.png"
                     : "/Lotus/Interface/Icons/Categories/IconTennoConSigil.png",
             Tag: "TennoConRelay",
             Node: "TennoConHUB2"
         });
         const vt: IVoidTrader = {
-            _id: toOid2("687809030379266d790495c6", buildLabel),
-            Activation: toMongoDate2(1752937200000, buildLabel),
-            Expiry: toMongoDate2(2000000000000, buildLabel),
+            _id: toOid2("687809030379266d790495c6", buildVersion),
+            Activation: toMongoDate2(1752937200000, buildVersion),
+            Expiry: toMongoDate2(2000000000000, buildVersion),
             Character: "Baro'Ki Teel",
             Node: "TennoConHUB2",
             Manifest: []
         };
         worldState.VoidTraders.push(vt);
-        fullyStockBaro(vt, buildLabel);
+        fullyStockBaro(vt, buildVersion);
     }
 
     if (config.worldState) {
         for (const [key, alert] of Object.entries(configAlerts)) {
             if (config.worldState[key as keyof typeof config.worldState]) {
                 const { minBuildVersion, ...wsAlert } = alert;
-                if (!minBuildVersion || buildVersionInt >= minBuildVersion) {
+                if (!minBuildVersion || buildVersion >= minBuildVersion) {
                     if (wsAlert.MissionInfo.missionType == "MT_DEFENSE") {
                         wsAlert.MissionInfo.maxWaveNum =
                             defenseWavesPerRotation * (wsAlert.MissionInfo.maxRotations ?? 1);
@@ -2172,7 +2179,7 @@ export const getWorldState = (
 
         worldState.Alerts.push(
             {
-                _id: toOid2("68dc23c42e9d3acfa708ff3b", buildLabel),
+                _id: toOid2("68dc23c42e9d3acfa708ff3b", buildVersion),
                 Activation: { $date: { $numberLong: activation.toString() } },
                 Expiry: { $date: { $numberLong: expiry.toString() } },
                 MissionInfo: {
@@ -2195,7 +2202,7 @@ export const getWorldState = (
                 ForceUnlock: true
             },
             {
-                _id: toOid2("68dc2466e298b4f04206687a", buildLabel),
+                _id: toOid2("68dc2466e298b4f04206687a", buildVersion),
                 Activation: { $date: { $numberLong: activation.toString() } },
                 Expiry: { $date: { $numberLong: expiry.toString() } },
                 MissionInfo: {
@@ -2218,7 +2225,7 @@ export const getWorldState = (
                 ForceUnlock: true
             },
             {
-                _id: toOid2("68dc26865e7cb56b820b4252", buildLabel),
+                _id: toOid2("68dc26865e7cb56b820b4252", buildVersion),
                 Activation: { $date: { $numberLong: activation.toString() } },
                 Expiry: { $date: { $numberLong: expiry.toString() } },
                 MissionInfo: {
@@ -2242,45 +2249,13 @@ export const getWorldState = (
             }
         );
 
-        const storeItems: (Partial<IFlashSale> & { TypeName: string })[] = [
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/ImageConquera2021D", RegularOverride: 1 },
-            { TypeName: "/Lotus/Upgrades/Skins/Operator/Tattoos/TattooTennoI", RegularOverride: 1 },
-            { TypeName: "/Lotus/Upgrades/Skins/Operator/Tattoos/TattooTennoH", RegularOverride: 1 },
-            { TypeName: "/Lotus/Upgrades/Skins/Clan/QTCC2024EmblemItem", RegularOverride: 1 },
-            { TypeName: "/Lotus/Types/Items/ShipDecos/Conquera2024Display", RegularOverride: 1 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageConqueraGlyphVII", RegularOverride: 1 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageConqueraGlyphVI", RegularOverride: 1 },
-            { TypeName: "/Lotus/Interface/Graphics/CustomUI/ConqueraStyle", RegularOverride: 1 },
-            { TypeName: "/Lotus/Interface/Graphics/CustomUI/Backgrounds/ConqueraBackground", RegularOverride: 1 },
-            { TypeName: "/Lotus/Types/Items/ShipDecos/Conquera2021Deco", RegularOverride: 1 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/ImageConquera2022A", RegularOverride: 1 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/ImageConquera2021B", RegularOverride: 1 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/ImageConquera2021A", RegularOverride: 1 },
-            { TypeName: "/Lotus/Upgrades/Skins/Scarves/TnCharityRibbonSyandana", RegularOverride: 1 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/ImageConquera2021C", RegularOverride: 1 },
-            { TypeName: "/Lotus/Types/Items/ShipDecos/Venus/Conquera2023CommunityDisplay", RegularOverride: 1 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageConqueraGlyphUpdated", RegularOverride: 1 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/ImageConquera", RegularOverride: 1 },
-            { TypeName: "/Lotus/Upgrades/Skins/Sigils/QTCC2023ConqueraSigil", RegularOverride: 1 },
-            { TypeName: "/Lotus/Upgrades/Skins/Sigils/ConqueraSigil", RegularOverride: 1 },
-            { TypeName: "/Lotus/Upgrades/Skins/Effects/Conquera2022Ephemera", RegularOverride: 1 },
-            { TypeName: "/Lotus/Upgrades/Skins/Effects/ConqueraEphemera", RegularOverride: 1 },
-            { TypeName: "/Lotus/Upgrades/Skins/Armor/TnCharityRibbonArmor/ConqueraArmorL", RegularOverride: 1 },
-            { TypeName: "/Lotus/Upgrades/Skins/Armor/TnCharityRibbonArmor/ConqueraArmorA", RegularOverride: 1 },
-            { TypeName: "/Lotus/Upgrades/Skins/Armor/TnCharityRibbonArmor/ConqueraChestRibbon", RegularOverride: 1 },
-            { TypeName: "/Lotus/Types/Items/ShipDecos/Plushies/PlushyProtectorStalker", PremiumOverride: 35 }
-        ];
-
-        pushFlashSales(worldState, storeItems, activation, expiry, "COMMUNITY", buildLabel);
+        pushFlashSales(worldState, qqtcFlashSales, activation, expiry, "COMMUNITY", buildVersion);
     }
 
     const isFebruary = date.getUTCMonth() == 1;
-    if (
-        (config.worldState?.starDaysOverride ?? isFebruary) &&
-        version_compare(buildLabel, gameToBuildVersion["29.10.0"]) >= 0
-    ) {
+    if ((config.worldState?.starDaysOverride ?? isFebruary) && buildVersion >= gameToBuildVersionInt["29.10.0"]) {
         worldState.Goals.push({
-            _id: toOid2("67a4dcce2a198564d62e1647", buildLabel),
+            _id: toOid2("67a4dcce2a198564d62e1647", buildVersion),
             Activation: {
                 $date: {
                     $numberLong: config.worldState?.starDaysOverride
@@ -2307,13 +2282,13 @@ export const getWorldState = (
         });
     }
 
-    if (version_compare(buildLabel, gameToBuildVersion["38.6.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["38.6.0"]) {
         // The client gets kinda confused when multiple goals have the same tag, so considering these mutually exclusive.
         if (config.worldState?.galleonOfGhouls == 1) {
             worldState.Goals.push({
-                _id: toOid2("6814ddf00000000000000000", buildLabel),
-                Activation: toMongoDate2(1746198000000, buildLabel),
-                Expiry: toMongoDate2(2000000000000, buildLabel),
+                _id: toOid2("6814ddf00000000000000000", buildVersion),
+                Activation: toMongoDate2(1746198000000, buildVersion),
+                Expiry: toMongoDate2(2000000000000, buildVersion),
                 Count: 0,
                 Goal: 1,
                 Success: 0,
@@ -2334,9 +2309,9 @@ export const getWorldState = (
             });
         } else if (config.worldState?.galleonOfGhouls == 2) {
             worldState.Goals.push({
-                _id: toOid2("681e18700000000000000000", buildLabel),
-                Activation: toMongoDate2(1746802800000, buildLabel),
-                Expiry: toMongoDate2(2000000000000, buildLabel),
+                _id: toOid2("681e18700000000000000000", buildVersion),
+                Activation: toMongoDate2(1746802800000, buildVersion),
+                Expiry: toMongoDate2(2000000000000, buildVersion),
                 Count: 0,
                 Goal: 1,
                 Success: 0,
@@ -2357,9 +2332,9 @@ export const getWorldState = (
             });
         } else if (config.worldState?.galleonOfGhouls == 3) {
             worldState.Goals.push({
-                _id: toOid2("682752f00000000000000000", buildLabel),
-                Activation: toMongoDate2(1747407600000, buildLabel),
-                Expiry: toMongoDate2(2000000000000, buildLabel),
+                _id: toOid2("682752f00000000000000000", buildVersion),
+                Activation: toMongoDate2(1747407600000, buildVersion),
+                Expiry: toMongoDate2(2000000000000, buildVersion),
                 Count: 0,
                 Goal: 1,
                 Success: 0,
@@ -2390,10 +2365,10 @@ export const getWorldState = (
     const isPlagueStarActive = timeMs >= plagueStarStart && timeMs < plagueStarEnd;
     if (
         (config.worldState?.plagueStarOverride ?? isPlagueStarActive) &&
-        version_compare(buildLabel, gameToBuildVersion["22.7.0"]) >= 0
+        buildVersion >= gameToBuildVersionInt["22.7.0"]
     ) {
         worldState.Goals.push({
-            _id: toOid2("654a5058c757487cdb11824f", buildLabel),
+            _id: toOid2("654a5058c757487cdb11824f", buildVersion),
             Activation: {
                 $date: {
                     $numberLong: config.worldState?.plagueStarOverride ? "1699372800000" : plagueStarStart.toString()
@@ -2459,10 +2434,7 @@ export const getWorldState = (
     const dogDaysEnd = Date.UTC(date.getUTCFullYear(), 8, 1 + firstSeptemberWednesdayOffset, 15);
 
     const isDogDaysActive = timeMs >= dogDaysStart && timeMs < dogDaysEnd;
-    if (
-        (config.worldState?.dogDaysOverride ?? isDogDaysActive) &&
-        version_compare(buildLabel, gameToBuildVersion["25.7.0"]) >= 0
-    ) {
+    if ((config.worldState?.dogDaysOverride ?? isDogDaysActive) && buildVersion >= gameToBuildVersionInt["25.7.0"]) {
         const activation = config.worldState?.dogDaysOverride ? 1699372800000 : dogDaysStart;
         const expiry = config.worldState?.dogDaysOverride ? 2000000000000 : dogDaysEnd;
         const rewards = [
@@ -2704,22 +2676,7 @@ export const getWorldState = (
             NightLevel: "/Lotus/Levels/GrineerBeach/GrineerBeachEventNight.level"
         });
 
-        const storeItems: (Partial<IFlashSale> & { TypeName: string })[] = [
-            { TypeName: "/Lotus/Types/StoreItems/Packages/WaterFightNoggleBundle", PremiumOverride: 240 },
-            { TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFBeastMasterBobbleHead", PremiumOverride: 35 },
-            { TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFChargerBobbleHead", PremiumOverride: 35 },
-            { TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFEngineerBobbleHead", PremiumOverride: 35 },
-            { TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFGruntBobbleHead", PremiumOverride: 35 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/ImagePopsicleGrineerPurple", RegularOverride: 1 },
-            { TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFHealerBobbleHead", PremiumOverride: 35 },
-            { TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFHeavyBobbleHead", PremiumOverride: 35 },
-            { TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFHellionBobbleHead", PremiumOverride: 35 },
-            { TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFSniperBobbleHead", PremiumOverride: 35 },
-            { TypeName: "/Lotus/Types/Items/ShipDecos/Events/WFTankBobbleHead", PremiumOverride: 35 },
-            { TypeName: "/Lotus/Types/StoreItems/SuitCustomizations/ColourPickerRollers", PremiumOverride: 75 }
-        ];
-
-        pushFlashSales(worldState, storeItems, activation, expiry, "SEASONAL", buildLabel);
+        pushFlashSales(worldState, dogDaysFlashSales, activation, expiry, "SEASONAL", buildVersion);
     }
 
     // there no strict start day so lets pick first march monday
@@ -2732,113 +2689,28 @@ export const getWorldState = (
     const isSaintPatrickActive = timeMs >= saintPatrickStart && timeMs < saintPatrickEnd;
     if (
         (config.worldState?.saintPatrickOverride ?? isSaintPatrickActive) &&
-        version_compare(buildLabel, gameToBuildVersion["13.0.0"]) >= 0
+        buildVersion >= gameToBuildVersionInt["13.0.0"]
     ) {
         const activation = config.worldState?.saintPatrickOverride ? 1772467200000 : saintPatrickStart;
         const expiry = config.worldState?.saintPatrickOverride ? 2000000000000 : saintPatrickEnd;
-        const storeItems: (Partial<IFlashSale> & { TypeName: string })[] = [
-            { TypeName: "/Lotus/Types/StoreItems/SuitCustomizations/ColourPickerShamrockItem", RegularOverride: 1 }
-        ];
-
-        pushFlashSales(worldState, storeItems, activation, expiry, "SEASONAL", buildLabel);
+        pushFlashSales(worldState, saintPatrickDayFlashSales, activation, expiry, "SEASONAL", buildVersion);
     }
 
     // Pride Month - June
     const isJune = date.getUTCMonth() == 5;
-    if (
-        (config.worldState?.prideOverride ?? isJune) &&
-        version_compare(buildLabel, gameToBuildVersion["29.5.0"]) >= 0
-    ) {
+    if ((config.worldState?.prideOverride ?? isJune) && buildVersion >= gameToBuildVersionInt["29.5.0"]) {
         const activation = config.worldState?.prideOverride ? 1772467200000 : Date.UTC(date.getUTCFullYear(), 5, 1);
         const expiry = config.worldState?.prideOverride ? 2000000000000 : Date.UTC(date.getUTCFullYear(), 6, 1);
-        const storeItems: (Partial<IFlashSale> & { TypeName: string; minBuildLabel?: string })[] = [
-            // Color palettes
-            { TypeName: "/Lotus/Types/StoreItems/SuitCustomizations/ColourPickerPrideItemA", RegularOverride: 1 },
-            {
-                TypeName: "/Lotus/Types/StoreItems/SuitCustomizations/ColourPickerPrideItemB",
-                RegularOverride: 1,
-                minBuildLabel: gameToBuildVersion["31.5.0"]
-            },
-            // Glyphs
-            {
-                TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImagePrideLotusSymbolGlyph",
-                RegularOverride: 1,
-                minBuildLabel: gameToBuildVersion["42.0.0"]
-            },
-            {
-                TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImagePrideCommunity",
-                RegularOverride: 1,
-                minBuildLabel: gameToBuildVersion["31.6.0"]
-            },
-            {
-                TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageHildrynPrideCommunity",
-                RegularOverride: 1,
-                minBuildLabel: gameToBuildVersion["33.5.0"]
-            },
-            {
-                TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImagePrideGlyph",
-                RegularOverride: 1,
-                minBuildLabel: gameToBuildVersion["35.5.0"]
-            },
-            {
-                TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImagePride2025Glyph",
-                RegularOverride: 1,
-                minBuildLabel: gameToBuildVersion["38.5.0"]
-            },
-            // Ship decorations
-            {
-                TypeName: "/Lotus/Types/Items/ShipDecos/Venus/PrideCommunityDisplay",
-                RegularOverride: 1,
-                minBuildLabel: gameToBuildVersion["31.6.0"]
-            },
-            {
-                TypeName: "/Lotus/Types/Items/ShipDecos/Pride2023Display",
-                RegularOverride: 1,
-                minBuildLabel: gameToBuildVersion["33.5.0"]
-            },
-            {
-                TypeName: "/Lotus/Types/Items/ShipDecos/Venus/Pride2024Display",
-                RegularOverride: 1,
-                minBuildLabel: gameToBuildVersion["35.5.0"]
-            },
-            {
-                TypeName: "/Lotus/Types/Items/ShipDecos/Pride2in1Display",
-                RegularOverride: 1,
-                minBuildLabel: gameToBuildVersion["38.6.0"]
-            },
-            {
-                TypeName: "/Lotus/Types/Items/ShipDecos/Events/NeonPrideWings",
-                RegularOverride: 1,
-                minBuildLabel: gameToBuildVersion["35.5.0"]
-            },
-            {
-                TypeName: "/Lotus/Types/Items/ShipDecos/HeartOroRainbowDeco",
-                RegularOverride: 1,
-                minBuildLabel: gameToBuildVersion["38.6.0"]
-            },
-            // 2026 items
-            {
-                TypeName: "/Lotus/Types/Items/ShipDecos/Pride2026Poster",
-                RegularOverride: 1,
-                minBuildLabel: gameToBuildVersion["42.0.0"]
-            },
-            {
-                TypeName: "/Lotus/Types/Items/ShipDecos/Props/Seasonal/Pride2026SquarePictureFrame",
-                RegularOverride: 1,
-                minBuildLabel: gameToBuildVersion["42.0.0"]
-            }
-        ];
-
-        pushFlashSales(worldState, storeItems, activation, expiry, "SEASONAL", buildLabel);
+        pushFlashSales(worldState, prideMonthFlashSales, activation, expiry, "SEASONAL", buildVersion);
     }
 
     const xmasStart = Date.UTC(date.getUTCFullYear(), 11, 1);
     const xmasEnd = Date.UTC(date.getUTCFullYear() + 1, 1, 1);
     const isXmas = timeMs >= xmasStart && timeMs < xmasEnd;
-    if ((config.worldState?.xmasOverride ?? isXmas) && version_compare(buildLabel, gameToBuildVersion["13.0.0"]) >= 0) {
+    if ((config.worldState?.xmasOverride ?? isXmas) && buildVersion >= gameToBuildVersionInt["13.0.0"]) {
         const activation = config.worldState?.xmasOverride ? 1772467200000 : xmasStart;
         const expiry = config.worldState?.xmasOverride ? 2000000000000 : xmasEnd;
-        pushFlashSales(worldState, tennobaumFlashSales, activation, expiry, "SEASONAL", buildLabel);
+        pushFlashSales(worldState, tennobaumFlashSales, activation, expiry, "SEASONAL", buildVersion);
     }
 
     if (config.worldState?.anniversary != undefined) {
@@ -2849,25 +2721,19 @@ export const getWorldState = (
                     Node: "EventNode28",
                     MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2019E",
                     Tag: "Anniversary2019TacAlert",
-                    Reward: {
-                        items: ["/Lotus/StoreItems/Upgrades/Skins/Excalibur/ExcaliburDexSkin"]
-                    }
+                    Reward: { items: ["/Lotus/StoreItems/Upgrades/Skins/Excalibur/ExcaliburDexSkin"] }
                 },
                 {
                     Node: "EventNode26",
                     MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2020F",
                     Tag: "Anniversary2020TacAlert",
-                    Reward: {
-                        items: ["/Lotus/StoreItems/Types/Items/ShipDecos/ExcaliburDexBobbleHead"]
-                    }
+                    Reward: { items: ["/Lotus/StoreItems/Types/Items/ShipDecos/ExcaliburDexBobbleHead"] }
                 },
                 {
                     Node: "EventNode19",
                     MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2024ChallengeModeA",
                     Tag: "Anniversary2024TacAlertCMA",
-                    Reward: {
-                        items: ["/Lotus/StoreItems/Types/Items/MiscItems/WeaponUtilityUnlocker"]
-                    }
+                    Reward: { items: ["/Lotus/StoreItems/Types/Items/MiscItems/WeaponUtilityUnlocker"] }
                 }
             ],
             [
@@ -2875,17 +2741,13 @@ export const getWorldState = (
                     Node: "EventNode24",
                     MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2017C",
                     Tag: "Anniversary2018TacAlert",
-                    Reward: {
-                        items: ["/Lotus/StoreItems/Weapons/Tenno/LongGuns/DexTheThird/DexTheThird"]
-                    }
+                    Reward: { items: ["/Lotus/StoreItems/Weapons/Tenno/LongGuns/DexTheThird/DexTheThird"] }
                 },
                 {
                     Node: "EventNode18",
                     MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2020H",
                     Tag: "Anniversary2020TacAlert",
-                    Reward: {
-                        items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/ImageDexAnniversary"]
-                    }
+                    Reward: { items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/ImageDexAnniversary"] }
                 }
             ],
             [
@@ -2893,25 +2755,19 @@ export const getWorldState = (
                     Node: "EventNode18",
                     MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2022J",
                     Tag: "Anniversary2022TacAlert",
-                    Reward: {
-                        items: ["/Lotus/StoreItems/Upgrades/Skins/Rhino/RhinoDexSkin"]
-                    }
+                    Reward: { items: ["/Lotus/StoreItems/Upgrades/Skins/Rhino/RhinoDexSkin"] }
                 },
                 {
                     Node: "EventNode38",
                     MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2025D",
                     Tag: "Anniversary2020TacAlert",
-                    Reward: {
-                        items: ["/Lotus/StoreItems/Types/Items/ShipDecos/RhinoDexBobbleHead"]
-                    }
+                    Reward: { items: ["/Lotus/StoreItems/Types/Items/ShipDecos/RhinoDexBobbleHead"] }
                 },
                 {
                     Node: "EventNode27",
                     MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2025ChallengeModeA",
                     Tag: "Anniversary2024TacAlertCMA",
-                    Reward: {
-                        items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst"]
-                    }
+                    Reward: { items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst"] }
                 }
             ],
             [
@@ -2919,17 +2775,13 @@ export const getWorldState = (
                     Node: "EventNode2",
                     MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2020G",
                     Tag: "Anniversary2020TacAlert",
-                    Reward: {
-                        items: ["/Lotus/StoreItems/Upgrades/Skins/Liset/DexLisetSkin"]
-                    }
+                    Reward: { items: ["/Lotus/StoreItems/Upgrades/Skins/Liset/DexLisetSkin"] }
                 },
                 {
                     Node: "EventNode17",
                     MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2017B",
                     Tag: "Anniversary2018TacAlert",
-                    Reward: {
-                        items: ["/Lotus/StoreItems/Weapons/Tenno/Melee/Swords/DexTheSecond/DexTheSecond"]
-                    }
+                    Reward: { items: ["/Lotus/StoreItems/Weapons/Tenno/Melee/Swords/DexTheSecond/DexTheSecond"] }
                 }
             ],
             [
@@ -2937,25 +2789,19 @@ export const getWorldState = (
                     Node: "EventNode18",
                     MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2017A",
                     Tag: "Anniversary2018TacAlert",
-                    Reward: {
-                        items: ["/Lotus/StoreItems/Weapons/Tenno/Pistols/DexFuris/DexFuris"]
-                    }
+                    Reward: { items: ["/Lotus/StoreItems/Weapons/Tenno/Pistols/DexFuris/DexFuris"] }
                 },
                 {
                     Node: "EventNode26",
                     MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2023K",
                     Tag: "Anniversary2025TacAlert",
-                    Reward: {
-                        items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageCommunityClemComic"]
-                    }
+                    Reward: { items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageCommunityClemComic"] }
                 },
                 {
                     Node: "EventNode12",
                     MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2025ChallengeModeB",
                     Tag: "Anniversary2025TacAlertCMB",
-                    Reward: {
-                        items: ["/Lotus/StoreItems/Types/Items/MiscItems/WeaponPrimaryArcaneUnlocker"]
-                    }
+                    Reward: { items: ["/Lotus/StoreItems/Types/Items/MiscItems/WeaponPrimaryArcaneUnlocker"] }
                 }
             ],
             [
@@ -2973,9 +2819,7 @@ export const getWorldState = (
                     Node: "EventNode27",
                     MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2018D",
                     Tag: "Anniversary2018TacAlert",
-                    Reward: {
-                        items: ["/Lotus/StoreItems/Upgrades/Skins/Scarves/DexScarf"]
-                    }
+                    Reward: { items: ["/Lotus/StoreItems/Upgrades/Skins/Scarves/DexScarf"] }
                 }
             ],
             [
@@ -2983,25 +2827,19 @@ export const getWorldState = (
                     Node: "EventNode38",
                     MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2025C",
                     Tag: "Anniversary2018TacAlert",
-                    Reward: {
-                        items: ["/Lotus/StoreItems/Upgrades/Skins/Wisp/DexWispSkin"]
-                    }
+                    Reward: { items: ["/Lotus/StoreItems/Upgrades/Skins/Wisp/DexWispSkin"] }
                 },
                 {
                     Node: "EventNode12",
                     MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2024L",
                     Tag: "Anniversary2024TacAlert",
-                    Reward: {
-                        items: ["/Lotus/Types/StoreItems/Packages/OperatorDrifterDexBundle"]
-                    }
+                    Reward: { items: ["/Lotus/Types/StoreItems/Packages/OperatorDrifterDexBundle"] }
                 },
                 {
                     Node: "EventNode26",
                     MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2024ChallengeModeB",
                     Tag: "Anniversary2024TacAlertCMB",
-                    Reward: {
-                        items: ["/Lotus/StoreItems/Types/Recipes/Components/UmbraFormaBlueprint"]
-                    }
+                    Reward: { items: ["/Lotus/StoreItems/Types/Recipes/Components/UmbraFormaBlueprint"] }
                 }
             ],
             [
@@ -3017,10 +2855,7 @@ export const getWorldState = (
                             "/Lotus/StoreItems/Types/Game/CatbrowPet/CatbrowGeneticSignature"
                         ],
                         countedItems: [
-                            {
-                                ItemType: "/Lotus/Types/Game/CatbrowPet/CatbrowGeneticSignature",
-                                ItemCount: 10
-                            }
+                            { ItemType: "/Lotus/Types/Game/CatbrowPet/CatbrowGeneticSignature", ItemCount: 10 }
                         ]
                     }
                 },
@@ -3042,8 +2877,8 @@ export const getWorldState = (
                         config.worldState?.anniversary!.toString(16).padStart(4, "0") +
                         i.toString(16).padStart(4, "0")
                 },
-                Activation: toMongoDate2(1745593200000, buildLabel),
-                Expiry: toMongoDate2(2000000000000, buildLabel),
+                Activation: toMongoDate2(1745593200000, buildVersion),
+                Expiry: toMongoDate2(2000000000000, buildVersion),
                 Count: 0,
                 Goal: 1,
                 Success: 0,
@@ -3061,20 +2896,12 @@ export const getWorldState = (
         });
     }
 
-    if (config.worldState?.wolfHunt != undefined && version_compare(buildLabel, gameToBuildVersion["25.0.0"]) >= 0) {
+    if (config.worldState?.wolfHunt != undefined && buildVersion >= gameToBuildVersionInt["25.0.0"]) {
         if (config.worldState.wolfHunt == 0) {
             worldState.Goals.push({
-                _id: toOid2("67ed7672798d6466172e3b9c", buildLabel),
-                Activation: {
-                    $date: {
-                        $numberLong: "1743616800000"
-                    }
-                },
-                Expiry: {
-                    $date: {
-                        $numberLong: "2000000000000"
-                    }
-                },
+                _id: toOid2("67ed7672798d6466172e3b9c", buildVersion),
+                Activation: { $date: { $numberLong: "1743616800000" } },
+                Expiry: { $date: { $numberLong: "2000000000000" } },
                 Count: 0,
                 Goal: 1,
                 BonusGoal: 2,
@@ -3103,17 +2930,9 @@ export const getWorldState = (
             });
         } else if (config.worldState.wolfHunt == 1) {
             worldState.Goals.push({
-                _id: toOid2("67ed7672798d6466172e3b9d", buildLabel),
-                Activation: {
-                    $date: {
-                        $numberLong: "1743616800000"
-                    }
-                },
-                Expiry: {
-                    $date: {
-                        $numberLong: "2000000000000"
-                    }
-                },
+                _id: toOid2("67ed7672798d6466172e3b9d", buildVersion),
+                Activation: { $date: { $numberLong: "1743616800000" } },
+                Expiry: { $date: { $numberLong: "2000000000000" } },
                 Count: 0,
                 Goal: 3,
                 InterimGoals: [1, 2],
@@ -3173,12 +2992,12 @@ export const getWorldState = (
         "Anniversary2025TacAlertCMB"
     ];
 
-    if (config.worldState?.hallowedFlame && version_compare(buildLabel, gameToBuildVersion["26.0.0"]) >= 0) {
+    if (config.worldState?.hallowedFlame && buildVersion >= gameToBuildVersionInt["26.0.0"]) {
         worldState.Goals.push(
             {
-                _id: toOid2("5db305403d34b5158873519a", buildLabel),
-                Activation: toMongoDate2(1699372800000, buildLabel),
-                Expiry: toMongoDate2(2000000000000, buildLabel),
+                _id: toOid2("5db305403d34b5158873519a", buildVersion),
+                Activation: toMongoDate2(1699372800000, buildVersion),
+                Expiry: toMongoDate2(2000000000000, buildVersion),
                 Count: 0,
                 Goal: 3,
                 InterimGoals: [1, 2],
@@ -3207,9 +3026,9 @@ export const getWorldState = (
                 }
             },
             {
-                _id: toOid2("5db3054a3d34b5158873519c", buildLabel),
-                Activation: toMongoDate2(1699372800000, buildLabel),
-                Expiry: toMongoDate2(2000000000000, buildLabel),
+                _id: toOid2("5db3054a3d34b5158873519c", buildVersion),
+                Activation: toMongoDate2(1699372800000, buildVersion),
+                Expiry: toMongoDate2(2000000000000, buildVersion),
                 Count: 0,
                 Goal: 900,
                 Success: 0,
@@ -3236,7 +3055,7 @@ export const getWorldState = (
         );
     }
 
-    if (config.worldState?.hallowedNightmares && version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0) {
+    if (config.worldState?.hallowedNightmares && buildVersion >= gameToBuildVersionInt["18.0.2"]) {
         const rewards = [
             // 2018
             [
@@ -3279,8 +3098,8 @@ export const getWorldState = (
 
         worldState.Goals.push({
             _id: { $oid: "5bc98f00000000000000000" + year.toString(16) },
-            Activation: toMongoDate2(1539972000000, buildLabel),
-            Expiry: toMongoDate2(2000000000000, buildLabel),
+            Activation: toMongoDate2(1539972000000, buildVersion),
+            Expiry: toMongoDate2(2000000000000, buildVersion),
             Count: 0,
             InterimGoals: [1],
             Goal: 2,
@@ -3304,8 +3123,8 @@ export const getWorldState = (
         if (year != 2) {
             worldState.Goals.push({
                 _id: { $oid: "5bc98f01000000000000000" + year.toString(16) },
-                Activation: toMongoDate2(1539972000000, buildLabel),
-                Expiry: toMongoDate2(2000000000000, buildLabel),
+                Activation: toMongoDate2(1539972000000, buildVersion),
+                Expiry: toMongoDate2(2000000000000, buildVersion),
                 Count: 0,
                 Goal: 666,
                 Success: 0,
@@ -3328,7 +3147,7 @@ export const getWorldState = (
         }
     }
 
-    if (config.worldState?.proxyRebellion && version_compare(buildLabel, gameToBuildVersion["23.2.0"]) >= 0) {
+    if (config.worldState?.proxyRebellion && buildVersion >= gameToBuildVersionInt["23.2.0"]) {
         const rewards = [
             // 2019
             [
@@ -3377,8 +3196,8 @@ export const getWorldState = (
 
         worldState.Goals.push({
             _id: { $oid: "5b5b5da0000000000000000" + year.toString(16) },
-            Activation: toMongoDate2(1532714400000, buildLabel),
-            Expiry: toMongoDate2(2000000000000, buildLabel),
+            Activation: toMongoDate2(1532714400000, buildVersion),
+            Expiry: toMongoDate2(2000000000000, buildVersion),
             Count: 0,
             Goal: 3,
             InterimGoals: [1, 2],
@@ -3406,11 +3225,11 @@ export const getWorldState = (
         });
     }
 
-    if (config.worldState?.longShadow && version_compare(buildLabel, gameToBuildVersion["18.22.1"]) >= 0) {
+    if (config.worldState?.longShadow && buildVersion >= gameToBuildVersionInt["18.22.1"]) {
         worldState.Goals.push({
-            _id: toOid2("5bc9e8f7272d5d184c8398c9", buildLabel),
-            Activation: toMongoDate2(1539972000000, buildLabel),
-            Expiry: toMongoDate2(2000000000000, buildLabel),
+            _id: toOid2("5bc9e8f7272d5d184c8398c9", buildVersion),
+            Activation: toMongoDate2(1539972000000, buildVersion),
+            Expiry: toMongoDate2(2000000000000, buildVersion),
             Count: 0,
             InterimGoals: [1, 2],
             Goal: 3,
@@ -3451,10 +3270,7 @@ export const getWorldState = (
     }
 
     const isOctober = date.getUTCMonth() == 9; // October = month index 9
-    if (
-        (config.worldState?.naberusNightsOverride ?? isOctober) &&
-        version_compare(buildLabel, gameToBuildVersion["29.3.1"]) >= 0
-    ) {
+    if ((config.worldState?.naberusNightsOverride ?? isOctober) && buildVersion >= gameToBuildVersionInt["29.3.1"]) {
         const activation = config.worldState?.naberusNightsOverride
             ? 1727881200000
             : Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1);
@@ -3464,7 +3280,7 @@ export const getWorldState = (
             : Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 1);
 
         worldState.Goals.push({
-            _id: toOid2("66fd602de1778d583419e8e7", buildLabel),
+            _id: toOid2("66fd602de1778d583419e8e7", buildVersion),
             Activation: { $date: { $numberLong: activation.toString() } },
             Expiry: { $date: { $numberLong: expiry.toString() } },
             Count: 0,
@@ -3478,154 +3294,14 @@ export const getWorldState = (
             Node: "DeimosHub"
         });
 
-        const storeItems: (Partial<IFlashSale> & { TypeName: string })[] = [
-            { TypeName: "/Lotus/Types/StoreItems/Packages/Halloween2023GlyphBundleA", PremiumOverride: 65 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/Halloween2021GlyphBundle", PremiumOverride: 65 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/Halloween2019GlyphBundleA", PremiumOverride: 65 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/Halloween2019GlyphBundleB", PremiumOverride: 65 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/HalloweenGlyphBundle", PremiumOverride: 65 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/Halloween2023ArmorBundle", PremiumOverride: 125 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/HalloweenCrpCircArmorPack", PremiumOverride: 100 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/HalloweenScarfBundleB", PremiumOverride: 80 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/HalloweenSkinPack", PremiumOverride: 175 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/HalloweenShipSkinBundle", PremiumOverride: 80 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/HalloweenSkinPackC", PremiumOverride: 175 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/HalloweenSkinPackII", PremiumOverride: 145 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/HalloweenScarfBundle", PremiumOverride: 130 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/AcolyteNoggleBundle", PremiumOverride: 160 },
-            { TypeName: "/Lotus/Types/Items/ShipDecos/AcolyteAreaCasterBobbleHead", PremiumOverride: 35 },
-            { TypeName: "/Lotus/Types/Items/ShipDecos/AcolyteDuellistBobbleHead", PremiumOverride: 35 },
-            { TypeName: "/Lotus/Types/Items/ShipDecos/AcolyteControlBobbleHead", PremiumOverride: 35 },
-            { TypeName: "/Lotus/Types/Items/ShipDecos/AcolyteHeavyBobbleHead", PremiumOverride: 35 },
-            { TypeName: "/Lotus/Types/Items/ShipDecos/AcolyteRogueBobbleHead", PremiumOverride: 35 },
-            { TypeName: "/Lotus/Types/Items/ShipDecos/AcolyteStrikerBobbleHead", PremiumOverride: 35 },
-            { TypeName: "/Lotus/Types/StoreItems/SuitCustomizations/ColourPickerHalloweenItemA", RegularOverride: 1 },
-            { TypeName: "/Lotus/Upgrades/Skins/Armor/Halloween2014Wings/Halloween2014ArmArmor", PremiumOverride: 50 },
-            { TypeName: "/Lotus/Upgrades/Skins/Festivities/PumpkinHead", RegularOverride: 1 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenRegorAxeShield", PremiumOverride: 20 },
-            {
-                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/Halloween2019CheshireKavat",
-                PremiumOverride: 20
-            },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenAkvasto", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenAngstrum", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenBoltor", PremiumOverride: 20 },
-            {
-                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/Halloween2019GhostChibiWisp",
-                PremiumOverride: 20
-            },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenBraton", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageHalloween2016A", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageHalloween2016C", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageHalloween2016B", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenBuzlok", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageHalloween2016D", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/Halloween2019CreepyClem", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenDaikyu", PremiumOverride: 20 },
-            {
-                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageHalloween2021Dethcube",
-                PremiumOverride: 20
-            },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenDragonNikana", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenDualZoren", PremiumOverride: 20 },
-            {
-                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/Halloween2019FrankenCorpus",
-                PremiumOverride: 20
-            },
-            {
-                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageHalloween2021Grineer",
-                PremiumOverride: 20
-            },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenGlaive", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenGalatine", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenGrakata", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenGorgon", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenGlaxion", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenTwinGremlins", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenGrinlok", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Scarves/HalloweenFireFlyScarf", PremiumOverride: 90 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenImperator", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenKronen", PremiumOverride: 20 },
-            {
-                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageHalloween2021Lotus",
-                PremiumOverride: 20
-            },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenJatKittag", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Scarves/HalloweenKyropteraScarf", PremiumOverride: 50 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenKunai", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Liset/LisetSkinHalloween", PremiumOverride: 50 },
-            { TypeName: "/Lotus/Upgrades/Skins/Liset/LisetInsectSkinHalloween", PremiumOverride: 50 },
-            {
-                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageChillingGlyphFour",
-                PremiumOverride: 20
-            },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenMarelok", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenNikana", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenNukor", PremiumOverride: 20 },
-            {
-                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageHalloween2021Loid",
-                PremiumOverride: 20
-            },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenOpticor", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenOrthos", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenParis", PremiumOverride: 20 },
-            {
-                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageChillingGlyphTwo",
-                PremiumOverride: 20
-            },
-            { TypeName: "/Lotus/Upgrades/Skins/Armor/CrpCircleArmour/HalloweenCrpCircC", PremiumOverride: 45 },
-            { TypeName: "/Lotus/Upgrades/Skins/Armor/CrpCircleArmour/HalloweenCrpCircA", PremiumOverride: 50 },
-            { TypeName: "/Lotus/Upgrades/Skins/Armor/CrpCircleArmour/HalloweenCrpCircL", PremiumOverride: 35 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenScindo", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/Halloween2019GhoulGrave", PremiumOverride: 20 },
-            {
-                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageHalloween2021Pumpkin",
-                PremiumOverride: 20
-            },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenSarpa", PremiumOverride: 20 },
-            {
-                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageChillingGlyphThree",
-                PremiumOverride: 20
-            },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenSilvaAndAegis", PremiumOverride: 20 },
-            {
-                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageChillingGlyphOne",
-                PremiumOverride: 20
-            },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenSoma", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenSkana", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/Halloween2019SlimeLoki", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenSobek", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenSonicor", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenSimulor", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenTonkor", PremiumOverride: 20 },
-            {
-                TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/Halloween2019TrickOrBalas",
-                PremiumOverride: 20
-            },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenSpira", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenStradavar", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenTwinGrakatas", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenArchSword", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenLato", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/Halloween2019Werefested", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Scarves/HalloweenErosionCape", PremiumOverride: 50 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenVasto", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenDarkSplitSword", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenDarkDagger", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Upgrades/Skins/Scarves/HalloweenGrnBannerScarf", PremiumOverride: 75 },
-            { TypeName: "/Lotus/Upgrades/Skins/Halloween/HalloweenAmprex", PremiumOverride: 20 },
-            { TypeName: "/Lotus/Types/StoreItems/Packages/HalloweenSkinPackD", PremiumOverride: 180 }
-        ];
-
-        pushFlashSales(worldState, storeItems, activation, expiry, "SEASONAL", buildLabel);
+        pushFlashSales(worldState, naberusNightsFlashSales, activation, expiry, "SEASONAL", buildVersion);
     }
 
-    if (config.worldState?.bellyOfTheBeast && version_compare(buildLabel, gameToBuildVersion["36.0.0"]) >= 0) {
+    if (config.worldState?.bellyOfTheBeast && buildVersion >= gameToBuildVersionInt["36.0.0"]) {
         worldState.Goals.push({
-            _id: toOid2("67a5035c2a198564d62e165e", buildLabel),
-            Activation: toMongoDate2(1738868400000, buildLabel),
-            Expiry: toMongoDate2(2000000000000, buildLabel),
+            _id: toOid2("67a5035c2a198564d62e165e", buildVersion),
+            Activation: toMongoDate2(1738868400000, buildVersion),
+            Expiry: toMongoDate2(2000000000000, buildVersion),
             Count: config.worldState.bellyOfTheBeastProgressOverride ?? 0,
             HealthPct: (config.worldState.bellyOfTheBeastProgressOverride ?? 0) / 100,
             Goal: 0,
@@ -3642,14 +3318,14 @@ export const getWorldState = (
             MissionKeyName: "/Lotus/Types/Keys/JadeShadowsEventMission",
             ItemType: "/Lotus/Types/Gameplay/JadeShadows/Resources/AscensionEventResourceItem"
         });
-        pushGoalAlerts(worldState, "JadeShadows", buildLabel);
+        pushGoalAlerts(worldState, "JadeShadows", buildVersion);
     }
 
-    if (config.worldState?.operationAtramentum && version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0) {
+    if (config.worldState?.operationAtramentum && buildVersion >= gameToBuildVersionInt["42.0.0"]) {
         worldState.Goals.push({
-            _id: toOid2("69ce8b780000000000000000", buildLabel),
-            Activation: toMongoDate2(1738868400000, buildLabel),
-            Expiry: toMongoDate2(2000000000000, buildLabel),
+            _id: toOid2("69ce8b780000000000000000", buildVersion),
+            Activation: toMongoDate2(1738868400000, buildVersion),
+            Expiry: toMongoDate2(2000000000000, buildVersion),
             Count: config.worldState.operationAtramentumProgressOverride ?? 0,
             HealthPct: (config.worldState.operationAtramentumProgressOverride ?? 0) / 100,
             Goal: 0,
@@ -3669,11 +3345,11 @@ export const getWorldState = (
     }
 
     // <U39
-    if (config.worldState?.eightClaw && version_compare(buildLabel, gameToBuildVersion["39.0.0"]) >= 0) {
+    if (config.worldState?.eightClaw && buildVersion >= gameToBuildVersionInt["39.0.0"]) {
         worldState.Goals.push({
-            _id: toOid2("685c15f80000000000000000", buildLabel),
-            Activation: toMongoDate2(1750865400000, buildLabel),
-            Expiry: toMongoDate2(2000000000000, buildLabel),
+            _id: toOid2("685c15f80000000000000000", buildVersion),
+            Activation: toMongoDate2(1750865400000, buildVersion),
+            Expiry: toMongoDate2(2000000000000, buildVersion),
             Count: config.worldState.eightClawProgressOverride ?? 0,
             HealthPct: (config.worldState.eightClawProgressOverride ?? 0) / 100,
             Goal: 0,
@@ -3691,19 +3367,11 @@ export const getWorldState = (
         });
     }
 
-    if (config.worldState?.scarletSpear && version_compare(buildLabel, gameToBuildVersion["27.3.0"]) >= 0) {
+    if (config.worldState?.scarletSpear && buildVersion >= gameToBuildVersionInt["27.3.0"]) {
         worldState.Goals.push({
-            _id: toOid2("5e7a3e2389e3090b0c6a998b", buildLabel),
-            Activation: {
-                $date: {
-                    $numberLong: "1585070400000"
-                }
-            },
-            Expiry: {
-                $date: {
-                    $numberLong: "2000000000000"
-                }
-            },
+            _id: toOid2("5e7a3e2389e3090b0c6a998b", buildVersion),
+            Activation: { $date: { $numberLong: "1585070400000" } },
+            Expiry: { $date: { $numberLong: "2000000000000" } },
             Node: "ScenarioEventHub5",
             Desc: "/Lotus/Language/G1Quests/FlotillaOperation",
             Icon: "/Lotus/Interface/Graphics/ScarletSpear/ScarletSpearIcon.png",
@@ -3715,48 +3383,28 @@ export const getWorldState = (
             CompletionBonus: [0, 2000, 6000, 10000],
             InterimGoals: [10000, 30000],
             InterimRewards: [
-                {
-                    items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/ScarletSpear/ScarletSpearOperationIEmblem"]
-                },
-                {
-                    items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/ScarletSpear/ScarletSpearOperationIIEmblem"]
-                }
+                { items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/ScarletSpear/ScarletSpearOperationIEmblem"] },
+                { items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/ScarletSpear/ScarletSpearOperationIIEmblem"] }
             ],
             Goal: 50000,
             Reward: {
                 items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/ScarletSpear/ScarletSpearOperationIIIEmblem"]
             },
-            AltExpiry: {
-                $date: {
-                    $numberLong: "2000000000000"
-                }
-            },
-            AltActivation: {
-                $date: {
-                    $numberLong: "2000000000000"
-                }
-            },
+            AltExpiry: { $date: { $numberLong: "2000000000000" } },
+            AltActivation: { $date: { $numberLong: "2000000000000" } },
             EpochNum: 114,
-            NextAltActivation: {
-                $date: {
-                    $numberLong: "2000000000000"
-                }
-            },
-            NextAltExpiry: {
-                $date: {
-                    $numberLong: "2000000000000"
-                }
-            },
+            NextAltActivation: { $date: { $numberLong: "2000000000000" } },
+            NextAltExpiry: { $date: { $numberLong: "2000000000000" } },
             PauseAutoScheduling: true
         });
     }
 
-    if (config.worldState?.orphixVenom && version_compare(buildLabel, gameToBuildVersion["29.6.8"]) >= 0) {
+    if (config.worldState?.orphixVenom && buildVersion >= gameToBuildVersionInt["29.6.8"]) {
         worldState.Goals.push(
             {
-                _id: toOid2("5fdcccb875d5ad500dc477d0", buildLabel),
-                Activation: toMongoDate2(1608320400000, buildLabel),
-                Expiry: toMongoDate2(2000000000000, buildLabel),
+                _id: toOid2("5fdcccb875d5ad500dc477d0", buildVersion),
+                Activation: toMongoDate2(1608320400000, buildVersion),
+                Expiry: toMongoDate2(2000000000000, buildVersion),
                 Count: 0,
                 Goal: 500,
                 Success: 0,
@@ -3769,14 +3417,12 @@ export const getWorldState = (
                 Icon: "/Lotus/Interface/Icons/Categories/IconMech256.png",
                 Tag: "MechSurvivalA",
                 ScoreVar: "MechSurvivalScore",
-                Reward: {
-                    items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/MechEventEmblemItem"]
-                }
+                Reward: { items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/MechEventEmblemItem"] }
             },
             {
-                _id: toOid2("5fdcccb875d5ad500dc477d1", buildLabel),
-                Activation: toMongoDate2(1608320400000, buildLabel),
-                Expiry: toMongoDate2(2000000000000, buildLabel),
+                _id: toOid2("5fdcccb875d5ad500dc477d1", buildVersion),
+                Activation: toMongoDate2(1608320400000, buildVersion),
+                Expiry: toMongoDate2(2000000000000, buildVersion),
                 Count: 0,
                 Goal: 1000,
                 Success: 0,
@@ -3790,14 +3436,12 @@ export const getWorldState = (
                 Tag: "MechSurvivalB",
                 PrereqGoalTags: ["MechSurvivalA"],
                 ScoreVar: "MechSurvivalScore",
-                Reward: {
-                    items: ["/Lotus/StoreItems/Types/Items/FusionTreasures/OroFusexJ"]
-                }
+                Reward: { items: ["/Lotus/StoreItems/Types/Items/FusionTreasures/OroFusexJ"] }
             },
             {
-                _id: toOid2("5fdcccb875d5ad500dc477d2", buildLabel),
-                Activation: toMongoDate2(1608320400000, buildLabel),
-                Expiry: toMongoDate2(2000000000000, buildLabel),
+                _id: toOid2("5fdcccb875d5ad500dc477d2", buildVersion),
+                Activation: toMongoDate2(1608320400000, buildVersion),
+                Expiry: toMongoDate2(2000000000000, buildVersion),
                 Count: 0,
                 Goal: 2000,
                 Success: 0,
@@ -3828,11 +3472,11 @@ export const getWorldState = (
         );
     }
 
-    if (config.worldState?.bloodOfPerita && version_compare(buildLabel, gameToBuildVersion["41.0.0"]) >= 0) {
+    if (config.worldState?.bloodOfPerita && buildVersion >= gameToBuildVersionInt["41.0.0"]) {
         worldState.Goals.push({
-            _id: toOid2("694189080000000000000000", buildLabel),
-            Activation: toMongoDate2(1765902600000, buildLabel),
-            Expiry: toMongoDate2(2000000000000, buildLabel),
+            _id: toOid2("694189080000000000000000", buildVersion),
+            Activation: toMongoDate2(1765902600000, buildVersion),
+            Expiry: toMongoDate2(2000000000000, buildVersion),
             GracePeriod: { $date: { $numberLong: "2000000000000" } },
             Count: 0,
             Goal: 0,
@@ -3844,7 +3488,7 @@ export const getWorldState = (
             Tag: "12MinWarEvent",
             Node: "SolNode251"
         });
-        pushGoalAlerts(worldState, "12MinWarEvent", buildLabel);
+        pushGoalAlerts(worldState, "12MinWarEvent", buildVersion);
     }
 
     if (config.worldState?.lunarNewYear) {
@@ -4064,7 +3708,7 @@ export const getWorldState = (
         } else if (config.worldState.lunarNewYear in storeItems) {
             selectedStoreItems.push(...storeItems[config.worldState.lunarNewYear]);
         }
-        pushFlashSales(worldState, selectedStoreItems, 1750865400000, 2000000000000, "SEASONAL", buildLabel);
+        pushFlashSales(worldState, selectedStoreItems, 1750865400000, 2000000000000, "SEASONAL", buildVersion);
     }
 
     // Thermia Fractures activates for 14 days, with alternating 4 and 3-day breaks
@@ -4076,7 +3720,7 @@ export const getWorldState = (
 
     if (
         (config.worldState?.thermiaFracturesOverride ?? isThermiaFracturesActive) &&
-        version_compare(buildLabel, gameToBuildVersion["24.5.1"]) >= 0
+        buildVersion >= gameToBuildVersionInt["24.5.1"]
     ) {
         const activeStartDay = day - activeThermiaFracturesCycleDay;
 
@@ -4087,7 +3731,7 @@ export const getWorldState = (
         // If we push it, the game may show the event even tho it's not activated yet (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2721)
         if (timeMs >= activation) {
             worldState.Goals.push({
-                _id: toOid2("5c7cb0d00000000000000000", buildLabel),
+                _id: toOid2("5c7cb0d00000000000000000", buildVersion),
                 Activation: { $date: { $numberLong: activation.toString() } },
                 Expiry: { $date: { $numberLong: expiry.toString() } },
                 Node: "SolNode129",
@@ -4126,7 +3770,7 @@ export const getWorldState = (
                 ]
             });
             worldState.NodeOverrides.push({
-                _id: toOid2("5c7cb0d00000000000000000", buildLabel),
+                _id: toOid2("5c7cb0d00000000000000000", buildVersion),
                 Activation: { $date: { $numberLong: activation.toString() } },
                 Expiry: { $date: { $numberLong: expiry.toString() } },
                 Node: "SolNode129",
@@ -4135,7 +3779,7 @@ export const getWorldState = (
             });
             if (count >= 35) {
                 worldState.GlobalUpgrades.push({
-                    _id: toOid2("5c81cefa4c4566791728eaa6", buildLabel),
+                    _id: toOid2("5c81cefa4c4566791728eaa6", buildVersion),
                     Activation: { $date: { $numberLong: activation.toString() } },
                     ExpiryDate: { $date: { $numberLong: expiry.toString() } },
                     UpgradeType: "GAMEPLAY_MONEY_REWARD_AMOUNT",
@@ -4147,7 +3791,7 @@ export const getWorldState = (
             // Not sure about that
             if (count == 100) {
                 worldState.GlobalUpgrades.push({
-                    _id: toOid2("5c81cefa4c4566791728eaa7", buildLabel),
+                    _id: toOid2("5c81cefa4c4566791728eaa7", buildVersion),
                     Activation: { $date: { $numberLong: activation.toString() } },
                     ExpiryDate: { $date: { $numberLong: expiry.toString() } },
                     UpgradeType: "GAMEPLAY_PICKUP_AMOUNT",
@@ -4160,7 +3804,7 @@ export const getWorldState = (
     }
 
     // Nightwave Challenges
-    const nightwaveSyndicateTag = getNightwaveSyndicateTag(buildLabel);
+    const nightwaveSyndicateTag = getNightwaveSyndicateTag(buildVersion);
     if (nightwaveSyndicateTag) {
         const nightwaveStartTimestamp = nightwaveTagToActivation[nightwaveSyndicateTag] ?? 1747851300000;
         const nightwaveSeason = nightwaveTagToSeason[nightwaveSyndicateTag];
@@ -4195,34 +3839,34 @@ export const getWorldState = (
 
     {
         worldState.NodeOverrides.push(
-            { _id: toOid2("549b18e9b029cef5991d6aec", buildLabel), Node: "EuropaHUB", Hide: true },
-            { _id: toOid2("54a1737aeb658f6cbccf70ff", buildLabel), Node: "ErisHUB", Hide: true },
-            { _id: toOid2("54a736ddec12f80bd6e9e326", buildLabel), Node: "VenusHUB", Hide: true }
+            { _id: toOid2("549b18e9b029cef5991d6aec", buildVersion), Node: "EuropaHUB", Hide: true },
+            { _id: toOid2("54a1737aeb658f6cbccf70ff", buildVersion), Node: "ErisHUB", Hide: true },
+            { _id: toOid2("54a736ddec12f80bd6e9e326", buildVersion), Node: "VenusHUB", Hide: true }
         );
-        if (version_compare(buildLabel, gameToBuildVersion["22.18.0"]) >= 0) {
+        if (buildVersion >= gameToBuildVersionInt["22.18.0"]) {
             worldState.NodeOverrides.push({
-                _id: toOid2("5ad9f9bb6df82a56eabf3d44", buildLabel),
+                _id: toOid2("5ad9f9bb6df82a56eabf3d44", buildVersion),
                 Node: "SolNode802",
                 // Elite Sanctuary Onslaught cycling every week
                 Seed: new SRng(week).randomInt(0, 0xff_ffff)
             });
         }
-        if (version_compare(buildLabel, gameToBuildVersion["25.7.0"]) >= 0) {
+        if (buildVersion >= gameToBuildVersionInt["25.7.0"]) {
             worldState.NodeOverrides.push({
-                _id: toOid2("5d24d1f674491d51f8d44473", buildLabel),
+                _id: toOid2("5d24d1f674491d51f8d44473", buildVersion),
                 Node: "MercuryHUB",
                 Hide: true,
                 LevelOverride: "/Lotus/Levels/Proc/Hub/RelayStationHubHydroid",
-                Activation: toMongoDate2(1563030000000, buildLabel)
+                Activation: toMongoDate2(1563030000000, buildVersion)
             });
         }
-        if (version_compare(buildLabel, gameToBuildVersion["21.0.0"]) >= 0) {
+        if (buildVersion >= gameToBuildVersionInt["21.0.0"]) {
             worldState.NodeOverrides.push({
-                _id: toOid2("5b8817c2bd4f253264d6aa91", buildLabel),
+                _id: toOid2("5b8817c2bd4f253264d6aa91", buildVersion),
                 Node: "EarthHUB",
                 Hide: false,
                 LevelOverride: "/Lotus/Levels/Proc/Hub/RelayStationHubTwoB",
-                Activation: toMongoDate2(1535646600000, buildLabel)
+                Activation: toMongoDate2(1535646600000, buildVersion)
             });
         }
     }
@@ -4233,54 +3877,54 @@ export const getWorldState = (
     do {
         const bountyCycleStart = Math.trunc((bountyEpoch + bountyCycle * eidolonCycleDuration) * 1000);
         bountyCycleEnd = Math.trunc(bountyCycleStart + eidolonCycleDuration * 1000);
-        if (version_compare(buildLabel, gameToBuildVersion["29.0.0"]) >= 0) {
+        if (buildVersion >= gameToBuildVersionInt["29.0.0"]) {
             worldState.SyndicateMissions.push({
                 _id: toOid2(
                     ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000004",
-                    buildLabel
+                    buildVersion
                 ),
-                Activation: toMongoDate2(bountyCycleStart, buildLabel),
-                Expiry: toMongoDate2(bountyCycleEnd, buildLabel),
+                Activation: toMongoDate2(bountyCycleStart, buildVersion),
+                Expiry: toMongoDate2(bountyCycleEnd, buildVersion),
                 Tag: "EntratiLabSyndicate",
                 Seed: bountyCycle,
                 Nodes: []
             });
         }
-        if (version_compare(buildLabel, gameToBuildVersion["31.5.0"]) >= 0) {
+        if (buildVersion >= gameToBuildVersionInt["31.5.0"]) {
             worldState.SyndicateMissions.push({
                 _id: toOid2(
                     ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000029",
-                    buildLabel
+                    buildVersion
                 ),
-                Activation: toMongoDate2(bountyCycleStart, buildLabel),
-                Expiry: toMongoDate2(bountyCycleEnd, buildLabel),
+                Activation: toMongoDate2(bountyCycleStart, buildVersion),
+                Expiry: toMongoDate2(bountyCycleEnd, buildVersion),
                 Tag: "ZarimanSyndicate",
                 Seed: bountyCycle,
                 Nodes: []
             });
         }
-        if (version_compare(buildLabel, gameToBuildVersion["38.0.0"]) >= 0) {
+        if (buildVersion >= gameToBuildVersionInt["38.0.0"]) {
             worldState.SyndicateMissions.push({
                 _id: toOid2(
                     ((bountyCycleStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "0000000000000006",
-                    buildLabel
+                    buildVersion
                 ),
-                Activation: toMongoDate2(bountyCycleStart, buildLabel),
-                Expiry: toMongoDate2(bountyCycleEnd, buildLabel),
+                Activation: toMongoDate2(bountyCycleStart, buildVersion),
+                Expiry: toMongoDate2(bountyCycleEnd, buildVersion),
                 Tag: "HexSyndicate",
                 Seed: bountyCycle,
                 Nodes: []
             });
         }
 
-        pushClassicBounties(worldState.SyndicateMissions, bountyCycle, buildLabel);
+        pushClassicBounties(worldState.SyndicateMissions, bountyCycle, buildVersion);
     } while (isBeforeNextExpectedWorldStateRefresh(timeMs, bountyCycleEnd) && ++bountyCycle);
 
     const ghoulsCycleDay = day % 21;
     const isGhoulEmergenceActive = ghoulsCycleDay >= 17 && ghoulsCycleDay <= 20; // 4 days for event and 17 days for break
     if (
         (config.worldState?.ghoulEmergenceOverride ?? isGhoulEmergenceActive) &&
-        version_compare(buildLabel, gameToBuildVersion["22.8.2"]) >= 0
+        buildVersion >= gameToBuildVersionInt["22.8.2"]
     ) {
         const ghoulPool = [...eidolonGhoulJobs];
         const pastGhoulPool = [...eidolonGhoulJobs];
@@ -4301,7 +3945,7 @@ export const getWorldState = (
         const bountyCycleStartSecs = Math.trunc(bountyEpoch + bountyCycle * eidolonCycleDuration);
 
         worldState.Goals.push({
-            _id: toOid2("687ebbe6d1d17841c9c59f38", buildLabel),
+            _id: toOid2("687ebbe6d1d17841c9c59f38", buildVersion),
             Activation: {
                 $date: {
                     $numberLong: config.worldState?.ghoulEmergenceOverride
@@ -4370,13 +4014,13 @@ export const getWorldState = (
         });
     }
 
-    if (config.worldState?.breedingGrounds && version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
+    if (config.worldState?.breedingGrounds && buildVersion >= gameToBuildVersionInt["14.0.0"]) {
         worldState.Goals.push({
-            _id: toOid2("53a35a043f9a5b16e0308ea7", buildLabel),
-            Activation: toMongoDate2(1753204900185, buildLabel),
+            _id: toOid2("53a35a043f9a5b16e0308ea7", buildVersion),
+            Activation: toMongoDate2(1753204900185, buildVersion),
             Count: 0,
             Desc: "/Lotus/Language/G1Quests/InfestedCorpusHiveEventName",
-            Expiry: toMongoDate2(2000000000000, buildLabel),
+            Expiry: toMongoDate2(2000000000000, buildVersion),
             Goal: 48,
             InterimGoals: [6, 17],
             MissionKeyName: "/Lotus/Types/Keys/InfestedCorpusHiveEventKey",
@@ -4405,9 +4049,9 @@ export const getWorldState = (
 
     if (config.worldState?.creditBoostMultiplier) {
         worldState.GlobalUpgrades.push({
-            _id: toOid2("5b23106f283a555109666672", buildLabel),
-            Activation: toMongoDate2(1740164400000, buildLabel),
-            ExpiryDate: toMongoDate2(2000000000000, buildLabel),
+            _id: toOid2("5b23106f283a555109666672", buildVersion),
+            Activation: toMongoDate2(1740164400000, buildVersion),
+            ExpiryDate: toMongoDate2(2000000000000, buildVersion),
             UpgradeType: "GAMEPLAY_MONEY_REWARD_AMOUNT",
             OperationType: "MULTIPLY",
             Value: config.worldState.creditBoostMultiplier,
@@ -4417,9 +4061,9 @@ export const getWorldState = (
     }
     if (config.worldState?.affinityBoostMultiplier) {
         worldState.GlobalUpgrades.push({
-            _id: toOid2("5b23106f283a555109666673", buildLabel),
-            Activation: toMongoDate2(1740164400000, buildLabel),
-            ExpiryDate: toMongoDate2(2000000000000, buildLabel),
+            _id: toOid2("5b23106f283a555109666673", buildVersion),
+            Activation: toMongoDate2(1740164400000, buildVersion),
+            ExpiryDate: toMongoDate2(2000000000000, buildVersion),
             UpgradeType: "GAMEPLAY_KILL_XP_AMOUNT",
             OperationType: "MULTIPLY",
             Value: config.worldState.affinityBoostMultiplier,
@@ -4429,9 +4073,9 @@ export const getWorldState = (
     }
     if (config.worldState?.resourceBoostMultiplier) {
         worldState.GlobalUpgrades.push({
-            _id: toOid2("5b23106f283a555109666674", buildLabel),
-            Activation: toMongoDate2(1740164400000, buildLabel),
-            ExpiryDate: toMongoDate2(2000000000000, buildLabel),
+            _id: toOid2("5b23106f283a555109666674", buildVersion),
+            Activation: toMongoDate2(1740164400000, buildVersion),
+            ExpiryDate: toMongoDate2(2000000000000, buildVersion),
             UpgradeType: "GAMEPLAY_PICKUP_AMOUNT",
             OperationType: "MULTIPLY",
             Value: config.worldState.resourceBoostMultiplier,
@@ -4441,25 +4085,25 @@ export const getWorldState = (
     }
 
     // Sheev parts were added in 19.6.3, so versions prior to that may take too kindly to seeing invasions.
-    if (version_compare(buildLabel, gameToBuildVersion["19.5.3"]) > 0) {
+    if (buildVersion > gameToBuildVersionInt["19.5.3"]) {
         // Rough outline of dynamic invasions.
         // TODO: Invasions chains, e.g. an infestation mission would soon lead to other nodes on that planet also having an infestation invasion.
         // TODO: Grineer/Corpus to fund their death stars with each invasion win.
         {
-            worldState.Invasions.push(createInvasion(day, 0, buildLabel));
-            worldState.Invasions.push(createInvasion(day, 1, buildLabel));
-            worldState.Invasions.push(createInvasion(day, 2, buildLabel));
+            worldState.Invasions.push(createInvasion(day, 0, buildVersion));
+            worldState.Invasions.push(createInvasion(day, 1, buildVersion));
+            worldState.Invasions.push(createInvasion(day, 2, buildVersion));
 
             // Completed invasions stay for up to 24 hours as the winner 'occupies' that node
-            worldState.Invasions.push(createInvasion(day - 1, 0, buildLabel));
-            worldState.Invasions.push(createInvasion(day - 1, 1, buildLabel));
-            worldState.Invasions.push(createInvasion(day - 1, 2, buildLabel));
+            worldState.Invasions.push(createInvasion(day - 1, 0, buildVersion));
+            worldState.Invasions.push(createInvasion(day - 1, 1, buildVersion));
+            worldState.Invasions.push(createInvasion(day - 1, 2, buildVersion));
         }
     }
 
     // Baro
     // Introdused in U15.6
-    if (version_compare(buildLabel, gameToBuildVersion["15.5.0"]) > 0) {
+    if (buildVersion > gameToBuildVersionInt["15.5.0"]) {
         const baroIndex = Math.trunc((Date.now() - 910800000) / (unixTimesInMs.day * 14));
         const baroStart = baroIndex * (unixTimesInMs.day * 14) + 910800000;
         const baroActualStart = baroStart + unixTimesInMs.day * (config.worldState?.baroAlwaysAvailable ? 0 : 12);
@@ -4467,22 +4111,22 @@ export const getWorldState = (
         const baroRelayOverride = config.worldState?.baroRelayOverride;
         const baroNodeIndex = baroRelayOverride && baroRelayOverride > 0 ? baroRelayOverride - 1 : baroIndex % 4;
         let baroNode = ["EarthHUB", "MercuryHUB", "SaturnHUB", "PlutoHUB"][baroNodeIndex];
-        if (baroNode == "MercuryHUB" && version_compare(buildLabel, gameToBuildVersion["18.18.0"]) < 0) {
+        if (baroNode == "MercuryHUB" && buildVersion < gameToBuildVersionInt["18.18.0"]) {
             // This Pre-Star Chart 3.0 client won't know Larunda Relay, so move Baro elsewhere.
             baroNode = "EarthHUB";
         }
         const evilBaroStage =
-            version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0 ? 0 : (config.worldState?.evilBaroStage ?? 0);
+            buildVersion >= gameToBuildVersionInt["40.0.0"] ? (config.worldState?.evilBaroStage ?? 0) : 0;
         const baroCharacter = ["Baro'Ki Teel", "EvilBaroWeek1", "EvilBaroWeek2", "EvilBaroWeek3", "EvilBaroWeek4"][
             evilBaroStage
         ];
         const vt: IVoidTrader = {
             _id: toOid2(
                 ((baroStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "493c96d6067610bc",
-                buildLabel
+                buildVersion
             ),
-            Activation: toMongoDate2(baroActualStart, buildLabel),
-            Expiry: toMongoDate2(baroEnd, buildLabel),
+            Activation: toMongoDate2(baroActualStart, buildVersion),
+            Expiry: toMongoDate2(baroEnd, buildVersion),
             Character: baroCharacter,
             Node: baroNode,
             Manifest: []
@@ -4490,7 +4134,7 @@ export const getWorldState = (
         worldState.VoidTraders.push(vt);
         if (isBeforeNextExpectedWorldStateRefresh(timeMs, baroActualStart)) {
             if (config.worldState?.baroFullyStocked) {
-                fullyStockBaro(vt, buildLabel);
+                fullyStockBaro(vt, buildVersion);
             } else {
                 const tempManifest: IBaroDataTradeOffer[] = [];
                 const rng = new SRng(new SRng(baroIndex).randomInt(0, 100_000));
@@ -4541,9 +4185,9 @@ export const getWorldState = (
                 }
                 vt.Manifest.push(
                     ...tempManifest
-                        .filter(({ minBuildLabel }) => version_compare(buildLabel, minBuildLabel) >= 0)
+                        .filter(({ minBuildVersionInt }) => buildVersion >= minBuildVersionInt)
                         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                        .map(({ minBuildLabel, ...offer }) => offer)
+                        .map(({ minBuildVersionInt, ...offer }) => offer)
                 );
             }
         }
@@ -4551,7 +4195,7 @@ export const getWorldState = (
 
     // Varzia
     // introduced in 30.9.4
-    if (version_compare(buildLabel, gameToBuildVersion["31.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["31.0.0"]) {
         const pt: IPrimeVaultTrader = {
             _id: { $oid: ((weekStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "c36af423770eaa97" },
             Activation: { $date: { $numberLong: weekStart.toString() } },
@@ -4563,22 +4207,22 @@ export const getWorldState = (
             ScheduleInfo: []
         };
         worldState.PrimeVaultTraders.push(pt);
-        const rotation = config.worldState?.varziaOverride || getVarziaRotation(week, buildLabel);
+        const rotation = config.worldState?.varziaOverride || getVarziaRotation(week, buildVersion);
         pt.Manifest = config.worldState?.varziaFullyStocked
-            ? getAllVarziaManifests(buildLabel)
-            : getVarziaManifest(rotation, buildLabel);
+            ? getAllVarziaManifests(buildVersion)
+            : getVarziaManifest(rotation, buildVersion);
         if (config.worldState?.varziaOverride || config.worldState?.varziaFullyStocked) {
             pt.Expiry = { $date: { $numberLong: "2000000000000" } };
         } else {
             pt.ScheduleInfo.push({
                 Expiry: { $date: { $numberLong: (weekEnd + unixTimesInMs.week).toString() } },
-                FeaturedItem: getVarziaRotation(week + 1, buildLabel)
+                FeaturedItem: getVarziaRotation(week + 1, buildVersion)
             });
         }
     }
 
     // Void Storms
-    if (version_compare(buildLabel, gameToBuildVersion["30.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["30.0.0"]) {
         const hour = Math.trunc(timeMs / unixTimesInMs.hour);
         const overLastHourStormExpiry = hour * unixTimesInMs.hour + 10 * unixTimesInMs.minute;
         const thisHourStormActivation = hour * unixTimesInMs.hour + 40 * unixTimesInMs.minute;
@@ -4592,21 +4236,21 @@ export const getWorldState = (
     }
 
     // Sortie & syndicate missions cycling every day (at 16:00 or 17:00 UTC depending on if London, OT is observing DST)
-    if (version_compare(buildLabel, gameToBuildVersion["15.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["15.0.0"]) {
         const rollover = getSortieTime(day);
 
         // Omit sorties for pre-Star Chart 3.0 clients to avoid breaking them.
-        if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) >= 0) {
+        if (buildVersion >= gameToBuildVersionInt["18.18.0"]) {
             if (timeMs < rollover) {
-                worldState.Sorties.push(getSortie(day - 1, buildLabel));
+                worldState.Sorties.push(getSortie(day - 1, buildVersion));
                 if (
-                    version_compare(buildLabel, gameToBuildVersion["25.7.0"]) >= 0 &&
+                    buildVersion >= gameToBuildVersionInt["25.7.0"] &&
                     isBeforeNextExpectedWorldStateRefresh(timeMs, rollover)
                 ) {
-                    worldState.Sorties.push(getSortie(day, buildLabel));
+                    worldState.Sorties.push(getSortie(day, buildVersion));
                 }
             } else {
-                worldState.Sorties.push(getSortie(day, buildLabel));
+                worldState.Sorties.push(getSortie(day, buildVersion));
             }
         }
 
@@ -4625,7 +4269,7 @@ export const getWorldState = (
         const targetType = `/Lotus/Types/Game/Library/Targets/Research${config.worldState.communitySynthesisTarget}Target`;
         worldState.LibraryInfo = {
             CurrentTarget: {
-                StartTime: toMongoDate2(0, buildLabel),
+                StartTime: toMongoDate2(0, buildVersion),
                 TargetType: targetType,
                 EnemyType: libraryTargetToAvatar[targetType],
                 PersonalScansRequired: 10,
@@ -4637,7 +4281,7 @@ export const getWorldState = (
         }
     }
 
-    if (config.worldState?.snowdayShowdown && version_compare(buildLabel, gameToBuildVersion["19.4.1"]) >= 0) {
+    if (config.worldState?.snowdayShowdown && buildVersion >= gameToBuildVersionInt["19.4.1"]) {
         worldState.PVPAlternativeModes.push({
             TargetMode: "PVPMODE_TEAMDEATHMATCH",
             TitleLoc: "/Lotus/Language/G1Quests/TacAlertSnowballFightTitle",
@@ -4676,15 +4320,15 @@ export const getWorldState = (
         });
     }
 
-    if (version_compare(buildLabel, gameToBuildVersion["17.7.1"]) >= 0) {
-        if (version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["17.7.1"]) {
+        if (buildVersion >= gameToBuildVersionInt["18.0.2"]) {
             const conclaveWeekStart = weekStart + 40 * unixTimesInMs.minute - 2 * unixTimesInMs.day;
             const conclaveWeekEnd = conclaveWeekStart + unixTimesInMs.week;
 
-            pushConclaveWeekly(worldState.PVPChallengeInstances, week, buildLabel);
+            pushConclaveWeekly(worldState.PVPChallengeInstances, week, buildVersion);
 
             if (isBeforeNextExpectedWorldStateRefresh(timeMs, conclaveWeekEnd)) {
-                pushConclaveWeekly(worldState.PVPChallengeInstances, week + 1, buildLabel);
+                pushConclaveWeekly(worldState.PVPChallengeInstances, week + 1, buildVersion);
             }
         }
 
@@ -4692,16 +4336,16 @@ export const getWorldState = (
             const conclaveDayStart =
                 EPOCH + day * unixTimesInMs.day + 5 * unixTimesInMs.hour + 30 * unixTimesInMs.minute;
             const conclaveDayEnd = conclaveDayStart + unixTimesInMs.day;
-            pushConclaveDailys(worldState.PVPChallengeInstances, day, buildLabel);
+            pushConclaveDailys(worldState.PVPChallengeInstances, day, buildVersion);
 
             if (isBeforeNextExpectedWorldStateRefresh(timeMs, conclaveDayEnd)) {
-                pushConclaveDailys(worldState.PVPChallengeInstances, day + 1, buildLabel);
+                pushConclaveDailys(worldState.PVPChallengeInstances, day + 1, buildVersion);
             }
         }
     }
 
     // Archon Hunt cycling every week
-    if (version_compare(buildLabel, gameToBuildVersion["32.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["32.0.0"]) {
         worldState.LiteSorties.push(getLiteSortie(week));
         if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
             worldState.LiteSorties.push(getLiteSortie(week + 1));
@@ -4709,27 +4353,27 @@ export const getWorldState = (
     }
 
     // Circuit choices cycling every week
-    if (buildVersionInt >= gameToBuildVersionInt["42.0.0"]) {
+    if (buildVersion >= gameToBuildVersionInt["42.0.0"]) {
         worldState.EndlessXpSchedule = [
             {
                 Activation: { $date: { $numberLong: weekStart.toString() } },
                 Expiry: { $date: { $numberLong: weekEnd.toString() } },
-                CategoryChoices: getEndlessXpChoices(week, buildVersionInt)
+                CategoryChoices: getEndlessXpChoices(week, buildVersion)
             }
         ];
         if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
             worldState.EndlessXpSchedule.push({
                 Activation: { $date: { $numberLong: (weekStart + 604800000).toString() } },
                 Expiry: { $date: { $numberLong: (weekEnd + 604800000).toString() } },
-                CategoryChoices: getEndlessXpChoices(week + 1, buildVersionInt)
+                CategoryChoices: getEndlessXpChoices(week + 1, buildVersion)
             });
         }
-    } else if (buildVersionInt >= gameToBuildVersionInt["33.0.0"]) {
-        worldState.EndlessXpChoices = getEndlessXpChoices(week, buildVersionInt);
+    } else if (buildVersion >= gameToBuildVersionInt["33.0.0"]) {
+        worldState.EndlessXpChoices = getEndlessXpChoices(week, buildVersion);
     }
 
     // 1999 Calendar Season cycling every week + YearIteration every 4 weeks
-    if (version_compare(buildLabel, gameToBuildVersion["38.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["38.0.0"]) {
         worldState.KnownCalendarSeasons.push(getCalendarSeason(week));
         if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
             worldState.KnownCalendarSeasons.push(getCalendarSeason(week + 1));
@@ -4739,7 +4383,7 @@ export const getWorldState = (
     const season = (["CST_WINTER", "CST_SPRING", "CST_SUMMER", "CST_FALL"] as const)[week % 4];
     const labConquest = getConquest("CT_LAB", week, null);
     const hexConquest = getConquest("CT_HEX", week, season);
-    if (version_compare(buildLabel, gameToBuildVersion["40.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["40.0.0"]) {
         worldState.Conquests = [labConquest, hexConquest];
         if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
             const season = (["CST_WINTER", "CST_SPRING", "CST_SUMMER", "CST_FALL"] as const)[(week + 1) % 4];
@@ -4748,7 +4392,7 @@ export const getWorldState = (
         }
     }
 
-    if (version_compare(buildLabel, gameToBuildVersion["41.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["41.0.0"]) {
         worldState.Descents = [getDescent(week)];
         if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
             worldState.Descents.push(getDescent(week + 1));
@@ -4822,16 +4466,13 @@ export const getWorldState = (
     }
     worldState.Tmp = JSON.stringify(tmp);
 
-    if (convertGoals && version_compare(buildLabel, gameToBuildVersion["20.4.0"]) < 0) {
+    if (convertGoals && buildVersion < gameToBuildVersionInt["20.4.0"]) {
         worldState.Version = 9;
         convertGoalsToV9(worldState.Goals);
     }
 
     // This must be the last field in these versions.
-    if (
-        version_compare(buildLabel, gameToBuildVersion["18.18.0"]) >= 0 &&
-        version_compare(buildLabel, gameToBuildVersion["20.4.0"]) <= 0
-    ) {
+    if (buildVersion >= gameToBuildVersionInt["18.18.0"] && buildVersion <= gameToBuildVersionInt["20.4.0"]) {
         worldState.WorldSeed = "4763605";
     }
 
@@ -4929,18 +4570,19 @@ const convertGoalsToV9 = (goals: IGoal[]): void => {
 };
 
 export const populateFissures = async (worldState: IWorldState): Promise<void> => {
-    if (version_compare(worldState.BuildLabel, gameToBuildVersion["18.16.0"]) < 0) return;
+    const buildVersion = buildVersionToInt(worldState.BuildLabel);
+    if (buildVersion < gameToBuildVersionInt["18.16.0"]) return;
     if (config.worldState?.allTheFissures) {
         let i = 0;
         for (const [tier, nodes] of Object.entries(fissureMissions)) {
             for (const node of nodes) {
                 const meta = ExportRegions[node];
                 worldState.ActiveMissions.push({
-                    _id: toOid2((i++).toString().padStart(8, "0") + "8e0c70ba050f1eb7", worldState.BuildLabel),
+                    _id: toOid2((i++).toString().padStart(8, "0") + "8e0c70ba050f1eb7", buildVersion),
                     Region: meta.systemIndex + 1,
                     Seed: 1337,
-                    Activation: toMongoDate2(1000000000000, worldState.BuildLabel),
-                    Expiry: toMongoDate2(2000000000000, worldState.BuildLabel),
+                    Activation: toMongoDate2(1000000000000, buildVersion),
+                    Expiry: toMongoDate2(2000000000000, buildVersion),
                     Node: node,
                     MissionType: meta.missionType,
                     Modifier: tier,
@@ -4953,14 +4595,14 @@ export const populateFissures = async (worldState: IWorldState): Promise<void> =
         for (const fissure of fissures) {
             const meta = ExportRegions[fissure.Node];
             worldState.ActiveMissions.push({
-                _id: toOid2(fissure._id, worldState.BuildLabel),
+                _id: toOid2(fissure._id, buildVersion),
                 Region: meta.systemIndex + 1,
                 Seed: 1337,
                 Activation:
                     fissure.Activation.getTime() < Date.now() // Activation is in the past?
-                        ? toMongoDate2(1000000000000, worldState.BuildLabel) // Let the client know 'explicitly' to avoid interference from time constraints.
-                        : toMongoDate2(fissure.Activation, worldState.BuildLabel),
-                Expiry: toMongoDate2(fissure.Expiry, worldState.BuildLabel),
+                        ? toMongoDate2(1000000000000, buildVersion) // Let the client know 'explicitly' to avoid interference from time constraints.
+                        : toMongoDate2(fissure.Activation, buildVersion),
+                Expiry: toMongoDate2(fissure.Expiry, buildVersion),
                 Node: fissure.Node,
                 MissionType: meta.missionType,
                 Modifier: fissure.Modifier,
@@ -4972,34 +4614,31 @@ export const populateFissures = async (worldState: IWorldState): Promise<void> =
         const meta = ExportRegions[fissure.Node];
         if (
             (meta.faction == "FC_MITW" || fissure.Modifier == "VoidT6") &&
-            version_compare(worldState.BuildLabel, gameToBuildVersion["35.5.0"]) < 0
+            buildVersion < gameToBuildVersionInt["35.5.0"]
         ) {
             return false;
         }
-        if (fissure.Hard && version_compare(worldState.BuildLabel, gameToBuildVersion["32.0.0"]) < 0) {
+        if (fissure.Hard && buildVersion < gameToBuildVersionInt["32.0.0"]) {
             return false;
         }
-        if (meta.systemIndex == 16 && version_compare(worldState.BuildLabel, gameToBuildVersion["29.0.0"]) < 0) {
+        if (meta.systemIndex == 16 && buildVersion < gameToBuildVersionInt["29.0.0"]) {
             return false;
         }
-        if (fissure.Modifier == "VoidT5" && version_compare(worldState.BuildLabel, gameToBuildVersion["26.0.0"]) < 0) {
+        if (fissure.Modifier == "VoidT5" && buildVersion < gameToBuildVersionInt["26.0.0"]) {
             return false;
         }
-        if (
-            fissure.MissionType == "MT_ARTIFACT" &&
-            version_compare(worldState.BuildLabel, gameToBuildVersion["25.7.0"]) < 0
-        ) {
+        if (fissure.MissionType == "MT_ARTIFACT" && buildVersion < gameToBuildVersionInt["25.7.0"]) {
             return false;
         }
         if (
             meta.systemIndex == 17 &&
-            version_compare(worldState.BuildLabel, gameToBuildVersion["18.0.2"]) < 0 // Should be 18.0.0
+            buildVersion < gameToBuildVersionInt["18.0.2"] // Should be 18.0.0
         ) {
             return false;
         }
         return true;
     });
-    if (version_compare(worldState.BuildLabel, gameToBuildVersion["32.0.0"]) < 0) {
+    if (buildVersion < gameToBuildVersionInt["32.0.0"]) {
         for (const fissure of worldState.ActiveMissions) {
             delete fissure.Hard;
         }
@@ -5007,17 +4646,15 @@ export const populateFissures = async (worldState: IWorldState): Promise<void> =
 };
 
 export const populateDailyDeal = async (worldState: IWorldState): Promise<void> => {
+    const buildVersion = buildVersionToInt(worldState.BuildLabel);
     const dailyDeals = await DailyDeal.find({});
     for (const dailyDeal of dailyDeals) {
         const meta = darvoDeals.find(d => d.StoreItem == dailyDeal.StoreItem);
-        if (
-            (!meta || version_compare(worldState.BuildLabel, meta.minBuildLabel) >= 0) &&
-            dailyDeal.Expiry.getTime() > Date.now()
-        ) {
+        if ((!meta || buildVersion >= meta.minBuildVersionInt) && dailyDeal.Expiry.getTime() > Date.now()) {
             worldState.DailyDeals.push({
                 StoreItem: dailyDeal.StoreItem,
-                Activation: toMongoDate2(dailyDeal.Activation, worldState.BuildLabel),
-                Expiry: toMongoDate2(dailyDeal.Expiry, worldState.BuildLabel),
+                Activation: toMongoDate2(dailyDeal.Activation, buildVersion),
+                Expiry: toMongoDate2(dailyDeal.Expiry, buildVersion),
                 Discount: dailyDeal.Discount,
                 OriginalPrice: dailyDeal.OriginalPrice,
                 SalePrice: dailyDeal.SalePrice,
@@ -5108,7 +4745,7 @@ export const getLiteSortie = (week: number): ILiteSortie => {
     };
 };
 
-const getEndlessXpChoices = (week: number, buildVersionInt: number): IEndlessXpChoice[] => {
+const getEndlessXpChoices = (week: number, buildVersion: number): IEndlessXpChoice[] => {
     const normalChoices = [
         ["Nidus", "Octavia", "Harrow"],
         ["Gara", "Khora", "Revenant"],
@@ -5130,7 +4767,7 @@ const getEndlessXpChoices = (week: number, buildVersionInt: number): IEndlessXpC
         ["AckAndBrunt", "Soma", "Vasto", "NamiSolo", "Burston"],
         ["Zylok", "Sibear", "Dread", "Despair", "Hate"],
         ["Dera", "Sybaris", "Cestra", "Sicarus", "Okina"],
-        ...(buildVersionInt >= gameToBuildVersionInt["43.0.0"]
+        ...(buildVersion >= gameToBuildVersionInt["43.0.0"]
             ? [["Vectis", "Stug", "Ballistica", "Destreza", "Obex"]]
             : []),
         ["Braton", "Lato", "Skana", "Paris", "Kunai"]
@@ -5158,7 +4795,7 @@ export const isArchwingMission = (node: IRegion): boolean => {
     return false;
 };
 
-export const getNightwaveSyndicateTag = (buildLabel: string = BL_LATEST): string | undefined => {
+export const getNightwaveSyndicateTag = (buildVersion: number = BV_LATEST): string | undefined => {
     if (config.worldState?.nightwaveOverride) {
         if (config.worldState.nightwaveOverride in nightwaveTagToSeason) {
             return config.worldState.nightwaveOverride;
@@ -5171,59 +4808,59 @@ export const getNightwaveSyndicateTag = (buildLabel: string = BL_LATEST): string
             valid_values: Object.keys(nightwaveTagToSeason)
         });
     }
-    if (version_compare(buildLabel, gameToBuildVersion["42.0.6"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["42.0.6"]) {
         return "RadioLegionIntermission15Syndicate";
     }
-    if (version_compare(buildLabel, gameToBuildVersion["40.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["40.0.0"]) {
         return "RadioLegionIntermission14Syndicate";
     }
-    if (version_compare(buildLabel, gameToBuildVersion["38.6.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["38.6.0"]) {
         return "RadioLegionIntermission13Syndicate";
     }
-    if (version_compare(buildLabel, gameToBuildVersion["38.0.8"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["38.0.8"]) {
         return "RadioLegionIntermission12Syndicate";
     }
-    if (version_compare(buildLabel, gameToBuildVersion["36.1.2"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["36.1.2"]) {
         return "RadioLegionIntermission11Syndicate";
     }
-    if (version_compare(buildLabel, gameToBuildVersion["35.5.9"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["35.5.9"]) {
         return "RadioLegionIntermission10Syndicate";
     }
-    if (version_compare(buildLabel, gameToBuildVersion["34.0.8"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["34.0.8"]) {
         return "RadioLegionIntermission9Syndicate";
     }
     // Actual version is U33.0.11
-    if (version_compare(buildLabel, gameToBuildVersion["33.0.10"]) > 0) {
+    if (buildVersion > gameToBuildVersionInt["33.0.10"]) {
         return "RadioLegionIntermission8Syndicate";
     }
-    if (version_compare(buildLabel, gameToBuildVersion["32.2.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["32.2.0"]) {
         return "RadioLegionIntermission7Syndicate";
     }
-    if (version_compare(buildLabel, gameToBuildVersion["31.6.4"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["31.6.4"]) {
         return "RadioLegionIntermission6Syndicate";
     }
-    if (version_compare(buildLabel, gameToBuildVersion["31.2.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["31.2.0"]) {
         return "RadioLegionIntermission5Syndicate";
     }
-    if (version_compare(buildLabel, gameToBuildVersion["30.6.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["30.6.0"]) {
         return "RadioLegionIntermission4Syndicate";
     }
-    if (version_compare(buildLabel, gameToBuildVersion["29.7.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["29.7.0"]) {
         return "RadioLegionIntermission3Syndicate";
     }
-    if (version_compare(buildLabel, gameToBuildVersion["28.3.2"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["28.3.2"]) {
         return "RadioLegion3Syndicate";
     }
-    if (version_compare(buildLabel, gameToBuildVersion["25.8.2"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["25.8.2"]) {
         return "RadioLegionIntermission2Syndicate";
     }
-    if (version_compare(buildLabel, gameToBuildVersion["25.3.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["25.3.0"]) {
         return "RadioLegion2Syndicate";
     }
-    if (version_compare(buildLabel, gameToBuildVersion["25.1.2"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["25.1.2"]) {
         return "RadioLegionIntermissionSyndicate";
     }
-    if (version_compare(buildLabel, gameToBuildVersion["24.3.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["24.3.0"]) {
         return "RadioLegionSyndicate";
     }
     return undefined;
@@ -5526,7 +5163,7 @@ const alertDurationMultipliers = new Map<string, number>([
     ["/Lotus/Types/Items/MiscItems/Eventium", 2]
 ]);
 
-const getVersionAppropriateHelmet = (helmetPath: string, buildLabel: string): string => {
+const getVersionAppropriateHelmet = (helmetPath: string, buildVersion: number): string => {
     let isStore = false;
     let typePath = helmetPath;
     if (helmetPath.startsWith("/Lotus/StoreItems/")) {
@@ -5534,7 +5171,7 @@ const getVersionAppropriateHelmet = (helmetPath: string, buildLabel: string): st
         typePath = "/Lotus/" + helmetPath.substring("/Lotus/StoreItems/".length);
     }
 
-    const isPreU13_2_3 = version_compare(buildLabel, gameToBuildVersion["13.2.3"]) < 0; // arcane helmets were available until U13.2.3
+    const isPreU13_2_3 = buildVersion < gameToBuildVersionInt["13.2.3"]; // arcane helmets were available until U13.2.3
     let resultPath = typePath;
 
     if (isPreU13_2_3) {
@@ -5557,7 +5194,7 @@ const getVersionAppropriateHelmet = (helmetPath: string, buildLabel: string): st
     return isStore ? toStoreItem(resultPath) : resultPath;
 };
 
-const getEligibleAlertNodes = (regions: Record<string, IRegion>, buildLabel: string): string[] => {
+const getEligibleAlertNodes = (regions: Record<string, IRegion>, buildVersion: number): string[] => {
     const eligibleNodes: string[] = [];
     const validMissionTypes = new Set([
         "MT_SURVIVAL",
@@ -5577,7 +5214,7 @@ const getEligibleAlertNodes = (regions: Record<string, IRegion>, buildLabel: str
     const validFactions = new Set(["FC_GRINEER", "FC_CORPUS", "FC_INFESTATION", "FC_CORRUPTED", "FC_OROKIN"]);
 
     for (const [nodeId, nodeData] of Object.entries(regions)) {
-        if (!isRegionAvailableIn(nodeId, nodeData, buildLabel)) {
+        if (!isRegionAvailableIn(nodeId, nodeData, buildVersion)) {
             continue;
         }
         if (!nodeId.startsWith("SolNode") && !nodeId.startsWith("SettlementNode")) {
@@ -5731,30 +5368,30 @@ const alertDescTexts: Record<string, string[] | undefined> = {
     MT_EXCAVATE: ["/Lotus/Language/Alerts/IntelDesc4", "/Lotus/Language/Alerts/IntelDesc22"]
 };
 
-const getFilteredAlertHelmets = (buildLabel: string): string[] => {
+const getFilteredAlertHelmets = (buildVersion: number): string[] => {
     return alertHelmets.filter(helmet => {
-        if (helmet.includes("BardAlt")) return version_compare(buildLabel, gameToBuildVersion["20.0.0"]) >= 0;
-        if (helmet.includes("NidusAlt")) return version_compare(buildLabel, gameToBuildVersion["19.5.3"]) >= 0;
-        if (helmet.includes("FairyAlt")) return version_compare(buildLabel, gameToBuildVersion["19.0.1"]) >= 0;
-        if (helmet.includes("WukongAlt")) return version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0;
-        if (helmet.includes("BrawlerAlt")) return version_compare(buildLabel, gameToBuildVersion["17.7.1"]) >= 0;
-        if (helmet.includes("SandmanAlt")) return version_compare(buildLabel, gameToBuildVersion["18.5.0"]) >= 0;
-        if (helmet.includes("NezhaAlt")) return version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0;
-        if (helmet.includes("RangerAlt")) return version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0;
-        if (helmet.includes("AnimaAlt")) return version_compare(buildLabel, gameToBuildVersion["17.7.1"]) >= 0;
+        if (helmet.includes("BardAlt")) return buildVersion >= gameToBuildVersionInt["20.0.0"];
+        if (helmet.includes("NidusAlt")) return buildVersion >= gameToBuildVersionInt["19.5.3"];
+        if (helmet.includes("FairyAlt")) return buildVersion >= gameToBuildVersionInt["19.0.1"];
+        if (helmet.includes("WukongAlt")) return buildVersion >= gameToBuildVersionInt["18.0.2"];
+        if (helmet.includes("BrawlerAlt")) return buildVersion >= gameToBuildVersionInt["17.7.1"];
+        if (helmet.includes("SandmanAlt")) return buildVersion >= gameToBuildVersionInt["18.5.0"];
+        if (helmet.includes("NezhaAlt")) return buildVersion >= gameToBuildVersionInt["18.0.2"];
+        if (helmet.includes("RangerAlt")) return buildVersion >= gameToBuildVersionInt["18.0.2"];
+        if (helmet.includes("AnimaAlt")) return buildVersion >= gameToBuildVersionInt["17.7.1"];
         if (helmet.includes("ChromaAlt") || helmet.includes("DragonAlt"))
-            return version_compare(buildLabel, gameToBuildVersion["16.0.2"]) >= 0;
+            return buildVersion >= gameToBuildVersionInt["16.0.2"];
         if (helmet.includes("MesaAlt") || helmet.includes("CowgirlAlt"))
-            return version_compare(buildLabel, gameToBuildVersion["15.5.0"]) >= 0;
+            return buildVersion >= gameToBuildVersionInt["15.5.0"];
         if (helmet.includes("LimboAlt") || helmet.includes("LimboAristeas"))
-            return version_compare(buildLabel, gameToBuildVersion["15.0.0"]) >= 0;
+            return buildVersion >= gameToBuildVersionInt["15.0.0"];
         if (helmet.includes("HarlequinAlt") || helmet.includes("MirageAlt"))
-            return version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0;
-        if (helmet.includes("PirateAlt")) return version_compare(buildLabel, gameToBuildVersion["13.0.0"]) >= 0;
-        if (helmet.includes("Zephyr")) return version_compare(buildLabel, gameToBuildVersion["12.1.2"]) >= 0;
-        if (helmet.includes("Oberon")) return version_compare(buildLabel, gameToBuildVersion["11.1.3"]) >= 0;
-        if (helmet.includes("Valkyr")) return version_compare(buildLabel, gameToBuildVersion["11.1.3"]) >= 0;
-        if (helmet.includes("Vauban")) return version_compare(buildLabel, gameToBuildVersion["8.0.0"]) >= 0;
+            return buildVersion >= gameToBuildVersionInt["14.0.0"];
+        if (helmet.includes("PirateAlt")) return buildVersion >= gameToBuildVersionInt["13.0.0"];
+        if (helmet.includes("Zephyr")) return buildVersion >= gameToBuildVersionInt["12.1.2"];
+        if (helmet.includes("Oberon")) return buildVersion >= gameToBuildVersionInt["11.1.3"];
+        if (helmet.includes("Valkyr")) return buildVersion >= gameToBuildVersionInt["11.1.3"];
+        if (helmet.includes("Vauban")) return buildVersion >= gameToBuildVersionInt["8.0.0"];
         return true;
     });
 };
@@ -5763,7 +5400,7 @@ const generateSeededAlert = (
     alertIndex: number,
     eligibleNodes: string[],
     usedNodes: Set<string>,
-    buildLabel: string,
+    buildVersion: number,
     regions: Record<string, IRegion>
 ): IAlert | undefined => {
     const seed = new SRng(alertIndex * 2654435761).randomInt(0, 100_000);
@@ -5775,8 +5412,8 @@ const generateSeededAlert = (
     const nodeId = rng.randomElement(availableNodes)!;
     const nodeData = regions[nodeId];
 
-    const isPreU14 = version_compare(buildLabel, gameToBuildVersion["14.0.0"]) < 0;
-    const isPostU18 = version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0;
+    const isPreU14 = buildVersion < gameToBuildVersionInt["14.0.0"];
+    const isPostU18 = buildVersion >= gameToBuildVersionInt["18.0.2"];
     const isArch = isArchwingMission(nodeData);
 
     const factions: TFaction[] = isArch ? ["FC_GRINEER", "FC_CORPUS"] : ["FC_GRINEER", "FC_CORPUS", "FC_INFESTATION"];
@@ -5851,35 +5488,32 @@ const generateSeededAlert = (
     let isNightmare = false;
 
     const filteredStdRes = [...alertStandardResources];
-    if (version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["14.0.0"]) {
         filteredStdRes.push({ path: "/Lotus/Types/Items/MiscItems/ArgonCrystal", qty: 1 });
     }
-    if (version_compare(buildLabel, gameToBuildVersion["10.8.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["10.8.0"]) {
         filteredStdRes.push({ path: "/Lotus/Types/Items/MiscItems/OxiumAlloy", qty: 300 });
     }
-    if (version_compare(buildLabel, gameToBuildVersion["15.5.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["15.5.0"]) {
         filteredStdRes.push({ path: "/Lotus/Types/Items/MiscItems/Tellurium", qty: 1 });
     }
 
     const filteredSpecRes: { path: string; qty: number }[] = [];
-    if (version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["14.0.0"]) {
         filteredSpecRes.push({ path: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg", qty: 1 });
     }
-    if (version_compare(buildLabel, gameToBuildVersion["18.5.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["18.5.0"]) {
         filteredSpecRes.push({ path: "/Lotus/Types/Game/CatbrowPet/CatbrowGeneticSignature", qty: 5 });
     }
-    if (version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["14.0.0"]) {
         filteredSpecRes.push({ path: "/Lotus/Types/Items/MiscItems/Eventium", qty: 5 });
     }
-    if (version_compare(buildLabel, gameToBuildVersion["17.12.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["17.12.0"]) {
         filteredSpecRes.push({ path: "/Lotus/Types/Items/MiscItems/Alertium", qty: 1 });
     }
-    if (version_compare(buildLabel, gameToBuildVersion["18.13.3"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["18.13.3"]) {
         filteredSpecRes.push({ path: "/Lotus/Types/Items/MiscItems/VoidTearDrop", qty: 20 });
     }
-
-    const hasNightmare = version_compare(buildLabel, gameToBuildVersion["9.1.0"]) >= 0;
-    const hasExcavate = version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0;
 
     const categories: { name: string; weight: number }[] = [
         { name: "CREDITS", weight: 60 },
@@ -5890,9 +5524,9 @@ const generateSeededAlert = (
         { name: "AURAS", weight: 18 },
         { name: "OROKIN_BP", weight: 4 }
     ];
-    if (hasNightmare) categories.push({ name: "NIGHTMARE_MODS", weight: 30 });
+    if (buildVersion >= gameToBuildVersionInt["9.1.0"]) categories.push({ name: "NIGHTMARE_MODS", weight: 30 });
     if (filteredSpecRes.length > 0) categories.push({ name: "SPECIAL_RESOURCES", weight: 10 });
-    if (version_compare(buildLabel, gameToBuildVersion["7.11.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["7.11.0"]) {
         categories.push({ name: "VAUBAN_PARTS", weight: 7 });
     }
 
@@ -5921,7 +5555,7 @@ const generateSeededAlert = (
             break;
         }
         case "ENDO": {
-            const isPreU19 = version_compare(buildLabel, gameToBuildVersion["19.0.1"]) < 0;
+            const isPreU19 = buildVersion < gameToBuildVersionInt["19.0.1"];
             const endoRoll = rng.randomInt(0, 99);
             if (isPreU19) {
                 let corePath = "/Lotus/Upgrades/Mods/FusionCores/CoreClassCommonThree";
@@ -5957,7 +5591,7 @@ const generateSeededAlert = (
             break;
         }
         case "ALT_HELMETS": {
-            const filteredHelmets = getFilteredAlertHelmets(buildLabel);
+            const filteredHelmets = getFilteredAlertHelmets(buildVersion);
             const helmet = rng.randomElement(filteredHelmets)!;
             rewardItems = [toStoreItem(helmet)];
             break;
@@ -6006,14 +5640,14 @@ const generateSeededAlert = (
     const descTexts = alertDescTexts[missionType];
     const descText = isPreU14 && descTexts ? rng.randomElement(descTexts) : undefined;
 
-    if (!hasExcavate && missionType === "MT_EXCAVATE") {
+    if (buildVersion < gameToBuildVersionInt["14.0.0"] && missionType === "MT_EXCAVATE") {
         return undefined;
     }
 
     const alert: IAlert = {
-        _id: toOid2(oid, buildLabel),
-        Activation: toMongoDate2(activation, buildLabel),
-        Expiry: toMongoDate2(expiry, buildLabel),
+        _id: toOid2(oid, buildVersion),
+        Activation: toMongoDate2(activation, buildVersion),
+        Expiry: toMongoDate2(expiry, buildVersion),
         MissionInfo: {
             location: nodeId,
             missionType: missionType,
@@ -6040,13 +5674,13 @@ const generateSeededAlert = (
 
 export const populateAlerts = async (worldState: IWorldState): Promise<void> => {
     const buildLabel = worldState.BuildLabel;
+    const buildVersion = buildVersionToInt(buildLabel);
     if (
         config.worldState?.classicAlerts ??
-        (version_compare(buildLabel, gameToBuildVersion["5.1.0"]) >= 0 &&
-            version_compare(buildLabel, gameToBuildVersion["24.3.0"]) < 0) // alerts were retired with U24.3.0
+        (buildVersion >= gameToBuildVersionInt["5.1.0"] && buildVersion < gameToBuildVersionInt["24.3.0"]) // alerts were retired with U24.3.0
     ) {
         const regions = await getRegions(buildLabel);
-        const validNodes = getEligibleAlertNodes(regions, buildLabel);
+        const validNodes = getEligibleAlertNodes(regions, buildVersion);
 
         if (validNodes.length === 0) return;
 
@@ -6056,7 +5690,7 @@ export const populateAlerts = async (worldState: IWorldState): Promise<void> => 
         const usedNodes = new Set<string>();
 
         for (let idx = currentAlertIndex - 8; idx <= currentAlertIndex + 1; idx++) {
-            const alert = generateSeededAlert(idx, validNodes, usedNodes, buildLabel, regions);
+            const alert = generateSeededAlert(idx, validNodes, usedNodes, buildVersion, regions);
             if (alert) {
                 const activationTime =
                     "$date" in alert.Activation
@@ -6068,13 +5702,13 @@ export const populateAlerts = async (worldState: IWorldState): Promise<void> => 
                 if (timeMs >= activationTime && timeMs < expiryTime) {
                     usedNodes.add(alert.MissionInfo.location);
 
-                    const isPreU14 = version_compare(buildLabel, gameToBuildVersion["14.0.0"]) < 0;
+                    const isPreU14 = buildVersion < gameToBuildVersionInt["14.0.0"];
                     if (alert.MissionInfo.missionReward) {
                         if (alert.MissionInfo.missionReward.items) {
                             alert.MissionInfo.missionReward.items = alert.MissionInfo.missionReward.items.map(item => {
                                 let processedItem = item;
                                 if (processedItem.includes("/Recipes/Helmets/")) {
-                                    processedItem = getVersionAppropriateHelmet(processedItem, buildLabel);
+                                    processedItem = getVersionAppropriateHelmet(processedItem, buildVersion);
                                 }
 
                                 if (isPreU14) {
@@ -6085,7 +5719,7 @@ export const populateAlerts = async (worldState: IWorldState): Promise<void> => 
                                         return `/Lotus/Types/Recipes/WarframeRecipes/${filename}StoreItem`;
                                     }
 
-                                    const isPreU13 = version_compare(buildLabel, gameToBuildVersion["13.0.0"]) < 0;
+                                    const isPreU13 = buildVersion < gameToBuildVersionInt["13.0.0"];
                                     if (filename === "FormaBlueprint") {
                                         if (isPreU13) {
                                             return "/Lotus/Types/StoreItems/Recipes/OrokinCatalystBlueprintStoreItem";
@@ -6176,9 +5810,9 @@ const pushConclaveDaily = (
     }[],
     day: number,
     id: number,
-    buildLabel: string
+    buildVersion: number
 ): void => {
-    if (version_compare(buildLabel, gameToBuildVersion["18.0.2"]) < 0) {
+    if (buildVersion < gameToBuildVersionInt["18.0.2"]) {
         PVPMode = PVPMode.replace("PVPMODE_", "");
     }
     const conclaveDayStart = EPOCH + day * unixTimesInMs.day + 5 * unixTimesInMs.hour + 30 * unixTimesInMs.minute;
@@ -6199,10 +5833,10 @@ const pushConclaveDaily = (
         activeChallenges.some(x => x.PVPMode == PVPMode)
     );
     activeChallenges.push({
-        _id: toOid2("689ec5d985b55902" + challengeId.toString().padStart(8, "0"), buildLabel),
+        _id: toOid2("689ec5d985b55902" + challengeId.toString().padStart(8, "0"), buildVersion),
         challengeTypeRefID: challenge.key,
-        startDate: toMongoDate2(conclaveDayStart, buildLabel),
-        endDate: toMongoDate2(conclaveDayEnd, buildLabel),
+        startDate: toMongoDate2(conclaveDayStart, buildVersion),
+        endDate: toMongoDate2(conclaveDayEnd, buildVersion),
         params: [{ n: "ScriptParamValue", v: challenge.ScriptParamValue }],
         isGenerated: true,
         PVPMode,
@@ -6211,10 +5845,10 @@ const pushConclaveDaily = (
     });
 };
 
-const pushConclaveDailys = (activeChallenges: IPVPChallengeInstance[], day: number, buildLabel: string): void => {
+const pushConclaveDailys = (activeChallenges: IPVPChallengeInstance[], day: number, buildVersion: number): void => {
     const modes = ["PVPMODE_CAPTURETHEFLAG", "PVPMODE_DEATHMATCH", "PVPMODE_TEAMDEATHMATCH"];
     // closest known version to Update: Lunaro
-    if (version_compare(buildLabel, gameToBuildVersion["18.13.3"]) > 0) {
+    if (buildVersion > gameToBuildVersionInt["18.13.3"]) {
         modes.push("PVPMODE_SPEEDBALL");
     }
     const challengesMap: Record<
@@ -6235,22 +5869,22 @@ const pushConclaveDailys = (activeChallenges: IPVPChallengeInstance[], day: numb
     }
 
     modes.forEach((mode, index) => {
-        pushConclaveDaily(activeChallenges, mode, challengesMap[mode], day, index * 2, buildLabel);
-        pushConclaveDaily(activeChallenges, mode, challengesMap[mode], day, index * 2 + 1, buildLabel);
+        pushConclaveDaily(activeChallenges, mode, challengesMap[mode], day, index * 2, buildVersion);
+        pushConclaveDaily(activeChallenges, mode, challengesMap[mode], day, index * 2 + 1, buildVersion);
     });
 };
 
-const pushConclaveWeekly = (activeChallenges: IPVPChallengeInstance[], week: number, buildLabel: string): void => {
+const pushConclaveWeekly = (activeChallenges: IPVPChallengeInstance[], week: number, buildVersion: number): void => {
     const weekStart = EPOCH + week * unixTimesInMs.week;
     const conclaveWeekStart = weekStart + 40 * unixTimesInMs.minute - 2 * unixTimesInMs.day;
     const conclaveWeekEnd = conclaveWeekStart + unixTimesInMs.week;
     const conclaveIdStart = ((conclaveWeekStart / 1000) & 0xffffffff).toString(16).padStart(8, "0").padEnd(23, "0");
     activeChallenges.push(
         {
-            _id: toOid2(conclaveIdStart + "1", buildLabel),
+            _id: toOid2(conclaveIdStart + "1", buildVersion),
             challengeTypeRefID: "/Lotus/PVPChallengeTypes/PVPTimedChallengeGameModeWins",
-            startDate: toMongoDate2(conclaveWeekStart, buildLabel),
-            endDate: toMongoDate2(conclaveWeekEnd, buildLabel),
+            startDate: toMongoDate2(conclaveWeekStart, buildVersion),
+            endDate: toMongoDate2(conclaveWeekEnd, buildVersion),
             params: [{ n: "ScriptParamValue", v: 6 }],
             isGenerated: true,
             PVPMode: "PVPMODE_ALL",
@@ -6258,10 +5892,10 @@ const pushConclaveWeekly = (activeChallenges: IPVPChallengeInstance[], week: num
             Category: "PVPChallengeTypeCategory_WEEKLY"
         },
         {
-            _id: toOid2(conclaveIdStart + "2", buildLabel),
+            _id: toOid2(conclaveIdStart + "2", buildVersion),
             challengeTypeRefID: "/Lotus/PVPChallengeTypes/PVPTimedChallengeGameModeComplete",
-            startDate: toMongoDate2(conclaveWeekStart, buildLabel),
-            endDate: toMongoDate2(conclaveWeekEnd, buildLabel),
+            startDate: toMongoDate2(conclaveWeekStart, buildVersion),
+            endDate: toMongoDate2(conclaveWeekEnd, buildVersion),
             params: [{ n: "ScriptParamValue", v: 20 }],
             isGenerated: true,
             PVPMode: "PVPMODE_ALL",
@@ -6269,10 +5903,10 @@ const pushConclaveWeekly = (activeChallenges: IPVPChallengeInstance[], week: num
             Category: "PVPChallengeTypeCategory_WEEKLY"
         },
         {
-            _id: toOid2(conclaveIdStart + "3", buildLabel),
+            _id: toOid2(conclaveIdStart + "3", buildVersion),
             challengeTypeRefID: "/Lotus/PVPChallengeTypes/PVPTimedChallengeOtherChallengeCompleteANY",
-            startDate: toMongoDate2(conclaveWeekStart, buildLabel),
-            endDate: toMongoDate2(conclaveWeekEnd, buildLabel),
+            startDate: toMongoDate2(conclaveWeekStart, buildVersion),
+            endDate: toMongoDate2(conclaveWeekEnd, buildVersion),
             params: [{ n: "ScriptParamValue", v: 10 }],
             isGenerated: true,
             PVPMode: "PVPMODE_ALL",
@@ -6280,35 +5914,35 @@ const pushConclaveWeekly = (activeChallenges: IPVPChallengeInstance[], week: num
             Category: "PVPChallengeTypeCategory_WEEKLY"
         },
         {
-            _id: toOid2(conclaveIdStart + "4", buildLabel),
+            _id: toOid2(conclaveIdStart + "4", buildVersion),
             challengeTypeRefID: "/Lotus/PVPChallengeTypes/PVPTimedChallengeWeeklyStandardSet",
-            startDate: toMongoDate2(conclaveWeekStart, buildLabel),
-            endDate: toMongoDate2(conclaveWeekEnd, buildLabel),
+            startDate: toMongoDate2(conclaveWeekStart, buildVersion),
+            endDate: toMongoDate2(conclaveWeekEnd, buildVersion),
             params: [{ n: "ScriptParamValue", v: 0 }],
             isGenerated: true,
             PVPMode: "PVPMODE_NONE",
             subChallenges: [
-                toOid2(conclaveIdStart + "1", buildLabel),
-                toOid2(conclaveIdStart + "2", buildLabel),
-                toOid2(conclaveIdStart + "3", buildLabel)
+                toOid2(conclaveIdStart + "1", buildVersion),
+                toOid2(conclaveIdStart + "2", buildVersion),
+                toOid2(conclaveIdStart + "3", buildVersion)
             ],
             Category: "PVPChallengeTypeCategory_WEEKLY_ROOT"
         }
     );
 };
 
-const pushGoalAlerts = (ws: IWorldState, tag: string, buildLabel: string): void => {
+const pushGoalAlerts = (ws: IWorldState, tag: string, buildVersion: number): void => {
     const genMeta = alertGeneratorConfig[tag];
     const neededAlerts = genMeta.alertLength / genMeta.alertInterval;
     const currentAlertIndex = Math.floor((ws.Time * 1000 - EPOCH) / genMeta.alertInterval);
     for (let i = 0; i <= neededAlerts; i++) {
-        ws.Alerts.push(generateGoalAlert(tag, currentAlertIndex - i, ws.Alerts, buildLabel));
+        ws.Alerts.push(generateGoalAlert(tag, currentAlertIndex - i, ws.Alerts, buildVersion));
     }
 };
 
-const generateGoalAlert = (tag: string, alertIdx: number, wsAlerts: IAlert[], buildLabel: string): IAlert => {
+const generateGoalAlert = (tag: string, alertIdx: number, wsAlerts: IAlert[], buildVersion: number): IAlert => {
     const genMeta = alertGeneratorConfig[tag];
-    const defenseWavesPerRotation = version_compare(buildLabel, gameToBuildVersion["38.5.0"]) < 0 ? 5 : 3;
+    const defenseWavesPerRotation = buildVersion < gameToBuildVersionInt["38.5.0"] ? 5 : 3;
     const activation = EPOCH + alertIdx * genMeta.alertInterval;
     const expiry = activation + genMeta.alertLength;
     const tagHash = catBreadHash(tag);
@@ -6392,23 +6026,23 @@ export const populateFeaturedGuilds = async (worldState: IWorldState): Promise<v
 
 const pushFlashSales = (
     ws: IWorldState,
-    storeItems: (Partial<IFlashSale> & { TypeName: string; minBuildLabel?: string })[],
+    storeItems: IFlashSaleData[],
     startDate: number | Date,
     endDate: number | Date,
     category: string,
-    buildLabel: string
+    buildVersion: number
 ): void => {
     const filteredItems = storeItems.filter(
-        item => !item.minBuildLabel || version_compare(buildLabel, item.minBuildLabel) >= 0
+        item => !item.minBuildVersionInt || buildVersion >= item.minBuildVersionInt
     );
 
     ws.FlashSales.push(
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        ...filteredItems.map(({ minBuildLabel, ...item }) => ({
+        ...filteredItems.map(({ minBuildVersionInt, ...item }) => ({
             ...item,
-            StartDate: toMongoDate2(startDate, buildLabel),
-            EndDate: toMongoDate2(endDate, buildLabel),
-            ProductExpiryOverride: toMongoDate2(endDate, buildLabel),
+            StartDate: toMongoDate2(startDate, buildVersion),
+            EndDate: toMongoDate2(endDate, buildVersion),
+            ProductExpiryOverride: toMongoDate2(endDate, buildVersion),
             // Defaulting all of this is probably not needed, but might be needed for Market 2.0 (pre-U25):
             ShowInMarket: item.ShowInMarket ?? true,
             HideFromMarket: item.HideFromMarket ?? false,

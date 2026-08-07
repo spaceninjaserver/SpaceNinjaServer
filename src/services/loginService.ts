@@ -19,7 +19,8 @@ import { logger } from "../utils/logger.ts";
 import { version_compare } from "../helpers/inventoryHelpers.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import { OAuth2Client } from "google-auth-library";
-import { BL_LATEST } from "../constants/gameVersions.ts";
+import { BL_LATEST, BV_LATEST } from "../constants/gameVersions.ts";
+import { buildVersionToInt } from "../helpers/versionHelper.ts";
 
 export const isCorrectPassword = (requestPassword: string, databasePassword: string): boolean => {
     return requestPassword === databasePassword;
@@ -163,6 +164,14 @@ export const getBuildLabel = (req: Request, account: Pick<TAccountDocument, "Bui
         return BL_LATEST; // WebUI
     } else {
         return account.BuildLabel!; // loginController guarantees that a buildLabel is set for game clients.
+    }
+};
+
+export const getBuildVersion = (req: Request, account: Pick<TAccountDocument, "BuildLabel">): number => {
+    if ("wsid" in req.query) {
+        return BV_LATEST; // WebUI
+    } else {
+        return buildVersionToInt(account.BuildLabel!);
     }
 };
 

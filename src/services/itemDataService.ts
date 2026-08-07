@@ -77,6 +77,7 @@ import { logger } from "../utils/logger.ts";
 import { version_compare } from "../helpers/inventoryHelpers.ts";
 import vorsPrizePreU40Rewards from "../../static/fixed_responses/vorsPrizePreU40Rewards.json" with { type: "json" };
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../constants/gameToBuildVersionInt.ts";
 import { getWorldState } from "./worldStateService.ts";
 import { promises as fs } from "fs";
 import path from "path";
@@ -4498,9 +4499,9 @@ export const getRegions = async (buildLabel: string): Promise<Record<string, IRe
     return ExportRegions;
 };
 
-export const isRegionAvailableIn = (key: string, value: IRegion, buildLabel: string): boolean => {
+export const isRegionAvailableIn = (key: string, value: IRegion, buildVersion: number): boolean => {
     // Zeipel, Lua (Rescue)
-    if (version_compare(buildLabel, gameToBuildVersion["32.2.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["32.2.0"]) {
         return true;
     }
     if (key == "SolNode307") {
@@ -4508,7 +4509,7 @@ export const isRegionAvailableIn = (key: string, value: IRegion, buildLabel: str
     }
 
     // Apollo, Lua (Disruption)
-    if (version_compare(buildLabel, gameToBuildVersion["25.7.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["25.7.0"]) {
         return true;
     }
     if (key == "SolNode308") {
@@ -4516,7 +4517,7 @@ export const isRegionAvailableIn = (key: string, value: IRegion, buildLabel: str
     }
 
     // Kuva Fortress
-    if (version_compare(buildLabel, gameToBuildVersion["19.0.1"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["19.0.1"]) {
         return true;
     }
     if (value.systemIndex == 18) {
