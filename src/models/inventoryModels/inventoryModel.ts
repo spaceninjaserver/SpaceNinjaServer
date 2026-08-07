@@ -1444,7 +1444,7 @@ const nemesisSchema = new Schema<INemesisDatabase>(
         d: { type: Date, required: true },
         PrevOwners: { type: Number, required: true },
         SecondInCommand: { type: Boolean, required: true },
-        Weakened: { type: Boolean, required: true },
+        Weakened: { type: Boolean, default: false },
         InfNodes: { type: [infNodeSchema], required: true },
         HenchmenKilled: { type: Number, default: 0 },
         HintProgress: { type: Number, default: 0 },
