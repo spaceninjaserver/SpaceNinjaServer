@@ -2761,6 +2761,12 @@ const baro: IBaro = {
             PrimePrice: 550,
             RegularPrice: 100000,
             minBuildVersionInt: gameToBuildVersionInt["42.0.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Sentinels/Skins/ExilisHelios",
+            PrimePrice: 300,
+            RegularPrice: 170000,
+            minBuildVersionInt: gameToBuildVersionInt["41.1.0"]
         }
     ],
     allIfAny: [
