@@ -1671,6 +1671,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         relicPlatinumBonusCommon: Number,
         relicPlatinumBonusUncommon: Number,
         relicPlatinumBonusRare: Number,
+        teralystCapturePlatinumBonus: Number,
+        gantulystCapturePlatinumBonus: Number,
+        hydrolystCapturePlatinumBonus: Number,
         nightwaveStandingMultiplier: Number,
 
         Created: Date,

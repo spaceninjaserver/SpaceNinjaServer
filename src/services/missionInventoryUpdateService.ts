@@ -1739,6 +1739,42 @@ export const addMissionRewards = async (
                     si.DROP_MOD = si.DROP_MISC_ITEM;
                     si.DROP_MISC_ITEM = undefined;
                 }
+                if (
+                    si.DropTable == "/Lotus/Types/DropTables/EidolonDropTables/TeralystCapturedDropTable" &&
+                    si.DROP_MOD &&
+                    inventory.teralystCapturePlatinumBonus != null &&
+                    inventory.teralystCapturePlatinumBonus > 0
+                ) {
+                    inventory.pendingPremiumCredits ??= 0;
+                    inventory.pendingPremiumCredits += inventory.teralystCapturePlatinumBonus * si.DROP_MOD.length;
+                    logger.debug(
+                        `captured x${si.DROP_MOD.length} teralyst, gave ${inventory.teralystCapturePlatinumBonus * si.DROP_MOD.length} platinum`
+                    );
+                }
+                if (
+                    si.DropTable == "/Lotus/Types/DropTables/EidolonDropTables/TeralystBigCapturedDropTable" &&
+                    si.DROP_MOD &&
+                    inventory.gantulystCapturePlatinumBonus != null &&
+                    inventory.gantulystCapturePlatinumBonus > 0
+                ) {
+                    inventory.pendingPremiumCredits ??= 0;
+                    inventory.pendingPremiumCredits += inventory.gantulystCapturePlatinumBonus * si.DROP_MOD.length;
+                    logger.debug(
+                        `captured x${si.DROP_MOD.length} gantulyst, gave ${inventory.gantulystCapturePlatinumBonus * si.DROP_MOD.length} platinum`
+                    );
+                }
+                if (
+                    si.DropTable == "/Lotus/Types/DropTables/EidolonDropTables/TeralystRainCapturedDropTable" &&
+                    si.DROP_MOD &&
+                    inventory.hydrolystCapturePlatinumBonus != null &&
+                    inventory.hydrolystCapturePlatinumBonus > 0
+                ) {
+                    inventory.pendingPremiumCredits ??= 0;
+                    inventory.pendingPremiumCredits += inventory.hydrolystCapturePlatinumBonus * si.DROP_MOD.length;
+                    logger.debug(
+                        `captured x${si.DROP_MOD.length} hydrolist, gave ${inventory.hydrolystCapturePlatinumBonus * si.DROP_MOD.length} platinum`
+                    );
+                }
                 const droptables = ExportEnemies.droptables[si.DropTable] ?? [];
                 if (si.DROP_MOD) {
                     const modDroptable = droptables.find(x => x.type == "mod");

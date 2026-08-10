@@ -99,6 +99,9 @@ export const accountCheatNumbers = [
     "relicPlatinumBonusCommon",
     "relicPlatinumBonusUncommon",
     "relicPlatinumBonusRare",
+    "teralystCapturePlatinumBonus",
+    "gantulystCapturePlatinumBonus",
+    "hydrolystCapturePlatinumBonus",
     "nightwaveStandingMultiplier"
 ] as const;
 
