@@ -103,7 +103,9 @@ import type {
     IHybridFusionTreasure,
     IWeeklyGuildVaultBonus,
     IWeekGuildVaultBonusReward,
-    IMiscAccountData
+    IMiscAccountData,
+    INemesisBaseClient,
+    INemesisBaseDatabase
 } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IOid, ITypeCount } from "../../types/commonTypes.ts";
@@ -1434,18 +1436,18 @@ const nemesisSchema = new Schema<INemesisDatabase>(
         KillingSuit: { type: String, required: true },
         killingDamageType: { type: Number, required: true },
         ShoulderHelmet: { type: String, required: true },
-        WeaponIdx: { type: Number, required: true },
-        AgentIdx: { type: Number, required: true },
+        WeaponIdx: { type: Number, default: -1 },
+        AgentIdx: { type: Number, default: 0 },
         BirthNode: { type: String, required: true },
         Faction: { type: String, default: "FC_GRINEER" },
         Rank: { type: Number, default: 0 },
         k: { type: Boolean, default: false },
         Traded: { type: Boolean, default: false },
         d: { type: Date, required: true },
-        PrevOwners: { type: Number, required: true },
-        SecondInCommand: { type: Boolean, required: true },
+        PrevOwners: { type: Number, default: 0 },
+        SecondInCommand: { type: Boolean, default: false },
         Weakened: { type: Boolean, default: false },
-        InfNodes: { type: [infNodeSchema], required: true },
+        InfNodes: { type: [infNodeSchema], default: [] },
         HenchmenKilled: { type: Number, default: 0 },
         HintProgress: { type: Number, default: 0 },
         Hints: { type: [Number], default: [] },
@@ -1461,6 +1463,41 @@ nemesisSchema.set("toJSON", {
     transform(_doc, obj: Record<string, any>) {
         const db = obj as INemesisDatabase;
         const client = obj as INemesisClient;
+
+        client.d = toMongoDate(db.d);
+
+        delete obj._id;
+        delete obj.__v;
+    }
+});
+
+const nemesisHistorySchema = new Schema<INemesisBaseDatabase>(
+    {
+        fp: { type: BigInt, required: true },
+        manifest: { type: String, required: true },
+        KillingSuit: { type: String, required: true },
+        killingDamageType: { type: Number, required: true },
+        ShoulderHelmet: { type: String, required: true },
+        WeaponIdx: { type: Number, default: -1 },
+        AgentIdx: { type: Number, default: 0 },
+        BirthNode: { type: String, required: true },
+        Faction: { type: String, default: "FC_GRINEER" },
+        Rank: { type: Number, default: 0 },
+        k: { type: Boolean, default: false },
+        Traded: { type: Boolean, default: false },
+        d: { type: Date, required: true },
+        PrevOwners: { type: Number, default: 0 },
+        SecondInCommand: { type: Boolean, default: false },
+        Weakened: { type: Boolean, default: false }
+    },
+    { _id: false }
+);
+
+nemesisHistorySchema.set("toJSON", {
+    virtuals: true,
+    transform(_doc, obj: Record<string, any>) {
+        const db = obj as INemesisBaseDatabase;
+        const client = obj as INemesisBaseClient;
 
         client.d = toMongoDate(db.d);
 
@@ -1963,7 +2000,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         //CorpusLich or GrineerLich
         NemesisAbandonedRewards: { type: [String], default: [] },
         Nemesis: nemesisSchema,
-        NemesisHistory: { type: [nemesisSchema], default: undefined },
+        NemesisHistory: { type: [nemesisHistorySchema], default: undefined },
         LastNemesisAllySpawnTime: { type: Date, default: undefined },
         NemesisTaxedCredits: Number,
 
