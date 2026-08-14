@@ -508,7 +508,8 @@ export const getInventoryResponse = async (
         }
     }
 
-    if (inventory.universalPolarityEverywhere) {
+    if (inventory.universalPolarityEverywhere && version_compare(buildLabel, gameToBuildVersion["24.4.0"]) >= 0) {
+        // Apparently AP_ANY already existed in U24.4
         const Polarity: IPolarity[] = [];
         // 12 is needed for necramechs. 15 is needed for plexus/crewshipharness.
         for (let i = 0; i != 15; ++i) {
