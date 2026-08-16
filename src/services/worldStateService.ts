@@ -4808,6 +4808,9 @@ export const getNightwaveSyndicateTag = (buildVersion: number = BV_LATEST): stri
             valid_values: Object.keys(nightwaveTagToSeason)
         });
     }
+    if (buildVersion >= gameToBuildVersionInt["43.5.0"]) {
+        return "RadioLegionIntermission16Syndicate";
+    }
     if (buildVersion >= gameToBuildVersionInt["42.0.6"]) {
         return "RadioLegionIntermission15Syndicate";
     }
@@ -4867,6 +4870,7 @@ export const getNightwaveSyndicateTag = (buildVersion: number = BV_LATEST): stri
 };
 
 export const nightwaveTagToSeason: Record<string, number> = {
+    RadioLegionIntermission16Syndicate: 18, // Amir's Shockwave
     RadioLegionIntermission15Syndicate: 17, // Nora's Mix: Time Tempests
     RadioLegionIntermission14Syndicate: 16, // Nora's Mix: Dreams of the Dead
     RadioLegionIntermission13Syndicate: 15, // Nora's Mix Vol. 9
@@ -4888,6 +4892,7 @@ export const nightwaveTagToSeason: Record<string, number> = {
 };
 
 export const nightwaveTagToSeasonName: Record<string, string> = {
+    RadioLegionIntermission16Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceThirteenSeasonTitle",
     RadioLegionIntermission15Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceTwelveSeasonTitle",
     RadioLegionIntermission14Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceElevenSeasonTitle",
     RadioLegionIntermission13Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceTenSeasonTitle",
@@ -4909,6 +4914,7 @@ export const nightwaveTagToSeasonName: Record<string, string> = {
 };
 
 const nightwaveTagToActivation: Record<string, number> = {
+    RadioLegionIntermission16Syndicate: 1786548600000,
     RadioLegionIntermission15Syndicate: 1775662200000,
     RadioLegionIntermission14Syndicate: 1761589199000
 };
