@@ -166,18 +166,22 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 }
             }
 
-            if (payload.Weapon.UnlockLevel && payload.Weapon.UnlockLevel > 0) {
-                const item = inventory[payload.Category].id(itemId)!;
-                item.Features ??= 0;
-                item.Features |= eEquipmentFeatures.DOUBLE_CAPACITY;
-                updatePlatinum(inventory, 20);
-            }
-            if (payload.Weapon.UpgradeNodes != undefined) {
-                const item = inventory[payload.Category].id(itemId)!;
-                item.UpgradeNodes = payload.Weapon.UpgradeNodes;
-            }
-            if (payload.Cost) {
-                updateCredits(inventory, payload.Cost);
+            if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) < 0) {
+                if (version_compare(buildLabel, gameToBuildVersion["5.3.0"]) < 0) {
+                    if (payload.Weapon.UnlockLevel && payload.Weapon.UnlockLevel > 0) {
+                        const item = inventory[payload.Category].id(itemId)!;
+                        item.Features ??= 0;
+                        item.Features |= eEquipmentFeatures.DOUBLE_CAPACITY;
+                        updatePlatinum(inventory, 20);
+                    }
+                }
+                if (payload.Weapon.UpgradeNodes != undefined) {
+                    const item = inventory[payload.Category].id(itemId)!;
+                    item.UpgradeNodes = payload.Weapon.UpgradeNodes;
+                }
+                if (payload.Cost) {
+                    updateCredits(inventory, payload.Cost);
+                }
             }
 
             await inventory.save();
