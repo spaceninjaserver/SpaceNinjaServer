@@ -5147,8 +5147,7 @@ const alertNightmareMods = [
 
 const alertOrokinBP = [
     "/Lotus/Types/Recipes/Components/OrokinCatalystBlueprint",
-    "/Lotus/Types/Recipes/Components/OrokinReactorBlueprint",
-    "/Lotus/Types/Recipes/Components/FormaBlueprint"
+    "/Lotus/Types/Recipes/Components/OrokinReactorBlueprint"
 ];
 
 const alertDurationMultipliers = new Map<string, number>([
@@ -5502,6 +5501,11 @@ export const generateSeededAlert = async (alertIndex: number, buildVersion: numb
         filteredSpecRes.push({ path: "/Lotus/Types/Items/MiscItems/VoidTearDrop", qty: 20 });
     }
 
+    const filteredOrkinBP = [...alertOrokinBP];
+    if (buildVersion >= gameToBuildVersionInt["13.0.0"]) {
+        filteredOrkinBP.push("/Lotus/Types/Recipes/Components/FormaBlueprint");
+    }
+
     const categories: { name: string; weight: number }[] = [
         { name: "CREDITS", weight: 60 },
         { name: "STANDARD_RESOURCES", weight: 120 },
@@ -5600,7 +5604,7 @@ export const generateSeededAlert = async (alertIndex: number, buildVersion: numb
             break;
         }
         case "OROKIN_BP": {
-            const specialBP = rng.randomElement(alertOrokinBP)!;
+            const specialBP = rng.randomElement(filteredOrkinBP)!;
             rewardItems = [toStoreItem(specialBP)];
             break;
         }
@@ -5677,13 +5681,8 @@ export const populateAlerts = async (worldState: IWorldState): Promise<void> => 
                         const isPreU13 = buildVersion < gameToBuildVersionInt["13.0.0"];
 
                         const itemMapping: Record<string, string> = {
-                            "/Lotus/StoreItems/Types/Recipes/Components/FormaBlueprint": isPreU13
-                                ? "/Lotus/Types/StoreItems/Recipes/OrokinCatalystBlueprintStoreItem"
-                                : "/Lotus/Types/Recipes/Components/FormaBlueprintStoreItem",
-
-                            "/Lotus/StoreItems/Types/Items/MiscItems/Forma": isPreU13
-                                ? "/Lotus/Types/StoreItems/Recipes/OrokinCatalystStoreItem"
-                                : "/Lotus/Types/Recipes/Components/FormaStoreItem",
+                            "/Lotus/StoreItems/Types/Recipes/Components/FormaBlueprint":
+                                "/Lotus/Types/Recipes/Components/FormaBlueprintStoreItem",
 
                             "/Lotus/StoreItems/Types/Recipes/Components/OrokinReactorBlueprint": isPreU13
                                 ? "/Lotus/Types/StoreItems/Recipes/OrokinReactorBlueprintStoreItem"
