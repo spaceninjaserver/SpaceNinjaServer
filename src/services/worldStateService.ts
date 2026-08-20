@@ -5515,11 +5515,9 @@ export const generateSeededAlert = async (alertIndex: number, buildVersion: numb
         { name: "AURAS", weight: 18 },
         { name: "OROKIN_BP", weight: 4 }
     ];
+    if (buildVersion >= gameToBuildVersionInt["7.11.0"]) categories.push({ name: "VAUBAN_PARTS", weight: 7 });
     if (buildVersion >= gameToBuildVersionInt["9.1.0"]) categories.push({ name: "NIGHTMARE_MODS", weight: 30 });
-    if (filteredSpecRes.length > 0) categories.push({ name: "SPECIAL_RESOURCES", weight: 10 });
-    if (buildVersion >= gameToBuildVersionInt["7.11.0"]) {
-        categories.push({ name: "VAUBAN_PARTS", weight: 7 });
-    }
+    if (buildVersion >= gameToBuildVersionInt["14.0.0"]) categories.push({ name: "SPECIAL_RESOURCES", weight: 10 });
 
     let totalWeight = 0;
     for (const cat of categories) {
