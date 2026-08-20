@@ -102,7 +102,8 @@ import {
     idToDay,
     idToWeek,
     pushClassicBounties,
-    populateAlerts
+    populateAlerts,
+    generateSeededAlert
 } from "./worldStateService.ts";
 import { config, shouldDoServerQol } from "./configService.ts";
 import libraryDailyTasks from "../../static/fixed_responses/libraryDailyTasks.json" with { type: "json" };
@@ -1252,8 +1253,12 @@ export const addMissionRewards = async (
 
     if (rewardInfo.alertId) {
         const worldState = getWorldState(buildLabel);
-        await populateAlerts(worldState);
-        const alert = worldState.Alerts.find(x => fromOid(x._id) == rewardInfo.alertId);
+        let alert = worldState.Alerts.find(x => fromOid(x._id) == rewardInfo.alertId);
+        if (!alert && rewardInfo.alertId.slice(8, 12) == "a1e4") {
+            const alertIndex = parseInt(rewardInfo.alertId.slice(-7), 16);
+            alert = await generateSeededAlert(alertIndex, buildVersionToInt(buildLabel));
+        }
+
         if (!alert) {
             logger.warn(`mission completed unknown alert`, { alertId: rewardInfo.alertId });
         } else {
