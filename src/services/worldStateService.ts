@@ -5673,38 +5673,34 @@ export const populateAlerts = async (worldState: IWorldState): Promise<void> => 
             const expiryTime = fromMongoDate(alert.Expiry).getTime();
 
             if (timeMs >= activationTime && timeMs < expiryTime) {
-                if (alert.MissionInfo.missionReward) {
-                    if (alert.MissionInfo.missionReward.items) {
-                        const isPreU14 = buildVersion < gameToBuildVersionInt["14.0.0"];
-                        const isPreU13 = buildVersion < gameToBuildVersionInt["13.0.0"];
+                if (alert.MissionInfo.missionReward && alert.MissionInfo.missionReward.items) {
+                    const itemMapping: Record<string, string> = {
+                        "/Lotus/StoreItems/Types/Recipes/Components/FormaBlueprint":
+                            "/Lotus/Types/Recipes/Components/FormaBlueprintStoreItem",
 
-                        const itemMapping: Record<string, string> = {
-                            "/Lotus/StoreItems/Types/Recipes/Components/FormaBlueprint":
-                                "/Lotus/Types/Recipes/Components/FormaBlueprintStoreItem",
-
-                            "/Lotus/StoreItems/Types/Recipes/Components/OrokinReactorBlueprint": isPreU13
+                        "/Lotus/StoreItems/Types/Recipes/Components/OrokinReactorBlueprint":
+                            buildVersion < gameToBuildVersionInt["13.0.0"]
                                 ? "/Lotus/Types/StoreItems/Recipes/OrokinReactorBlueprintStoreItem"
                                 : "/Lotus/Types/Recipes/Components/OrokinReactorBlueprintStoreItem",
 
-                            "/Lotus/StoreItems/Types/Recipes/Components/OrokinCatalystBlueprint":
-                                "/Lotus/Types/StoreItems/Recipes/OrokinCatalystBlueprintStoreItem"
-                        };
+                        "/Lotus/StoreItems/Types/Recipes/Components/OrokinCatalystBlueprint":
+                            "/Lotus/Types/StoreItems/Recipes/OrokinCatalystBlueprintStoreItem"
+                    };
 
-                        alert.MissionInfo.missionReward.items = alert.MissionInfo.missionReward.items.map(item => {
-                            if (!isPreU14) return item;
-                            if (item in itemMapping) {
-                                return itemMapping[item];
-                            }
-                            const filename = item.split("/").pop()!;
-                            if (item.startsWith("/Lotus/StoreItems/Recipes/WarframeRecipes/")) {
-                                return `/Lotus/Types/Recipes/WarframeRecipes/${filename}StoreItem`;
-                            }
-                            if (item.endsWith("Blueprint")) {
-                                return `/Lotus/Types/StoreItems/Recipes/${filename}StoreItem`;
-                            }
-                            return item;
-                        });
-                    }
+                    alert.MissionInfo.missionReward.items = alert.MissionInfo.missionReward.items.map(item => {
+                        if (!(buildVersion < gameToBuildVersionInt["14.0.0"])) return item;
+                        if (item in itemMapping) {
+                            return itemMapping[item];
+                        }
+                        const filename = item.split("/").pop()!;
+                        if (item.startsWith("/Lotus/StoreItems/Recipes/WarframeRecipes/")) {
+                            return `/Lotus/Types/Recipes/WarframeRecipes/${filename}StoreItem`;
+                        }
+                        if (item.endsWith("Blueprint")) {
+                            return `/Lotus/Types/StoreItems/Recipes/${filename}StoreItem`;
+                        }
+                        return item;
+                    });
                 }
 
                 activeAlerts.push(alert);
