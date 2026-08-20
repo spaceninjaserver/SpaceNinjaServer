@@ -5211,7 +5211,7 @@ const getEligibleAlertNodes = (regions: Record<string, IRegion>, buildVersion: n
         "MT_SABOTAGE",
         "MT_RACE"
     ]);
-    const validFactions = new Set(["FC_GRINEER", "FC_CORPUS", "FC_INFESTATION", "FC_CORRUPTED", "FC_OROKIN"]);
+    const validFactions = new Set(["FC_GRINEER", "FC_CORPUS", "FC_INFESTATION", "FC_OROKIN"]);
 
     for (const [nodeId, nodeData] of Object.entries(regions)) {
         if (!isRegionAvailableIn(nodeId, nodeData, buildVersion)) {
@@ -5408,10 +5408,7 @@ export const generateSeededAlert = async (alertIndex: number, buildVersion: numb
     const isArch = isArchwingMission(nodeData);
 
     const factions: TFaction[] = isArch ? ["FC_GRINEER", "FC_CORPUS"] : ["FC_GRINEER", "FC_CORPUS", "FC_INFESTATION"];
-    let faction: TFaction = rng.randomInt(0, 9) < 7 ? (nodeData.faction as TFaction) : rng.randomElement(factions)!;
-    if (faction === "FC_OROKIN" && buildVersion >= gameToBuildVersionInt["18.0.2"]) {
-        faction = "FC_CORRUPTED" as TFaction;
-    }
+    const faction: TFaction = rng.randomInt(0, 9) < 7 ? (nodeData.faction as TFaction) : rng.randomElement(factions)!;
 
     const missionTypes: TMissionType[] = [
         "MT_SURVIVAL",
@@ -5449,7 +5446,6 @@ export const generateSeededAlert = async (alertIndex: number, buildVersion: numb
     if (missionType !== nodeData.missionType || faction !== nodeData.faction) {
         let foundEnemySpec: string | undefined = undefined;
         let foundExtraEnemySpec: string | undefined = undefined;
-        const searchFaction = (faction as string) === "FC_CORRUPTED" ? "FC_OROKIN" : faction;
 
         if (isArch) {
             const targetTileset =
@@ -5458,7 +5454,7 @@ export const generateSeededAlert = async (alertIndex: number, buildVersion: numb
         }
 
         if (!foundEnemySpec) {
-            const nodes = Object.values(regions).filter(node => node.faction == searchFaction && node.enemySpec);
+            const nodes = Object.values(regions).filter(node => node.faction == faction && node.enemySpec);
             const node = nodes.find(node => node.missionType == missionType) ?? nodes[0];
 
             foundEnemySpec = node.enemySpec;
@@ -5583,7 +5579,7 @@ export const generateSeededAlert = async (alertIndex: number, buildVersion: numb
         }
         case "ALT_HELMETS": {
             const filteredHelmets = getFilteredAlertHelmets(buildVersion);
-            const helmet = rng.randomElement(filteredHelmets)!;
+            const helmet = getVersionAppropriateHelmet(rng.randomElement(filteredHelmets)!, buildVersion);
             rewardItems = [toStoreItem(helmet)];
             break;
         }
@@ -5675,86 +5671,42 @@ export const populateAlerts = async (worldState: IWorldState): Promise<void> => 
             const expiryTime = fromMongoDate(alert.Expiry).getTime();
 
             if (timeMs >= activationTime && timeMs < expiryTime) {
-                const isPreU14 = buildVersion < gameToBuildVersionInt["14.0.0"];
                 if (alert.MissionInfo.missionReward) {
                     if (alert.MissionInfo.missionReward.items) {
+                        const isPreU14 = buildVersion < gameToBuildVersionInt["14.0.0"];
+                        const isPreU13 = buildVersion < gameToBuildVersionInt["13.0.0"];
+
+                        const itemMapping: Record<string, string> = {
+                            "/Lotus/StoreItems/Types/Recipes/Components/FormaBlueprint": isPreU13
+                                ? "/Lotus/Types/StoreItems/Recipes/OrokinCatalystBlueprintStoreItem"
+                                : "/Lotus/Types/Recipes/Components/FormaBlueprintStoreItem",
+
+                            "/Lotus/StoreItems/Types/Items/MiscItems/Forma": isPreU13
+                                ? "/Lotus/Types/StoreItems/Recipes/OrokinCatalystStoreItem"
+                                : "/Lotus/Types/Recipes/Components/FormaStoreItem",
+
+                            "/Lotus/StoreItems/Types/Recipes/Components/OrokinReactorBlueprint": isPreU13
+                                ? "/Lotus/Types/StoreItems/Recipes/OrokinReactorBlueprintStoreItem"
+                                : "/Lotus/Types/Recipes/Components/OrokinReactorBlueprintStoreItem",
+
+                            "/Lotus/StoreItems/Types/Recipes/Components/OrokinCatalystBlueprint":
+                                "/Lotus/Types/StoreItems/Recipes/OrokinCatalystBlueprintStoreItem"
+                        };
+
                         alert.MissionInfo.missionReward.items = alert.MissionInfo.missionReward.items.map(item => {
-                            let processedItem = item;
-                            if (processedItem.includes("/Recipes/Helmets/")) {
-                                processedItem = getVersionAppropriateHelmet(processedItem, buildVersion);
+                            if (!isPreU14) return item;
+                            if (item in itemMapping) {
+                                return itemMapping[item];
                             }
-
-                            if (isPreU14) {
-                                const parts = processedItem.split("/");
-                                const filename = parts[parts.length - 1];
-
-                                if (processedItem.includes("/Recipes/WarframeRecipes/")) {
-                                    return `/Lotus/Types/Recipes/WarframeRecipes/${filename}StoreItem`;
-                                }
-
-                                const isPreU13 = buildVersion < gameToBuildVersionInt["13.0.0"];
-                                if (filename === "FormaBlueprint") {
-                                    if (isPreU13) {
-                                        return "/Lotus/Types/StoreItems/Recipes/OrokinCatalystBlueprintStoreItem";
-                                    }
-                                    return "/Lotus/Types/Recipes/Components/FormaBlueprintStoreItem";
-                                }
-                                if (filename === "Forma") {
-                                    if (isPreU13) {
-                                        return "/Lotus/Types/StoreItems/Recipes/OrokinCatalystStoreItem";
-                                    }
-                                    return "/Lotus/Types/Recipes/Components/FormaStoreItem";
-                                }
-                                if (filename === "OrokinReactorBlueprint") {
-                                    if (isPreU13) {
-                                        return "/Lotus/Types/StoreItems/Recipes/OrokinReactorBlueprintStoreItem";
-                                    }
-                                    return "/Lotus/Types/Recipes/Components/OrokinReactorBlueprintStoreItem";
-                                }
-                                if (filename === "OrokinCatalystBlueprint") {
-                                    return "/Lotus/Types/StoreItems/Recipes/OrokinCatalystBlueprintStoreItem";
-                                }
-                                if (filename.endsWith("Blueprint")) {
-                                    return `/Lotus/Types/StoreItems/Recipes/${filename}StoreItem`;
-                                }
-                                return processedItem;
+                            const filename = item.split("/").pop()!;
+                            if (item.startsWith("/Lotus/StoreItems/Recipes/WarframeRecipes/")) {
+                                return `/Lotus/Types/Recipes/WarframeRecipes/${filename}StoreItem`;
                             }
-
-                            return processedItem;
+                            if (item.endsWith("Blueprint")) {
+                                return `/Lotus/Types/StoreItems/Recipes/${filename}StoreItem`;
+                            }
+                            return item;
                         });
-                    }
-
-                    if (alert.MissionInfo.missionReward.countedItems) {
-                        if (isPreU14) {
-                            alert.MissionInfo.missionReward.countedItems =
-                                alert.MissionInfo.missionReward.countedItems.map(ci => {
-                                    if (ci.ItemType === "/Lotus/Types/Items/MiscItems/ArgonCrystal") {
-                                        return {
-                                            ItemType: "/Lotus/Types/Items/MiscItems/OrokinCell",
-                                            ItemCount: ci.ItemCount
-                                        };
-                                    }
-                                    if (ci.ItemType === "/Lotus/Types/Items/MiscItems/OxiumAlloy") {
-                                        return {
-                                            ItemType: "/Lotus/Types/Items/MiscItems/Gallium",
-                                            ItemCount: Math.max(1, Math.round(ci.ItemCount / 10))
-                                        };
-                                    }
-                                    if (ci.ItemType === "/Lotus/Types/Items/MiscItems/Tellurium") {
-                                        return {
-                                            ItemType: "/Lotus/Types/Items/MiscItems/Morphic",
-                                            ItemCount: ci.ItemCount
-                                        };
-                                    }
-                                    if (ci.ItemType === "/Lotus/Types/Items/MiscItems/Alertium") {
-                                        return {
-                                            ItemType: "/Lotus/Types/Items/MiscItems/Neurode",
-                                            ItemCount: ci.ItemCount
-                                        };
-                                    }
-                                    return ci;
-                                });
-                        }
                     }
                 }
 
