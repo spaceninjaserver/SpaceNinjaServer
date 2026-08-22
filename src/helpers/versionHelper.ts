@@ -7,6 +7,16 @@ export const buildLabelToVersionInt = (buildLabel: string): number => {
     return buildVersionToInt(buildLabel.split("/")[0]);
 };
 
+export const intToBuildVersion = (versionInt: number): string => {
+    const year = Math.floor(versionInt / 1_00_00_00_00);
+    const month = Math.floor(versionInt / 1_00_00_00) % 100;
+    const day = Math.floor(versionInt / 1_00_00) % 100;
+    const hour = Math.floor(versionInt / 1_00) % 100;
+    const minute = versionInt % 100;
+
+    return `${year}.${month.toString().padStart(2, "0")}.${day.toString().padStart(2, "0")}.${hour.toString().padStart(2, "0")}.${minute.toString().padStart(2, "0")}`;
+};
+
 export const wikiDateToBuildVersion = (wikiDate: number): string => {
     const date = new Date(wikiDate * 1000);
     return `${date.getUTCFullYear()}.${date.getUTCMonth()}.${date.getUTCDate()}.${date.getUTCHours()}.${date.getUTCMinutes()}`;
