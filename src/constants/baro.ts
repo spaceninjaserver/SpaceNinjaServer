@@ -2767,6 +2767,12 @@ const baro: IBaro = {
             PrimePrice: 300,
             RegularPrice: 170000,
             minBuildVersionInt: gameToBuildVersionInt["41.1.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Upgrades/Mods/Archwing/Rifle/Expert/ArchwingWeaponFreezeDamageModExpert",
+            PrimePrice: 390,
+            RegularPrice: 210000,
+            minBuildVersionInt: gameToBuildVersionInt["43.5.0"]
         }
     ],
     allIfAny: [
