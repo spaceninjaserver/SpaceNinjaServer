@@ -45,6 +45,7 @@
       "addEndo": true,
       "addDirac": true,
       "import": true,
+      "export": true,
       "toggleCheat": {
         "*": true,
         "skipAllDialogue": true

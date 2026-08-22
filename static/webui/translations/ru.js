@@ -368,7 +368,9 @@ dict = {
 
     import_importNote: `Вы можете загрузить полный или частичный ответ <code>inventory.php</code> или <code>getShip.php</code> (клиентское представление) здесь. `,
     import_importNote2: `Все поддерживаемые поля <b>будут перезаписаны</b> в вашем аккаунте.`,
+    import_importNote3: `Также вы можете использовать расположенную ниже кнопку <b>Экспорт</b>. Она сохранит полный JSON-файл под именем <code>sns-export-ID_ТВОЕГО_АККАУНТА.json</code>, который впоследствии можно будет использовать для импорта ваших данных.`,
     import_submit: `Отправить`,
+    import_export: `Экспорт`,
     import_samples: `Примеры:`,
     import_samples_maxFocus: `Все школы Фокуса макс. уровня (Фокус |VAL|)`,
     import_samples_accolades: `Акколады и доступ к чату Совета`,

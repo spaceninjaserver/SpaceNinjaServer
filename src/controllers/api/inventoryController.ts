@@ -375,7 +375,8 @@ export const getInventoryResponse = async (
     inventory: TInventoryDatabaseDocument,
     xpBasedLevelCapDisabled: boolean,
     buildLabel: string,
-    forWebui: boolean = false
+    forWebui: boolean = false,
+    forExport: boolean = false
 ): Promise<IInventoryClient> => {
     const [inventoryWithLoadOutPresets, ships, latestMessage, pendingTrades] = await Promise.all([
         inventory.populate<{ LoadOutPresets: ILoadoutDatabase }>("LoadOutPresets"),
@@ -408,178 +409,180 @@ export const getInventoryResponse = async (
         };
     }
 
-    if (inventory.infiniteCredits) {
-        inventoryResponse.RegularCredits = 999999999;
-    }
-    if (inventory.infinitePlatinum) {
-        inventoryResponse.PremiumCreditsFree = 0;
-        inventoryResponse.PremiumCredits = 999999999;
-    }
-    if (inventory.infiniteEndo) {
-        inventoryResponse.FusionPoints = 999999999;
-    }
-    if (inventory.infiniteDirac) {
-        inventoryResponse.CrewShipFusionPoints = 999999999;
-    }
-    if (inventory.infiniteRegalAya) {
-        inventoryResponse.PrimeTokens = 999999999;
-    }
-    if (inventory.infiniteRevives) {
-        for (const suit of inventoryResponse.Suits) {
-            suit.ExtraRemaining = 999999999;
+    if (!forExport) {
+        if (inventory.infiniteCredits) {
+            inventoryResponse.RegularCredits = 999999999;
         }
-    }
-    if (inventory.infiniteTrades) {
-        inventoryResponse.TradesRemaining = 9999;
-    }
-    if (inventory.infiniteGifts) {
-        inventoryResponse.GiftsRemaining = 9999;
-    }
-
-    if (inventory.skipAllDialogue) {
-        inventoryResponse.TauntHistory ??= [];
-        if (!inventoryResponse.TauntHistory.find(x => x.node == "TreasureTutorial")) {
-            inventoryResponse.TauntHistory.push({
-                node: "TreasureTutorial",
-                state: "TS_COMPLETED"
-            });
+        if (inventory.infinitePlatinum) {
+            inventoryResponse.PremiumCreditsFree = 0;
+            inventoryResponse.PremiumCredits = 999999999;
         }
-        if (!inventoryResponse.TauntHistory.find(x => x.node == "StarchartTutorial")) {
-            inventoryResponse.TauntHistory.push({
-                node: "StarchartTutorial",
-                state: "TS_COMPLETED"
-            });
+        if (inventory.infiniteEndo) {
+            inventoryResponse.FusionPoints = 999999999;
         }
-        if (!inventoryResponse.TauntHistory.find(x => x.node == "CraftingTutorial")) {
-            inventoryResponse.TauntHistory.push({
-                node: "CraftingTutorial",
-                state: "TS_COMPLETED"
-            });
+        if (inventory.infiniteDirac) {
+            inventoryResponse.CrewShipFusionPoints = 999999999;
         }
-        for (const str of allDialogue) {
-            addString(inventoryResponse.NodeIntrosCompleted, str);
+        if (inventory.infiniteRegalAya) {
+            inventoryResponse.PrimeTokens = 999999999;
         }
-    }
-
-    if (inventory.skipAllPopups) {
-        for (const str of allPopups) {
-            addString(inventoryResponse.NodeIntrosCompleted, str);
-        }
-        inventoryResponse.Settings ??= {
-            FriendInvRestriction: "GIFT_MODE_ALL",
-            GiftMode: "GIFT_MODE_ALL",
-            GuildInvRestriction: "GIFT_MODE_ALL",
-            ShowFriendInvNotifications: true,
-            TradingRulesConfirmed: false
-        };
-        inventoryResponse.Settings.TradingRulesConfirmed = true;
-        inventoryResponse.PlayedParkourTutorial = true; // Skips PoE update popup in U22
-        inventoryResponse.MadeStoryModeDecision = true; // Skips tutorial popup in U15
-        inventoryResponse.HasResetAccount = true; // In ~U10, you are asked to confirm dojo contributions 3 times because "you will forfeit your one-time reset"
-    }
-
-    if (config.worldState?.baroTennoConRelay) {
-        [
-            "/Lotus/Types/Items/Events/TennoConRelay2022EarlyAccess",
-            "/Lotus/Types/Items/Events/TennoConRelay2023EarlyAccess",
-            "/Lotus/Types/Items/Events/TennoConRelay2024EarlyAccess",
-            "/Lotus/Types/Items/Events/TennoConRelay2025EarlyAccess",
-            "/Lotus/Types/Items/Events/TennoConRelay2026EarlyAccess"
-        ].forEach(uniqueName => {
-            if (!inventoryResponse.FlavourItems.some(x => x.ItemType == uniqueName)) {
-                inventoryResponse.FlavourItems.push({ ItemType: uniqueName });
+        if (inventory.infiniteRevives) {
+            for (const suit of inventoryResponse.Suits) {
+                suit.ExtraRemaining = 999999999;
             }
-        });
-    }
+        }
+        if (inventory.infiniteTrades) {
+            inventoryResponse.TradesRemaining = 9999;
+        }
+        if (inventory.infiniteGifts) {
+            inventoryResponse.GiftsRemaining = 9999;
+        }
 
-    if (inventory.spoofMasteryRank && inventory.spoofMasteryRank >= 0) {
-        inventoryResponse.PlayerLevel = inventory.spoofMasteryRank;
-        if (!xpBasedLevelCapDisabled) {
-            // This client has not been patched to accept any mastery rank, need to fake the XP.
-            // Limiting this to MR 100 to avoid breakage: https://onlyg.it/OpenWF/SpaceNinjaServer/issues/4244
-            inventoryResponse.XPInfo = [];
-            let numFrames = getExpRequiredForMr(Math.min(inventory.spoofMasteryRank, 100)) / (30 * 200);
-            while (numFrames-- > 0) {
-                inventoryResponse.XPInfo.push({
-                    ItemType: "/Lotus/Powersuits/Mag/Mag",
-                    XP: 900_000 // Enough for rank 30 as per https://wiki.warframe.com/w/Affinity
+        if (inventory.skipAllDialogue) {
+            inventoryResponse.TauntHistory ??= [];
+            if (!inventoryResponse.TauntHistory.find(x => x.node == "TreasureTutorial")) {
+                inventoryResponse.TauntHistory.push({
+                    node: "TreasureTutorial",
+                    state: "TS_COMPLETED"
                 });
             }
+            if (!inventoryResponse.TauntHistory.find(x => x.node == "StarchartTutorial")) {
+                inventoryResponse.TauntHistory.push({
+                    node: "StarchartTutorial",
+                    state: "TS_COMPLETED"
+                });
+            }
+            if (!inventoryResponse.TauntHistory.find(x => x.node == "CraftingTutorial")) {
+                inventoryResponse.TauntHistory.push({
+                    node: "CraftingTutorial",
+                    state: "TS_COMPLETED"
+                });
+            }
+            for (const str of allDialogue) {
+                addString(inventoryResponse.NodeIntrosCompleted, str);
+            }
         }
-    }
 
-    if (inventory.universalPolarityEverywhere && version_compare(buildLabel, gameToBuildVersion["24.4.0"]) >= 0) {
-        // Apparently AP_ANY already existed in U24.4
-        const Polarity: IPolarity[] = [];
-        // 12 is needed for necramechs. 15 is needed for plexus/crewshipharness.
-        for (let i = 0; i != 15; ++i) {
-            Polarity.push({
-                Slot: i,
-                Value: "AP_ANY"
+        if (inventory.skipAllPopups) {
+            for (const str of allPopups) {
+                addString(inventoryResponse.NodeIntrosCompleted, str);
+            }
+            inventoryResponse.Settings ??= {
+                FriendInvRestriction: "GIFT_MODE_ALL",
+                GiftMode: "GIFT_MODE_ALL",
+                GuildInvRestriction: "GIFT_MODE_ALL",
+                ShowFriendInvNotifications: true,
+                TradingRulesConfirmed: false
+            };
+            inventoryResponse.Settings.TradingRulesConfirmed = true;
+            inventoryResponse.PlayedParkourTutorial = true; // Skips PoE update popup in U22
+            inventoryResponse.MadeStoryModeDecision = true; // Skips tutorial popup in U15
+            inventoryResponse.HasResetAccount = true; // In ~U10, you are asked to confirm dojo contributions 3 times because "you will forfeit your one-time reset"
+        }
+
+        if (config.worldState?.baroTennoConRelay) {
+            [
+                "/Lotus/Types/Items/Events/TennoConRelay2022EarlyAccess",
+                "/Lotus/Types/Items/Events/TennoConRelay2023EarlyAccess",
+                "/Lotus/Types/Items/Events/TennoConRelay2024EarlyAccess",
+                "/Lotus/Types/Items/Events/TennoConRelay2025EarlyAccess",
+                "/Lotus/Types/Items/Events/TennoConRelay2026EarlyAccess"
+            ].forEach(uniqueName => {
+                if (!inventoryResponse.FlavourItems.some(x => x.ItemType == uniqueName)) {
+                    inventoryResponse.FlavourItems.push({ ItemType: uniqueName });
+                }
             });
         }
-        for (const key of equipmentKeys) {
-            if (key in inventoryResponse) {
-                for (const equipment of inventoryResponse[key]) {
-                    equipment.Polarity = Polarity;
+
+        if (inventory.spoofMasteryRank && inventory.spoofMasteryRank >= 0) {
+            inventoryResponse.PlayerLevel = inventory.spoofMasteryRank;
+            if (!xpBasedLevelCapDisabled) {
+                // This client has not been patched to accept any mastery rank, need to fake the XP.
+                // Limiting this to MR 100 to avoid breakage: https://onlyg.it/OpenWF/SpaceNinjaServer/issues/4244
+                inventoryResponse.XPInfo = [];
+                let numFrames = getExpRequiredForMr(Math.min(inventory.spoofMasteryRank, 100)) / (30 * 200);
+                while (numFrames-- > 0) {
+                    inventoryResponse.XPInfo.push({
+                        ItemType: "/Lotus/Powersuits/Mag/Mag",
+                        XP: 900_000 // Enough for rank 30 as per https://wiki.warframe.com/w/Affinity
+                    });
                 }
             }
         }
-    }
 
-    if (inventory.unlockDoubleCapacityPotatoesEverywhere) {
-        for (const key of equipmentKeys) {
-            if (key in inventoryResponse) {
-                for (const equipment of inventoryResponse[key]) {
-                    equipment.Features ??= 0;
-                    equipment.Features |= eEquipmentFeatures.DOUBLE_CAPACITY;
+        if (inventory.universalPolarityEverywhere && version_compare(buildLabel, gameToBuildVersion["24.4.0"]) >= 0) {
+            // Apparently AP_ANY already existed in U24.4
+            const Polarity: IPolarity[] = [];
+            // 12 is needed for necramechs. 15 is needed for plexus/crewshipharness.
+            for (let i = 0; i != 15; ++i) {
+                Polarity.push({
+                    Slot: i,
+                    Value: "AP_ANY"
+                });
+            }
+            for (const key of equipmentKeys) {
+                if (key in inventoryResponse) {
+                    for (const equipment of inventoryResponse[key]) {
+                        equipment.Polarity = Polarity;
+                    }
                 }
             }
         }
-    }
 
-    if (inventory.unlockExilusEverywhere) {
-        for (const key of equipmentKeys) {
-            if (key in inventoryResponse) {
-                for (const equipment of inventoryResponse[key]) {
-                    equipment.Features ??= 0;
-                    equipment.Features |= eEquipmentFeatures.UTILITY_SLOT;
+        if (inventory.unlockDoubleCapacityPotatoesEverywhere) {
+            for (const key of equipmentKeys) {
+                if (key in inventoryResponse) {
+                    for (const equipment of inventoryResponse[key]) {
+                        equipment.Features ??= 0;
+                        equipment.Features |= eEquipmentFeatures.DOUBLE_CAPACITY;
+                    }
                 }
             }
         }
-    }
 
-    if (inventory.unlockArcanesEverywhere) {
-        for (const key of equipmentKeys) {
-            if (key in inventoryResponse) {
-                for (const equipment of inventoryResponse[key]) {
-                    equipment.Features ??= 0;
-                    equipment.Features |= eEquipmentFeatures.ARCANE_SLOT;
-                    equipment.Features |= eEquipmentFeatures.SECOND_ARCANE_SLOT;
+        if (inventory.unlockExilusEverywhere) {
+            for (const key of equipmentKeys) {
+                if (key in inventoryResponse) {
+                    for (const equipment of inventoryResponse[key]) {
+                        equipment.Features ??= 0;
+                        equipment.Features |= eEquipmentFeatures.UTILITY_SLOT;
+                    }
                 }
             }
         }
-    }
 
-    if (inventory.noDailyStandingLimits) {
-        const spoofedDailyAffiliation = Math.max(999_999, 16000 + inventoryResponse.PlayerLevel * 500);
-        for (const key of allDailyAffiliationKeys) {
-            inventoryResponse[key] = spoofedDailyAffiliation;
+        if (inventory.unlockArcanesEverywhere) {
+            for (const key of equipmentKeys) {
+                if (key in inventoryResponse) {
+                    for (const equipment of inventoryResponse[key]) {
+                        equipment.Features ??= 0;
+                        equipment.Features |= eEquipmentFeatures.ARCANE_SLOT;
+                        equipment.Features |= eEquipmentFeatures.SECOND_ARCANE_SLOT;
+                    }
+                }
+            }
         }
-    }
 
-    if (inventory.noDailyFocusLimit) {
-        inventoryResponse.DailyFocus = Math.max(999_999, 250000 + inventoryResponse.PlayerLevel * 5000);
-    }
+        if (inventory.noDailyStandingLimits) {
+            const spoofedDailyAffiliation = Math.max(999_999, 16000 + inventoryResponse.PlayerLevel * 500);
+            for (const key of allDailyAffiliationKeys) {
+                inventoryResponse[key] = spoofedDailyAffiliation;
+            }
+        }
 
-    if (inventoryResponse.InfestedFoundry) {
-        applyCheatsToInfestedFoundry(inventory, inventoryResponse.InfestedFoundry);
+        if (inventory.noDailyFocusLimit) {
+            inventoryResponse.DailyFocus = Math.max(999_999, 250000 + inventoryResponse.PlayerLevel * 5000);
+        }
+
+        if (inventoryResponse.InfestedFoundry) {
+            applyCheatsToInfestedFoundry(inventory, inventoryResponse.InfestedFoundry);
+        }
     }
 
     // Set 2FA enabled so trading post can be used
     inventoryResponse.HWIDProtectEnabled = true;
 
-    if (!forWebui) {
+    if (!forWebui || !forExport) {
         // Ensure numbers comfortably fit in a 32-bit integer so the client's in-memory value doesn't overflow or underflow.
         for (const obj of inventory.RawUpgrades) {
             if (obj.ItemCount > 999_999_999) {

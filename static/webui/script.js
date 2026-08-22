@@ -4667,6 +4667,27 @@ function doImport() {
     });
 }
 
+function doExport() {
+    revalidateAuthz().then(() => {
+        $.get("/custom/export?" + window.authz)
+            .then(function (data) {
+                const blob = new Blob([JSON.stringify(data, null, "\t")], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+
+                link.href = url;
+                link.download = `sns-export-${window.accountId}.json`;
+                link.click();
+
+                URL.revokeObjectURL(url);
+            })
+            .catch(function (e) {
+                toast(e.responseText, "danger");
+                console.error(e);
+            });
+    });
+}
+
 function doChangeSupportedSyndicate() {
     const uniqueName = document.getElementById("changeSyndicate").value;
 

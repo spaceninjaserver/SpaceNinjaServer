@@ -368,7 +368,9 @@ dict = {
 
     import_importNote: `您可以在此处提供完整或部分的<code>inventory.php</code>或者<code>getShip.php</code>响应(客户端表示形式).`,
     import_importNote2: `支持的所有字段<b>将被覆盖</b>到您的账户中.`,
+    import_importNote3: `[UNTRANSLATED] You can also use the <b>Export</b> button below. It will save the complete JSON as <code>sns-export-YOUR_ACCOUNTID.json</code>, which can later be used to import your data.`,
     import_submit: `提交`,
+    import_export: `[UNTRANSLATED] Export`,
     import_samples: `示例:`,
     import_samples_maxFocus: `全专精学派满级 (专精|VAL|版本)`,
     import_samples_accolades: `荣誉与议会聊天权限`,
