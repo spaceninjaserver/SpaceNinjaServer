@@ -3619,6 +3619,22 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
                 ]
             };
         }
+    } else if (uniqueName == "/Lotus/Types/Recipes/SentinelRecipes/WyrmSentinelBlueprint") {
+        // Undocumented change, might be U9.1.0
+        if (version_compare(buildLabel, gameToBuildVersion["9.1.2"]) < 0) {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ...data.ingredients[0],
+                        ItemCount: 100
+                    },
+                    data.ingredients[1],
+                    data.ingredients[2],
+                    data.ingredients[3]
+                ]
+            };
+        }
     }
 
     if (uniqueName.startsWith("/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/")) {
