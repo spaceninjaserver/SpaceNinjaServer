@@ -4559,7 +4559,7 @@ single.getRoute("#guild-route").on("beforeload", function () {
                     const allianceReq = $.get("/custom/getAlliance?guildId=" + guildId);
                     allianceReq.done(allianceData => {
                         document.getElementById("guildView-alliance").textContent =
-                            loc("guildView_alliance") + ": " + allianceData.Name;
+                            itemMap["/Lotus/Language/Clan/Clan_AllianceBtnTitle"].name + ": " + allianceData.Name;
 
                         let userAlliancePermisssions;
                         if (userGuildMember && userGuildMember.Rank <= 1) {
