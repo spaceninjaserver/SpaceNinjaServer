@@ -368,7 +368,9 @@ dict = {
 
     import_importNote: `Możesz podać pełną lub częściową odpowiedź z <code>inventory.php</code> lub <code>getShip.php</code> (reprezentacja klienta).`,
     import_importNote2: `Wszystkie pola które są wspierane przez importer <b>będą napisane</b> w twoim koncie.`,
+    import_importNote3: `[UNTRANSLATED] You can also use the <b>Export</b> button below. It will save the complete JSON as <code>sns-export-YOUR_ACCOUNTID.json</code>, which can later be used to import your data.`,
     import_submit: `Wyślij`,
+    import_export: `[UNTRANSLATED] Export`,
     import_samples: `Przykłady:`,
     import_samples_maxFocus: `Wszystkie szkoły skupienia wymaxowane (Focus |VAL|)`,
     import_samples_accolades: `Dostęp do czatu rady i wyróżnionych`,
