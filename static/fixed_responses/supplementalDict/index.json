@@ -218,5 +218,9 @@
   "/Lotus/Language/Alchemy/ArchonUpgradeWarframeDamageBoostFromRadiation",
   "/Lotus/Language/Alchemy/ArchonUpgradeWarframeToxinProcDamage",
   "/Lotus/Language/Alchemy/ArchonUpgradeWarframeRegenHPOnToxinProc",
-  "/Lotus/Language/Alchemy/ArchonUpgradeWarframeCritBoostFromHeat"
+  "/Lotus/Language/Alchemy/ArchonUpgradeWarframeCritBoostFromHeat",
+  "/Lotus/Language/Suits/StalkerTeleportName",
+  "/Lotus/Language/Suits/StalkerStunName",
+  "/Lotus/Language/Suits/StalkerSmokeScreenName",
+  "/Lotus/Language/Suits/StalkerAbsorbAbilityName"
 ]

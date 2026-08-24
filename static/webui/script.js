@@ -1003,16 +1003,6 @@ function fetchItemList() {
                         i => i.uniqueName === "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadC"
                     ).name
                 },
-                "/Lotus/Powersuits/Stalker/Stalker": {
-                    name: getAddDict("/Lotus/Language/Game/Stalker")
-                },
-                "/Lotus/Powersuits/Excalibur/DarkExcalibur": {
-                    name: loc("code_darkExcalibur").replace(
-                        "|ITEM|",
-                        data.Suits.find(i => i.uniqueName === "/Lotus/Powersuits/Excalibur/ExcaliburPrime").name
-                    ),
-                    exalted: ["/Lotus/Powersuits/Excalibur/DoomSwordCYUmbra"]
-                },
                 // U5
                 "/Lotus/Types/Game/PowerSuit": { name: loc("code_warframe") },
                 "/Lotus/Types/Game/LotusMeleeWeapon": { name: loc("code_melee") }
@@ -1154,22 +1144,18 @@ function fetchItemList() {
                                 loc("code_U5Mod").replace("|TYPE|", loc("code_melee")) + " [GrineerMeleeModule]",
                             "/Lotus/Upgrades/Modules/TennoSwordModule":
                                 loc("code_U5Mod").replace("|TYPE|", loc("code_melee")) + " [TennoSwordModule]",
-
                             "/Lotus/Upgrades/Modules/GrineerPistolModule": loc("code_U5Mod").replace(
                                 "|TYPE|",
                                 loc("code_pistol")
                             ),
-
                             "/Lotus/Upgrades/Modules/GrineerRifleModule": loc("code_U5Mod").replace(
                                 "|TYPE|",
                                 loc("code_rifle")
                             ),
-
                             "/Lotus/Upgrades/Modules/GrineerShotgunModule": loc("code_U5Mod").replace(
                                 "|TYPE|",
                                 loc("code_shotgun")
                             ),
-
                             "/Lotus/Upgrades/Modules/OrokinWarframeModule": loc("code_U5Mod").replace(
                                 "|TYPE|",
                                 loc("code_warframe")
@@ -1183,10 +1169,16 @@ function fetchItemList() {
                             //console.log(`changed ${item.uniqueName} name to path`);
                             item.name = item.uniqueName;
                         }
+                        if (item.uniqueName == "/Lotus/Powersuits/Excalibur/DarkExcalibur") {
+                            item.name = loc("code_darkExcalibur").replace(
+                                "|ITEM|",
+                                data.Suits.find(i => i.uniqueName === "/Lotus/Powersuits/Excalibur/ExcaliburPrime").name
+                            );
+                        }
                         if ("badReason" in item) {
                             if (item.badReason == "starter") {
                                 item.name = loc("code_starter").replaceAll("|MOD|", item.name);
-                            } else if (item.badReason != "notraw") {
+                            } else if (item.badReason == "frivolous") {
                                 item.name += " " + loc("code_badItem");
                             }
                         }
@@ -1232,7 +1224,7 @@ function fetchItemList() {
                                     .getElementById("datalist-" + type + "-" + item.partType.slice(5))
                                     .appendChild(option);
                             }
-                        } else if (item.badReason != "notraw") {
+                        } else if (item.badReason != "notraw" && item.badReason != "metadataPatch") {
                             let stringifier = itemToString;
                             if (nameToItems[item.name].length > 1) {
                                 stringifier = itemToStringWithSubtype;
@@ -1397,11 +1389,7 @@ async function populateInventoryRoute() {
                         });
                         td.textContent = td.textContent.slice(0, -1) + " ]";
                     }
-                    if (
-                        ["/Lotus/Powersuits/Stalker/Stalker", "/Lotus/Powersuits/Excalibur/DarkExcalibur"].includes(
-                            item.ItemType
-                        )
-                    ) {
+                    if (itemMap[item.ItemType]?.badReason == "metadataPatch") {
                         td.textContent += " ";
                         const abbr = document.createElement("abbr");
                         abbr.innerHTML = icons.note;

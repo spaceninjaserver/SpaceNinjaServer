@@ -1177,6 +1177,56 @@ export const supplementalSuits: Record<string, IPowersuit> = {
         ],
         excludeFromMarket: true,
         introducedAt: 1519338301
+    },
+    "/Lotus/Powersuits/Stalker/Stalker": {
+        name: "/Lotus/Language/Game/Stalker",
+        parentName: "/Lotus/Types/Game/PowerSuits/PlayerPowerSuit",
+        description: "/Lotus/Language/Enemies/StalkerDesc",
+        icon: "/Lotus/Interface/Icons/StoreIcons/MiscItems/Stalker.png",
+        health: 455,
+        shield: 180,
+        armor: 135,
+        stamina: 3,
+        power: 100,
+        codexSecret: true,
+        masteryReq: 0,
+        longDescription: "/Lotus/Language/Enemies/StalkerDesc",
+        sprintSpeed: 1.2,
+        passiveDescription: "/Lotus/Language/Suits/StalkerPassiveAbility",
+        abilities: [
+            {
+                uniqueName: "/Lotus/Powersuits/Stalker/Abilities/StalkerTeleportToAbility",
+                name: "/Lotus/Language/Suits/StalkerTeleportName",
+                description: "/Lotus/Language/Suits/StalkerTeleportDesc",
+                icon: "/Lotus/Interface/Icons/Abilities/StalkerTeleport.png",
+                energyRequiredToActivate: 25
+            },
+            {
+                uniqueName: "/Lotus/Powersuits/Stalker/Abilities/StalkerStunAbility",
+                name: "/Lotus/Language/Suits/StalkerStunName",
+                description: "/Lotus/Language/Suits/StalkerStunDescription",
+                icon: "/Lotus/Interface/Icons/Abilities/StalkerMarkedVengeance.png",
+                energyRequiredToActivate: 50
+            },
+            {
+                uniqueName: "/Lotus/Powersuits/Stalker/Abilities/StalkerSmokeScreenAbility",
+                name: "/Lotus/Language/Suits/StalkerSmokeScreenName",
+                description: "/Lotus/Language/Suits/StalkerSmokeScreenDesc",
+                icon: "/Lotus/Interface/Icons/Abilities/StalkerSmokeScreen.png",
+                energyRequiredToActivate: 75
+            },
+            {
+                uniqueName: "/Lotus/Powersuits/Stalker/Abilities/StalkerAbsorbAbility",
+                name: "/Lotus/Language/Suits/StalkerAbsorbAbilityName",
+                description: "/Lotus/Language/Suits/StalkerAbsorbAbilityDesc",
+                icon: "/Lotus/Interface/Icons/Abilities/StalkerAbsorbProjectile.png",
+                energyRequiredToActivate: 100
+            }
+        ],
+        productCategory: "Suits",
+        variantType: "VT_NORMAL",
+        excludeFromMarket: true,
+        introducedAt: 1687359253
     }
 };
 

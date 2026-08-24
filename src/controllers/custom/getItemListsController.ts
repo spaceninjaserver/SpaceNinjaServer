@@ -6,6 +6,7 @@ import {
     getString,
     supplementalKeys,
     supplementalRecipes,
+    supplementalSuits,
     supplementalUpgrades,
     U5Modules
 } from "../../services/itemDataService.ts";
@@ -48,7 +49,7 @@ interface ListedItem {
     subtype?: string;
     fusionLimit?: number;
     exalted?: readonly string[];
-    badReason?: "starter" | "frivolous" | "notraw";
+    badReason?: "starter" | "frivolous" | "notraw" | "metadataPatch";
     partType?: string;
     chainLength?: number;
     parazon?: boolean;
@@ -177,13 +178,14 @@ const getItemListsController: RequestHandler = (req, response) => {
         ...Object.values(ExportDojoRecipes.rooms).flatMap(r => r.ingredients.map(i => i.ItemType)),
         ...Object.values(ExportDojoRecipes.decos).flatMap(d => d.ingredients.map(i => i.ItemType))
     ]);
-    for (const [uniqueName, item] of Object.entries(ExportWarframes)) {
+    for (const [uniqueName, item] of Object.entries({ ...ExportWarframes, ...supplementalSuits })) {
         if (item.productCategory != "SpecialItems") {
             res[item.productCategory].push({
                 uniqueName,
                 name: getString(item.name, lang),
                 exalted: item.exalted,
-                maxLevelCap: item.maxLevelCap
+                maxLevelCap: item.maxLevelCap,
+                badReason: uniqueName in supplementalSuits ? "metadataPatch" : undefined
             });
         }
         item.abilities.forEach(ability => {
