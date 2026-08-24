@@ -3557,31 +3557,6 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
                 data.ingredients[0].ItemType = "/Lotus/Types/Items/MiscItems/ControlModule";
             }
         }
-    } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/HuntingBowBlueprint") {
-        // There was an undocumented change to this recipe's ingredients sometime between 8.3.0 and 9.1.2...
-        if (version_compare(buildLabel, gameToBuildVersion["9.1.2"]) < 0) {
-            data = {
-                ...data,
-                ingredients: [
-                    {
-                        ItemType: "/Lotus/Types/Items/MiscItems/Morphic",
-                        ItemCount: 1
-                    },
-                    {
-                        ItemType: "/Lotus/Types/Items/MiscItems/Circuits",
-                        ItemCount: 300
-                    },
-                    {
-                        ItemType: "/Lotus/Types/Items/MiscItems/PolymerBundle",
-                        ItemCount: 500
-                    },
-                    {
-                        ItemType: "/Lotus/Types/Items/MiscItems/Nanospores",
-                        ItemCount: 1250
-                    }
-                ]
-            };
-        }
     } else if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/ExcaliburBlueprint") {
         if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) < 0) {
             data = {
@@ -3603,9 +3578,33 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
                 buildTime: 259200
             };
         }
-    } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/DualAxeBlueprint") {
-        // Undocumented change, might be U9.1.0
-        if (version_compare(buildLabel, gameToBuildVersion["9.1.2"]) < 0) {
+    }
+
+    if (version_compare(buildLabel, gameToBuildVersion["9.1.2"]) < 0) {
+        // There was an undocumented change to this recipe's ingredients sometime between 8.3.0 and 9.1.2...
+        if (uniqueName == "/Lotus/Types/Recipes/Weapons/HuntingBowBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ...data.ingredients[0],
+                        ItemCount: 1
+                    },
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Circuits",
+                        ItemCount: 300
+                    },
+                    {
+                        ...data.ingredients[2],
+                        ItemCount: 500
+                    },
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 1250
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/DualAxeBlueprint") {
             data = {
                 ...data,
                 ingredients: [
@@ -3621,10 +3620,7 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
                     }
                 ]
             };
-        }
-    } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/QuadShotgunBlueprint") {
-        // Undocumented change, might be U9.1.0
-        if (version_compare(buildLabel, gameToBuildVersion["9.1.2"]) < 0) {
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/QuadShotgunBlueprint") {
             data = {
                 ...data,
                 ingredients: [
@@ -3646,10 +3642,7 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
                     }
                 ]
             };
-        }
-    } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/DarkDaggerBlueprint") {
-        // Undocumented change, might be U9.1.0
-        if (version_compare(buildLabel, gameToBuildVersion["9.1.2"]) < 0) {
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/DarkDaggerBlueprint") {
             data = {
                 ...data,
                 ingredients: [
@@ -3668,10 +3661,13 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
                     }
                 ]
             };
-        }
-    } else if (uniqueName == "/Lotus/Types/Recipes/SentinelRecipes/WyrmSentinelBlueprint") {
-        // Undocumented change, might be U9.1.0
-        if (version_compare(buildLabel, gameToBuildVersion["9.1.2"]) < 0) {
+        } else if (
+            [
+                "/Lotus/Types/Recipes/SentinelRecipes/DethCubeSentinelBlueprint",
+                "/Lotus/Types/Recipes/SentinelRecipes/ShadeSentinelBlueprint",
+                "/Lotus/Types/Recipes/SentinelRecipes/WyrmSentinelBlueprint"
+            ].includes(uniqueName)
+        ) {
             data = {
                 ...data,
                 ingredients: [
@@ -3682,6 +3678,515 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
                     data.ingredients[1],
                     data.ingredients[2],
                     data.ingredients[3]
+                ]
+            };
+        } else if (
+            [
+                "/Lotus/Types/Recipes/WarframeRecipes/AshSystemsBlueprint",
+                "/Lotus/Types/Recipes/WarframeRecipes/FrostSystemsBlueprint",
+                "/Lotus/Types/Recipes/WarframeRecipes/RhinoSystemsBlueprint"
+            ].includes(uniqueName)
+        ) {
+            data = {
+                ...data,
+                ingredients: [
+                    data.ingredients[0],
+                    data.ingredients[1],
+                    data.ingredients[2],
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 220
+                    }
+                ]
+            };
+        } else if (
+            [
+                "/Lotus/Types/Recipes/Weapons/Skins/DaggerAxeBlueprint",
+                "/Lotus/Types/Recipes/Weapons/Skins/DualDaggerAxeBlueprint"
+            ].includes(uniqueName)
+        ) {
+            data = {
+                ...data,
+                ingredients: [
+                    data.ingredients[0],
+                    data.ingredients[1],
+                    data.ingredients[2],
+                    {
+                        ...data.ingredients[3],
+                        ItemType: "/Lotus/Types/Items/MiscItems/Rubedo"
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/StrunShotgunBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ...data.ingredients[0],
+                        ItemCount: 2
+                    },
+                    {
+                        ...data.ingredients[1],
+                        ItemCount: 550
+                    },
+                    data.ingredients[2],
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/PolymerBundle",
+                        ItemCount: 50
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/StalkerBowBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ...data.ingredients[0],
+                        ItemCount: 5
+                    },
+                    {
+                        ...data.ingredients[1],
+                        ItemCount: 600
+                    },
+                    data.ingredients[2],
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Nanospores",
+                        ItemCount: 1500
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/SnipetronBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ...data.ingredients[0],
+                        ItemCount: 1
+                    },
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Circuits",
+                        ItemCount: 300
+                    },
+                    data.ingredients[2],
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 300
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/SkanaSwordBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ...data.ingredients[0],
+                        ItemCount: 1
+                    },
+                    data.ingredients[1],
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Ferrite",
+                        ItemCount: 700
+                    },
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 80
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/PolearmBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ...data.ingredients[0],
+                        ItemCount: 2
+                    },
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Salvage",
+                        ItemCount: 900
+                    },
+                    data.ingredients[2],
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 100
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/PangolinSwordBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    data.ingredients[0],
+                    data.ingredients[1],
+                    {
+                        ...data.ingredients[2],
+                        ItemType: "/Lotus/Types/Items/MiscItems/Rubedo"
+                    },
+                    data.ingredients[3]
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/MireSwordBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ...data.ingredients[0],
+                        ItemCount: 1
+                    },
+                    {
+                        ...data.ingredients[1],
+                        ItemCount: 500
+                    },
+                    {
+                        ...data.ingredients[2],
+                        ItemCount: 300
+                    },
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 75
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/MacheteBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ...data.ingredients[0],
+                        ItemCount: 2
+                    },
+                    data.ingredients[1],
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Ferrite",
+                        ItemCount: 700
+                    },
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 150
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/LatronBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ...data.ingredients[0],
+                        ItemCount: 2
+                    },
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Circuits",
+                        ItemCount: 350
+                    },
+                    data.ingredients[2],
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 250
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/KogakeBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Nanospores",
+                        ItemCount: 900
+                    },
+                    {
+                        ...data.ingredients[1],
+                        ItemCount: 2
+                    },
+                    data.ingredients[2],
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 120
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/HeatSwordBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    data.ingredients[0],
+                    data.ingredients[1],
+                    data.ingredients[2],
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 75
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/GrnStaffBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ...data.ingredients[0],
+                        ItemCount: 1
+                    },
+                    data.ingredients[1],
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Rubedo",
+                        ItemCount: 250
+                    },
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 100
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/GrnSniperRifleBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ...data.ingredients[0],
+                        ItemCount: 1
+                    },
+                    {
+                        ...data.ingredients[1],
+                        ItemCount: 300
+                    },
+                    data.ingredients[2],
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/AlloyPlate",
+                        ItemCount: 300
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/GorgonBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    data.ingredients[0],
+                    data.ingredients[1],
+                    data.ingredients[2],
+                    {
+                        ...data.ingredients[3],
+                        ItemType: "/Lotus/Types/Items/MiscItems/Rubedo"
+                    }
+                ]
+            };
+        } else if (
+            ["/Lotus/Types/Recipes/Weapons/GauntletBlueprint", "/Lotus/Types/Recipes/Weapons/FuraxBlueprint"].includes(
+                uniqueName
+            )
+        ) {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ...data.ingredients[0],
+                        ItemCount: 700
+                    },
+                    data.ingredients[1],
+                    data.ingredients[2],
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 150
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/FurisBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    data.ingredients[0],
+                    data.ingredients[1],
+                    data.ingredients[2],
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 2
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/EtherSwordBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ...data.ingredients[0],
+                        ItemCount: 1
+                    },
+                    {
+                        ...data.ingredients[1],
+                        ItemCount: 750
+                    },
+                    {
+                        ...data.ingredients[2],
+                        ItemCount: 600
+                    },
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 100
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/DualSkanaSwordBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    data.ingredients[0],
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Salvage",
+                        ItemCount: 900
+                    },
+                    data.ingredients[2],
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 80
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/DualHeatSwordBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    data.ingredients[0],
+                    data.ingredients[1],
+                    {
+                        ...data.ingredients[2],
+                        ItemCount: 850
+                    },
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/AlloyPlate",
+                        ItemCount: 80
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/DualEtherSwordBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ...data.ingredients[0],
+                        ItemCount: 2
+                    },
+                    data.ingredients[1],
+                    data.ingredients[2],
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/AlloyPlate",
+                        ItemCount: 80
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/DualCleaversBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ...data.ingredients[0],
+                        ItemCount: 3
+                    },
+                    data.ingredients[1],
+                    {
+                        ...data.ingredients[2],
+                        ItemType: "/Lotus/Types/Items/MiscItems/Ferrite"
+                    },
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 250
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/CeramicDaggerBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ...data.ingredients[0],
+                        ItemCount: 2
+                    },
+                    data.ingredients[1],
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/Rubedo",
+                        ItemCount: 300
+                    },
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 75
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/BurstonRifleBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    data.ingredients[0],
+                    data.ingredients[1],
+                    data.ingredients[2],
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 100
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/BroncoBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ...data.ingredients[0],
+                        ItemCount: 1
+                    },
+                    {
+                        ...data.ingredients[1],
+                        ItemCount: 100
+                    },
+                    data.ingredients[2],
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 100
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/BoltorBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    data.ingredients[0],
+                    {
+                        ...data.ingredients[1],
+                        ItemCount: 500
+                    },
+                    data.ingredients[2],
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 100
+                    }
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/BoltoBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    data.ingredients[0],
+                    {
+                        ItemType: "/Lotus/Types/Items/MiscItems/AlloyPlate",
+                        ItemCount: 300
+                    },
+                    {
+                        ...data.ingredients[2],
+                        ItemCount: 1
+                    },
+                    data.ingredients[3]
+                ]
+            };
+        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/AxeBlueprint") {
+            data = {
+                ...data,
+                ingredients: [
+                    data.ingredients[0],
+                    data.ingredients[1],
+                    {
+                        ...data.ingredients[2],
+                        ItemType: "/Lotus/Types/Items/MiscItems/Rubedo"
+                    },
+                    {
+                        ...data.ingredients[3],
+                        ItemCount: 80
+                    }
                 ]
             };
         }
