@@ -103,7 +103,7 @@ import {
 import type { IMessageCreationTemplate } from "./inboxService.ts";
 import { createMessage } from "./inboxService.ts";
 import { getMaxStanding, getMinStanding } from "../helpers/syndicateStandingHelper.ts";
-import { getNightwaveSyndicateTag, getWorldState } from "./worldStateService.ts";
+import { getCalendarSeason, getNightwaveSyndicateTag, getWorldState, getWorldStateTime } from "./worldStateService.ts";
 import type { ICalendarSeason } from "../types/worldStateTypes.ts";
 import type { INemesisProfile } from "../helpers/nemesisHelpers.ts";
 import { generateNemesisProfile } from "../helpers/nemesisHelpers.ts";
@@ -2787,7 +2787,9 @@ export const addChallenges = async (
         }
 
         if (Name.startsWith("Calendar")) {
-            addString(getCalendarProgress(inventory).SeasonProgress.ActivatedChallenges, Name);
+            const { week } = getWorldStateTime();
+            const currentSeason = getCalendarSeason(week);
+            addString(getCalendarProgress(inventory, currentSeason).SeasonProgress.ActivatedChallenges, Name);
         }
 
         if ((Completed?.length ?? 0) > (dbChallenge.Completed?.length ?? 0)) {
@@ -2865,8 +2867,9 @@ export const addChallenges = async (
 };
 
 export const addCalendarProgress = (inventory: TInventoryDatabaseDocument, value: { challenge: string }[]): void => {
-    const calendarProgress = getCalendarProgress(inventory);
-    const currentSeason = getWorldState().KnownCalendarSeasons[0];
+    const { week } = getWorldStateTime();
+    const currentSeason = getCalendarSeason(week);
+    const calendarProgress = getCalendarProgress(inventory, currentSeason);
     calendarProgress.SeasonProgress.LastCompletedChallengeDayIdx = currentSeason.Days.findIndex(
         day => day.events.length != 0 && day.events[0].challenge == value[value.length - 1].challenge
     );
@@ -3275,10 +3278,9 @@ export const getDialogue = (
 };
 
 export const getCalendarProgress = (
-    inventory: Pick<TInventoryDatabaseDocument, "CalendarProgress">
+    inventory: Pick<TInventoryDatabaseDocument, "CalendarProgress">,
+    currentSeason: ICalendarSeason
 ): ICalendarProgress => {
-    const currentSeason = getWorldState().KnownCalendarSeasons[0];
-
     if (!inventory.CalendarProgress) {
         inventory.CalendarProgress = {
             Version: 19,

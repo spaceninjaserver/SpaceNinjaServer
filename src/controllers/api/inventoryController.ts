@@ -66,7 +66,7 @@ import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import { DailyDeal } from "../../models/worldStateModel.ts";
 import { eEquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { generateRewardSeed } from "../../services/rngService.ts";
-import { getInvasionByOid, getWorldState } from "../../services/worldStateService.ts";
+import { getCalendarSeason, getInvasionByOid, getWorldStateTime } from "../../services/worldStateService.ts";
 import { createMessage, getInboxFilter } from "../../services/inboxService.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 import { PendingTrade } from "../../models/tradingModel.ts";
@@ -166,9 +166,11 @@ export const inventoryController: RequestHandler = async (request, response) => 
 
         const previousYearIteration = inventory.CalendarProgress?.Iteration;
 
+        const { week } = getWorldStateTime();
+        const currentSeason = getCalendarSeason(week);
         // We need to do the following to ensure the in-game calendar does not break:
-        getCalendarProgress(inventory); // Keep the CalendarProgress up-to-date (at least for the current year iteration) (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2364)
-        checkCalendarAutoAdvance(inventory, getWorldState().KnownCalendarSeasons[0]); // Skip birthday events for characters if we do not have them unlocked yet (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2424)
+        getCalendarProgress(inventory, currentSeason); // Keep the CalendarProgress up-to-date (at least for the current year iteration) (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2364)
+        checkCalendarAutoAdvance(inventory, currentSeason); // Skip birthday events for characters if we do not have them unlocked yet (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2424)
 
         // also handle sending of kiss cinematic at year rollover
         if (

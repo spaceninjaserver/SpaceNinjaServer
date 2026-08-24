@@ -1,7 +1,7 @@
 import { checkCalendarAutoAdvance, getCalendarProgress, getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { handleStoreItemAcquisition } from "../../services/purchaseService.ts";
-import { getWorldState } from "../../services/worldStateService.ts";
+import { getCalendarSeason, getWorldStateTime } from "../../services/worldStateService.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
 
@@ -9,8 +9,9 @@ import type { RequestHandler } from "express";
 export const completeCalendarEventController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId, undefined);
-    const calendarProgress = getCalendarProgress(inventory);
-    const currentSeason = getWorldState().KnownCalendarSeasons[0];
+    const { week } = getWorldStateTime();
+    const currentSeason = getCalendarSeason(week);
+    const calendarProgress = getCalendarProgress(inventory, currentSeason);
     let inventoryChanges: IInventoryChanges = {};
     const dayIndex = calendarProgress.SeasonProgress.LastCompletedDayIdx + 1;
     const day = currentSeason.Days[dayIndex];

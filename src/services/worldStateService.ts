@@ -1267,7 +1267,7 @@ const birthdays: number[] = [
     355 // Velimir (MinervaVelemirDialogue_rom.dialogue)
 ];
 
-const getCalendarSeason = (week: number): ICalendarSeason => {
+export const getCalendarSeason = (week: number): ICalendarSeason => {
     const seasonIndex = week % 4;
     const seasonDay1 = [1, 91, 182, 274][seasonIndex];
     const seasonDay91 = seasonDay1 + 90;
@@ -1867,12 +1867,15 @@ export const getInvasionByOid = (oid: string): IInvasion | undefined => {
     return undefined;
 };
 
-export const getWorldState = (
-    buildLabel: string = BL_LATEST,
-    convertGoals: boolean = true,
-    changeLegacyTags: boolean = config.unfaithfulBugFixes?.useAnniversaryTagForOldGoals || false
-): IWorldState => {
-    const buildVersion = buildVersionToInt(buildLabel);
+export const getWorldStateTime = (): {
+    timeSecs: number;
+    timeMs: number;
+    day: number;
+    week: number;
+    weekStart: number;
+    weekEnd: number;
+    date: Date;
+} => {
     const constraints: ITimeConstraint[] = [];
     if (config.worldState?.eidolonOverride) {
         constraints.push(config.worldState.eidolonOverride == "day" ? eidolonDayConstraint : eidolonNightConstraint);
@@ -1919,6 +1922,24 @@ export const getWorldState = (
     const weekStart = EPOCH + week * 604800000;
     const weekEnd = weekStart + 604800000;
     const date = new Date(timeMs);
+    return {
+        timeSecs,
+        timeMs,
+        day,
+        week,
+        weekStart,
+        weekEnd,
+        date
+    };
+};
+
+export const getWorldState = (
+    buildLabel: string = BL_LATEST,
+    convertGoals: boolean = true,
+    changeLegacyTags: boolean = config.unfaithfulBugFixes?.useAnniversaryTagForOldGoals || false
+): IWorldState => {
+    const { timeSecs, timeMs, day, week, weekStart, weekEnd, date } = getWorldStateTime();
+    const buildVersion = buildVersionToInt(buildLabel);
     const defenseWavesPerRotation = buildVersion < gameToBuildVersionInt["38.5.0"] ? 5 : 3;
 
     const worldState: IWorldState = {
