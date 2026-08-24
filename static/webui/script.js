@@ -8,6 +8,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
+const webUITranslations = ["en", "ru", "fr", "de", "zh", "es", "uk", "pl"];
 const allPermissions = [];
 document.querySelectorAll("[data-enabling-permission]").forEach(elm => {
     const perm = elm.getAttribute("data-enabling-permission");
@@ -502,6 +503,20 @@ function updateLocElements() {
     });
 }
 
+function replacePluralForms(text, values) {
+    const webui_lang = webUITranslations.indexOf(window.lang) == -1 ? "en" : lang;
+    const pluralRules = new Intl.PluralRules(webui_lang == "tc" ? "zh" : webui_lang); // tc isn't valid code for Intl so use zh instead
+    const pluralCategories = pluralRules.resolvedOptions().pluralCategories;
+
+    return text.replace(/\|(\w+)\||\{(\w+):plural:([^{}]+)\}/g, (match, variable, pluralVariable, forms) => {
+        if (variable) return values[variable] ?? match;
+        const value = Number(values[pluralVariable]);
+        const category = pluralRules.select(value);
+        const formsList = forms.split("|");
+        return formsList[pluralCategories.indexOf(category)] ?? formsList.at(-1);
+    });
+}
+
 function setActiveLanguage(lang) {
     window.lang = lang;
     const lang_name = document.querySelector("[data-lang=" + lang + "]").textContent;
@@ -510,7 +525,7 @@ function setActiveLanguage(lang) {
     document.querySelector("[data-lang=" + lang + "]").classList.add("active");
 
     window.dictPromise = new Promise(resolve => {
-        const webui_lang = ["en", "ru", "fr", "de", "zh", "es", "uk", "pl"].indexOf(lang) == -1 ? "en" : lang;
+        const webui_lang = webUITranslations.indexOf(lang) == -1 ? "en" : lang;
         let script = document.getElementById("translations");
         if (script) document.documentElement.removeChild(script);
 
@@ -2552,7 +2567,14 @@ function addMissingEquipment(categories) {
             }
         });
     });
-    if (requests.length != 0 && window.confirm(loc("code_addItemsConfirm").replaceAll("|COUNT|", requests.length))) {
+    if (
+        requests.length != 0 &&
+        window.confirm(
+            replacePluralForms(loc("code_addItemsConfirm"), {
+                COUNT: requests.length
+            })
+        )
+    ) {
         return dispatchAddItemsRequestsBatch(requests);
     }
 }
@@ -2576,7 +2598,13 @@ function addMissingDangerRooms() {
                 });
                 if (requests.length == 0) {
                     toast(loc("code_nothingToDo"));
-                } else if (window.confirm(loc("code_addItemsConfirm").replaceAll("|COUNT|", requests.length))) {
+                } else if (
+                    window.confirm(
+                        replacePluralForms(loc("code_addItemsConfirm"), {
+                            COUNT: requests.length
+                        })
+                    )
+                ) {
                     return dispatchAddItemsRequestsBatch(requests);
                 }
             });
@@ -2743,7 +2771,11 @@ function addMissingVaultItems(vaultType) {
 
     if (
         requests.length != 0 &&
-        window.confirm(loc("code_addVaultItemsConfirm").replaceAll("|COUNT|", requests.length))
+        window.confirm(
+            replacePluralForms(loc("code_addVaultItemsConfirm"), {
+                COUNT: requests.length
+            })
+        )
     ) {
         return dispatchAddVaultItemsBatch(requests, vaultType);
     }
@@ -2776,7 +2808,11 @@ function addMissingTechProjects() {
 
     if (
         requests.length != 0 &&
-        window.confirm(loc("code_addTechProjectsConfirm").replaceAll("|COUNT|", requests.length))
+        window.confirm(
+            replacePluralForms(loc("code_addTechProjectsConfirm"), {
+                COUNT: requests.length
+            })
+        )
     ) {
         return dispatchAddTechProjectsBatch(requests);
     }
@@ -2795,7 +2831,11 @@ function bulkRemoveVaultItems(vaultType) {
 
     if (
         requests.length != 0 &&
-        window.confirm(loc("code_removeVaultItemsConfirm").replaceAll("|COUNT|", requests.length))
+        window.confirm(
+            replacePluralForms(loc("code_removeVaultItemsConfirm"), {
+                COUNT: requests.length
+            })
+        )
     ) {
         return dispatchAddVaultItemsBatch(requests, vaultType);
     }
@@ -2828,7 +2868,11 @@ function bulkRemoveTechProjects() {
 
     if (
         requests.length != 0 &&
-        window.confirm(loc("code_removeTechProjectsConfirm").replaceAll("|COUNT|", requests.length))
+        window.confirm(
+            replacePluralForms(loc("code_removeTechProjectsConfirm"), {
+                COUNT: requests.length
+            })
+        )
     ) {
         return dispatchRemoveTechProjectsBatch(requests);
     }
@@ -2921,7 +2965,13 @@ function addMissingEvolutionProgress() {
     });
     if (requests.length == 0) {
         toast(loc("code_nothingToDo"));
-    } else if (window.confirm(loc("code_addItemsConfirm").replaceAll("|COUNT|", requests.length))) {
+    } else if (
+        window.confirm(
+            replacePluralForms(loc("code_addItemsConfirm"), {
+                COUNT: requests.length
+            })
+        )
+    ) {
         setEvolutionProgress(requests);
     }
 }
@@ -3595,7 +3645,11 @@ function doUnlockAllFocusSchools() {
             if (Object.keys(missingFocusUpgrades).length == 0) {
                 toast(loc("code_focusAllUnlocked"));
             } else {
-                toast(loc("code_focusUnlocked").replaceAll("|COUNT|", Object.keys(missingFocusUpgrades).length));
+                toast(
+                    replacePluralForms(loc("code_focusUnlocked"), {
+                        COUNT: Object.keys(missingFocusUpgrades).length
+                    })
+                );
                 if (ws_is_open) {
                     window.ws.send(JSON.stringify({ sync_inventory: true }));
                 }
@@ -3760,7 +3814,11 @@ function doAddAllMods() {
             modsAll = Array.from(modsAll);
             if (
                 modsAll.length != 0 &&
-                window.confirm(loc("code_addModsConfirm").replaceAll("|COUNT|", modsAll.length))
+                window.confirm(
+                    replacePluralForms(loc("code_addModsConfirm"), {
+                        COUNT: modsAll.length
+                    })
+                )
             ) {
                 $.post({
                     url: "/custom/addItems?" + window.authz,
@@ -5458,7 +5516,9 @@ function handleAbilityOverride(event, configIndex) {
 function removeItems(category) {
     revalidateAuthz().then(() => {
         const count = document.getElementById(category + "-list").getElementsByTagName("tr").length;
-        let message = loc("code_bulkRemoveConfirm").replaceAll("|COUNT|", count);
+        let message = replacePluralForms(loc("code_bulkRemoveConfirm"), {
+            COUNT: count
+        });
         if (category === "Suits") message += "\n" + loc("code_bulkRemoveNote");
         if (count != 0 && window.confirm(message)) {
             $.get("/custom/removeItems?" + window.authz + "&category=" + category).done(function () {
@@ -5597,7 +5657,13 @@ async function doAdminBroadcastInbox() {
             return;
         }
 
-        if (!window.confirm(loc("admin_sendConfirm").replaceAll("|COUNT|", String(targetIds.length)))) {
+        if (
+            !window.confirm(
+                replacePluralForms(loc("admin_sendConfirm"), {
+                    COUNT: targetIds.length
+                })
+            )
+        ) {
             return;
         }
 
@@ -5626,7 +5692,11 @@ async function doAdminBroadcastInbox() {
             data: JSON.stringify({ targetIds, messages })
         });
 
-        toast(loc("admin_sendToAllSuccess").replaceAll("|COUNT|", targetIds.length));
+        toast(
+            replacePluralForms(loc("admin_sendToAllSuccess"), {
+                COUNT: targetIds.length
+            })
+        );
     } catch (error) {
         alert(error);
     } finally {
