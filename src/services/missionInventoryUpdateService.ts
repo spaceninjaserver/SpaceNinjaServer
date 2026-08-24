@@ -1961,7 +1961,10 @@ export const addFixedLevelRewards = async (
     if (rewards.droptable) {
         const droptable = getMissionDeck(rewards.droptable, buildLabel);
         if (droptable) {
-            const rotations: number[] = rewardInfo ? await getRotations(rewardInfo, buildLabel) : [0];
+            const rotations: number[] =
+                rewardInfo && rewards.droptable != "/Lotus/Types/Game/MissionDecks/ProjectNightwatchBonusRewards"
+                    ? await getRotations(rewardInfo, buildLabel)
+                    : [0];
             if (rewards.droptable.startsWith("/Lotus/Types/Game/MissionDecks/VoidKeyMissionRewards/")) {
                 logger.debug(`rolling ${rewards.droptable} for ${rotations.length} void tower rewards`);
                 const RARITY_TO_PROBABILITY: Record<TRarity, number> = {
