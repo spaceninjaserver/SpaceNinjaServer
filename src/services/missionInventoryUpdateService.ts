@@ -102,8 +102,7 @@ import {
     idToDay,
     idToWeek,
     pushClassicBounties,
-    populateAlerts,
-    generateSeededAlert
+    getAlertByOid
 } from "./worldStateService.ts";
 import { config, shouldDoServerQol } from "./configService.ts";
 import libraryDailyTasks from "../../static/fixed_responses/libraryDailyTasks.json" with { type: "json" };
@@ -1252,11 +1251,10 @@ export const addMissionRewards = async (
     let missionCompletionCredits = 0;
 
     if (rewardInfo.alertId) {
-        const worldState = getWorldState(buildLabel);
-        let alert = worldState.Alerts.find(x => fromOid(x._id) == rewardInfo.alertId);
-        if (!alert && rewardInfo.alertId.slice(8, 12) == "a1e4") {
-            const alertIndex = parseInt(rewardInfo.alertId.slice(-7), 16);
-            alert = await generateSeededAlert(alertIndex, buildVersionToInt(buildLabel));
+        let alert = await getAlertByOid(rewardInfo.alertId, buildVersionToInt(buildLabel));
+        if (!alert) {
+            const worldState = getWorldState(buildLabel);
+            alert = worldState.Alerts.find(x => fromOid(x._id) == rewardInfo.alertId);
         }
 
         if (!alert) {
@@ -2658,9 +2656,11 @@ async function getRandomMissionDrops(
                 }
             }
         } else if (RewardInfo.alertId) {
-            const worldState = getWorldState(buildLabel);
-            await populateAlerts(worldState);
-            const alert = worldState.Alerts.find(x => fromOid(x._id) == RewardInfo.alertId);
+            let alert = await getAlertByOid(RewardInfo.alertId, buildVersionToInt(buildLabel));
+            if (!alert) {
+                const worldState = getWorldState(buildLabel);
+                alert = worldState.Alerts.find(x => fromOid(x._id) == RewardInfo.alertId);
+            }
             if (alert && alert.MissionInfo.enemyCacheOverride) {
                 const deck = ExportRewards[alert.MissionInfo.enemyCacheOverride];
                 for (let rotation = 0; rotation != RewardInfo.EnemyCachesFound; ++rotation) {

@@ -5416,7 +5416,7 @@ const getFilteredAlertHelmets = (buildVersion: number): string[] => {
     });
 };
 
-export const generateSeededAlert = async (alertIndex: number, buildVersion: number): Promise<IAlert> => {
+const generateSeededAlert = async (alertIndex: number, buildVersion: number): Promise<IAlert> => {
     const seed = new SRng(alertIndex * 2654435761).randomInt(0, 100_000);
     const rng = new SRng(seed);
     const regions = await getRegions(intToBuildVersion(buildVersion));
@@ -5676,6 +5676,14 @@ export const generateSeededAlert = async (alertIndex: number, buildVersion: numb
     };
 
     return alert;
+};
+
+export const getAlertByOid = async (oid: string, buildVersion: number): Promise<IAlert | undefined> => {
+    if (oid.slice(8, 12) != "a1e4") {
+        return undefined;
+    }
+    const alertIndex = parseInt(oid.slice(-7), 16);
+    return generateSeededAlert(alertIndex, buildVersion);
 };
 
 export const populateAlerts = async (worldState: IWorldState): Promise<void> => {
