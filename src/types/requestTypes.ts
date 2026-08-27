@@ -79,6 +79,7 @@ export type IMissionInventoryUpdateRequest = {
     FusionTreasures?: IFusionTreasure[] | IFusionTreasureClientLegacy[];
     QuestKeys?: Omit<IQuestKeyDatabase, "CompletionDate">[];
     RegularCredits?: number;
+    Cards?: IUpgradeClient[];
     MissionFailed: boolean;
     MissionStatus?: IMissionStatus;
     AliveTime: number;

@@ -5388,6 +5388,15 @@ const alertDescTexts: Record<string, string[] | undefined> = {
     MT_EXCAVATE: ["/Lotus/Language/Alerts/IntelDesc4", "/Lotus/Language/Alerts/IntelDesc22"]
 };
 
+const getFilteredAlertWeapons = (buildVersion: number): string[] => {
+    return alertWeapons.filter(weapon => {
+        if (weapon.includes("DaggerAxe")) return buildVersion >= gameToBuildVersionInt["7.7.1"];
+        if (weapon.includes("Grn")) return buildVersion >= gameToBuildVersionInt["7.7.1"];
+        if (weapon.includes("Glaive")) return buildVersion >= gameToBuildVersionInt["7.9.0"];
+        return true;
+    });
+};
+
 const getFilteredAlertHelmets = (buildVersion: number): string[] => {
     return alertHelmets.filter(helmet => {
         if (helmet.includes("BardAlt")) return buildVersion >= gameToBuildVersionInt["20.0.0"];
@@ -5411,7 +5420,13 @@ const getFilteredAlertHelmets = (buildVersion: number): string[] => {
         if (helmet.includes("Zephyr")) return buildVersion >= gameToBuildVersionInt["12.1.2"];
         if (helmet.includes("Oberon")) return buildVersion >= gameToBuildVersionInt["11.1.3"];
         if (helmet.includes("Valkyr")) return buildVersion >= gameToBuildVersionInt["11.1.3"];
+        if (helmet.includes("V2")) return buildVersion >= gameToBuildVersionInt["9.0.0"];
         if (helmet.includes("Vauban")) return buildVersion >= gameToBuildVersionInt["8.0.0"];
+        if (helmet.includes("Excalibur")) return buildVersion >= gameToBuildVersionInt["7.7.1"];
+        if (helmet.includes("Nyx")) return buildVersion >= gameToBuildVersionInt["7.7.1"];
+        if (helmet.includes("Frost")) return buildVersion >= gameToBuildVersionInt["7.7.1"];
+        if (helmet.includes("Saryn")) return buildVersion >= gameToBuildVersionInt["7.7.1"];
+        if (helmet.includes("Banshee")) return buildVersion >= gameToBuildVersionInt["7.7.1"];
         return true;
     });
 };
@@ -5596,8 +5611,16 @@ const generateSeededAlert = async (alertIndex: number, buildVersion: number): Pr
             break;
         }
         case "AURAS": {
+            const isPreU9 = buildVersion < gameToBuildVersionInt["9.0.0"];
             const aura = rng.randomElement(alertAuras)!;
-            rewardItems = [toStoreItem(aura)];
+            if (isPreU9) {
+                const auraPath = aura
+                    .replace("/Lotus/Upgrades/Mods/Aura/", "/Lotus/Types/Cards/")
+                    .replace("AuraMod", "Buff");
+                rewardItems = [toStoreItem(auraPath)];
+            } else {
+                rewardItems = [toStoreItem(aura)];
+            }
             break;
         }
         case "ALT_HELMETS": {
@@ -5612,7 +5635,8 @@ const generateSeededAlert = async (alertIndex: number, buildVersion: number): Pr
             break;
         }
         case "WEAPONS": {
-            const weapon = rng.randomElement(alertWeapons)!;
+            const filteredWeapons = getFilteredAlertWeapons(buildVersion);
+            const weapon = rng.randomElement(filteredWeapons)!;
             rewardItems = [toStoreItem(weapon)];
             break;
         }
@@ -5727,6 +5751,9 @@ export const populateAlerts = async (worldState: IWorldState): Promise<void> => 
                         }
                         if (item.endsWith("Blueprint")) {
                             return `/Lotus/Types/StoreItems/Recipes/${filename}StoreItem`;
+                        }
+                        if (item.endsWith("Buff")) {
+                            return `/Lotus/Types/StoreItems/Cards/${filename}StoreItem`;
                         }
                         return item;
                     });
