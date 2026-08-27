@@ -4,7 +4,7 @@ import type { TEquipmentKey } from "../../types/inventoryTypes/inventoryTypes.ts
 import { getInventory } from "../../services/inventoryService.ts";
 import { eEquipmentFeatures, type TEquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { broadcastInventoryUpdate, sendWsBroadcastTo } from "../../services/wsService.ts";
-import allIncarnons from "../../../static/fixed_responses/allIncarnonList.json" with { type: "json" };
+import { evolutionWeapons } from "../../constants/evolutionWeapons.ts";
 import { ExportWeapons } from "warframe-public-export-plus";
 
 export const equipmentFeaturesController: RequestHandler = async (req, res) => {
@@ -32,9 +32,9 @@ export const equipmentFeaturesController: RequestHandler = async (req, res) => {
             const parentName = ExportWeapons[item.ItemType].parentName;
             let searchType: string | undefined;
 
-            if (allIncarnons.includes(item.ItemType)) {
+            if (evolutionWeapons.has(item.ItemType)) {
                 searchType = item.ItemType;
-            } else if (allIncarnons.includes(parentName)) {
+            } else if (evolutionWeapons.has(parentName)) {
                 searchType = parentName;
             }
 

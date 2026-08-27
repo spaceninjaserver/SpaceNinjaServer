@@ -582,17 +582,6 @@ const webUiModularWeapons = [
     "/Lotus/Types/Friendly/Pets/CreaturePets/MedjayPredatorKubrowPetPowerSuit"
 ];
 
-const permanentEvolutionWeapons = new Set([
-    "/Lotus/Weapons/Tenno/Zariman/LongGuns/PumpShotgun/ZarimanPumpShotgun",
-    "/Lotus/Weapons/Tenno/Zariman/LongGuns/SemiAutoRifle/ZarimanSemiAutoRifle",
-    "/Lotus/Weapons/Tenno/Zariman/Melee/Dagger/ZarimanDaggerWeapon",
-    "/Lotus/Weapons/Tenno/Zariman/Melee/Tonfas/ZarimanTonfaWeapon",
-    "/Lotus/Weapons/Tenno/Zariman/Pistols/HeavyPistol/ZarimanHeavyPistol",
-    "/Lotus/Weapons/Thanotech/EntFistIncarnon/EntFistIncarnon",
-    "/Lotus/Weapons/Thanotech/EntratiWristGun/EntratiWristGunWeapon",
-    "/Lotus/Weapons/Tenno/Zariman/Melee/HeavyScythe/ZarimanHeavyScythe/ZarimanHeavyScytheWeapon"
-]);
-
 const icons = {
     angleDown: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>`,
     angleLeft: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>`,
@@ -1246,6 +1235,10 @@ function fetchItemList() {
                                 const vaultOption = option.cloneNode(true);
                                 document.getElementById("datalist-VaultMiscItems").appendChild(vaultOption);
                             }
+                            if (item.baseEvolutionWeapon) {
+                                const vaultOption = option.cloneNode(true);
+                                document.getElementById("datalist-EvolutionProgress").appendChild(vaultOption);
+                            }
                         }
                         itemMap[item.uniqueName] = { ...item, type };
                     });
@@ -1559,7 +1552,7 @@ async function populateInventoryRoute() {
 
     document.getElementById("EvolutionProgress-list").innerHTML = "";
     data.EvolutionProgress?.forEach(item => {
-        const maxRank = permanentEvolutionWeapons.has(item.ItemType) ? 5 : 4;
+        const maxRank = itemMap[item.ItemType]?.permanentEvolutionWeapon ? 5 : 4;
         const tr = document.createElement("tr");
         tr.setAttribute("data-item-type", item.ItemType);
         {
@@ -1597,7 +1590,7 @@ async function populateInventoryRoute() {
 
                 td.appendChild(a);
             }
-            if ((permanentEvolutionWeapons.has(item.ItemType) && item.Rank > 0) || item.Rank > 1) {
+            if ((itemMap[item.ItemType]?.permanentEvolutionWeapon && item.Rank > 0) || item.Rank > 1) {
                 const a = document.createElement("a");
                 a.href = "#";
                 a.onclick = function (event) {
@@ -2511,11 +2504,15 @@ function doAcquireEvolution() {
         $("#acquire-type-EvolutionProgress").addClass("is-invalid").focus();
         return;
     }
-    if (!document.querySelector("#EvolutionProgress-list [data-item-type='" + uniqueName + "']")) {
-        setEvolutionProgress([{ ItemType: uniqueName, Rank: permanentEvolutionWeapons.has(uniqueName) ? 0 : 1 }]);
-    } else {
-        toast(loc("code_nothingToDo"));
-    }
+    window.itemListPromise.then(itemMap => {
+        if (!document.querySelector("#EvolutionProgress-list [data-item-type='" + uniqueName + "']")) {
+            setEvolutionProgress([
+                { ItemType: uniqueName, Rank: itemMap[uniqueName]?.permanentEvolutionWeapon ? 0 : 1 }
+            ]);
+        } else {
+            toast(loc("code_nothingToDo"));
+        }
+    });
 }
 
 $(document).on("input", "input, textarea", function () {
@@ -2944,48 +2941,52 @@ async function addMissingHelminthRecipes() {
 }
 
 function addMissingEvolutionProgress() {
-    const requests = [];
-    document.querySelectorAll("#datalist-EvolutionProgress option").forEach(elm => {
-        const uniqueName = elm.getAttribute("data-key");
-        if (!document.querySelector("#EvolutionProgress-list [data-item-type='" + uniqueName + "']")) {
-            requests.push({ ItemType: uniqueName, Rank: permanentEvolutionWeapons.has(uniqueName) ? 0 : 1 });
+    window.itemListPromise.then(itemMap => {
+        const requests = [];
+        document.querySelectorAll("#datalist-EvolutionProgress option").forEach(elm => {
+            const uniqueName = elm.getAttribute("data-key");
+            if (!document.querySelector("#EvolutionProgress-list [data-item-type='" + uniqueName + "']")) {
+                requests.push({ ItemType: uniqueName, Rank: itemMap[uniqueName]?.permanentEvolutionWeapon ? 0 : 1 });
+            }
+        });
+        if (requests.length == 0) {
+            toast(loc("code_nothingToDo"));
+        } else if (
+            window.confirm(
+                replacePluralForms(loc("code_addItemsConfirm"), {
+                    COUNT: requests.length
+                })
+            )
+        ) {
+            setEvolutionProgress(requests);
         }
     });
-    if (requests.length == 0) {
-        toast(loc("code_nothingToDo"));
-    } else if (
-        window.confirm(
-            replacePluralForms(loc("code_addItemsConfirm"), {
-                COUNT: requests.length
-            })
-        )
-    ) {
-        setEvolutionProgress(requests);
-    }
 }
 
 function maxRankAllEvolutions() {
     revalidateAuthz().then(() => {
         getInventoryData().then(data => {
-            const requests = [];
+            window.itemListPromise.then(itemMap => {
+                const requests = [];
 
-            data.EvolutionProgress.forEach(item => {
-                const maxRank = permanentEvolutionWeapons.has(item.ItemType) ? 5 : 4;
-                if (item.Rank < maxRank) {
-                    requests.push({
-                        ItemType: item.ItemType,
-                        Rank: maxRank
+                data.EvolutionProgress.forEach(item => {
+                    const maxRank = itemMap[item.ItemType]?.permanentEvolutionWeapon ? 5 : 4;
+                    if (item.Rank < maxRank) {
+                        requests.push({
+                            ItemType: item.ItemType,
+                            Rank: maxRank
+                        });
+                    }
+                });
+
+                if (Object.keys(requests).length > 0) {
+                    return setEvolutionProgress(requests).then(() => {
+                        toast(loc("code_succRankUp"));
                     });
                 }
+
+                toast(loc("code_noEquipmentToRankUp"));
             });
-
-            if (Object.keys(requests).length > 0) {
-                return setEvolutionProgress(requests).then(() => {
-                    toast(loc("code_succRankUp"));
-                });
-            }
-
-            toast(loc("code_noEquipmentToRankUp"));
         });
     });
 }
@@ -3950,9 +3951,6 @@ async function populateDetailedViewRoute() {
             buttonsCard.innerHTML = "";
             item.Features ??= 0;
             const bits = [];
-            const evolutionWeapons = Array.from(document.querySelectorAll("#datalist-EvolutionProgress option")).map(
-                option => option.dataset.key
-            );
 
             if (category != "OperatorAmps") bits.push(1);
             if (["Suits", "LongGuns", "Pistols", "Melee"].includes(category)) bits.push(2);
@@ -3961,7 +3959,7 @@ async function populateDetailedViewRoute() {
             if (category == "SpaceGuns") bits.push(4, 64);
             if (
                 [item.ItemType, itemMap[item.ItemType]?.parentName].some(
-                    type => type && evolutionWeapons.includes(type) && !permanentEvolutionWeapons.has(type)
+                    type => type && itemMap[type]?.evolutionWeapon && !itemMap[type]?.permanentEvolutionWeapon
                 )
             )
                 bits.push(512);

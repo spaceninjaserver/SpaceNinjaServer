@@ -36,7 +36,7 @@ import {
     ExportWarframes,
     ExportWeapons
 } from "warframe-public-export-plus";
-import allIncarnons from "../../../static/fixed_responses/allIncarnonList.json" with { type: "json" };
+import { evolutionWeapons, permanentEvolutionWeapons } from "../../constants/evolutionWeapons.ts";
 import supplementalDict from "../../../static/fixed_responses/supplementalDict/index.json" with { type: "json" };
 import varzia from "../../constants/varzia.ts";
 import suitDefaultUpgrades from "../../constants/suitDefaultUpgrades.ts";
@@ -59,6 +59,9 @@ interface ListedItem {
     parentName?: string;
     fits?: { type: string; rarity: TRarity; statAtten?: number }[];
     upgrades?: IU5FingerprintUpgrade[];
+    evolutionWeapon?: true;
+    baseEvolutionWeapon?: true;
+    permanentEvolutionWeapon?: true;
 }
 
 interface ItemLists {
@@ -78,7 +81,6 @@ interface ItemLists {
     OperatorAmps: ListedItem[];
     QuestKeys: ListedItem[];
     KubrowPets: ListedItem[];
-    EvolutionProgress: ListedItem[];
     mods: ListedItem[];
     Boosters: ListedItem[];
     VarziaOffers: ListedItem[];
@@ -126,7 +128,6 @@ const getItemListsController: RequestHandler = (req, response) => {
         OperatorAmps: [],
         QuestKeys: [],
         KubrowPets: [],
-        EvolutionProgress: [],
         mods: [],
         Boosters: [],
         VarziaOffers: [],
@@ -239,7 +240,11 @@ const getItemListsController: RequestHandler = (req, response) => {
                     uniqueName,
                     name: getString(item.name, lang),
                     maxLevelCap: item.maxLevelCap,
-                    parentName: item.parentName
+                    parentName: item.parentName,
+                    evolutionWeapon:
+                        evolutionWeapons.has(uniqueName) || evolutionWeapons.has(item.parentName) ? true : undefined,
+                    baseEvolutionWeapon: evolutionWeapons.has(uniqueName) ? true : undefined,
+                    permanentEvolutionWeapon: permanentEvolutionWeapons.has(uniqueName) ? true : undefined
                 };
                 res[item.productCategory].push(listedItem);
 
@@ -494,12 +499,6 @@ const getItemListsController: RequestHandler = (req, response) => {
                 parentName: key.parentName
             });
         }
-    }
-    for (const uniqueName of allIncarnons) {
-        res.EvolutionProgress.push({
-            uniqueName,
-            name: getString(getItemName(uniqueName) || "", lang)
-        });
     }
 
     for (const item of Object.values(ExportBoosters)) {
