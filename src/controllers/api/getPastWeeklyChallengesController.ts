@@ -1,62 +1,73 @@
 import type { RequestHandler } from "express";
-import { getAccountIdForRequest } from "../../services/loginService.ts";
+import { getAccountForRequest } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getSeasonChallengePools, getWorldState, pushWeeklyActs } from "../../services/worldStateService.ts";
+import {
+    getNightwaveSyndicateTag,
+    getSeasonChallengePools,
+    getWorldStateTime,
+    nightwaveTagToActivation,
+    nightwaveTagToSeason,
+    pushWeeklyActs
+} from "../../services/worldStateService.ts";
 import { EPOCH, unixTimesInMs } from "../../constants/timeConstants.ts";
 import type { ISeasonChallenge } from "../../types/worldStateTypes.ts";
 import { ExportChallenges } from "warframe-public-export-plus";
+import { buildLabelToVersionInt } from "../../helpers/versionHelper.ts";
 
 export const getPastWeeklyChallengesController: RequestHandler = async (req, res) => {
-    const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId, "SeasonChallengeHistory ChallengeProgress");
-    const worldState = getWorldState(undefined);
+    const account = await getAccountForRequest(req);
+    const inventory = await getInventory(account._id, "SeasonChallengeHistory ChallengeProgress");
+    const nightwaveSyndicateTag = getNightwaveSyndicateTag(buildLabelToVersionInt(account.BuildLabel!));
+    const PastWeeklyChallenges: ISeasonChallenge[] = [];
 
-    if (worldState.SeasonInfo) {
-        const pools = getSeasonChallengePools(worldState.SeasonInfo.AffiliationTag);
-        const nightwaveStartTimestamp = Number(worldState.SeasonInfo.Activation.$date.$numberLong);
-        const nightwaveSeason = worldState.SeasonInfo.Season;
-        const timeMs = worldState.Time * 1000;
-        const completedChallengesIds = new Set<string>();
+    if (nightwaveSyndicateTag) {
+        const pools = getSeasonChallengePools(nightwaveSyndicateTag);
+        const hasPools = pools.weekly.length > 0 || pools.hardWeekly.length > 0 || pools.weeklyPermanent.length > 0;
+        if (hasPools) {
+            const nightwaveStartTimestamp = nightwaveTagToActivation[nightwaveSyndicateTag] ?? 1747851300000;
+            const nightwaveSeason = nightwaveTagToSeason[nightwaveSyndicateTag];
+            const { week } = getWorldStateTime();
+            const completedChallengesIds = new Set<string>();
 
-        inventory.SeasonChallengeHistory.forEach(challengeHistory => {
-            const entryNightwaveSeason = parseInt(challengeHistory.id.slice(0, 4), 10) - 1;
-            if (nightwaveSeason == entryNightwaveSeason) {
-                const meta = Object.entries(ExportChallenges).find(
-                    ([key]) => key.split("/").pop() === challengeHistory.challenge
-                );
-                if (meta) {
-                    const [, challengeMeta] = meta;
-                    const challengeProgress = inventory.ChallengeProgress.find(
-                        c => c.Name === challengeHistory.challenge
+            inventory.SeasonChallengeHistory.forEach(challengeHistory => {
+                const entryNightwaveSeason = parseInt(challengeHistory.id.slice(0, 4), 10) - 1;
+                if (nightwaveSeason == entryNightwaveSeason) {
+                    const meta = Object.entries(ExportChallenges).find(
+                        ([key]) => key.split("/").pop() === challengeHistory.challenge
                     );
+                    if (meta) {
+                        const [, challengeMeta] = meta;
+                        const challengeProgress = inventory.ChallengeProgress.find(
+                            c => c.Name === challengeHistory.challenge
+                        );
 
-                    if (challengeProgress && challengeProgress.Progress >= (challengeMeta.requiredCount ?? 1)) {
-                        completedChallengesIds.add(challengeHistory.id);
+                        if (challengeProgress && challengeProgress.Progress >= (challengeMeta.requiredCount ?? 1)) {
+                            completedChallengesIds.add(challengeHistory.id);
+                        }
                     }
                 }
-            }
-        });
+            });
+            let previousWeek = week - 1;
 
-        const PastWeeklyChallenges: ISeasonChallenge[] = [];
+            while (
+                EPOCH + previousWeek * unixTimesInMs.week >= nightwaveStartTimestamp &&
+                PastWeeklyChallenges.length < 3
+            ) {
+                const tempActs: ISeasonChallenge[] = [];
+                pushWeeklyActs(tempActs, pools, week, nightwaveStartTimestamp, nightwaveSeason);
 
-        let week = Math.trunc((timeMs - EPOCH) / unixTimesInMs.week) - 1;
-
-        while (EPOCH + week * unixTimesInMs.week >= nightwaveStartTimestamp && PastWeeklyChallenges.length < 3) {
-            const tempActs: ISeasonChallenge[] = [];
-            pushWeeklyActs(tempActs, pools, week, nightwaveStartTimestamp, nightwaveSeason);
-
-            for (const act of tempActs) {
-                if (!completedChallengesIds.has(act._id.$oid) && PastWeeklyChallenges.length < 3) {
-                    if (act.Challenge.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanent")) {
-                        act.Permanent = true;
+                for (const act of tempActs) {
+                    if (!completedChallengesIds.has(act._id.$oid) && PastWeeklyChallenges.length < 3) {
+                        if (act.Challenge.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanent")) {
+                            act.Permanent = true;
+                        }
+                        PastWeeklyChallenges.push(act);
                     }
-                    PastWeeklyChallenges.push(act);
                 }
-            }
 
-            week--;
+                previousWeek--;
+            }
         }
-
-        res.json({ PastWeeklyChallenges: PastWeeklyChallenges });
     }
+    return res.json({ PastWeeklyChallenges: PastWeeklyChallenges });
 };

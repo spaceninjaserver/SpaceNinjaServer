@@ -840,22 +840,33 @@ interface IRotatingSeasonChallengePools {
 }
 
 export const getSeasonChallengePools = (syndicateTag: string): IRotatingSeasonChallengePools => {
-    const syndicate = ExportSyndicates[syndicateTag];
-    if (!syndicate.dailyChallenges || !syndicate.weeklyChallenges) {
-        throw new Error(`invalid syndicate tag for nightwave: ${syndicateTag}`);
+    if (syndicateTag in ExportSyndicates) {
+        const syndicate = ExportSyndicates[syndicateTag];
+        if (!syndicate.dailyChallenges || !syndicate.weeklyChallenges) {
+            throw new Error(`invalid syndicate tag for nightwave: ${syndicateTag}`);
+        }
+        return {
+            daily: syndicate.dailyChallenges,
+            weekly: syndicate.weeklyChallenges.filter(
+                x =>
+                    x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/") &&
+                    !x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanent")
+            ),
+            hardWeekly: syndicate.weeklyChallenges.filter(x =>
+                x.startsWith("/Lotus/Types/Challenges/Seasons/WeeklyHard/")
+            ),
+            weeklyPermanent: syndicate.weeklyChallenges.filter(x =>
+                x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanent")
+            )
+        };
+    } else {
+        return {
+            daily: [],
+            weekly: [],
+            hardWeekly: [],
+            weeklyPermanent: []
+        };
     }
-    return {
-        daily: syndicate.dailyChallenges,
-        weekly: syndicate.weeklyChallenges.filter(
-            x =>
-                x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/") &&
-                !x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanent")
-        ),
-        hardWeekly: syndicate.weeklyChallenges.filter(x => x.startsWith("/Lotus/Types/Challenges/Seasons/WeeklyHard/")),
-        weeklyPermanent: syndicate.weeklyChallenges.filter(x =>
-            x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanent")
-        )
-    };
 };
 
 const getSeasonDailyChallenge = (pools: IRotatingSeasonChallengePools, day: number): ISeasonChallenge => {
@@ -877,25 +888,27 @@ const pushSeasonWeeklyChallenge = (
     week: number,
     id: number
 ): void => {
-    const weekStart = EPOCH + week * 604800000;
-    const weekEnd = weekStart + 604800000;
-    const challengeId = week * 7 + id;
-    const rng = new SRng(new SRng(challengeId).randomInt(0, 100_000));
-    let challenge: string;
-    do {
-        challenge = rng.randomElement(pool)!;
-    } while (activeChallenges.some(x => x.Challenge == challenge));
-    activeChallenges.push({
-        _id: {
-            $oid:
-                (nightwaveSeason + 1).toString().padStart(4, "0") +
-                "bb2d9d00cb47" +
-                challengeId.toString().padStart(8, "0")
-        },
-        Activation: { $date: { $numberLong: weekStart.toString() } },
-        Expiry: { $date: { $numberLong: weekEnd.toString() } },
-        Challenge: challenge
-    });
+    if (pool.length > 0) {
+        const weekStart = EPOCH + week * 604800000;
+        const weekEnd = weekStart + 604800000;
+        const challengeId = week * 7 + id;
+        const rng = new SRng(new SRng(challengeId).randomInt(0, 100_000));
+        let challenge: string;
+        do {
+            challenge = rng.randomElement(pool)!;
+        } while (activeChallenges.some(x => x.Challenge == challenge));
+        activeChallenges.push({
+            _id: {
+                $oid:
+                    (nightwaveSeason + 1).toString().padStart(4, "0") +
+                    "bb2d9d00cb47" +
+                    challengeId.toString().padStart(8, "0")
+            },
+            Activation: { $date: { $numberLong: weekStart.toString() } },
+            Expiry: { $date: { $numberLong: weekEnd.toString() } },
+            Challenge: challenge
+        });
+    }
 };
 
 export const pushWeeklyActs = (
@@ -3840,11 +3853,13 @@ export const getWorldState = (
             ActiveChallenges: []
         };
         const pools = getSeasonChallengePools(nightwaveSyndicateTag);
-        worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(pools, day - 2));
-        worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(pools, day - 1));
-        worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(pools, day - 0));
-        if (isBeforeNextExpectedWorldStateRefresh(timeMs, EPOCH + (day + 1) * 86400000)) {
-            worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(pools, day + 1));
+        if (pools.daily.length > 0) {
+            worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(pools, day - 2));
+            worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(pools, day - 1));
+            worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(pools, day - 0));
+            if (isBeforeNextExpectedWorldStateRefresh(timeMs, EPOCH + (day + 1) * 86400000)) {
+                worldState.SeasonInfo.ActiveChallenges.push(getSeasonDailyChallenge(pools, day + 1));
+            }
         }
         pushWeeklyActs(worldState.SeasonInfo.ActiveChallenges, pools, week, nightwaveStartTimestamp, nightwaveSeason);
         if (isBeforeNextExpectedWorldStateRefresh(timeMs, weekEnd)) {
@@ -4818,76 +4833,34 @@ export const isArchwingMission = (node: IRegion): boolean => {
 
 export const getNightwaveSyndicateTag = (buildVersion: number = BV_LATEST): string | undefined => {
     if (config.worldState?.nightwaveOverride) {
-        if (config.worldState.nightwaveOverride in nightwaveTagToSeason) {
-            return config.worldState.nightwaveOverride;
-        }
-        if (config.worldState.nightwaveOverride == "disable") {
+        const override = config.worldState.nightwaveOverride;
+        if (override == "disable") {
             return undefined;
         }
-        logger.warn(`ignoring invalid config value for worldState.nightwaveOverride`, {
-            value: config.worldState.nightwaveOverride,
-            valid_values: Object.keys(nightwaveTagToSeason)
-        });
+        if (!(override in nightwaveTagToSeason)) {
+            logger.warn(`ignoring invalid config value for worldState.nightwaveOverride`, {
+                value: override,
+                valid_values: Object.keys(nightwaveTagToSeason)
+            });
+            return undefined;
+        }
+        return isNightwaveTagAvailable(override, buildVersion) ? override : undefined;
     }
-    if (buildVersion >= gameToBuildVersionInt["42.0.6"]) {
-        return "RadioLegionIntermission15Syndicate";
+    return Object.keys(nightwaveTagToSeason).find(tag => isNightwaveTagAvailable(tag, buildVersion));
+};
+
+const isNightwaveTagAvailable = (tag: string, buildVersion: number): boolean => {
+    if (!(tag in nightwaveTagMinBuildVersion)) {
+        return false;
     }
-    if (buildVersion >= gameToBuildVersionInt["40.0.0"]) {
-        return "RadioLegionIntermission14Syndicate";
-    }
-    if (buildVersion >= gameToBuildVersionInt["38.6.0"]) {
-        return "RadioLegionIntermission13Syndicate";
-    }
-    if (buildVersion >= gameToBuildVersionInt["38.0.8"]) {
-        return "RadioLegionIntermission12Syndicate";
-    }
-    if (buildVersion >= gameToBuildVersionInt["36.1.2"]) {
-        return "RadioLegionIntermission11Syndicate";
-    }
-    if (buildVersion >= gameToBuildVersionInt["35.5.9"]) {
-        return "RadioLegionIntermission10Syndicate";
-    }
-    if (buildVersion >= gameToBuildVersionInt["34.0.8"]) {
-        return "RadioLegionIntermission9Syndicate";
-    }
-    // Actual version is U33.0.11
-    if (buildVersion > gameToBuildVersionInt["33.0.10"]) {
-        return "RadioLegionIntermission8Syndicate";
-    }
-    if (buildVersion >= gameToBuildVersionInt["32.2.0"]) {
-        return "RadioLegionIntermission7Syndicate";
-    }
-    if (buildVersion >= gameToBuildVersionInt["31.6.4"]) {
-        return "RadioLegionIntermission6Syndicate";
-    }
-    if (buildVersion >= gameToBuildVersionInt["31.2.0"]) {
-        return "RadioLegionIntermission5Syndicate";
-    }
-    if (buildVersion >= gameToBuildVersionInt["30.6.0"]) {
-        return "RadioLegionIntermission4Syndicate";
-    }
-    if (buildVersion >= gameToBuildVersionInt["29.7.0"]) {
-        return "RadioLegionIntermission3Syndicate";
-    }
-    if (buildVersion >= gameToBuildVersionInt["28.3.2"]) {
-        return "RadioLegion3Syndicate";
-    }
-    if (buildVersion >= gameToBuildVersionInt["25.8.2"]) {
-        return "RadioLegionIntermission2Syndicate";
-    }
-    if (buildVersion >= gameToBuildVersionInt["25.3.0"]) {
-        return "RadioLegion2Syndicate";
-    }
-    if (buildVersion >= gameToBuildVersionInt["25.1.2"]) {
-        return "RadioLegionIntermissionSyndicate";
-    }
-    if (buildVersion >= gameToBuildVersionInt["24.3.0"]) {
-        return "RadioLegionSyndicate";
-    }
-    return undefined;
+    const minBuildVersion = nightwaveTagMinBuildVersion[tag];
+    return tag == "RadioLegionIntermission8Syndicate"
+        ? buildVersion > gameToBuildVersionInt[minBuildVersion]
+        : buildVersion >= gameToBuildVersionInt[minBuildVersion];
 };
 
 export const nightwaveTagToSeason: Record<string, number> = {
+    RadioLegionIntermission16Syndicate: 18, // Amir's Shockwave
     RadioLegionIntermission15Syndicate: 17, // Nora's Mix: Time Tempests
     RadioLegionIntermission14Syndicate: 16, // Nora's Mix: Dreams of the Dead
     RadioLegionIntermission13Syndicate: 15, // Nora's Mix Vol. 9
@@ -4909,6 +4882,7 @@ export const nightwaveTagToSeason: Record<string, number> = {
 };
 
 export const nightwaveTagToSeasonName: Record<string, string> = {
+    RadioLegionIntermission16Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceThirteenSeasonTitle",
     RadioLegionIntermission15Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceTwelveSeasonTitle",
     RadioLegionIntermission14Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceElevenSeasonTitle",
     RadioLegionIntermission13Syndicate: "/Lotus/Language/Syndicates/RadioLegionNorasChoiceTenSeasonTitle",
@@ -4929,9 +4903,32 @@ export const nightwaveTagToSeasonName: Record<string, string> = {
     RadioLegionSyndicate: "/Lotus/Language/Syndicates/RadioLegionSeasonTitle1"
 };
 
-const nightwaveTagToActivation: Record<string, number> = {
+export const nightwaveTagToActivation: Record<string, number> = {
+    RadioLegionIntermission16Syndicate: 1786548600000,
     RadioLegionIntermission15Syndicate: 1775662200000,
     RadioLegionIntermission14Syndicate: 1761589199000
+};
+
+const nightwaveTagMinBuildVersion: Record<string, keyof typeof gameToBuildVersionInt> = {
+    RadioLegionIntermission16Syndicate: "43.5.0",
+    RadioLegionIntermission15Syndicate: "42.0.6",
+    RadioLegionIntermission14Syndicate: "40.0.0",
+    RadioLegionIntermission13Syndicate: "38.6.0",
+    RadioLegionIntermission12Syndicate: "38.0.8",
+    RadioLegionIntermission11Syndicate: "36.1.2",
+    RadioLegionIntermission10Syndicate: "35.5.9",
+    RadioLegionIntermission9Syndicate: "34.0.8",
+    RadioLegionIntermission8Syndicate: "33.0.10", // Actual version is U33.0.11
+    RadioLegionIntermission7Syndicate: "32.2.0",
+    RadioLegionIntermission6Syndicate: "31.6.4",
+    RadioLegionIntermission5Syndicate: "31.2.0",
+    RadioLegionIntermission4Syndicate: "30.6.0",
+    RadioLegionIntermission3Syndicate: "29.7.0",
+    RadioLegion3Syndicate: "28.3.2",
+    RadioLegionIntermission2Syndicate: "25.8.2",
+    RadioLegion2Syndicate: "25.3.0",
+    RadioLegionIntermissionSyndicate: "25.1.2",
+    RadioLegionSyndicate: "24.3.0"
 };
 
 const updateFissures = async (): Promise<void> => {
