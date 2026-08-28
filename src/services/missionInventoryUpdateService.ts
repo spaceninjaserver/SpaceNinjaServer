@@ -85,6 +85,7 @@ import { crackRelic, ensureRelicRewardIsCorrect } from "../helpers/relicHelper.t
 import { createMessage } from "./inboxService.ts";
 import {
     generateNemesisProfile,
+    getFallbackHelmet,
     getInfestedLichItemRewards,
     getInfNodes,
     getKillTokenRewardCount,
@@ -880,7 +881,8 @@ export const addMissionInventoryUpdates = async (
                         manifest: inventory.Nemesis.manifest,
                         KillingSuit: inventory.Nemesis.KillingSuit,
                         killingDamageType: inventory.Nemesis.killingDamageType,
-                        ShoulderHelmet: inventory.Nemesis.ShoulderHelmet,
+                        ShoulderHelmet:
+                            inventory.Nemesis.ShoulderHelmet || getFallbackHelmet(inventory.Nemesis.KillingSuit),
                         WeaponIdx: inventory.Nemesis.WeaponIdx,
                         AgentIdx: inventory.Nemesis.AgentIdx,
                         BirthNode: inventory.Nemesis.BirthNode,

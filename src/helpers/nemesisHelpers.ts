@@ -534,3 +534,10 @@ export const getNemesisTaxInfo = (nemesis: INemesisDatabase): INemesisTaxInfo | 
     }
     return undefined;
 };
+
+// some nemesis form live have empty ShoulderHelmet
+export const getFallbackHelmet = (itemType: string): string => {
+    const suit = getPowerSuit(itemType);
+    const helmetType = suit?.additionalItems?.find(x => x.startsWith("/Lotus/Upgrades/Skins/") && x.endsWith("Helmet"));
+    return helmetType ?? "/Lotus/Upgrades/Skins/Excalibur/ExcaliburHelmet";
+};

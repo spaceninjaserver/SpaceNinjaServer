@@ -92,6 +92,7 @@ import { getRecipe } from "./itemDataService.ts";
 import { logger } from "../utils/logger.ts";
 import { isEligibleForThousandYearFishDeco, migrateFusionTreasures } from "./inventoryService.ts";
 import { BL_LATEST } from "../constants/gameVersions.ts";
+import { getFallbackHelmet } from "../helpers/nemesisHelpers.ts";
 
 const convertOptionalDate = (value: IMongoDateWithLegacySupport | undefined): Date | undefined => {
     return value ? fromMongoDate(value) : undefined;
@@ -279,6 +280,7 @@ const convertLastSortieReward = (client: ILastSortieRewardClient): ILastSortieRe
 const convertNemesisBase = (client: INemesisBaseClient): INemesisBaseDatabase => {
     return {
         ...client,
+        ShoulderHelmet: client.ShoulderHelmet || getFallbackHelmet(client.KillingSuit),
         fp: BigInt(client.fp),
         d: fromMongoDate(client.d)
     };
@@ -287,6 +289,7 @@ const convertNemesisBase = (client: INemesisBaseClient): INemesisBaseDatabase =>
 const convertNemesis = (client: INemesisClient): INemesisDatabase => {
     return {
         ...client,
+        ShoulderHelmet: client.ShoulderHelmet || getFallbackHelmet(client.KillingSuit),
         fp: BigInt(client.fp),
         d: fromMongoDate(client.d)
     };

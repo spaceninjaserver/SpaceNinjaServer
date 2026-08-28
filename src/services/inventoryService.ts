@@ -106,7 +106,7 @@ import { getMaxStanding, getMinStanding } from "../helpers/syndicateStandingHelp
 import { getCalendarSeason, getNightwaveSyndicateTag, getWorldState, getWorldStateTime } from "./worldStateService.ts";
 import type { ICalendarSeason } from "../types/worldStateTypes.ts";
 import type { INemesisProfile } from "../helpers/nemesisHelpers.ts";
-import { generateNemesisProfile } from "../helpers/nemesisHelpers.ts";
+import { generateNemesisProfile, getFallbackHelmet } from "../helpers/nemesisHelpers.ts";
 import { type TAccountDocument } from "./loginService.ts";
 import { KAHL_EPOCH, unixTimesInMs } from "../constants/timeConstants.ts";
 import { addString } from "../helpers/stringHelpers.ts";
@@ -3222,6 +3222,23 @@ export const cleanupInventory = (inventory: TInventoryDatabaseDocument): void =>
     for (const challenge of inventory.ChallengeProgress) {
         if (challenge.Completed?.length === 0) {
             challenge.Completed = undefined;
+        }
+    }
+
+    {
+        let fixedShoulderHelmets = 0;
+        for (const item of inventory.NemesisHistory ?? []) {
+            if (!item.ShoulderHelmet) {
+                item.ShoulderHelmet = getFallbackHelmet(item.KillingSuit);
+                ++fixedShoulderHelmets;
+            }
+        }
+        if (inventory.Nemesis && !inventory.Nemesis.ShoulderHelmet) {
+            inventory.Nemesis.ShoulderHelmet = getFallbackHelmet(inventory.Nemesis.KillingSuit);
+            ++fixedShoulderHelmets;
+        }
+        if (fixedShoulderHelmets) {
+            logger.debug(`fixed ${fixedShoulderHelmets} invalid nemesis shoulder helmets`);
         }
     }
 };
