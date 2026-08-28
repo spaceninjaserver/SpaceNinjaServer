@@ -4,6 +4,7 @@ import {
     getItemName,
     getNormalizedString,
     getString,
+    supplementalItemNames,
     supplementalKeys,
     supplementalRecipes,
     supplementalSuits,
@@ -49,7 +50,7 @@ interface ListedItem {
     subtype?: string;
     fusionLimit?: number;
     exalted?: readonly string[];
-    badReason?: "starter" | "frivolous" | "notraw" | "metadataPatch";
+    badReason?: "starter" | "frivolous" | "notraw" | "metadataPatch" | "u5mod";
     partType?: string;
     chainLength?: number;
     parazon?: boolean;
@@ -471,7 +472,8 @@ const getItemListsController: RequestHandler = (req, response) => {
         if (uniqueName.substring(0, 18) != "/Lotus/Types/Game/") {
             const mod: ListedItem = {
                 uniqueName,
-                name: getString(arcane.name, lang)
+                name: getString(arcane.name, lang),
+                fusionLimit: arcane.fusionLimit
             };
             if (arcane.excludeFromCodex) {
                 mod.badReason = "frivolous";
@@ -607,10 +609,13 @@ const getItemListsController: RequestHandler = (req, response) => {
     for (const [uniqueName, mod] of Object.entries(U5Modules)) {
         res.mods.push({
             uniqueName,
-            name: uniqueName,
+            name: mod.name
+                ? getString(mod.name || uniqueName, lang)
+                : getString(getItemName(mod.fits[0].type) || uniqueName, lang),
             fusionLimit: 0,
             fits: mod.fits,
-            upgrades: mod.upgrades
+            upgrades: mod.upgrades,
+            badReason: "u5mod"
         });
     }
 
@@ -618,6 +623,13 @@ const getItemListsController: RequestHandler = (req, response) => {
         res.NightwaveTags.push({
             uniqueName,
             name: getString(name, lang) || name
+        });
+    }
+
+    for (const [uniqueName, name] of Object.entries(supplementalItemNames)) {
+        res.AdditionalDict.push({
+            uniqueName,
+            name: getString(name, lang)
         });
     }
 

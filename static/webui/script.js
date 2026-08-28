@@ -838,11 +838,11 @@ function fetchItemList() {
             });
             data.LongGuns.push({
                 uniqueName: "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimary",
-                name: getAddDict("/Lotus/Language/SolarisVenus/Kitgun_Singular")
+                name: getAddDict("/Lotus/Language/Weapons/LotusModularGunName")
             });
             data.Pistols.push({
                 uniqueName: "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondary",
-                name: getAddDict("/Lotus/Language/SolarisVenus/Kitgun_Singular")
+                name: getAddDict("/Lotus/Language/Weapons/LotusModularGunName")
             });
             data.MoaPets ??= [];
             data.MoaPets.push({
@@ -877,66 +877,6 @@ function fetchItemList() {
                 }
             );
 
-            data.miscitems.push(
-                {
-                    uniqueName: "/Lotus/Types/Keys/GolemKeyBlueprint",
-                    name: data.blueprintAndItem.replace(
-                        "|ITEM|",
-                        data.miscitems.find(i => i.uniqueName === "/Lotus/Types/Keys/DerelictGolemKey").name
-                    )
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/DerelictCaptureKeyBlueprint",
-                    name: data.blueprintAndItem.replace(
-                        "|ITEM|",
-                        data.miscitems.find(i => i.uniqueName === "/Lotus/Types/Keys/DerelictCaptureKey").name
-                    )
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/DerelictDefenseKeyBlueprint",
-                    name: data.blueprintAndItem.replace(
-                        "|ITEM|",
-                        data.miscitems.find(i => i.uniqueName === "/Lotus/Types/Keys/DerelictDefenseKey").name
-                    )
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/DerelictExterminateKeyBlueprint",
-                    name: data.blueprintAndItem.replace(
-                        "|ITEM|",
-                        data.miscitems.find(i => i.uniqueName === "/Lotus/Types/Keys/DerelictExterminateKey").name
-                    )
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/DerelictMobileDefenseKeyBlueprint",
-                    name: data.blueprintAndItem.replace(
-                        "|ITEM|",
-                        data.miscitems.find(i => i.uniqueName === "/Lotus/Types/Keys/DerelictMobileDefenseKey").name
-                    )
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/DerelictSabotageKeyBlueprint",
-                    name: data.blueprintAndItem.replace(
-                        "|ITEM|",
-                        data.miscitems.find(i => i.uniqueName === "/Lotus/Types/Keys/DerelictSabotageKey").name
-                    )
-                },
-                {
-                    uniqueName: "/Lotus/Types/Keys/DerelictSurvivalKeyBlueprint",
-                    name: data.blueprintAndItem.replace(
-                        "|ITEM|",
-                        data.miscitems.find(i => i.uniqueName === "/Lotus/Types/Keys/DerelictSurvivalKey").name
-                    )
-                },
-                {
-                    uniqueName: "/Lotus/Types/Recipes/KevinTestRecipe",
-                    name: data.blueprintAndItem.replace("|ITEM|", loc("code_infernoMod"))
-                },
-                {
-                    uniqueName: "/Lotus/Types/Recipes/IncendiaryRifleModBlueprint",
-                    name: data.blueprintAndItem.replace("|ITEM|", loc("code_infernoMod"))
-                }
-            );
-
             data.VarziaOffers.unshift({
                 uniqueName: "",
                 name: loc("disabled")
@@ -949,34 +889,6 @@ function fetchItemList() {
             });
 
             const itemMap = {
-                // Generics for rivens
-                "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun": { name: loc("code_archgun") },
-                "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon": { name: loc("code_melee") },
-                "/Lotus/Weapons/Tenno/Pistol/LotusPistol": { name: loc("code_pistol") },
-                "/Lotus/Weapons/Tenno/Rifle/LotusRifle": { name: loc("code_rifle") },
-                "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": { name: loc("code_shotgun") },
-                // Modular weapons
-                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam": {
-                    name: getAddDict("/Lotus/Language/SolarisVenus/Kitgun_Singular")
-                },
-                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryLauncher": {
-                    name: getAddDict("/Lotus/Language/SolarisVenus/Kitgun_Singular")
-                },
-                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryShotgun": {
-                    name: getAddDict("/Lotus/Language/SolarisVenus/Kitgun_Singular")
-                },
-                "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimarySniper": {
-                    name: getAddDict("/Lotus/Language/SolarisVenus/Kitgun_Singular")
-                },
-                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam": {
-                    name: getAddDict("/Lotus/Language/SolarisVenus/Kitgun_Singular")
-                },
-                "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun": {
-                    name: getAddDict("/Lotus/Language/SolarisVenus/Kitgun_Singular")
-                },
-                "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": {
-                    name: getAddDict("/Lotus/Language/Hoverboards/Hoverboard_Singular")
-                },
                 "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetAPowerSuit": {
                     name: data.ModularParts.find(
                         i => i.uniqueName === "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadA"
@@ -991,10 +903,7 @@ function fetchItemList() {
                     name: data.ModularParts.find(
                         i => i.uniqueName === "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/ZanukaPetPartHeadC"
                     ).name
-                },
-                // U5
-                "/Lotus/Types/Game/PowerSuit": { name: loc("code_warframe") },
-                "/Lotus/Types/Game/LotusMeleeWeapon": { name: loc("code_melee") }
+                }
             };
             for (const [type, items] of Object.entries(data)) {
                 if (type == "archonCrystalUpgrades") {
@@ -1122,38 +1031,14 @@ function fetchItemList() {
                     });
                 } else if (["MissionTypes", "Nodes", "AdditionalDict"].includes(type)) {
                     items.forEach(item => {
-                        itemMap[item.uniqueName] = { ...item, type };
+                        if (!itemMap[item.uniqueName]) {
+                            itemMap[item.uniqueName] = { ...item, type };
+                        }
                     });
                 } else if (type != "blueprintAndItem") {
                     const nameToItems = {};
                     items.forEach(item => {
                         item.name = item.name.replace(/<.+>/g, "").trim();
-                        const nameMap = {
-                            "/Lotus/Upgrades/Modules/GrineerMeleeModule":
-                                loc("code_U5Mod").replace("|TYPE|", loc("code_melee")) + " [GrineerMeleeModule]",
-                            "/Lotus/Upgrades/Modules/TennoSwordModule":
-                                loc("code_U5Mod").replace("|TYPE|", loc("code_melee")) + " [TennoSwordModule]",
-                            "/Lotus/Upgrades/Modules/GrineerPistolModule": loc("code_U5Mod").replace(
-                                "|TYPE|",
-                                loc("code_pistol")
-                            ),
-                            "/Lotus/Upgrades/Modules/GrineerRifleModule": loc("code_U5Mod").replace(
-                                "|TYPE|",
-                                loc("code_rifle")
-                            ),
-                            "/Lotus/Upgrades/Modules/GrineerShotgunModule": loc("code_U5Mod").replace(
-                                "|TYPE|",
-                                loc("code_shotgun")
-                            ),
-                            "/Lotus/Upgrades/Modules/OrokinWarframeModule": loc("code_U5Mod").replace(
-                                "|TYPE|",
-                                loc("code_warframe")
-                            ),
-                            "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod": loc("code_infernoMod")
-                        };
-                        if (nameMap[item.name]) {
-                            item.name = nameMap[item.name];
-                        }
                         if (item.name == "") {
                             //console.log(`changed ${item.uniqueName} name to path`);
                             item.name = item.uniqueName;
@@ -1164,11 +1049,28 @@ function fetchItemList() {
                                 data.Suits.find(i => i.uniqueName === "/Lotus/Powersuits/Excalibur/ExcaliburPrime").name
                             );
                         }
+                        if (
+                            [
+                                "/Lotus/Types/Recipes/KevinTestRecipe",
+                                "/Lotus/Types/Recipes/IncendiaryRifleModBlueprint"
+                            ].includes(item.uniqueName)
+                        ) {
+                            item.name = loc("code_updateSuffix").replace("|TYPE|", item.name).replace("|VALUE|", "5");
+                        }
                         if ("badReason" in item) {
                             if (item.badReason == "starter") {
-                                item.name = loc("code_starter").replaceAll("|MOD|", item.name);
+                                item.name = loc("code_starter")
+                                    .replaceAll("|MOD|", item.name)
+                                    .replaceAll("|FLAWED|", getAddDict("/Lotus/Language/Labels/DAMAGED"));
                             } else if (item.badReason == "frivolous") {
                                 item.name += " " + loc("code_badItem");
+                            } else if (item.badReason == "u5mod") {
+                                if (item.fits.length > 1) {
+                                    item.name = loc("code_U5Mod").replace("|TYPE|", item.name);
+                                }
+                                item.name = loc("code_updateSuffix")
+                                    .replace("|TYPE|", item.name)
+                                    .replace("|VALUE|", "5");
                             }
                         }
                         nameToItems[item.name] ??= [];
@@ -1309,16 +1211,6 @@ const modularWeapons = [
     "/Lotus/Types/Friendly/Pets/CreaturePets/VizierPredatorKubrowPetPowerSuit",
     "/Lotus/Types/Friendly/Pets/CreaturePets/PharaohPredatorKubrowPetPowerSuit",
     "/Lotus/Types/Friendly/Pets/CreaturePets/MedjayPredatorKubrowPetPowerSuit"
-];
-
-const U5Mods = [
-    "/Lotus/Upgrades/Modules/GrineerMeleeModule",
-    "/Lotus/Upgrades/Modules/GrineerPistolModule",
-    "/Lotus/Upgrades/Modules/GrineerRifleModule",
-    "/Lotus/Upgrades/Modules/GrineerShotgunModule",
-    "/Lotus/Upgrades/Modules/OrokinWarframeModule",
-    "/Lotus/Upgrades/Modules/TennoSwordModule",
-    "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod"
 ];
 
 async function populateInventoryRoute() {
@@ -1973,24 +1865,28 @@ single.getRoute("/webui/mods").on("beforeload", async function () {
         {
             const td = document.createElement("td");
             td.textContent = itemMap[item.ItemType]?.name ?? item.ItemType;
-            if (
-                U5Mods.includes(item.ItemType) &&
-                item.ItemType != "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod"
-            ) {
+            if (itemMap[item.ItemType]?.badReason == "u5mod") {
                 if (item.UpgradeFingerprint) {
                     const fingerprint = JSON.parse(item.UpgradeFingerprint);
-                    if (fingerprint.fits) {
+                    if (fingerprint.fits && itemMap[item.ItemType]?.fits.length > 1) {
                         td.textContent = loc("code_U5Mod").replace(
                             "|TYPE|",
                             itemMap[fingerprint.fits]?.name ?? fingerprint.fits
                         );
-                    }
-                    if (item.ItemType.endsWith("GrineerMeleeModule") || item.ItemType.endsWith("TennoSwordModule")) {
-                        td.textContent += " [" + item.ItemType.split("/").pop() + "]";
+                        td.textContent = loc("code_updateSuffix")
+                            .replace("|TYPE|", td.textContent)
+                            .replace("|VALUE|", "5");
+                        if (
+                            [
+                                "/Lotus/Upgrades/Modules/GrineerMeleeModule",
+                                "/Lotus/Upgrades/Modules/TennoSwordModule"
+                            ].includes(item.ItemType)
+                        ) {
+                            td.textContent += " [" + item.ItemType.split("/").pop() + "]";
+                        }
                     }
                 }
-            }
-            if (itemMap[item.ItemType]?.badReason == "notraw") {
+            } else if (itemMap[item.ItemType]?.badReason == "notraw") {
                 // Assuming this is a riven with a pending challenge, so rank would be N/A, but otherwise it's fine.
             } else if (!Number.isNaN(rank)) {
                 td.innerHTML += " <span title='" + loc("code_rank") + "'>★ " + rank + "/" + maxRank + "</span>";
@@ -2011,7 +1907,7 @@ single.getRoute("/webui/mods").on("beforeload", async function () {
                 a.innerHTML = icons.arrowUp;
                 td.appendChild(a);
             }
-            if (U5Mods.includes(item.ItemType)) {
+            if (itemMap[item.ItemType]?.badReason == "u5mod") {
                 const a = document.createElement("a");
                 a.href = "/webui/details?productCategory=Upgrades&itemId=" + item.ItemId.$oid;
                 a.innerHTML = icons.feather;
@@ -3779,49 +3675,55 @@ function doAddAllMods() {
         modsAll.add(child.getAttribute("data-key"));
     }
 
-    [
-        "/Lotus/Upgrades/Mods/Fusers/CommonModFuser",
-        "/Lotus/Upgrades/Mods/Fusers/UncommonModFuser",
-        "/Lotus/Upgrades/Mods/Fusers/RareModFuser",
-        "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser",
-        "/Lotus/Upgrades/Modules/GrineerMeleeModule",
-        "/Lotus/Upgrades/Modules/GrineerPistolModule",
-        "/Lotus/Upgrades/Modules/GrineerRifleModule",
-        "/Lotus/Upgrades/Modules/GrineerShotgunModule",
-        "/Lotus/Upgrades/Modules/OrokinWarframeModule",
-        "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod"
-    ].forEach(path => modsAll.delete(path));
-
     revalidateAuthz().then(() => {
         getInventoryData().then(data => {
-            for (const modOwned of data.RawUpgrades) {
-                if ((modOwned.ItemCount ?? 1) > 0) {
-                    modsAll.delete(modOwned.ItemType);
-                }
-            }
+            window.itemListPromise.then(itemMap => {
+                [
+                    "/Lotus/Upgrades/Mods/Fusers/CommonModFuser",
+                    "/Lotus/Upgrades/Mods/Fusers/UncommonModFuser",
+                    "/Lotus/Upgrades/Mods/Fusers/RareModFuser",
+                    "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser"
+                ].forEach(path => modsAll.delete(path));
 
-            modsAll = Array.from(modsAll);
-            if (
-                modsAll.length != 0 &&
-                window.confirm(
-                    replacePluralForms(loc("code_addModsConfirm"), {
-                        COUNT: modsAll.length
-                    })
-                )
-            ) {
-                $.post({
-                    url: "/custom/addItems?" + window.authz,
-                    contentType: "application/json",
-                    data: JSON.stringify(
-                        modsAll.map(mod => ({
-                            ItemType: mod,
-                            ItemCount: 21 // To fully upgrade certain arcanes
-                        }))
+                for (const mod of modsAll) {
+                    if (itemMap[mod]?.badReason == "u5mod") {
+                        modsAll.delete(mod);
+                    }
+                }
+
+                for (const modOwned of data.RawUpgrades) {
+                    if ((modOwned.ItemCount ?? 1) > 0) {
+                        modsAll.delete(modOwned.ItemType);
+                    }
+                }
+
+                modsAll = Array.from(modsAll);
+                if (
+                    modsAll.length != 0 &&
+                    window.confirm(
+                        replacePluralForms(loc("code_addModsConfirm"), {
+                            COUNT: modsAll.length
+                        })
                     )
-                }).done(function () {
-                    updateInventory();
-                });
-            }
+                ) {
+                    $.post({
+                        url: "/custom/addItems?" + window.authz,
+                        contentType: "application/json",
+                        data: JSON.stringify(
+                            modsAll.map(mod => {
+                                const fusionLimit = itemMap[mod]?.fusionLimit ?? 0;
+                                const isArcane = mod.startsWith("/Lotus/Upgrades/CosmeticEnhancers/");
+                                return {
+                                    ItemType: mod,
+                                    ItemCount: isArcane ? ((fusionLimit + 1) * (fusionLimit + 2)) / 2 : 1
+                                };
+                            })
+                        )
+                    }).done(function () {
+                        updateInventory();
+                    });
+                }
+            });
         });
     });
 }
@@ -4198,7 +4100,7 @@ async function populateDetailedViewRoute() {
             document.getElementById("valenceBonus-card").classList.add("d-none");
         }
 
-        if (U5Mods.includes(item.ItemType)) {
+        if (itemMap[item.ItemType]?.badReason == "u5mod") {
             document.getElementById("u5ModEdit-card").classList.remove("d-none");
             const oldFitsSelect = document.getElementById("u5ModEdit-fits");
             const fitsSelect = oldFitsSelect.cloneNode(false);
@@ -5181,8 +5083,7 @@ function createUpgradeInput(targetDiv, itemMap, itemType, upgrade) {
             const option = document.createElement("option");
             option.value = up.type;
             const locType =
-                (itemType.endsWith("GrineerMeleeModule") || itemType.endsWith("TennoSwordModule")) &&
-                up.type == "WEAPON_FIRE_RATE"
+                meta.fits[0].type == "/Lotus/Types/Game/LotusMeleeWeapon" && up.type == "WEAPON_FIRE_RATE"
                     ? "WEAPON_MELEE_FIRE_RATE"
                     : up.type;
             if (
@@ -5219,7 +5120,7 @@ function createUpgradeInput(targetDiv, itemMap, itemType, upgrade) {
         ["COMMON", "UNCOMMON", "RARE"].forEach(rarity => {
             const option = document.createElement("option");
             option.value = rarity;
-            const locKey = "code_rarity" + rarity.charAt(0) + rarity.slice(1).toLowerCase();
+            const locKey = itemMap["/Lotus/Language/Labels/" + rarity]?.name ?? rarity;
             option.textContent = loc(locKey);
             option.setAttribute("data-loc", locKey);
             select.appendChild(option);

@@ -51,8 +51,8 @@
   "/Lotus/Language/OstronCrafting/OperatorTrainingAmpName",
   "/Lotus/Language/Items/OperatorVoidBeam",
   "/Lotus/Language/UiElements/PLACEMENT_METERS",
-  "/Lotus/Language/SolarisVenus/Kitgun_Singular",
-  "/Lotus/Language/Hoverboards/Hoverboard_Singular",
+  "/Lotus/Language/Weapons/LotusModularGunName",
+  "/Lotus/Language/SolarisVenus/KDriveItem",
   "/Lotus/Language/OstronCrafting/Zaw_Singular",
   "/Lotus/Language/SolarisVenus/MoaPet_Singular",
   "/Lotus/Language/Pets/ZanukaPetItemName",
@@ -154,7 +154,6 @@
   "/Lotus/Language/Syndicates/RadioLegionShortSeasonTitle1",
   "/Lotus/Language/Syndicates/RadioLegionSeasonTitle3",
   "/Lotus/Language/Syndicates/RadioLegionSeasonTitle2",
-  "/Lotus/Language/Syndicates/RadioLegionShortSeasonTitle1",
   "/Lotus/Language/Syndicates/RadioLegionSeasonTitle1",
   "/Lotus/Language/Upgrades/AvatarAbilityStrengthModDesc",
   "/Lotus/Language/Upgrades/AvatarAbilityRangeModDesc",
@@ -223,5 +222,13 @@
   "/Lotus/Language/Suits/StalkerTeleportName",
   "/Lotus/Language/Suits/StalkerStunName",
   "/Lotus/Language/Suits/StalkerSmokeScreenName",
-  "/Lotus/Language/Suits/StalkerAbsorbAbilityName"
+  "/Lotus/Language/Suits/StalkerAbsorbAbilityName",
+  "/Lotus/Language/Items/InfernoMod",
+  "/Lotus/Language/Items/PistolCategoryName",
+  "/Lotus/Language/Items/Warframe",
+  "/Lotus/Language/Labels/COMMON",
+  "/Lotus/Language/Labels/UNCOMMON",
+  "/Lotus/Language/Labels/RARE",
+  "/Lotus/Language/Labels/LEGENDARY",
+  "/Lotus/Language/Labels/DAMAGED"
 ]

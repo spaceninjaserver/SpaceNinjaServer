@@ -1603,6 +1603,26 @@ export const supplementalVendors: Record<string, IVendor> = {
     }
 };
 
+export const supplementalItemNames: Record<string, string> = {
+    "/Lotus/Types/Game/SolarRails/BasicSolarRail": "/Lotus/Language/Items/BasicSolarRailName",
+    "/Lotus/Types/Game/LotusMeleeWeapon": "/Lotus/Language/Items/MeleeCategoryName",
+    "/Lotus/Weapons/Tenno/Melee/PlayerMeleeWeapon": "/Lotus/Language/Items/MeleeCategoryName",
+    "/Lotus/Weapons/Tenno/Pistol/LotusPistol": "/Lotus/Language/Items/PistolCategoryName",
+    "/Lotus/Weapons/Tenno/Rifle/LotusRifle": "/Lotus/Language/Items/RifleCategoryName",
+    "/Lotus/Weapons/Tenno/Shotgun/LotusShotgun": "/Lotus/Language/Items/ShotgunCategoryName",
+    "/Lotus/Types/Game/PowerSuit": "/Lotus/Language/Items/Warframe",
+    "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod": "/Lotus/Language/Items/InfernoMod",
+    "/Lotus/Weapons/Tenno/Archwing/Primary/ArchGun": "/Lotus/Language/Items/ArchwingGun",
+    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryBeam": "/Lotus/Language/Weapons/LotusModularGunName",
+    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryLauncher": "/Lotus/Language/Weapons/LotusModularGunName",
+    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimaryShotgun": "/Lotus/Language/Weapons/LotusModularGunName",
+    "/Lotus/Weapons/SolarisUnited/Primary/LotusModularPrimarySniper": "/Lotus/Language/Weapons/LotusModularGunName",
+    "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryBeam": "/Lotus/Language/Weapons/LotusModularGunName",
+    "/Lotus/Weapons/SolarisUnited/Secondary/LotusModularSecondaryShotgun":
+        "/Lotus/Language/Weapons/LotusModularGunName",
+    "/Lotus/Types/Vehicles/Hoverboard/HoverboardSuit": "/Lotus/Language/SolarisVenus/KDriveItem"
+};
+
 const preU42YinYangRewards: TMissionDeck = [
     [
         {
@@ -2533,6 +2553,7 @@ const preU26SpyMissionDecks: Record<string, TMissionDeck> = {
 };
 
 interface IU5FingerprintData {
+    name?: string;
     fits: { type: string; rarity: TRarity; statAtten?: number }[];
     upgrades: IU5FingerprintUpgrade[];
     numUpgrades: {
@@ -2709,6 +2730,7 @@ export const U5ModsWeights: Record<TRarity, number> = {
 
 export const U5Modules: Record<string, IU5FingerprintData> = {
     "/Lotus/Upgrades/Modules/Crafted/IncendiaryRifleMod": {
+        name: "/Lotus/Language/Items/InfernoMod",
         fits: [
             {
                 type: "/Lotus/Weapons/Tenno/Rifle/Rifle",
@@ -2733,6 +2755,10 @@ export const U5Modules: Record<string, IU5FingerprintData> = {
     "/Lotus/Upgrades/Modules/GrineerMeleeModule": {
         fits: [
             {
+                type: "/Lotus/Types/Game/LotusMeleeWeapon",
+                rarity: "COMMON"
+            },
+            {
                 type: "/Lotus/Weapons/Tenno/Melee/DualShortSword/DualShortSword",
                 rarity: "UNCOMMON"
             },
@@ -2743,10 +2769,6 @@ export const U5Modules: Record<string, IU5FingerprintData> = {
             {
                 type: "/Lotus/Weapons/Tenno/Melee/Staff/Staff",
                 rarity: "UNCOMMON"
-            },
-            {
-                type: "/Lotus/Types/Game/LotusMeleeWeapon",
-                rarity: "COMMON"
             },
             {
                 type: "/Lotus/Weapons/Tenno/Melee/Fist/Fist",
@@ -3164,6 +3186,10 @@ export const U5Modules: Record<string, IU5FingerprintData> = {
     "/Lotus/Upgrades/Modules/TennoSwordModule": {
         fits: [
             {
+                type: "/Lotus/Types/Game/LotusMeleeWeapon",
+                rarity: "COMMON"
+            },
+            {
                 type: "/Lotus/Weapons/Tenno/Melee/DualShortSword/DualShortSword",
                 rarity: "UNCOMMON"
             },
@@ -3174,10 +3200,6 @@ export const U5Modules: Record<string, IU5FingerprintData> = {
             {
                 type: "/Lotus/Weapons/Tenno/Melee/Staff/Staff",
                 rarity: "UNCOMMON"
-            },
-            {
-                type: "/Lotus/Types/Game/LotusMeleeWeapon",
-                rarity: "COMMON"
             }
         ],
         upgrades: [
@@ -4371,6 +4393,9 @@ export const getItemName = (uniqueName: string): string | undefined => {
     if (uniqueName in ExportKeys) {
         return ExportKeys[uniqueName].name;
     }
+    if (uniqueName in supplementalKeys) {
+        return supplementalKeys[uniqueName].name;
+    }
     if (uniqueName in ExportGear) {
         return ExportGear[uniqueName].name;
     }
@@ -4401,8 +4426,8 @@ export const getItemName = (uniqueName: string): string | undefined => {
     if (uniqueName in ExportDojoRecipes.decos) {
         return ExportDojoRecipes.decos[uniqueName].name;
     }
-    if (uniqueName == "/Lotus/Types/Game/SolarRails/BasicSolarRail") {
-        return "/Lotus/Language/Items/BasicSolarRailName";
+    if (uniqueName in supplementalItemNames) {
+        return supplementalItemNames[uniqueName];
     }
     return undefined;
 };
