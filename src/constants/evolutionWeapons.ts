@@ -50,5 +50,10 @@ export const evolutionWeapons = new Set([
     "/Lotus/Weapons/Tenno/Shotgun/Shotgun",
     "/Lotus/Weapons/Tenno/ThrowingWeapons/Kunai",
     "/Lotus/Weapons/Tenno/ThrowingWeapons/StalkerKunai",
+    "/Lotus/Weapons/Tenno/Rifle/TennoSniperRifle",
+    "/Lotus/Weapons/Grineer/Pistols/GrineerCrossbow/GrineerGooGun",
+    "/Lotus/Weapons/Tenno/Pistols/AutomaticHandCrossbow/AutoCrossBow",
+    "/Lotus/Weapons/Tenno/Melee/Swords/TnoRapier/TnoRapier",
+    "/Lotus/Weapons/Corpus/Melee/KickAndPunch/KickPunchWeapon",
     ...permanentEvolutionWeapons
 ]);
