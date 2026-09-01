@@ -5,6 +5,7 @@ import {
     claimLoginReward,
     getRandomLoginRewards,
     isLoginRewardAChoice,
+    legacyMilestones,
     setAccountGotLoginRewardToday
 } from "../../services/loginRewardService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
@@ -15,15 +16,32 @@ import { ExportBoosters, ExportResources } from "warframe-public-export-plus";
 
 export const loginRewardsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const today = Math.trunc(Date.now() / 86400000) * 86400;
-    const isMilestoneDay = account.LoginDays == 5 || account.LoginDays % 50 == 0;
-    const nextMilestoneDay = account.LoginDays < 5 ? 5 : (Math.trunc(account.LoginDays / 50) + 1) * 50;
+
+    // https://wiki.warframe.com/w/Login_Rewards
+    const is_pre_daily_tribute = version_compare(buildLabel, gameToBuildVersion["18.0.2"]) < 0;
+    const is_pre_milestones = version_compare(buildLabel, gameToBuildVersion["23.10.0"]) < 0;
+
+    const isMilestoneDay = is_pre_milestones
+        ? account.LoginDays % 50 == 0 && account.LoginDays <= 1000 // legacy milestones programmed up to 1000 day
+        : account.LoginDays == 5 || account.LoginDays % 50 == 0; // modern milestones have additional milestone at 5 day
+
+    const nextMilestoneDay = is_pre_milestones
+        ? account.LoginDays < 1000
+            ? (Math.trunc(account.LoginDays / 50) + 1) * 50
+            : 1000
+        : account.LoginDays < 5
+          ? 5
+          : (Math.trunc(account.LoginDays / 50) + 1) * 50;
 
     if (today != account.LastLoginRewardDate) {
         const inventory = await getInventory(account._id, undefined);
         if (!inventory.disableDailyTribute) {
-            const buildLabel = getBuildLabel(req, account);
-            const randomRewards = await getRandomLoginRewards(account, inventory, buildLabel);
+            const useLegacyMilestone = isMilestoneDay && is_pre_milestones && account.LoginDays <= 1000;
+            const randomRewards = useLegacyMilestone
+                ? [legacyMilestones[Math.trunc(account.LoginDays / 50) - 1]]
+                : await getRandomLoginRewards(account, inventory, buildLabel);
             const response: ILoginRewardsReponse = {
                 DailyTributeInfo: {
                     Rewards: randomRewards,
@@ -38,10 +56,6 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
                 LastLoginRewardDate: today
             };
 
-            // https://wiki.warframe.com/w/Login_Rewards
-            const is_pre_daily_tribute = version_compare(buildLabel, gameToBuildVersion["18.0.2"]) < 0;
-            const is_pre_milestones = version_compare(buildLabel, gameToBuildVersion["23.10.0"]) < 0;
-
             if (
                 (!isMilestoneDay && randomRewards.length == 1) || // A choice is not needed?
                 is_pre_milestones // Or client is unable to make a choice?
@@ -49,6 +63,7 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
                 response.DailyTributeInfo.HasChosenReward = true;
                 response.DailyTributeInfo.ChosenReward = randomRewards[0];
                 response.DailyTributeInfo.NewInventory = await claimLoginReward(inventory, randomRewards[0]);
+                if (useLegacyMilestone) inventory.LoginMilestoneRewards.push(randomRewards[0].StoreItemType);
                 setAccountGotLoginRewardToday(account, inventory);
                 await Promise.all([inventory.save(), account.save()]);
 

@@ -407,3 +407,196 @@ const randomRewards: (ILoginReward & { Rarity: TRarity; minBuildLabel?: string }
         Transmission: "/Lotus/Sounds/Dialog/DailyTribute/Ordis/DDayTribOrdis"
     }
 ];
+
+export const legacyMilestones: (ILoginReward & { minBuildLabel?: string })[] = [
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/Types/StoreItems/Packages/LoginPackA",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: ""
+    },
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/StoreItems/Weapons/Tenno/Pistols/SundialGun/SundialPistol",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: ""
+    },
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/Types/StoreItems/Packages/LoginPackB",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: ""
+    },
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/StoreItems/Upgrades/Mods/Melee/Expert/WeaponFireRateModExpert",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: ""
+    },
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/Types/StoreItems/Packages/LoginPackC",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: ""
+    },
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/StoreItems/Weapons/Tenno/Melee/SunDialAxe/SundialAxeWeapon",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: "",
+        minBuildLabel: gameToBuildVersion["18.16.0"]
+    },
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/Types/StoreItems/Packages/LoginPackD",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: ""
+    },
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/StoreItems/Upgrades/Mods/Warframe/Expert/VigorModExpert",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: ""
+    },
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/Types/StoreItems/Packages/LoginPackE",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: ""
+    },
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/StoreItems/Weapons/Tenno/LongGuns/LoginPrimary/SundialRifle",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: "",
+        minBuildLabel: gameToBuildVersion["18.16.0"]
+    },
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/Types/StoreItems/Packages/LoginPackF",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: ""
+    },
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/StoreItems/Upgrades/Mods/Rifle/DualStat/PrimedShredMod",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: "",
+        minBuildLabel: gameToBuildVersion["21.0.0"]
+    },
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/StoreItems/Language/Bundles/LoginPackGName",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: "",
+        minBuildLabel: gameToBuildVersion["22.0.0"]
+    },
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/StoreItems/Weapons/Tenno/Melee/SwordsAndBoards/SundialSwordBoard/SundialBoardSword",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: "",
+        minBuildLabel: gameToBuildVersion["22.2.4"]
+    },
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/Types/StoreItems/Packages/Login750Pack",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: "",
+        minBuildLabel: gameToBuildVersion["22.6.0.1"]
+    },
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/StoreItems/Upgrades/Skins/Scarves/TnSundialCape",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: "",
+        minBuildLabel: gameToBuildVersion["22.10.1"]
+    },
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/Types/StoreItems/Packages/Login850Pack",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: "",
+        minBuildLabel: gameToBuildVersion["22.16.0"]
+    },
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/StoreItems/Upgrades/Mods/Warframe/Expert/AvatarKnockdownResistanceModExpert",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: ""
+    },
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/Types/StoreItems/Packages/Login950Pack",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: "",
+        minBuildLabel: gameToBuildVersion["23.2.0"]
+    },
+    {
+        RewardType: "RT_STORE_ITEM",
+        Icon: "",
+        StoreItemType: "/Lotus/Types/StoreItems/Packages/SundialArmorBundle",
+        Amount: 1,
+        ScalingMultiplier: 1,
+        Duration: 0,
+        Transmission: "",
+        minBuildLabel: gameToBuildVersion["23.9.1"]
+    }
+];
