@@ -71,7 +71,7 @@ import { createMessage, getInboxFilter } from "../../services/inboxService.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 import { PendingTrade } from "../../models/tradingModel.ts";
 import { exportTrade } from "../../services/tradingService.ts";
-import { supplementalSuits } from "../../services/itemDataService.ts";
+import { supplementalSuits, U42AbilityToLegacy } from "../../services/itemDataService.ts";
 import suitDefaultUpgrades from "../../constants/suitDefaultUpgrades.ts";
 import type { ITypeCount } from "../../types/commonTypes.ts";
 import { sendWsBroadcastToWebui } from "../../services/wsService.ts";
@@ -644,8 +644,9 @@ export const getInventoryResponse = async (
     for (const suit of inventoryResponse.Suits) {
         for (const config of suit.Configs) {
             if (config.AbilityOverride) {
-                config.AbilityOverride.Ability =
-                    "/Lotus/Powersuits/PowersuitAbilities/" + config.AbilityOverride.Ability.split("/").pop();
+                if (config.AbilityOverride.Ability in U42AbilityToLegacy) {
+                    config.AbilityOverride.Ability = U42AbilityToLegacy[config.AbilityOverride.Ability];
+                }
             }
         }
     }
