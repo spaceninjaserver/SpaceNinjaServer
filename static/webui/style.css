@@ -58,3 +58,30 @@ td.text-end > a > svg {
     padding-right: var(--bs-navbar-nav-link-padding-x);
     padding-left: var(--bs-navbar-nav-link-padding-x);
 }
+
+.market-filter {
+    max-width: 24rem;
+}
+
+.market-item-table {
+    min-height: 60vh;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.market-price {
+    width: 100%;
+    min-width: 0;
+}
+
+.market-product-column {
+    width: 50%;
+}
+
+.market-currency-column {
+    width: 6.5rem;
+}
+
+.market-price-column {
+    width: 12rem;
+}

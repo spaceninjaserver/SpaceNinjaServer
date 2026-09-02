@@ -18,6 +18,7 @@ import {
     ExportArcanes,
     ExportAvionics,
     ExportBoosters,
+    ExportBundles,
     ExportCustoms,
     ExportDojoRecipes,
     ExportDrones,
@@ -44,7 +45,7 @@ import suitDefaultUpgrades from "../../constants/suitDefaultUpgrades.ts";
 import { pseudoRecipeToOwnedRecipeMap } from "../../services/foundryService.ts";
 import { nightwaveTagToSeasonName } from "../../services/worldStateService.ts";
 
-interface ListedItem {
+export interface ListedItem {
     uniqueName: string;
     name: string;
     subtype?: string;
@@ -65,7 +66,7 @@ interface ListedItem {
     permanentEvolutionWeapon?: true;
 }
 
-interface ItemLists {
+export interface ItemLists {
     Suits: ListedItem[];
     LongGuns: ListedItem[];
     Melee: ListedItem[];
@@ -91,6 +92,15 @@ interface ItemLists {
     FlavourItems: ListedItem[];
     ShipDecorations: ListedItem[];
     WeaponSkins: ListedItem[];
+    Tennogen: ListedItem[];
+    BundleGlyphs: ListedItem[];
+    BundleGenes: ListedItem[];
+    BundleBoosters: ListedItem[];
+    BundleMods: ListedItem[];
+    BundleIncarnons: ListedItem[];
+    BundleHeirlooms: ListedItem[];
+    BundleNoggles: ListedItem[];
+    Bundles: ListedItem[];
     MissionTypes: ListedItem[];
     Nodes: ListedItem[];
     NightwaveTags: ListedItem[];
@@ -110,8 +120,24 @@ const toTitleCase = (str: string): string => {
     return str.replace(/[^\s-]+/g, word => word.charAt(0).toUpperCase() + word.substring(1).toLowerCase());
 };
 
-const getItemListsController: RequestHandler = (req, response) => {
-    const lang = getDict(typeof req.query.lang == "string" ? req.query.lang : "en");
+const supplementalModBundleTypes = new Set([
+    "/Lotus/Types/StoreItems/Packages/EssentialColdModPack",
+    "/Lotus/Types/StoreItems/Packages/EssentialCritModPack",
+    "/Lotus/Types/StoreItems/Packages/EssentialDamageModPack",
+    "/Lotus/Types/StoreItems/Packages/EssentialElectricityModPack",
+    "/Lotus/Types/StoreItems/Packages/EssentialGrimoireModPack",
+    "/Lotus/Types/StoreItems/Packages/EssentialHeatModPack",
+    "/Lotus/Types/StoreItems/Packages/EssentialTennokaiModPack",
+    "/Lotus/Types/StoreItems/Packages/EssentialToxinModPack",
+    "/Lotus/Types/StoreItems/Packages/EvergreenTripleMeleeRiven",
+    "/Lotus/Types/StoreItems/Packages/EvergreenTripleRifleRiven",
+    "/Lotus/Types/StoreItems/Packages/EvergreenTripleSecondaryRiven",
+    "/Lotus/Types/StoreItems/Packages/Login850Pack",
+    "/Lotus/Types/StoreItems/Packages/TheTeacherRewardModPack"
+]);
+
+export const getItemLists = (language: string = "en"): ItemLists => {
+    const lang = getDict(language);
     const res: ItemLists = {
         Suits: [],
         LongGuns: [],
@@ -138,6 +164,15 @@ const getItemListsController: RequestHandler = (req, response) => {
         FlavourItems: [],
         ShipDecorations: [],
         WeaponSkins: [],
+        Tennogen: [],
+        BundleGlyphs: [],
+        BundleGenes: [],
+        BundleBoosters: [],
+        BundleMods: [],
+        BundleIncarnons: [],
+        BundleHeirlooms: [],
+        BundleNoggles: [],
+        Bundles: [],
         MissionTypes: [],
         Nodes: [],
         NightwaveTags: [],
@@ -367,7 +402,19 @@ const getItemListsController: RequestHandler = (req, response) => {
         });
     }
     for (const [uniqueName, item] of Object.entries(ExportCustoms)) {
-        if (item.productCategory == "WeaponSkins") {
+        const fileName = uniqueName.substring(uniqueName.lastIndexOf("/") + 1);
+        const isTennogen =
+            item.name.startsWith("/Lotus/Language/SteamWorkshop/") ||
+            uniqueName.includes("/SteamWorkshop/") ||
+            uniqueName.includes("/Tennogen/") ||
+            (/^SW[A-Z]/.test(fileName) && !fileName.startsWith("SW1999"));
+        if (isTennogen) {
+            res.Tennogen.push({
+                uniqueName,
+                name: getString(item.name, lang),
+                alwaysAvailable: item.alwaysAvailable
+            });
+        } else if (item.productCategory == "WeaponSkins") {
             if (
                 !uniqueName.startsWith("/Lotus/Types/Game/Lotus") && // Base Items
                 !uniqueName.endsWith("ProjectileSkin") && // UnrealTournament ProjectileSkins
@@ -387,6 +434,51 @@ const getItemListsController: RequestHandler = (req, response) => {
                 });
             }
         }
+    }
+    const suitAndSentinelTypes = new Set(
+        [...res.Suits, ...res.Sentinels].map(item => item.uniqueName)
+    );
+    for (const [uniqueName, item] of Object.entries(ExportBundles)) {
+        const componentTypeNames = item.components.map(component => component.typeName);
+        const allComponentsMatch = (pattern: RegExp): boolean =>
+            componentTypeNames.length > 0 && componentTypeNames.every(typeName => pattern.test(typeName));
+        const isGeneBundle =
+            /^\/Lotus\/Types\/StoreItems\/Packages\/(?:Kavat|Kubrow)(?:Base)?ColorPack/.test(uniqueName) ||
+            allComponentsMatch(/KubrowPet\/(?:Colors|Patterns)|CatbrowPet\/(?:Colors|Patterns)|GeneMask/i);
+        const target =
+            /Heirloom/i.test(uniqueName)
+                ? res.BundleHeirlooms
+                : /TennoGen/i.test(uniqueName)
+                  ? res.Tennogen
+                : uniqueName.startsWith("/Lotus/Types/StoreItems/Packages/IncarnonPackages/")
+                    ? res.BundleIncarnons
+                    : uniqueName.includes("/AvatarImages/") || allComponentsMatch(/AvatarImages|Glyph/i)
+                      ? res.BundleGlyphs
+                      : isGeneBundle
+                        ? res.BundleGenes
+                        : allComponentsMatch(/\/Boosters\//i)
+                          ? res.BundleBoosters
+                          : supplementalModBundleTypes.has(uniqueName) ||
+                              allComponentsMatch(/\/Upgrades\/Mods\/(?!FusionBundles\/)/i)
+                            ? res.BundleMods
+                            : allComponentsMatch(/BobbleHead|Noggle/i)
+                              ? res.BundleNoggles
+                              : res.Bundles;
+        if (
+            target == res.Bundles &&
+            componentTypeNames.some(typeName => {
+                const internalTypeName = typeName.startsWith("/Lotus/StoreItems/")
+                    ? "/Lotus/" + typeName.substring("/Lotus/StoreItems/".length)
+                    : typeName;
+                return suitAndSentinelTypes.has(internalTypeName);
+            })
+        ) {
+            continue;
+        }
+        target.push({
+            uniqueName,
+            name: item.name ? getString(item.name, lang) : uniqueName.substring(uniqueName.lastIndexOf("/") + 1)
+        });
     }
 
     for (const [uniqueName, upgrade] of Object.entries({ ...ExportUpgrades, ...supplementalUpgrades })) {
@@ -640,7 +732,11 @@ const getItemListsController: RequestHandler = (req, response) => {
         });
     }
 
-    response.json(res);
+    return res;
+};
+
+const getItemListsController: RequestHandler = (req, response) => {
+    response.json(getItemLists(typeof req.query.lang == "string" ? req.query.lang : "en"));
 };
 
 export { getItemListsController };

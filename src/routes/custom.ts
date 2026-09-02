@@ -58,6 +58,13 @@ import { setAccountCheatController } from "../controllers/custom/setAccountCheat
 import { setGuildCheatController } from "../controllers/custom/setGuildCheatController.ts";
 
 import { getConfigController, setConfigController } from "../controllers/custom/configController.ts";
+import {
+    getMarketCatalogController,
+    getMarketItemPriceController,
+    getMarketItemPricesController,
+    getPrimeMarketItemsController,
+    setMarketCatalogController
+} from "../controllers/custom/marketCatalogController.ts";
 
 const customRouter = express.Router();
 
@@ -119,5 +126,10 @@ customRouter.post("/changeEmail", changeEmailController);
 
 customRouter.post("/getConfig", getConfigController);
 customRouter.post("/setConfig", setConfigController);
+customRouter.get("/marketCatalog", getMarketCatalogController);
+customRouter.post("/marketCatalog", setMarketCatalogController);
+customRouter.get("/marketCatalog/primeItems", getPrimeMarketItemsController);
+customRouter.get("/marketCatalog/itemPrice", getMarketItemPriceController);
+customRouter.post("/marketCatalog/itemPrices", getMarketItemPricesController);
 
 export { customRouter };

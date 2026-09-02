@@ -38,6 +38,7 @@ import type {
     IEndlessXpChoice,
     IGoalV9
 } from "../types/worldStateTypes.ts";
+import { applyCustomMarketCatalog } from "./customMarketService.ts";
 import { toMongoDate2, toOid, toOid2, fromMongoDate } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
 import { DailyDeal, Fissure } from "../models/worldStateModel.ts";
@@ -4512,6 +4513,7 @@ export const getWorldState = (
         worldState.WorldSeed = "4763605";
     }
 
+    applyCustomMarketCatalog(worldState, buildVersion);
     return worldState;
 };
 

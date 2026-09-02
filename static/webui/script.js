@@ -3507,6 +3507,504 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
     });
 });
 
+// Market manager route
+
+let marketCatalog;
+let marketItemMap = {};
+let activeMarketCategoryId;
+let marketOriginalPrice;
+let marketPriceRequestId = 0;
+const MARKET_PLATINUM_TO_CREDITS_RATIO = 5_000;
+
+const marketCategoryIcons = {
+    newplayer: "market_icon_newplayer",
+    new: "market_icon_new",
+    popular: "market_icon_popular",
+    seasonal: "market_icon_seasonal",
+    community: "market_icon_community",
+    heirloom: "market_icon_heirloom",
+    tennogen: "market_icon_tennogen",
+    sale: "market_icon_sale",
+    wishlist: "market_icon_wishlist",
+    quickbuy: "market_icon_quickbuy",
+    primeaccess: "market_icon_primeaccess"
+};
+
+const marketItemTypes = [
+    ["Suits", "inventory_suits"],
+    ["LongGuns", "inventory_longGuns"],
+    ["Pistols", "inventory_pistols"],
+    [
+        "KitgunParts",
+        "market_kitgunParts",
+        [
+            "ModularParts-GUN_BARREL",
+            "ModularParts-GUN_PRIMARY_HANDLE",
+            "ModularParts-GUN_SECONDARY_HANDLE",
+            "ModularParts-GUN_CLIP"
+        ]
+    ],
+    ["Melee", "inventory_melee"],
+    ["ZawParts", "market_zawParts", ["ModularParts-BLADE", "ModularParts-HILT", "ModularParts-HILT_WEIGHT"]],
+    ["SpaceSuits", "inventory_spaceSuits"],
+    ["SpaceGuns", "inventory_spaceGuns"],
+    ["SpaceMelee", "inventory_spaceMelee"],
+    ["MechSuits", "inventory_mechSuits"],
+    ["Sentinels", "inventory_sentinels"],
+    ["SentinelWeapons", "inventory_sentinelWeapons"],
+    [
+        "AmpParts",
+        "market_ampParts",
+        ["ModularParts-AMP_OCULUS", "ModularParts-AMP_CORE", "ModularParts-AMP_BRACE"]
+    ],
+    ["KubrowPets", "inventory_kubrowPets"],
+    [
+        "InfestedCompanionParts",
+        "market_infestedCompanionParts",
+        [
+            "ModularParts-CATBROW_ANTIGEN",
+            "ModularParts-CATBROW_MUTAGEN",
+            "ModularParts-KUBROW_ANTIGEN",
+            "ModularParts-KUBROW_MUTAGEN"
+        ]
+    ],
+    [
+        "MoaParts",
+        "market_moaParts",
+        ["ModularParts-MOA_ENGINE", "ModularParts-MOA_PAYLOAD", "ModularParts-MOA_HEAD", "ModularParts-MOA_LEG"]
+    ],
+    [
+        "HoundParts",
+        "market_houndParts",
+        [
+            "ModularParts-ZANUKA_BODY",
+            "ModularParts-ZANUKA_HEAD",
+            "ModularParts-ZANUKA_LEG",
+            "ModularParts-ZANUKA_TAIL"
+        ]
+    ],
+    [
+        "KDriveParts",
+        "market_kDriveParts",
+        [
+            "ModularParts-HB_DECK",
+            "ModularParts-HB_ENGINE",
+            "ModularParts-HB_FRONT",
+            "ModularParts-HB_JET"
+        ]
+    ],
+    ["FlavourItems", "inventory_flavourItems"],
+    ["ShipDecorations", "inventory_shipDecorations"],
+    ["WeaponSkins", "inventory_weaponSkins"],
+    ["Tennogen", "market_tennogen"],
+    ["BundleGlyphs", "market_bundleGlyphs"],
+    ["BundleGenes", "market_bundleGenes"],
+    ["BundleBoosters", "market_bundleBoosters"],
+    ["BundleMods", "market_bundleMods"],
+    ["BundleIncarnons", "market_bundleIncarnons"],
+    ["BundleHeirlooms", "market_bundleHeirlooms"],
+    ["BundleNoggles", "market_bundleNoggles"],
+    ["Bundles", "market_bundles"],
+    ["miscitems", "market_miscItems"]
+];
+
+function escapeMarketHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function marketCategoryOptions(selected) {
+    return (marketCatalog?.categories ?? [])
+        .map(
+            category =>
+                `<option value="${escapeMarketHtml(category.id)}"${category.id == selected ? " selected" : ""}>${escapeMarketHtml(category.name)}</option>`
+        )
+        .join("");
+}
+
+function marketIconOptions(selected) {
+    return [...new Set([selected, ...Object.keys(marketCategoryIcons)])]
+        .filter(Boolean)
+        .map(
+            icon =>
+                `<option value="${escapeMarketHtml(icon)}"${icon == selected ? " selected" : ""}>${escapeMarketHtml(marketCategoryIcons[icon] ? loc(marketCategoryIcons[icon]) : icon)}</option>`
+        )
+        .join("");
+}
+
+function renderMarketCategories() {
+    if (!marketCatalog) return;
+    document.getElementById("market-enabled").checked = marketCatalog.enabled;
+    document.getElementById("market-convert-original-platinum").checked =
+        marketCatalog.convertOriginalPlatinumToCredits === true;
+    document.getElementById("market-category-list").innerHTML = marketCatalog.categories
+        .map(
+            (category, index) => `<tr>
+                <td><input class="form-check-input" type="checkbox" ${category.enabled ? "checked" : ""} onchange="updateMarketCategory(${index}, 'enabled', this.checked)" /></td>
+                <td class="font-monospace">${escapeMarketHtml(category.id)}</td>
+                <td><input class="form-control" value="${escapeMarketHtml(category.name)}" onchange="updateMarketCategory(${index}, 'name', this.value)" /></td>
+                <td><select class="form-select" onchange="updateMarketCategory(${index}, 'icon', this.value)">${marketIconOptions(category.icon)}</select></td>
+                <td class="text-nowrap text-end">
+                    <button class="btn btn-sm btn-primary" onclick="moveMarketCategory(${index}, -1)" ${index == 0 ? "disabled" : ""}>↑</button>
+                    <button class="btn btn-sm btn-primary" onclick="moveMarketCategory(${index}, 1)" ${index == marketCatalog.categories.length - 1 ? "disabled" : ""}>↓</button>
+                    <button class="btn btn-sm btn-primary" onclick="removeMarketCategory(${index})">${loc("code_remove")}</button>
+                </td>
+            </tr>`
+        )
+        .join("");
+    if (!marketCatalog.categories.some(category => category.id == activeMarketCategoryId)) {
+        activeMarketCategoryId = marketCatalog.categories[0]?.id;
+    }
+    document.getElementById("market-new-category").innerHTML = marketCategoryOptions(activeMarketCategoryId);
+    renderMarketItemCategoryTabs();
+    renderMarketItems();
+}
+
+function renderMarketItemCategoryTabs() {
+    document.getElementById("market-item-category-tabs").innerHTML = marketCatalog.categories
+        .map(
+            category => `<li class="nav-item">
+                <button class="nav-link${category.id == activeMarketCategoryId ? " active" : ""}" type="button" onclick="selectMarketItemCategory('${escapeMarketHtml(category.id)}')">${escapeMarketHtml(category.name)}</button>
+            </li>`
+        )
+        .join("");
+}
+
+function selectMarketItemCategory(categoryId) {
+    activeMarketCategoryId = categoryId;
+    document.getElementById("market-new-category").value = categoryId;
+    renderMarketItemCategoryTabs();
+    renderMarketItems();
+}
+
+function renderMarketItems() {
+    if (!marketCatalog) return;
+    const filter = document.getElementById("market-filter").value.trim().toLowerCase();
+    document.getElementById("market-item-list").innerHTML = marketCatalog.items
+        .map((item, index) => ({ item, index }))
+        .filter(({ item }) => item.categoryId == activeMarketCategoryId)
+        .filter(({ item }) => !filter || `${item.label ?? ""} ${item.typeName}`.toLowerCase().includes(filter))
+        .map(
+            ({ item, index }) => `<tr>
+                <td><input class="form-check-input" type="checkbox" ${item.enabled ? "checked" : ""} onchange="updateMarketItem(${index}, 'enabled', this.checked)" /></td>
+                <td class="market-product-column">${escapeMarketHtml(item.label || item.typeName.split('/').pop())}</td>
+                <td class="market-currency-column"><select class="form-select" onchange="updateMarketItem(${index}, 'currency', this.value)">
+                    <option value="credits"${item.currency == "credits" ? " selected" : ""}>${loc("market_credits")}</option>
+                    <option value="platinum"${item.currency == "platinum" ? " selected" : ""}>${loc("market_platinum")}</option>
+                </select></td>
+                <td class="market-price-column"><input class="form-control market-price" type="number" min="0" step="1" value="${item.price}" onchange="updateMarketItem(${index}, 'price', Number(this.value))" /></td>
+                <td class="text-end"><button class="btn btn-sm btn-primary" onclick="removeMarketItem(${index})">${loc("code_remove")}</button></td>
+            </tr>`
+        )
+        .join("");
+}
+
+function convertMarketCategoryCurrency(targetCurrency) {
+    for (const item of marketCatalog.items) {
+        if (item.categoryId != activeMarketCategoryId || item.currency == targetCurrency) continue;
+        if (targetCurrency == "credits") {
+            item.currency = "credits";
+            item.price *= MARKET_PLATINUM_TO_CREDITS_RATIO;
+        } else {
+            item.currency = "platinum";
+            item.price = Math.max(0, Math.round(item.price / MARKET_PLATINUM_TO_CREDITS_RATIO));
+        }
+    }
+    renderMarketItems();
+}
+
+function renderMarketItemSuggestions() {
+    const selectedType = document.getElementById("market-item-type").value;
+    const datalist = document.getElementById("datalist-market-items");
+    datalist.innerHTML = "";
+    const itemType = marketItemTypes.find(([type]) => type == selectedType);
+    if (itemType) {
+        getMarketItemTypeOptions(itemType).forEach(option => datalist.appendChild(option.cloneNode(true)));
+    }
+    marketPriceRequestId++;
+    marketOriginalPrice = undefined;
+    document.getElementById("market-new-item").value = "";
+}
+
+function applyMarketOriginalPrice() {
+    if (!marketOriginalPrice) return;
+    const currencySelect = document.getElementById("market-new-currency");
+    const priceInput = document.getElementById("market-new-price");
+    const resolved = resolveMarketOriginalPrice(marketOriginalPrice, currencySelect.value);
+    currencySelect.value = resolved.currency;
+    if (resolved.price !== null) priceInput.value = resolved.price;
+}
+
+function resolveMarketOriginalPrice(originalPrice, preferredCurrency) {
+    let currency = preferredCurrency;
+    let price = currency == "credits" ? originalPrice.creditsPrice : originalPrice.platinumPrice;
+    if (price === null) {
+        if (originalPrice.creditsPrice !== null) {
+            currency = "credits";
+            price = originalPrice.creditsPrice;
+        } else if (originalPrice.platinumPrice !== null) {
+            currency = "platinum";
+            price = originalPrice.platinumPrice;
+        }
+    }
+    return { currency, price };
+}
+
+async function loadMarketOriginalPrice() {
+    const input = document.getElementById("market-new-item");
+    const typeName = getKey(input) || input.value.trim();
+    const requestId = ++marketPriceRequestId;
+    marketOriginalPrice = undefined;
+    if (!typeName.startsWith("/Lotus/")) return;
+    try {
+        await revalidateAuthz();
+        const selectedType = document.getElementById("market-item-type").value;
+        const itemType = marketItemTypes.find(([type]) => type == selectedType);
+        const categorySources = itemType?.[2] ?? [selectedType];
+        const response = await fetch(
+            `/custom/marketCatalog/itemPrice?typeName=${encodeURIComponent(typeName)}&categorySources=${encodeURIComponent(categorySources.join("|"))}&${window.authz}`
+        );
+        if (!response.ok) return;
+        const price = await response.json();
+        if (requestId != marketPriceRequestId) return;
+        marketOriginalPrice = price;
+        applyMarketOriginalPrice();
+    } catch {}
+}
+
+function getMarketItemTypeOptions([type, _label, sourceLists = [type]]) {
+    const seen = new Set();
+    const options = [];
+    const modularPartItems =
+        type == "miscitems"
+            ? new Set(
+                  [...document.querySelectorAll('[id^="datalist-ModularParts-"] option')]
+                      .map(option => option.getAttribute("data-key"))
+                      .filter(Boolean)
+              )
+            : undefined;
+    sourceLists.forEach(sourceList => {
+        document.querySelectorAll(`#datalist-${sourceList} option`).forEach(option => {
+            const itemType = option.getAttribute("data-key");
+            if (
+                itemType &&
+                !seen.has(itemType) &&
+                !modularWeapons.includes(itemType) &&
+                !modularPartItems?.has(itemType)
+            ) {
+                seen.add(itemType);
+                options.push(option);
+            }
+        });
+    });
+    return options;
+}
+
+function buildMarketItemSuggestions(itemMap) {
+    marketItemMap = itemMap;
+    const typeSelect = document.getElementById("market-item-type");
+    typeSelect.innerHTML = marketItemTypes
+        .map(itemType => {
+            const [type, label] = itemType;
+            const count = getMarketItemTypeOptions(itemType).length;
+            const categoryName = loc(label).replace(/<[^>]+>/g, "");
+            return `<option value="${type}">${escapeMarketHtml(categoryName)} (${count})</option>`;
+        })
+        .join("");
+    renderMarketItemSuggestions();
+}
+
+async function loadMarketCatalog() {
+    try {
+        await revalidateAuthz();
+        const response = await fetch("/custom/marketCatalog?" + window.authz);
+        if (response.status == 401) {
+            document.getElementById("market-admin-required").classList.remove("d-none");
+            document.getElementById("market-manager").classList.add("d-none");
+            return;
+        }
+        if (!response.ok) throw new Error(await response.text());
+        marketCatalog = await response.json();
+        document.getElementById("market-admin-required").classList.add("d-none");
+        document.getElementById("market-manager").classList.remove("d-none");
+        renderMarketCategories();
+    } catch (error) {
+        toast(String(error));
+    }
+}
+
+async function saveMarketCatalog() {
+    marketCatalog.enabled = document.getElementById("market-enabled").checked;
+    marketCatalog.convertOriginalPlatinumToCredits = document.getElementById(
+        "market-convert-original-platinum"
+    ).checked;
+    try {
+        await revalidateAuthz();
+        const response = await fetch("/custom/marketCatalog?" + window.authz, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(marketCatalog)
+        });
+        if (!response.ok) throw new Error(await response.text());
+        marketCatalog = await response.json();
+        renderMarketCategories();
+        toast(loc("market_saved"));
+    } catch (error) {
+        toast(String(error));
+    }
+}
+
+function addMarketCategory() {
+    let suffix = marketCatalog.categories.length + 1;
+    while (marketCatalog.categories.some(category => category.id == `CUSTOM_${suffix}`)) suffix++;
+    marketCatalog.categories.push({
+        id: `CUSTOM_${suffix}`,
+        name: `CUSTOM_${suffix}`,
+        icon: "new",
+        enabled: true
+    });
+    activeMarketCategoryId = `CUSTOM_${suffix}`;
+    renderMarketCategories();
+}
+
+function updateMarketCategory(index, field, value) {
+    marketCatalog.categories[index][field] = value;
+    renderMarketCategories();
+}
+
+function moveMarketCategory(index, offset) {
+    const target = index + offset;
+    if (target < 0 || target >= marketCatalog.categories.length) return;
+    [marketCatalog.categories[index], marketCatalog.categories[target]] = [
+        marketCatalog.categories[target],
+        marketCatalog.categories[index]
+    ];
+    renderMarketCategories();
+}
+
+function removeMarketCategory(index) {
+    const id = marketCatalog.categories[index].id;
+    marketCatalog.categories.splice(index, 1);
+    marketCatalog.items = marketCatalog.items.filter(item => item.categoryId != id);
+    renderMarketCategories();
+}
+
+function addMarketItem() {
+    if (!marketCatalog.categories.length) return toast(loc("market_needCategory"));
+    const input = document.getElementById("market-new-item");
+    const typeName = getKey(input) || input.value.trim();
+    if (!typeName.startsWith("/Lotus/")) return toast(loc("market_badPath"));
+    if (marketCatalog.items.some(item => item.typeName == typeName)) return toast(loc("market_duplicateItem"));
+    const knownItem = marketItemMap[typeName];
+    const categoryId = document.getElementById("market-new-category").value;
+    marketCatalog.items.push({
+        typeName,
+        ...(knownItem && { label: knownItem.name }),
+        categoryId,
+        enabled: true,
+        currency: document.getElementById("market-new-currency").value,
+        price: Math.max(0, Math.trunc(Number(document.getElementById("market-new-price").value) || 0))
+    });
+    input.value = "";
+    activeMarketCategoryId = categoryId;
+    renderMarketItemCategoryTabs();
+    renderMarketItems();
+}
+
+async function addAllMarketItems() {
+    if (!marketCatalog.categories.length) return toast(loc("market_needCategory"));
+    const selectedType = document.getElementById("market-item-type").value;
+    const itemType = marketItemTypes.find(([type]) => type == selectedType);
+    if (!itemType) return;
+    const categorySources = itemType[2] ?? [selectedType];
+    const existing = new Set(marketCatalog.items.map(item => item.typeName));
+    const typeNames = getMarketItemTypeOptions(itemType)
+        .map(option => option.getAttribute("data-key"))
+        .filter(typeName => typeName && !existing.has(typeName));
+    if (!typeNames.length) return toast(loc("market_allAdded").replace("|COUNT|", "0"));
+    if (!confirm(loc("market_confirmAddAll").replace("|COUNT|", String(typeNames.length)))) return;
+
+    const button = document.getElementById("market-add-all");
+    button.disabled = true;
+    try {
+        await revalidateAuthz();
+        const response = await fetch(`/custom/marketCatalog/itemPrices?${window.authz}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ typeNames, categorySources })
+        });
+        if (!response.ok) throw new Error(await response.text());
+        const prices = await response.json();
+        const categoryId = document.getElementById("market-new-category").value;
+        const preferredCurrency = document.getElementById("market-new-currency").value;
+        for (const typeName of typeNames) {
+            const resolved = resolveMarketOriginalPrice(prices[typeName], preferredCurrency);
+            const knownItem = marketItemMap[typeName];
+            marketCatalog.items.push({
+                typeName,
+                ...(knownItem && { label: knownItem.name }),
+                categoryId,
+                enabled: true,
+                currency: resolved.currency,
+                price: resolved.price ?? 0
+            });
+        }
+        activeMarketCategoryId = categoryId;
+        renderMarketCategories();
+        toast(loc("market_allAdded").replace("|COUNT|", String(typeNames.length)));
+    } catch (error) {
+        toast(String(error));
+    } finally {
+        button.disabled = false;
+    }
+}
+
+function updateMarketItem(index, field, value) {
+    marketCatalog.items[index][field] = field == "price" ? Math.max(0, Math.trunc(value) || 0) : value;
+}
+
+function removeMarketItem(index) {
+    marketCatalog.items.splice(index, 1);
+    renderMarketItems();
+}
+
+async function importPrimeMarketItems() {
+    try {
+        await revalidateAuthz();
+        const response = await fetch(`/custom/marketCatalog/primeItems?lang=${encodeURIComponent(window.lang)}&${window.authz}`);
+        if (!response.ok) throw new Error(await response.text());
+        const primeItems = await response.json();
+        if (!marketCatalog.categories.some(category => category.id == "PRIME")) {
+            marketCatalog.categories.push({ id: "PRIME", name: "Prime", icon: "primeaccess", enabled: true });
+        }
+        activeMarketCategoryId = "PRIME";
+        const byType = new Map(marketCatalog.items.map(item => [item.typeName, item]));
+        for (const primeItem of primeItems) {
+            const existing = byType.get(primeItem.typeName);
+            if (existing) {
+                Object.assign(existing, { ...primeItem, categoryId: "PRIME", enabled: true, currency: "credits" });
+            } else {
+                marketCatalog.items.push({ ...primeItem, categoryId: "PRIME", enabled: true, currency: "credits" });
+            }
+        }
+        renderMarketCategories();
+        toast(loc("market_primeImported").replace("|COUNT|", primeItems.length));
+    } catch (error) {
+        toast(String(error));
+    }
+}
+
+single.getRoute("/webui/market").on("beforeload", function () {
+    Promise.all([awaitAuthz(), window.itemListPromise]).then(([, itemMap]) => {
+        buildMarketItemSuggestions(itemMap);
+        loadMarketCatalog();
+    });
+});
+
 function doUnlockAllFocusSchools() {
     revalidateAuthz().then(() => {
         getInventoryData().then(async data => {

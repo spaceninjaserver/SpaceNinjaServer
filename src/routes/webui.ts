@@ -47,6 +47,7 @@ webuiRouter.get("/webui/clan", virtualRouteController);
 webuiRouter.get("/webui/guildView", virtualRouteController);
 webuiRouter.get("/webui/users", virtualRouteController);
 webuiRouter.get("/webui/admin", virtualRouteController);
+webuiRouter.get("/webui/market", virtualRouteController);
 
 // Serve static files
 webuiRouter.use("/webui", express.static(path.join(baseDir, "static/webui")));

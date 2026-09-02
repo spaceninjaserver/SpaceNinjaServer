@@ -5385,12 +5385,13 @@ export const getPrice = (
     quantity: number = 1,
     durability: number = 0,
     usePremium: boolean,
-    buildLabel: string
+    buildLabel: string,
+    skipFlashSales: boolean = false
 ): number => {
     const isBundle = storeItemName in ExportBundles;
     let internalName = isBundle ? storeItemName : fromStoreItem(storeItemName);
 
-    {
+    if (!skipFlashSales) {
         const { FlashSales } = getWorldState(buildLabel);
         const flashSale = FlashSales.find(s => s.TypeName == internalName);
         if (flashSale) {
@@ -5441,7 +5442,8 @@ export const getPrice = (
                     component.purchaseQuantity,
                     [3, 7, 30, 90].indexOf(component.durabilityDays ?? 3),
                     usePremium,
-                    buildLabel
+                    buildLabel,
+                    skipFlashSales
                 );
             }
             const discount = typeof bundle.packageDiscount === "number" ? bundle.packageDiscount : 0.25;

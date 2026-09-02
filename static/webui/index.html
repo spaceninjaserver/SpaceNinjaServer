@@ -68,6 +68,9 @@
                             <a class="nav-link" href="/webui/cheats" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_cheats"></a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="/webui/market" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_market"></a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="/webui/import" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_import"></a>
                         </li>
                         <li class="nav-item">
@@ -1813,6 +1816,93 @@
                     </div>
                 </div>
             </div>
+            <div data-route="/webui/market" data-title-tag="navbar_market">
+                <div class="d-none" id="market-admin-required">
+                    <p class="card-text" data-loc="cheats_administratorRequirement"></p>
+                </div>
+                <div class="d-none" id="market-manager">
+                    <div class="alert alert-info" data-loc="market_restartNote"></div>
+                    <div class="card mb-3">
+                        <h5 class="card-header" data-loc="market_settings"></h5>
+                        <div class="card-body">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="market-enabled" />
+                                <label class="form-check-label" for="market-enabled" data-loc="market_enabled"></label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="market-convert-original-platinum" />
+                                <label class="form-check-label" for="market-convert-original-platinum" data-loc="market_convertOriginalPlatinum"></label>
+                            </div>
+                            <div class="d-flex flex-wrap gap-2 align-items-center">
+                                <button class="btn btn-primary" onclick="saveMarketCatalog();" data-loc="market_save"></button>
+                                <button class="btn btn-primary" onclick="addMarketCategory();" data-loc="market_addCategory"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-3">
+                        <h5 class="card-header" data-loc="market_categories"></h5>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead><tr>
+                                        <th data-loc="market_on"></th>
+                                        <th data-loc="market_categoryId"></th>
+                                        <th data-loc="market_categoryName"></th>
+                                        <th data-loc="market_icon"></th>
+                                        <th></th>
+                                    </tr></thead>
+                                    <tbody id="market-category-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-3">
+                        <h5 class="card-header" data-loc="market_addItem"></h5>
+                        <div class="card-body">
+                            <form class="row g-2" onsubmit="addMarketItem();return false;">
+                                <div class="col-lg-2"><select class="form-select" id="market-item-type" onchange="renderMarketItemSuggestions();"></select></div>
+                                <div class="col-lg-3"><input class="form-control" id="market-new-item" list="datalist-market-items" autocomplete="off" onchange="loadMarketOriginalPrice();" data-loc-placeholder="market_itemPath" /></div>
+                                <div class="col-lg-2"><select class="form-select" id="market-new-category"></select></div>
+                                <div class="col-lg-2">
+                                    <select class="form-select" id="market-new-currency" onchange="applyMarketOriginalPrice();">
+                                        <option value="credits" data-loc="market_credits"></option>
+                                        <option value="platinum" data-loc="market_platinum"></option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-1"><input class="form-control" id="market-new-price" type="number" min="0" step="1" value="0" /></div>
+                                <div class="col-lg-2 d-flex gap-2">
+                                    <button class="btn btn-primary flex-fill" type="submit" data-loc="general_addButton"></button>
+                                    <button class="btn btn-primary flex-fill text-nowrap" id="market-add-all" type="button" onclick="addAllMarketItems();" data-loc="market_addAll"></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <ul class="nav nav-tabs card-header-tabs" id="market-item-category-tabs"></ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex gap-2 mb-3">
+                                <input class="form-control market-filter flex-grow-1" id="market-filter" oninput="renderMarketItems();" data-loc-placeholder="market_filter" />
+                                <button class="btn btn-primary text-nowrap" type="button" onclick="convertMarketCategoryCurrency('platinum');" data-loc="market_convertToPlatinum"></button>
+                                <button class="btn btn-primary text-nowrap" type="button" onclick="convertMarketCategoryCurrency('credits');" data-loc="market_convertToCredits"></button>
+                            </div>
+                            <div class="table-responsive market-item-table">
+                                <table class="table table-hover align-middle">
+                                    <thead><tr>
+                                        <th data-loc="market_on"></th>
+                                        <th class="market-product-column" data-loc="market_product"></th>
+                                        <th class="market-currency-column" data-loc="market_currency"></th>
+                                        <th class="market-price-column" data-loc="market_price"></th>
+                                        <th></th>
+                                    </tr></thead>
+                                    <tbody id="market-item-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div data-route="/webui/import" data-title-tag="navbar_import">
                 <p>
                     <span data-loc="import_importNote"></span>
@@ -1943,6 +2033,15 @@
     <datalist id="datalist-FlavourItems"></datalist>
     <datalist id="datalist-ShipDecorations"></datalist>
     <datalist id="datalist-WeaponSkins"></datalist>
+    <datalist id="datalist-Tennogen"></datalist>
+    <datalist id="datalist-BundleGlyphs"></datalist>
+    <datalist id="datalist-BundleGenes"></datalist>
+    <datalist id="datalist-BundleBoosters"></datalist>
+    <datalist id="datalist-BundleMods"></datalist>
+    <datalist id="datalist-BundleIncarnons"></datalist>
+    <datalist id="datalist-BundleHeirlooms"></datalist>
+    <datalist id="datalist-BundleNoggles"></datalist>
+    <datalist id="datalist-Bundles"></datalist>
     <datalist id="datalist-VaultMiscItems"></datalist>
     <datalist id="datalist-circuitGameModes">
         <option>Survival</option>
@@ -1954,6 +2053,7 @@
         <option>Alchemy</option>
     </datalist>
     <datalist id="datalist-usernames"></datalist>
+    <datalist id="datalist-market-items"></datalist>
     <script src="/webui/libs/jquery-3.6.0.min.js"></script>
     <script src="/webui/libs/whirlpool-js.min.js"></script>
     <script src="/webui/libs/single.js"></script>
