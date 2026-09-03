@@ -23,3 +23,6 @@ yarn.lock
 # MongoDB data
 /database
 /db-data
+
+# Local WebUI Market catalog
+/customMarket/
