@@ -34,12 +34,16 @@ const getOriginalPrice = (typeName: string, usePremium: boolean): number | null 
     try {
         const storeItem = toStoreItem(typeName);
         if (!candidates.includes(storeItem)) candidates.push(storeItem);
-    } catch {}
+    } catch {
+        // Some bundle paths cannot be converted to ordinary StoreItems paths.
+    }
 
     for (const candidate of candidates) {
         try {
             return getPrice(candidate, 1, 0, usePremium, BL_LATEST, true);
-        } catch {}
+        } catch {
+            continue;
+        }
     }
     return null;
 };
@@ -105,10 +109,11 @@ export const setMarketCatalogSettingsController: RequestHandler = async (req, re
     if (!isAdministrator(account)) return void res.status(401).end();
     try {
         const current = getCustomMarketCatalog();
+        const body = req.body as { enabled?: unknown; useMetadataPatch?: unknown };
         const catalog = await saveCustomMarketCatalog({
             ...current,
-            enabled: req.body?.enabled !== false,
-            useMetadataPatch: req.body?.useMetadataPatch === true
+            enabled: body.enabled !== false,
+            useMetadataPatch: body.useMetadataPatch === true
         });
         sendWsBroadcast({ sync_world_state: true });
         res.json({ enabled: catalog.enabled, useMetadataPatch: catalog.useMetadataPatch });
@@ -199,14 +204,14 @@ export const getMarketItemPriceController: RequestHandler = async (req, res) => 
 export const getMarketItemPricesController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     if (!isAdministrator(account)) return void res.status(401).end();
-    const typeNames = Array.isArray(req.body?.typeNames)
-        ? req.body.typeNames
-              .filter((typeName: unknown): typeName is string =>
-                  typeof typeName == "string" && typeName.startsWith("/Lotus/")
-              )
-              .slice(0, 10_000)
-        : [];
-    const categorySources = normalizeCategorySources(req.body?.categorySources);
+    const body = req.body as { typeNames?: unknown; categorySources?: unknown };
+    const rawTypeNames = Array.isArray(body.typeNames) ? (body.typeNames as unknown[]) : [];
+    const typeNames = rawTypeNames
+        .filter(
+            (typeName: unknown): typeName is string => typeof typeName == "string" && typeName.startsWith("/Lotus/")
+        )
+        .slice(0, 10_000);
+    const categorySources = normalizeCategorySources(body.categorySources);
     res.json(
         Object.fromEntries(typeNames.map(typeName => [typeName, getMarketItemPricing(typeName, categorySources)]))
     );

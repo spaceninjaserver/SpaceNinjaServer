@@ -597,7 +597,7 @@ export const lunarNewYearAllFlashSales: IFlashSaleData[] = [
     { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2026BundleB", PremiumOverride: 480 },
     { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2026BundleC", PremiumOverride: 700 },
     { TypeName: "/Lotus/Types/StoreItems/AvatarImages/LNY2026HorseGlyph", RegularOverride: 1 },
-    { TypeName: "/Lotus/Upgrades/Skins/Clan/LNY2026HorseGlyph", RegularOverride: 1 },
+    { TypeName: "/Lotus/Upgrades/Skins/Clan/LNY2026HorseGlyph", RegularOverride: 1 }
 ];
 
 export interface IFlashSaleData extends Partial<IFlashSale> {

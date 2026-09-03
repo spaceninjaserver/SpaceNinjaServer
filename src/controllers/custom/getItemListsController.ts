@@ -158,8 +158,7 @@ const supplementalModBundleTypes = new Set([
 const isAnimalCompanionPattern = (uniqueName: string): boolean =>
     /^\/Lotus\/Types\/Game\/(?:CatbrowPet|KubrowPet|InfestedKavatPet|InfestedPredatorPet)\/Patterns\//.test(
         uniqueName
-    ) ||
-    /^\/Lotus\/Upgrades\/Skins\/(?:Catbrows\/(?!Armor\/)|Kubrows\/Fur\/)/.test(uniqueName);
+    ) || /^\/Lotus\/Upgrades\/Skins\/(?:Catbrows\/(?!Armor\/)|Kubrows\/Fur\/)/.test(uniqueName);
 
 const nonPlayerWeaponTypes = new Set([
     "/Lotus/Weapons/Tenno/Grimoire/TnDoppelgangerGrimoire",
@@ -475,9 +474,7 @@ export const getItemLists = (language: string = "en"): ItemLists => {
             }
         }
     }
-    const suitAndSentinelTypes = new Set(
-        [...res.Suits, ...res.Sentinels].map(item => item.uniqueName)
-    );
+    const suitAndSentinelTypes = new Set([...res.Suits, ...res.Sentinels].map(item => item.uniqueName));
     for (const [uniqueName, item] of Object.entries(ExportBundles)) {
         const componentTypeNames = item.components.map(component => component.typeName);
         const allComponentsMatch = (pattern: RegExp): boolean =>
@@ -485,25 +482,24 @@ export const getItemLists = (language: string = "en"): ItemLists => {
         const isGeneBundle =
             /^\/Lotus\/Types\/StoreItems\/Packages\/(?:Kavat|Kubrow)(?:Base)?ColorPack/.test(uniqueName) ||
             allComponentsMatch(/KubrowPet\/(?:Colors|Patterns)|CatbrowPet\/(?:Colors|Patterns)|GeneMask/i);
-        const target =
-            /Heirloom/i.test(uniqueName)
-                ? res.BundleHeirlooms
-                : allComponentsMatch(/AvatarImages|Glyph/i)
-                  ? res.BundleGlyphs
-                  : /TennoGen/i.test(uniqueName)
-                    ? res.Tennogen
-                    : uniqueName.startsWith("/Lotus/Types/StoreItems/Packages/IncarnonPackages/")
-                      ? res.BundleIncarnons
-                      : isGeneBundle
-                        ? res.BundleGenes
-                        : allComponentsMatch(/\/Boosters\//i)
-                          ? res.BundleBoosters
-                          : supplementalModBundleTypes.has(uniqueName) ||
-                              allComponentsMatch(/\/Upgrades\/Mods\/(?!FusionBundles\/)/i)
-                            ? res.BundleMods
-                            : allComponentsMatch(/BobbleHead|Noggle/i)
-                              ? res.BundleNoggles
-                              : res.Bundles;
+        const target = /Heirloom/i.test(uniqueName)
+            ? res.BundleHeirlooms
+            : allComponentsMatch(/AvatarImages|Glyph/i)
+              ? res.BundleGlyphs
+              : /TennoGen/i.test(uniqueName)
+                ? res.Tennogen
+                : uniqueName.startsWith("/Lotus/Types/StoreItems/Packages/IncarnonPackages/")
+                  ? res.BundleIncarnons
+                  : isGeneBundle
+                    ? res.BundleGenes
+                    : allComponentsMatch(/\/Boosters\//i)
+                      ? res.BundleBoosters
+                      : supplementalModBundleTypes.has(uniqueName) ||
+                          allComponentsMatch(/\/Upgrades\/Mods\/(?!FusionBundles\/)/i)
+                        ? res.BundleMods
+                        : allComponentsMatch(/BobbleHead|Noggle/i)
+                          ? res.BundleNoggles
+                          : res.Bundles;
         if (
             target == res.Bundles &&
             componentTypeNames.some(typeName => {

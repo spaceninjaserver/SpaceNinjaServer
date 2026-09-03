@@ -10,6 +10,9 @@ import { ExportBundles } from "warframe-public-export-plus";
 
 export type TCustomMarketCurrency = "credits" | "platinum";
 
+const isCustomMarketCurrency = (value: unknown): value is TCustomMarketCurrency =>
+    value == "credits" || value == "platinum";
+
 export interface ICustomMarketCategory {
     id: string;
     name: string;
@@ -49,12 +52,16 @@ const normalizeCategoryId = (value: unknown): string =>
         .toUpperCase()
         .replace(/[^A-Z0-9_]/g, "_");
 
+const isRecord = (value: unknown): value is Record<string, unknown> => typeof value == "object" && value !== null;
+
 const validateCatalog = (value: unknown): ICustomMarketCatalog => {
-    if (!value || typeof value != "object") throw new Error("catalog must be an object");
-    const input = value as Partial<ICustomMarketCatalog>;
+    if (!isRecord(value)) throw new Error("catalog must be an object");
+    const input = value;
     const categories: ICustomMarketCategory[] = [];
     const categoryIds = new Set<string>();
-    for (const raw of Array.isArray(input.categories) ? input.categories : []) {
+    for (const category of Array.isArray(input.categories) ? input.categories : []) {
+        if (!isRecord(category)) throw new Error("catalog category must be an object");
+        const raw = category;
         const id = normalizeCategoryId(raw.id);
         if (!id) throw new Error("category id cannot be empty");
         if (categoryIds.has(id)) throw new Error(`duplicate category id: ${id}`);
@@ -73,14 +80,17 @@ const validateCatalog = (value: unknown): ICustomMarketCatalog => {
 
     const items: ICustomMarketItem[] = [];
     const itemTypes = new Set<string>();
-    for (const raw of Array.isArray(input.items) ? input.items : []) {
+    for (const item of Array.isArray(input.items) ? input.items : []) {
+        if (!isRecord(item)) throw new Error("catalog item must be an object");
+        const raw = item;
         const typeName = String(raw.typeName ?? "").trim();
         const categoryId = normalizeCategoryId(raw.categoryId);
         const price = Number(raw.price);
+        const currency = raw.currency;
         if (!typeName.startsWith("/Lotus/")) throw new Error(`invalid item path: ${typeName}`);
         if (itemTypes.has(typeName)) throw new Error(`duplicate item path: ${typeName}`);
         if (!categoryIds.has(categoryId)) throw new Error(`item ${typeName} refers to unknown category ${categoryId}`);
-        if (raw.currency != "credits" && raw.currency != "platinum") {
+        if (!isCustomMarketCurrency(currency)) {
             throw new Error(`item ${typeName} has an invalid currency`);
         }
         if (!Number.isSafeInteger(price) || price < 0) throw new Error(`item ${typeName} has an invalid price`);
@@ -89,7 +99,7 @@ const validateCatalog = (value: unknown): ICustomMarketCatalog => {
             typeName,
             categoryId,
             enabled: raw.enabled !== false,
-            currency: raw.currency,
+            currency,
             price
         });
     }
