@@ -106,6 +106,7 @@ export interface ItemLists {
     ColorPalettes: ListedItem[];
     Seasonal: ListedItem[];
     Tennogen: ListedItem[];
+    Glyphs: ListedItem[];
     BundleGlyphs: ListedItem[];
     BundleGenes: ListedItem[];
     BundleBoosters: ListedItem[];
@@ -122,12 +123,10 @@ export interface ItemLists {
     blueprintAndItem: string;
 }
 
-const isGlyphItem = (uniqueName: string, nameKey?: string): boolean =>
-    uniqueName.includes("/AvatarImages/") ||
-    /Glyph/i.test(uniqueName) ||
-    /\/Glyphs\//i.test(nameKey ?? "") ||
-    uniqueName.includes("/ShipDecos/Operator/SchoolDecal") ||
-    uniqueName.endsWith("/TennoGenSigil");
+const isAvatarGlyphItem = (uniqueName: string): boolean => uniqueName.includes("/AvatarImages/");
+
+const isSigilItem = (uniqueName: string): boolean =>
+    uniqueName.includes("/Upgrades/Skins/Sigils/") || uniqueName.includes("/Upgrades/Skins/Clan/");
 
 const relicQualitySuffixes: Record<TRelicQuality, string> = {
     VPQ_BRONZE: "",
@@ -155,6 +154,12 @@ const supplementalModBundleTypes = new Set([
     "/Lotus/Types/StoreItems/Packages/Login850Pack",
     "/Lotus/Types/StoreItems/Packages/TheTeacherRewardModPack"
 ]);
+
+const isAnimalCompanionPattern = (uniqueName: string): boolean =>
+    /^\/Lotus\/Types\/Game\/(?:CatbrowPet|KubrowPet|InfestedKavatPet|InfestedPredatorPet)\/Patterns\//.test(
+        uniqueName
+    ) ||
+    /^\/Lotus\/Upgrades\/Skins\/(?:Catbrows\/(?!Armor\/)|Kubrows\/Fur\/)/.test(uniqueName);
 
 const nonPlayerWeaponTypes = new Set([
     "/Lotus/Weapons/Tenno/Grimoire/TnDoppelgangerGrimoire",
@@ -192,6 +197,7 @@ export const getItemLists = (language: string = "en"): ItemLists => {
         ColorPalettes: [],
         Seasonal: [],
         Tennogen: [],
+        Glyphs: [],
         BundleGlyphs: [],
         BundleGenes: [],
         BundleBoosters: [],
@@ -360,8 +366,7 @@ export const getItemLists = (language: string = "en"): ItemLists => {
             }
         }
         if (item.productCategory == "ShipDecorations") {
-            const target = isGlyphItem(uniqueName, item.name) ? res.BundleGlyphs : res.ShipDecorations;
-            target.push({
+            res.ShipDecorations.push({
                 uniqueName: uniqueName,
                 name: name,
                 parentName: item.parentName
@@ -396,8 +401,7 @@ export const getItemLists = (language: string = "en"): ItemLists => {
         });
     }
     for (const [uniqueName, item] of Object.entries(ExportGear)) {
-        const target = isGlyphItem(uniqueName, item.name) ? res.BundleGlyphs : res.miscitems;
-        target.push({
+        res.miscitems.push({
             uniqueName: uniqueName,
             name: getString(item.name, lang),
             subtype: "Gear",
@@ -438,14 +442,14 @@ export const getItemLists = (language: string = "en"): ItemLists => {
             uniqueName.includes("/SteamWorkshop/") ||
             uniqueName.includes("/Tennogen/") ||
             (/^SW[A-Z]/.test(fileName) && !fileName.startsWith("SW1999"));
-        if (isGlyphItem(uniqueName, item.name)) {
-            res.BundleGlyphs.push({
+        if (isTennogen) {
+            res.Tennogen.push({
                 uniqueName,
                 name: getString(item.name, lang),
                 alwaysAvailable: item.alwaysAvailable
             });
-        } else if (isTennogen) {
-            res.Tennogen.push({
+        } else if (isAnimalCompanionPattern(uniqueName)) {
+            res.BundleGenes.push({
                 uniqueName,
                 name: getString(item.name, lang),
                 alwaysAvailable: item.alwaysAvailable
@@ -484,7 +488,7 @@ export const getItemLists = (language: string = "en"): ItemLists => {
         const target =
             /Heirloom/i.test(uniqueName)
                 ? res.BundleHeirlooms
-                : isGlyphItem(uniqueName, item.name) || allComponentsMatch(/AvatarImages|Glyph/i)
+                : allComponentsMatch(/AvatarImages|Glyph/i)
                   ? res.BundleGlyphs
                   : /TennoGen/i.test(uniqueName)
                     ? res.Tennogen
@@ -716,8 +720,8 @@ export const getItemLists = (language: string = "en"): ItemLists => {
     for (const [uniqueName, item] of Object.entries(ExportFlavour)) {
         const target = /Colou?rPicker/i.test(uniqueName)
             ? res.ColorPalettes
-            : isGlyphItem(uniqueName, item.name)
-              ? res.BundleGlyphs
+            : isAvatarGlyphItem(uniqueName)
+              ? res.Glyphs
               : res.FlavourItems;
         target.push({
             uniqueName,
@@ -807,15 +811,25 @@ export const getItemLists = (language: string = "en"): ItemLists => {
             marketCreditsPrice: typeof offer.RegularOverride == "number" ? offer.RegularOverride : null,
             marketPlatinumPrice: typeof offer.PremiumOverride == "number" ? offer.PremiumOverride : null
         };
-        const isGlyph = isGlyphItem(uniqueName, nameKey);
-        if (isGlyph) {
-            const existing = res.BundleGlyphs.find(item => normalizeStoreItemType(item.uniqueName) == uniqueName);
+        if (isAvatarGlyphItem(uniqueName)) {
+            const existing = res.Glyphs.find(item => normalizeStoreItemType(item.uniqueName) == uniqueName);
             if (existing) {
                 existing.marketCreditsPrice = listedItem.marketCreditsPrice;
                 existing.marketPlatinumPrice = listedItem.marketPlatinumPrice;
             } else {
-                res.BundleGlyphs.push(listedItem);
+                res.Glyphs.push(listedItem);
             }
+        } else if (isSigilItem(uniqueName)) {
+            const existing = res.WeaponSkins.find(item => normalizeStoreItemType(item.uniqueName) == uniqueName);
+            if (existing) {
+                existing.marketCreditsPrice = listedItem.marketCreditsPrice;
+                existing.marketPlatinumPrice = listedItem.marketPlatinumPrice;
+            } else {
+                res.WeaponSkins.push(listedItem);
+            }
+        } else if (knownItem?.isBundle && res.BundleGlyphs.includes(knownItem)) {
+            knownItem.marketCreditsPrice = listedItem.marketCreditsPrice;
+            knownItem.marketPlatinumPrice = listedItem.marketPlatinumPrice;
         } else {
             res.Seasonal.push(listedItem);
         }

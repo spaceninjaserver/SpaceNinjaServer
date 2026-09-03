@@ -3599,6 +3599,7 @@ const marketItemTypes = [
     ["ColorPalettes", "market_colorPalettes"],
     ["Seasonal", "market_seasonalItems"],
     ["Tennogen", "market_tennogen"],
+    ["Glyphs", "market_glyphs"],
     ["BundleGlyphs", "market_bundleGlyphs"],
     ["BundleGenes", "market_bundleGenes"],
     ["BundleBoosters", "market_bundleBoosters"],

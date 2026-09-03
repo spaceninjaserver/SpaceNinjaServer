@@ -10,6 +10,7 @@ import { sendWsBroadcast } from "../../services/wsService.ts";
 import { getDict, getItemName, getPrice, getString, toStoreItem } from "../../services/itemDataService.ts";
 import { BL_LATEST } from "../../constants/gameVersions.ts";
 import { getItemLists, type ListedItem } from "./getItemListsController.ts";
+import { ExportBundles } from "warframe-public-export-plus";
 
 const REGAL_AYA_TO_CREDITS_RATIO = 375_000;
 const MAX_ORIGINAL_PLATINUM_PRICE = 10_000;
@@ -53,8 +54,11 @@ const getCategoryItems = (source: string): ListedItem[] => {
     return Array.isArray(list) ? (list as ListedItem[]) : [];
 };
 
-const getCategoryMaximumPlatinumPrice = (sources: string[]): number | null => {
-    const key = [...new Set(sources)].sort().join("|");
+const isBundleItem = (typeName: string, listedItem?: ListedItem): boolean =>
+    listedItem?.isBundle === true || typeName in ExportBundles;
+
+const getCategoryMaximumPlatinumPrice = (sources: string[], bundle: boolean): number | null => {
+    const key = `${bundle ? "bundle" : "single"}|${[...new Set(sources)].sort().join("|")}`;
     const cached = categoryMaximumPlatinumPrices.get(key);
     if (cached !== undefined) return cached;
 
@@ -62,6 +66,7 @@ const getCategoryMaximumPlatinumPrice = (sources: string[]): number | null => {
     const seen = new Set<string>();
     for (const source of sources) {
         for (const item of getCategoryItems(source)) {
+            if (isBundleItem(item.uniqueName, item) != bundle) continue;
             if (seen.has(item.uniqueName) || isPrimeItem(item.uniqueName)) continue;
             seen.add(item.uniqueName);
             const price =
@@ -147,9 +152,10 @@ const getMarketItemPricing = (
     const isModularPartCategory =
         categorySources.length > 0 && categorySources.every(source => source.startsWith("ModularParts-"));
     const isAnimalCompanionCategory = categorySources.length == 1 && categorySources[0] == "KubrowPets";
+    const bundle = isBundleItem(typeName, categoryItem);
     const categoryMaximum =
         categorySources.length && !isModularPartCategory && !isAnimalCompanionCategory
-            ? getCategoryMaximumPlatinumPrice(categorySources)
+            ? getCategoryMaximumPlatinumPrice(categorySources, bundle)
             : null;
     const primeItem = isPrimeItem(typeName);
 
