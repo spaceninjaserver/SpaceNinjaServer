@@ -3913,7 +3913,14 @@ async function saveMarketSettingsImmediately() {
 }
 
 function getMarketStoreItemPath(typeName) {
-    if (typeName.startsWith("/Lotus/Types/StoreItems/") || typeName.startsWith("/Lotus/StoreItems/")) {
+    if (typeName.startsWith("/Lotus/StoreItems/")) return typeName;
+    if (
+        typeName.startsWith("/Lotus/Types/StoreItems/AvatarImages/") &&
+        !marketItemMap[typeName]?.isBundle
+    ) {
+        return `/Lotus/StoreItems${typeName.substring("/Lotus".length)}`;
+    }
+    if (typeName.startsWith("/Lotus/Types/StoreItems/")) {
         return typeName;
     }
     if (typeName.startsWith("/Lotus/Types/Boosters/")) {
@@ -3933,14 +3940,16 @@ function buildMarketMetadataPatch() {
         if (!item.enabled || !enabledCategoryIds.has(item.categoryId)) continue;
         const metadataPath = getMarketStoreItemPath(item.typeName);
         if (!metadataPath) continue;
-        const lines = [
-            `> ${metadataPath}`,
-            "    AlwaysAvailable=1",
+        const lines = [`> ${metadataPath}`];
+        // AlwaysAvailable makes avatar images selectable without ownership, so the
+        // Market then hides them as already owned. ShowInMarket is sufficient here.
+        if (!metadataPath.includes("/AvatarImages/")) lines.push("    AlwaysAvailable=1");
+        lines.push(
             "    ShowInMarket=1",
             "    AutoCalcPrices=0",
             "    s|(?m)^ExpiryDate=.*\\r?$|",
             "    r|IsSteamPurchase=1|IsSteamPurchase=0"
-        ];
+        );
         if (item.currency == "credits") {
             lines.push(`    RegularPrice=${item.price}`, "    s|(?m)^PremiumPrice=.*\\r?$|");
         } else {

@@ -6,6 +6,7 @@ import { toMongoDate2 } from "../helpers/inventoryHelpers.ts";
 import type { IWorldState } from "../types/worldStateTypes.ts";
 import varzia from "../constants/varzia.ts";
 import { BV_LATEST } from "../constants/gameVersions.ts";
+import { ExportBundles } from "warframe-public-export-plus";
 
 export type TCustomMarketCurrency = "credits" | "platinum";
 
@@ -133,7 +134,11 @@ export const toMarketTypeName = (typeName: string): string => {
 };
 
 export const toMarketStoreItemPath = (typeName: string): string => {
-    if (typeName.startsWith("/Lotus/Types/StoreItems/") || typeName.startsWith("/Lotus/StoreItems/")) {
+    if (typeName.startsWith("/Lotus/StoreItems/")) return typeName;
+    if (typeName.startsWith("/Lotus/Types/StoreItems/AvatarImages/") && !(typeName in ExportBundles)) {
+        return `/Lotus/StoreItems${typeName.substring("/Lotus".length)}`;
+    }
+    if (typeName.startsWith("/Lotus/Types/StoreItems/")) {
         return typeName;
     }
     if (typeName.startsWith("/Lotus/Types/Boosters/")) {

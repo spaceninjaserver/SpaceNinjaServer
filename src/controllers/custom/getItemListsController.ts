@@ -74,6 +74,7 @@ export interface ListedItem {
     permanentEvolutionWeapon?: true;
     marketCreditsPrice?: number | null;
     marketPlatinumPrice?: number | null;
+    isBundle?: true;
 }
 
 export interface ItemLists {
@@ -512,7 +513,8 @@ export const getItemLists = (language: string = "en"): ItemLists => {
         }
         target.push({
             uniqueName,
-            name: item.name ? getString(item.name, lang) : uniqueName.substring(uniqueName.lastIndexOf("/") + 1)
+            name: item.name ? getString(item.name, lang) : uniqueName.substring(uniqueName.lastIndexOf("/") + 1),
+            isBundle: true
         });
     }
 
