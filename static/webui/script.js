@@ -3596,6 +3596,8 @@ const marketItemTypes = [
     ["FlavourItems", "inventory_flavourItems"],
     ["ShipDecorations", "inventory_shipDecorations"],
     ["WeaponSkins", "inventory_weaponSkins"],
+    ["ColorPalettes", "market_colorPalettes"],
+    ["Seasonal", "market_seasonalItems"],
     ["Tennogen", "market_tennogen"],
     ["BundleGlyphs", "market_bundleGlyphs"],
     ["BundleGenes", "market_bundleGenes"],
@@ -3639,8 +3641,8 @@ function marketIconOptions(selected) {
 function renderMarketCategories() {
     if (!marketCatalog) return;
     document.getElementById("market-enabled").checked = marketCatalog.enabled;
-    document.getElementById("market-convert-original-platinum").checked =
-        marketCatalog.convertOriginalPlatinumToCredits === true;
+    document.getElementById("market-use-metadata-patch").checked = marketCatalog.useMetadataPatch === true;
+    toggleMarketMetadataPatchControls();
     document.getElementById("market-category-list").innerHTML = marketCatalog.categories
         .map(
             (category, index) => `<tr>
@@ -3685,13 +3687,22 @@ function renderMarketItems() {
     if (!marketCatalog) return;
     const filter = document.getElementById("market-filter").value.trim().toLowerCase();
     document.getElementById("market-item-list").innerHTML = marketCatalog.items
-        .map((item, index) => ({ item, index }))
+        .map((item, index) => {
+            const normalizedTypeName = item.typeName.startsWith("/Lotus/StoreItems/")
+                ? "/Lotus/" + item.typeName.substring("/Lotus/StoreItems/".length)
+                : item.typeName;
+            const label =
+                marketItemMap[item.typeName]?.name ??
+                marketItemMap[normalizedTypeName]?.name ??
+                item.typeName.split("/").pop();
+            return { item, index, label };
+        })
         .filter(({ item }) => item.categoryId == activeMarketCategoryId)
-        .filter(({ item }) => !filter || `${item.label ?? ""} ${item.typeName}`.toLowerCase().includes(filter))
+        .filter(({ item, label }) => !filter || `${label} ${item.typeName}`.toLowerCase().includes(filter))
         .map(
-            ({ item, index }) => `<tr>
+            ({ item, index, label }) => `<tr>
                 <td><input class="form-check-input" type="checkbox" ${item.enabled ? "checked" : ""} onchange="updateMarketItem(${index}, 'enabled', this.checked)" /></td>
-                <td class="market-product-column">${escapeMarketHtml(item.label || item.typeName.split('/').pop())}</td>
+                <td class="market-product-column">${escapeMarketHtml(label)}</td>
                 <td class="market-currency-column"><select class="form-select" onchange="updateMarketItem(${index}, 'currency', this.value)">
                     <option value="credits"${item.currency == "credits" ? " selected" : ""}>${loc("market_credits")}</option>
                     <option value="platinum"${item.currency == "platinum" ? " selected" : ""}>${loc("market_platinum")}</option>
@@ -3839,9 +3850,7 @@ async function loadMarketCatalog() {
 
 async function saveMarketCatalog() {
     marketCatalog.enabled = document.getElementById("market-enabled").checked;
-    marketCatalog.convertOriginalPlatinumToCredits = document.getElementById(
-        "market-convert-original-platinum"
-    ).checked;
+    marketCatalog.useMetadataPatch = document.getElementById("market-use-metadata-patch").checked;
     try {
         await revalidateAuthz();
         const response = await fetch("/custom/marketCatalog?" + window.authz, {
@@ -3858,17 +3867,147 @@ async function saveMarketCatalog() {
     }
 }
 
+function toggleMarketMetadataPatchControls() {
+    document
+        .getElementById("market-generate-metadata-patch")
+        ?.classList.toggle("d-none", !document.getElementById("market-use-metadata-patch")?.checked);
+}
+
+async function saveMarketSettingsImmediately() {
+    const enabledInput = document.getElementById("market-enabled");
+    const metadataPatchInput = document.getElementById("market-use-metadata-patch");
+    const previousEnabled = marketCatalog.enabled;
+    const previousUseMetadataPatch = marketCatalog.useMetadataPatch === true;
+    toggleMarketMetadataPatchControls();
+    enabledInput.disabled = true;
+    metadataPatchInput.disabled = true;
+    try {
+        await revalidateAuthz();
+        const response = await fetch("/custom/marketCatalog/settings?" + window.authz, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                enabled: enabledInput.checked,
+                useMetadataPatch: metadataPatchInput.checked
+            })
+        });
+        if (!response.ok) throw new Error(await response.text());
+        const settings = await response.json();
+        marketCatalog.enabled = settings.enabled;
+        marketCatalog.useMetadataPatch = settings.useMetadataPatch;
+        enabledInput.checked = settings.enabled;
+        metadataPatchInput.checked = settings.useMetadataPatch;
+    } catch (error) {
+        enabledInput.checked = previousEnabled;
+        metadataPatchInput.checked = previousUseMetadataPatch;
+        toast(String(error));
+    } finally {
+        enabledInput.disabled = false;
+        metadataPatchInput.disabled = false;
+        toggleMarketMetadataPatchControls();
+    }
+}
+
+function getMarketStoreItemPath(typeName) {
+    if (typeName.startsWith("/Lotus/Types/StoreItems/") || typeName.startsWith("/Lotus/StoreItems/")) {
+        return typeName;
+    }
+    if (typeName.startsWith("/Lotus/Types/Boosters/")) {
+        return `/Lotus/Types/StoreItems/Boosters/${typeName.substring("/Lotus/Types/Boosters/".length)}StoreItem`;
+    }
+    return typeName.startsWith("/Lotus/")
+        ? `/Lotus/StoreItems/${typeName.substring("/Lotus/".length)}`
+        : undefined;
+}
+
+function buildMarketMetadataPatch() {
+    const enabledCategoryIds = new Set(
+        (marketCatalog?.categories ?? []).filter(category => category.enabled).map(category => category.id)
+    );
+    const sections = [];
+    for (const item of marketCatalog?.items ?? []) {
+        const metadataPath = getMarketStoreItemPath(item.typeName);
+        if (!metadataPath) continue;
+        const lines = [`> ${metadataPath}`];
+        if (!item.enabled || !enabledCategoryIds.has(item.categoryId)) {
+            lines.push("    ShowInMarket=0");
+        } else {
+            lines.push(
+                "    AlwaysAvailable=1",
+                "    ShowInMarket=1",
+                "    AutoCalcPrices=0",
+                "    s|(?m)^ExpiryDate=.*\\r?$|",
+                "    r|IsSteamPurchase=1|IsSteamPurchase=0"
+            );
+            if (item.currency == "credits") {
+                lines.push(`    RegularPrice=${item.price}`, "    s|(?m)^PremiumPrice=.*\\r?$|");
+            } else {
+                lines.push(`    PremiumPrice=${item.price}`, "    s|(?m)^RegularPrice=.*\\r?$|");
+            }
+        }
+        sections.push(lines.join("\r\n"));
+    }
+    if (!sections.length) return;
+    return [
+        "# Generated by SpaceNinjaServer Market manager.",
+        "# Re-generate after changing tabs, products, prices, currencies, or enabled states.",
+        "# Save in OpenWF/Metadata Patches and fully restart the game.",
+        "",
+        sections.join("\r\n\r\n"),
+        ""
+    ].join("\r\n");
+}
+
+async function saveMarketMetadataPatch() {
+    const patchText = buildMarketMetadataPatch();
+    if (!patchText) return toast(loc("market_metadataPatchEmpty"));
+    try {
+        if (typeof window.showSaveFilePicker != "function") {
+            throw new Error(loc("market_savePickerUnsupported"));
+        }
+        const fileHandle = await window.showSaveFilePicker({
+            suggestedName: "Custom Market Catalog.txt",
+            types: [
+                {
+                    description: "OpenWF Metadata Patch",
+                    accept: { "text/plain": [".txt"] }
+                }
+            ]
+        });
+        const writable = await fileHandle.createWritable();
+        await writable.write(patchText);
+        await writable.close();
+        toast(loc("market_metadataPatchSaved").replace("|COUNT|", String(marketCatalog.items.length)));
+    } catch (error) {
+        if (error?.name != "AbortError") toast(String(error));
+    }
+}
+
 function addMarketCategory() {
-    let suffix = marketCatalog.categories.length + 1;
-    while (marketCatalog.categories.some(category => category.id == `CUSTOM_${suffix}`)) suffix++;
-    marketCatalog.categories.push({
-        id: `CUSTOM_${suffix}`,
-        name: `CUSTOM_${suffix}`,
+    const usedSuffixes = new Set(
+        marketCatalog.categories
+            .map(category => /^CUSTOM_(\d+)$/.exec(category.id)?.[1])
+            .filter(Boolean)
+            .map(Number)
+    );
+    let suffix = 1;
+    while (usedSuffixes.has(suffix)) suffix++;
+    const id = `CUSTOM_${suffix}`;
+    const insertIndex = marketCatalog.categories.findIndex(category => {
+        const existingSuffix = /^CUSTOM_(\d+)$/.exec(category.id)?.[1];
+        return existingSuffix !== undefined && Number(existingSuffix) > suffix;
+    });
+    const category = {
+        id,
+        name: id,
         icon: "new",
         enabled: true
-    });
-    activeMarketCategoryId = `CUSTOM_${suffix}`;
+    };
+    const categoryIndex = insertIndex == -1 ? marketCatalog.categories.length : insertIndex;
+    marketCatalog.categories.splice(categoryIndex, 0, category);
+    activeMarketCategoryId = id;
     renderMarketCategories();
+    document.getElementById("market-category-list").rows[categoryIndex]?.scrollIntoView({ block: "nearest" });
 }
 
 function updateMarketCategory(index, field, value) {
@@ -3899,11 +4038,9 @@ function addMarketItem() {
     const typeName = getKey(input) || input.value.trim();
     if (!typeName.startsWith("/Lotus/")) return toast(loc("market_badPath"));
     if (marketCatalog.items.some(item => item.typeName == typeName)) return toast(loc("market_duplicateItem"));
-    const knownItem = marketItemMap[typeName];
     const categoryId = document.getElementById("market-new-category").value;
     marketCatalog.items.push({
         typeName,
-        ...(knownItem && { label: knownItem.name }),
         categoryId,
         enabled: true,
         currency: document.getElementById("market-new-currency").value,
@@ -3943,10 +4080,8 @@ async function addAllMarketItems() {
         const preferredCurrency = document.getElementById("market-new-currency").value;
         for (const typeName of typeNames) {
             const resolved = resolveMarketOriginalPrice(prices[typeName], preferredCurrency);
-            const knownItem = marketItemMap[typeName];
             marketCatalog.items.push({
                 typeName,
-                ...(knownItem && { label: knownItem.name }),
                 categoryId,
                 enabled: true,
                 currency: resolved.currency,
@@ -3984,11 +4119,17 @@ async function importPrimeMarketItems() {
         activeMarketCategoryId = "PRIME";
         const byType = new Map(marketCatalog.items.map(item => [item.typeName, item]));
         for (const primeItem of primeItems) {
+            const { label: _localizedLabel, ...primeItemData } = primeItem;
             const existing = byType.get(primeItem.typeName);
             if (existing) {
-                Object.assign(existing, { ...primeItem, categoryId: "PRIME", enabled: true, currency: "credits" });
+                Object.assign(existing, { ...primeItemData, categoryId: "PRIME", enabled: true, currency: "credits" });
             } else {
-                marketCatalog.items.push({ ...primeItem, categoryId: "PRIME", enabled: true, currency: "credits" });
+                marketCatalog.items.push({
+                    ...primeItemData,
+                    categoryId: "PRIME",
+                    enabled: true,
+                    currency: "credits"
+                });
             }
         }
         renderMarketCategories();

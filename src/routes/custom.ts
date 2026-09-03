@@ -63,7 +63,8 @@ import {
     getMarketItemPriceController,
     getMarketItemPricesController,
     getPrimeMarketItemsController,
-    setMarketCatalogController
+    setMarketCatalogController,
+    setMarketCatalogSettingsController
 } from "../controllers/custom/marketCatalogController.ts";
 
 const customRouter = express.Router();
@@ -128,6 +129,7 @@ customRouter.post("/getConfig", getConfigController);
 customRouter.post("/setConfig", setConfigController);
 customRouter.get("/marketCatalog", getMarketCatalogController);
 customRouter.post("/marketCatalog", setMarketCatalogController);
+customRouter.post("/marketCatalog/settings", setMarketCatalogSettingsController);
 customRouter.get("/marketCatalog/primeItems", getPrimeMarketItemsController);
 customRouter.get("/marketCatalog/itemPrice", getMarketItemPriceController);
 customRouter.post("/marketCatalog/itemPrices", getMarketItemPricesController);

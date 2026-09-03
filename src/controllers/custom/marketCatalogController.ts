@@ -64,7 +64,10 @@ const getCategoryMaximumPlatinumPrice = (sources: string[]): number | null => {
         for (const item of getCategoryItems(source)) {
             if (seen.has(item.uniqueName) || isPrimeItem(item.uniqueName)) continue;
             seen.add(item.uniqueName);
-            const price = getOriginalPrice(item.uniqueName, true);
+            const price =
+                item.marketPlatinumPrice !== undefined
+                    ? item.marketPlatinumPrice
+                    : getOriginalPrice(item.uniqueName, true);
             if (isUsableCategoryMaximumPrice(price)) {
                 maximum = Math.max(maximum ?? 0, price);
             }
@@ -92,6 +95,23 @@ export const setMarketCatalogController: RequestHandler = async (req, res) => {
     }
 };
 
+export const setMarketCatalogSettingsController: RequestHandler = async (req, res) => {
+    const account = await getAccountForRequest(req);
+    if (!isAdministrator(account)) return void res.status(401).end();
+    try {
+        const current = getCustomMarketCatalog();
+        const catalog = await saveCustomMarketCatalog({
+            ...current,
+            enabled: req.body?.enabled !== false,
+            useMetadataPatch: req.body?.useMetadataPatch === true
+        });
+        sendWsBroadcast({ sync_world_state: true });
+        res.json({ enabled: catalog.enabled, useMetadataPatch: catalog.useMetadataPatch });
+    } catch (error) {
+        res.status(400).send(error instanceof Error ? error.message : String(error));
+    }
+};
+
 export const getPrimeMarketItemsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     if (!isAdministrator(account)) return void res.status(401).end();
@@ -112,8 +132,18 @@ const getMarketItemPricing = (
     typeName: string,
     categorySources: string[]
 ): { creditsPrice: number | null; platinumPrice: number | null } => {
-    let creditsPrice = getOriginalPrice(typeName, false);
-    let platinumPrice = getOriginalPrice(typeName, true);
+    const normalizedTypeName = toMarketTypeName(typeName);
+    const categoryItem = categorySources
+        .flatMap(source => getCategoryItems(source))
+        .find(item => toMarketTypeName(item.uniqueName) == normalizedTypeName);
+    let creditsPrice =
+        categoryItem?.marketCreditsPrice !== undefined
+            ? categoryItem.marketCreditsPrice
+            : getOriginalPrice(typeName, false);
+    let platinumPrice =
+        categoryItem?.marketPlatinumPrice !== undefined
+            ? categoryItem.marketPlatinumPrice
+            : getOriginalPrice(typeName, true);
     const isModularPartCategory =
         categorySources.length > 0 && categorySources.every(source => source.startsWith("ModularParts-"));
     const isAnimalCompanionCategory = categorySources.length == 1 && categorySources[0] == "KubrowPets";

@@ -1826,23 +1826,25 @@
                         <h5 class="card-header" data-loc="market_settings"></h5>
                         <div class="card-body">
                             <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" id="market-enabled" />
+                                <input class="form-check-input" type="checkbox" id="market-enabled" onchange="saveMarketSettingsImmediately();" />
                                 <label class="form-check-label" for="market-enabled" data-loc="market_enabled"></label>
                             </div>
                             <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" id="market-convert-original-platinum" />
-                                <label class="form-check-label" for="market-convert-original-platinum" data-loc="market_convertOriginalPlatinum"></label>
+                                <input class="form-check-input" type="checkbox" id="market-use-metadata-patch" onchange="saveMarketSettingsImmediately();" />
+                                <label class="form-check-label" for="market-use-metadata-patch" data-loc="market_useMetadataPatch"></label>
+                                <div class="form-text" data-loc="market_useMetadataPatchNote"></div>
                             </div>
                             <div class="d-flex flex-wrap gap-2 align-items-center">
                                 <button class="btn btn-primary" onclick="saveMarketCatalog();" data-loc="market_save"></button>
                                 <button class="btn btn-primary" onclick="addMarketCategory();" data-loc="market_addCategory"></button>
+                                <button class="btn btn-primary d-none" id="market-generate-metadata-patch" onclick="saveMarketMetadataPatch();" data-loc="market_generateMetadataPatch"></button>
                             </div>
                         </div>
                     </div>
                     <div class="card mb-3">
                         <h5 class="card-header" data-loc="market_categories"></h5>
                         <div class="card-body p-0">
-                            <div class="table-responsive">
+                            <div class="table-responsive market-category-table">
                                 <table class="table table-hover align-middle mb-0">
                                     <thead><tr>
                                         <th data-loc="market_on"></th>
@@ -2033,6 +2035,8 @@
     <datalist id="datalist-FlavourItems"></datalist>
     <datalist id="datalist-ShipDecorations"></datalist>
     <datalist id="datalist-WeaponSkins"></datalist>
+    <datalist id="datalist-ColorPalettes"></datalist>
+    <datalist id="datalist-Seasonal"></datalist>
     <datalist id="datalist-Tennogen"></datalist>
     <datalist id="datalist-BundleGlyphs"></datalist>
     <datalist id="datalist-BundleGenes"></datalist>

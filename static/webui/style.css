@@ -63,6 +63,7 @@ td.text-end > a > svg {
     max-width: 24rem;
 }
 
+.market-category-table,
 .market-item-table {
     min-height: 60vh;
     max-height: 60vh;

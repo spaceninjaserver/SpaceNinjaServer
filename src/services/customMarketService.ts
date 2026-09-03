@@ -7,8 +7,6 @@ import type { IWorldState } from "../types/worldStateTypes.ts";
 import varzia from "../constants/varzia.ts";
 import { BV_LATEST } from "../constants/gameVersions.ts";
 
-const ORIGINAL_MARKET_PLATINUM_TO_CREDITS_RATIO = 5_000;
-
 export type TCustomMarketCurrency = "credits" | "platinum";
 
 export interface ICustomMarketCategory {
@@ -20,7 +18,6 @@ export interface ICustomMarketCategory {
 
 export interface ICustomMarketItem {
     typeName: string;
-    label?: string;
     categoryId: string;
     enabled: boolean;
     currency: TCustomMarketCurrency;
@@ -30,7 +27,7 @@ export interface ICustomMarketItem {
 export interface ICustomMarketCatalog {
     version: 1;
     enabled: boolean;
-    convertOriginalPlatinumToCredits: boolean;
+    useMetadataPatch: boolean;
     categories: ICustomMarketCategory[];
     items: ICustomMarketItem[];
 }
@@ -40,7 +37,7 @@ export const customMarketCatalogPath = path.join(repoDir, "customMarket", "catal
 const emptyCatalog = (): ICustomMarketCatalog => ({
     version: 1,
     enabled: true,
-    convertOriginalPlatinumToCredits: false,
+    useMetadataPatch: false,
     categories: [],
     items: []
 });
@@ -89,7 +86,6 @@ const validateCatalog = (value: unknown): ICustomMarketCatalog => {
         itemTypes.add(typeName);
         items.push({
             typeName,
-            ...(raw.label && { label: String(raw.label) }),
             categoryId,
             enabled: raw.enabled !== false,
             currency: raw.currency,
@@ -100,7 +96,7 @@ const validateCatalog = (value: unknown): ICustomMarketCatalog => {
     return {
         version: 1,
         enabled: input.enabled !== false,
-        convertOriginalPlatinumToCredits: input.convertOriginalPlatinumToCredits === true,
+        useMetadataPatch: input.useMetadataPatch === true,
         categories,
         items
     };
@@ -136,6 +132,16 @@ export const toMarketTypeName = (typeName: string): string => {
     return typeName;
 };
 
+export const toMarketStoreItemPath = (typeName: string): string => {
+    if (typeName.startsWith("/Lotus/Types/StoreItems/") || typeName.startsWith("/Lotus/StoreItems/")) {
+        return typeName;
+    }
+    if (typeName.startsWith("/Lotus/Types/Boosters/")) {
+        return `/Lotus/Types/StoreItems/Boosters/${typeName.substring("/Lotus/Types/Boosters/".length)}StoreItem`;
+    }
+    return `/Lotus/StoreItems/${typeName.substring("/Lotus/".length)}`;
+};
+
 export const getPrimeItemsForCustomMarket = (): { typeName: string; primePrice: number }[] => {
     const prices = new Map<string, number>();
     const add = (typeName: string, primePrice: number | undefined): void => {
@@ -157,16 +163,6 @@ export const getPrimeItemsForCustomMarket = (): { typeName: string; primePrice: 
 
 export const applyCustomMarketCatalog = (worldState: IWorldState, buildVersion: number): void => {
     const configuredTypeNames = new Set(catalog.items.map(item => toMarketTypeName(item.typeName)));
-    if (catalog.convertOriginalPlatinumToCredits) {
-        for (const sale of worldState.FlashSales) {
-            if (configuredTypeNames.has(toMarketTypeName(sale.TypeName))) continue;
-            if (typeof sale.PremiumOverride != "number" || sale.PremiumOverride <= 0) continue;
-            const creditsPrice = sale.PremiumOverride * ORIGINAL_MARKET_PLATINUM_TO_CREDITS_RATIO;
-            if (!Number.isSafeInteger(creditsPrice)) continue;
-            sale.RegularOverride = creditsPrice;
-            sale.PremiumOverride = 0;
-        }
-    }
     if (!catalog.enabled) return;
 
     const enabledCategories = catalog.categories.filter(category => category.enabled);
@@ -190,32 +186,33 @@ export const applyCustomMarketCatalog = (worldState: IWorldState, buildVersion: 
         if (category.Items) category.Items = category.Items.filter(typeName => !configuredTypeNames.has(typeName));
     }
 
-    // FlashSales requires a date range even for ordinary Market products. Some old products also
-    // carry an expired ExpiryDate in their metadata, so override that date for every enabled custom
-    // product as well. This keeps all products managed here effectively permanent.
+    // FlashSales requires a date range even for ordinary Market products. Do not send
+    // ProductExpiryOverride for enabled custom products, so the server does not add a limited-time marker.
     const startDate = toMongoDate2(new Date("2020-01-01T00:00:00.000Z"), buildVersion);
     const endDate = toMongoDate2(new Date("9999-12-31T23:59:59.999Z"), buildVersion);
     for (const item of catalog.items) {
         const typeName = toMarketTypeName(item.typeName);
         if (!item.enabled || !enabledCategoryIds.has(item.categoryId)) {
-            worldState.FlashSales.push({
-                TypeName: typeName,
-                StartDate: startDate,
-                EndDate: endDate,
-                ShowInMarket: false,
-                HideFromMarket: true
-            });
+            if (!catalog.useMetadataPatch) {
+                worldState.FlashSales.push({
+                    TypeName: typeName,
+                    StartDate: startDate,
+                    EndDate: endDate,
+                    ShowInMarket: false,
+                    HideFromMarket: true
+                });
+            }
             continue;
         }
         const category = worldState.InGameMarket.LandingPage.Categories.find(
             current => current.CategoryName == item.categoryId
         )!;
-        category.Items!.push(typeName);
+        category.Items!.push(catalog.useMetadataPatch ? toMarketStoreItemPath(item.typeName) : typeName);
+        if (catalog.useMetadataPatch) continue;
         worldState.FlashSales.push({
             TypeName: typeName,
             StartDate: startDate,
             EndDate: endDate,
-            ProductExpiryOverride: endDate,
             ShowInMarket: true,
             HideFromMarket: false,
             SupporterPack: false,

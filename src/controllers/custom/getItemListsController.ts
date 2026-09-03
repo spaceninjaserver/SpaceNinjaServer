@@ -44,6 +44,14 @@ import varzia from "../../constants/varzia.ts";
 import suitDefaultUpgrades from "../../constants/suitDefaultUpgrades.ts";
 import { pseudoRecipeToOwnedRecipeMap } from "../../services/foundryService.ts";
 import { nightwaveTagToSeasonName } from "../../services/worldStateService.ts";
+import {
+    dogDaysFlashSales,
+    lunarNewYearAllFlashSales,
+    naberusNightsFlashSales,
+    prideMonthFlashSales,
+    saintPatrickDayFlashSales,
+    tennobaumFlashSales
+} from "../../constants/flashSales.ts";
 
 export interface ListedItem {
     uniqueName: string;
@@ -64,6 +72,8 @@ export interface ListedItem {
     evolutionWeapon?: true;
     baseEvolutionWeapon?: true;
     permanentEvolutionWeapon?: true;
+    marketCreditsPrice?: number | null;
+    marketPlatinumPrice?: number | null;
 }
 
 export interface ItemLists {
@@ -92,6 +102,8 @@ export interface ItemLists {
     FlavourItems: ListedItem[];
     ShipDecorations: ListedItem[];
     WeaponSkins: ListedItem[];
+    ColorPalettes: ListedItem[];
+    Seasonal: ListedItem[];
     Tennogen: ListedItem[];
     BundleGlyphs: ListedItem[];
     BundleGenes: ListedItem[];
@@ -108,6 +120,13 @@ export interface ItemLists {
     //circuitGameModes: ListedItem[];
     blueprintAndItem: string;
 }
+
+const isGlyphItem = (uniqueName: string, nameKey?: string): boolean =>
+    uniqueName.includes("/AvatarImages/") ||
+    /Glyph/i.test(uniqueName) ||
+    /\/Glyphs\//i.test(nameKey ?? "") ||
+    uniqueName.includes("/ShipDecos/Operator/SchoolDecal") ||
+    uniqueName.endsWith("/TennoGenSigil");
 
 const relicQualitySuffixes: Record<TRelicQuality, string> = {
     VPQ_BRONZE: "",
@@ -164,6 +183,8 @@ export const getItemLists = (language: string = "en"): ItemLists => {
         FlavourItems: [],
         ShipDecorations: [],
         WeaponSkins: [],
+        ColorPalettes: [],
+        Seasonal: [],
         Tennogen: [],
         BundleGlyphs: [],
         BundleGenes: [],
@@ -332,7 +353,8 @@ export const getItemLists = (language: string = "en"): ItemLists => {
             }
         }
         if (item.productCategory == "ShipDecorations") {
-            res.ShipDecorations.push({
+            const target = isGlyphItem(uniqueName, item.name) ? res.BundleGlyphs : res.ShipDecorations;
+            target.push({
                 uniqueName: uniqueName,
                 name: name,
                 parentName: item.parentName
@@ -367,7 +389,8 @@ export const getItemLists = (language: string = "en"): ItemLists => {
         });
     }
     for (const [uniqueName, item] of Object.entries(ExportGear)) {
-        res.miscitems.push({
+        const target = isGlyphItem(uniqueName, item.name) ? res.BundleGlyphs : res.miscitems;
+        target.push({
             uniqueName: uniqueName,
             name: getString(item.name, lang),
             subtype: "Gear",
@@ -408,7 +431,13 @@ export const getItemLists = (language: string = "en"): ItemLists => {
             uniqueName.includes("/SteamWorkshop/") ||
             uniqueName.includes("/Tennogen/") ||
             (/^SW[A-Z]/.test(fileName) && !fileName.startsWith("SW1999"));
-        if (isTennogen) {
+        if (isGlyphItem(uniqueName, item.name)) {
+            res.BundleGlyphs.push({
+                uniqueName,
+                name: getString(item.name, lang),
+                alwaysAvailable: item.alwaysAvailable
+            });
+        } else if (isTennogen) {
             res.Tennogen.push({
                 uniqueName,
                 name: getString(item.name, lang),
@@ -448,12 +477,12 @@ export const getItemLists = (language: string = "en"): ItemLists => {
         const target =
             /Heirloom/i.test(uniqueName)
                 ? res.BundleHeirlooms
-                : /TennoGen/i.test(uniqueName)
-                  ? res.Tennogen
-                : uniqueName.startsWith("/Lotus/Types/StoreItems/Packages/IncarnonPackages/")
-                    ? res.BundleIncarnons
-                    : uniqueName.includes("/AvatarImages/") || allComponentsMatch(/AvatarImages|Glyph/i)
-                      ? res.BundleGlyphs
+                : isGlyphItem(uniqueName, item.name) || allComponentsMatch(/AvatarImages|Glyph/i)
+                  ? res.BundleGlyphs
+                  : /TennoGen/i.test(uniqueName)
+                    ? res.Tennogen
+                    : uniqueName.startsWith("/Lotus/Types/StoreItems/Packages/IncarnonPackages/")
+                      ? res.BundleIncarnons
                       : isGeneBundle
                         ? res.BundleGenes
                         : allComponentsMatch(/\/Boosters\//i)
@@ -677,7 +706,12 @@ export const getItemLists = (language: string = "en"): ItemLists => {
     }
 
     for (const [uniqueName, item] of Object.entries(ExportFlavour)) {
-        res.FlavourItems.push({
+        const target = /Colou?rPicker/i.test(uniqueName)
+            ? res.ColorPalettes
+            : isGlyphItem(uniqueName, item.name)
+              ? res.BundleGlyphs
+              : res.FlavourItems;
+        target.push({
             uniqueName,
             name: getString(item.name, lang),
             alwaysAvailable: item.alwaysAvailable
@@ -730,6 +764,53 @@ export const getItemLists = (language: string = "en"): ItemLists => {
             uniqueName,
             name: getString(uniqueName, lang)
         });
+    }
+
+    const normalizeStoreItemType = (typeName: string): string =>
+        typeName.startsWith("/Lotus/StoreItems/")
+            ? "/Lotus/" + typeName.substring("/Lotus/StoreItems/".length)
+            : typeName;
+    const knownItems = new Map<string, ListedItem>();
+    for (const list of Object.values(res)) {
+        if (!Array.isArray(list)) continue;
+        for (const item of list as ListedItem[]) knownItems.set(normalizeStoreItemType(item.uniqueName), item);
+    }
+    const seasonalOffers = [
+        ...dogDaysFlashSales,
+        ...saintPatrickDayFlashSales,
+        ...prideMonthFlashSales,
+        ...tennobaumFlashSales,
+        ...naberusNightsFlashSales,
+        ...lunarNewYearAllFlashSales
+    ];
+    const seasonalByType = new Map(seasonalOffers.map(offer => [normalizeStoreItemType(offer.TypeName), offer]));
+    const seasonalSupplementalNameKeys = new Map([
+        ["/Lotus/Upgrades/Skins/Clan/LNY2026HorseGlyph", "/Lotus/Language/Seasonal/LNY2026HorseGlyphName"]
+    ]);
+    for (const [uniqueName, offer] of seasonalByType) {
+        const knownItem = knownItems.get(uniqueName);
+        const nameKey =
+            getItemName(uniqueName) ?? getItemName(offer.TypeName) ?? seasonalSupplementalNameKeys.get(uniqueName);
+        const listedItem: ListedItem = {
+            uniqueName,
+            name:
+                knownItem?.name ??
+                (nameKey ? getString(nameKey, lang) : uniqueName.substring(uniqueName.lastIndexOf("/") + 1)),
+            marketCreditsPrice: typeof offer.RegularOverride == "number" ? offer.RegularOverride : null,
+            marketPlatinumPrice: typeof offer.PremiumOverride == "number" ? offer.PremiumOverride : null
+        };
+        const isGlyph = isGlyphItem(uniqueName, nameKey);
+        if (isGlyph) {
+            const existing = res.BundleGlyphs.find(item => normalizeStoreItemType(item.uniqueName) == uniqueName);
+            if (existing) {
+                existing.marketCreditsPrice = listedItem.marketCreditsPrice;
+                existing.marketPlatinumPrice = listedItem.marketPlatinumPrice;
+            } else {
+                res.BundleGlyphs.push(listedItem);
+            }
+        } else {
+            res.Seasonal.push(listedItem);
+        }
     }
 
     return res;
