@@ -109,7 +109,7 @@ dict = {
     navbar_guildView: `Clan`,
     navbar_mods: `Mods`,
     navbar_cheats: `Cheats`,
-    navbar_market: `Market Management`,
+    navbar_market: `Store`,
     navbar_import: `Import`,
     settings_passwordMismatch: `The new passwords do not match.`,
     settings_passwordSuccess: `Password updated.`,

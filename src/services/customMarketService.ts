@@ -192,22 +192,11 @@ export const applyCustomMarketCatalog = (worldState: IWorldState, buildVersion: 
     const endDate = toMongoDate2(new Date("9999-12-31T23:59:59.999Z"), buildVersion);
     for (const item of catalog.items) {
         const typeName = toMarketTypeName(item.typeName);
-        if (!item.enabled || !enabledCategoryIds.has(item.categoryId)) {
-            if (!catalog.useMetadataPatch) {
-                worldState.FlashSales.push({
-                    TypeName: typeName,
-                    StartDate: startDate,
-                    EndDate: endDate,
-                    ShowInMarket: false,
-                    HideFromMarket: true
-                });
-            }
-            continue;
-        }
+        if (!item.enabled || !enabledCategoryIds.has(item.categoryId)) continue;
         const category = worldState.InGameMarket.LandingPage.Categories.find(
             current => current.CategoryName == item.categoryId
         )!;
-        category.Items!.push(catalog.useMetadataPatch ? toMarketStoreItemPath(item.typeName) : typeName);
+        category.Items!.push(toMarketStoreItemPath(item.typeName));
         if (catalog.useMetadataPatch) continue;
         worldState.FlashSales.push({
             TypeName: typeName,

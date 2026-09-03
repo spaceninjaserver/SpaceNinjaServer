@@ -155,6 +155,11 @@ const supplementalModBundleTypes = new Set([
     "/Lotus/Types/StoreItems/Packages/TheTeacherRewardModPack"
 ]);
 
+const nonPlayerWeaponTypes = new Set([
+    "/Lotus/Weapons/Tenno/Grimoire/TnDoppelgangerGrimoire",
+    "/Lotus/Types/JadeShadowsPart2Mission/Enemies/Ground/Elites/JS2MCorruptedBossMinigun"
+]);
+
 export const getItemLists = (language: string = "en"): ItemLists => {
     const lang = getDict(language);
     const res: ItemLists = {
@@ -265,6 +270,7 @@ export const getItemLists = (language: string = "en"): ItemLists => {
         }
     }
     for (const [uniqueName, item] of Object.entries(ExportWeapons)) {
+        if (nonPlayerWeaponTypes.has(uniqueName)) continue;
         if (item.partType) {
             if (!uniqueName.split("/")[7]?.startsWith("PvPVariant")) {
                 // not a pvp variant

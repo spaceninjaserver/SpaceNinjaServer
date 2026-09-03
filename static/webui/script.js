@@ -3667,10 +3667,14 @@ function renderMarketCategories() {
 }
 
 function renderMarketItemCategoryTabs() {
+    const itemCounts = new Map();
+    for (const item of marketCatalog.items) {
+        itemCounts.set(item.categoryId, (itemCounts.get(item.categoryId) ?? 0) + 1);
+    }
     document.getElementById("market-item-category-tabs").innerHTML = marketCatalog.categories
         .map(
             category => `<li class="nav-item">
-                <button class="nav-link${category.id == activeMarketCategoryId ? " active" : ""}" type="button" onclick="selectMarketItemCategory('${escapeMarketHtml(category.id)}')">${escapeMarketHtml(category.name)}</button>
+                <button class="nav-link${category.id == activeMarketCategoryId ? " active" : ""}" type="button" onclick="selectMarketItemCategory('${escapeMarketHtml(category.id)}')">${escapeMarketHtml(category.name)} (${itemCounts.get(category.id) ?? 0})</button>
             </li>`
         )
         .join("");
@@ -4104,6 +4108,7 @@ function updateMarketItem(index, field, value) {
 
 function removeMarketItem(index) {
     marketCatalog.items.splice(index, 1);
+    renderMarketItemCategoryTabs();
     renderMarketItems();
 }
 
