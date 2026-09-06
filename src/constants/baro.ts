@@ -2517,6 +2517,12 @@ const baro: IBaro = {
             minBuildVersionInt: gameToBuildVersionInt["38.0.0"]
         },
         {
+            ItemType: "/Lotus/StoreItems/Types/Items/SongItems/VenusOrbVallisLoginSongItem",
+            PrimePrice: 130,
+            RegularPrice: 190000,
+            minBuildVersionInt: gameToBuildVersionInt["38.0.0"]
+        },
+        {
             ItemType: "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyBaro",
             PrimePrice: 100,
             RegularPrice: 125000,
