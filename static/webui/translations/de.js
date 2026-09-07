@@ -191,6 +191,7 @@ dict = {
     cheats_skipAllPopups: `Alle Popups überspringen`,
     cheats_unlockAllScans: `Alle Scans freischalten`,
     cheats_unlockSuccRelog: `Erfolgreich. Bitte beachte, dass du dich neu anmelden musst, damit der Client dies aktualisiert.`,
+    cheats_unlockAllNormalMissions: `[UNTRANSLATED] Unlock Normal Star Chart`,
     cheats_unlockAllMissions: `Alle Missionen freischalten`,
     cheats_unlockAllMissions_ok: `Erfolgreich. Bitte beachte, dass du ein Dojo/Relais besuchen oder dich neu anmelden musst, damit die Sternenkarte aktualisiert wird.`,
     cheats_infiniteCredits: `Unendlich Credits`,

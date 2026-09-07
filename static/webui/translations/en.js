@@ -190,6 +190,7 @@ dict = {
     cheats_skipAllPopups: `Skip All Popups`,
     cheats_unlockAllScans: `Unlock All Scans`,
     cheats_unlockSuccRelog: `Success. Please note that you'll need to relog for the client to refresh this.`,
+    cheats_unlockAllNormalMissions: `Unlock Normal Star Chart`,
     cheats_unlockAllMissions: `Unlock All Missions`,
     cheats_unlockAllMissions_ok: `Success. Please note that you'll need to enter a dojo/relay or relog for the client to refresh the star chart.`,
     cheats_infiniteCredits: `Infinite Credits`,

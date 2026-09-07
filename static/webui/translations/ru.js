@@ -191,6 +191,7 @@ dict = {
     cheats_skipAllPopups: `Пропустить все всплывающие окна`,
     cheats_unlockAllScans: `Разблокировать все сканирования`,
     cheats_unlockSuccRelog: `Успех. Вам необходимо повторно войти в игру, чтобы клиент обновил эту информацию.`,
+    cheats_unlockAllNormalMissions: `[UNTRANSLATED] Unlock Normal Star Chart`,
     cheats_unlockAllMissions: `Разблокировать все миссии`,
     cheats_unlockAllMissions_ok: `Успех. Пожалуйста, обратите внимание, что вам нужно будет войти в Додзё/Реле или перезайти, чтобы клиент обновил звездную карту.`,
     cheats_infiniteCredits: `Бесконечные Кредиты`,

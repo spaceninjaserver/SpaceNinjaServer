@@ -191,6 +191,7 @@ dict = {
     cheats_skipAllPopups: `[UNTRANSLATED] Skip All Popups`,
     cheats_unlockAllScans: `Desbloquear todos los escaneos`,
     cheats_unlockSuccRelog: `Éxito. Ten en cuenta que deberás volver a iniciar sesión para que el cliente se actualice.`,
+    cheats_unlockAllNormalMissions: `[UNTRANSLATED] Unlock Normal Star Chart`,
     cheats_unlockAllMissions: `Desbloquear todas las misiones`,
     cheats_unlockAllMissions_ok: `Éxito. Ten en cuenta que deberás entrar a un dojo, repetidor o volver a iniciar sesión para que el cliente actualice el mapa estelar.`,
     cheats_infiniteCredits: `Créditos infinitos`,

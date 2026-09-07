@@ -191,6 +191,7 @@ dict = {
     cheats_skipAllPopups: `Passer les popups`,
     cheats_unlockAllScans: `Débloquer tous les scans`,
     cheats_unlockSuccRelog: `Succès. Une reconnexion est requise pour appliquer les changements.`,
+    cheats_unlockAllNormalMissions: `[UNTRANSLATED] Unlock Normal Star Chart`,
     cheats_unlockAllMissions: `Débloquer toutes les missions`,
     cheats_unlockAllMissions_ok: `Succès. Une actualisation de l'inventaire est nécessaire.`,
     cheats_infiniteCredits: `Crédits infinis`,

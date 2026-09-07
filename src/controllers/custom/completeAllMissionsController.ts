@@ -9,6 +9,7 @@ import type { RequestHandler } from "express";
 import { ExportRegions } from "warframe-public-export-plus";
 
 export const completeAllMissionsController: RequestHandler = async (req, res) => {
+    const includeSteelPath = req.query.normalOnly != "1";
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId, undefined);
     const MissionRewards: IMissionReward[] = [];
@@ -30,7 +31,9 @@ export const completeAllMissionsController: RequestHandler = async (req, res) =>
                 await addFixedLevelRewards(node.missionReward, MissionRewards, BL_LATEST);
             }
         }
-        mission.Tier = 1;
+        if (includeSteelPath) {
+            mission.Tier = 1;
+        }
     }
     for (const reward of MissionRewards) {
         await handleStoreItemAcquisition(reward.StoreItem, inventory, reward.ItemCount, undefined, true);
@@ -93,8 +96,10 @@ export const completeAllMissionsController: RequestHandler = async (req, res) =>
             Name: `SaviourOfVenus`
         }
     ]);
-    await ensureUserHasSteelPathRewards(inventory, true);
-    addString(inventory.NodeIntrosCompleted, "TeshinHardModeUnlocked");
+    if (includeSteelPath) {
+        await ensureUserHasSteelPathRewards(inventory, true);
+        addString(inventory.NodeIntrosCompleted, "TeshinHardModeUnlocked");
+    }
     addString(inventory.NodeIntrosCompleted, "CetusInvasionNodeIntro");
     addString(inventory.NodeIntrosCompleted, "CetusSyndicate_IntroJob");
     let syndicate = inventory.Affiliations.find(x => x.Tag == "CetusSyndicate");

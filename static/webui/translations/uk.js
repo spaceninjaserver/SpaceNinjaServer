@@ -191,6 +191,7 @@ dict = {
     cheats_skipAllPopups: `Пропустити всі спливаючі вікна`,
     cheats_unlockAllScans: `Розблокувати всі сканування`,
     cheats_unlockSuccRelog: `Успіх. Вам потрібно буде повторно увійти в гру, щоб клієнт оновив цю інформацію.`,
+    cheats_unlockAllNormalMissions: `[UNTRANSLATED] Unlock Normal Star Chart`,
     cheats_unlockAllMissions: `Розблокувати всі місії`,
     cheats_unlockAllMissions_ok: `Успіх. Будь ласка, зверніть увагу, що вам потрібно буде увійти в Доджьо/Реле або перезайти, щоб клієнт оновив Зоряну мапу.`,
     cheats_infiniteCredits: `Бескінечні Кредити`,

@@ -191,6 +191,7 @@ dict = {
     cheats_skipAllPopups: `跳过所有弹窗`,
     cheats_unlockAllScans: `解锁所有扫描`,
     cheats_unlockSuccRelog: `操作成功.请注意,您需要重新登录以刷新客户端.`,
+    cheats_unlockAllNormalMissions: `解锁普通星图`,
     cheats_unlockAllMissions: `解锁所有星图`,
     cheats_unlockAllMissions_ok: `操作成功.请注意,您需要进入道场/中继站或重新登录以刷新星图数据.`,
     cheats_infiniteCredits: `无限现金`,
