@@ -235,7 +235,7 @@ interface IOfferIdentifiers {
     firstItemPriceType?: string;
 }
 
-const getOfferIdentifiers = (offer: IVendorOffer | IItemManifest): IOfferIdentifiers => {
+const getOfferIdentifiers = (offer: IVendorOffer | IItemManifest, manifest: IVendor): IOfferIdentifiers => {
     let obj: IOfferIdentifiers;
     if ("storeItem" in offer) {
         // IVendorOffer
@@ -252,8 +252,9 @@ const getOfferIdentifiers = (offer: IVendorOffer | IItemManifest): IOfferIdentif
             storeItem: offer.StoreItem,
             quantity: offer.QuantityMultiplier
         };
-        if ((offer.ItemPrices?.length ?? 0) > 0) {
-            obj.firstItemPriceType = offer.ItemPrices![0].ItemType;
+        const rawItem = manifest.items.find(i => i.storeItem == offer.StoreItem && "BIN_" + i.bin == offer.Bin);
+        if (rawItem?.itemPrices?.length) {
+            obj.firstItemPriceType = rawItem.itemPrices![0].ItemType;
         }
     }
     return obj;
@@ -261,8 +262,8 @@ const getOfferIdentifiers = (offer: IVendorOffer | IItemManifest): IOfferIdentif
 
 type TOfferId = string;
 
-const getOfferId = (offer: IVendorOffer | IItemManifest): TOfferId => {
-    const { storeItem, quantity, firstItemPriceType } = getOfferIdentifiers(offer);
+const getOfferId = (offer: IVendorOffer | IItemManifest, manifest: IVendor): TOfferId => {
+    const { storeItem, quantity, firstItemPriceType } = getOfferIdentifiers(offer, manifest);
     let str = storeItem + "x" + quantity;
     if (firstItemPriceType) {
         str += ":" + firstItemPriceType;
@@ -359,10 +360,10 @@ const generateVendorManifest = (
                 }
             }
             for (const item of manifest.items) {
-                remainingItemCapacity[getOfferId(item)] = 1 + item.duplicates;
+                remainingItemCapacity[getOfferId(item, manifest)] = 1 + item.duplicates;
             }
             for (const offer of info.ItemManifest) {
-                remainingItemCapacity[getOfferId(offer)] -= 1;
+                remainingItemCapacity[getOfferId(offer, manifest)] -= 1;
                 const bin = parseInt(offer.Bin.substring(4));
                 if (missingItemsPerBin[bin]) {
                     missingItemsPerBin[bin] -= 1;
@@ -377,7 +378,7 @@ const generateVendorManifest = (
             for (const item of manifest.items) {
                 if (item.alwaysOffered || item.rotatedWeekly) {
                     ++numUncountedOffers;
-                    const id = getOfferId(item);
+                    const id = getOfferId(item, manifest);
                     if (remainingItemCapacity[id] != 0) {
                         remainingItemCapacity[id] -= 1;
                         offersToAdd.push(item);
@@ -422,10 +423,10 @@ const generateVendorManifest = (
             while (info.ItemManifest.length + offersToAdd.length < numItemsTarget) {
                 const item = useRng ? rng.randomReward(rollableOffers)! : rollableOffers[i++];
                 if (
-                    remainingItemCapacity[getOfferId(item)] != 0 &&
+                    remainingItemCapacity[getOfferId(item, manifest)] != 0 &&
                     (numOffersThatNeedToMatchABin == 0 || missingItemsPerBin[item.bin])
                 ) {
-                    remainingItemCapacity[getOfferId(item)] -= 1;
+                    remainingItemCapacity[getOfferId(item, manifest)] -= 1;
                     if (missingItemsPerBin[item.bin]) {
                         missingItemsPerBin[item.bin] -= 1;
                         numOffersThatNeedToMatchABin -= 1;
