@@ -206,6 +206,7 @@ dict = {
     cheats_claimingBlueprintRefundsIngredients: `蓝图制造完成领取后返还材料`,
     cheats_dontSubtractPurchaseCreditCost: `购物时不减少现金花费`,
     cheats_dontSubtractPurchasePlatinumCost: `购物时不减少白金花费`,
+    cheats_dontSubtractRushPlatinumCost: `[UNTRANSLATED] Don't Subtract Blueprint Rush Platinum Cost`,
     cheats_dontSubtractPurchaseItemCost: `购物时不减少物品花费`,
     cheats_dontSubtractPurchaseStandingCost: `购物时不减少声望花费`,
     cheats_dontSubtractKuvaForRivens: `重塑裂罅MOD无消耗`,

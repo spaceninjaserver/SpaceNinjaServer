@@ -206,6 +206,7 @@ dict = {
     cheats_claimingBlueprintRefundsIngredients: `Повернення інгредієнтів креслеників`,
     cheats_dontSubtractPurchaseCreditCost: `Не вираховувати вартість Кредитів при купівлі`,
     cheats_dontSubtractPurchasePlatinumCost: `Не вираховувати вартість Платини при купівлі`,
+    cheats_dontSubtractRushPlatinumCost: `[UNTRANSLATED] Don't Subtract Blueprint Rush Platinum Cost`,
     cheats_dontSubtractPurchaseItemCost: `Не вираховувати вартість предметів при купівлі`,
     cheats_dontSubtractPurchaseStandingCost: `Не вираховувати вартість репутації при купівлі`,
     cheats_dontSubtractKuvaForRivens: `[UNTRANSLATED] Don't Subtract Kuva For Rivens`,

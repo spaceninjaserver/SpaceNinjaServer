@@ -205,6 +205,7 @@ dict = {
     cheats_claimingBlueprintRefundsIngredients: `Claiming Blueprint Refunds Ingredients`,
     cheats_dontSubtractPurchaseCreditCost: `Don't Subtract Purchase Credit Cost`,
     cheats_dontSubtractPurchasePlatinumCost: `Don't Subtract Purchase Platinum Cost`,
+    cheats_dontSubtractRushPlatinumCost: `Don't Subtract Blueprint Rush Platinum Cost`,
     cheats_dontSubtractPurchaseItemCost: `Don't Subtract Purchase Item Cost`,
     cheats_dontSubtractPurchaseStandingCost: `Don't Subtract Purchase Standing Cost`,
     cheats_dontSubtractKuvaForRivens: `Don't Subtract Kuva For Rivens`,

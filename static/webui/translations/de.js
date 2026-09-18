@@ -206,6 +206,7 @@ dict = {
     cheats_claimingBlueprintRefundsIngredients: `Fertige Blaupausen erstatten Ressourcen zurück`,
     cheats_dontSubtractPurchaseCreditCost: `Credits beim Kauf nicht verbrauchen`,
     cheats_dontSubtractPurchasePlatinumCost: `Platinum beim Kauf nicht verbrauchen`,
+    cheats_dontSubtractRushPlatinumCost: `[UNTRANSLATED] Don't Subtract Blueprint Rush Platinum Cost`,
     cheats_dontSubtractPurchaseItemCost: `Inhalte beim Kauf nicht verbrauchen`,
     cheats_dontSubtractPurchaseStandingCost: `Ansehen beim Kauf nicht verbrauchen`,
     cheats_dontSubtractKuvaForRivens: `Kuva für Riven-Mods nicht verbrauchen`,

@@ -206,6 +206,7 @@ dict = {
     cheats_claimingBlueprintRefundsIngredients: `Récupérer les items rend les ressources`,
     cheats_dontSubtractPurchaseCreditCost: `Ne pas retirer le coût en crédits`,
     cheats_dontSubtractPurchasePlatinumCost: `Ne pas retirer le coût en platines`,
+    cheats_dontSubtractRushPlatinumCost: `[UNTRANSLATED] Don't Subtract Blueprint Rush Platinum Cost`,
     cheats_dontSubtractPurchaseItemCost: `Ne pas retirer le coût d'achat`,
     cheats_dontSubtractPurchaseStandingCost: `Ne pas retirer le coût en réputation`,
     cheats_dontSubtractKuvaForRivens: `Ne pas retirer de Kuva pour les Rivens`,

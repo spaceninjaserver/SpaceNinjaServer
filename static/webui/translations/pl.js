@@ -206,6 +206,7 @@ dict = {
     cheats_claimingBlueprintRefundsIngredients: `Odbieranie schematu zwraca materiały`,
     cheats_dontSubtractPurchaseCreditCost: `Nie odejmuj kosztu zakupu w kredytach`,
     cheats_dontSubtractPurchasePlatinumCost: `Nie odejmuj kosztu zakupu w platynie`,
+    cheats_dontSubtractRushPlatinumCost: `Nie odejmuj kosztu przyspieszenia w platynie`,
     cheats_dontSubtractPurchaseItemCost: `Nie odejmuj kosztu zakupu przedmiotu`,
     cheats_dontSubtractPurchaseStandingCost: `Nie odejmuj kosztu zakupu za reputacje`,
     cheats_dontSubtractKuvaForRivens: `Nie odejmuj Kuv'y dla Riven'ów`,

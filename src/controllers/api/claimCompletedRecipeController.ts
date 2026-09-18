@@ -166,7 +166,7 @@ const claimCompletedRecipe = async (
         }
     }
 
-    if (rush) {
+    if (rush && !inventory.dontSubtractRushPlatinumCost) {
         let cost = recipe.skipBuildTimePrice;
         const end = Math.trunc(pendingRecipe.CompletionDate.getTime() / 1000);
         const start = end - recipe.buildTime;

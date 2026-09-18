@@ -1652,6 +1652,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         skipAllPopups: Boolean,
         dontSubtractPurchaseCreditCost: Boolean,
         dontSubtractPurchasePlatinumCost: Boolean,
+        dontSubtractRushPlatinumCost: Boolean,
         dontSubtractPurchaseItemCost: Boolean,
         dontSubtractPurchaseStandingCost: Boolean,
         dontSubtractKuvaForRivens: Boolean,
