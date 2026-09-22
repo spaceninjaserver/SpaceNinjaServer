@@ -87,27 +87,30 @@ export const accountCheatBooleans = [
     "incrementDailyTributeBy50",
     "tradesDontTouchInventory" // API-only cheat for bot developers
 ] as const;
-export const accountCheatNumbers = [
-    "nemesisHenchmenKillsMultiplierGrineer",
-    "nemesisHenchmenKillsMultiplierCorpus",
-    "nemesisAntivirusGainMultiplier",
-    "nemesisHintProgressMultiplierGrineer",
-    "nemesisHintProgressMultiplierCorpus",
-    "nemesisExtraWeapon",
-    "spoofMasteryRank",
-    "dailyTributeRewardMultiplier",
-    "relicRewardItemCountMultiplier",
-    "relicPlatinumBonusCommon",
-    "relicPlatinumBonusUncommon",
-    "relicPlatinumBonusRare",
-    "teralystCapturePlatinumBonus",
-    "gantulystCapturePlatinumBonus",
-    "hydrolystCapturePlatinumBonus",
-    "nightwaveStandingMultiplier"
-] as const;
+export const accountCheatBooleansHiddenFromWebui: readonly (typeof accountCheatBooleans)[number][] = [
+    "tradesDontTouchInventory"
+];
+export const accountCheatNumbers = {
+    nemesisHenchmenKillsMultiplierGrineer: { min: 0, max: 65535, default: 1 },
+    nemesisHenchmenKillsMultiplierCorpus: { min: 0, max: 65535, default: 1 },
+    nemesisAntivirusGainMultiplier: { min: 0, max: 65535, default: 1 },
+    nemesisHintProgressMultiplierGrineer: { min: 0, max: 65535, default: 1 },
+    nemesisHintProgressMultiplierCorpus: { min: 0, max: 65535, default: 1 },
+    nemesisExtraWeapon: { min: 0, max: 65535, default: 0 },
+    spoofMasteryRank: { min: -1, max: 65535, default: -1 },
+    dailyTributeRewardMultiplier: { min: 1, max: 1000000, default: 1 },
+    relicRewardItemCountMultiplier: { min: 1, max: 1000000, default: 1 },
+    relicPlatinumBonusCommon: { min: 0, max: 1000000, default: 0 },
+    relicPlatinumBonusUncommon: { min: 0, max: 1000000, default: 0 },
+    relicPlatinumBonusRare: { min: 0, max: 1000000, default: 0 },
+    teralystCapturePlatinumBonus: { min: 0, max: 1000000, default: 0 },
+    gantulystCapturePlatinumBonus: { min: 0, max: 1000000, default: 0 },
+    hydrolystCapturePlatinumBonus: { min: 0, max: 1000000, default: 0 },
+    nightwaveStandingMultiplier: { min: 1, max: 1000000, default: 1 }
+} as const;
 
 export type TAccountCheatBooleanKey = (typeof accountCheatBooleans)[number];
-export type TAccountCheatNumberKey = (typeof accountCheatNumbers)[number];
+export type TAccountCheatNumberKey = keyof typeof accountCheatNumbers;
 
 type IAccountCheatBooleans = {
     [_ in TAccountCheatBooleanKey]: boolean | undefined;

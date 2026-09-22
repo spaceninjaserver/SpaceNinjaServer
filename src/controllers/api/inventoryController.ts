@@ -397,7 +397,7 @@ export const getInventoryResponse = async (
         for (const key of accountCheatBooleans) {
             delete inventoryResponse[key as keyof typeof inventoryResponse];
         }
-        for (const key of accountCheatNumbers) {
+        for (const key of Object.keys(accountCheatNumbers)) {
             delete inventoryResponse[key as keyof typeof inventoryResponse];
         }
     }

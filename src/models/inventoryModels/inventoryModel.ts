@@ -107,7 +107,7 @@ import type {
     INemesisBaseClient,
     INemesisBaseDatabase
 } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
+import { accountCheatBooleans, accountCheatNumbers, equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IOid, ITypeCount } from "../../types/commonTypes.ts";
 import type {
     IAbilityOverride,
@@ -1643,76 +1643,17 @@ const miscAccountDataSchema = new Schema<IMiscAccountData>(
     { _id: false }
 );
 
+const accountCheatFields = {
+    ...Object.fromEntries(accountCheatBooleans.map(key => [key, Boolean])),
+    ...Object.fromEntries(Object.keys(accountCheatNumbers).map(key => [key, Number]))
+};
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
 
         // SNS account cheats
-        skipAllDialogue: Boolean,
-        skipAllPopups: Boolean,
-        dontSubtractPurchaseCreditCost: Boolean,
-        dontSubtractPurchasePlatinumCost: Boolean,
-        dontSubtractRushPlatinumCost: Boolean,
-        dontSubtractPurchaseItemCost: Boolean,
-        dontSubtractPurchaseStandingCost: Boolean,
-        dontSubtractKuvaForRivens: Boolean,
-        dontSubtractVoidTraces: Boolean,
-        dontSubtractConsumables: Boolean,
-        dontSubtractKeys: Boolean,
-        finishInvasionsInOneMission: Boolean,
-        infiniteCredits: Boolean,
-        infinitePlatinum: Boolean,
-        infiniteEndo: Boolean,
-        infiniteDirac: Boolean,
-        infiniteRegalAya: Boolean,
-        infiniteRevives: Boolean,
-        infiniteTrades: Boolean,
-        infiniteGifts: Boolean,
-        infiniteHelminthMaterials: Boolean,
-        universalPolarityEverywhere: Boolean,
-        unlockDoubleCapacityPotatoesEverywhere: Boolean,
-        unlockExilusEverywhere: Boolean,
-        unlockArcanesEverywhere: Boolean,
-        alertsRepeatable: Boolean,
-        syndicateMissionsRepeatable: Boolean,
-        instantFinishRivenChallenge: Boolean,
-        noDailyStandingLimits: Boolean,
-        noDailyFocusLimit: Boolean,
-        noArgonCrystalDecay: Boolean,
-        noMasteryRankUpCooldown: Boolean,
-        noVendorPurchaseLimits: Boolean,
-        noNodeEntryFees: Boolean,
-        noDeathMarks: Boolean,
-        noNemesis: Boolean,
-        noKimCooldowns: Boolean,
-        noBlessingCooldown: Boolean,
-        claimingBlueprintRefundsIngredients: Boolean,
-        instantResourceExtractorDrones: Boolean,
-        noResourceExtractorDronesDamage: Boolean,
-        missionsCanGiveAllRelics: Boolean,
-        exceptionalRelicsAlwaysGiveBronzeReward: Boolean,
-        flawlessRelicsAlwaysGiveSilverReward: Boolean,
-        radiantRelicsAlwaysGiveGoldReward: Boolean,
-        disableDailyTribute: Boolean,
-        incrementDailyTributeBy50: Boolean,
-        tradesDontTouchInventory: Boolean, // API-only cheat for bot developers
-
-        nemesisHenchmenKillsMultiplierGrineer: Number,
-        nemesisHenchmenKillsMultiplierCorpus: Number,
-        nemesisAntivirusGainMultiplier: Number,
-        nemesisHintProgressMultiplierGrineer: Number,
-        nemesisHintProgressMultiplierCorpus: Number,
-        nemesisExtraWeapon: Number,
-        spoofMasteryRank: Number,
-        dailyTributeRewardMultiplier: Number,
-        relicRewardItemCountMultiplier: Number,
-        relicPlatinumBonusCommon: Number,
-        relicPlatinumBonusUncommon: Number,
-        relicPlatinumBonusRare: Number,
-        teralystCapturePlatinumBonus: Number,
-        gantulystCapturePlatinumBonus: Number,
-        hydrolystCapturePlatinumBonus: Number,
-        nightwaveStandingMultiplier: Number,
+        ...accountCheatFields,
 
         Created: Date,
 
