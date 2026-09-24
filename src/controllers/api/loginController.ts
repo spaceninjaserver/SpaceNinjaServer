@@ -62,7 +62,7 @@ export const loginController: RequestHandler = async (request, response) => {
 
     const buildLabel = getBuildLabelForUnauthenticatedRequest(request);
 
-    if (version_compare(buildLabel, "2026.05.13.13.07") > 0 && !args.dev) {
+    if (version_compare(buildLabel, "2026.08.19.11.06") > 0 && !args.dev) {
         response.status(400).json({ error: "I'm making a list and checking it twice" });
         return;
     }
@@ -229,7 +229,7 @@ const createLoginResponse = (request: Request, account: IDatabaseAccountJson, bu
             //{ experiment: "quick_buy_visible", experimentGroup: "quick_buy_visible" } // Shows "quick buy" market section for MR 4+ players
         ];
     }
-    if (buildVersion >= gameToBuildVersionInt["30.0.0"]) {
+    if (buildVersion >= gameToBuildVersionInt["30.0.0"] && buildVersion < gameToBuildVersionInt["43.0.0"]) {
         resp.DTLS = config.dtls ?? 0; // bit 0 enables DTLS. if enabled, additional bits can be set, e.g. bit 2 to enable logging. on live, the value is 99.
     }
     if (buildVersion >= gameToBuildVersionInt["31.5.0"]) {
