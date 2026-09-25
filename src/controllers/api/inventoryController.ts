@@ -76,6 +76,7 @@ import suitDefaultUpgrades from "../../constants/suitDefaultUpgrades.ts";
 import type { ITypeCount } from "../../types/commonTypes.ts";
 import { sendWsBroadcastToWebui } from "../../services/wsService.ts";
 import { wikiDateToBuildVersion } from "../../helpers/versionHelper.ts";
+import { addQuestKey } from "../../services/questService.ts";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);
@@ -328,11 +329,22 @@ export const inventoryController: RequestHandler = async (request, response) => 
     if (
         inventory.QuestKeys.some(
             q => q.ItemType === "/Lotus/Types/Keys/JadeShadows/JadeShadowQuestKeyChain" && q.Completed == true
-        ) &&
-        !inventory.NodeIntrosCompleted.some(i => i.startsWith("BabyName_"))
+        )
     ) {
-        inventory.NodeIntrosCompleted.push("BabyName_A");
-        logger.debug(`forcing baby name to Sirius`);
+        if (!inventory.NodeIntrosCompleted.some(i => i.startsWith("BabyName_"))) {
+            inventory.NodeIntrosCompleted.push("BabyName_A");
+            logger.debug(`forcing baby name to Sirius`);
+        }
+        if (
+            !inventory.QuestKeys.some(
+                q => q.ItemType == "/Lotus/Types/Keys/JadeShadowsPart2Constellations/JadeShadowsPart2QuestKeyChain"
+            )
+        ) {
+            addQuestKey(inventory, {
+                ItemType: "/Lotus/Types/Keys/JadeShadowsPart2Constellations/JadeShadowsPart2QuestKeyChain"
+            });
+            logger.debug(`adding missing JadeShadowsPart2QuestKeyChain`);
+        }
     }
 
     if (version_compare(buildLabel, gameToBuildVersion["15.0.0"]) < 0) {
