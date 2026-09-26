@@ -646,7 +646,7 @@ export const getInventoryResponse = async (
         const { Customization, IsMale } = inventoryResponse.VesselCustomization;
         const json = JSON.stringify({
             VesselBodyMale: IsMale,
-            pricol: Customization?.pricol
+            pricol: Customization.pricol
         } satisfies ITennoCon2026Cust);
 
         inventoryResponse.MiscAccountData ??= [];
