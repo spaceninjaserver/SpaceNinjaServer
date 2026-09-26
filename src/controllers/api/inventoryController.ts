@@ -10,6 +10,7 @@ import type {
     IFusionTreasureClientLegacy,
     IInventoryClient,
     IShipInventory,
+    ITennoCon2026Cust,
     IUpgradeClient
 } from "../../types/inventoryTypes/inventoryTypes.ts";
 import {
@@ -635,6 +636,27 @@ export const getInventoryResponse = async (
         version_compare(buildLabel, getNemesisManifest(inventoryResponse.Nemesis.manifest).minBuild) < 0
     ) {
         inventoryResponse.Nemesis = undefined;
+    }
+
+    // U43 moved vessel customization from MiscAccountData to VesselCustomization so translate it back for older versions
+    if (version_compare(buildLabel, gameToBuildVersion["43.0.0"]) >= 0) {
+        return inventoryResponse;
+    }
+    if (inventoryResponse.VesselCustomization) {
+        const { Customization, IsMale } = inventoryResponse.VesselCustomization;
+        const json = JSON.stringify({
+            VesselBodyMale: IsMale,
+            pricol: Customization?.pricol
+        } satisfies ITennoCon2026Cust);
+
+        inventoryResponse.MiscAccountData ??= [];
+        const existing = inventoryResponse.MiscAccountData.find(i => i.PropertyName === "TennoCon2026Cust");
+        if (existing) {
+            existing.Json = json;
+        } else {
+            inventoryResponse.MiscAccountData.push({ PropertyName: "TennoCon2026Cust", Json: json });
+        }
+        delete inventoryResponse.VesselCustomization;
     }
 
     // U42 migrated ability paths so translate them back for older versions

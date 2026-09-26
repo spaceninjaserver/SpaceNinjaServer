@@ -105,7 +105,8 @@ import type {
     IWeekGuildVaultBonusReward,
     IMiscAccountData,
     INemesisBaseClient,
-    INemesisBaseDatabase
+    INemesisBaseDatabase,
+    IVesselCustomization
 } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IOid, ITypeCount } from "../../types/commonTypes.ts";
@@ -1643,6 +1644,16 @@ const miscAccountDataSchema = new Schema<IMiscAccountData>(
     { _id: false }
 );
 
+const vesselCustomizationSchema = new Schema<IVesselCustomization>(
+    {
+        Customization: {
+            pricol: colorSchema
+        },
+        IsMale: Boolean
+    },
+    { _id: false }
+);
+
 const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
     {
         accountOwnerId: Schema.Types.ObjectId,
@@ -2113,7 +2124,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
 
         WeeklyGuildVaultBonusInfo: { type: [weeklyGuildVaultBonusSchema], default: undefined },
 
-        MiscAccountData: { type: [miscAccountDataSchema], default: undefined }
+        MiscAccountData: { type: [miscAccountDataSchema], default: undefined },
+
+        VesselCustomization: { type: vesselCustomizationSchema, default: undefined }
     },
     { timestamps: { createdAt: "Created", updatedAt: false } }
 );
