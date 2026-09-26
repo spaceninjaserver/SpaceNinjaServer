@@ -110,7 +110,7 @@ export const accountCheatNumbers = {
 } as const;
 
 export type TAccountCheatBooleanKey = (typeof accountCheatBooleans)[number];
-export type TAccountCheatNumberKey = keyof typeof accountCheatNumbers;
+type TAccountCheatNumberKey = keyof typeof accountCheatNumbers;
 
 type IAccountCheatBooleans = {
     [_ in TAccountCheatBooleanKey]: boolean | undefined;
