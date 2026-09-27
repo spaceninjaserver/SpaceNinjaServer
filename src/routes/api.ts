@@ -161,6 +161,7 @@ import { setShipFavouriteLoadoutController } from "../controllers/api/setShipFav
 import { setShipVignetteController } from "../controllers/api/setShipVignetteController.ts";
 import { setSuitInfectionController } from "../controllers/api/setSuitInfectionController.ts";
 import { setSupportedSyndicateController } from "../controllers/api/setSupportedSyndicateController.ts";
+import { setVesselCustomizationController } from "../controllers/api/setVesselCustomizationController.ts";
 import { setWeaponSkillTreeController } from "../controllers/api/setWeaponSkillTreeController.ts";
 import { shipDecorationsController } from "../controllers/api/shipDecorationsController.ts";
 import { signupAndroidController } from "../controllers/api/signupAndroidController.ts";
@@ -404,6 +405,7 @@ apiRouter.post("/setShipCustomizations.php", setShipCustomizationsController);
 apiRouter.post("/setShipFavouriteLoadout.php", setShipFavouriteLoadoutController);
 apiRouter.post("/setShipVignette.php", setShipVignetteController);
 apiRouter.post("/setSuitInfection.php", setSuitInfectionController);
+apiRouter.post("/setVesselCustomization.php", setVesselCustomizationController);
 apiRouter.post("/setWeaponSkillTree.php", setWeaponSkillTreeController);
 apiRouter.post("/shipDecorations.php", shipDecorationsController);
 apiRouter.post("/startCollectibleEntry.php", startCollectibleEntryController);

@@ -27,7 +27,8 @@ import type {
     IWeeklyMissionChallengeInfo,
     ITauPrequelQuestCustomData,
     ICollectibleEntry,
-    TInventorySlot
+    TInventorySlot,
+    ITennoCon2026Cust
 } from "../types/inventoryTypes/inventoryTypes.ts";
 import { eInventorySlot, equipmentKeys, slotNames } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdateTypes.ts";
@@ -3239,6 +3240,19 @@ export const cleanupInventory = (inventory: TInventoryDatabaseDocument): void =>
         }
         if (fixedShoulderHelmets) {
             logger.debug(`fixed ${fixedShoulderHelmets} invalid nemesis shoulder helmets`);
+        }
+    }
+
+    {
+        const index = inventory.MiscAccountData?.findIndex(i => i.PropertyName == "TennoCon2026Cust") ?? -1;
+        if (index != -1) {
+            const [oldVesselCust] = inventory.MiscAccountData!.splice(index, 1);
+            const { VesselBodyMale, pricol } = JSON.parse(oldVesselCust.Json) as ITennoCon2026Cust;
+            inventory.VesselCustomization = {
+                Customization: { pricol },
+                IsMale: VesselBodyMale ?? true
+            };
+            logger.debug(`migrated TennoCon2026Cust from MiscAccountData to VesselCustomization`);
         }
     }
 };

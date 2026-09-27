@@ -570,6 +570,7 @@ export interface IInventoryClient
     Sketches?: ISketch[];
     WeeklyGuildVaultBonusInfo?: IWeeklyGuildVaultBonus[] | IWeeklyGuildVaultBonus; // should be an array
     MiscAccountData?: IMiscAccountData[];
+    VesselCustomization?: IVesselCustomization;
 }
 
 export interface IAffiliation {
@@ -1436,4 +1437,13 @@ export interface IWeekGuildVaultBonusReward {
 export interface IMiscAccountData {
     PropertyName: string;
     Json: string;
+}
+export interface IVesselCustomization {
+    Customization: { pricol?: IColor };
+    IsMale: boolean;
+}
+
+export interface ITennoCon2026Cust {
+    VesselBodyMale?: boolean;
+    pricol?: IColor;
 }

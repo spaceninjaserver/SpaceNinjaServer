@@ -37,7 +37,8 @@ import type {
     IPeriodicMissionCompletionDatabase,
     INemesisBaseClient,
     INemesisBaseDatabase,
-    IFusionTreasure
+    IFusionTreasure,
+    ITennoCon2026Cust
 } from "../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys, slotNames, type IStepSequencerDatabase } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
@@ -616,6 +617,20 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     if (client.WeeklyGuildVaultBonusInfo !== undefined) {
         db.WeeklyGuildVaultBonusInfo = client.WeeklyGuildVaultBonusInfo;
+    }
+    if (client.MiscAccountData !== undefined) {
+        const legacyVesselCust = client.MiscAccountData.find(d => d.PropertyName == "TennoCon2026Cust");
+        if (legacyVesselCust) {
+            const { VesselBodyMale, pricol } = JSON.parse(legacyVesselCust.Json) as ITennoCon2026Cust;
+            db.VesselCustomization = {
+                Customization: { pricol },
+                IsMale: VesselBodyMale ?? true
+            };
+        }
+        db.MiscAccountData = client.MiscAccountData.filter(d => d !== legacyVesselCust);
+    }
+    if (client.VesselCustomization !== undefined) {
+        db.VesselCustomization = client.VesselCustomization;
     }
 
     // Final sanity check over data
