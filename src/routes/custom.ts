@@ -4,6 +4,7 @@ import { tunablesController } from "../controllers/custom/tunablesController.ts"
 import { equipmentFeaturesController } from "../controllers/custom/equipmentFeaturesController.ts";
 import { exportController } from "../controllers/custom/exportController.ts";
 import { getItemListsController } from "../controllers/custom/getItemListsController.ts";
+import { getWebuiDataController } from "../controllers/custom/getWebuiDataController.ts";
 import { pushArchonCrystalUpgradeController } from "../controllers/custom/pushArchonCrystalUpgradeController.ts";
 import { popArchonCrystalUpgradeController } from "../controllers/custom/popArchonCrystalUpgradeController.ts";
 import { deleteAccountController } from "../controllers/custom/deleteAccountController.ts";
@@ -65,6 +66,7 @@ customRouter.get("/tunables.json", tunablesController);
 customRouter.get("/equipmentFeatures", equipmentFeaturesController);
 customRouter.get("/export", exportController);
 customRouter.get("/getItemLists", getItemListsController);
+customRouter.get("/getWebuiData", getWebuiDataController);
 customRouter.get("/pushArchonCrystalUpgrade", pushArchonCrystalUpgradeController);
 customRouter.get("/popArchonCrystalUpgrade", popArchonCrystalUpgradeController);
 customRouter.get("/deleteAccount", deleteAccountController);

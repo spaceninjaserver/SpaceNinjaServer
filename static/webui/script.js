@@ -10,12 +10,7 @@
 
 const webUITranslations = ["en", "ru", "fr", "de", "zh", "es", "uk", "pl"];
 const allPermissions = [];
-document.querySelectorAll("[data-enabling-permission]").forEach(elm => {
-    const perm = elm.getAttribute("data-enabling-permission");
-    if (allPermissions.indexOf(perm) == -1) {
-        allPermissions.push(perm);
-    }
-});
+let accountCheats;
 
 let auth_pending = false,
     ws_is_open = false,
@@ -169,7 +164,78 @@ function openWebSocket() {
         setTimeout(openWebSocket, 3000);
     };
 }
-openWebSocket();
+
+function buildAccountCheatsCard(webuiData) {
+    const booleansContainer = document.getElementById("account-cheats-booleans");
+    for (const key of webuiData.accountCheats.booleans) {
+        const div = document.createElement("div");
+        div.className = "form-check";
+
+        const input = document.createElement("input");
+        input.className = "form-check-input";
+        input.type = "checkbox";
+        input.id = key;
+        input.setAttribute("data-enabling-permission", "toggleCheat." + key);
+        div.appendChild(input);
+
+        const label = document.createElement("label");
+        label.className = "form-check-label";
+        label.htmlFor = key;
+        label.setAttribute("data-loc", "cheats_" + key);
+        div.appendChild(label);
+
+        booleansContainer.appendChild(div);
+    }
+
+    const numbersContainer = document.getElementById("account-cheats-numbers");
+    for (const [key, { min, max, default: defaultValue }] of Object.entries(webuiData.accountCheats.numbers)) {
+        const form = document.createElement("form");
+        form.className = "form-group mt-2";
+
+        const label = document.createElement("label");
+        label.className = "form-label";
+        label.htmlFor = key;
+        label.setAttribute("data-loc", "cheats_" + key);
+        form.appendChild(label);
+
+        const group = document.createElement("div");
+        group.className = "input-group";
+
+        const input = document.createElement("input");
+        input.className = "form-control";
+        input.id = key;
+        input.type = "number";
+        input.min = min;
+        input.max = max;
+        input.setAttribute("data-default", defaultValue);
+        group.appendChild(input);
+
+        const btn = document.createElement("button");
+        btn.className = "btn btn-secondary";
+        btn.type = "button";
+        btn.setAttribute("data-loc", "cheats_save");
+        group.appendChild(btn);
+
+        form.appendChild(group);
+        numbersContainer.appendChild(form);
+    }
+}
+
+$.get("/custom/getWebuiData").done(webuiData => {
+    buildAccountCheatsCard(webuiData);
+
+    document.querySelectorAll("[data-enabling-permission]").forEach(elm => {
+        const perm = elm.getAttribute("data-enabling-permission");
+        if (allPermissions.indexOf(perm) == -1) {
+            allPermissions.push(perm);
+        }
+    });
+
+    accountCheats = document.querySelectorAll("#account-cheats input[id]");
+    attachAccountCheatsHandlers();
+
+    openWebSocket();
+});
 
 function refreshServerConfig() {
     window.is_admin = undefined;
@@ -1155,8 +1221,6 @@ function fetchItemList() {
     });
 }
 fetchItemList();
-
-const accountCheats = document.querySelectorAll("#account-cheats input[id]");
 
 let inventory_data;
 // Assumes that caller revalidates authz
@@ -3577,67 +3641,69 @@ function doIntrinsicsUnlockAll() {
     });
 }
 
-document.querySelectorAll("#account-cheats input[type=checkbox]").forEach(elm => {
-    elm.onchange = function () {
-        revalidateAuthz().then(() => {
-            const value = elm.checked;
-            $.post({
-                url: "/custom/setAccountCheat?" + window.authz,
-                contentType: "application/json",
-                data: JSON.stringify({
-                    key: elm.id,
-                    value: value
-                })
-            }).done(res => {
-                elm.checked = value;
-                inventory_data[elm.id] = value;
-                if (res == "retroactivable") {
-                    if (window.confirm(loc("cheats_retroactivePrompt"))) {
-                        $.get("/custom/retroactivelyApplyCheat?" + window.authz + "&cheat=" + elm.id);
+function attachAccountCheatsHandlers() {
+    document.querySelectorAll("#account-cheats input[type=checkbox]").forEach(elm => {
+        elm.onchange = function () {
+            revalidateAuthz().then(() => {
+                const value = elm.checked;
+                $.post({
+                    url: "/custom/setAccountCheat?" + window.authz,
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        key: elm.id,
+                        value: value
+                    })
+                }).done(res => {
+                    elm.checked = value;
+                    inventory_data[elm.id] = value;
+                    if (res == "retroactivable") {
+                        if (window.confirm(loc("cheats_retroactivePrompt"))) {
+                            $.get("/custom/retroactivelyApplyCheat?" + window.authz + "&cheat=" + elm.id);
+                        }
                     }
-                }
+                });
             });
-        });
-    };
-});
+        };
+    });
 
-document.querySelectorAll("#account-cheats .input-group").forEach(grp => {
-    const input = grp.querySelector("input");
-    const select = grp.querySelector("select");
-    const btn = grp.querySelector("button");
-    if (input) {
-        input.oninput = input.onchange = function () {
-            btn.classList.remove("btn-secondary");
-            btn.classList.add("btn-primary");
-        };
-    }
-    if (select) {
-        select.oninput = select.onchange = function () {
-            btn.classList.remove("btn-secondary");
-            btn.classList.add("btn-primary");
-        };
-    }
-    btn.onclick = function () {
-        btn.classList.remove("btn-primary");
-        btn.classList.add("btn-secondary");
-        const input = btn.closest(".input-group").querySelector('input[type="number"]');
-        if (!input) return;
-        revalidateAuthz().then(() => {
-            const value = Math.min(Number(input.value), Number(input.max));
-            $.post({
-                url: "/custom/setAccountCheat?" + window.authz,
-                contentType: "application/json",
-                data: JSON.stringify({
-                    key: input.id,
-                    value: value
-                })
-            }).done(() => {
-                input.value = value;
-                inventory_data[elm.id] = value;
+    document.querySelectorAll("#account-cheats .input-group").forEach(grp => {
+        const input = grp.querySelector("input");
+        const select = grp.querySelector("select");
+        const btn = grp.querySelector("button");
+        if (input) {
+            input.oninput = input.onchange = function () {
+                btn.classList.remove("btn-secondary");
+                btn.classList.add("btn-primary");
+            };
+        }
+        if (select) {
+            select.oninput = select.onchange = function () {
+                btn.classList.remove("btn-secondary");
+                btn.classList.add("btn-primary");
+            };
+        }
+        btn.onclick = function () {
+            btn.classList.remove("btn-primary");
+            btn.classList.add("btn-secondary");
+            const input = btn.closest(".input-group").querySelector('input[type="number"]');
+            if (!input) return;
+            revalidateAuthz().then(() => {
+                const value = Math.min(Number(input.value), Number(input.max));
+                $.post({
+                    url: "/custom/setAccountCheat?" + window.authz,
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        key: input.id,
+                        value: value
+                    })
+                }).done(() => {
+                    input.value = value;
+                    inventory_data[elm.id] = value;
+                });
             });
-        });
-    };
-});
+        };
+    });
+}
 
 document.querySelectorAll("#guild-cheats input[type=checkbox]").forEach(elm => {
     elm.onchange = function () {

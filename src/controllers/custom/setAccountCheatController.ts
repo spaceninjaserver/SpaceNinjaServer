@@ -5,8 +5,7 @@ import {
     accountCheatBooleans,
     accountCheatNumbers,
     type IAccountCheats,
-    type TAccountCheatBooleanKey,
-    type TAccountCheatNumberKey
+    type TAccountCheatBooleanKey
 } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
 import { logger } from "../../utils/logger.ts";
@@ -21,7 +20,7 @@ export const setAccountCheatController: RequestHandler = async (req, res) => {
         if (!hasPermission(account, `toggleCheat.${payload.key}`)) {
             throw new Error(`Permission denied`);
         }
-    } else if (accountCheatNumbers.indexOf(payload.key as TAccountCheatNumberKey) == -1) {
+    } else if (!(payload.key in accountCheatNumbers)) {
         throw new Error(`unexpected setAccountCheat key: ${payload.key}`);
     }
     if (payload.value == undefined) {
