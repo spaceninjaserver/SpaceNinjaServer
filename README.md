@@ -8,6 +8,9 @@ This project is in active development at <https://onlyg.it/OpenWF/SpaceNinjaServ
 
 To get an idea of what functionality you can expect to be missing [have a look through the issues](https://onlyg.it/OpenWF/SpaceNinjaServer/issues). However, many things have been implemented and *should* work as expected. Please open an issue for anything where that's not the case and/or the server is reporting errors.
 
+- Issues must be written in English.
+- Please do not submit AI-generated issues.
+
 ## config.json
 
 SpaceNinjaServer requires a `config.json`. To set it up, you can copy the [config-vanilla.json](config-vanilla.json), which has most cheats disabled.
