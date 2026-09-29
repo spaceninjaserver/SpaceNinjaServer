@@ -72,7 +72,7 @@ import { createMessage, getInboxFilter } from "../../services/inboxService.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 import { PendingTrade } from "../../models/tradingModel.ts";
 import { exportTrade } from "../../services/tradingService.ts";
-import { supplementalSuits, U42AbilityToLegacy } from "../../services/itemDataService.ts";
+import { isModularPartKnownToBuild, supplementalSuits, U42AbilityToLegacy } from "../../services/itemDataService.ts";
 import suitDefaultUpgrades from "../../constants/suitDefaultUpgrades.ts";
 import type { ITypeCount } from "../../types/commonTypes.ts";
 import { sendWsBroadcastToWebui } from "../../services/wsService.ts";
@@ -648,6 +648,13 @@ export const getInventoryResponse = async (
         version_compare(buildLabel, getNemesisManifest(inventoryResponse.Nemesis.manifest).minBuild) < 0
     ) {
         inventoryResponse.Nemesis = undefined;
+    }
+
+    // Old versions can't display equipment with an unrecognised modular part properly, so omit it
+    for (const category of equipmentKeys) {
+        inventoryResponse[category] = inventoryResponse[category].filter(
+            item => !item.ModularParts || item.ModularParts.every(part => isModularPartKnownToBuild(part, buildLabel))
+        );
     }
 
     // U44 moved vessel customization from MiscAccountData to VesselCustomization so translate it back for older versions

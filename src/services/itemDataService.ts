@@ -3744,6 +3744,38 @@ export const U5Modules: Record<string, IU5FingerprintData> = {
     }
 };
 
+const modularPartIntroductions: Record<string, number> = {
+    // Zaws
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee01/": gameToBuildVersionInt["22.0.0"],
+    "/Lotus/Weapons/Ostron/Melee/ModularMeleeInfested/": buildLabelToVersionInt("2017.11.15.00.00"), // U22.3
+    "/Lotus/Weapons/Ostron/Melee/ModularMelee02/": gameToBuildVersionInt["22.18.0"],
+    // Amps
+    "/Lotus/Weapons/Sentients/OperatorAmplifiers/SentTrainingAmplifier/": gameToBuildVersionInt["22.0.0"],
+    "/Lotus/Weapons/Sentients/OperatorAmplifiers/Set1/": gameToBuildVersionInt["22.0.0"],
+    "/Lotus/Weapons/Sentients/OperatorAmplifiers/Set2/": buildLabelToVersionInt("2018.08.16.00.00"), // U23.4
+    "/Lotus/Weapons/Corpus/OperatorAmplifiers/Set1/": gameToBuildVersionInt["24.2.0"],
+    // Kitguns
+    "/Lotus/Weapons/SolarisUnited/Secondary/SUModularSecondarySet1/": gameToBuildVersionInt["24.0.0"],
+    "/Lotus/Weapons/SolarisUnited/Primary/SUModularPrimarySet1/": gameToBuildVersionInt["28.0.0"],
+    "/Lotus/Weapons/Infested/Pistols/InfKitGun/": gameToBuildVersionInt["29.5.0"],
+    // K-Drives
+    "/Lotus/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardSolarisA/":
+        gameToBuildVersionInt["24.0.0"],
+    "/Lotus/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardCorpusA/":
+        gameToBuildVersionInt["24.0.0"],
+    "/Lotus/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardCorpusB/":
+        gameToBuildVersionInt["24.0.0"],
+    "/Lotus/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardCorpusC/":
+        gameToBuildVersionInt["24.4.0"],
+    "/Lotus/Types/Vehicles/Hoverboard/HoverboardParts/PartComponents/HoverboardInfestedB/":
+        gameToBuildVersionInt["29.5.0"],
+    // Predasites & Vulpaphylas
+    "/Lotus/Types/Friendly/Pets/CreaturePets/CreaturePetParts/Deimos/": gameToBuildVersionInt["29.0.0"],
+    "/Lotus/Types/Items/Deimos/WoundedInfested": gameToBuildVersionInt["29.0.0"],
+    // Hounds
+    "/Lotus/Types/Friendly/Pets/ZanukaPets/ZanukaPetParts/": gameToBuildVersionInt["30.5.0"]
+};
+
 interface legacyCacheKey {
     target: string;
     buildLabel: string;
@@ -5576,4 +5608,9 @@ export const getUpgrade = (uniqueName: string): IUpgrade | undefined => {
 
 export const getVendor = (uniqueName: string): IVendor | undefined => {
     return ExportVendors[uniqueName] ?? supplementalVendors[uniqueName];
+};
+
+export const isModularPartKnownToBuild = (partType: string, buildLabel: string): boolean => {
+    const entry = Object.entries(modularPartIntroductions).find(([prefix]) => partType.startsWith(prefix));
+    return !entry || buildLabelToVersionInt(buildLabel) >= entry[1];
 };
