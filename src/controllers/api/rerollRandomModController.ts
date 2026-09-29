@@ -7,10 +7,12 @@ import { createUnveiledRivenFingerprint, randomiseRivenStats } from "../../helpe
 import { ExportUpgrades } from "warframe-public-export-plus";
 import type { IOidWithLegacySupport } from "../../types/commonTypes.ts";
 import { toObjectId, toOid2 } from "../../helpers/inventoryHelpers.ts";
+import { logger } from "../../utils/logger.ts";
 
 export const rerollRandomModController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const request = getJSONfromString<RerollRandomModRequest>(String(req.body));
+    logger.debug("reroll random mod request", { request });
     if ("ItemIds" in request) {
         const buildLabel = getBuildLabel(req, account);
         const inventory = await getInventory(account._id, "Upgrades MiscItems dontSubtractKuvaForRivens");
@@ -26,7 +28,9 @@ export const rerollRandomModController: RequestHandler = async (req, res) => {
             } else {
                 fingerprint.rerolls ??= 0;
                 if (!inventory.dontSubtractKuvaForRivens) {
-                    const kuvaCost = fingerprint.rerolls < rerollCosts.length ? rerollCosts[fingerprint.rerolls] : 3500;
+                    let kuvaCost = fingerprint.rerolls < rerollCosts.length ? rerollCosts[fingerprint.rerolls] : 3500;
+                    // TODO: filter out advancedTrait from that
+                    if (request.LockedTraits?.length) kuvaCost *= 2;
                     totalKuvaCost += kuvaCost;
                     addMiscItems(inventory, [
                         {
@@ -39,7 +43,7 @@ export const rerollRandomModController: RequestHandler = async (req, res) => {
                 fingerprint.rerolls++;
                 upgrade.UpgradeFingerprint = JSON.stringify(fingerprint);
 
-                randomiseRivenStats(ExportUpgrades[upgrade.ItemType], fingerprint);
+                randomiseRivenStats(ExportUpgrades[upgrade.ItemType], fingerprint, request.LockedTraits);
                 upgrade.PendingRerollFingerprint = JSON.stringify(fingerprint);
             }
 
@@ -72,6 +76,7 @@ type RerollRandomModRequest = LetsGoGamblingRequest | AwDangitRequest;
 
 interface LetsGoGamblingRequest {
     ItemIds: string[];
+    LockedTraits?: string[];
 }
 
 interface AwDangitRequest {
