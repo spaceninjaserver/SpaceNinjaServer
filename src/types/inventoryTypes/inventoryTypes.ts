@@ -1439,8 +1439,8 @@ export interface IMiscAccountData {
     Json: string;
 }
 export interface IVesselCustomization {
-    Customization: { pricol?: IColor };
-    IsMale: boolean;
+    Customization?: { pricol?: IColor };
+    IsMale?: boolean;
 }
 
 export interface ITennoCon2026Cust {
