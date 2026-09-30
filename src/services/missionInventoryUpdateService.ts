@@ -1245,6 +1245,7 @@ export const addMissionRewards = async (
         }
         return { MissionRewards: [], AffiliationMods };
     }
+    const isSteelPath = !!(missions?.Tier || alerts?.Tier);
 
     //TODO: check double reward merging
     const MissionRewards: IMissionReward[] = await getRandomMissionDrops(
@@ -1254,11 +1255,11 @@ export const addMissionRewards = async (
         levelKeyName,
         missions,
         wagerTier,
-        firstCompletion
+        firstCompletion,
+        isSteelPath
     );
     logger.debug("random mission drops:", MissionRewards);
     const inventoryChanges: IInventoryChanges = {};
-    const isSteelPath = missions?.Tier || alerts?.Tier;
     let SyndicateXPItemReward;
     let ConquestCompletedMissionsCount;
 
@@ -2033,7 +2034,8 @@ async function getRandomMissionDrops(
     levelKeyName: string | undefined,
     mission: IMission | undefined,
     tierOverride: number | undefined,
-    firstCompletion: boolean
+    firstCompletion: boolean,
+    isSteelPath: boolean
 ): Promise<IMissionReward[]> {
     const drops: IMissionReward[] = [];
     if (RewardInfo.sortieTag == "Final" && firstCompletion) {
@@ -2418,6 +2420,16 @@ async function getRandomMissionDrops(
                         buildLabel
                     );
                     droptimes = 1;
+                    {
+                        // Completion of the mission awards 12-16 Crimson Talent (Scoria's Angel) or Emerald Talent (The Kuva Wytch) (18-22 on The Steel Path) https://wiki.warframe.com/w/Uranus_Proxima#Mission_Completion_Rewards
+                        drops.push({
+                            StoreItem:
+                                RewardInfo.node == "CrewBattleNode561"
+                                    ? "/Lotus/Types/JadeShadowsPart2Mission/Gameplay/Resources/GarudaFavor"
+                                    : "/Lotus/Types/JadeShadowsPart2Mission/Gameplay/Resources/AshFavor",
+                            ItemCount: rng.randomInt(12, 16) + (isSteelPath ? 6 : 0)
+                        });
+                    }
                 }
                 //Players receive two items on the list.
                 for (let dropitem = 0; dropitem < droptimes; ++dropitem) {
