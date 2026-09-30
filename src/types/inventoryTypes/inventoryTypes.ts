@@ -701,8 +701,8 @@ export interface ICrewMemberClient {
     WeaponId: IOid;
     XP: number;
     PowersuitType?: string;
-    Configs: IItemConfig[];
-    SecondInCommand: boolean; // on call
+    Configs?: IItemConfig[];
+    SecondInCommand?: boolean; // on call
     ItemId: IOid;
 }
 
@@ -976,7 +976,7 @@ export interface INemesisBaseClient {
     Traded: boolean;
     d: IMongoDate;
     PrevOwners: number;
-    SecondInCommand: boolean;
+    SecondInCommand?: boolean;
     Weakened: boolean;
 }
 

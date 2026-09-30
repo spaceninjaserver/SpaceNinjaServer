@@ -38,7 +38,9 @@ import type {
     INemesisBaseClient,
     INemesisBaseDatabase,
     IFusionTreasure,
-    ITennoCon2026Cust
+    ITennoCon2026Cust,
+    ICrewMemberClient,
+    ICrewMemberDatabase
 } from "../types/inventoryTypes/inventoryTypes.ts";
 import { equipmentKeys, slotNames, type IStepSequencerDatabase } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
@@ -316,6 +318,15 @@ const convertPeriodicMissionCompletion = (
     return {
         ...client,
         date: fromMongoDate(client.date)
+    };
+};
+
+const convertCrewMember = (client: ICrewMemberClient): ICrewMemberDatabase => {
+    const { ItemId, ...rest } = client;
+    return {
+        ...rest,
+        _id: new Types.ObjectId(fromOid(ItemId)),
+        WeaponId: new Types.ObjectId(fromOid(client.WeaponId))
     };
 };
 
@@ -631,6 +642,9 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     if (client.VesselCustomization !== undefined) {
         db.VesselCustomization = client.VesselCustomization;
+    }
+    if (client.CrewMembers !== undefined) {
+        replaceArray<ICrewMemberDatabase>(db.CrewMembers, client.CrewMembers.map(convertCrewMember));
     }
 
     // Final sanity check over data

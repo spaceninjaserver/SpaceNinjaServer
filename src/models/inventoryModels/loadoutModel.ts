@@ -11,6 +11,7 @@ export const EquipmentSelectionSchema = new Schema<IEquipmentSelectionDatabase>(
         ItemId: Schema.Types.Mixed, // should be Types.ObjectId but cannot be schema-validated as such because of old commits + MongoDB does not save updates as expected
         mod: Number,
         cus: Number,
+        ItemType: String,
         hide: Boolean
     },
     {
