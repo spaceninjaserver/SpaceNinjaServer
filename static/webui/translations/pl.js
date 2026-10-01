@@ -219,6 +219,7 @@ dict = {
     cheats_unlockDoubleCapacityPotatoesEverywhere: `Wszędzie Ziemniaki`,
     cheats_unlockExilusEverywhere: `Wszędzie Adaptery Exilus`,
     cheats_unlockArcanesEverywhere: `Wszędzie Adaptery Arkan`,
+    cheats_formaDoesntResetRank: `[UNTRANSLATED] Forma Doesn't Reset Rank`,
     cheats_noDailyStandingLimits: `Brak limitów dziennej reputacji`,
     cheats_noDailyFocusLimit: `Brak limitów dziennego skupienia`,
     cheats_noArgonCrystalDecay: `Brak rozpadu kryształów Argonu`,

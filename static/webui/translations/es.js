@@ -219,6 +219,7 @@ dict = {
     cheats_unlockDoubleCapacityPotatoesEverywhere: `Patatas en todas partes`,
     cheats_unlockExilusEverywhere: `Adaptadores Exilus en todas partes`,
     cheats_unlockArcanesEverywhere: `Adaptadores de Arcanos en todas partes`,
+    cheats_formaDoesntResetRank: `[UNTRANSLATED] Forma Doesn't Reset Rank`,
     cheats_noDailyStandingLimits: `Sin límite diario de reputación`,
     cheats_noDailyFocusLimit: `Límites diarios de enfoque desactivados`,
     cheats_noArgonCrystalDecay: `Sin descomposición de cristal de Argón`,

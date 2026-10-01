@@ -219,6 +219,7 @@ dict = {
     cheats_unlockDoubleCapacityPotatoesEverywhere: `Orokin Reaktor & Beschleuniger überall`,
     cheats_unlockExilusEverywhere: `Exilus-Adapter überall`,
     cheats_unlockArcanesEverywhere: `Arkana-Adapter überall`,
+    cheats_formaDoesntResetRank: `[UNTRANSLATED] Forma Doesn't Reset Rank`,
     cheats_noDailyStandingLimits: `Kein tägliches Ansehen Limit`,
     cheats_noDailyFocusLimit: `Kein tägliches Fokus-Limit`,
     cheats_noArgonCrystalDecay: `Argon-Kristalle verschwinden niemals`,

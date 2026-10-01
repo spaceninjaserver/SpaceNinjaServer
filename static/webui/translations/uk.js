@@ -219,6 +219,7 @@ dict = {
     cheats_unlockDoubleCapacityPotatoesEverywhere: `Орокінські Реактори/Каталізатори скрізь`,
     cheats_unlockExilusEverywhere: `Ексилотримач скрізь`,
     cheats_unlockArcanesEverywhere: `Тримач Містифікаторів скрізь`,
+    cheats_formaDoesntResetRank: `[UNTRANSLATED] Forma Doesn't Reset Rank`,
     cheats_noDailyStandingLimits: `Без щоденних лімітів репутації`,
     cheats_noDailyFocusLimit: `Без щоденних лімітів Фокусу`,
     cheats_noArgonCrystalDecay: `Без розпаду Аргонових кристалів`,

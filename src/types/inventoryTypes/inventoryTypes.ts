@@ -63,6 +63,7 @@ export const accountCheatBooleans = [
     "unlockDoubleCapacityPotatoesEverywhere",
     "unlockExilusEverywhere",
     "unlockArcanesEverywhere",
+    "formaDoesntResetRank",
     "alertsRepeatable",
     "syndicateMissionsRepeatable",
     "instantFinishRivenChallenge",

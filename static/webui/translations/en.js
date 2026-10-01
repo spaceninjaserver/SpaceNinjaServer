@@ -218,6 +218,7 @@ dict = {
     cheats_unlockDoubleCapacityPotatoesEverywhere: `Potatoes Everywhere`,
     cheats_unlockExilusEverywhere: `Exilus Adapters Everywhere`,
     cheats_unlockArcanesEverywhere: `Arcane Adapters Everywhere`,
+    cheats_formaDoesntResetRank: `Forma Doesn't Reset Rank`,
     cheats_noDailyStandingLimits: `No Daily Standing Limits`,
     cheats_noDailyFocusLimit: `No Daily Focus Limit`,
     cheats_noArgonCrystalDecay: `No Argon Crystal Decay`,
