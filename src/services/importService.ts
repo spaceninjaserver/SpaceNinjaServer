@@ -326,7 +326,8 @@ const convertCrewMember = (client: ICrewMemberClient): ICrewMemberDatabase => {
     return {
         ...rest,
         _id: new Types.ObjectId(fromOid(ItemId)),
-        WeaponId: new Types.ObjectId(fromOid(client.WeaponId))
+        WeaponId: client.WeaponId ? new Types.ObjectId(fromOid(client.WeaponId)) : undefined,
+        Configs: client.Configs?.map(convertItemConfig)
     };
 };
 

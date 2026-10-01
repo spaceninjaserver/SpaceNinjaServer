@@ -698,7 +698,7 @@ export interface ICrewMemberClient {
     AssignedRole?: number;
     SkillEfficiency: ICrewMemberSkillEfficiency;
     WeaponConfigIdx: number;
-    WeaponId: IOid;
+    WeaponId?: IOid;
     XP: number;
     PowersuitType?: string;
     Configs?: IItemConfig[];
@@ -707,7 +707,7 @@ export interface ICrewMemberClient {
 }
 
 export interface ICrewMemberDatabase extends Omit<ICrewMemberClient, "WeaponId" | "ItemId"> {
-    WeaponId: Types.ObjectId;
+    WeaponId?: Types.ObjectId;
     _id: Types.ObjectId;
 }
 

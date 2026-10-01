@@ -363,7 +363,9 @@ crewMemberSchema.set("toJSON", {
         const db = obj as ICrewMemberDatabase;
         const client = obj as ICrewMemberClient;
 
-        client.WeaponId = toOid(db.WeaponId);
+        if (db.WeaponId) {
+            client.WeaponId = toOid(db.WeaponId);
+        }
         client.ItemId = toOid(db._id);
 
         delete obj._id;

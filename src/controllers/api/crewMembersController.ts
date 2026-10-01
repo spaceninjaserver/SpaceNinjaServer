@@ -21,7 +21,9 @@ export const crewMembersController: RequestHandler = async (req, res) => {
         dbCrewMember.AssignedRole = data.crewMember.AssignedRole;
         dbCrewMember.SkillEfficiency = data.crewMember.SkillEfficiency;
         dbCrewMember.WeaponConfigIdx = data.crewMember.WeaponConfigIdx;
-        dbCrewMember.WeaponId = new Types.ObjectId(data.crewMember.WeaponId.$oid);
+        if (data.crewMember.WeaponId) {
+            dbCrewMember.WeaponId = new Types.ObjectId(data.crewMember.WeaponId.$oid);
+        }
         dbCrewMember.Configs = data.crewMember.Configs;
         dbCrewMember.SecondInCommand = data.crewMember.SecondInCommand;
     }
