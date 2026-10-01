@@ -3,16 +3,67 @@ import type { IMessageClient, IMessageDatabase } from "../types/inboxTypes.ts";
 import type { TMessageDocument } from "../models/inboxModel.ts";
 import { Inbox } from "../models/inboxModel.ts";
 import type { QueryFilter, Types } from "mongoose";
-import { buildVersionToInt } from "../helpers/versionHelper.ts";
+import { buildVersionToInt, wikiDateToBuildVersionInt } from "../helpers/versionHelper.ts";
+import {
+    ExportRecipes,
+    ExportRelics,
+    ExportUpgrades,
+    ExportWarframes,
+    ExportWeapons
+} from "warframe-public-export-plus";
+import { supplementalSuits, toStoreItem } from "./itemDataService.ts";
+
+const unknownItemsCache = new Map<number, string[]>();
+const getItemsUnknownToBuild = (buildVersion: number): string[] => {
+    let items = unknownItemsCache.get(buildVersion);
+    if (!items) {
+        const unknown = new Set<string>();
+        const exports: Record<string, { introducedAt?: number }>[] = [
+            ExportWarframes,
+            supplementalSuits,
+            ExportWeapons,
+            ExportUpgrades,
+            ExportRelics
+        ];
+        for (const exp of exports) {
+            for (const [uniqueName, item] of Object.entries(exp)) {
+                if (item.introducedAt && wikiDateToBuildVersionInt(item.introducedAt) > buildVersion) {
+                    unknown.add(uniqueName);
+                }
+            }
+        }
+        for (const [uniqueName, recipe] of Object.entries(ExportRecipes)) {
+            if (unknown.has(recipe.resultType)) {
+                unknown.add(uniqueName);
+            }
+        }
+        items = [];
+        for (const uniqueName of unknown) {
+            items.push(uniqueName, toStoreItem(uniqueName));
+        }
+        unknownItemsCache.set(buildVersion, items);
+    }
+    return items;
+};
 
 export const getInboxFilter = (
     accountId: string | Types.ObjectId,
     buildLabel: string
 ): QueryFilter<IMessageDatabase> => {
-    return {
+    const buildVersion = buildVersionToInt(buildLabel);
+    const filter: QueryFilter<IMessageDatabase> = {
         ownerId: accountId,
-        $or: [{ minBuildVersion: { $exists: false } }, { minBuildVersion: { $lte: buildVersionToInt(buildLabel) } }]
+        $or: [{ minBuildVersion: { $exists: false } }, { minBuildVersion: { $lte: buildVersion } }]
     };
+    const unknownItems = getItemsUnknownToBuild(buildVersion);
+    if (unknownItems.length != 0) {
+        filter.$nor = [
+            { att: { $in: unknownItems } },
+            { "countedAtt.ItemType": { $in: unknownItems } },
+            { "gifts.GiftType": { $in: unknownItems } }
+        ];
+    }
+    return filter;
 };
 
 export const getMessagesSorted = async (
