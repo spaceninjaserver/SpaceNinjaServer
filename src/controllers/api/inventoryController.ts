@@ -39,6 +39,7 @@ import {
     getCalendarProgress,
     getInventory,
     handleTauMemories,
+    MAX_CARDS_PER_MOD,
     PRE_U40_MAX_KUBROW_EGGS
 } from "../../services/inventoryService.ts";
 import { logger } from "../../utils/logger.ts";
@@ -974,7 +975,8 @@ export const getInventoryResponse = async (
         for (const rawUpgrade of inventoryResponse.RawUpgrades) {
             const id = inventory.RawUpgrades.find(x => x.ItemType == rawUpgrade.ItemType)?._id;
             if (id) {
-                for (let i = 0; i < rawUpgrade.ItemCount; i++) {
+                const numCards = Math.min(rawUpgrade.ItemCount, MAX_CARDS_PER_MOD);
+                for (let i = 0; i < numCards; i++) {
                     const card = {
                         ItemType: rawUpgrade.ItemType,
                         ItemId: toOid2(id, buildLabel),

@@ -524,7 +524,9 @@ export const freeUpSlot = <ST extends TInventorySlot>(
     updateSlots(inventory, bin, 1, 0);
 };
 
-export const PRE_U40_MAX_KUBROW_EGGS = 100; // capped to avoid sending an overly large array
+// capped to avoid sending an overly large array
+export const PRE_U40_MAX_KUBROW_EGGS = 100;
+export const MAX_CARDS_PER_MOD = 100;
 
 export const addItem = async (
     inventory: TInventoryDatabaseDocument,
