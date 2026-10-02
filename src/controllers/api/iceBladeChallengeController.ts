@@ -88,8 +88,18 @@ export const iceBladeChallengeController: RequestHandler = async (req, res) => {
                 {
                     QuestKeys: {
                         $all: [
-                            { $elemMatch: { ItemType: "/Lotus/Types/Keys/ZarimanQuest/ZarimanQuestKeyChain", Completed: true } },
-                            { $elemMatch: { ItemType: "/Lotus/Types/Keys/EntratiLab/EntratiQuestKeyChain", Completed: true } }
+                            {
+                                $elemMatch: {
+                                    ItemType: "/Lotus/Types/Keys/ZarimanQuest/ZarimanQuestKeyChain",
+                                    Completed: true
+                                }
+                            },
+                            {
+                                $elemMatch: {
+                                    ItemType: "/Lotus/Types/Keys/EntratiLab/EntratiQuestKeyChain",
+                                    Completed: true
+                                }
+                            }
                         ]
                     }
                 },
