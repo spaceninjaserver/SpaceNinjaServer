@@ -309,7 +309,7 @@ dict = {
     worldState_lunarNewYearAnimal11: `des Hundes`,
     worldState_lunarNewYearAnimal12: `des Schweines`,
     worldState_anniversary: `Warframe Jubiläum`,
-    worldState_useAnniversaryTagForOldGoals: `Verwende <code>Tag</code> vom Warframe Jubiläum für alte Events`,
+    worldState_useAnniversaryTagForOldGoals: `[UNTRANSLATED] Add <code>Anniversary</code> prefix to <code>Tag</code> of old Events`,
     worldState_giveBreedingGroundsRewardsAtSum: `Belohnungen nach Gesamtpunktzahl vergeben`,
     worldState_giveBreedingGroundsRewardsAtSumDesc: `Aus irgendeinem Grund erhöht das Spiel den Schwierigkeitsgrad nicht anhand der Gesamtpunktzahl, wodurch Belohnungen für die höchste Punktzahl nicht erreichbar sind.`,
     worldState_dogDaysRewards: `Hitzefrei-Belohnungen`,

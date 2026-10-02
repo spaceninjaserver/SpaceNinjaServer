@@ -309,7 +309,7 @@ dict = {
     worldState_lunarNewYearAnimal11: `狗`,
     worldState_lunarNewYearAnimal12: `猪`,
     worldState_anniversary: `12周年纪念活动`,
-    worldState_useAnniversaryTagForOldGoals: `使用纪念活动<code>Tag</code>解决旧活动不显示问题`,
+    worldState_useAnniversaryTagForOldGoals: `[UNTRANSLATED] Add <code>Anniversary</code> prefix to <code>Tag</code> of old Events`,
     worldState_giveBreedingGroundsRewardsAtSum: `根据总共获得的分数来发放奖励`,
     worldState_giveBreedingGroundsRewardsAtSumDesc: `由于某些原因,游戏难度未随着总分上升,因此不可能根据最佳成绩获得奖励.`,
     worldState_dogDaysRewards: `三伏天奖励设置`,
