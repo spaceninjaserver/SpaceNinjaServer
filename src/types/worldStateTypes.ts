@@ -668,7 +668,7 @@ export interface IIceBladeLoadout {
     Skins: string[];
 }
 
-export interface IIceBladeChampionClient {
+interface IIceBladeChampionClient {
     Loadout: IIceBladeLoadout;
     Date: IMongoDate;
 }
