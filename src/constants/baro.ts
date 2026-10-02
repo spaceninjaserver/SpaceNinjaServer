@@ -2779,6 +2779,12 @@ const baro: IBaro = {
             PrimePrice: 390,
             RegularPrice: 210000,
             minBuildVersionInt: gameToBuildVersionInt["43.5.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Weapons/Pistols/ZylokExilisSkin",
+            PrimePrice: 300,
+            RegularPrice: 420000,
+            minBuildVersionInt: gameToBuildVersionInt["41.1.0"]
         }
     ],
     allIfAny: [
