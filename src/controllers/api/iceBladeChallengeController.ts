@@ -87,7 +87,10 @@ export const iceBladeChallengeController: RequestHandler = async (req, res) => {
             const inventories = await Inventory.find(
                 {
                     QuestKeys: {
-                        $elemMatch: { ItemType: "/Lotus/Types/Keys/ZarimanQuest/ZarimanQuestKeyChain", Completed: true }
+                        $all: [
+                            { $elemMatch: { ItemType: "/Lotus/Types/Keys/ZarimanQuest/ZarimanQuestKeyChain", Completed: true } },
+                            { $elemMatch: { ItemType: "/Lotus/Types/Keys/EntratiLab/EntratiQuestKeyChain", Completed: true } }
+                        ]
                     }
                 },
                 "accountOwnerId"
