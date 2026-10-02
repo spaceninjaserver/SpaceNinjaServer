@@ -2,6 +2,7 @@ import type { IMongoDateWithLegacySupport, IMongoDate, IOid, IOidWithLegacySuppo
 import { Types } from "mongoose";
 import type { TRarity } from "warframe-public-export-plus";
 import type { IFusionTreasure } from "../types/inventoryTypes/inventoryTypes.ts";
+import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 import type { IColor } from "../types/inventoryTypes/commonInventoryTypes.ts";
 import gameToBuildVersionInt from "../constants/gameToBuildVersionInt.ts";
 import { buildVersionToInt } from "./versionHelper.ts";
@@ -79,6 +80,14 @@ export const toMongoDate = (date: Date): IMongoDate => {
 export const fromMongoDate = (date: IMongoDateWithLegacySupport): Date => {
     if ("$date" in date) return new Date(parseInt(date.$date.$numberLong));
     return new Date(date.sec * 1000 + Math.floor(date.usec / 1000));
+};
+
+export const getMasteryRank = (
+    inventory: Pick<TInventoryDatabaseDocument, "PlayerLevel" | "spoofMasteryRank">
+): number => {
+    return inventory.spoofMasteryRank !== undefined && inventory.spoofMasteryRank >= 0
+        ? inventory.spoofMasteryRank
+        : inventory.PlayerLevel;
 };
 
 export const parseFusionTreasure = (name: string, count: number): IFusionTreasure => {

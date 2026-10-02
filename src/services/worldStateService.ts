@@ -38,9 +38,9 @@ import type {
     IEndlessXpChoice,
     IGoalV9
 } from "../types/worldStateTypes.ts";
-import { toMongoDate2, toOid, toOid2, fromMongoDate } from "../helpers/inventoryHelpers.ts";
+import { toMongoDate, toMongoDate2, toOid, toOid2, fromMongoDate } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
-import { DailyDeal, Fissure } from "../models/worldStateModel.ts";
+import { DailyDeal, Fissure, IceBladeChampion } from "../models/worldStateModel.ts";
 import { toStoreItem, fromStoreItem, getRegions } from "./itemDataService.ts";
 import { factionToInt, getConquest, getMissionTypeForLegacyOverride } from "./conquestService.ts";
 import { getDescent } from "./descentService.ts";
@@ -5761,6 +5761,19 @@ export const populateAlerts = async (worldState: IWorldState): Promise<void> => 
         }
 
         worldState.Alerts.push(...activeAlerts);
+    }
+};
+
+export const populateIceBladeChampion = async (worldState: IWorldState): Promise<void> => {
+    if (!worldState.Tmp || buildVersionToInt(worldState.BuildLabel) < gameToBuildVersionInt["44.0.0"]) return;
+    const champion = await IceBladeChampion.findOne({});
+    if (champion) {
+        const tmp = JSON.parse(worldState.Tmp) as ITmp;
+        tmp.icbdata = {
+            Loadout: champion.Loadout,
+            Date: toMongoDate(champion.Date)
+        };
+        worldState.Tmp = JSON.stringify(tmp);
     }
 };
 

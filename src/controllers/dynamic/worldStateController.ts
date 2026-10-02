@@ -4,7 +4,8 @@ import {
     populateDailyDeal,
     populateFeaturedGuilds,
     populateFissures,
-    populateAlerts
+    populateAlerts,
+    populateIceBladeChampion
 } from "../../services/worldStateService.ts";
 import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { BL_LATEST } from "../../constants/gameVersions.ts";
@@ -36,7 +37,8 @@ export const worldStateController: RequestHandler = async (req, res) => {
         populateDailyDeal(worldState),
         populateFeaturedGuilds(worldState),
         populateFissures(worldState),
-        populateAlerts(worldState)
+        populateAlerts(worldState),
+        populateIceBladeChampion(worldState)
     ]);
 
     if (elionWorkaroundNeeded) {

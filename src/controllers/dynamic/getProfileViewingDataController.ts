@@ -1,4 +1,11 @@
-import { fromOid, toLegacyOid, toMongoDate2, toOid2, version_compare } from "../../helpers/inventoryHelpers.ts";
+import {
+    fromOid,
+    getMasteryRank,
+    toLegacyOid,
+    toMongoDate2,
+    toOid2,
+    version_compare
+} from "../../helpers/inventoryHelpers.ts";
 import type { TGuildDatabaseDocument } from "../../models/guildModel.ts";
 import { Guild, GuildMember } from "../../models/guildModel.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
@@ -98,7 +105,7 @@ const getProfileViewingDataByPlayerId = async (
     const result: IPlayerProfileViewingDataResult = {
         AccountId: toOid2(account._id, buildLabel),
         DisplayName: account.DisplayName,
-        PlayerLevel: (inventory.spoofMasteryRank ?? -1) !== -1 ? inventory.spoofMasteryRank! : inventory.PlayerLevel,
+        PlayerLevel: getMasteryRank(inventory),
         LoadOutInventory: {
             WeaponSkins: [],
             XPInfo: inventory.XPInfo
@@ -157,14 +164,13 @@ export const getProfileViewingDataByGuildId = async (
             Account.findById(member.accountId, "DisplayName"),
             Inventory.findOne(
                 { accountOwnerId: member.accountId },
-                "DisplayName PlayerLevel XPInfo LoadOutPresets CurrentLoadOutIds WeaponSkins Suits Pistols LongGuns Melee"
+                "DisplayName PlayerLevel spoofMasteryRank XPInfo LoadOutPresets CurrentLoadOutIds WeaponSkins Suits Pistols LongGuns Melee"
             )
         ]);
         const result: IPlayerProfileViewingDataResult = {
             AccountId: toOid2(account!._id, buildLabel),
             DisplayName: account!.DisplayName,
-            PlayerLevel:
-                (inventory!.spoofMasteryRank ?? -1) !== -1 ? inventory!.spoofMasteryRank! : inventory!.PlayerLevel,
+            PlayerLevel: getMasteryRank(inventory!),
             LoadOutInventory: {
                 WeaponSkins: [],
                 XPInfo: inventory!.XPInfo

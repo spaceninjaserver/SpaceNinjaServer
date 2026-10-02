@@ -36,6 +36,7 @@ import { getRegisteredLosersController } from "../controllers/custom/getRegister
 
 import { abilityOverrideController } from "../controllers/custom/abilityOverrideController.ts";
 import { createMessageController } from "../controllers/custom/createMessageController.ts";
+import { resetIceBladeChampionController } from "../controllers/custom/resetIceBladeChampionController.ts";
 import { addCurrencyController } from "../controllers/custom/addCurrencyController.ts";
 import { addItemsController } from "../controllers/custom/addItemsController.ts";
 import {
@@ -85,6 +86,7 @@ customRouter.get("/addMissingHelminthBlueprints", addMissingHelminthBlueprintsCo
 customRouter.get("/unlockAllJobChainBounties", unlockAllJobChainBountiesController);
 customRouter.get("/unlockAllSimarisResearchEntries", unlockAllSimarisResearchEntriesController);
 customRouter.get("/unlockAllScans", unlockAllScansController);
+customRouter.get("/resetIceBladeChampion", resetIceBladeChampionController);
 customRouter.get("/unlockAllShipFeatures", unlockAllShipFeaturesController);
 customRouter.get("/unlockAllCapturaScenes", unlockAllCapturaScenesController);
 customRouter.get("/removeCustomization", removeCustomizationController);

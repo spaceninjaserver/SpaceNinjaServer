@@ -3,7 +3,7 @@ import { getInventory } from "./inventoryService.ts";
 import { Account } from "../models/loginModel.ts";
 import type { Types } from "mongoose";
 import { Friendship } from "../models/friendModel.ts";
-import { fromOid, toMongoDate2 } from "../helpers/inventoryHelpers.ts";
+import { fromOid, getMasteryRank, toMongoDate2 } from "../helpers/inventoryHelpers.ts";
 import { getUnicodeName } from "./loginService.ts";
 
 export const addAccountDataToFriendInfo = async (
@@ -22,7 +22,7 @@ export const addAccountDataToFriendInfo = async (
 
 export const addInventoryDataToFriendInfo = async (info: IFriendInfo): Promise<void> => {
     const inventory = await getInventory(fromOid(info._id), "PlayerLevel ActiveAvatarImageType spoofMasteryRank");
-    info.PlayerLevel = inventory.spoofMasteryRank == -1 ? inventory.PlayerLevel : inventory.spoofMasteryRank;
+    info.PlayerLevel = getMasteryRank(inventory);
     info.ActiveAvatarImageType = inventory.ActiveAvatarImageType;
     info.TitleType = inventory.TitleType;
 };
