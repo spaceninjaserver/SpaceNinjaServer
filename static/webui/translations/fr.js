@@ -219,6 +219,7 @@ dict = {
     cheats_unlockDoubleCapacityPotatoesEverywhere: `Réacteurs et Catalyseurs partout`,
     cheats_unlockExilusEverywhere: `Adaptateurs Exilus partout`,
     cheats_unlockArcanesEverywhere: `Adaptateur d'Arcanes partout`,
+    cheats_polarizationDoesntResetRank: `[UNTRANSLATED] Polarization Doesn't Reset Rank (Older Versions: Shown After Inventory Resync)`,
     cheats_noDailyStandingLimits: `Aucune limite de réputation journalière`,
     cheats_noDailyFocusLimit: `Aucune limite journalière de focus`,
     cheats_noArgonCrystalDecay: `Aucune désintégration des Cristaux d'Argon`,

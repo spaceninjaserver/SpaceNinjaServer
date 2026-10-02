@@ -219,6 +219,7 @@ dict = {
     cheats_unlockDoubleCapacityPotatoesEverywhere: `全物品自带Orokin反应堆`,
     cheats_unlockExilusEverywhere: `全物品自带适配器`,
     cheats_unlockArcanesEverywhere: `全物品自带赋能适配器`,
+    cheats_polarizationDoesntResetRank: `[UNTRANSLATED] Polarization Doesn't Reset Rank (Older Versions: Shown After Inventory Resync)`,
     cheats_noDailyStandingLimits: `无每日声望限制`,
     cheats_noDailyFocusLimit: `指挥官专精无每日获取上限`,
     cheats_noArgonCrystalDecay: `氩结晶无衰变`,

@@ -15,7 +15,7 @@ import {
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import { addInfestedFoundryXP, applyCheatsToInfestedFoundry } from "../../services/infestedFoundryService.ts";
 import { sendWsBroadcastTo, sendWsBroadcastToWebui } from "../../services/wsService.ts";
-import type { IEquipmentDatabase } from "../../types/equipmentTypes.ts";
+import type { IEquipmentClient, IEquipmentDatabase } from "../../types/equipmentTypes.ts";
 import { eEquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { Types } from "mongoose";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
@@ -42,7 +42,8 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 "RegularCredits",
                 "infinitePlatinum",
                 "PremiumCredits",
-                "PremiumCreditsFree"
+                "PremiumCreditsFree",
+                "polarizationDoesntResetRank"
             );
 
             if (payload.IsSwappingOperation === true) {
@@ -57,7 +58,9 @@ export const upgradesController: RequestHandler = async (req, res) => {
                         case "/Lotus/Types/Items/MiscItems/Forma":
                         case "/Lotus/Types/Items/MiscItems/FormaUmbra": {
                             const item = inventory[payload.Category].id(itemId)!;
-                            item.XP = 0;
+                            if (!inventory.polarizationDoesntResetRank) {
+                                item.XP = 0;
+                            }
                             setSlotPolarity(item, payload.PolarizeSlot, payload.PolarizeValue);
                             item.Polarized ??= 0;
                             item.Polarized += 1;
@@ -197,6 +200,7 @@ export const upgradesController: RequestHandler = async (req, res) => {
             "infinitePlatinum",
             "PremiumCredits",
             "PremiumCreditsFree",
+            "polarizationDoesntResetRank",
             "infiniteHelminthMaterials",
             "InfestedFoundry",
             "Recipes"
@@ -319,16 +323,24 @@ export const upgradesController: RequestHandler = async (req, res) => {
                     case "/Lotus/Types/Items/MiscItems/FormaAura":
                     case "/Lotus/Types/Items/MiscItems/FormaStance": {
                         const item = inventory[payload.ItemCategory].id(payload.ItemId.$oid)!;
-                        item.XP = 0;
                         setSlotPolarity(item, operation.PolarizeSlot, operation.PolarizeValue);
                         item.Polarized ??= 0;
                         item.Polarized += 1;
                         if (item.AltWeaponModeId) {
                             const otherItem = inventory[bayonetOtherCategory].id(item.AltWeaponModeId)!;
-                            otherItem.XP = 0;
                             setSlotPolarity(otherItem, operation.PolarizeSlot, operation.PolarizeValue);
                             otherItem.Polarized ??= 0;
                             otherItem.Polarized += 1;
+                            if (inventory.polarizationDoesntResetRank) {
+                                inventoryChanges[bayonetOtherCategory] = [otherItem.toJSON<IEquipmentClient>()];
+                            } else {
+                                otherItem.XP = 0;
+                            }
+                        }
+                        if (inventory.polarizationDoesntResetRank) {
+                            inventoryChanges[payload.ItemCategory] = [item.toJSON<IEquipmentClient>()];
+                        } else {
+                            item.XP = 0;
                         }
                         sendWsBroadcastTo(accountId, { update_inventory: true }); // webui may need to to re-add "max rank" button
                         break;
