@@ -3070,7 +3070,7 @@ export const getWorldState = (
                 Bounty: true,
                 Best: true,
                 ClampNodeScores: true,
-                Node: "EventNode35",
+                Node: "EventNode35", // Incompatible with Hallowed Nightmares 2026
                 MissionKeyName: "/Lotus/Types/Keys/LanternEndlessEventKeyD",
                 Faction: "FC_INFESTATION",
                 Desc: "/Lotus/Language/Events/TacAlertHalloweenLanternEndless",
@@ -3090,94 +3090,123 @@ export const getWorldState = (
     }
 
     if (config.worldState?.hallowedNightmares && buildVersion >= gameToBuildVersionInt["18.0.2"]) {
-        const rewards = [
-            // 2018
-            [
-                {
-                    items: ["/Lotus/StoreItems/Upgrades/Skins/Sigils/DotD2016Sigil"]
-                },
-                {
-                    items: ["/Lotus/StoreItems/Upgrades/Skins/Halloween/HalloweenDread"]
-                },
-                {
-                    items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinReactor"]
-                }
-            ],
-            // 2016
-            [
-                {
-                    items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst"]
-                },
-                {
-                    items: [
-                        "/Lotus/StoreItems/Upgrades/Skins/Sigils/DotD2016Sigil",
-                        "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
-                    ]
-                },
-                {
-                    items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinReactor"]
-                }
-            ],
-            // 2015
-            [
-                {
-                    items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst"]
-                },
-                {
-                    items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"]
-                }
-            ]
-        ];
         const year = config.worldState.hallowedNightmaresRewardsOverride ?? 0;
-
-        worldState.Goals.push({
-            _id: { $oid: "5bc98f00000000000000000" + year.toString(16) },
-            Activation: toMongoDate2(1539972000000, buildVersion),
-            Expiry: toMongoDate2(2000000000000, buildVersion),
-            Count: 0,
-            InterimGoals: [1],
-            Goal: 2,
-            Success: 0,
-            Personal: true,
-            Bounty: true,
-            Tag: changeLegacyTags ? tagsForOlderGoals[0] : "Halloween",
-            Faction: "FC_INFESTATION",
-            Desc: "/Lotus/Language/G1Quests/TacAlertHalloweenTitle",
-            ToolTip: "/Lotus/Language/G1Quests/TacAlertHalloweenToolTip",
-            Icon: "/Lotus/Interface/Icons/JackOLanternColour.png",
-            ClampNodeScores: true,
-            Node: "EventNode2", // Incompatible with Warframe Anniversary
-            MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyHalloween",
-            ConcurrentMissionKeyNames: ["/Lotus/Types/Keys/TacAlertKeyHalloweenBonus"],
-            ConcurrentNodeReqs: [1],
-            ConcurrentNodes: ["EventNode24"], // Incompatible with Hallowed Flame, Dog Days, Warframe Anniversary
-            InterimRewards: [rewards[year][0]],
-            Reward: rewards[year][1]
-        });
-        if (year != 2) {
+        const firstTag =
+            changeLegacyTags && buildVersion < gameToBuildVersionInt["44.0.0"] ? tagsForOlderGoals[0] : "Halloween";
+        if (year == 3) {
+            // 2026
             worldState.Goals.push({
-                _id: { $oid: "5bc98f01000000000000000" + year.toString(16) },
+                _id: { $oid: "6abe756f0000000000000000" },
+                Activation: toMongoDate2(1790866799000, buildVersion),
+                Expiry: toMongoDate2(2000000000000, buildVersion),
+                Count: 0,
+                Goal: 1,
+                Success: 0,
+                Personal: true,
+                ClampNodeScores: true,
+                Node: "EventNode35", // Incompatible with Hallowed Flame
+                MissionKeyName: "/Lotus/Types/Keys/TenYearAnniversary/TacAlertKeyTenYearAnniversaryM3A",
+                Desc: "/Lotus/Language/G1Quests/TacAlertHalloweenTitle",
+                Icon: "/Lotus/Interface/Icons/JackOLanternColour.png",
+                Tag: firstTag,
+                Reward: {
+                    credits: 50000,
+                    items: [
+                        "/Lotus/StoreItems/Upgrades/Skins/MeleeDangles/PumpkinMeleeDangle",
+                        "/Lotus/StoreItems/Types/StoreItems/AvatarImages/TenYearAnniversaryWeek4Glyph",
+                        "/Lotus/StoreItems/Types/Items/ShipDecos/MacheteManicBobbleHead"
+                    ]
+                }
+            });
+        } else {
+            const rewards = [
+                // 2015
+                [
+                    {
+                        items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst"]
+                    },
+                    {
+                        items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"]
+                    }
+                ],
+                // 2016
+                [
+                    {
+                        items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst"]
+                    },
+                    {
+                        items: [
+                            "/Lotus/StoreItems/Upgrades/Skins/Sigils/DotD2016Sigil",
+                            "/Lotus/StoreItems/Upgrades/Skins/Clan/BountyHunterBadgeItem"
+                        ]
+                    },
+                    {
+                        items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinReactor"]
+                    }
+                ],
+                // 2018
+                [
+                    {
+                        items: ["/Lotus/StoreItems/Upgrades/Skins/Sigils/DotD2016Sigil"]
+                    },
+                    {
+                        items: ["/Lotus/StoreItems/Upgrades/Skins/Halloween/HalloweenDread"]
+                    },
+                    {
+                        items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinReactor"]
+                    }
+                ]
+            ];
+
+            worldState.Goals.push({
+                _id: { $oid: "5bc98f00000000000000000" + year.toString(16) },
                 Activation: toMongoDate2(1539972000000, buildVersion),
                 Expiry: toMongoDate2(2000000000000, buildVersion),
                 Count: 0,
-                Goal: 666,
+                InterimGoals: [1],
+                Goal: 2,
                 Success: 0,
                 Personal: true,
                 Bounty: true,
-                Best: true,
-                Tag: "Halloween",
-                PrereqGoalTags: [changeLegacyTags ? tagsForOlderGoals[0] : "Halloween"],
+                Tag: firstTag,
                 Faction: "FC_INFESTATION",
-                Desc: "Hallowed Nightmares - Time Attack",
+                Desc: "/Lotus/Language/G1Quests/TacAlertHalloweenTitle",
                 ToolTip: "/Lotus/Language/G1Quests/TacAlertHalloweenToolTip",
                 Icon: "/Lotus/Interface/Icons/JackOLanternColour.png",
                 ClampNodeScores: true,
-                Node: "EventNode25", // Incompatible with Hallowed Flame, Dog Days
-                MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyHalloweenTimeAttack",
-                ScoreVar: "TimeAttackScore",
-                ScoreMaxTag: "Halloween16",
-                Reward: rewards[year][2]
+                Node: "EventNode2", // Incompatible with Warframe Anniversary
+                MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyHalloween",
+                ConcurrentMissionKeyNames: ["/Lotus/Types/Keys/TacAlertKeyHalloweenBonus"],
+                ConcurrentNodeReqs: [1],
+                ConcurrentNodes: ["EventNode24"], // Incompatible with Hallowed Flame, Dog Days, Warframe Anniversary
+                InterimRewards: [rewards[year][0]],
+                Reward: rewards[year][1]
             });
+            if (year != 0) {
+                worldState.Goals.push({
+                    _id: { $oid: "5bc98f01000000000000000" + year.toString(16) },
+                    Activation: toMongoDate2(1539972000000, buildVersion),
+                    Expiry: toMongoDate2(2000000000000, buildVersion),
+                    Count: 0,
+                    Goal: 666,
+                    Success: 0,
+                    Personal: true,
+                    Bounty: true,
+                    Best: true,
+                    Tag: firstTag,
+                    PrereqGoalTags: [firstTag],
+                    Faction: "FC_INFESTATION",
+                    Desc: "Hallowed Nightmares - Time Attack",
+                    ToolTip: "/Lotus/Language/G1Quests/TacAlertHalloweenToolTip",
+                    Icon: "/Lotus/Interface/Icons/JackOLanternColour.png",
+                    ClampNodeScores: true,
+                    Node: "EventNode25", // Incompatible with Hallowed Flame, Dog Days
+                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyHalloweenTimeAttack",
+                    ScoreVar: "TimeAttackScore",
+                    ScoreMaxTag: "Halloween16",
+                    Reward: rewards[year][2]
+                });
+            }
         }
     }
 
