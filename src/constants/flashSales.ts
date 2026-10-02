@@ -27,7 +27,46 @@ export const qqtcFlashSales: IFlashSaleData[] = [
     { TypeName: "/Lotus/Upgrades/Skins/Armor/TnCharityRibbonArmor/ConqueraArmorL", RegularOverride: 1 },
     { TypeName: "/Lotus/Upgrades/Skins/Armor/TnCharityRibbonArmor/ConqueraArmorA", RegularOverride: 1 },
     { TypeName: "/Lotus/Upgrades/Skins/Armor/TnCharityRibbonArmor/ConqueraChestRibbon", RegularOverride: 1 },
-    { TypeName: "/Lotus/Types/Items/ShipDecos/Plushies/PlushyProtectorStalker", PremiumOverride: 35 }
+    {
+        TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageConqueraGlyphVIII",
+        RegularOverride: 1,
+        minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
+    },
+    {
+        TypeName: "/Lotus/Types/StoreItems/AvatarImages/AvatarImageConqueraGlyphIX",
+        RegularOverride: 1,
+        minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
+    },
+    {
+        TypeName: "/Lotus/Types/Items/ShipDecos/QTCC2in1Display",
+        RegularOverride: 1,
+        minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
+    },
+    {
+        TypeName: "/Lotus/Upgrades/Skins/Scarves/ZephyrQTCCSyandana",
+        RegularOverride: 1,
+        minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
+    },
+    {
+        TypeName: "/Lotus/Upgrades/Skins/Tengu/ZephyrQTCCBodySkin",
+        RegularOverride: 25000,
+        minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
+    },
+    {
+        TypeName: "/Lotus/Types/Items/ShipDecos/Plushies/PlushyProtectorStalker",
+        PremiumOverride: 35,
+        minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
+    },
+    {
+        TypeName: "/Lotus/Types/Items/ShipDecos/Plushies/PlushyValkyr",
+        PremiumOverride: 35,
+        minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
+    },
+    {
+        TypeName: "/Lotus/Types/Items/ShipDecos/Plushies/PlushyVoruna",
+        PremiumOverride: 35,
+        minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
+    }
 ];
 
 export const dogDaysFlashSales: IFlashSaleData[] = [
