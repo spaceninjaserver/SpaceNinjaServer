@@ -1,4 +1,9 @@
-import type { IAlertDatabase, IDailyDealDatabase, IFissureDatabase } from "../types/worldStateTypes.ts";
+import type {
+    IAlertDatabase,
+    IDailyDealDatabase,
+    IFissureDatabase,
+    IIceBladeChampionDatabase
+} from "../types/worldStateTypes.ts";
 import { model, Schema } from "mongoose";
 import { typeCountSchema } from "./inventoryModels/inventoryModel.ts";
 
@@ -54,3 +59,11 @@ const alertSchema = new Schema<IAlertDatabase>({
 });
 
 alertSchema.index({ Expiry: 1 }, { expireAfterSeconds: 0 });
+
+const iceBladeChampionSchema = new Schema<IIceBladeChampionDatabase>({
+    PlayerId: { type: Schema.Types.ObjectId, required: true },
+    Loadout: { type: Schema.Types.Mixed, required: true },
+    Date: { type: Date, required: true }
+});
+
+export const IceBladeChampion = model<IIceBladeChampionDatabase>("IceBladeChampion", iceBladeChampionSchema);

@@ -660,6 +660,23 @@ export interface ITmp {
     edg?: TCircuitGameMode[]; // The Circuit game modes overwrite
     tcend26?: boolean; // TC 2026 demo ended, unlock vessel customization
     tcaz?: number; // Somehow related to domestic drone acquisition on TC2026 demo relay, without it game don't send request to receive it, set to 3 on live
+    icbdata?: IIceBladeChampionClient; // First player to pull the Iceblade, their Warframe is shown as a statue on Yuvan Peak
+}
+
+export interface IIceBladeLoadout {
+    ItemType: string;
+    Skins: string[];
+}
+
+interface IIceBladeChampionClient {
+    Loadout: IIceBladeLoadout;
+    Date: IMongoDate;
+}
+
+export interface IIceBladeChampionDatabase {
+    PlayerId: Types.ObjectId;
+    Loadout: IIceBladeLoadout;
+    Date: Date;
 }
 
 interface IPgr {

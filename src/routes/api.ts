@@ -96,6 +96,7 @@ import { guildTechController } from "../controllers/api/guildTechController.ts";
 import { guildVaultBonusRewardsController } from "../controllers/api/guildVaultBonusRewardsController.ts";
 import { hostSessionController } from "../controllers/api/hostSessionController.ts";
 import { hubBlessingController } from "../controllers/api/hubBlessingController.ts";
+import { iceBladeChallengeController } from "../controllers/api/iceBladeChallengeController.ts";
 import { inboxController } from "../controllers/api/inboxController.ts";
 import { infestedFoundryController } from "../controllers/api/infestedFoundryController.ts";
 import { inventoryController } from "../controllers/api/inventoryController.ts";
@@ -351,6 +352,7 @@ apiRouter.post("/guildTech.php", guildTechController);
 apiRouter.post("/guildVaultBonusRewards.php", guildVaultBonusRewardsController); // U42+
 apiRouter.post("/hostSession.php", hostSessionController);
 apiRouter.post("/hubBlessing.php", hubBlessingController);
+apiRouter.post("/iceBladeChallenge.php", iceBladeChallengeController);
 apiRouter.post("/inbox.php", inboxController); // from ~U15, don't know when they changed it to GET
 apiRouter.post("/infestedFoundry.php", infestedFoundryController);
 apiRouter.post("/instantCompleteRecipe.php", claimCompletedRecipeController); // U8

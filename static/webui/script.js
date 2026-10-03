@@ -4945,6 +4945,15 @@ async function doMaxPlexus() {
     }
 }
 
+async function doResetIceBladeChampion() {
+    if (!window.confirm(loc("code_resetIceBladeChampionConfirm"))) {
+        return;
+    }
+    await revalidateAuthz();
+    await fetch("/custom/resetIceBladeChampion?" + window.authz);
+    toast(loc("code_succChange"));
+}
+
 async function doUnlockAllScans() {
     await revalidateAuthz();
     await fetch("/custom/unlockAllScans?" + window.authz);

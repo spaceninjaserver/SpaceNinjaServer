@@ -82,6 +82,7 @@ import {
     convertToLegacyFingerprint,
     fromMongoDate,
     fromOid,
+    getMasteryRank,
     kubrowDetails,
     kubrowFurPatternsWeights,
     kubrowWeights,
@@ -2109,7 +2110,7 @@ export const addEquipment = <K extends TEquipmentKey>(
     return inventoryChanges;
 };
 
-const addCustomization = (
+export const addCustomization = (
     inventory: TInventoryDatabaseDocument,
     customizationName: string,
     inventoryChanges: IInventoryChanges = {}
@@ -2566,10 +2567,7 @@ export const addMiscItemsComplex = (
                     inventory.FoundToday = undefined;
                 }
             } else if (ItemType == "/Lotus/Types/Items/MiscItems/VoidTearDrop") {
-                const masteryRank =
-                    inventory.spoofMasteryRank && inventory.spoofMasteryRank >= 0
-                        ? inventory.spoofMasteryRank
-                        : inventory.PlayerLevel;
+                const masteryRank = getMasteryRank(inventory);
                 const maxVoidTraces = 100 + masteryRank * 50;
                 if (MiscItems[itemIndex].ItemCount > maxVoidTraces) {
                     MiscItems[itemIndex].ItemCount = maxVoidTraces;
