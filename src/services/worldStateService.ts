@@ -2329,7 +2329,7 @@ export const getWorldState = (
                 Personal: true,
                 Bounty: true,
                 ClampNodeScores: true,
-                Node: "EventNode19",
+                Node: "EventNode19", // Incompatible with Warframe Anniversary
                 MissionKeyName: "/Lotus/Types/Keys/GalleonRobberyAlert",
                 Desc: "/Lotus/Language/Events/GalleonRobberyEventMissionTitle",
                 Icon: "/Lotus/Interface/Icons/Player/GalleonRobberiesEvent.png",
@@ -2375,7 +2375,7 @@ export const getWorldState = (
                 Personal: true,
                 Bounty: true,
                 ClampNodeScores: true,
-                Node: "EventNode19",
+                Node: "EventNode19", // Incompatible with Warframe Anniversary
                 MissionKeyName: "/Lotus/Types/Keys/GalleonRobberyAlertC",
                 Desc: "/Lotus/Language/Events/GalleonRobberyEventMissionTitle",
                 Icon: "/Lotus/Interface/Icons/Player/GalleonRobberiesEvent.png",
@@ -2690,7 +2690,7 @@ export const getWorldState = (
             Personal: true,
             Bounty: true,
             ClampNodeScores: true,
-            Node: "EventNode25", // Incompatible with Hallowed Flame, Hallowed Nightmares, Warframe Anniversary
+            Node: "EventNode25", // Incompatible with Hallowed Flame, Hallowed Nightmares
             ConcurrentMissionKeyNames: [
                 "/Lotus/Types/Keys/TacAlertKeyWaterFightB",
                 "/Lotus/Types/Keys/TacAlertKeyWaterFightC",
@@ -2748,7 +2748,7 @@ export const getWorldState = (
     }
 
     if (config.worldState?.anniversary != undefined) {
-        // Incompatible with: Use Tag from Warframe Anniversary for old Events, Wolf Hunt, Galleon Of Ghouls, Hallowed Flame, Hallowed Nightmares, Dog Days, Proxy Rebellion, Long Shadow
+        // Incompatible with: Wolf Hunt, Galleon Of Ghouls, Hallowed Flame, Hallowed Nightmares, Dog Days, Proxy Rebellion, Long Shadow, Orphix Venom
         const goalsByWeek: Partial<IGoal>[][] = [
             [
                 {
@@ -3014,17 +3014,7 @@ export const getWorldState = (
         }
     }
 
-    const tagsForOlderGoals: string[] = [
-        "Anniversary2018TacAlert",
-        "Anniversary2019TacAlert",
-        "Anniversary2020TacAlert",
-        "Anniversary2021TacAlert",
-        "Anniversary2022TacAlert",
-        "Anniversary2024TacAlert",
-        "Anniversary2024TacAlertCMA",
-        "Anniversary2025TacAlert",
-        "Anniversary2025TacAlertCMB"
-    ];
+    const legacyTag = (tag: string): string => (changeLegacyTags ? "Anniversary" + tag : tag);
 
     if (config.worldState?.hallowedFlame && buildVersion >= gameToBuildVersionInt["26.0.0"]) {
         worldState.Goals.push(
@@ -3039,7 +3029,7 @@ export const getWorldState = (
                 Personal: true,
                 Bounty: true,
                 ClampNodeScores: true,
-                Node: "EventNode24", // Incompatible with Hallowed Nightmares, Dog Days
+                Node: "EventNode24", // Incompatible with Hallowed Nightmares, Dog Days, Warframe Anniversary
                 ConcurrentMissionKeyNames: [
                     "/Lotus/Types/Keys/LanternEndlessEventKeyB",
                     "/Lotus/Types/Keys/LanternEndlessEventKeyC"
@@ -3050,7 +3040,7 @@ export const getWorldState = (
                 Faction: "FC_INFESTATION",
                 Desc: "/Lotus/Language/Events/TacAlertHalloweenLantern",
                 Icon: "/Lotus/Interface/Icons/JackOLanternColour.png",
-                Tag: changeLegacyTags ? tagsForOlderGoals[0] : "Halloween19",
+                Tag: legacyTag("Halloween19"),
                 InterimRewards: [
                     { items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst"] },
                     { items: ["/Lotus/StoreItems/Types/Items/MiscItems/Forma"] }
@@ -3070,13 +3060,13 @@ export const getWorldState = (
                 Bounty: true,
                 Best: true,
                 ClampNodeScores: true,
-                Node: "EventNode35", // Incompatible with Hallowed Nightmares 2026
+                Node: "EventNode35", // Incompatible with Hallowed Nightmares 2026, Dog Days
                 MissionKeyName: "/Lotus/Types/Keys/LanternEndlessEventKeyD",
                 Faction: "FC_INFESTATION",
                 Desc: "/Lotus/Language/Events/TacAlertHalloweenLanternEndless",
                 Icon: "/Lotus/Interface/Icons/JackOLanternColour.png",
                 Tag: "Halloween19Endless",
-                PrereqGoalTags: [changeLegacyTags ? tagsForOlderGoals[0] : "Halloween19"],
+                PrereqGoalTags: [legacyTag("Halloween19")],
                 Reward: {
                     items: [
                         "/Lotus/StoreItems/Upgrades/Skins/Effects/BatsEphemera",
@@ -3091,8 +3081,7 @@ export const getWorldState = (
 
     if (config.worldState?.hallowedNightmares && buildVersion >= gameToBuildVersionInt["18.0.2"]) {
         const year = config.worldState.hallowedNightmaresRewardsOverride ?? 0;
-        const firstTag =
-            changeLegacyTags && buildVersion < gameToBuildVersionInt["44.0.0"] ? tagsForOlderGoals[0] : "Halloween";
+        const firstTag = buildVersion < gameToBuildVersionInt["44.0.0"] ? legacyTag("Halloween") : "Halloween";
         if (year == 3) {
             // 2026
             worldState.Goals.push({
@@ -3104,7 +3093,7 @@ export const getWorldState = (
                 Success: 0,
                 Personal: true,
                 ClampNodeScores: true,
-                Node: "EventNode35", // Incompatible with Hallowed Flame
+                Node: "EventNode35", // Incompatible with Hallowed Flame, Dog Days
                 MissionKeyName: "/Lotus/Types/Keys/TenYearAnniversary/TacAlertKeyTenYearAnniversaryM3A",
                 Desc: "/Lotus/Language/G1Quests/TacAlertHalloweenTitle",
                 Icon: "/Lotus/Interface/Icons/JackOLanternColour.png",
@@ -3281,7 +3270,7 @@ export const getWorldState = (
             Faction: "FC_CORPUS",
             Desc: "/Lotus/Language/Alerts/TacAlertProxyRebellion",
             Icon: "/Lotus/Materials/Emblems/BountyBadge_e.png",
-            Tag: changeLegacyTags ? tagsForOlderGoals[1] : "ProxyRebellion",
+            Tag: legacyTag("ProxyRebellion"),
             InterimRewards: rewards[year].slice(0, 2),
             Reward: rewards[year][2],
             BonusReward: rewards[year][3]
@@ -3300,7 +3289,7 @@ export const getWorldState = (
             Success: 0,
             Personal: true,
             Bounty: true,
-            Tag: changeLegacyTags ? tagsForOlderGoals[2] : "NightwatchTacAlert",
+            Tag: legacyTag("NightwatchTacAlert"),
             Faction: "FC_GRINEER",
             Desc: "/Lotus/Language/G1Quests/ProjectNightwatchTacAlertTitle",
             Icon: "/Lotus/Materials/Emblems/BountyBadge_e.png",
@@ -3473,7 +3462,7 @@ export const getWorldState = (
                 Success: 0,
                 Personal: true,
                 Best: true,
-                Node: "EventNode17", // Incompatible with Proxy Rebellion
+                Node: "EventNode17", // Incompatible with Proxy Rebellion, Warframe Anniversary
                 MissionKeyName: "/Lotus/Types/Keys/MechSurvivalCorpusShip",
                 Faction: "FC_SENTIENT",
                 Desc: "/Lotus/Language/Events/MechEventMissionTier1",
@@ -3491,7 +3480,7 @@ export const getWorldState = (
                 Success: 0,
                 Personal: true,
                 Best: true,
-                Node: "EventNode28", // Incompatible with Galleon Of Ghouls, Wolf Hunt
+                Node: "EventNode28", // Incompatible with Galleon Of Ghouls, Wolf Hunt, Warframe Anniversary
                 MissionKeyName: "/Lotus/Types/Keys/MechSurvivalGrineerGalleon",
                 Faction: "FC_SENTIENT",
                 Desc: "/Lotus/Language/Events/MechEventMissionTier2",
@@ -4094,7 +4083,7 @@ export const getWorldState = (
             ToolTip: "/Lotus/Language/G1Quests/InfestedCorpusHiveEventToolTip",
             Personal: true,
             Best: !config.unfaithfulBugFixes?.giveBreedingGroundsRewardsAtSum,
-            Tag: changeLegacyTags ? tagsForOlderGoals[3] : "HiveEvent", // Madeup tag
+            Tag: legacyTag("HiveEvent"), // Madeup tag
             InterimRewards: [
                 { items: ["/Lotus/StoreItems/Upgrades/Skins/Clan/HiveSabotageEventBadgeItem"] },
                 {

@@ -310,7 +310,7 @@ dict = {
     worldState_lunarNewYearAnimal11: `Собаки`,
     worldState_lunarNewYearAnimal12: `Свиньи`,
     worldState_anniversary: `Годовщина Warframe`,
-    worldState_useAnniversaryTagForOldGoals: `Использовать <code>Tag</code> из Годовщины Warframe для старых событий`,
+    worldState_useAnniversaryTagForOldGoals: `Добавить префикс <code>Anniversary</code> к <code>Tag</code> старых событий`,
     worldState_giveBreedingGroundsRewardsAtSum: `Выдавать награды за общий счёт`,
     worldState_giveBreedingGroundsRewardsAtSumDesc: `По какой-то причине игра не увеличивает сложность в зависимости от общего количества набранных очков, поэтому получить награду за лучший результат невозможно.`,
     worldState_dogDaysRewards: `Награды Знойных дней`,
