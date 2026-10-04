@@ -2425,8 +2425,8 @@ async function getRandomMissionDrops(
                         drops.push({
                             StoreItem:
                                 RewardInfo.node == "CrewBattleNode561"
-                                    ? "/Lotus/Types/JadeShadowsPart2Mission/Gameplay/Resources/GarudaFavor"
-                                    : "/Lotus/Types/JadeShadowsPart2Mission/Gameplay/Resources/AshFavor",
+                                    ? "/Lotus/StoreItems/Types/JadeShadowsPart2Mission/Gameplay/Resources/GarudaFavor"
+                                    : "/Lotus/StoreItems/Types/JadeShadowsPart2Mission/Gameplay/Resources/AshFavor",
                             ItemCount: rng.randomInt(12, 16) + (isSteelPath ? 6 : 0)
                         });
                     }
