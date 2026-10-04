@@ -2800,23 +2800,30 @@ export const addChallenges = async (
                     dbChallenge.Completed.push(completion);
                     if (completion == "challengeRewards") {
                         const path = challengeNameToPath[Name];
-                        const meta = ExportChallenges[path];
-                        if (meta.message) {
-                            logger.debug(`${Name} completed, sending inbox message`);
-                            await createMessage(inventory.accountOwnerId, [convertInboxMessage(meta.message)]);
-                            continue;
-                        }
-                        if (meta.countedRewards) {
-                            logger.debug(`${Name} completed, giving rewards:`, meta.countedRewards);
-                            for (const cr of meta.countedRewards) {
-                                combineInventoryChanges(
-                                    inventoryChanges,
-                                    await addItem(inventory, fromStoreItem(cr.StoreItem), cr.ItemCount)
-                                );
+                        if (path in ExportChallenges) {
+                            const meta = ExportChallenges[path];
+                            if (meta.message) {
+                                logger.debug(`${Name} completed, sending inbox message`);
+                                await createMessage(inventory.accountOwnerId, [convertInboxMessage(meta.message)]);
+                                continue;
                             }
-                            continue;
+                            if (meta.countedRewards) {
+                                logger.debug(`${Name} completed, giving rewards:`, meta.countedRewards);
+                                for (const cr of meta.countedRewards) {
+                                    combineInventoryChanges(
+                                        inventoryChanges,
+                                        await addItem(inventory, fromStoreItem(cr.StoreItem), cr.ItemCount)
+                                    );
+                                }
+                                continue;
+                            }
                         }
-                        logger.warn(`ignoring unknown challenge completion`, { name: Name, path, completion, meta });
+                        logger.warn(`ignoring unknown challenge completion`, {
+                            name: Name,
+                            path,
+                            completion,
+                            meta: ExportChallenges[path]
+                        });
                         dbChallenge.Progress = 0;
                         dbChallenge.Completed = [];
                     }
