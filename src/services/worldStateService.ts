@@ -5457,7 +5457,9 @@ const generateSeededAlert = async (alertIndex: number, buildVersion: number): Pr
     const isPreU14 = buildVersion < gameToBuildVersionInt["14.0.0"];
     const isArch = isArchwingMission(nodeData);
 
-    const factions: TFaction[] = isArch ? ["FC_GRINEER", "FC_CORPUS"] : ["FC_GRINEER", "FC_CORPUS", "FC_INFESTATION"];
+    const factions = (
+        (isArch ? ["FC_GRINEER", "FC_CORPUS"] : ["FC_GRINEER", "FC_CORPUS", "FC_INFESTATION"]) satisfies TFaction[]
+    ).filter(faction => Object.values(regions).some(node => node.faction == faction && node.enemySpec));
     const faction: TFaction = rng.randomInt(0, 9) < 7 ? (nodeData.faction as TFaction) : rng.randomElement(factions)!;
 
     const missionTypes: TMissionType[] = [
