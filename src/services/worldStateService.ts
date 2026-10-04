@@ -2457,6 +2457,26 @@ export const getWorldState = (
             Transmission: "/Lotus/Sounds/Dialog/PlainsMeteorLeadUp/LeadUp/DLeadUp0021Lotus",
             InstructionalItem: "/Lotus/Types/StoreItems/Packages/PlagueStarEventStoreItem"
         });
+        worldState.NodeOverrides.push({
+            _id: toOid2("654a5058c757487cdb11824f", buildVersion),
+            Activation: {
+                $date: {
+                    $numberLong: config.worldState?.plagueStarOverride ? "1699372800000" : plagueStarStart.toString()
+                }
+            },
+            Expiry: {
+                $date: {
+                    $numberLong: config.worldState?.plagueStarOverride ? "2000000000000" : plagueStarEnd.toString()
+                }
+            },
+            Node: "SolNode228",
+            ExtraEnemySpec: "/Lotus/Types/Game/EnemySpecs/InfestedSquadA",
+            CustomNpcEncounters: [
+                "/Lotus/Types/Gameplay/Eidolon/Encounters/InfestedEncounters/InfestedPatrol",
+                "/Lotus/Types/Gameplay/Eidolon/Encounters/InfestedEncounters/InfestedDropPods",
+                "/Lotus/Types/Gameplay/Eidolon/Encounters/InfestedEncounters/InfestedDropPodsReinforcements"
+            ]
+        });
     }
 
     const firstAugustWeekday = new Date(Date.UTC(date.getUTCFullYear(), 7, 1)).getUTCDay();

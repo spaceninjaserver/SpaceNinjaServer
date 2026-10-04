@@ -369,6 +369,7 @@ interface INodeOverride {
     LevelOverride?: string;
     Faction?: string;
     CustomNpcEncounters?: string[];
+    ExtraEnemySpec?: string;
 }
 
 export interface ISortie {
