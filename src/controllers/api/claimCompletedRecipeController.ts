@@ -194,7 +194,8 @@ const claimCompletedRecipe = async (
             inventory,
             "/Lotus/Types/Game/KubrowPet/ImprintedTraitPrint",
             pet.Details,
-            resp.InventoryChanges
+            resp.InventoryChanges,
+            pet.ModularParts
         );
     } else if (recipe.secretIngredientAction != "SIA_UNBRAND") {
         if (recipe.resultType == "/Lotus/Powersuits/Excalibur/ExcaliburUmbra") {

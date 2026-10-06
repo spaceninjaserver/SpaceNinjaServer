@@ -24,6 +24,7 @@ import type {
     INemesisPetTargetFingerprint,
     IDialogueDatabase,
     IKubrowPetPrintClient,
+    IKubrowPetPrintDatabase,
     IWeeklyMissionChallengeInfo,
     ITauPrequelQuestCustomData,
     ICollectibleEntry,
@@ -1625,13 +1626,45 @@ const createRandomTraits = (kubrowPetName: string, traitsPool: TTraitsPool): ITr
     };
 };
 
+const traitKeys: (keyof ITraits)[] = [
+    "BaseColor",
+    "SecondaryColor",
+    "TertiaryColor",
+    "AccentColor",
+    "EyeColor",
+    "FurPattern",
+    "Personality",
+    "BodyType",
+    "Head",
+    "Tail"
+];
+
+export const inheritTraitsFromPrints = (
+    prints: IKubrowPetPrintDatabase[]
+): Pick<IKubrowGenetics, "DominantTraits" | "RecessiveTraits"> & { ModularParts?: string[] } => {
+    // Each trait has a 50% weighting per imprint.
+    const dominantTraits = {} as ITraits;
+    const recessiveTraits: Partial<ITraits> = {};
+    for (const key of traitKeys) {
+        dominantTraits[key] = getRandomElement(prints)!.DominantTraits[key]!;
+        recessiveTraits[key] = getRandomElement(prints)!.RecessiveTraits[key];
+    }
+    // Infested pets store their antigen & mutagen in ModularParts, so those are inherited as well.
+    let modularParts: string[] | undefined;
+    if (prints.every(print => print.InheritedModularParts?.length == 2)) {
+        modularParts = [0, 1].map(i => getRandomElement(prints)!.InheritedModularParts![i]);
+    }
+    return { DominantTraits: dominantTraits, RecessiveTraits: recessiveTraits, ModularParts: modularParts };
+};
+
 export const addKubrowPet = (
     inventory: TInventoryDatabaseDocument,
     kubrowPetName: string,
     details: IKubrowPetDetailsDatabase | undefined,
     premiumPurchase: boolean,
     inventoryChanges: IInventoryChanges,
-    buildLabel: string
+    buildLabel: string,
+    inheritedTraits?: Pick<IKubrowGenetics, "DominantTraits" | "RecessiveTraits"> & { ModularParts?: string[] }
 ): IInventoryChanges => {
     const isPreU28 = version_compare(buildLabel, gameToBuildVersion["28.0.0"]) < 0;
     const isPreU26 = version_compare(buildLabel, gameToBuildVersion["26.0.0"]) < 0;
@@ -1714,8 +1747,8 @@ export const addKubrowPet = (
             HatchDate: premiumPurchase ? new Date() : new Date(Date.now() + 10 * unixTimesInMs.hour), // On live, this seems to be somewhat randomised so that the pet hatches 9~11 hours after start. TOVERIFY: Although it might differ for the quest recipe?
             IsMale: !!getRandomInt(0, 1),
             Size: getRandomInt(70, 100) / 100,
-            DominantTraits: dominantTraits,
-            RecessiveTraits: recessiveTraits
+            DominantTraits: inheritedTraits?.DominantTraits ?? dominantTraits,
+            RecessiveTraits: inheritedTraits?.RecessiveTraits ?? recessiveTraits
         };
     }
 
@@ -1724,6 +1757,7 @@ export const addKubrowPet = (
             ItemType: kubrowPetName,
             Configs: configs,
             XP: 0,
+            ModularParts: inheritedTraits?.ModularParts,
             Details: details,
             IsNew: inventory.KubrowPets.find(x => x.ItemType == kubrowPetName) ? undefined : true
         }) - 1;
@@ -1737,7 +1771,8 @@ export const addKubrowPetPrint = (
     inventory: TInventoryDatabaseDocument,
     typeName: string,
     details: IKubrowGenetics,
-    inventoryChanges: IInventoryChanges
+    inventoryChanges: IInventoryChanges,
+    modularParts?: string[]
 ): void => {
     inventoryChanges.KubrowPetPrints ??= [];
     inventoryChanges.KubrowPetPrints.push(
@@ -1748,7 +1783,8 @@ export const addKubrowPetPrint = (
                 IsMale: details.IsMale,
                 Size: details.Size,
                 DominantTraits: details.DominantTraits,
-                RecessiveTraits: details.RecessiveTraits
+                RecessiveTraits: details.RecessiveTraits,
+                InheritedModularParts: modularParts
             }) - 1
         ].toJSON<IKubrowPetPrintClient>()
     );

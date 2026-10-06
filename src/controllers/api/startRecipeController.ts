@@ -7,6 +7,7 @@ import {
     addItem,
     addKubrowPet,
     addMiscItem,
+    inheritTraitsFromPrints,
     freeUpSlot,
     getInventory,
     updateCurrency
@@ -106,7 +107,27 @@ export const startRecipeController: RequestHandler = async (req, res) => {
         if (infestedSuit) {
             infestedSuit.InfestationDate = new Date();
         }
-        inventoryChanges = addKubrowPet(inventory, resultSuitType, undefined, false, {}, buildLabel);
+        // Imprints may be provided as secret ingredients to determine the traits of the new pet.
+        const prints = startRecipeRequest.Ids.slice(recipe.ingredients.length)
+            .filter(id => id.length == 24)
+            .map(id => inventory.KubrowPetPrints.id(id))
+            .filter(print => print != null);
+        if (prints.length != 0 && prints.length != 2) {
+            throw new Error(`expected 2 imprints but got ${prints.length}`);
+        }
+        const inheritedTraits = prints.length ? inheritTraitsFromPrints(prints) : undefined;
+        for (const print of prints) {
+            inventory.KubrowPetPrints.pull({ _id: print._id });
+        }
+        inventoryChanges = addKubrowPet(
+            inventory,
+            inheritedTraits?.DominantTraits.Personality ?? resultSuitType,
+            undefined,
+            false,
+            {},
+            buildLabel,
+            inheritedTraits
+        );
         pr.KubrowPet = new Types.ObjectId(fromOid(inventoryChanges.KubrowPets![0].ItemId));
     } else if (recipe.secretIngredientAction == "SIA_DISTILL_PRINT") {
         pr.KubrowPet = new Types.ObjectId(startRecipeRequest.Ids[recipe.ingredients.length]);

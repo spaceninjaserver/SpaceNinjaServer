@@ -1082,7 +1082,8 @@ const kubrowPetPrintSchema = new Schema<IKubrowPetPrintDatabase>(
         IsMale: Boolean,
         Size: Number,
         DominantTraits: traitsSchema,
-        RecessiveTraits: traitsSchema
+        RecessiveTraits: traitsSchema,
+        InheritedModularParts: { type: [String], default: undefined }
     },
     { id: false }
 );

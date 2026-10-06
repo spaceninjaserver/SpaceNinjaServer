@@ -905,10 +905,10 @@ export interface IKubrowPetPrintClient {
     DominantTraits: ITraits;
     RecessiveTraits: ITraits;
     ItemId: IOid;
-    InheritedModularParts?: any[];
+    InheritedModularParts?: string[];
 }
 
-export interface IKubrowPetPrintDatabase extends Omit<IKubrowPetPrintClient, "ItemId" | "InheritedModularParts"> {
+export interface IKubrowPetPrintDatabase extends Omit<IKubrowPetPrintClient, "ItemId"> {
     _id: Types.ObjectId;
 }
 
