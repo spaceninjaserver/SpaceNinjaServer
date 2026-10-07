@@ -1959,6 +1959,9 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         NemesisHistory: { type: [nemesisHistorySchema], default: undefined },
         LastNemesisAllySpawnTime: { type: Date, default: undefined },
         NemesisTaxedCredits: Number,
+        NemesisTaxedFusionPoints: Number,
+        NemesisTaxedMiscItems: { type: [typeCountSchema], default: undefined },
+        NemesisTaxedCollectedItems: { type: [typeCountSchema], default: undefined },
 
         //TradingRulesConfirmed,ShowFriendInvNotifications(Option->Social)
         Settings: settingsSchema,
@@ -2084,6 +2087,9 @@ inventorySchema.set("toJSON", {
         delete returnedObject.HarvesterPoints;
         delete returnedObject.DeathSquadPoints;
         delete returnedObject.NemesisTaxedCredits;
+        delete returnedObject.NemesisTaxedFusionPoints;
+        delete returnedObject.NemesisTaxedMiscItems;
+        delete returnedObject.NemesisTaxedCollectedItems;
         delete returnedObject.duviriSeedRefresh;
         delete returnedObject.HybridFusionTreasures;
         delete returnedObject.receivedThousandYearFishDeco;

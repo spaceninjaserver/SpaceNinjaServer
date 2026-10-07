@@ -182,6 +182,9 @@ export interface IInventoryDatabase
     HarvesterPoints?: number;
     DeathSquadPoints?: number;
     NemesisTaxedCredits?: number;
+    NemesisTaxedFusionPoints?: number;
+    NemesisTaxedMiscItems?: ITypeCount[];
+    NemesisTaxedCollectedItems?: ITypeCount[]; // ItemType is a store item here
     duviriSeedRefresh?: Date;
     HybridFusionTreasures: IHybridFusionTreasure[]; // SNS-specific in-database format to support both modern & legacy clients
     receivedThousandYearFishDeco?: true; // placed decos are not in inventory, hence this boolean

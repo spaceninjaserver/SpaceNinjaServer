@@ -12,7 +12,9 @@ import {
     ExportFusionBundles,
     ExportRelics,
     ExportRewards,
-    ExportRecipes
+    ExportRecipes,
+    ExportResources,
+    ExportUpgrades
 } from "warframe-public-export-plus";
 import type { IMissionInventoryUpdateRequest, IRewardInfo } from "../types/requestTypes.ts";
 import { logger } from "../utils/logger.ts";
@@ -35,6 +37,7 @@ import {
     addEmailItem,
     addFocusXpIncreases,
     addFusionPoints,
+    addFusionTreasures,
     addItem,
     addKahlProgress,
     addLevelKeys,
@@ -1038,6 +1041,63 @@ export const addMissionInventoryUpdates = async (
     return ret;
 };
 
+// https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1896: "it might be using an extra factor like * 4 because otherwise the ItemCounts would be chronically too low"
+const rawUpgradeTaxFactor = 4;
+
+const getTaxedItems = (
+    items: ITypeCount[] | undefined,
+    taxRate: number,
+    owned: readonly ITypeCount[]
+): ITypeCount[] => {
+    const taxedItems: ITypeCount[] = [];
+    for (const { ItemType, ItemCount } of items ?? []) {
+        const ownedCount = owned.find(x => x.ItemType == ItemType)?.ItemCount ?? 0;
+        const taxedCount = Math.min(Math.round(ItemCount * taxRate), ownedCount);
+        if (taxedCount > 0) {
+            taxedItems.push({ ItemType, ItemCount: taxedCount });
+        }
+    }
+    return taxedItems;
+};
+
+const getUnsocketedFusionTreasures = (
+    inventory: Pick<TInventoryDatabaseDocument, "HybridFusionTreasures">
+): ITypeCount[] => {
+    const treasures: ITypeCount[] = [];
+    for (const { ItemType, Sockets } of inventory.HybridFusionTreasures) {
+        if (!Sockets) {
+            const existing = treasures.find(x => x.ItemType == ItemType);
+            if (existing) {
+                ++existing.ItemCount;
+            } else {
+                treasures.push({ ItemType, ItemCount: 1 });
+            }
+        }
+    }
+    return treasures;
+};
+
+// Includes vaulted relics, which older clients and the missionsCanGiveAllRelics cheat can still give.
+const isRequiemRelic = (itemType: string): boolean => {
+    return itemType in ExportRelics && ExportRelics[itemType].era == "Requiem";
+};
+
+// The Antivirus mods in the same folder are for the Technocyte Coda and are not Requiem mods.
+const isRequiemMod = (itemType: string): boolean => {
+    return itemType.startsWith("/Lotus/Upgrades/Mods/Immortal/Immortal");
+};
+
+const isTaxableReward = (reward: IMissionReward): boolean => {
+    const itemType = fromStoreItem(reward.StoreItem);
+    return (
+        // Credits and Endo are taxed separately. Requiem relics and Requiem mods are not taxed.
+        !reward.StoreItem.includes("/PickUps/Credits/") &&
+        !(itemType in ExportFusionBundles) &&
+        !isRequiemRelic(itemType) &&
+        !isRequiemMod(itemType)
+    );
+};
+
 interface AddMissionRewardsReturnType {
     MissionRewards: IMissionReward[];
     inventoryChanges?: IInventoryChanges;
@@ -1232,7 +1292,11 @@ export const addMissionRewards = async (
         InvasionProgress: invasionProgress,
         EndOfMatchUpload: endOfMatchUpload,
         GoalTag: goalTag,
-        ChallengeInstanceStates: challengeInstanceStates
+        ChallengeInstanceStates: challengeInstanceStates,
+        FusionBundles: fusionBundles,
+        MiscItems: miscItems,
+        RawUpgrades: rawUpgrades,
+        FusionTreasures: fusionTreasures
     }: IMissionInventoryUpdateRequest,
     firstCompletion: boolean
 ): Promise<AddMissionRewardsReturnType> => {
@@ -1665,7 +1729,36 @@ export const addMissionRewards = async (
         }
     }
 
+    const NemesisTaxInfo: INemesisTaxInfo | undefined = nodeControlledByNemesis
+        ? getNemesisTaxInfo(inventory.Nemesis!)
+        : undefined;
+
+    // The reward stays in MissionRewards, but is stolen instead of being given to the player.
+    const tryStealReward = (reward: IMissionReward): boolean => {
+        if (
+            !NemesisTaxInfo ||
+            NemesisTaxInfo.TaxCreditsOnly ||
+            !isTaxableReward(reward) ||
+            Math.random() >= NemesisTaxInfo.TaxRate
+        ) {
+            return false;
+        }
+        NemesisTaxInfo.TaxedCollectedItems ??= [];
+        NemesisTaxInfo.TaxedCollectedItems.push(reward);
+        inventory.NemesisTaxedCollectedItems ??= [];
+        const existing = inventory.NemesisTaxedCollectedItems.find(x => x.ItemType == reward.StoreItem);
+        if (existing) {
+            existing.ItemCount += reward.ItemCount;
+        } else {
+            inventory.NemesisTaxedCollectedItems.push({ ItemType: reward.StoreItem, ItemCount: reward.ItemCount });
+        }
+        return true;
+    };
+
     for (const reward of MissionRewards) {
+        if (tryStealReward(reward)) {
+            continue;
+        }
         const inventoryChange = await handleStoreItemAcquisition(
             reward.StoreItem,
             inventory,
@@ -1687,9 +1780,6 @@ export const addMissionRewards = async (
         rngRewardCredits: inventoryChanges.RegularCredits ?? 0
     });
 
-    const NemesisTaxInfo: INemesisTaxInfo | undefined = nodeControlledByNemesis
-        ? getNemesisTaxInfo(inventory.Nemesis!)
-        : undefined;
     if (NemesisTaxInfo) {
         const taxedCredits = Math.round(credits.TotalCredits[0] * NemesisTaxInfo.TaxRate);
         NemesisTaxInfo.TaxedCredits = taxedCredits;
@@ -1699,6 +1789,71 @@ export const addMissionRewards = async (
         credits.TotalCredits[1] -= taxedCredits;
         inventory.NemesisTaxedCredits ??= 0;
         inventory.NemesisTaxedCredits += taxedCredits;
+
+        if (!NemesisTaxInfo.TaxCreditsOnly) {
+            const fusionPoints =
+                (fusionBundles ?? []).reduce(
+                    (sum, x) => sum + ExportFusionBundles[x.ItemType].fusionPoints * x.ItemCount,
+                    0
+                ) +
+                MissionRewards.filter(x => fromStoreItem(x.StoreItem) in ExportFusionBundles).reduce(
+                    (sum, x) => sum + ExportFusionBundles[fromStoreItem(x.StoreItem)].fusionPoints * x.ItemCount,
+                    0
+                );
+            const taxedFusionPoints = -addFusionPoints(inventory, -Math.round(fusionPoints * NemesisTaxInfo.TaxRate));
+            if (taxedFusionPoints) {
+                NemesisTaxInfo.TaxedFusionPoints = taxedFusionPoints;
+                inventoryChanges.FusionPoints ??= 0;
+                inventoryChanges.FusionPoints -= taxedFusionPoints;
+                inventory.NemesisTaxedFusionPoints ??= 0;
+                inventory.NemesisTaxedFusionPoints += taxedFusionPoints;
+            }
+
+            const taxedMiscItems = getTaxedItems(
+                // Requiem relics are not taxed.
+                miscItems?.filter(x => !isRequiemRelic(x.ItemType)),
+                NemesisTaxInfo.TaxRate,
+                inventory.MiscItems
+            );
+            const taxedRawUpgrades = getTaxedItems(
+                // Requiem mods are not taxed.
+                rawUpgrades?.filter(x => !isRequiemMod(x.ItemType)),
+                NemesisTaxInfo.TaxRate * rawUpgradeTaxFactor,
+                inventory.RawUpgrades
+            );
+            // Ayatan Treasures are a separate field in the request.
+            const taxedFusionTreasures = getTaxedItems(
+                fusionTreasures?.flatMap(x =>
+                    "ItemId" in x ? [] : [{ ItemType: x.ItemType, ItemCount: x.ItemCount }]
+                ),
+                NemesisTaxInfo.TaxRate,
+                getUnsocketedFusionTreasures(inventory)
+            );
+            if (taxedMiscItems.length || taxedRawUpgrades.length || taxedFusionTreasures.length) {
+                addMiscItems(
+                    inventory,
+                    taxedMiscItems.map(x => ({ ItemType: x.ItemType, ItemCount: -x.ItemCount }))
+                );
+                addMods(
+                    inventory,
+                    taxedRawUpgrades.map(x => ({ ItemType: x.ItemType, ItemCount: -x.ItemCount }))
+                );
+                addFusionTreasures(
+                    inventory,
+                    taxedFusionTreasures.map(x => ({ ItemType: x.ItemType, ItemCount: -x.ItemCount, Sockets: 0 }))
+                );
+                NemesisTaxInfo.TaxedMiscItems = [...taxedMiscItems, ...taxedRawUpgrades, ...taxedFusionTreasures];
+                inventory.NemesisTaxedMiscItems ??= [];
+                for (const taxedItem of NemesisTaxInfo.TaxedMiscItems) {
+                    const existing = inventory.NemesisTaxedMiscItems.find(x => x.ItemType == taxedItem.ItemType);
+                    if (existing) {
+                        existing.ItemCount += taxedItem.ItemCount;
+                    } else {
+                        inventory.NemesisTaxedMiscItems.push(taxedItem);
+                    }
+                }
+            }
+        }
     }
 
     const RecoveredItemInfo: IRecoveredItemInfo | undefined = NemesisKillConvert
@@ -1716,13 +1871,64 @@ export const addMissionRewards = async (
             credits.CreditsBonus[1] += inventory.NemesisTaxedCredits;
             inventory.NemesisTaxedCredits = undefined;
         }
+        if (inventory.NemesisTaxedFusionPoints) {
+            RecoveredItemInfo.RecoveredFusionPoints = addFusionPoints(inventory, inventory.NemesisTaxedFusionPoints);
+            inventoryChanges.FusionPoints ??= 0;
+            inventoryChanges.FusionPoints += RecoveredItemInfo.RecoveredFusionPoints;
+            inventory.NemesisTaxedFusionPoints = undefined;
+        }
+        if (inventory.NemesisTaxedMiscItems) {
+            for (const { ItemType, ItemCount } of inventory.NemesisTaxedMiscItems) {
+                RecoveredItemInfo.RecoveredMiscItems.push({ ItemType, ItemCount });
+                if (ItemType in ExportUpgrades) {
+                    addMods(inventory, [{ ItemType, ItemCount }]);
+                } else if (
+                    ItemType in ExportResources &&
+                    ExportResources[ItemType].productCategory == "FusionTreasures"
+                ) {
+                    addFusionTreasures(inventory, [{ ItemType, ItemCount, Sockets: 0 }]);
+                } else {
+                    addMiscItems(inventory, [{ ItemType, ItemCount }]);
+                }
+            }
+            inventory.NemesisTaxedMiscItems = undefined;
+        }
+        if (inventory.NemesisTaxedCollectedItems) {
+            for (const { ItemType, ItemCount } of inventory.NemesisTaxedCollectedItems) {
+                const inventoryChange = await handleStoreItemAcquisition(
+                    ItemType,
+                    inventory,
+                    ItemCount,
+                    undefined,
+                    true
+                );
+                combineInventoryChanges(inventoryChanges, inventoryChange.InventoryChanges);
+                // The client does not display RecoveredCollectedItems, so these are reported as RecoveredMiscItems.
+                const recoveredType = fromStoreItem(ItemType);
+                const existing = RecoveredItemInfo.RecoveredMiscItems.find(x => x.ItemType == recoveredType);
+                if (existing) {
+                    existing.ItemCount += ItemCount;
+                } else {
+                    RecoveredItemInfo.RecoveredMiscItems.push({ ItemType: recoveredType, ItemCount });
+                }
+            }
+            inventory.NemesisTaxedCollectedItems = undefined;
+        }
     }
 
     if (voidTearWave && voidTearWave.Participants[0].QualifiesForReward) {
         if (!voidTearWave.Participants[0].HaveRewardResponse && !voidTearWave.Participants[0].Reward) {
             // non-endless fissure in solo mode; giving reward now
             const reward = await crackRelic(inventory, voidTearWave.Participants[0], inventoryChanges);
-            MissionRewards.push({ StoreItem: reward.type, ItemCount: reward.itemCount });
+            const missionReward = { StoreItem: reward.type, ItemCount: reward.itemCount };
+            MissionRewards.push(missionReward);
+            if (tryStealReward(missionReward)) {
+                // The relic's reward was already given, so take it back.
+                combineInventoryChanges(
+                    inventoryChanges,
+                    await addItem(inventory, fromStoreItem(reward.type), -reward.itemCount)
+                );
+            }
         } else if (inventory.MissionRelicRewards) {
             // endless fissure or non-endless fissure in multiplayer
 
@@ -1731,10 +1937,14 @@ export const addMissionRewards = async (
 
             // already gave reward(s) but should still show in EOM screen
             for (const reward of inventory.MissionRelicRewards) {
-                MissionRewards.push({
+                const missionReward = {
                     StoreItem: reward.ItemType,
                     ItemCount: reward.ItemCount
-                });
+                };
+                MissionRewards.push(missionReward);
+                if (tryStealReward(missionReward)) {
+                    await addItem(inventory, fromStoreItem(reward.ItemType), -reward.ItemCount);
+                }
             }
             inventory.MissionRelicRewards = undefined;
         }
