@@ -24,7 +24,7 @@ export interface IUnveiledRivenFingerprint {
     rerolls?: number;
     pol: string;
     buffs: IFingerprintStat[];
-    curses: IFingerprintStat[];
+    curses?: IFingerprintStat[];
     IsSentinel?: true;
 }
 
@@ -90,17 +90,18 @@ export const randomiseRivenStats = (
     // With a locked trait, the number of buffs and curses stays the same
     const hasLock = !!lockedTraits?.length;
     const numBuffs = hasLock ? fingerprint.buffs.length : 2 + Math.trunc(Math.random() * 2); // 2 or 3
-    const numCurses = hasLock ? fingerprint.curses.length : Math.random() < 0.5 ? 1 : 0;
+    const numCurses = hasLock ? (fingerprint.curses?.length ?? 0) : Math.random() < 0.5 ? 1 : 0;
 
     fingerprint.buffs = hasLock ? fingerprint.buffs.filter(x => lockedTraits!.includes(x.Tag)) : [];
-    fingerprint.curses = hasLock ? fingerprint.curses.filter(x => lockedTraits!.includes(x.Tag)) : [];
+    fingerprint.curses = hasLock ? (fingerprint.curses ?? []).filter(x => lockedTraits!.includes(x.Tag)) : [];
 
-    // TODO: add advancedTrait to that
     const isUsed = (tag: string): boolean =>
-        fingerprint.buffs.some(y => y.Tag == tag) || fingerprint.curses.some(y => y.Tag == tag);
+        fingerprint.buffs.some(y => y.Tag == tag) || fingerprint.curses!.some(y => y.Tag == tag);
 
     while (fingerprint.buffs.length < numBuffs) {
-        const entry = getRandomElement(meta.upgradeEntries!.filter(x => x.canBeBuff && !isUsed(x.tag)));
+        const entry = getRandomElement(
+            meta.upgradeEntries!.filter(x => x.canBeBuff && !x.isAdvancedTrait && !isUsed(x.tag))
+        );
         if (!entry) {
             logger.warn(`no unused buff left, riven has ${fingerprint.buffs.length}/${numBuffs}`);
             break;
@@ -109,7 +110,9 @@ export const randomiseRivenStats = (
     }
 
     while (fingerprint.curses.length < numCurses) {
-        const entry = getRandomElement(meta.upgradeEntries!.filter(x => x.canBeCurse && !isUsed(x.tag)));
+        const entry = getRandomElement(
+            meta.upgradeEntries!.filter(x => x.canBeCurse && !x.isAdvancedTrait && !isUsed(x.tag))
+        );
         if (!entry) {
             logger.warn(`no unused curse left, riven has ${fingerprint.curses.length}/${numCurses}`);
             break;

@@ -20,17 +20,20 @@ export const rerollRandomModController: RequestHandler = async (req, res) => {
         let totalKuvaCost = 0;
         request.ItemIds.forEach(itemId => {
             const upgrade = inventory.Upgrades.id(itemId)!;
+            const meta = ExportUpgrades[upgrade.ItemType];
             const fingerprint = JSON.parse(upgrade.UpgradeFingerprint!) as RivenFingerprint;
             if ("challenge" in fingerprint) {
                 upgrade.UpgradeFingerprint = JSON.stringify(
-                    createUnveiledRivenFingerprint(ExportUpgrades[upgrade.ItemType], fingerprint.IsSentinel)
+                    createUnveiledRivenFingerprint(meta, fingerprint.IsSentinel)
                 );
             } else {
                 fingerprint.rerolls ??= 0;
                 if (!inventory.dontSubtractKuvaForRivens) {
                     let kuvaCost = fingerprint.rerolls < rerollCosts.length ? rerollCosts[fingerprint.rerolls] : 3500;
-                    // TODO: filter out advancedTrait from that
-                    if (request.LockedTraits?.length) kuvaCost *= 2;
+                    const lockedTraits = request.LockedTraits?.filter(
+                        tag => !meta.upgradeEntries!.find(x => x.tag == tag)?.isAdvancedTrait
+                    );
+                    if (lockedTraits?.length) kuvaCost *= 2;
                     totalKuvaCost += kuvaCost;
                     addMiscItems(inventory, [
                         {
@@ -43,7 +46,7 @@ export const rerollRandomModController: RequestHandler = async (req, res) => {
                 fingerprint.rerolls++;
                 upgrade.UpgradeFingerprint = JSON.stringify(fingerprint);
 
-                randomiseRivenStats(ExportUpgrades[upgrade.ItemType], fingerprint, request.LockedTraits);
+                randomiseRivenStats(meta, fingerprint, request.LockedTraits);
                 upgrade.PendingRerollFingerprint = JSON.stringify(fingerprint);
             }
 

@@ -109,6 +109,7 @@ import { logoutController } from "../controllers/api/logoutController.ts";
 import { marketRecommendationsController } from "../controllers/api/marketRecommendationsController.ts";
 import { marketSearchRecommendationsController } from "../controllers/api/marketSearchRecommendationsController.ts";
 import { maturePetController } from "../controllers/api/maturePetController.ts";
+import { mergeRandomUpgradesController } from "../controllers/api/mergeRandomUpgradesController.ts";
 import { missionInventoryUpdateController } from "../controllers/api/missionInventoryUpdateController.ts";
 import { modularWeaponCraftingController } from "../controllers/api/modularWeaponCraftingController.ts";
 import { modularWeaponSaleController } from "../controllers/api/modularWeaponSaleController.ts";
@@ -363,6 +364,7 @@ apiRouter.post("/login.php", loginController);
 apiRouter.post("/loginRewardsSelection.php", loginRewardsSelectionController);
 apiRouter.post("/logout.php", logoutController); // from ~U16, don't know when they changed it to GET
 apiRouter.post("/maturePet.php", maturePetController);
+apiRouter.post("/mergeRandomUpgrades.php", mergeRandomUpgradesController);
 apiRouter.post("/missionInventoryUpdate.php", missionInventoryUpdateController);
 apiRouter.post("/modularWeaponCrafting.php", modularWeaponCraftingController);
 apiRouter.post("/modularWeaponSale.php", modularWeaponSaleController);
