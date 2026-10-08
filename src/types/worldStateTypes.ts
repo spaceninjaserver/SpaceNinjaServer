@@ -359,7 +359,7 @@ export interface IFissureDatabase {
     Hard?: boolean;
 }
 
-interface INodeOverride {
+export interface INodeOverride {
     _id: IOidWithLegacySupport;
     Activation?: IMongoDateWithLegacySupport;
     Expiry?: IMongoDateWithLegacySupport;
@@ -369,6 +369,7 @@ interface INodeOverride {
     LevelOverride?: string;
     Faction?: string;
     CustomNpcEncounters?: string[];
+    EnemySpec?: string;
     ExtraEnemySpec?: string;
 }
 

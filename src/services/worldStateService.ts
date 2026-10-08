@@ -36,7 +36,8 @@ import type {
     IFlashSale,
     IAlertMissionInfo,
     IEndlessXpChoice,
-    IGoalV9
+    IGoalV9,
+    INodeOverride
 } from "../types/worldStateTypes.ts";
 import { toMongoDate, toMongoDate2, toOid, toOid2, fromMongoDate } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
@@ -1869,6 +1870,41 @@ const createInvasion = (day: number, idx: number, buildVersion: number): IInvasi
             faction: attacker
         },
         Activation: toMongoDate2(startMs, buildVersion)
+    };
+};
+
+// A faction that wins an invasion as the attacker occupies the node for 24 hours after the invasion ends.
+// The occupiers bring the enemy specs of one of their own nodes with the same mission type, e.g. Corpus occupying SolNode31 (Rescue) were seen using the specs of SolNode126 (Corpus Rescue).
+const createInvasionOccupation = (day: number, idx: number, buildVersion: number): INodeOverride | undefined => {
+    const invasion = createInvasion(day, idx, buildVersion);
+    if (invasion.Count <= 0) {
+        return undefined; // The defenders held the node.
+    }
+    const missionType = ExportRegions[invasion.Node].missionType;
+    const candidates = Object.entries(ExportRegions).filter(
+        ([key, region]) =>
+            key.startsWith("SolNode") &&
+            region.faction == invasion.Faction &&
+            region.missionType == missionType &&
+            region.enemySpec
+    );
+    if (!candidates.length) {
+        return undefined;
+    }
+    const startMs = EPOCH + day * 86400_000;
+    const [, specSource] = new SRng(day * 3 + idx).randomElement(candidates)!;
+    return {
+        _id: toOid2(
+            ((startMs / 1000) & 0xffffffff).toString(16).padStart(8, "0") +
+                "fd148cb9" +
+                (idx & 0xffffffff).toString(16).padStart(8, "0"),
+            buildVersion
+        ),
+        Node: invasion.Node,
+        Faction: invasion.Faction,
+        EnemySpec: specSource.enemySpec,
+        ExtraEnemySpec: specSource.extraEnemySpec,
+        Expiry: toMongoDate2(startMs + 2 * 86400_000, buildVersion)
     };
 };
 
@@ -4172,6 +4208,13 @@ export const getWorldState = (
             worldState.Invasions.push(createInvasion(day - 1, 0, buildVersion));
             worldState.Invasions.push(createInvasion(day - 1, 1, buildVersion));
             worldState.Invasions.push(createInvasion(day - 1, 2, buildVersion));
+
+            for (let idx = 0; idx != 3; ++idx) {
+                const occupation = createInvasionOccupation(day - 1, idx, buildVersion);
+                if (occupation) {
+                    worldState.NodeOverrides.push(occupation);
+                }
+            }
         }
     }
 
