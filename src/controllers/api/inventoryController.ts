@@ -263,10 +263,11 @@ export const inventoryController: RequestHandler = async (request, response) => 
         if (invasion.Completed) {
             let factionSidedWith: string | undefined;
             let battlePay: readonly ICountedItem[] | undefined;
-            if (qi.AttackerScore >= 3) {
+            // Delta is the net progress (the client shows the side it points to). Missions for the other side cancel it out.
+            if (qi.Delta >= 3) {
                 factionSidedWith = invasion.Faction;
                 battlePay = invasion.AttackerReward.countedItems;
-            } else if (qi.DefenderScore >= 3) {
+            } else if (qi.Delta <= -3) {
                 factionSidedWith = invasion.DefenderFaction;
                 battlePay = invasion.DefenderReward.countedItems;
             }

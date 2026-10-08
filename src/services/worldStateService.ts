@@ -6,6 +6,7 @@ import sortieTilesetMissions from "../../static/fixed_responses/worldState/sorti
 import syndicateMissions from "../../static/fixed_responses/worldState/syndicateMissions.json" with { type: "json" };
 import darvoDeals from "../constants/darvoDeals.ts";
 import invasionNodes from "../../static/fixed_responses/worldState/invasionNodes.json" with { type: "json" };
+import infestationOnlyInvasionNodes from "../../static/fixed_responses/worldState/infestationOnlyInvasionNodes.json" with { type: "json" };
 import invasionRewards from "../../static/fixed_responses/worldState/invasionRewards.json" with { type: "json" };
 import pvpChallenges from "../../static/fixed_responses/worldState/pvpChallenges.json" with { type: "json" };
 import { EPOCH, unixTimesInMs } from "../constants/timeConstants.ts";
@@ -1816,20 +1817,22 @@ const getAllVarziaManifests = (buildVersion: number): IPrimeVaultTraderOffer[] =
 const createInvasion = (day: number, idx: number, buildVersion: number): IInvasion => {
     const id = day * 3 + idx;
     const defender = (["FC_GRINEER", "FC_CORPUS", day % 2 ? "FC_GRINEER" : "FC_CORPUS"] as const)[idx];
+    const node = sequentiallyUniqueRandomElement(invasionNodes[defender], id, 5, 690175)!; // Can't repeat the other 2 on this day nor the last 3
     const rng = new SRng(new SRng(id).randomInt(0, 1_000_000));
-    const isInfestationOutbreak = rng.randomInt(0, 1) == 0;
+    // Some nodes (Venus, Mars and the boss nodes) are only invaded by the Infested.
+    const isInfestationOutbreak = rng.randomInt(0, 1) == 0 || infestationOnlyInvasionNodes[defender].includes(node);
     const attacker = isInfestationOutbreak ? "FC_INFESTATION" : defender == "FC_GRINEER" ? "FC_CORPUS" : "FC_GRINEER";
     const startMs = EPOCH + day * 86400_000;
     const oid =
         ((startMs / 1000) & 0xffffffff).toString(16).padStart(8, "0") +
         "fd148cb8" +
         (idx & 0xffffffff).toString(16).padStart(8, "0");
-    const node = sequentiallyUniqueRandomElement(invasionNodes[defender], id, 5, 690175)!; // Can't repeat the other 2 on this day nor the last 3
     const progress = (Date.now() - startMs) / 86400_000;
     const countMultiplier = isInfestationOutbreak || rng.randomInt(0, 1) ? -1 : 1; // if defender is winning, count is negative
     const fiftyPercent = rng.randomInt(1000, 29000); // introduce some 'yitter' for the percentages
     const rewardFloat = rng.randomFloat();
-    const rewardTier = rewardFloat < 0.201 ? "RARE" : rewardFloat < 0.7788 ? "COMMON" : "UNCOMMON";
+    // Chances are from https://wiki.warframe.com/w/Invasion#Chances: ~2% for the rare blueprints, ~76% for the resource, the rest for weapon parts.
+    const rewardTier = rewardFloat < 0.0201 ? "RARE" : rewardFloat < 0.7788 ? "COMMON" : "UNCOMMON";
     const attackerReward: IMissionReward = {};
     const defenderReward: IMissionReward = {};
     if (isInfestationOutbreak) {

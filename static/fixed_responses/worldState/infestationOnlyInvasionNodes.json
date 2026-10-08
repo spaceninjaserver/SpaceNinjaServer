@@ -1,0 +1,37 @@
+{
+  "FC_CORPUS": [
+    "SettlementNode20",
+    "SolNode2",
+    "SolNode22",
+    "SolNode23",
+    "SolNode51",
+    "SolNode53",
+    "SolNode61",
+    "SolNode65",
+    "SolNode66",
+    "SolNode101",
+    "SolNode104",
+    "SolNode107",
+    "SolNode109",
+    "SolNode123",
+    "SolNode127",
+    "SolNode128",
+    "SolNode210"
+  ],
+  "FC_GRINEER": [
+    "SolNode11",
+    "SolNode16",
+    "SolNode30",
+    "SolNode32",
+    "SolNode36",
+    "SolNode41",
+    "SolNode45",
+    "SolNode46",
+    "SolNode58",
+    "SolNode68",
+    "SolNode99",
+    "SolNode106",
+    "SolNode113",
+    "SolNode144"
+  ]
+}
