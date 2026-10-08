@@ -28,6 +28,8 @@ import type {
     IPendingRecipeDatabase,
     IQuestKeyClient,
     IQuestKeyDatabase,
+    IKuvaKeyClient,
+    IKuvaKeyDatabase,
     ISlots,
     IUpgradeClient,
     IUpgradeDatabase,
@@ -142,6 +144,14 @@ export const importUpgrade = (client: IUpgradeClient): IUpgradeDatabase => {
 };
 
 const convertOperatorConfig = (client: IOperatorConfigClient): IOperatorConfigDatabase => {
+    const { ItemId, ...rest } = client;
+    return {
+        ...rest,
+        _id: new Types.ObjectId(fromOid(ItemId))
+    };
+};
+
+const convertKuvaKey = (client: IKuvaKeyClient): IKuvaKeyDatabase => {
     const { ItemId, ...rest } = client;
     return {
         ...rest,
@@ -569,6 +579,15 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
     }
     if (client.CompletedJobChains !== undefined) {
         db.CompletedJobChains = client.CompletedJobChains;
+    }
+    if (client.KuvaKeys !== undefined) {
+        replaceArray<IKuvaKeyDatabase>(db.KuvaKeys, client.KuvaKeys.map(convertKuvaKey));
+    }
+    if (client.KuvaKeysRewards !== undefined) {
+        db.KuvaKeysRewards = {
+            ...client.KuvaKeysRewards,
+            Expiry: fromMongoDate(client.KuvaKeysRewards.Expiry)
+        };
     }
     for (const key of ["LastSortieReward", "LastLiteSortieReward"] as const) {
         if (client[key] !== undefined) {

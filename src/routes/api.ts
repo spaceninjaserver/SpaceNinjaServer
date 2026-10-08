@@ -102,6 +102,7 @@ import { infestedFoundryController } from "../controllers/api/infestedFoundryCon
 import { inventoryController } from "../controllers/api/inventoryController.ts";
 import { inventorySlotsController } from "../controllers/api/inventorySlotsController.ts";
 import { joinSessionGetController, joinSessionPostController } from "../controllers/api/joinSessionController.ts";
+import { kuvaPathController } from "../controllers/api/kuvaPathController.ts";
 import { loginController } from "../controllers/api/loginController.ts";
 import { loginRewardsController } from "../controllers/api/loginRewardsController.ts";
 import { loginRewardsSelectionController } from "../controllers/api/loginRewardsSelectionController.ts";
@@ -360,6 +361,7 @@ apiRouter.post("/instantCompleteRecipe.php", claimCompletedRecipeController); //
 apiRouter.post("/inventory.php", inventoryController); // used by companion app
 apiRouter.post("/inventorySlots.php", inventorySlotsController);
 apiRouter.post("/joinSession.php", joinSessionPostController);
+apiRouter.post("/kuvaPath.php", kuvaPathController);
 apiRouter.post("/login.php", loginController);
 apiRouter.post("/loginRewardsSelection.php", loginRewardsSelectionController);
 apiRouter.post("/logout.php", logoutController); // from ~U16, don't know when they changed it to GET

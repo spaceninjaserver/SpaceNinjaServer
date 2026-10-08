@@ -4579,7 +4579,8 @@ export const getWorldState = (
         },
         sfn: [550, 553, 554, 555][halfHour % 4],
         tcend26: true,
-        tcaz: 3
+        tcaz: 3,
+        kkEnabled: true
     };
     if (Array.isArray(config.worldState?.circuitGameModes)) {
         tmp.edg = config.worldState.circuitGameModes as TCircuitGameMode[];

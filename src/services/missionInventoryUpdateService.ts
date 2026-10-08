@@ -73,6 +73,7 @@ import { Types } from "mongoose";
 import type { IAffiliationMods, IInventoryChanges } from "../types/purchaseTypes.ts";
 import {
     fromStoreItem,
+    isStoreItem,
     getKey,
     getLevelKeyRewards,
     getMissionDeck,
@@ -1324,6 +1325,22 @@ export const addMissionRewards = async (
     );
     logger.debug("random mission drops:", MissionRewards);
     const inventoryChanges: IInventoryChanges = {};
+
+    if (rewardInfo.ActiveKuvaKey) {
+        const kuvaKeyId = rewardInfo.ActiveKuvaKey.ItemId.$oid;
+        if (inventory.KuvaKeys.id(kuvaKeyId)) {
+            inventory.KuvaKeys.pull({ _id: kuvaKeyId });
+            inventoryChanges.RemovedIdItems ??= [];
+            inventoryChanges.RemovedIdItems.push({ ItemId: { $oid: kuvaKeyId } });
+        }
+        MissionRewards.push({ StoreItem: "/Lotus/StoreItems/Types/Items/MiscItems/RivenSplicer", ItemCount: 1 });
+        if (!inventory.FlavourItems.some(x => x.ItemType == "/Lotus/Upgrades/Skins/Liset/CryobellHoodOrnament")) {
+            MissionRewards.push({
+                StoreItem: "/Lotus/StoreItems/Upgrades/Skins/Liset/CryobellHoodOrnament",
+                ItemCount: 1
+            });
+        }
+    }
     let SyndicateXPItemReward;
     let ConquestCompletedMissionsCount;
 
@@ -2937,10 +2954,36 @@ async function getRandomMissionDrops(
         }
     }
 
+    if (RewardInfo.ActiveKuvaKey) {
+        for (const tag of RewardInfo.CustomEOMTags ?? []) {
+            const [chest, num] = tag.split("_");
+            if (chest != "GoldChest" && chest != "SilverChest") {
+                continue;
+            }
+            const deck = getMissionDeck(
+                chest == "GoldChest"
+                    ? "/Lotus/Types/Game/MissionDecks/KuvaPathRewards/KuvaPathGoldRewards"
+                    : "/Lotus/Types/Game/MissionDecks/KuvaPathRewards/KuvaPathSilverRewards",
+                buildLabel
+            )!;
+            const rng = new SRng(BigInt(RewardInfo.ActiveKuvaKey.Seed));
+            if (chest == "SilverChest") {
+                rng.churnSeed(Number(num) * 6);
+            }
+            for (const tier of deck) {
+                const reward = getRandomRewardByChance(tier, rng)!;
+                drops.push({ StoreItem: reward.type, ItemCount: reward.itemCount });
+            }
+        }
+    }
+
     {
         const buildVersion = buildVersionToInt(buildLabel);
         for (let i = drops.length - 1; i >= 0; i--) {
             const drop = drops[i];
+            if (!isStoreItem(drop.StoreItem)) {
+                continue;
+            }
             const itemType = fromStoreItem(drop.StoreItem);
             if (itemType in ExportRelics) {
                 const oRelic = ExportRelics[itemType];

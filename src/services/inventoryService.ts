@@ -1082,6 +1082,9 @@ export const addItem = async (
                     if (quantity != 1) {
                         throw new Error(`unexpected acquisition quantity of Skins: got ${quantity}, expected 1`);
                     }
+                    if (typeName.endsWith("HoodOrnament")) {
+                        return addCustomization(inventory, typeName);
+                    }
                     return addSkin(inventory, typeName);
                 }
             }

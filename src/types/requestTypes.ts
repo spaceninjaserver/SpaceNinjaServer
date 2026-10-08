@@ -233,6 +233,11 @@ export interface IRewardInfo extends IBountyRewardInfo {
     PVPChallengeInstancesCompleted?: {
         ChallengeInstanceIDs: IOidWithLegacySupport[];
     };
+    ActiveKuvaKey?: {
+        ItemType: string;
+        ItemId: IOid;
+        Seed: bigint;
+    };
 }
 
 export interface IGoalsProgress {
