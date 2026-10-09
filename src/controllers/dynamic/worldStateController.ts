@@ -4,6 +4,7 @@ import {
     populateDailyDeal,
     populateFeaturedGuilds,
     populateFissures,
+    populateInvasions,
     populateAlerts,
     populateIceBladeChampion
 } from "../../services/worldStateService.ts";
@@ -37,6 +38,7 @@ export const worldStateController: RequestHandler = async (req, res) => {
         populateDailyDeal(worldState),
         populateFeaturedGuilds(worldState),
         populateFissures(worldState),
+        populateInvasions(worldState),
         populateAlerts(worldState),
         populateIceBladeChampion(worldState)
     ]);

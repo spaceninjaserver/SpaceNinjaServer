@@ -78,6 +78,7 @@ import type {
     ICrewMemberDatabase,
     ICrewMemberClient,
     IRewardAttenuation,
+    IInvasionCompletion,
     IInvasionProgressDatabase,
     IInvasionProgressClient,
     IAccolades,
@@ -735,7 +736,19 @@ const invasionProgressSchema = new Schema<IInvasionProgressDatabase>(
         invasionId: Schema.Types.ObjectId,
         Delta: Number,
         AttackerScore: Number,
-        DefenderScore: Number
+        DefenderScore: Number,
+        Completion: {
+            type: new Schema<IInvasionCompletion>(
+                {
+                    Faction: String,
+                    DefenderFaction: String,
+                    AttackerReward: [typeCountSchema],
+                    DefenderReward: [typeCountSchema]
+                },
+                { _id: false }
+            ),
+            default: undefined
+        }
     },
     { _id: false }
 );
@@ -747,6 +760,7 @@ invasionProgressSchema.set("toJSON", {
 
         client._id = toOid(db.invasionId);
         delete obj.invasionId;
+        delete obj.Completion;
         delete obj.__v;
     }
 });

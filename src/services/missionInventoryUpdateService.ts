@@ -99,6 +99,7 @@ import {
 } from "../helpers/nemesisHelpers.ts";
 import { Loadout } from "../models/inventoryModels/loadoutModel.ts";
 import {
+    addInvasionProgress,
     getInvasionByOid,
     getLiteSortie,
     getSortie,
@@ -811,6 +812,7 @@ export const addMissionInventoryUpdates = async (
             }
             case "InvasionProgress": {
                 for (const clientProgress of value) {
+                    const completion = await addInvasionProgress(fromOid(clientProgress._id), clientProgress.Delta);
                     if (inventory.finishInvasionsInOneMission) {
                         clientProgress.Delta *= 3;
                         clientProgress.AttackerScore *= 3;
@@ -823,17 +825,21 @@ export const addMissionInventoryUpdates = async (
                         dbProgress.Delta += clientProgress.Delta;
                         dbProgress.AttackerScore += clientProgress.AttackerScore;
                         dbProgress.DefenderScore += clientProgress.DefenderScore;
+                        dbProgress.Completion = completion;
                     } else {
                         inventory.QualifyingInvasions.push({
                             invasionId: new Types.ObjectId(fromOid(clientProgress._id)),
                             Delta: clientProgress.Delta,
                             AttackerScore: clientProgress.AttackerScore,
-                            DefenderScore: clientProgress.DefenderScore
+                            DefenderScore: clientProgress.DefenderScore,
+                            Completion: completion
                         });
                     }
-                    const invasion = getInvasionByOid(fromOid(clientProgress._id))!;
-                    const factionSidedWith = clientProgress.AttackerScore ? invasion.Faction : invasion.DefenderFaction;
-                    if (invasion.Faction != "FC_INFESTATION") {
+                    const invasion = await getInvasionByOid(fromOid(clientProgress._id));
+                    if (invasion && invasion.Faction != "FC_INFESTATION") {
+                        const factionSidedWith = clientProgress.AttackerScore
+                            ? invasion.Faction
+                            : invasion.DefenderFaction;
                         const info = factionSidedWith != "FC_GRINEER" ? grineerDeathSquadInfo : corpusDeathSquadInfo;
                         if (!inventory[info.booleanKey] && !inventory.noDeathMarks) {
                             const numberKey = info.numberKey;
@@ -2352,7 +2358,7 @@ async function getRandomMissionDrops(
         } else if (
             RewardInfo.invasionId &&
             region.missionType == "MT_ASSASSINATION" &&
-            getInvasionByOid(RewardInfo.invasionId)?.Faction == "FC_INFESTATION"
+            (await getInvasionByOid(RewardInfo.invasionId))?.Faction == "FC_INFESTATION"
         ) {
             // Invasion assassination has Phorid has the boss who should drop Nyx parts
             rewardManifests = ["/Lotus/Types/Game/MissionDecks/BossMissionRewards/NyxRewards"];

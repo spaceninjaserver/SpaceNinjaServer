@@ -1427,6 +1427,57 @@
                                 </div>
                                 <div class="form-group mt-2 d-flex gap-2">
                                     <div class="flex-fill">
+                                        <form class="form-group" onsubmit="doSaveConfigInt('worldState.invasionGrineerCount'); return false;">
+                                            <label class="form-label" for="worldState.invasionGrineerCount" data-loc="worldState_invasionGrineerCount"></label>
+                                            <div class="input-group">
+                                                <input id="worldState.invasionGrineerCount" class="form-control" type="number" min="0" max="5" data-default="1" />
+                                                <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <form class="form-group" onsubmit="doSaveConfigInt('worldState.invasionCorpusCount'); return false;">
+                                            <label class="form-label" for="worldState.invasionCorpusCount" data-loc="worldState_invasionCorpusCount"></label>
+                                            <div class="input-group">
+                                                <input id="worldState.invasionCorpusCount" class="form-control" type="number" min="0" max="5" data-default="1" />
+                                                <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <form class="form-group" onsubmit="doSaveConfigInt('worldState.invasionOutbreakCount'); return false;">
+                                            <label class="form-label" for="worldState.invasionOutbreakCount" data-loc="worldState_invasionOutbreakCount"></label>
+                                            <div class="input-group">
+                                                <input id="worldState.invasionOutbreakCount" class="form-control" type="number" min="0" max="5" data-default="2" />
+                                                <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-2 d-flex gap-2">
+                                    <div class="flex-fill">
+                                        <form class="form-group" onsubmit="doSaveConfigInt('worldState.invasionGoal'); return false;">
+                                            <label class="form-label" for="worldState.invasionGoal" data-loc="worldState_invasionGoal"></label>
+                                            <div class="input-group">
+                                                <input id="worldState.invasionGoal" class="form-control" type="number" min="1" max="100000" data-default="30000" />
+                                                <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-2 d-flex gap-2">
+                                    <div class="flex-fill">
+                                        <form class="form-group" onsubmit="doSaveConfigInt('worldState.invasionSimulatedHours'); return false;">
+                                            <label class="form-label" for="worldState.invasionSimulatedHours" data-loc="worldState_invasionSimulatedHours"></label>
+                                            <div class="input-group">
+                                                <input id="worldState.invasionSimulatedHours" class="form-control" type="number" min="0" max="720" data-default="36" />
+                                                <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-2 d-flex gap-2">
+                                    <div class="flex-fill">
                                         <label class="form-label" for="worldState.nightwaveOverride" data-loc="worldState_nightwaveOverride"></label>
                                         <select class="form-control" id="worldState.nightwaveOverride" data-default=""></select>
                                     </div>

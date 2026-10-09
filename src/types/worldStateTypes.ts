@@ -1,5 +1,11 @@
 import type { IMissionReward, TFaction, TMissionType } from "warframe-public-export-plus";
-import type { IMongoDateWithLegacySupport, IMongoDate, IOid, IOidWithLegacySupport } from "./commonTypes.ts";
+import type {
+    IMongoDateWithLegacySupport,
+    IMongoDate,
+    IOid,
+    IOidWithLegacySupport,
+    ITypeCount
+} from "./commonTypes.ts";
 import type { Types } from "mongoose";
 
 export interface IWorldState {
@@ -333,6 +339,25 @@ export interface IInvasion {
     DefenderReward: IMissionReward;
     DefenderMissionInfo: IInvasionMissionInfo;
     Activation: IMongoDateWithLegacySupport;
+}
+
+export interface IInvasionDatabase {
+    _id: Types.ObjectId;
+    Slot: number;
+    Node: string;
+    Faction: string;
+    DefenderFaction: string;
+    Count: number; // Positive when the attackers lead. Not an integer when simulated players are involved.
+    Goal: number;
+    GoalScale?: number; // Goal relative to the configured one
+    AttackerReward: ITypeCount[];
+    DefenderReward: ITypeCount[];
+    AttackerSeed: number;
+    DefenderSeed: number;
+    SimulatedSide: number; // 1 or -1, the side simulated players fight for
+    LastSimulated: Date;
+    Activation: Date;
+    CompletedAt?: Date;
 }
 
 interface IInvasionMissionInfo {

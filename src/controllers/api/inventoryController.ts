@@ -254,24 +254,36 @@ export const inventoryController: RequestHandler = async (request, response) => 
 
     for (let i = 0; i != inventory.QualifyingInvasions.length; ) {
         const qi = inventory.QualifyingInvasions[i];
-        const invasion = getInvasionByOid(qi.invasionId.toString());
-        if (!invasion) {
-            logger.debug(`removing QualifyingInvasions entry for unknown invasion: ${qi.invasionId.toString()}`);
-            inventory.QualifyingInvasions.splice(i, 1);
-            continue;
+        let completion = qi.Completion;
+        if (!completion) {
+            // An invasion from before completions were stored.
+            const invasion = await getInvasionByOid(qi.invasionId.toString());
+            if (!invasion) {
+                logger.debug(`removing QualifyingInvasions entry for unknown invasion: ${qi.invasionId.toString()}`);
+                inventory.QualifyingInvasions.splice(i, 1);
+                continue;
+            }
+            if (invasion.Completed) {
+                completion = {
+                    Faction: invasion.Faction,
+                    DefenderFaction: invasion.DefenderFaction,
+                    AttackerReward: [...(invasion.AttackerReward.countedItems ?? [])],
+                    DefenderReward: [...(invasion.DefenderReward.countedItems ?? [])]
+                };
+            }
         }
-        if (invasion.Completed) {
+        if (completion) {
             let factionSidedWith: string | undefined;
             let battlePay: readonly ICountedItem[] | undefined;
             // Delta is the net progress (the client shows the side it points to). Missions for the other side cancel it out.
             if (qi.Delta >= 3) {
-                factionSidedWith = invasion.Faction;
-                battlePay = invasion.AttackerReward.countedItems;
+                factionSidedWith = completion.Faction;
+                battlePay = completion.AttackerReward;
             } else if (qi.Delta <= -3) {
-                factionSidedWith = invasion.DefenderFaction;
-                battlePay = invasion.DefenderReward.countedItems;
+                factionSidedWith = completion.DefenderFaction;
+                battlePay = completion.DefenderReward;
             }
-            if (factionSidedWith && battlePay) {
+            if (factionSidedWith && battlePay?.length) {
                 logger.debug(`invasion pay from ${factionSidedWith}`, { battlePay });
                 // Decoupling rewards from the inbox message because it may delete itself without being read
                 for (const item of battlePay) {

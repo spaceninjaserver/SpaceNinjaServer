@@ -2,7 +2,8 @@ import type {
     IAlertDatabase,
     IDailyDealDatabase,
     IFissureDatabase,
-    IIceBladeChampionDatabase
+    IIceBladeChampionDatabase,
+    IInvasionDatabase
 } from "../types/worldStateTypes.ts";
 import { model, Schema } from "mongoose";
 import { typeCountSchema } from "./inventoryModels/inventoryModel.ts";
@@ -59,6 +60,29 @@ const alertSchema = new Schema<IAlertDatabase>({
 });
 
 alertSchema.index({ Expiry: 1 }, { expireAfterSeconds: 0 });
+
+const invasionSchema = new Schema<IInvasionDatabase>({
+    Slot: { type: Number, required: true },
+    Node: { type: String, required: true },
+    Faction: { type: String, required: true },
+    DefenderFaction: { type: String, required: true },
+    Count: { type: Number, required: true },
+    Goal: { type: Number, required: true },
+    GoalScale: Number,
+    AttackerReward: [typeCountSchema],
+    DefenderReward: [typeCountSchema],
+    AttackerSeed: { type: Number, required: true },
+    DefenderSeed: { type: Number, required: true },
+    SimulatedSide: { type: Number, required: true },
+    LastSimulated: { type: Date, required: true },
+    Activation: { type: Date, required: true },
+    CompletedAt: Date
+});
+
+// Completed invasions are only needed for a few days, e.g. while the winner occupies the node.
+invasionSchema.index({ CompletedAt: 1 }, { expireAfterSeconds: 7 * 86400 });
+
+export const Invasion = model<IInvasionDatabase>("Invasion", invasionSchema);
 
 const iceBladeChampionSchema = new Schema<IIceBladeChampionDatabase>({
     PlayerId: { type: Schema.Types.ObjectId, required: true },

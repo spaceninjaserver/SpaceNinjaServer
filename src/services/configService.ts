@@ -130,6 +130,11 @@ export interface IConfig {
         eightClawProgressOverride?: number;
         thermiaFracturesOverride?: boolean;
         thermiaFracturesProgressOverride?: number;
+        invasionGrineerCount?: number;
+        invasionCorpusCount?: number;
+        invasionOutbreakCount?: number;
+        invasionGoal?: number;
+        invasionSimulatedHours?: number;
         eidolonOverride?: string;
         vallisOverride?: string;
         duviriOverride?: string;

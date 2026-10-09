@@ -38,16 +38,21 @@ import type {
     IAlertMissionInfo,
     IEndlessXpChoice,
     IGoalV9,
+    IInvasionDatabase,
     INodeOverride
 } from "../types/worldStateTypes.ts";
 import { toMongoDate, toMongoDate2, toOid, toOid2, fromMongoDate } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
-import { DailyDeal, Fissure, IceBladeChampion } from "../models/worldStateModel.ts";
+import { isValidObjectId } from "mongoose";
+import type { ITypeCount } from "../types/commonTypes.ts";
+import type { IInvasionCompletion } from "../types/inventoryTypes/inventoryTypes.ts";
+import { DailyDeal, Fissure, IceBladeChampion, Invasion } from "../models/worldStateModel.ts";
 import { toStoreItem, fromStoreItem, getRegions } from "./itemDataService.ts";
 import { factionToInt, getConquest, getMissionTypeForLegacyOverride } from "./conquestService.ts";
 import { getDescent } from "./descentService.ts";
 import { catBreadHash } from "../helpers/stringHelpers.ts";
 import { Guild } from "../models/guildModel.ts";
+import { Inventory } from "../models/inventoryModels/inventoryModel.ts";
 import { libraryTargetToAvatar } from "../constants/synthesis.ts";
 import { BL_LATEST, BV_LATEST } from "../constants/gameVersions.ts";
 import { isRegionAvailableIn } from "./itemDataService.ts";
@@ -1814,7 +1819,8 @@ const getAllVarziaManifests = (buildVersion: number): IPrimeVaultTraderOffer[] =
     return [...dualPacks, ...vanguardRelics, ...singlePacks, ...items, ...bobbleHeads, ...relics];
 };
 
-const createInvasion = (day: number, idx: number, buildVersion: number): IInvasion => {
+// Invasions used to be generated from the day. This is only kept so progress made in those still pays out.
+const createLegacyInvasion = (day: number, idx: number, buildVersion: number): IInvasion => {
     const id = day * 3 + idx;
     const defender = (["FC_GRINEER", "FC_CORPUS", day % 2 ? "FC_GRINEER" : "FC_CORPUS"] as const)[idx];
     const node = sequentiallyUniqueRandomElement(invasionNodes[defender], id, 5, 690175)!; // Can't repeat the other 2 on this day nor the last 3
@@ -1876,12 +1882,82 @@ const createInvasion = (day: number, idx: number, buildVersion: number): IInvasi
     };
 };
 
-// A faction that wins an invasion as the attacker occupies the node for 24 hours after the invasion ends.
+// The numbers below that aren't settings come from three years of daily worldState snapshots (https://github.com/calamity-inc/warframe-worldstate-history).
+
+type TInvasionDefender = "FC_GRINEER" | "FC_CORPUS";
+type TInvasionAttacker = TInvasionDefender | "FC_INFESTATION";
+
+// Each kind of attacker has its own range of slots.
+const invasionSlotsPerAttacker = 10;
+const invasionAttackers: readonly TInvasionAttacker[] = ["FC_GRINEER", "FC_CORPUS", "FC_INFESTATION"];
+
+const isInvasionBossNode = (node: string): boolean => ExportRegions[node].missionType == "MT_ASSASSINATION";
+
+const getInvasionNodeDefender = (node: string): TInvasionDefender | undefined =>
+    invasionNodes.FC_GRINEER.includes(node)
+        ? "FC_GRINEER"
+        : invasionNodes.FC_CORPUS.includes(node)
+          ? "FC_CORPUS"
+          : undefined;
+
+// Some nodes (Venus, Mars and the boss nodes) are only invaded by the Infested.
+const isInfestationOnlyInvasionNode = (node: string): boolean =>
+    infestationOnlyInvasionNodes.FC_GRINEER.includes(node) || infestationOnlyInvasionNodes.FC_CORPUS.includes(node);
+
+const getInvasionGoal = (invasion: { GoalScale?: number }, baseGoal: number): number =>
+    Math.max(1, Math.round(baseGoal * (invasion.GoalScale ?? 1)));
+
+// The winner occupies the node for 12 to 24 hours.
+const maxInvasionOccupationMs = 24 * unixTimesInMs.hour;
+const getInvasionOccupationMs = (invasion: IInvasionDatabase): number =>
+    new SRng(parseInt(invasion._id.toString().substring(16), 16)).randomInt(12 * 60, 24 * 60) * unixTimesInMs.minute;
+
+const invasionToClient = (invasion: IInvasionDatabase, buildVersion: number): IInvasion => {
+    const isInfestationOutbreak = invasion.Faction == "FC_INFESTATION";
+    // The client draws an outbreak as 100% + Count/Goal, so its Count can never be positive.
+    const count = Math.max(
+        Math.min(Math.trunc(invasion.Count), isInfestationOutbreak ? 0 : invasion.Goal),
+        -invasion.Goal
+    );
+    return {
+        _id: toOid2(invasion._id, buildVersion),
+        Faction: invasion.Faction,
+        DefenderFaction: invasion.DefenderFaction,
+        Node: invasion.Node,
+        Count: count,
+        Goal: invasion.Goal,
+        LocTag: isInfestationOutbreak
+            ? isInvasionBossNode(invasion.Node)
+                ? "/Lotus/Language/Menu/InfestedInvasionBoss"
+                : "/Lotus/Language/Menu/InfestedInvasionGeneric"
+            : invasion.Faction == "FC_CORPUS"
+              ? "/Lotus/Language/Menu/CorpusInvasionGeneric"
+              : "/Lotus/Language/Menu/GrineerInvasionGeneric",
+        Completed: !!invasion.CompletedAt,
+        ChainID: toOid2(invasion._id, buildVersion),
+        AttackerReward: invasion.AttackerReward.length ? { countedItems: invasion.AttackerReward } : {},
+        AttackerMissionInfo: {
+            seed: invasion.AttackerSeed,
+            faction: invasion.DefenderFaction
+        },
+        DefenderReward: invasion.DefenderReward.length ? { countedItems: invasion.DefenderReward } : {},
+        DefenderMissionInfo: {
+            seed: invasion.DefenderSeed,
+            faction: invasion.Faction
+        },
+        Activation: toMongoDate2(invasion.Activation.getTime(), buildVersion)
+    };
+};
+
+// A faction that wins an invasion as the attacker occupies the node for a while after the invasion ends.
 // The occupiers bring the enemy specs of one of their own nodes with the same mission type, e.g. Corpus occupying SolNode31 (Rescue) were seen using the specs of SolNode126 (Corpus Rescue).
-const createInvasionOccupation = (day: number, idx: number, buildVersion: number): INodeOverride | undefined => {
-    const invasion = createInvasion(day, idx, buildVersion);
-    if (invasion.Count <= 0) {
-        return undefined; // The defenders held the node.
+const createInvasionOccupation = (invasion: IInvasionDatabase, buildVersion: number): INodeOverride | undefined => {
+    if (!invasion.CompletedAt || invasion.Count <= 0 || invasion.Faction == "FC_INFESTATION") {
+        return undefined; // Still going, or the defenders held the node.
+    }
+    const expiry = invasion.CompletedAt.getTime() + getInvasionOccupationMs(invasion);
+    if (expiry <= Date.now()) {
+        return undefined;
     }
     const missionType = ExportRegions[invasion.Node].missionType;
     const candidates = Object.entries(ExportRegions).filter(
@@ -1894,27 +1970,184 @@ const createInvasionOccupation = (day: number, idx: number, buildVersion: number
     if (!candidates.length) {
         return undefined;
     }
-    const startMs = EPOCH + day * 86400_000;
-    const [, specSource] = new SRng(day * 3 + idx).randomElement(candidates)!;
+    const oid = invasion._id.toString();
+    const [, specSource] = new SRng(parseInt(oid.substring(16), 16)).randomElement(candidates)!;
     return {
-        _id: toOid2(
-            ((startMs / 1000) & 0xffffffff).toString(16).padStart(8, "0") +
-                "fd148cb9" +
-                (idx & 0xffffffff).toString(16).padStart(8, "0"),
-            buildVersion
-        ),
+        _id: toOid2(oid.substring(0, 8) + "fd148cb9" + oid.substring(16), buildVersion),
         Node: invasion.Node,
         Faction: invasion.Faction,
         EnemySpec: specSource.enemySpec,
         ExtraEnemySpec: specSource.extraEnemySpec,
-        Expiry: toMongoDate2(startMs + 2 * 86400_000, buildVersion)
+        Expiry: toMongoDate2(expiry, buildVersion)
     };
 };
 
-export const getInvasionByOid = (oid: string): IInvasion | undefined => {
+// What a player's battle pay depends on, so the invasion itself isn't needed for it.
+const getInvasionCompletion = (invasion: IInvasionDatabase): IInvasionCompletion => ({
+    Faction: invasion.Faction,
+    DefenderFaction: invasion.DefenderFaction,
+    AttackerReward: invasion.AttackerReward,
+    DefenderReward: invasion.DefenderReward
+});
+
+const completeInvasions = async (): Promise<void> => {
+    for (const invasion of await Invasion.find({
+        CompletedAt: { $exists: false },
+        $expr: { $gte: [{ $abs: "$Count" }, "$Goal"] }
+    })) {
+        await Invasion.updateOne({ _id: invasion._id }, { $set: { CompletedAt: new Date() } });
+        // Everyone who took part is told what they need for their battle pay.
+        await Inventory.updateMany(
+            { "QualifyingInvasions.invasionId": invasion._id },
+            { $set: { "QualifyingInvasions.$.Completion": getInvasionCompletion(invasion) } }
+        );
+    }
+};
+
+const startInvasion = async (
+    slot: number,
+    node: string,
+    attacker: TInvasionAttacker,
+    defender: TInvasionDefender,
+    baseGoal: number
+): Promise<void> => {
+    const rewardFloat = Math.random();
+    let attackerReward: ITypeCount[];
+    let defenderReward: ITypeCount;
+    let isRare = false;
+    if (attacker == "FC_INFESTATION") {
+        // About 55% the defender's resource, 18% a Mutagen Mass, 9% two of them and 18% the nav coordinate.
+        attackerReward = [];
+        defenderReward = getRandomElement(
+            rewardFloat < 0.547
+                ? invasionRewards[defender].COMMON
+                : invasionRewards.FC_INFESTATION[
+                      rewardFloat < 0.729 ? "COMMON" : rewardFloat < 0.823 ? "UNCOMMON" : "RARE"
+                  ]
+        )!;
+    } else {
+        // Both sides offer the same tier: about 6% a rare blueprint, 51% the resource and 43% a weapon part.
+        isRare = rewardFloat < 0.061;
+        const rewardTier = isRare ? "RARE" : rewardFloat < 0.575 ? "COMMON" : "UNCOMMON";
+        attackerReward = [getRandomElement(invasionRewards[attacker][rewardTier])!];
+        defenderReward = getRandomElement(invasionRewards[defender][rewardTier])!;
+    }
+    // On live the goal is 30000 on boss nodes and 30000 to 50000 elsewhere, doubled when the reward is a rare blueprint.
+    const goalScale = isInvasionBossNode(node) ? 1 : ((30 + getRandomInt(0, 20)) / 30) * (isRare ? 2 : 1);
+    const now = new Date();
+    await Invasion.insertOne({
+        Slot: slot,
+        Node: node,
+        Faction: attacker,
+        DefenderFaction: defender,
+        Count: 0,
+        Goal: getInvasionGoal({ GoalScale: goalScale }, baseGoal),
+        GoalScale: goalScale,
+        AttackerReward: attackerReward,
+        DefenderReward: [defenderReward],
+        AttackerSeed: getRandomInt(0, 1_000_000),
+        DefenderSeed: getRandomInt(0, 1_000_000),
+        SimulatedSide: attacker == "FC_INFESTATION" || getRandomInt(0, 1) ? -1 : 1, // Nobody fights for the Infested
+        LastSimulated: now,
+        Activation: now
+    });
+};
+
+const updateInvasions = async (): Promise<void> => {
+    const baseGoal = config.worldState?.invasionGoal ?? 30_000;
+    const simulatedHours = config.worldState?.invasionSimulatedHours ?? 36;
+    const now = Date.now();
+
+    for (const invasion of await Invasion.find({ CompletedAt: { $exists: false } })) {
+        // The goal can be changed while invasions are running. They keep their percentage.
+        const goal = getInvasionGoal(invasion, baseGoal);
+        if (goal != invasion.Goal) {
+            await Invasion.updateOne(
+                { _id: invasion._id },
+                [{ $set: { Count: { $multiply: ["$Count", goal / invasion.Goal] }, Goal: goal } }],
+                { updatePipeline: true }
+            );
+        }
+        // On live, an invasion moves with the missions all players complete. Simulated players stand in for them here.
+        // The setting is the time they need for a Grineer or Corpus invasion. On live those take about 36 hours, an infested node about 10 and Phorid about 27.
+        const simulatedMs =
+            simulatedHours *
+            unixTimesInMs.hour *
+            (invasion.Faction != "FC_INFESTATION" ? 1 : isInvasionBossNode(invasion.Node) ? 0.75 : 0.28);
+        const elapsed = now - invasion.LastSimulated.getTime();
+        const missions = simulatedMs ? (goal * elapsed) / simulatedMs : 0;
+        await Invasion.updateOne(
+            { _id: invasion._id },
+            { $inc: { Count: invasion.SimulatedSide * missions }, $set: { LastSimulated: new Date(now) } }
+        );
+    }
+    await completeInvasions();
+
+    const recent = await Invasion.find(
+        {
+            $or: [
+                { CompletedAt: { $exists: false } },
+                { CompletedAt: { $gt: new Date(now - maxInvasionOccupationMs) } }
+            ]
+        },
+        "Slot Node CompletedAt"
+    );
+    // Nodes with an invasion on them, or possibly still occupied after one.
+    const busyNodes = new Set(recent.map(x => x.Node));
+    const activeSlots = new Set(recent.filter(x => !x.CompletedAt).map(x => x.Slot));
+    // On live there's usually one Grineer front, one Corpus front and two outbreaks.
+    const counts = [
+        config.worldState?.invasionGrineerCount ?? 1,
+        config.worldState?.invasionCorpusCount ?? 1,
+        config.worldState?.invasionOutbreakCount ?? 2
+    ];
+    for (let kind = 0; kind != invasionAttackers.length; ++kind) {
+        const attacker = invasionAttackers[kind];
+        for (let i = 0; i < counts[kind]; ++i) {
+            const slot = kind * invasionSlotsPerAttacker + i;
+            if (activeSlots.has(slot)) {
+                continue;
+            }
+            const node = getRandomElement(
+                (attacker == "FC_INFESTATION"
+                    ? [...invasionNodes.FC_GRINEER, ...invasionNodes.FC_CORPUS]
+                    : invasionNodes[attacker == "FC_GRINEER" ? "FC_CORPUS" : "FC_GRINEER"].filter(
+                          x => !isInfestationOnlyInvasionNode(x)
+                      )
+                ).filter(x => !busyNodes.has(x))
+            );
+            if (node) {
+                await startInvasion(slot, node, attacker, getInvasionNodeDefender(node)!, baseGoal);
+                busyNodes.add(node);
+            }
+        }
+    }
+};
+
+// A completed mission moves the invasion by one towards the side it was done for.
+// If the invasion is over (maybe because of this mission), the completion is returned for the progress of the player who reported it, as their inventory is being worked on right now.
+export const addInvasionProgress = async (oid: string, delta: number): Promise<IInvasionCompletion | undefined> => {
+    if (isValidObjectId(oid) && delta) {
+        await Invasion.updateOne({ _id: oid, CompletedAt: { $exists: false } }, { $inc: { Count: Math.sign(delta) } });
+        await completeInvasions();
+        const invasion = await Invasion.findById(oid);
+        if (invasion?.CompletedAt) {
+            return getInvasionCompletion(invasion);
+        }
+    }
+    return undefined;
+};
+
+export const getInvasionByOid = async (oid: string): Promise<IInvasion | undefined> => {
     const arr = oid.split("fd148cb8");
     if (arr.length == 2 && arr[0].length == 8 && arr[1].length == 8) {
-        return createInvasion(idToDay(oid), parseInt(arr[1], 16), BV_LATEST);
+        return createLegacyInvasion(idToDay(oid), parseInt(arr[1], 16), BV_LATEST);
+    }
+    if (isValidObjectId(oid)) {
+        const invasion = await Invasion.findById(oid);
+        if (invasion) {
+            return invasionToClient(invasion, BV_LATEST);
+        }
     }
     return undefined;
 };
@@ -4199,30 +4432,6 @@ export const getWorldState = (
         });
     }
 
-    // Sheev parts were added in 19.6.3, so versions prior to that may take too kindly to seeing invasions.
-    if (buildVersion > gameToBuildVersionInt["19.5.3"]) {
-        // Rough outline of dynamic invasions.
-        // TODO: Invasions chains, e.g. an infestation mission would soon lead to other nodes on that planet also having an infestation invasion.
-        // TODO: Grineer/Corpus to fund their death stars with each invasion win.
-        {
-            worldState.Invasions.push(createInvasion(day, 0, buildVersion));
-            worldState.Invasions.push(createInvasion(day, 1, buildVersion));
-            worldState.Invasions.push(createInvasion(day, 2, buildVersion));
-
-            // Completed invasions stay for up to 24 hours as the winner 'occupies' that node
-            worldState.Invasions.push(createInvasion(day - 1, 0, buildVersion));
-            worldState.Invasions.push(createInvasion(day - 1, 1, buildVersion));
-            worldState.Invasions.push(createInvasion(day - 1, 2, buildVersion));
-
-            for (let idx = 0; idx != 3; ++idx) {
-                const occupation = createInvasionOccupation(day - 1, idx, buildVersion);
-                if (occupation) {
-                    worldState.NodeOverrides.push(occupation);
-                }
-            }
-        }
-    }
-
     // Baro
     // Introdused in U15.6
     if (buildVersion > gameToBuildVersionInt["15.5.0"]) {
@@ -4689,6 +4898,25 @@ const convertGoalsToV9 = (goals: IGoal[]): void => {
             BonusLevelModifier: g.BonusLevelModifier,
             BonusWaveModifier: g.BonusWaveModifier
         } as IGoalV9;
+    }
+};
+
+export const populateInvasions = async (worldState: IWorldState): Promise<void> => {
+    const buildVersion = buildVersionToInt(worldState.BuildLabel);
+    // Sheev parts were added in 19.6.3, so versions prior to that may take too kindly to seeing invasions.
+    if (buildVersion <= gameToBuildVersionInt["19.5.3"]) return;
+    const invasions = await Invasion.find({
+        $or: [
+            { CompletedAt: { $exists: false } },
+            { CompletedAt: { $gt: new Date(Date.now() - maxInvasionOccupationMs) } } // Completed invasions stay while the winner occupies the node
+        ]
+    });
+    for (const invasion of invasions) {
+        worldState.Invasions.push(invasionToClient(invasion, buildVersion));
+        const occupation = createInvasionOccupation(invasion, buildVersion);
+        if (occupation) {
+            worldState.NodeOverrides.push(occupation);
+        }
     }
 };
 
@@ -5867,7 +6095,7 @@ export const populateIceBladeChampion = async (worldState: IWorldState): Promise
 };
 
 export const updateWorldStateCollections = async (): Promise<void> => {
-    await Promise.all([updateFissures(), updateDailyDeal()]);
+    await Promise.all([updateFissures(), updateDailyDeal(), updateInvasions()]);
 };
 
 const pushConclaveDaily = (
