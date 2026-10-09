@@ -19,10 +19,16 @@ export const exportController: RequestHandler = async (req, res) => {
         ]);
         const inventoryResponse = await getInventoryResponse(req, inventory, false, BL_LATEST, false, true);
 
-        res.json({
-            ...inventoryResponse,
-            ...personalRooms.toJSON()
-        });
+        res.type("json").send(
+            JSON.stringify(
+                {
+                    ...inventoryResponse,
+                    ...personalRooms.toJSON()
+                },
+                null,
+                "\t"
+            )
+        );
     } catch (e) {
         console.error(e);
         res.send((e as Error).message);

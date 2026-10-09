@@ -4,6 +4,7 @@ import { getLoadout } from "../../services/loadoutService.ts";
 import { getAccountForRequest, hasPermission } from "../../services/loginService.ts";
 import { getPersonalRooms } from "../../services/personalRoomsService.ts";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
+import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import type { IInventoryClient } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IGetShipResponse } from "../../types/personalRoomsTypes.ts";
 import type { RequestHandler } from "express";
@@ -14,7 +15,7 @@ export const importController: RequestHandler = async (req, res) => {
         res.status(500).send(`Permission denied`).end();
         return;
     }
-    const request = req.body as IImportRequest;
+    const request = getJSONfromString<IImportRequest>(String(req.body));
 
     let anyKnownKey = false;
     try {

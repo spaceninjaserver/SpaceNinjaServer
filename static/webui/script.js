@@ -4658,12 +4658,12 @@ function doPopArchonCrystalUpgrade(type) {
 function doImport() {
     revalidateAuthz().then(() => {
         try {
+            const inventoryText = $("#import-inventory").val();
+            JSON.parse(inventoryText); // validate
             $.post({
                 url: "/custom/import?" + window.authz,
-                contentType: "application/json",
-                data: JSON.stringify({
-                    inventory: JSON.parse($("#import-inventory").val())
-                })
+                contentType: "application/octet-stream",
+                data: '{"inventory":' + inventoryText + "}"
             }).then(function (err) {
                 if (err) {
                     toast(err == "noKnownKey" ? loc("code_nothingToDo") : err);
@@ -4681,9 +4681,10 @@ function doImport() {
 
 function doExport() {
     revalidateAuthz().then(() => {
-        $.get("/custom/export?" + window.authz)
+        // Keep response as text - parsing would lose BigInt precision
+        $.get({ url: "/custom/export?" + window.authz, dataType: "text" })
             .then(function (data) {
-                const blob = new Blob([JSON.stringify(data, null, "\t")], { type: "application/json" });
+                const blob = new Blob([data], { type: "application/json" });
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement("a");
 
