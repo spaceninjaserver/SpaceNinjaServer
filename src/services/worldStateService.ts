@@ -3908,6 +3908,7 @@ export const getWorldState = (
                     UpgradeType: "GAMEPLAY_PICKUP_AMOUNT",
                     OperationType: "MULTIPLY",
                     Value: 2,
+                    ValidType: "/Lotus/Types/Items/MiscItems/ResourceItem",
                     Nodes: ["SolNode129"]
                 });
             }
@@ -4192,6 +4193,7 @@ export const getWorldState = (
             UpgradeType: "GAMEPLAY_PICKUP_AMOUNT",
             OperationType: "MULTIPLY",
             Value: config.worldState.resourceBoostMultiplier,
+            ValidType: "/Lotus/Types/Items/MiscItems/ResourceItem",
             LocalizeTag: "",
             LocalizeDescTag: ""
         });

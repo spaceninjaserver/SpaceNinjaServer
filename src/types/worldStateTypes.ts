@@ -312,6 +312,7 @@ interface IGlobalUpgrade {
     UpgradeType: string;
     OperationType: string;
     Value: number;
+    ValidType?: string;
     LocalizeTag?: string;
     LocalizeDescTag?: string;
     Nodes?: string[];
