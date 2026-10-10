@@ -118,6 +118,8 @@
     "invasionOutbreakCount": 2,
     "invasionGoal": 30000,
     "invasionSimulatedHours": 36,
+    "invasionSpreadHours": 2,
+    "invasionRestHours": null,
     "eidolonOverride": "",
     "vallisOverride": "",
     "duviriOverride": "",

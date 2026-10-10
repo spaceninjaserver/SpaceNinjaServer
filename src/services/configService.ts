@@ -135,6 +135,8 @@ export interface IConfig {
         invasionOutbreakCount?: number;
         invasionGoal?: number;
         invasionSimulatedHours?: number;
+        invasionSpreadHours?: number;
+        invasionRestHours?: number;
         eidolonOverride?: string;
         vallisOverride?: string;
         duviriOverride?: string;

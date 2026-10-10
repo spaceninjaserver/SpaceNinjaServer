@@ -43,7 +43,7 @@ import type {
 } from "../types/worldStateTypes.ts";
 import { toMongoDate, toMongoDate2, toOid, toOid2, fromMongoDate } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
-import { isValidObjectId } from "mongoose";
+import { isValidObjectId, Types } from "mongoose";
 import type { ITypeCount } from "../types/commonTypes.ts";
 import type { IInvasionCompletion } from "../types/inventoryTypes/inventoryTypes.ts";
 import { DailyDeal, Fissure, IceBladeChampion, Invasion } from "../models/worldStateModel.ts";
@@ -1934,7 +1934,7 @@ const invasionToClient = (invasion: IInvasionDatabase, buildVersion: number): II
               ? "/Lotus/Language/Menu/CorpusInvasionGeneric"
               : "/Lotus/Language/Menu/GrineerInvasionGeneric",
         Completed: !!invasion.CompletedAt,
-        ChainID: toOid2(invasion._id, buildVersion),
+        ChainID: toOid2(invasion.ChainID ?? invasion._id, buildVersion),
         AttackerReward: invasion.AttackerReward.length ? { countedItems: invasion.AttackerReward } : {},
         AttackerMissionInfo: {
             seed: invasion.AttackerSeed,
@@ -2009,7 +2009,8 @@ const startInvasion = async (
     node: string,
     attacker: TInvasionAttacker,
     defender: TInvasionDefender,
-    baseGoal: number
+    baseGoal: number,
+    chainId?: Types.ObjectId
 ): Promise<void> => {
     const rewardFloat = Math.random();
     let attackerReward: ITypeCount[];
@@ -2035,7 +2036,11 @@ const startInvasion = async (
     // On live the goal is 30000 on boss nodes and 30000 to 50000 elsewhere, doubled when the reward is a rare blueprint.
     const goalScale = isInvasionBossNode(node) ? 1 : ((30 + getRandomInt(0, 20)) / 30) * (isRare ? 2 : 1);
     const now = new Date();
+    const _id = new Types.ObjectId();
+    // An infested node spreads to the nodes around it after 1 to 3 hours on live, so half to one and a half times the configured 2.
+    const spreadHours = config.worldState?.invasionSpreadHours ?? 2;
     await Invasion.insertOne({
+        _id,
         Slot: slot,
         Node: node,
         Faction: attacker,
@@ -2049,13 +2054,40 @@ const startInvasion = async (
         DefenderSeed: getRandomInt(0, 1_000_000),
         SimulatedSide: attacker == "FC_INFESTATION" || getRandomInt(0, 1) ? -1 : 1, // Nobody fights for the Infested
         LastSimulated: now,
-        Activation: now
+        Activation: now,
+        ChainID: chainId ?? _id,
+        SpreadAt:
+            attacker == "FC_INFESTATION" && spreadHours
+                ? new Date(now.getTime() + spreadHours * (0.5 + Math.random()) * unixTimesInMs.hour)
+                : undefined
     });
 };
+
+// Fronts move between adjacent nodes of the same planet.
+const invasionNeighbours = new Map<string, string[]>();
+{
+    const addNeighbour = (a: string, b: string): void => {
+        const arr = invasionNeighbours.get(a);
+        if (!arr) {
+            invasionNeighbours.set(a, [b]);
+        } else if (!arr.includes(b)) {
+            arr.push(b);
+        }
+    };
+    for (const [key, region] of Object.entries(ExportRegions)) {
+        for (const next of region.nextNodes) {
+            if (next in ExportRegions && ExportRegions[next].systemName == region.systemName) {
+                addNeighbour(key, next);
+                addNeighbour(next, key);
+            }
+        }
+    }
+}
 
 const updateInvasions = async (): Promise<void> => {
     const baseGoal = config.worldState?.invasionGoal ?? 30_000;
     const simulatedHours = config.worldState?.invasionSimulatedHours ?? 36;
+    const restHours = config.worldState?.invasionRestHours;
     const now = Date.now();
 
     for (const invasion of await Invasion.find({ CompletedAt: { $exists: false } })) {
@@ -2083,18 +2115,67 @@ const updateInvasions = async (): Promise<void> => {
     }
     await completeInvasions();
 
-    const recent = await Invasion.find(
-        {
-            $or: [
-                { CompletedAt: { $exists: false } },
-                { CompletedAt: { $gt: new Date(now - maxInvasionOccupationMs) } }
-            ]
-        },
-        "Slot Node CompletedAt"
+    const recent = await Invasion.find({
+        $or: [{ CompletedAt: { $exists: false } }, { CompletedAt: { $gt: new Date(now - 4 * unixTimesInMs.day) } }]
+    });
+    const active = recent.filter(x => !x.CompletedAt);
+    // Nodes with an invasion on them, or still occupied after one.
+    const busyNodes = new Set(
+        recent.filter(x => !x.CompletedAt || x.CompletedAt.getTime() + maxInvasionOccupationMs > now).map(x => x.Node)
     );
-    // Nodes with an invasion on them, or possibly still occupied after one.
-    const busyNodes = new Set(recent.map(x => x.Node));
-    const activeSlots = new Set(recent.filter(x => !x.CompletedAt).map(x => x.Slot));
+    const activeSlots = new Set(active.map(x => x.Slot));
+    const planetOf = (node: string): string => ExportRegions[node].systemName;
+    // An outbreak has its planet to itself. Grineer and Corpus fronts can share one.
+    const outbreakPlanets = new Set(active.filter(x => x.Faction == "FC_INFESTATION").map(x => planetOf(x.Node)));
+    const invadedPlanets = new Set(active.map(x => planetOf(x.Node)));
+
+    // Grineer and Corpus move on to an adjacent node when they win. Otherwise their front ends there.
+    for (const invasion of recent) {
+        if (invasion.CompletedAt && !invasion.FollowedUp) {
+            if (invasion.Count > 0 && invasion.Faction != "FC_INFESTATION" && !activeSlots.has(invasion.Slot)) {
+                const node = getRandomElement(
+                    (invasionNeighbours.get(invasion.Node) ?? []).filter(
+                        x =>
+                            invasionNodes[invasion.DefenderFaction as TInvasionDefender].includes(x) &&
+                            !isInfestationOnlyInvasionNode(x) &&
+                            !busyNodes.has(x)
+                    )
+                );
+                if (node) {
+                    await startInvasion(
+                        invasion.Slot,
+                        node,
+                        invasion.Faction as TInvasionAttacker,
+                        invasion.DefenderFaction as TInvasionDefender,
+                        baseGoal,
+                        invasion.ChainID ?? invasion._id
+                    );
+                    busyNodes.add(node);
+                    activeSlots.add(invasion.Slot);
+                    invadedPlanets.add(planetOf(node));
+                }
+            }
+            await Invasion.updateOne({ _id: invasion._id }, { $set: { FollowedUp: true } });
+        }
+    }
+
+    // An infested node that isn't cleared in time spreads to every adjacent node. Reaching the boss node, where Phorid shows up, doesn't stop that.
+    for (const invasion of active) {
+        if (invasion.SpreadAt && invasion.SpreadAt.getTime() <= now) {
+            const chainId = invasion.ChainID ?? invasion._id;
+            const chainNodes = (await Invasion.find({ ChainID: chainId }, "Node")).map(x => x.Node);
+            for (const node of invasionNeighbours.get(invasion.Node) ?? []) {
+                const defender = getInvasionNodeDefender(node);
+                if (defender && !chainNodes.includes(node) && !busyNodes.has(node)) {
+                    await startInvasion(invasion.Slot, node, "FC_INFESTATION", defender, baseGoal, chainId);
+                    busyNodes.add(node);
+                }
+            }
+            await Invasion.updateOne({ _id: invasion._id }, { $unset: { SpreadAt: 1 } });
+        }
+    }
+
+    // A slot whose front has ended gets a new one after a rest.
     // On live there's usually one Grineer front, one Corpus front and two outbreaks.
     const counts = [
         config.worldState?.invasionGrineerCount ?? 1,
@@ -2108,17 +2189,46 @@ const updateInvasions = async (): Promise<void> => {
             if (activeSlots.has(slot)) {
                 continue;
             }
+            let last: IInvasionDatabase | undefined;
+            for (const invasion of recent) {
+                if (invasion.Slot == slot && (!last || invasion.CompletedAt!.getTime() > last.CompletedAt!.getTime())) {
+                    last = invasion;
+                }
+            }
+            if (last) {
+                // On live a slot stays empty for an hour or two after an outbreak and around half a day after a Grineer or Corpus front.
+                let restMs: number;
+                if (typeof restHours == "number") {
+                    restMs = restHours * unixTimesInMs.hour;
+                } else {
+                    const rng = new SRng(parseInt(last._id.toString().substring(16), 16));
+                    restMs =
+                        (attacker == "FC_INFESTATION" ? rng.randomInt(60, 120) : rng.randomInt(6 * 60, 18 * 60)) *
+                        unixTimesInMs.minute;
+                }
+                if (last.CompletedAt!.getTime() + restMs > now) {
+                    continue;
+                }
+            }
             const node = getRandomElement(
-                (attacker == "FC_INFESTATION"
-                    ? [...invasionNodes.FC_GRINEER, ...invasionNodes.FC_CORPUS]
-                    : invasionNodes[attacker == "FC_GRINEER" ? "FC_CORPUS" : "FC_GRINEER"].filter(
-                          x => !isInfestationOnlyInvasionNode(x)
+                attacker == "FC_INFESTATION"
+                    ? [...invasionNodes.FC_GRINEER, ...invasionNodes.FC_CORPUS].filter(
+                          x => !busyNodes.has(x) && !invadedPlanets.has(planetOf(x)) && !isInvasionBossNode(x) // Phorid only shows up when an outbreak spreads to the boss node
                       )
-                ).filter(x => !busyNodes.has(x))
+                    : invasionNodes[attacker == "FC_GRINEER" ? "FC_CORPUS" : "FC_GRINEER"].filter(
+                          x =>
+                              !busyNodes.has(x) &&
+                              !outbreakPlanets.has(planetOf(x)) &&
+                              !isInfestationOnlyInvasionNode(x)
+                      )
             );
             if (node) {
                 await startInvasion(slot, node, attacker, getInvasionNodeDefender(node)!, baseGoal);
                 busyNodes.add(node);
+                invadedPlanets.add(planetOf(node));
+                if (attacker == "FC_INFESTATION") {
+                    outbreakPlanets.add(planetOf(node));
+                }
             }
         }
     }

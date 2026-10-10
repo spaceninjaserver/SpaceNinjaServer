@@ -327,6 +327,8 @@ dict = {
     worldState_invasionOutbreakCount: `[UNTRANSLATED] Infested Outbreaks`,
     worldState_invasionGoal: `[UNTRANSLATED] Base Invasion Goal (Missions to Win)`,
     worldState_invasionSimulatedHours: `[UNTRANSLATED] Hours for Simulated Players to Finish a Grineer/Corpus Invasion (0 to disable)`,
+    worldState_invasionSpreadHours: `[UNTRANSLATED] Hours Before an Infested Node Spreads (0 to disable)`,
+    worldState_invasionRestHours: `[UNTRANSLATED] Hours of Rest After Invaders Are Stopped (empty for default)`,
     worldState_operationAtramentumProgressOverride: `Прогрес Операції «Атрамент»`,
     worldState_qtccAlerts: `Виклики Quest to Conquer Cancer`,
     worldState_destiny2TributeAlert: `[UNTRANSLATED] Destiny 2 Tribute Alert`,

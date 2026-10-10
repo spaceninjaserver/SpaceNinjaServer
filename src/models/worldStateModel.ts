@@ -76,7 +76,10 @@ const invasionSchema = new Schema<IInvasionDatabase>({
     SimulatedSide: { type: Number, required: true },
     LastSimulated: { type: Date, required: true },
     Activation: { type: Date, required: true },
-    CompletedAt: Date
+    CompletedAt: Date,
+    ChainID: Schema.Types.ObjectId,
+    SpreadAt: Date,
+    FollowedUp: Boolean
 });
 
 // Completed invasions are only needed for a few days, e.g. while the winner occupies the node.

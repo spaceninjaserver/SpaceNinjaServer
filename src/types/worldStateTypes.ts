@@ -358,6 +358,9 @@ export interface IInvasionDatabase {
     LastSimulated: Date;
     Activation: Date;
     CompletedAt?: Date;
+    ChainID?: Types.ObjectId; // Shared by the invasions of a front
+    SpreadAt?: Date; // When an infested node spreads to the nodes around it
+    FollowedUp?: boolean; // Set once a completed invasion has been checked for a follow-up
 }
 
 interface IInvasionMissionInfo {

@@ -1478,6 +1478,28 @@
                                 </div>
                                 <div class="form-group mt-2 d-flex gap-2">
                                     <div class="flex-fill">
+                                        <form class="form-group" onsubmit="doSaveConfigInt('worldState.invasionSpreadHours'); return false;">
+                                            <label class="form-label" for="worldState.invasionSpreadHours" data-loc="worldState_invasionSpreadHours"></label>
+                                            <div class="input-group">
+                                                <input id="worldState.invasionSpreadHours" class="form-control" type="number" min="0" max="72" data-default="2" />
+                                                <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-2 d-flex gap-2">
+                                    <div class="flex-fill">
+                                        <form class="form-group" onsubmit="doSaveConfigInt('worldState.invasionRestHours'); return false;">
+                                            <label class="form-label" for="worldState.invasionRestHours" data-loc="worldState_invasionRestHours"></label>
+                                            <div class="input-group">
+                                                <input id="worldState.invasionRestHours" class="form-control" type="number" min="0" max="72" data-default="" />
+                                                <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-2 d-flex gap-2">
+                                    <div class="flex-fill">
                                         <label class="form-label" for="worldState.nightwaveOverride" data-loc="worldState_nightwaveOverride"></label>
                                         <select class="form-control" id="worldState.nightwaveOverride" data-default=""></select>
                                     </div>

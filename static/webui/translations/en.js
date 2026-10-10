@@ -326,6 +326,8 @@ dict = {
     worldState_invasionOutbreakCount: `Infested Outbreaks`,
     worldState_invasionGoal: `Base Invasion Goal (Missions to Win)`,
     worldState_invasionSimulatedHours: `Hours for Simulated Players to Finish a Grineer/Corpus Invasion (0 to disable)`,
+    worldState_invasionSpreadHours: `Hours Before an Infested Node Spreads (0 to disable)`,
+    worldState_invasionRestHours: `Hours of Rest After Invaders Are Stopped (empty for default)`,
     worldState_operationAtramentumProgressOverride: `Operation: Atramentum Progress`,
     worldState_qtccAlerts: `Quest to Conquer Cancer Alerts`,
     worldState_destiny2TributeAlert: `Destiny 2 Tribute Alert`,
