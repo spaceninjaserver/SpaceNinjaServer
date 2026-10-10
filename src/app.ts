@@ -33,7 +33,7 @@ app.use((req, _res, next) => {
 });
 
 // Use body-parser middleware (exported by express)
-app.use(express.raw());
+app.use(express.raw({ limit: "16mb" }));
 app.use(express.json({ limit: "16mb" }));
 app.use(express.text({ limit: "16mb" }));
 
