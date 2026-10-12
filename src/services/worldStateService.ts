@@ -4536,7 +4536,9 @@ export const getWorldState = (
             UpgradeType: "GAMEPLAY_PICKUP_AMOUNT",
             OperationType: "MULTIPLY",
             Value: config.worldState.resourceBoostMultiplier,
-            ValidType: "/Lotus/Types/Items/MiscItems/ResourceItem",
+            ValidType: config.worldState.resourceBoostAffectsAllPickups
+                ? undefined
+                : "/Lotus/Types/Items/MiscItems/ResourceItem",
             LocalizeTag: "",
             LocalizeDescTag: ""
         });

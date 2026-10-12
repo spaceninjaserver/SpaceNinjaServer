@@ -78,6 +78,7 @@ export interface IConfig {
         creditBoostMultiplier?: number;
         affinityBoostMultiplier?: number;
         resourceBoostMultiplier?: number;
+        resourceBoostAffectsAllPickups?: boolean;
         tennoLiveRelay?: boolean;
         baroTennoConRelay?: boolean;
         baroAlwaysAvailable?: boolean;

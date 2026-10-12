@@ -63,6 +63,7 @@
     "creditBoostMultiplier": 0,
     "affinityBoostMultiplier": 0,
     "resourceBoostMultiplier": 0,
+    "resourceBoostAffectsAllPickups": false,
     "tennoLiveRelay": false,
     "baroTennoConRelay": false,
     "baroAlwaysAvailable": false,
