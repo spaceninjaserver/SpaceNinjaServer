@@ -1668,6 +1668,64 @@ const preU42YinYangRewards: TMissionDeck = [
     ]
 ];
 
+// Not in ExportRewards. From https://wiki.warframe.com/w/Razorback_Armada
+const supplementalMissionDecks: Record<string, TMissionDeck> = {
+    "/Supplementals/BossMissionRewards/RazorbackRewards": [
+        [
+            {
+                type: "/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/GorgonWraithBarrel",
+                probability: 0.1897,
+                itemCount: 1
+            },
+            {
+                type: "/Lotus/StoreItems/Types/Recipes/Weapons/GorgonWraithBlueprint",
+                probability: 0.1897,
+                itemCount: 1
+            },
+            {
+                type: "/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/GorgonWraithReceiver",
+                probability: 0.1897,
+                itemCount: 1
+            },
+            {
+                type: "/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/GorgonWraithStock",
+                probability: 0.1897,
+                itemCount: 1
+            },
+            {
+                type: "/Lotus/StoreItems/Upgrades/Mods/Melee/WeaponEventPunctureDamageMod",
+                probability: 0.0553,
+                itemCount: 1
+            },
+            {
+                type: "/Lotus/StoreItems/Upgrades/Mods/Pistol/WeaponEventPunctureDamageMod",
+                probability: 0.0553,
+                itemCount: 1
+            },
+            {
+                type: "/Lotus/StoreItems/Upgrades/Mods/Shotgun/WeaponEventPunctureDamageMod",
+                probability: 0.0553,
+                itemCount: 1
+            },
+            {
+                type: "/Lotus/StoreItems/Upgrades/Mods/Rifle/WeaponEventPunctureDamageMod",
+                probability: 0.0553,
+                itemCount: 1
+            },
+            {
+                type: "/Lotus/StoreItems/Upgrades/Mods/Archwing/Rifle/ArchwingEventFireStatusRifleMod",
+                probability: 0.0101,
+                itemCount: 1
+            },
+            {
+                type: "/Lotus/StoreItems/Upgrades/Mods/Archwing/Melee/ArchwingEventFireStatusMeleeMod",
+                probability: 0.0101,
+                itemCount: 1
+            }
+        ]
+    ]
+};
+
 // U26 added parazon and its mods, older versions dosen't like when there new things in rewards
 const preU26SpyMissionDecks: Record<string, TMissionDeck> = {
     "/Lotus/Types/Game/MissionDecks/SpyMissionRewards/QueensSpyHighMissionRewards": [
@@ -5368,7 +5426,7 @@ export const getMissionDeck = (uniqueName: string, buildLabel: string): Readonly
     if (version_compare(buildLabel, gameToBuildVersion["26.0.0"]) < 0 && uniqueName in preU26SpyMissionDecks) {
         return preU26SpyMissionDecks[uniqueName];
     }
-    return ExportRewards[uniqueName];
+    return ExportRewards[uniqueName] ?? supplementalMissionDecks[uniqueName];
 };
 
 export const getPowerSuit = (uniqueName: string): IPowersuit | undefined => {

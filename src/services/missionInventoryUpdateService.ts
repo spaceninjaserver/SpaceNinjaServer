@@ -104,6 +104,7 @@ import {
     getLiteSortie,
     getSortie,
     getWorldState,
+    populateConstructionEvents,
     idToBountyCycle,
     idToDay,
     idToWeek,
@@ -2271,6 +2272,25 @@ async function getRandomMissionDrops(
     isSteelPath: boolean
 ): Promise<IMissionReward[]> {
     const drops: IMissionReward[] = [];
+    if (RewardInfo.goalId) {
+        // Fomorian Sabotage and Razorback Armada
+        const worldState = getWorldState(buildLabel);
+        await populateConstructionEvents(worldState);
+        const manifest = worldState.Goals.find(x => fromOid(x._id) == RewardInfo.goalId)?.MissionInfo?.missionReward
+            ?.randomizedItems;
+        const eventDeck =
+            manifest == "fomorianRewardManifest"
+                ? "/Lotus/Types/Game/MissionDecks/BossMissionRewards/FomorianRewards"
+                : manifest == "razorbackRewardManifest"
+                  ? "/Supplementals/BossMissionRewards/RazorbackRewards"
+                  : undefined;
+        if (eventDeck) {
+            const drop = getRandomRewardByChance(getMissionDeck(eventDeck, buildLabel)![0]);
+            if (drop) {
+                drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount });
+            }
+        }
+    }
     if (RewardInfo.sortieTag == "Final" && firstCompletion) {
         const arr = RewardInfo.sortieId!.split("_");
         let sortieId = arr[1];

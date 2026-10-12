@@ -138,6 +138,14 @@ export interface IConfig {
         invasionSimulatedHours?: number;
         invasionSpreadHours?: number;
         invasionRestHours?: number;
+        constructionPctPerDay?: number;
+        constructionPctPerWin?: number;
+        constructionEventMissions?: number;
+        constructionEventDays?: number;
+        relayEventMercury?: string;
+        relayEventEarth?: string;
+        relayEventSaturn?: string;
+        relayEventPluto?: string;
         eidolonOverride?: string;
         vallisOverride?: string;
         duviriOverride?: string;

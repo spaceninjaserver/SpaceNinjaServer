@@ -1,5 +1,7 @@
 import type {
     IAlertDatabase,
+    IConstructionEventDatabase,
+    IConstructionProjectDatabase,
     IDailyDealDatabase,
     IFissureDatabase,
     IIceBladeChampionDatabase,
@@ -86,6 +88,36 @@ const invasionSchema = new Schema<IInvasionDatabase>({
 invasionSchema.index({ CompletedAt: 1 }, { expireAfterSeconds: 7 * 86400 });
 
 export const Invasion = model<IInvasionDatabase>("Invasion", invasionSchema);
+
+const constructionProjectSchema = new Schema<IConstructionProjectDatabase>({
+    Faction: { type: String, required: true },
+    Pct: { type: Number, required: true },
+    LastGrowth: { type: Date, required: true }
+});
+
+constructionProjectSchema.index({ Faction: 1 }, { unique: true });
+
+export const ConstructionProject = model<IConstructionProjectDatabase>(
+    "ConstructionProject",
+    constructionProjectSchema
+);
+
+const constructionEventSchema = new Schema<IConstructionEventDatabase>({
+    Faction: { type: String, required: true },
+    Relay: { type: Number, required: true },
+    Activation: { type: Date, required: true },
+    Expiry: { type: Date, required: true },
+    Health: { type: Number, required: true },
+    LastUpdate: { type: Date, required: true },
+    Automatic: { type: Boolean, required: true },
+    EndedAt: Date,
+    Destroyed: Boolean
+});
+
+// Ended events are kept for a while for the message that follows a destroyed one.
+constructionEventSchema.index({ EndedAt: 1 }, { expireAfterSeconds: 7 * 86400 });
+
+export const ConstructionEvent = model<IConstructionEventDatabase>("ConstructionEvent", constructionEventSchema);
 
 const iceBladeChampionSchema = new Schema<IIceBladeChampionDatabase>({
     PlayerId: { type: Schema.Types.ObjectId, required: true },

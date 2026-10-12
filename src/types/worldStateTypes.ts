@@ -106,8 +106,10 @@ export interface IAlertMissionInfo {
     missionType: TMissionType;
     faction: TFaction;
     difficulty: number;
-    archwingRequired?: true;
-    missionReward?: IMissionReward;
+    archwingRequired?: boolean;
+    requiredItems?: string[];
+    consumeRequiredItems?: boolean;
+    missionReward?: IMissionReward & { randomizedItems?: string };
     levelOverride?: string;
     enemySpec?: string;
     extraEnemySpec?: string;
@@ -119,6 +121,9 @@ export interface IAlertMissionInfo {
     questReq?: string;
     vipAgent?: string;
     leadersAlwaysAllowed?: true;
+    goalTag?: string;
+    levelAuras?: string[];
+    icon?: string;
     seed?: number;
     enemyCacheOverride?: string;
     nightmare?: boolean;
@@ -361,6 +366,26 @@ export interface IInvasionDatabase {
     ChainID?: Types.ObjectId; // Shared by the invasions of a front
     SpreadAt?: Date; // When an infested node spreads to the nodes around it
     FollowedUp?: boolean; // Set once a completed invasion has been checked for a follow-up
+}
+
+export interface IConstructionProjectDatabase {
+    Faction: string;
+    Pct: number;
+    LastGrowth: Date;
+}
+
+// A Fomorian Sabotage or Razorback Armada event
+export interface IConstructionEventDatabase {
+    _id: Types.ObjectId;
+    Faction: string;
+    Relay: number;
+    Activation: Date;
+    Expiry: Date;
+    Health: number;
+    LastUpdate: Date;
+    Automatic: boolean; // Started by a finished construction project rather than a setting
+    EndedAt?: Date;
+    Destroyed?: boolean;
 }
 
 interface IInvasionMissionInfo {

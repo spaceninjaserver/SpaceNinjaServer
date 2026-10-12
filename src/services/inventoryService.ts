@@ -106,7 +106,14 @@ import {
 import type { IMessageCreationTemplate } from "./inboxService.ts";
 import { createMessage } from "./inboxService.ts";
 import { getMaxStanding, getMinStanding } from "../helpers/syndicateStandingHelper.ts";
-import { getCalendarSeason, getNightwaveSyndicateTag, getWorldState, getWorldStateTime } from "./worldStateService.ts";
+import {
+    damageConstructionEvent,
+    getCalendarSeason,
+    getNightwaveSyndicateTag,
+    getWorldState,
+    getWorldStateTime,
+    populateConstructionEvents
+} from "./worldStateService.ts";
 import type { ICalendarSeason } from "../types/worldStateTypes.ts";
 import type { INemesisProfile } from "../helpers/nemesisHelpers.ts";
 import { generateNemesisProfile, getFallbackHelmet } from "../helpers/nemesisHelpers.ts";
@@ -3813,10 +3820,10 @@ export const processGoalProgressUpdates = async (
     currentNode?: string,
     isStealPath: boolean = false
 ): Promise<void> => {
+    const worldState = getWorldState(buildLabel, false, false);
+    await populateConstructionEvents(worldState);
     for (const uploadProgress of goalProgressUpdates) {
-        const goal = getWorldState(buildLabel, false, false).Goals.find(
-            x => fromOid(x._id) == fromOid(uploadProgress._id)
-        );
+        const goal = worldState.Goals.find(x => fromOid(x._id) == fromOid(uploadProgress._id));
         if (goal) {
             const goalId = fromOid(goal._id);
 
@@ -3826,6 +3833,9 @@ export const processGoalProgressUpdates = async (
                     uploadProgress.Best += extraCount;
                     uploadProgress.Count += extraCount;
                 }
+            }
+            if (goal.Fomorian) {
+                await damageConstructionEvent(goalId);
             }
             if (goal.Personal) {
                 inventory.PersonalGoalProgress ??= [];
@@ -4353,6 +4363,24 @@ const goalMessagesByTag: Record<
     string,
     { sndr: string; msg: string; sub: string; icon: string; arg?: string[]; minBuildLabel?: string }[]
 > = {
+    GrineerFomorian: [
+        {
+            sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+            msg: "/Lotus/Language/G1Quests/FomorianRevengeRewardBody",
+            sub: "/Lotus/Language/G1Quests/GenericTacAlertSmallRewardMsgTitle",
+            icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+            arg: ["CREDIT_REWARD"]
+        }
+    ],
+    FriendlyFireTacAlert: [
+        {
+            sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+            msg: "/Lotus/Language/G1Quests/RazorbackArmadaRewardBody",
+            sub: "/Lotus/Language/G1Quests/GenericTacAlertSmallRewardMsgTitle",
+            icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+            arg: ["CREDIT_REWARD"]
+        }
+    ],
     HeatFissure: [
         {
             sndr: "/Lotus/Language/Npcs/Eudico",

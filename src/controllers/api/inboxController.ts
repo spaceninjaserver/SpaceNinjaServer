@@ -32,6 +32,10 @@ import { fromStoreItem, isStoreItem } from "../../services/itemDataService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import { config } from "../../services/configService.ts";
+import {
+    getConstructionEventAnnouncements,
+    getConstructionEventEndMessages
+} from "../../services/worldStateService.ts";
 import { Types } from "mongoose";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
@@ -315,6 +319,36 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
             CrossPlatform: true,
             minBuildVersion: gameToBuildVersionInt["14.0.0"]
         });
+    }
+
+    for (const announcement of await getConstructionEventAnnouncements()) {
+        if (account.LatestEventMessageDate.getTime() < announcement.activation.getTime()) {
+            newEventMessages.push({
+                sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+                sub: announcement.sub,
+                msg: announcement.msg,
+                att: [announcement.att],
+                icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+                startDate: announcement.activation,
+                endDate: announcement.expiry,
+                CrossPlatform: true,
+                date: announcement.activation
+            });
+        }
+    }
+
+    for (const message of await getConstructionEventEndMessages()) {
+        if (account.LatestEventMessageDate.getTime() < message.date.getTime()) {
+            newEventMessages.push({
+                sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+                sub: message.sub,
+                msg: message.msg,
+                icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+                startDate: message.date,
+                CrossPlatform: true,
+                date: message.date
+            });
+        }
     }
 
     if (newEventMessages.length === 0) {

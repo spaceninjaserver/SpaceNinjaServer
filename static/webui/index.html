@@ -1508,6 +1508,86 @@
                                 </div>
                                 <div class="form-group mt-2 d-flex gap-2">
                                     <div class="flex-fill">
+                                        <form class="form-group" onsubmit="doSaveConfigFloat('worldState.constructionPctPerDay'); return false;">
+                                            <label class="form-label" for="worldState.constructionPctPerDay" data-loc="worldState_constructionPctPerDay"></label>
+                                            <div class="input-group">
+                                                <input id="worldState.constructionPctPerDay" class="form-control" type="number" min="0" max="100" step="0.01" data-default="0.75" />
+                                                <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <form class="form-group" onsubmit="doSaveConfigFloat('worldState.constructionPctPerWin'); return false;">
+                                            <label class="form-label" for="worldState.constructionPctPerWin" data-loc="worldState_constructionPctPerWin"></label>
+                                            <div class="input-group">
+                                                <input id="worldState.constructionPctPerWin" class="form-control" type="number" min="0" max="100" step="0.01" data-default="1" />
+                                                <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-2 d-flex gap-2">
+                                    <div class="flex-fill">
+                                        <label class="form-label" for="worldState.relayEventMercury" data-loc="worldState_relayEventMercury"></label>
+                                        <select class="form-control" id="worldState.relayEventMercury" data-default="">
+                                            <option value="" data-loc="worldState_relayEventAutomatic"></option>
+                                            <option value="fomorian" data-loc="worldState_relayEventFomorian"></option>
+                                            <option value="razorback" data-loc="worldState_relayEventRazorback"></option>
+                                            <option value="disabled" data-loc="disabled"></option>
+                                        </select>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <label class="form-label" for="worldState.relayEventEarth" data-loc="worldState_relayEventEarth"></label>
+                                        <select class="form-control" id="worldState.relayEventEarth" data-default="">
+                                            <option value="" data-loc="worldState_relayEventAutomatic"></option>
+                                            <option value="fomorian" data-loc="worldState_relayEventFomorian"></option>
+                                            <option value="razorback" data-loc="worldState_relayEventRazorback"></option>
+                                            <option value="disabled" data-loc="disabled"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-2 d-flex gap-2">
+                                    <div class="flex-fill">
+                                        <label class="form-label" for="worldState.relayEventSaturn" data-loc="worldState_relayEventSaturn"></label>
+                                        <select class="form-control" id="worldState.relayEventSaturn" data-default="">
+                                            <option value="" data-loc="worldState_relayEventAutomatic"></option>
+                                            <option value="fomorian" data-loc="worldState_relayEventFomorian"></option>
+                                            <option value="razorback" data-loc="worldState_relayEventRazorback"></option>
+                                            <option value="disabled" data-loc="disabled"></option>
+                                        </select>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <label class="form-label" for="worldState.relayEventPluto" data-loc="worldState_relayEventPluto"></label>
+                                        <select class="form-control" id="worldState.relayEventPluto" data-default="">
+                                            <option value="" data-loc="worldState_relayEventAutomatic"></option>
+                                            <option value="fomorian" data-loc="worldState_relayEventFomorian"></option>
+                                            <option value="razorback" data-loc="worldState_relayEventRazorback"></option>
+                                            <option value="disabled" data-loc="disabled"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-2 d-flex gap-2">
+                                    <div class="flex-fill">
+                                        <form class="form-group" onsubmit="doSaveConfigInt('worldState.constructionEventMissions'); return false;">
+                                            <label class="form-label" for="worldState.constructionEventMissions" data-loc="worldState_constructionEventMissions"></label>
+                                            <div class="input-group">
+                                                <input id="worldState.constructionEventMissions" class="form-control" type="number" min="1" max="100000" data-default="30" />
+                                                <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <form class="form-group" onsubmit="doSaveConfigInt('worldState.constructionEventDays'); return false;">
+                                            <label class="form-label" for="worldState.constructionEventDays" data-loc="worldState_constructionEventDays"></label>
+                                            <div class="input-group">
+                                                <input id="worldState.constructionEventDays" class="form-control" type="number" min="1" max="30" data-default="4" />
+                                                <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-2 d-flex gap-2">
+                                    <div class="flex-fill">
                                         <label class="form-label" for="worldState.nightwaveOverride" data-loc="worldState_nightwaveOverride"></label>
                                         <select class="form-control" id="worldState.nightwaveOverride" data-default=""></select>
                                     </div>

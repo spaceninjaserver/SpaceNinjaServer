@@ -37,16 +37,25 @@ import type {
     IFlashSale,
     IAlertMissionInfo,
     IEndlessXpChoice,
+    IConstructionEventDatabase,
     IGoalV9,
     IInvasionDatabase,
     INodeOverride
 } from "../types/worldStateTypes.ts";
 import { toMongoDate, toMongoDate2, toOid, toOid2, fromMongoDate } from "../helpers/inventoryHelpers.ts";
 import { logger } from "../utils/logger.ts";
+import { sendWsBroadcastToGame } from "./wsService.ts";
 import { isValidObjectId, Types } from "mongoose";
 import type { ITypeCount } from "../types/commonTypes.ts";
 import type { IInvasionCompletion } from "../types/inventoryTypes/inventoryTypes.ts";
-import { DailyDeal, Fissure, IceBladeChampion, Invasion } from "../models/worldStateModel.ts";
+import {
+    ConstructionEvent,
+    ConstructionProject,
+    DailyDeal,
+    Fissure,
+    IceBladeChampion,
+    Invasion
+} from "../models/worldStateModel.ts";
 import { toStoreItem, fromStoreItem, getRegions } from "./itemDataService.ts";
 import { factionToInt, getConquest, getMissionTypeForLegacyOverride } from "./conquestService.ts";
 import { getDescent } from "./descentService.ts";
@@ -2084,11 +2093,259 @@ const invasionNeighbours = new Map<string, string[]>();
     }
 }
 
+// A finished construction project attacks a relay: Fomorian Sabotage for the Grineer, Razorback Armada for the Corpus. On live these are started by hand and are given 4 to 5 days.
+// Both use the same node at a relay (its number is the planet's index), so a relay can only have one of them at a time.
+const constructionEventRelays = [
+    { Node: "EventNode0", VictimNode: "MercuryHUB" },
+    { Node: "EventNode2", VictimNode: "EarthHUB" },
+    { Node: "EventNode5", VictimNode: "SaturnHUB" },
+    { Node: "EventNode8", VictimNode: "PlutoHUB" }
+] as const;
+
+// What each relay is set to: an event that is forced on, no events at all, or (undefined) whatever a finished project sends there.
+const getConstructionEventRelaySettings = (): (TInvasionDefender | "disabled" | undefined)[] =>
+    [
+        config.worldState?.relayEventMercury,
+        config.worldState?.relayEventEarth,
+        config.worldState?.relayEventSaturn,
+        config.worldState?.relayEventPluto
+    ].map(x =>
+        x == "fomorian" ? "FC_GRINEER" : x == "razorback" ? "FC_CORPUS" : x == "disabled" ? "disabled" : undefined
+    );
+
+const updateConstructionProjects = async (now: number): Promise<void> => {
+    const pctPerDay = config.worldState?.constructionPctPerDay ?? 0.75;
+    const simulated = (config.worldState?.invasionSimulatedHours ?? 36) != 0;
+    const eventMs = (config.worldState?.constructionEventDays ?? 4) * unixTimesInMs.day;
+    const relaySettings = getConstructionEventRelaySettings();
+    let eventsChanged = false;
+
+    const active: IConstructionEventDatabase[] = [];
+    for (const event of await ConstructionEvent.find({ EndedAt: { $exists: false } })) {
+        // Simulated players get the event done by the time it expires.
+        const drain = simulated ? (now - event.LastUpdate.getTime()) / eventMs : 0;
+        const health = event.Health - drain;
+        if (
+            health <= 0 ||
+            event.Expiry.getTime() <= now ||
+            (event.Automatic ? relaySettings[event.Relay] !== undefined : relaySettings[event.Relay] != event.Faction)
+        ) {
+            await ConstructionEvent.updateOne(
+                { _id: event._id },
+                { $set: { EndedAt: new Date(now), Destroyed: health <= 0 } }
+            );
+            if (event.Automatic) {
+                // The project has to start over.
+                await ConstructionProject.updateOne({ Faction: event.Faction }, { $set: { Pct: 0 } });
+            }
+            eventsChanged = true;
+        } else {
+            await ConstructionEvent.updateOne(
+                { _id: event._id },
+                { $inc: { Health: -drain }, $set: { LastUpdate: new Date(now) } }
+            );
+            active.push(event);
+        }
+    }
+
+    const startEvent = async (faction: TInvasionDefender, relay: number, isAutomatic: boolean): Promise<void> => {
+        active.push(
+            await ConstructionEvent.insertOne({
+                Faction: faction,
+                Relay: relay,
+                Activation: new Date(now),
+                Expiry: new Date(now + eventMs),
+                Health: 1,
+                LastUpdate: new Date(now),
+                Automatic: isAutomatic
+            })
+        );
+        eventsChanged = true;
+    };
+
+    for (let relay = 0; relay != constructionEventRelays.length; ++relay) {
+        const faction = relaySettings[relay];
+        if (faction && faction != "disabled" && !active.some(x => x.Relay == relay)) {
+            await startEvent(faction, relay, false);
+        }
+    }
+
+    // The Construction Status of the Fomorian (Grineer) and the Razorback Armada (Corpus). On live it rises by about 0.75 a day with bigger steps now and then, and keeps going past 100 until the event is started.
+    for (const faction of ["FC_GRINEER", "FC_CORPUS"] as const) {
+        const project = await ConstructionProject.findOneAndUpdate(
+            { Faction: faction },
+            { $setOnInsert: { Pct: 0, LastGrowth: new Date(now) } },
+            { upsert: true, returnDocument: "after" }
+        );
+        await ConstructionProject.updateOne(
+            { Faction: faction },
+            {
+                $inc: { Pct: (pctPerDay * (now - project.LastGrowth.getTime())) / unixTimesInMs.day },
+                $set: { LastGrowth: new Date(now) }
+            }
+        );
+        if (project.Pct >= 100 && !active.some(x => x.Automatic && x.Faction == faction)) {
+            const relay = getRandomElement(
+                constructionEventRelays
+                    .map((_, i) => i)
+                    .filter(i => relaySettings[i] === undefined && !active.some(x => x.Relay == i))
+            );
+            if (relay !== undefined) {
+                await startEvent(faction, relay, true);
+            }
+        }
+    }
+
+    if (eventsChanged) {
+        // The client only picks up new or ended events when it is told to look.
+        sendWsBroadcastToGame(undefined, { sync_world_state: true });
+    }
+};
+
+const getConstructionEvents = async (): Promise<IConstructionEventDatabase[]> =>
+    await ConstructionEvent.find({ EndedAt: { $exists: false }, Expiry: { $gt: new Date() } }).lean();
+
+// Every completed run takes a bit off the health of the event. On live that's the whole community, here it's a setting.
+export const damageConstructionEvent = async (goalId: string): Promise<void> => {
+    if (isValidObjectId(goalId)) {
+        const missionsToDestroy = config.worldState?.constructionEventMissions ?? 30;
+        await ConstructionEvent.updateOne(
+            { _id: goalId, EndedAt: { $exists: false } },
+            { $inc: { Health: -1 / missionsToDestroy } }
+        );
+    }
+};
+
+// The inbox message that announces the event comes with the blueprint needed to take part.
+export const getConstructionEventAnnouncements = async (): Promise<
+    {
+        activation: Date;
+        expiry: Date;
+        sub: string;
+        msg: string;
+        att: string;
+    }[]
+> =>
+    (await getConstructionEvents()).map(event => ({
+        activation: event.Activation,
+        expiry: event.Expiry,
+        ...(event.Faction == "FC_GRINEER"
+            ? {
+                  sub: "/Lotus/Language/G1Quests/FomorianRevengeAnnounceTitle",
+                  msg: "/Lotus/Language/G1Quests/FomorianRevengeAnnounceBody",
+                  att: "/Lotus/Types/StoreItems/Consumables/Restoratives/FomorianNegatorBlueprint"
+              }
+            : {
+                  sub: "/Lotus/Language/G1Quests/RazorbackArmadaAnnounceTitle",
+                  msg: "/Lotus/Language/G1Quests/RazorbackArmadaAnnounceBody",
+                  att: "/Lotus/Types/StoreItems/Consumables/Restoratives/RazorbackCipherBlueprint"
+              })
+    }));
+
+// Sent once the event has been beaten. The Razorback Armada has no title of its own in the game's strings, so both use the one of their reward message.
+export const getConstructionEventEndMessages = async (): Promise<{ date: Date; sub: string; msg: string }[]> =>
+    (await ConstructionEvent.find({ Destroyed: true, EndedAt: { $exists: true } }).lean()).map(x => ({
+        date: x.EndedAt!,
+        sub: "/Lotus/Language/G1Quests/GenericTacAlertSmallRewardMsgTitle",
+        msg:
+            x.Faction == "FC_GRINEER"
+                ? "/Lotus/Language/G1Quests/FomorianRevengeDestroyedBody"
+                : "/Lotus/Language/G1Quests/RazorbackArmadaDestroyedBody"
+    }));
+
+// Fomorian Sabotage and Razorback Armada. Gated like the invasions they come from.
+export const populateConstructionEvents = async (worldState: IWorldState): Promise<void> => {
+    const buildVersion = buildVersionToInt(worldState.BuildLabel);
+    if (buildVersion <= gameToBuildVersionInt["19.5.3"]) return;
+    for (const event of await getConstructionEvents()) {
+        const isFomorian = event.Faction == "FC_GRINEER";
+        const relay = constructionEventRelays[event.Relay % constructionEventRelays.length];
+        const activation = toMongoDate2(event.Activation, buildVersion);
+        worldState.Goals.push({
+            _id: toOid2(event._id, buildVersion),
+            Fomorian: true,
+            Activation: activation,
+            Expiry: toMongoDate2(event.Expiry, buildVersion),
+            Count: 0,
+            Goal: isFomorian ? 1_000_000 : 3,
+            HealthPct: Math.min(Math.max(event.Health, 0), 1),
+            VictimNode: relay.VictimNode,
+            Personal: true,
+            Best: isFomorian,
+            ScoreVar: isFomorian ? "FomorianEventScore" : "",
+            ScoreMaxTag: isFomorian ? "FomorianEventScore" : "",
+            ScoreTagBlocksGuildTierChanges: false,
+            Success: 0,
+            Node: relay.Node,
+            Faction: event.Faction as TInvasionDefender,
+            Desc: isFomorian
+                ? "/Lotus/Language/G1Quests/FomorianRevengeBattleName"
+                : "/Lotus/Language/Menu/CorpusRazorbackProject",
+            Icon: isFomorian
+                ? "/Lotus/Materials/Emblems/SlingStone2_e.png"
+                : "/Lotus/Interface/Icons/Npcs/Corpus/ArmoredJackal.png",
+            RegionDrops: isFomorian ? ["/Lotus/Types/Items/MiscItems/OmegaIsotopePickup"] : [],
+            ArchwingDrops: isFomorian ? [] : ["/Lotus/Types/Items/MiscItems/RazorbackCipherPartPickup"],
+            ScoreLocTag: isFomorian
+                ? "/Lotus/Language/Menu/FomorianScoreHint"
+                : "/Lotus/Language/Menu/RazorbackArmadaScoreHint",
+            Tag: isFomorian ? "GrineerFomorian" : "FriendlyFireTacAlert",
+            MissionInfo: {
+                missionType: isFomorian ? "MT_SABOTAGE" : "MT_ASSASSINATION",
+                faction: event.Faction as TInvasionDefender,
+                location: relay.Node,
+                levelOverride: isFomorian
+                    ? "/Lotus/Levels/Proc/Space/SpaceGrineerFomorianAssaultProcLevel"
+                    : "/Lotus/Levels/Proc/Corpus/CorpusShipArmoredJackalBoss",
+                enemySpec: isFomorian
+                    ? "/Lotus/Types/Game/EnemySpecs/FomorianAttackSpec"
+                    : "/Lotus/Types/Game/EnemySpecs/ProjectFriendlyFire",
+                minEnemyLevel: 20,
+                maxEnemyLevel: 30,
+                difficulty: 1,
+                archwingRequired: isFomorian,
+                requiredItems: [
+                    isFomorian
+                        ? "/Lotus/StoreItems/Types/Restoratives/Consumable/FomorianNegator"
+                        : "/Lotus/StoreItems/Types/Restoratives/Consumable/RazorbackCipher"
+                ],
+                consumeRequiredItems: !isFomorian,
+                missionReward: { randomizedItems: isFomorian ? "fomorianRewardManifest" : "razorbackRewardManifest" },
+                vipAgent: isFomorian
+                    ? ""
+                    : "/Lotus/Types/Enemies/Corpus/SpecialEvents/ArmoredJackal/ArmoredJackalAgent",
+                leadersAlwaysAllowed: true,
+                goalTag: isFomorian ? "GrineerFomorian" : "FriendlyFireTacAlert",
+                levelAuras: isFomorian ? [] : ["/Lotus/Upgrades/Mods/DirectorMods/BossDropReductionAura"],
+                icon: isFomorian
+                    ? "/Lotus/Interface/Icons/Events/Fomorian.png"
+                    : "/Lotus/Interface/Icons/Events/RazorbackArmada.png"
+            },
+            ContinuousHubEvent: {
+                Transmissions: [
+                    isFomorian
+                        ? "/Lotus/Sounds/Dialog/HubAnnouncements/HekPropoganda"
+                        : "/Lotus/Sounds/Dialog/HubAnnouncements/NefAnyoMoaEventPropaganda"
+                ],
+                Activation: activation,
+                Expiry: toMongoDate2(event.Expiry.getTime() - 10 * unixTimesInMs.minute, buildVersion),
+                RepeatInterval: 1800
+            },
+            Reward: {
+                credits: 200_000,
+                items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst"]
+            }
+        });
+    }
+};
+
 const updateInvasions = async (): Promise<void> => {
     const baseGoal = config.worldState?.invasionGoal ?? 30_000;
     const simulatedHours = config.worldState?.invasionSimulatedHours ?? 36;
     const restHours = config.worldState?.invasionRestHours;
     const now = Date.now();
+
+    await updateConstructionProjects(now);
 
     for (const invasion of await Invasion.find({ CompletedAt: { $exists: false } })) {
         // The goal can be changed while invasions are running. They keep their percentage.
@@ -2154,6 +2411,13 @@ const updateInvasions = async (): Promise<void> => {
                     activeSlots.add(invasion.Slot);
                     invadedPlanets.add(planetOf(node));
                 }
+            }
+            if (invasion.Faction != "FC_INFESTATION") {
+                // Whoever wins a Grineer/Corpus invasion gets on with their construction project.
+                await ConstructionProject.updateOne(
+                    { Faction: invasion.Count > 0 ? invasion.Faction : invasion.DefenderFaction },
+                    { $inc: { Pct: config.worldState?.constructionPctPerWin ?? 1 } }
+                );
             }
             await Invasion.updateOne({ _id: invasion._id }, { $set: { FollowedUp: true } });
         }
@@ -5030,6 +5294,12 @@ export const populateInvasions = async (worldState: IWorldState): Promise<void> 
             worldState.NodeOverrides.push(occupation);
         }
     }
+    const projects = await ConstructionProject.find({});
+    worldState.ProjectPct = [
+        projects.find(x => x.Faction == "FC_GRINEER")?.Pct ?? 0,
+        projects.find(x => x.Faction == "FC_CORPUS")?.Pct ?? 0,
+        0
+    ];
 };
 
 export const populateFissures = async (worldState: IWorldState): Promise<void> => {
