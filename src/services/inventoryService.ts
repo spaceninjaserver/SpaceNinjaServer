@@ -1497,7 +1497,12 @@ const addSentinelWeapon = (
     // Sentinel weapons also occupy a slot in the sentinels bin
     combineInventoryChanges(inventoryChanges, occupySlot(inventory, eInventorySlot.SENTINELS, premiumPurchase));
 
-    const index = inventory.SentinelWeapons.push({ ItemType: typeName, XP: 0 }) - 1;
+    const index =
+        inventory.SentinelWeapons.push({
+            ItemType: typeName,
+            XP: 0,
+            Features: premiumPurchase ? eEquipmentFeatures.DOUBLE_CAPACITY : undefined
+        }) - 1;
     inventoryChanges.SentinelWeapons ??= [];
     inventoryChanges.SentinelWeapons.push(inventory.SentinelWeapons[index].toJSON<IEquipmentClient>());
 };
