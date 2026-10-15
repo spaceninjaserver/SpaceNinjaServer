@@ -4200,7 +4200,7 @@ export const getWorldState = (
             Activation: { $date: { $numberLong: "1792076400000" } },
             Count: 0,
             Desc: "/Lotus/Language/TauPrologue/RoadToTauEventName",
-            Expiry: { $date: { $numberLong: "1794931200000" } },
+            Expiry: { $date: { $numberLong: "2000000000000" } },
             Faction: "FC_INFESTATION",
             Goal: 0,
             ClanGoal: [72, 216, 648, 1944, 5832],
