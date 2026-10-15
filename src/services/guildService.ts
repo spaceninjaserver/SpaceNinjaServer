@@ -1169,5 +1169,20 @@ const goalGuildRewardByTag: Record<string, { guildGoals: number[][]; rewards: st
             "/Lotus/Levels/ClanDojo/ComponentPropRecipes/ShadowgrapherEventSilverTrophyRecipe",
             "/Lotus/Levels/ClanDojo/ComponentPropRecipes/ShadowgrapherEventGoldTrophyRecipe"
         ]
+    },
+    RoadToTauEvent: {
+        guildGoals: [
+            [1, 3000, 4500, 6000],
+            [1, 9000, 13500, 18000],
+            [1, 30000, 45000, 60000],
+            [1, 90000, 135000, 180000],
+            [1, 300000, 450000, 600000]
+        ],
+        rewards: [
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/RoadToTauEventTrophyTerracottaRecipe",
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/RoadToTauEventTrophyBronzeRecipe",
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/RoadToTauEventTrophySilverRecipe",
+            "/Lotus/Levels/ClanDojo/ComponentPropRecipes/RoadToTauEventTrophyGoldRecipe"
+        ]
     }
 };

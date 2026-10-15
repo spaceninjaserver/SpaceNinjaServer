@@ -131,6 +131,8 @@ export interface IConfig {
         eightClawProgressOverride?: number;
         thermiaFracturesOverride?: boolean;
         thermiaFracturesProgressOverride?: number;
+        epochOperationTaubound?: boolean;
+        epochOperationTauboundProgressOverride?: number;
         invasionGrineerCount?: number;
         invasionCorpusCount?: number;
         invasionOutbreakCount?: number;

@@ -45,6 +45,7 @@ interface IDatabaseAccount extends IAccountCreationData {
     receivedEventMessage_longShadow?: boolean;
     receivedEventMessage_operationAtramentum?: boolean;
     receivedEventMessage_breedingGrounds?: boolean;
+    receivedEventMessage_epochOperationTaubound?: boolean;
 }
 
 // Includes virtual ID

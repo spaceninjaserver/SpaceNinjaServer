@@ -319,6 +319,21 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
             minBuildVersion: gameToBuildVersionInt["14.0.0"]
         });
     }
+    if (config.worldState?.epochOperationTaubound && !account.receivedEventMessage_epochOperationTaubound) {
+        account.receivedEventMessage_epochOperationTaubound = true;
+        newEventMessages.push({
+            sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+            sub: "/Lotus/Language/TauPrologue/ErisMortemEventInboxSubject",
+            msg: "/Lotus/Language/TauPrologue/ErisMortemEventInboxBody",
+            icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+            startDate: new Date(),
+            lowPrioNewPlayers: true,
+            CrossPlatform: true,
+            transmission: "/Lotus/Sounds/Dialog/RoadToTau/DErisMortem0560Lotus",
+            QuestReq: "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain",
+            minBuildVersion: gameToBuildVersionInt["44.1.2"]
+        });
+    }
 
     const worldState = getWorldState(undefined, false);
     await populateConstructionEvents(worldState);

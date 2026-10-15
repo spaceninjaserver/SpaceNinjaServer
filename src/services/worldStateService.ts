@@ -506,6 +506,31 @@ const alertGeneratorConfig: Record<
             questReq: "/Lotus/Types/Keys/JadeShadows/JadeShadowQuestKeyChain",
             leadersAlwaysAllowed: true
         }
+    },
+    RoadToTauEvent: {
+        alertInterval: unixTimesInMs.hour / 2,
+        alertLength: unixTimesInMs.hour * 1.5,
+        allowedSystemIndexes: [10],
+        baseAlert: {
+            Tag: "RoadToTauEvent",
+            Icon: "/Lotus/Interface/Icons/StoreIcons/Resources/Events/Moonflesh.png"
+        },
+        baseMissionInfo: {
+            minEnemyLevel: 50,
+            maxEnemyLevel: 50,
+            maxRotations: 1,
+            missionReward: {
+                credits: 17000,
+                countedItems: [
+                    {
+                        ItemType: "/Lotus/Types/Gameplay/Events/RoadToTauEvent/RoadToTauEventResource",
+                        ItemCount: 50
+                    }
+                ]
+            },
+            descText: "/Lotus/Language/TauPrologue/EventAlertTitle",
+            leadersAlwaysAllowed: true
+        }
     }
 };
 
@@ -4167,6 +4192,29 @@ export const getWorldState = (
             Node: "SolNode251"
         });
         pushGoalAlerts(worldState, "12MinWarEvent", buildVersion);
+    }
+
+    if (config.worldState?.epochOperationTaubound && buildVersion >= gameToBuildVersionInt["44.1.2"]) {
+        worldState.Goals.push({
+            _id: { $oid: "6ad0ea700000000000000000" },
+            Activation: { $date: { $numberLong: "1792076400000" } },
+            Count: 0,
+            Desc: "/Lotus/Language/TauPrologue/RoadToTauEventName",
+            Expiry: { $date: { $numberLong: "1794931200000" } },
+            Faction: "FC_INFESTATION",
+            Goal: 0,
+            ClanGoal: [72, 216, 648, 1944, 5832],
+            HealthPct: (config.worldState.epochOperationTauboundProgressOverride ?? 0) / 100,
+            Icon: "/Lotus/Interface/Icons/WorldStatePanel/EpochOperationEventBadge.png",
+            ScoreLocTag: "/Lotus/Language/TauPrologue/RoadToTauEventScore",
+            Tag: "RoadToTauEvent",
+            ToolTip: "/Lotus/Language/TauPrologue/RoadToTauShortEventDesc",
+            Community: true,
+            RegionDrops: ["/Lotus/Types/Gameplay/Events/RoadToTauEvent/RoadToTauEventPickup"],
+            Regions: [10],
+            ItemType: "/Lotus/Types/Gameplay/Events/RoadToTauEvent/RoadToTauEventResource"
+        });
+        pushGoalAlerts(worldState, "RoadToTauEvent", buildVersion);
     }
 
     if (config.worldState?.lunarNewYear) {

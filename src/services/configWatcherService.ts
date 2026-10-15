@@ -281,6 +281,10 @@ export const syncConfigWithDatabase = (): void => {
         void Account.updateMany({}, { $unset: { receivedEventMessage_breedingGrounds: 1 } }).then(() => {});
         void Inbox.deleteMany({ sub: "/Lotus/Language/G1Quests/HiveEventLotusInboxTitle" }).then(() => {});
     }
+    if (!config.worldState?.epochOperationTaubound) {
+        void Account.updateMany({}, { $unset: { receivedEventMessage_epochOperationTaubound: 1 } }).then(() => {});
+        void Inbox.deleteMany({ sub: "/Lotus/Language/TauPrologue/ErisMortemEventInboxSubject" }).then(() => {});
+    }
     if (!config.worldState?.bloodOfPerita) {
         void Account.find({ receivedEventMessage_bloodOfPerita: { $exists: true } }, "_id").then(accounts => {
             for (const account of accounts) {
