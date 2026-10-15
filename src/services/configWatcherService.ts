@@ -119,6 +119,24 @@ export const validateConfig = (): void => {
         delete config.logger.level;
         modified = true;
     }
+    if (config.worldState) {
+        const worldState = config.worldState as Record<string, unknown>;
+        const renames: Record<string, string> = {
+            invasionRestHours: "invasionRestHoursOverride",
+            relayEventMercury: "relayEventMercuryOverride",
+            relayEventEarth: "relayEventEarthOverride",
+            relayEventSaturn: "relayEventSaturnOverride",
+            relayEventPluto: "relayEventPlutoOverride"
+        };
+        for (const [oldKey, newKey] of Object.entries(renames)) {
+            if (oldKey in worldState) {
+                const value = worldState[oldKey];
+                worldState[newKey] = value == "fomorian" ? "FC_GRINEER" : value == "razorback" ? "FC_CORPUS" : value;
+                delete worldState[oldKey];
+                modified = true;
+            }
+        }
+    }
     for (const key of configRemovedOptionsKeys) {
         if (config[key as keyof IConfig] !== undefined) {
             logger.debug(

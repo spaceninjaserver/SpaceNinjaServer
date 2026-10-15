@@ -558,7 +558,8 @@ function updateLocElements() {
                 // de and uk for no reason adds space between value and %
                 .replaceAll("|VAL| %", "|VAL|%") // de
                 .replaceAll("|VAL|&nbsp;%", "|VAL|%"); // uk
-            elm.innerHTML = elm.innerHTML.replace("|VAL|", elm.getAttribute("data-loc-replace"));
+            const val = elm.getAttribute("data-loc-replace");
+            elm.innerHTML = elm.innerHTML.replace("|VAL|", itemMap[val]?.name ?? val);
             if (elm.getAttribute("data-loc") == "worldState_lunarNewYearEntry") {
                 const animal = loc(
                     `worldState_lunarNewYearAnimal${((parseInt(elm.getAttribute("data-loc-replace")) - 4) % 12) + 1}`

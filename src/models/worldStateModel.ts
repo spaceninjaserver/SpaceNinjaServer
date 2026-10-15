@@ -64,13 +64,11 @@ const alertSchema = new Schema<IAlertDatabase>({
 alertSchema.index({ Expiry: 1 }, { expireAfterSeconds: 0 });
 
 const invasionSchema = new Schema<IInvasionDatabase>({
-    Slot: { type: Number, required: true },
     Node: { type: String, required: true },
     Faction: { type: String, required: true },
     DefenderFaction: { type: String, required: true },
     Count: { type: Number, required: true },
     Goal: { type: Number, required: true },
-    GoalScale: Number,
     AttackerReward: [typeCountSchema],
     DefenderReward: [typeCountSchema],
     AttackerSeed: { type: Number, required: true },
@@ -84,7 +82,6 @@ const invasionSchema = new Schema<IInvasionDatabase>({
     FollowedUp: Boolean
 });
 
-// Completed invasions are only needed for a few days, e.g. while the winner occupies the node.
 invasionSchema.index({ CompletedAt: 1 }, { expireAfterSeconds: 7 * 86400 });
 
 export const Invasion = model<IInvasionDatabase>("Invasion", invasionSchema);
@@ -110,12 +107,8 @@ const constructionEventSchema = new Schema<IConstructionEventDatabase>({
     Health: { type: Number, required: true },
     LastUpdate: { type: Date, required: true },
     Automatic: { type: Boolean, required: true },
-    EndedAt: Date,
     Destroyed: Boolean
 });
-
-// Ended events are kept for a while for the message that follows a destroyed one.
-constructionEventSchema.index({ EndedAt: 1 }, { expireAfterSeconds: 7 * 86400 });
 
 export const ConstructionEvent = model<IConstructionEventDatabase>("ConstructionEvent", constructionEventSchema);
 

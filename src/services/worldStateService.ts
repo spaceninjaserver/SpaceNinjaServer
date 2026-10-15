@@ -62,6 +62,9 @@ import { getDescent } from "./descentService.ts";
 import { catBreadHash } from "../helpers/stringHelpers.ts";
 import { Guild } from "../models/guildModel.ts";
 import { Inventory } from "../models/inventoryModels/inventoryModel.ts";
+import { Account } from "../models/loginModel.ts";
+import { Inbox } from "../models/inboxModel.ts";
+import { goalEventMessagesByTag } from "./inboxService.ts";
 import { libraryTargetToAvatar } from "../constants/synthesis.ts";
 import { BL_LATEST, BV_LATEST } from "../constants/gameVersions.ts";
 import { isRegionAvailableIn } from "./itemDataService.ts";
@@ -1828,7 +1831,7 @@ const getAllVarziaManifests = (buildVersion: number): IPrimeVaultTraderOffer[] =
     return [...dualPacks, ...vanguardRelics, ...singlePacks, ...items, ...bobbleHeads, ...relics];
 };
 
-// Invasions used to be generated from the day. This is only kept so progress made in those still pays out.
+// Only kept so progress in legacy invasions still pays out
 const createLegacyInvasion = (day: number, idx: number, buildVersion: number): IInvasion => {
     const id = day * 3 + idx;
     const defender = (["FC_GRINEER", "FC_CORPUS", day % 2 ? "FC_GRINEER" : "FC_CORPUS"] as const)[idx];
@@ -1891,39 +1894,28 @@ const createLegacyInvasion = (day: number, idx: number, buildVersion: number): I
     };
 };
 
-// The numbers below that aren't settings come from three years of daily worldState snapshots (https://github.com/calamity-inc/warframe-worldstate-history).
+const allInvasionNodes = [...invasionNodes.FC_GRINEER, ...invasionNodes.FC_CORPUS];
 
-type TInvasionDefender = "FC_GRINEER" | "FC_CORPUS";
-type TInvasionAttacker = TInvasionDefender | "FC_INFESTATION";
-
-// Each kind of attacker has its own range of slots.
-const invasionSlotsPerAttacker = 10;
-const invasionAttackers: readonly TInvasionAttacker[] = ["FC_GRINEER", "FC_CORPUS", "FC_INFESTATION"];
-
-const isInvasionBossNode = (node: string): boolean => ExportRegions[node].missionType == "MT_ASSASSINATION";
-
-const getInvasionNodeDefender = (node: string): TInvasionDefender | undefined =>
-    invasionNodes.FC_GRINEER.includes(node)
-        ? "FC_GRINEER"
-        : invasionNodes.FC_CORPUS.includes(node)
-          ? "FC_CORPUS"
-          : undefined;
-
-// Some nodes (Venus, Mars and the boss nodes) are only invaded by the Infested.
 const isInfestationOnlyInvasionNode = (node: string): boolean =>
     infestationOnlyInvasionNodes.FC_GRINEER.includes(node) || infestationOnlyInvasionNodes.FC_CORPUS.includes(node);
 
-const getInvasionGoal = (invasion: { GoalScale?: number }, baseGoal: number): number =>
-    Math.max(1, Math.round(baseGoal * (invasion.GoalScale ?? 1)));
+const getAdjacentInvasionNodes = (node: string): string[] => {
+    const region = ExportRegions[node];
+    return Object.entries(ExportRegions)
+        .filter(
+            ([key, value]) =>
+                key != node &&
+                value.systemName == region.systemName &&
+                (region.nextNodes.includes(key) || value.nextNodes.includes(node))
+        )
+        .map(([key]) => key);
+};
 
-// The winner occupies the node for 12 to 24 hours.
 const maxInvasionOccupationMs = 24 * unixTimesInMs.hour;
-const getInvasionOccupationMs = (invasion: IInvasionDatabase): number =>
-    new SRng(parseInt(invasion._id.toString().substring(16), 16)).randomInt(12 * 60, 24 * 60) * unixTimesInMs.minute;
 
 const invasionToClient = (invasion: IInvasionDatabase, buildVersion: number): IInvasion => {
     const isInfestationOutbreak = invasion.Faction == "FC_INFESTATION";
-    // The client draws an outbreak as 100% + Count/Goal, so its Count can never be positive.
+    // Client shows outbreak progress as 100% + Count/Goal, so Count must not be positive.
     const count = Math.max(
         Math.min(Math.trunc(invasion.Count), isInfestationOutbreak ? 0 : invasion.Goal),
         -invasion.Goal
@@ -1936,7 +1928,7 @@ const invasionToClient = (invasion: IInvasionDatabase, buildVersion: number): II
         Count: count,
         Goal: invasion.Goal,
         LocTag: isInfestationOutbreak
-            ? isInvasionBossNode(invasion.Node)
+            ? ExportRegions[invasion.Node].missionType == "MT_ASSASSINATION"
                 ? "/Lotus/Language/Menu/InfestedInvasionBoss"
                 : "/Lotus/Language/Menu/InfestedInvasionGeneric"
             : invasion.Faction == "FC_CORPUS"
@@ -1958,13 +1950,15 @@ const invasionToClient = (invasion: IInvasionDatabase, buildVersion: number): II
     };
 };
 
-// A faction that wins an invasion as the attacker occupies the node for a while after the invasion ends.
-// The occupiers bring the enemy specs of one of their own nodes with the same mission type, e.g. Corpus occupying SolNode31 (Rescue) were seen using the specs of SolNode126 (Corpus Rescue).
+// Winning attackers occupy the node with the enemy specs of one of their own nodes with the same mission type, e.g. Corpus on SolNode31 used SolNode126's.
 const createInvasionOccupation = (invasion: IInvasionDatabase, buildVersion: number): INodeOverride | undefined => {
     if (!invasion.CompletedAt || invasion.Count <= 0 || invasion.Faction == "FC_INFESTATION") {
-        return undefined; // Still going, or the defenders held the node.
+        return undefined;
     }
-    const expiry = invasion.CompletedAt.getTime() + getInvasionOccupationMs(invasion);
+    const expiry =
+        invasion.CompletedAt.getTime() +
+        new SRng(parseInt(invasion._id.toString().substring(16), 16)).randomInt(12 * 60, 24 * 60) *
+            unixTimesInMs.minute;
     if (expiry <= Date.now()) {
         return undefined;
     }
@@ -1991,7 +1985,6 @@ const createInvasionOccupation = (invasion: IInvasionDatabase, buildVersion: num
     };
 };
 
-// What a player's battle pay depends on, so the invasion itself isn't needed for it.
 const getInvasionCompletion = (invasion: IInvasionDatabase): IInvasionCompletion => ({
     Faction: invasion.Faction,
     DefenderFaction: invasion.DefenderFaction,
@@ -2005,7 +1998,6 @@ const completeInvasions = async (): Promise<void> => {
         $expr: { $gte: [{ $abs: "$Count" }, "$Goal"] }
     })) {
         await Invasion.updateOne({ _id: invasion._id }, { $set: { CompletedAt: new Date() } });
-        // Everyone who took part is told what they need for their battle pay.
         await Inventory.updateMany(
             { "QualifyingInvasions.invasionId": invasion._id },
             { $set: { "QualifyingInvasions.$.Completion": getInvasionCompletion(invasion) } }
@@ -2013,21 +2005,14 @@ const completeInvasions = async (): Promise<void> => {
     }
 };
 
-const startInvasion = async (
-    slot: number,
-    node: string,
-    attacker: TInvasionAttacker,
-    defender: TInvasionDefender,
-    baseGoal: number,
-    chainId?: Types.ObjectId
-): Promise<void> => {
+const startInvasion = async (node: string, attacker: string, chainId?: Types.ObjectId): Promise<void> => {
+    const defender = ExportRegions[node].faction as "FC_GRINEER" | "FC_CORPUS";
     const rewardFloat = Math.random();
-    let attackerReward: ITypeCount[];
+    let attackerReward: ITypeCount | undefined;
     let defenderReward: ITypeCount;
     let isRare = false;
     if (attacker == "FC_INFESTATION") {
-        // About 55% the defender's resource, 18% a Mutagen Mass, 9% two of them and 18% the nav coordinate.
-        attackerReward = [];
+        // ~55% defender resource, ~18% Mutagen Mass, ~9% 2x Mutagen Mass, ~18% nav coordinate
         defenderReward = getRandomElement(
             rewardFloat < 0.547
                 ? invasionRewards[defender].COMMON
@@ -2036,28 +2021,27 @@ const startInvasion = async (
                   ]
         )!;
     } else {
-        // Both sides offer the same tier: about 6% a rare blueprint, 51% the resource and 43% a weapon part.
+        // ~6% rare blueprint, ~51% resource, ~43% weapon part
         isRare = rewardFloat < 0.061;
         const rewardTier = isRare ? "RARE" : rewardFloat < 0.575 ? "COMMON" : "UNCOMMON";
-        attackerReward = [getRandomElement(invasionRewards[attacker][rewardTier])!];
+        attackerReward = getRandomElement(invasionRewards[attacker as "FC_GRINEER" | "FC_CORPUS"][rewardTier])!;
         defenderReward = getRandomElement(invasionRewards[defender][rewardTier])!;
     }
-    // On live the goal is 30000 on boss nodes and 30000 to 50000 elsewhere, doubled when the reward is a rare blueprint.
-    const goalScale = isInvasionBossNode(node) ? 1 : ((30 + getRandomInt(0, 20)) / 30) * (isRare ? 2 : 1);
+    const goalScale =
+        ExportRegions[node].missionType == "MT_ASSASSINATION"
+            ? 1
+            : ((30 + getRandomInt(0, 20)) / 30) * (isRare ? 2 : 1); // 30000 on boss nodes, otherwise 30000-50000, doubled for rare rewards
     const now = new Date();
     const _id = new Types.ObjectId();
-    // An infested node spreads to the nodes around it after 1 to 3 hours on live, so half to one and a half times the configured 2.
     const spreadHours = config.worldState?.invasionSpreadHours ?? 2;
     await Invasion.insertOne({
         _id,
-        Slot: slot,
         Node: node,
         Faction: attacker,
         DefenderFaction: defender,
         Count: 0,
-        Goal: getInvasionGoal({ GoalScale: goalScale }, baseGoal),
-        GoalScale: goalScale,
-        AttackerReward: attackerReward,
+        Goal: Math.round((config.worldState?.invasionGoal ?? 30_000) * goalScale),
+        AttackerReward: attackerReward ? [attackerReward] : [],
         DefenderReward: [defenderReward],
         AttackerSeed: getRandomInt(0, 1_000_000),
         DefenderSeed: getRandomInt(0, 1_000_000),
@@ -2067,34 +2051,12 @@ const startInvasion = async (
         ChainID: chainId ?? _id,
         SpreadAt:
             attacker == "FC_INFESTATION" && spreadHours
-                ? new Date(now.getTime() + spreadHours * (0.5 + Math.random()) * unixTimesInMs.hour)
+                ? new Date(now.getTime() + spreadHours * (0.5 + Math.random()) * unixTimesInMs.hour) // 1-3 hours on live
                 : undefined
     });
 };
 
-// Fronts move between adjacent nodes of the same planet.
-const invasionNeighbours = new Map<string, string[]>();
-{
-    const addNeighbour = (a: string, b: string): void => {
-        const arr = invasionNeighbours.get(a);
-        if (!arr) {
-            invasionNeighbours.set(a, [b]);
-        } else if (!arr.includes(b)) {
-            arr.push(b);
-        }
-    };
-    for (const [key, region] of Object.entries(ExportRegions)) {
-        for (const next of region.nextNodes) {
-            if (next in ExportRegions && ExportRegions[next].systemName == region.systemName) {
-                addNeighbour(key, next);
-                addNeighbour(next, key);
-            }
-        }
-    }
-}
-
-// A finished construction project attacks a relay: Fomorian Sabotage for the Grineer, Razorback Armada for the Corpus. On live these are started by hand and are given 4 to 5 days.
-// Both use the same node at a relay (its number is the planet's index), so a relay can only have one of them at a time.
+// Fomorian Sabotage & Razorback Armada share the same node, so only one per relay.
 const constructionEventRelays = [
     { Node: "EventNode0", VictimNode: "MercuryHUB" },
     { Node: "EventNode2", VictimNode: "EarthHUB" },
@@ -2102,53 +2064,71 @@ const constructionEventRelays = [
     { Node: "EventNode8", VictimNode: "PlutoHUB" }
 ] as const;
 
-// What each relay is set to: an event that is forced on, no events at all, or (undefined) whatever a finished project sends there.
-const getConstructionEventRelaySettings = (): (TInvasionDefender | "disabled" | undefined)[] =>
-    [
-        config.worldState?.relayEventMercury,
-        config.worldState?.relayEventEarth,
-        config.worldState?.relayEventSaturn,
-        config.worldState?.relayEventPluto
-    ].map(x =>
-        x == "fomorian" ? "FC_GRINEER" : x == "razorback" ? "FC_CORPUS" : x == "disabled" ? "disabled" : undefined
-    );
-
 const updateConstructionProjects = async (now: number): Promise<void> => {
     const pctPerDay = config.worldState?.constructionPctPerDay ?? 0.75;
     const simulated = (config.worldState?.invasionSimulatedHours ?? 36) != 0;
     const eventMs = (config.worldState?.constructionEventDays ?? 4) * unixTimesInMs.day;
-    const relaySettings = getConstructionEventRelaySettings();
+    const relayOverrides = [
+        config.worldState?.relayEventMercuryOverride,
+        config.worldState?.relayEventEarthOverride,
+        config.worldState?.relayEventSaturnOverride,
+        config.worldState?.relayEventPlutoOverride
+    ];
     let eventsChanged = false;
 
     const active: IConstructionEventDatabase[] = [];
-    for (const event of await ConstructionEvent.find({ EndedAt: { $exists: false } })) {
-        // Simulated players get the event done by the time it expires.
-        const drain = simulated ? (now - event.LastUpdate.getTime()) / eventMs : 0;
-        const health = event.Health - drain;
+    for (const event of await ConstructionEvent.find({})) {
         if (
-            health <= 0 ||
             event.Expiry.getTime() <= now ||
-            (event.Automatic ? relaySettings[event.Relay] !== undefined : relaySettings[event.Relay] != event.Faction)
+            (event.Automatic ? !!relayOverrides[event.Relay] : relayOverrides[event.Relay] != event.Faction)
         ) {
-            await ConstructionEvent.updateOne(
-                { _id: event._id },
-                { $set: { EndedAt: new Date(now), Destroyed: health <= 0 } }
-            );
-            if (event.Automatic) {
-                // The project has to start over.
+            await ConstructionEvent.deleteOne({ _id: event._id });
+            if (event.Automatic && !event.Destroyed) {
                 await ConstructionProject.updateOne({ Faction: event.Faction }, { $set: { Pct: 0 } });
             }
             eventsChanged = true;
-        } else {
+            continue;
+        }
+        active.push(event);
+        if (event.Destroyed) {
+            continue;
+        }
+        const drain = simulated ? (now - event.LastUpdate.getTime()) / eventMs : 0;
+        if (event.Health - drain > 0) {
             await ConstructionEvent.updateOne(
                 { _id: event._id },
                 { $inc: { Health: -drain }, $set: { LastUpdate: new Date(now) } }
             );
-            active.push(event);
+            continue;
         }
+        // Like on live, a destroyed event stays around for a few more hours.
+        await ConstructionEvent.updateOne(
+            { _id: event._id },
+            {
+                $set: {
+                    Health: 0,
+                    Destroyed: true,
+                    LastUpdate: new Date(now),
+                    Expiry: new Date(Math.min(event.Expiry.getTime(), now + 5 * unixTimesInMs.hour))
+                }
+            }
+        );
+        const date = new Date(now);
+        await Inbox.insertMany(
+            (await Account.find({}, "_id")).map(account => ({
+                ...goalEventMessagesByTag[event.Faction == "FC_GRINEER" ? "GrineerFomorian" : "FriendlyFireTacAlert"]
+                    .end,
+                ownerId: account._id,
+                date
+            }))
+        );
+        if (event.Automatic) {
+            await ConstructionProject.updateOne({ Faction: event.Faction }, { $set: { Pct: 0 } });
+        }
+        eventsChanged = true;
     }
 
-    const startEvent = async (faction: TInvasionDefender, relay: number, isAutomatic: boolean): Promise<void> => {
+    const startEvent = async (faction: string, relay: number, isAutomatic: boolean): Promise<void> => {
         active.push(
             await ConstructionEvent.insertOne({
                 Faction: faction,
@@ -2164,13 +2144,12 @@ const updateConstructionProjects = async (now: number): Promise<void> => {
     };
 
     for (let relay = 0; relay != constructionEventRelays.length; ++relay) {
-        const faction = relaySettings[relay];
-        if (faction && faction != "disabled" && !active.some(x => x.Relay == relay)) {
-            await startEvent(faction, relay, false);
+        const override = relayOverrides[relay];
+        if (override && override != "disabled" && !active.some(x => x.Relay == relay)) {
+            await startEvent(override, relay, false);
         }
     }
 
-    // The Construction Status of the Fomorian (Grineer) and the Razorback Armada (Corpus). On live it rises by about 0.75 a day with bigger steps now and then, and keeps going past 100 until the event is started.
     for (const faction of ["FC_GRINEER", "FC_CORPUS"] as const) {
         const project = await ConstructionProject.findOneAndUpdate(
             { Faction: faction },
@@ -2188,7 +2167,7 @@ const updateConstructionProjects = async (now: number): Promise<void> => {
             const relay = getRandomElement(
                 constructionEventRelays
                     .map((_, i) => i)
-                    .filter(i => relaySettings[i] === undefined && !active.some(x => x.Relay == i))
+                    .filter(i => !relayOverrides[i] && !active.some(x => x.Relay == i))
             );
             if (relay !== undefined) {
                 await startEvent(faction, relay, true);
@@ -2197,174 +2176,165 @@ const updateConstructionProjects = async (now: number): Promise<void> => {
     }
 
     if (eventsChanged) {
-        // The client only picks up new or ended events when it is told to look.
         sendWsBroadcastToGame(undefined, { sync_world_state: true });
     }
 };
 
-const getConstructionEvents = async (): Promise<IConstructionEventDatabase[]> =>
-    await ConstructionEvent.find({ EndedAt: { $exists: false }, Expiry: { $gt: new Date() } }).lean();
-
-// Every completed run takes a bit off the health of the event. On live that's the whole community, here it's a setting.
 export const damageConstructionEvent = async (goalId: string): Promise<void> => {
     if (isValidObjectId(goalId)) {
         const missionsToDestroy = config.worldState?.constructionEventMissions ?? 30;
         await ConstructionEvent.updateOne(
-            { _id: goalId, EndedAt: { $exists: false } },
+            { _id: goalId, Destroyed: { $ne: true } },
             { $inc: { Health: -1 / missionsToDestroy } }
         );
     }
 };
 
-// The inbox message that announces the event comes with the blueprint needed to take part.
-export const getConstructionEventAnnouncements = async (): Promise<
-    {
-        activation: Date;
-        expiry: Date;
-        sub: string;
-        msg: string;
-        att: string;
-    }[]
-> =>
-    (await getConstructionEvents()).map(event => ({
-        activation: event.Activation,
-        expiry: event.Expiry,
-        ...(event.Faction == "FC_GRINEER"
-            ? {
-                  sub: "/Lotus/Language/G1Quests/FomorianRevengeAnnounceTitle",
-                  msg: "/Lotus/Language/G1Quests/FomorianRevengeAnnounceBody",
-                  att: "/Lotus/Types/StoreItems/Consumables/Restoratives/FomorianNegatorBlueprint"
-              }
-            : {
-                  sub: "/Lotus/Language/G1Quests/RazorbackArmadaAnnounceTitle",
-                  msg: "/Lotus/Language/G1Quests/RazorbackArmadaAnnounceBody",
-                  att: "/Lotus/Types/StoreItems/Consumables/Restoratives/RazorbackCipherBlueprint"
-              })
-    }));
-
-// Sent once the event has been beaten. The Razorback Armada has no title of its own in the game's strings, so both use the one of their reward message.
-export const getConstructionEventEndMessages = async (): Promise<{ date: Date; sub: string; msg: string }[]> =>
-    (await ConstructionEvent.find({ Destroyed: true, EndedAt: { $exists: true } }).lean()).map(x => ({
-        date: x.EndedAt!,
-        sub: "/Lotus/Language/G1Quests/GenericTacAlertSmallRewardMsgTitle",
-        msg:
-            x.Faction == "FC_GRINEER"
-                ? "/Lotus/Language/G1Quests/FomorianRevengeDestroyedBody"
-                : "/Lotus/Language/G1Quests/RazorbackArmadaDestroyedBody"
-    }));
-
-// Fomorian Sabotage and Razorback Armada. Gated like the invasions they come from.
 export const populateConstructionEvents = async (worldState: IWorldState): Promise<void> => {
     const buildVersion = buildVersionToInt(worldState.BuildLabel);
     if (buildVersion <= gameToBuildVersionInt["19.5.3"]) return;
-    for (const event of await getConstructionEvents()) {
-        const isFomorian = event.Faction == "FC_GRINEER";
+    for (const event of await ConstructionEvent.find({ Expiry: { $gt: new Date() } })) {
         const relay = constructionEventRelays[event.Relay % constructionEventRelays.length];
         const activation = toMongoDate2(event.Activation, buildVersion);
-        worldState.Goals.push({
-            _id: toOid2(event._id, buildVersion),
-            Fomorian: true,
-            Activation: activation,
-            Expiry: toMongoDate2(event.Expiry, buildVersion),
-            Count: 0,
-            Goal: isFomorian ? 1_000_000 : 3,
-            HealthPct: Math.min(Math.max(event.Health, 0), 1),
-            VictimNode: relay.VictimNode,
-            Personal: true,
-            Best: isFomorian,
-            ScoreVar: isFomorian ? "FomorianEventScore" : "",
-            ScoreMaxTag: isFomorian ? "FomorianEventScore" : "",
-            ScoreTagBlocksGuildTierChanges: false,
-            Success: 0,
-            Node: relay.Node,
-            Faction: event.Faction as TInvasionDefender,
-            Desc: isFomorian
-                ? "/Lotus/Language/G1Quests/FomorianRevengeBattleName"
-                : "/Lotus/Language/Menu/CorpusRazorbackProject",
-            Icon: isFomorian
-                ? "/Lotus/Materials/Emblems/SlingStone2_e.png"
-                : "/Lotus/Interface/Icons/Npcs/Corpus/ArmoredJackal.png",
-            RegionDrops: isFomorian ? ["/Lotus/Types/Items/MiscItems/OmegaIsotopePickup"] : [],
-            ArchwingDrops: isFomorian ? [] : ["/Lotus/Types/Items/MiscItems/RazorbackCipherPartPickup"],
-            ScoreLocTag: isFomorian
-                ? "/Lotus/Language/Menu/FomorianScoreHint"
-                : "/Lotus/Language/Menu/RazorbackArmadaScoreHint",
-            Tag: isFomorian ? "GrineerFomorian" : "FriendlyFireTacAlert",
-            MissionInfo: {
-                missionType: isFomorian ? "MT_SABOTAGE" : "MT_ASSASSINATION",
-                faction: event.Faction as TInvasionDefender,
-                location: relay.Node,
-                levelOverride: isFomorian
-                    ? "/Lotus/Levels/Proc/Space/SpaceGrineerFomorianAssaultProcLevel"
-                    : "/Lotus/Levels/Proc/Corpus/CorpusShipArmoredJackalBoss",
-                enemySpec: isFomorian
-                    ? "/Lotus/Types/Game/EnemySpecs/FomorianAttackSpec"
-                    : "/Lotus/Types/Game/EnemySpecs/ProjectFriendlyFire",
-                minEnemyLevel: 20,
-                maxEnemyLevel: 30,
-                difficulty: 1,
-                archwingRequired: isFomorian,
-                requiredItems: [
-                    isFomorian
-                        ? "/Lotus/StoreItems/Types/Restoratives/Consumable/FomorianNegator"
-                        : "/Lotus/StoreItems/Types/Restoratives/Consumable/RazorbackCipher"
-                ],
-                consumeRequiredItems: !isFomorian,
-                missionReward: { randomizedItems: isFomorian ? "fomorianRewardManifest" : "razorbackRewardManifest" },
-                vipAgent: isFomorian
-                    ? ""
-                    : "/Lotus/Types/Enemies/Corpus/SpecialEvents/ArmoredJackal/ArmoredJackalAgent",
-                leadersAlwaysAllowed: true,
-                goalTag: isFomorian ? "GrineerFomorian" : "FriendlyFireTacAlert",
-                levelAuras: isFomorian ? [] : ["/Lotus/Upgrades/Mods/DirectorMods/BossDropReductionAura"],
-                icon: isFomorian
-                    ? "/Lotus/Interface/Icons/Events/Fomorian.png"
-                    : "/Lotus/Interface/Icons/Events/RazorbackArmada.png"
-            },
-            ContinuousHubEvent: {
-                Transmissions: [
-                    isFomorian
-                        ? "/Lotus/Sounds/Dialog/HubAnnouncements/HekPropoganda"
-                        : "/Lotus/Sounds/Dialog/HubAnnouncements/NefAnyoMoaEventPropaganda"
-                ],
+        const expiry = toMongoDate2(event.Expiry, buildVersion);
+        const hubEventExpiry = toMongoDate2(event.Expiry.getTime() - 10 * unixTimesInMs.minute, buildVersion);
+        const healthPct = event.Destroyed ? 0 : Math.min(Math.max(event.Health, 0), 1);
+        const success = event.Destroyed ? 1 : 0;
+        if (event.Faction == "FC_GRINEER") {
+            worldState.Goals.push({
+                _id: toOid2(event._id, buildVersion),
+                Fomorian: true,
                 Activation: activation,
-                Expiry: toMongoDate2(event.Expiry.getTime() - 10 * unixTimesInMs.minute, buildVersion),
-                RepeatInterval: 1800
-            },
-            Reward: {
-                credits: 200_000,
-                items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst"]
-            }
-        });
+                Expiry: expiry,
+                Count: 0,
+                Goal: 1000000,
+                HealthPct: healthPct,
+                VictimNode: relay.VictimNode,
+                Personal: true,
+                Best: true,
+                ScoreVar: "FomorianEventScore",
+                ScoreMaxTag: "FomorianEventScore",
+                ScoreTagBlocksGuildTierChanges: false,
+                Success: success,
+                Node: relay.Node,
+                Faction: "FC_GRINEER",
+                Desc: "/Lotus/Language/G1Quests/FomorianRevengeBattleName",
+                Icon: "/Lotus/Materials/Emblems/SlingStone2_e.png",
+                RegionDrops: ["/Lotus/Types/Items/MiscItems/OmegaIsotopePickup"],
+                ArchwingDrops: [],
+                ScoreLocTag: "/Lotus/Language/Menu/FomorianScoreHint",
+                Tag: "GrineerFomorian",
+                MissionInfo: {
+                    missionType: "MT_SABOTAGE",
+                    faction: "FC_GRINEER",
+                    location: relay.Node,
+                    levelOverride: "/Lotus/Levels/Proc/Space/SpaceGrineerFomorianAssaultProcLevel",
+                    enemySpec: "/Lotus/Types/Game/EnemySpecs/FomorianAttackSpec",
+                    minEnemyLevel: 20,
+                    maxEnemyLevel: 30,
+                    difficulty: 1,
+                    archwingRequired: true,
+                    requiredItems: ["/Lotus/StoreItems/Types/Restoratives/Consumable/FomorianNegator"],
+                    consumeRequiredItems: false,
+                    missionReward: {
+                        randomizedItems: "/Lotus/Types/Game/MissionDecks/BossMissionRewards/FomorianRewards"
+                    },
+                    vipAgent: "",
+                    leadersAlwaysAllowed: true,
+                    goalTag: "GrineerFomorian",
+                    levelAuras: [],
+                    icon: "/Lotus/Interface/Icons/Events/Fomorian.png"
+                },
+                ContinuousHubEvent: {
+                    Transmissions: ["/Lotus/Sounds/Dialog/HubAnnouncements/HekPropoganda"],
+                    Activation: activation,
+                    Expiry: hubEventExpiry,
+                    RepeatInterval: 1800
+                },
+                Reward: {
+                    credits: 200_000,
+                    items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst"]
+                }
+            });
+        } else {
+            worldState.Goals.push({
+                _id: toOid2(event._id, buildVersion),
+                Fomorian: true,
+                Activation: activation,
+                Expiry: expiry,
+                Count: event.Destroyed ? 3 : 0,
+                Goal: 3,
+                HealthPct: healthPct,
+                VictimNode: relay.VictimNode,
+                Personal: true,
+                Best: false,
+                ScoreVar: "",
+                ScoreMaxTag: "",
+                ScoreTagBlocksGuildTierChanges: false,
+                Success: success,
+                Node: relay.Node,
+                Faction: "FC_CORPUS",
+                Desc: "/Lotus/Language/Menu/CorpusRazorbackProject",
+                Icon: "/Lotus/Interface/Icons/Npcs/Corpus/ArmoredJackal.png",
+                RegionDrops: [],
+                ArchwingDrops: ["/Lotus/Types/Items/MiscItems/RazorbackCipherPartPickup"],
+                ScoreLocTag: "/Lotus/Language/Menu/RazorbackArmadaScoreHint",
+                Tag: "FriendlyFireTacAlert",
+                MissionInfo: {
+                    missionType: "MT_ASSASSINATION",
+                    faction: "FC_CORPUS",
+                    location: relay.Node,
+                    levelOverride: "/Lotus/Levels/Proc/Corpus/CorpusShipArmoredJackalBoss",
+                    enemySpec: "/Lotus/Types/Game/EnemySpecs/ProjectFriendlyFire",
+                    minEnemyLevel: 20,
+                    maxEnemyLevel: 30,
+                    difficulty: 1,
+                    archwingRequired: false,
+                    requiredItems: ["/Lotus/StoreItems/Types/Restoratives/Consumable/RazorbackCipher"],
+                    consumeRequiredItems: true,
+                    missionReward: {
+                        randomizedItems: "/Supplementals/BossMissionRewards/RazorbackRewards"
+                    },
+                    vipAgent: "/Lotus/Types/Enemies/Corpus/SpecialEvents/ArmoredJackal/ArmoredJackalAgent",
+                    leadersAlwaysAllowed: true,
+                    goalTag: "FriendlyFireTacAlert",
+                    levelAuras: ["/Lotus/Upgrades/Mods/DirectorMods/BossDropReductionAura"],
+                    icon: "/Lotus/Interface/Icons/Events/RazorbackArmada.png"
+                },
+                ContinuousHubEvent: {
+                    Transmissions: ["/Lotus/Sounds/Dialog/HubAnnouncements/NefAnyoMoaEventPropaganda"],
+                    Activation: activation,
+                    Expiry: hubEventExpiry,
+                    RepeatInterval: 1800
+                },
+                Reward: {
+                    credits: 200_000,
+                    items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst"]
+                }
+            });
+        }
     }
 };
 
 const updateInvasions = async (): Promise<void> => {
-    const baseGoal = config.worldState?.invasionGoal ?? 30_000;
     const simulatedHours = config.worldState?.invasionSimulatedHours ?? 36;
-    const restHours = config.worldState?.invasionRestHours;
+    const restHours = config.worldState?.invasionRestHoursOverride;
     const now = Date.now();
 
     await updateConstructionProjects(now);
 
     for (const invasion of await Invasion.find({ CompletedAt: { $exists: false } })) {
-        // The goal can be changed while invasions are running. They keep their percentage.
-        const goal = getInvasionGoal(invasion, baseGoal);
-        if (goal != invasion.Goal) {
-            await Invasion.updateOne(
-                { _id: invasion._id },
-                [{ $set: { Count: { $multiply: ["$Count", goal / invasion.Goal] }, Goal: goal } }],
-                { updatePipeline: true }
-            );
-        }
-        // On live, an invasion moves with the missions all players complete. Simulated players stand in for them here.
-        // The setting is the time they need for a Grineer or Corpus invasion. On live those take about 36 hours, an infested node about 10 and Phorid about 27.
+        // Simulate the rest of the playerbase. On live, Grineer/Corpus invasions take ~36 hours, outbreaks ~10 hours and Phorid ~27 hours.
         const simulatedMs =
             simulatedHours *
             unixTimesInMs.hour *
-            (invasion.Faction != "FC_INFESTATION" ? 1 : isInvasionBossNode(invasion.Node) ? 0.75 : 0.28);
+            (invasion.Faction != "FC_INFESTATION"
+                ? 1
+                : ExportRegions[invasion.Node].missionType == "MT_ASSASSINATION"
+                  ? 0.75
+                  : 0.28);
         const elapsed = now - invasion.LastSimulated.getTime();
-        const missions = simulatedMs ? (goal * elapsed) / simulatedMs : 0;
+        const missions = simulatedMs ? (invasion.Goal * elapsed) / simulatedMs : 0;
         await Invasion.updateOne(
             { _id: invasion._id },
             { $inc: { Count: invasion.SimulatedSide * missions }, $set: { LastSimulated: new Date(now) } }
@@ -2376,44 +2346,32 @@ const updateInvasions = async (): Promise<void> => {
         $or: [{ CompletedAt: { $exists: false } }, { CompletedAt: { $gt: new Date(now - 4 * unixTimesInMs.day) } }]
     });
     const active = recent.filter(x => !x.CompletedAt);
-    // Nodes with an invasion on them, or still occupied after one.
     const busyNodes = new Set(
         recent.filter(x => !x.CompletedAt || x.CompletedAt.getTime() + maxInvasionOccupationMs > now).map(x => x.Node)
     );
-    const activeSlots = new Set(active.map(x => x.Slot));
-    const planetOf = (node: string): string => ExportRegions[node].systemName;
-    // An outbreak has its planet to itself. Grineer and Corpus fronts can share one.
-    const outbreakPlanets = new Set(active.filter(x => x.Faction == "FC_INFESTATION").map(x => planetOf(x.Node)));
-    const invadedPlanets = new Set(active.map(x => planetOf(x.Node)));
+    // Only one front per planet
+    const invadedPlanets = new Set(active.map(x => ExportRegions[x.Node].systemName));
 
-    // Grineer and Corpus move on to an adjacent node when they win. Otherwise their front ends there.
     for (const invasion of recent) {
         if (invasion.CompletedAt && !invasion.FollowedUp) {
-            if (invasion.Count > 0 && invasion.Faction != "FC_INFESTATION" && !activeSlots.has(invasion.Slot)) {
+            // Grineer/Corpus attackers that won move on to an adjacent node.
+            if (invasion.Count > 0 && invasion.Faction != "FC_INFESTATION") {
                 const node = getRandomElement(
-                    (invasionNeighbours.get(invasion.Node) ?? []).filter(
+                    getAdjacentInvasionNodes(invasion.Node).filter(
                         x =>
-                            invasionNodes[invasion.DefenderFaction as TInvasionDefender].includes(x) &&
+                            allInvasionNodes.includes(x) &&
+                            ExportRegions[x].faction == invasion.DefenderFaction &&
                             !isInfestationOnlyInvasionNode(x) &&
                             !busyNodes.has(x)
                     )
                 );
                 if (node) {
-                    await startInvasion(
-                        invasion.Slot,
-                        node,
-                        invasion.Faction as TInvasionAttacker,
-                        invasion.DefenderFaction as TInvasionDefender,
-                        baseGoal,
-                        invasion.ChainID ?? invasion._id
-                    );
+                    await startInvasion(node, invasion.Faction, invasion.ChainID ?? invasion._id);
                     busyNodes.add(node);
-                    activeSlots.add(invasion.Slot);
-                    invadedPlanets.add(planetOf(node));
+                    invadedPlanets.add(ExportRegions[node].systemName);
                 }
             }
             if (invasion.Faction != "FC_INFESTATION") {
-                // Whoever wins a Grineer/Corpus invasion gets on with their construction project.
                 await ConstructionProject.updateOne(
                     { Faction: invasion.Count > 0 ? invasion.Faction : invasion.DefenderFaction },
                     { $inc: { Pct: config.worldState?.constructionPctPerWin ?? 1 } }
@@ -2423,15 +2381,14 @@ const updateInvasions = async (): Promise<void> => {
         }
     }
 
-    // An infested node that isn't cleared in time spreads to every adjacent node. Reaching the boss node, where Phorid shows up, doesn't stop that.
+    // Outbreaks spread to all adjacent nodes
     for (const invasion of active) {
         if (invasion.SpreadAt && invasion.SpreadAt.getTime() <= now) {
             const chainId = invasion.ChainID ?? invasion._id;
             const chainNodes = (await Invasion.find({ ChainID: chainId }, "Node")).map(x => x.Node);
-            for (const node of invasionNeighbours.get(invasion.Node) ?? []) {
-                const defender = getInvasionNodeDefender(node);
-                if (defender && !chainNodes.includes(node) && !busyNodes.has(node)) {
-                    await startInvasion(invasion.Slot, node, "FC_INFESTATION", defender, baseGoal, chainId);
+            for (const node of getAdjacentInvasionNodes(invasion.Node)) {
+                if (allInvasionNodes.includes(node) && !chainNodes.includes(node) && !busyNodes.has(node)) {
+                    await startInvasion(node, "FC_INFESTATION", chainId);
                     busyNodes.add(node);
                 }
             }
@@ -2439,67 +2396,70 @@ const updateInvasions = async (): Promise<void> => {
         }
     }
 
-    // A slot whose front has ended gets a new one after a rest.
-    // On live there's usually one Grineer front, one Corpus front and two outbreaks.
-    const counts = [
-        config.worldState?.invasionGrineerCount ?? 1,
-        config.worldState?.invasionCorpusCount ?? 1,
-        config.worldState?.invasionOutbreakCount ?? 2
-    ];
-    for (let kind = 0; kind != invasionAttackers.length; ++kind) {
-        const attacker = invasionAttackers[kind];
-        for (let i = 0; i < counts[kind]; ++i) {
-            const slot = kind * invasionSlotsPerAttacker + i;
-            if (activeSlots.has(slot)) {
+    // Each chain is a front, which rests for a while after it ended.
+    const fronts = await Invasion.find(
+        {
+            $or: [{ CompletedAt: { $exists: false } }, { CompletedAt: { $gt: new Date(now - unixTimesInMs.day) } }]
+        },
+        "Faction ChainID CompletedAt"
+    );
+    for (const [attacker, count] of [
+        ["FC_GRINEER", config.worldState?.invasionGrineerCount ?? 1],
+        ["FC_CORPUS", config.worldState?.invasionCorpusCount ?? 1],
+        ["FC_INFESTATION", config.worldState?.invasionOutbreakCount ?? 2]
+    ] as const) {
+        const chainToLast = new Map<string, IInvasionDatabase>();
+        for (const invasion of fronts) {
+            if (invasion.Faction == attacker) {
+                const chainId = (invasion.ChainID ?? invasion._id).toString();
+                const last = chainToLast.get(chainId);
+                if (!last || (last.CompletedAt && (!invasion.CompletedAt || invasion.CompletedAt > last.CompletedAt))) {
+                    chainToLast.set(chainId, invasion);
+                }
+            }
+        }
+        let numFronts = 0;
+        for (const last of chainToLast.values()) {
+            if (!last.CompletedAt) {
+                ++numFronts;
                 continue;
             }
-            let last: IInvasionDatabase | undefined;
-            for (const invasion of recent) {
-                if (invasion.Slot == slot && (!last || invasion.CompletedAt!.getTime() > last.CompletedAt!.getTime())) {
-                    last = invasion;
-                }
+            const rng = new SRng(parseInt(last._id.toString().substring(16), 16));
+            const restMs =
+                typeof restHours == "number"
+                    ? restHours * unixTimesInMs.hour
+                    : (attacker == "FC_INFESTATION" ? rng.randomInt(60, 120) : rng.randomInt(6 * 60, 18 * 60)) *
+                      unixTimesInMs.minute;
+            if (last.CompletedAt.getTime() + restMs > now) {
+                ++numFronts;
             }
-            if (last) {
-                // On live a slot stays empty for an hour or two after an outbreak and around half a day after a Grineer or Corpus front.
-                let restMs: number;
-                if (typeof restHours == "number") {
-                    restMs = restHours * unixTimesInMs.hour;
-                } else {
-                    const rng = new SRng(parseInt(last._id.toString().substring(16), 16));
-                    restMs =
-                        (attacker == "FC_INFESTATION" ? rng.randomInt(60, 120) : rng.randomInt(6 * 60, 18 * 60)) *
-                        unixTimesInMs.minute;
-                }
-                if (last.CompletedAt!.getTime() + restMs > now) {
-                    continue;
-                }
-            }
+        }
+        for (; numFronts < count; ++numFronts) {
             const node = getRandomElement(
                 attacker == "FC_INFESTATION"
-                    ? [...invasionNodes.FC_GRINEER, ...invasionNodes.FC_CORPUS].filter(
-                          x => !busyNodes.has(x) && !invadedPlanets.has(planetOf(x)) && !isInvasionBossNode(x) // Phorid only shows up when an outbreak spreads to the boss node
+                    ? allInvasionNodes.filter(
+                          x =>
+                              !busyNodes.has(x) &&
+                              !invadedPlanets.has(ExportRegions[x].systemName) &&
+                              ExportRegions[x].missionType != "MT_ASSASSINATION" // Phorid only appears when an outbreak spreads to it
                       )
                     : invasionNodes[attacker == "FC_GRINEER" ? "FC_CORPUS" : "FC_GRINEER"].filter(
                           x =>
                               !busyNodes.has(x) &&
-                              !outbreakPlanets.has(planetOf(x)) &&
+                              !invadedPlanets.has(ExportRegions[x].systemName) &&
                               !isInfestationOnlyInvasionNode(x)
                       )
             );
-            if (node) {
-                await startInvasion(slot, node, attacker, getInvasionNodeDefender(node)!, baseGoal);
-                busyNodes.add(node);
-                invadedPlanets.add(planetOf(node));
-                if (attacker == "FC_INFESTATION") {
-                    outbreakPlanets.add(planetOf(node));
-                }
+            if (!node) {
+                break;
             }
+            await startInvasion(node, attacker);
+            busyNodes.add(node);
+            invadedPlanets.add(ExportRegions[node].systemName);
         }
     }
 };
 
-// A completed mission moves the invasion by one towards the side it was done for.
-// If the invasion is over (maybe because of this mission), the completion is returned for the progress of the player who reported it, as their inventory is being worked on right now.
 export const addInvasionProgress = async (oid: string, delta: number): Promise<IInvasionCompletion | undefined> => {
     if (isValidObjectId(oid) && delta) {
         await Invasion.updateOne({ _id: oid, CompletedAt: { $exists: false } }, { $inc: { Count: Math.sign(delta) } });

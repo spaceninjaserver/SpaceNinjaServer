@@ -898,7 +898,7 @@ export interface IInvasionProgressClient {
 
 export interface IInvasionProgressDatabase extends Omit<IInvasionProgressClient, "_id"> {
     invasionId: Types.ObjectId;
-    Completion?: IInvasionCompletion; // Set when the invasion ends, for the battle pay
+    Completion?: IInvasionCompletion; // SNS only field for battle pay
 }
 
 export interface IInvasionCompletion {

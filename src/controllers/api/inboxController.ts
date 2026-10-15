@@ -8,6 +8,7 @@ import {
     deleteMessageRead,
     exportInboxMessage,
     getMessagesSorted,
+    goalEventMessagesByTag,
     type IMessageCreationTemplate
 } from "../../services/inboxService.ts";
 import {
@@ -32,10 +33,8 @@ import { fromStoreItem, isStoreItem } from "../../services/itemDataService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import { config } from "../../services/configService.ts";
-import {
-    getConstructionEventAnnouncements,
-    getConstructionEventEndMessages
-} from "../../services/worldStateService.ts";
+import { getWorldState, populateConstructionEvents } from "../../services/worldStateService.ts";
+import { fromMongoDate } from "../../helpers/inventoryHelpers.ts";
 import { Types } from "mongoose";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
@@ -321,33 +320,19 @@ const createNewEventMessages = async (account: TAccountDocument): Promise<void> 
         });
     }
 
-    for (const announcement of await getConstructionEventAnnouncements()) {
-        if (account.LatestEventMessageDate.getTime() < announcement.activation.getTime()) {
-            newEventMessages.push({
-                sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
-                sub: announcement.sub,
-                msg: announcement.msg,
-                att: [announcement.att],
-                icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
-                startDate: announcement.activation,
-                endDate: announcement.expiry,
-                CrossPlatform: true,
-                date: announcement.activation
-            });
-        }
-    }
-
-    for (const message of await getConstructionEventEndMessages()) {
-        if (account.LatestEventMessageDate.getTime() < message.date.getTime()) {
-            newEventMessages.push({
-                sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
-                sub: message.sub,
-                msg: message.msg,
-                icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
-                startDate: message.date,
-                CrossPlatform: true,
-                date: message.date
-            });
+    const worldState = getWorldState(undefined, false);
+    await populateConstructionEvents(worldState);
+    for (const goal of worldState.Goals) {
+        if (goal.Tag in goalEventMessagesByTag) {
+            const activation = fromMongoDate(goal.Activation);
+            if (account.LatestEventMessageDate < activation) {
+                newEventMessages.push({
+                    ...goalEventMessagesByTag[goal.Tag].start,
+                    startDate: activation,
+                    endDate: fromMongoDate(goal.Expiry),
+                    date: activation
+                });
+            }
         }
     }
 

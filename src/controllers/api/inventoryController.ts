@@ -256,7 +256,6 @@ export const inventoryController: RequestHandler = async (request, response) => 
         const qi = inventory.QualifyingInvasions[i];
         let completion = qi.Completion;
         if (!completion) {
-            // An invasion from before completions were stored.
             const invasion = await getInvasionByOid(qi.invasionId.toString());
             if (!invasion) {
                 logger.debug(`removing QualifyingInvasions entry for unknown invasion: ${qi.invasionId.toString()}`);
@@ -275,7 +274,6 @@ export const inventoryController: RequestHandler = async (request, response) => 
         if (completion) {
             let factionSidedWith: string | undefined;
             let battlePay: readonly ICountedItem[] | undefined;
-            // Delta is the net progress (the client shows the side it points to). Missions for the other side cancel it out.
             if (qi.Delta >= 3) {
                 factionSidedWith = completion.Faction;
                 battlePay = completion.AttackerReward;

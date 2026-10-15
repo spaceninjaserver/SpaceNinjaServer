@@ -1668,7 +1668,6 @@ const preU42YinYangRewards: TMissionDeck = [
     ]
 ];
 
-// Not in ExportRewards. From https://wiki.warframe.com/w/Razorback_Armada
 const supplementalMissionDecks: Record<string, TMissionDeck> = {
     "/Supplementals/BossMissionRewards/RazorbackRewards": [
         [

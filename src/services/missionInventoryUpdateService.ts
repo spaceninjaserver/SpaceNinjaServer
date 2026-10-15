@@ -1406,8 +1406,17 @@ export const addMissionRewards = async (
     }
 
     if (rewardInfo.goalId) {
-        const goal = getWorldState(buildLabel).Goals.find(x => fromOid(x._id) == rewardInfo.goalId);
+        const worldState = getWorldState(buildLabel);
+        await populateConstructionEvents(worldState);
+        const goal = worldState.Goals.find(x => fromOid(x._id) == rewardInfo.goalId);
         if (goal) {
+            if (goal.MissionInfo?.missionReward) {
+                missionCompletionCredits += await addFixedLevelRewards(
+                    goal.MissionInfo.missionReward,
+                    MissionRewards,
+                    buildLabel
+                );
+            }
             if (rewardInfo.node == goal.Node && goal.MissionKeyName) levelKeyName = goal.MissionKeyName;
             if (goal.ConcurrentNodes && goal.ConcurrentMissionKeyNames) {
                 for (let i = 0; i < goal.ConcurrentNodes.length && i < goal.ConcurrentMissionKeyNames.length; i++) {
@@ -2175,7 +2184,7 @@ const addCredits = async (
 };
 
 export const addFixedLevelRewards = async (
-    rewards: IMissionRewardExternal,
+    rewards: IMissionRewardExternal & { randomizedItems?: string },
     MissionRewards: IMissionReward[],
     buildLabel: string,
     rewardInfo?: IRewardInfo
@@ -2205,15 +2214,16 @@ export const addFixedLevelRewards = async (
             MissionRewards.push(item);
         }
     }
-    if (rewards.droptable) {
-        const droptable = getMissionDeck(rewards.droptable, buildLabel);
+    const droptableName = rewards.droptable ?? rewards.randomizedItems;
+    if (droptableName) {
+        const droptable = getMissionDeck(droptableName, buildLabel);
         if (droptable) {
             const rotations: number[] =
-                rewardInfo && rewards.droptable != "/Lotus/Types/Game/MissionDecks/ProjectNightwatchBonusRewards"
+                rewardInfo && droptableName != "/Lotus/Types/Game/MissionDecks/ProjectNightwatchBonusRewards"
                     ? await getRotations(rewardInfo, buildLabel)
                     : [0];
-            if (rewards.droptable.startsWith("/Lotus/Types/Game/MissionDecks/VoidKeyMissionRewards/")) {
-                logger.debug(`rolling ${rewards.droptable} for ${rotations.length} void tower rewards`);
+            if (droptableName.startsWith("/Lotus/Types/Game/MissionDecks/VoidKeyMissionRewards/")) {
+                logger.debug(`rolling ${droptableName} for ${rotations.length} void tower rewards`);
                 const RARITY_TO_PROBABILITY: Record<TRarity, number> = {
                     COMMON: 0.2533,
                     UNCOMMON: 0.11,
@@ -2236,7 +2246,7 @@ export const addFixedLevelRewards = async (
                     }
                 }
             } else {
-                logger.debug(`rolling ${rewards.droptable} for level key rewards`, { rotations });
+                logger.debug(`rolling ${droptableName} for level key rewards`, { rotations });
                 for (const tier of rotations) {
                     const reward = getRandomRewardByChance(droptable[tier]);
                     if (reward) {
@@ -2248,7 +2258,7 @@ export const addFixedLevelRewards = async (
                 }
             }
         } else {
-            logger.error(`unknown droptable ${rewards.droptable}`);
+            logger.error(`unknown droptable ${droptableName}`);
         }
     }
     return missionBonusCredits;
@@ -2272,25 +2282,6 @@ async function getRandomMissionDrops(
     isSteelPath: boolean
 ): Promise<IMissionReward[]> {
     const drops: IMissionReward[] = [];
-    if (RewardInfo.goalId) {
-        // Fomorian Sabotage and Razorback Armada
-        const worldState = getWorldState(buildLabel);
-        await populateConstructionEvents(worldState);
-        const manifest = worldState.Goals.find(x => fromOid(x._id) == RewardInfo.goalId)?.MissionInfo?.missionReward
-            ?.randomizedItems;
-        const eventDeck =
-            manifest == "fomorianRewardManifest"
-                ? "/Lotus/Types/Game/MissionDecks/BossMissionRewards/FomorianRewards"
-                : manifest == "razorbackRewardManifest"
-                  ? "/Supplementals/BossMissionRewards/RazorbackRewards"
-                  : undefined;
-        if (eventDeck) {
-            const drop = getRandomRewardByChance(getMissionDeck(eventDeck, buildLabel)![0]);
-            if (drop) {
-                drops.push({ StoreItem: drop.type, ItemCount: drop.itemCount });
-            }
-        }
-    }
     if (RewardInfo.sortieTag == "Final" && firstCompletion) {
         const arr = RewardInfo.sortieId!.split("_");
         let sortieId = arr[1];

@@ -1497,10 +1497,10 @@
                                 </div>
                                 <div class="form-group mt-2 d-flex gap-2">
                                     <div class="flex-fill">
-                                        <form class="form-group" onsubmit="doSaveConfigInt('worldState.invasionRestHours'); return false;">
-                                            <label class="form-label" for="worldState.invasionRestHours" data-loc="worldState_invasionRestHours"></label>
+                                        <form class="form-group" onsubmit="doSaveConfigInt('worldState.invasionRestHoursOverride'); return false;">
+                                            <label class="form-label" for="worldState.invasionRestHoursOverride" data-loc="worldState_invasionRestHoursOverride"></label>
                                             <div class="input-group">
-                                                <input id="worldState.invasionRestHours" class="form-control" type="number" min="0" max="72" data-default="" />
+                                                <input id="worldState.invasionRestHoursOverride" class="form-control" type="number" min="0" max="72" data-default="" />
                                                 <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
                                             </div>
                                         </form>
@@ -1528,40 +1528,40 @@
                                 </div>
                                 <div class="form-group mt-2 d-flex gap-2">
                                     <div class="flex-fill">
-                                        <label class="form-label" for="worldState.relayEventMercury" data-loc="worldState_relayEventMercury"></label>
-                                        <select class="form-control" id="worldState.relayEventMercury" data-default="">
-                                            <option value="" data-loc="worldState_relayEventAutomatic"></option>
-                                            <option value="fomorian" data-loc="worldState_relayEventFomorian"></option>
-                                            <option value="razorback" data-loc="worldState_relayEventRazorback"></option>
+                                        <label class="form-label" for="worldState.relayEventMercuryOverride" data-loc="worldState_relayEvent" data-loc-replace="MercuryHUB"></label>
+                                        <select class="form-control" id="worldState.relayEventMercuryOverride" data-default="">
+                                            <option value="" data-loc="normal"></option>
+                                            <option value="FC_GRINEER" data-loc-itemMap="/Lotus/Language/G1Quests/FomorianRevengeBattleName"></option>
+                                            <option value="FC_CORPUS" data-loc-itemMap="/Lotus/Language/Menu/CorpusRazorbackProject"></option>
                                             <option value="disabled" data-loc="disabled"></option>
                                         </select>
                                     </div>
                                     <div class="flex-fill">
-                                        <label class="form-label" for="worldState.relayEventEarth" data-loc="worldState_relayEventEarth"></label>
-                                        <select class="form-control" id="worldState.relayEventEarth" data-default="">
-                                            <option value="" data-loc="worldState_relayEventAutomatic"></option>
-                                            <option value="fomorian" data-loc="worldState_relayEventFomorian"></option>
-                                            <option value="razorback" data-loc="worldState_relayEventRazorback"></option>
+                                        <label class="form-label" for="worldState.relayEventEarthOverride" data-loc="worldState_relayEvent" data-loc-replace="EarthHUB"></label>
+                                        <select class="form-control" id="worldState.relayEventEarthOverride" data-default="">
+                                            <option value="" data-loc="normal"></option>
+                                            <option value="FC_GRINEER" data-loc-itemMap="/Lotus/Language/G1Quests/FomorianRevengeBattleName"></option>
+                                            <option value="FC_CORPUS" data-loc-itemMap="/Lotus/Language/Menu/CorpusRazorbackProject"></option>
                                             <option value="disabled" data-loc="disabled"></option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group mt-2 d-flex gap-2">
                                     <div class="flex-fill">
-                                        <label class="form-label" for="worldState.relayEventSaturn" data-loc="worldState_relayEventSaturn"></label>
-                                        <select class="form-control" id="worldState.relayEventSaturn" data-default="">
-                                            <option value="" data-loc="worldState_relayEventAutomatic"></option>
-                                            <option value="fomorian" data-loc="worldState_relayEventFomorian"></option>
-                                            <option value="razorback" data-loc="worldState_relayEventRazorback"></option>
+                                        <label class="form-label" for="worldState.relayEventSaturnOverride" data-loc="worldState_relayEvent" data-loc-replace="SaturnHUB"></label>
+                                        <select class="form-control" id="worldState.relayEventSaturnOverride" data-default="">
+                                            <option value="" data-loc="normal"></option>
+                                            <option value="FC_GRINEER" data-loc-itemMap="/Lotus/Language/G1Quests/FomorianRevengeBattleName"></option>
+                                            <option value="FC_CORPUS" data-loc-itemMap="/Lotus/Language/Menu/CorpusRazorbackProject"></option>
                                             <option value="disabled" data-loc="disabled"></option>
                                         </select>
                                     </div>
                                     <div class="flex-fill">
-                                        <label class="form-label" for="worldState.relayEventPluto" data-loc="worldState_relayEventPluto"></label>
-                                        <select class="form-control" id="worldState.relayEventPluto" data-default="">
-                                            <option value="" data-loc="worldState_relayEventAutomatic"></option>
-                                            <option value="fomorian" data-loc="worldState_relayEventFomorian"></option>
-                                            <option value="razorback" data-loc="worldState_relayEventRazorback"></option>
+                                        <label class="form-label" for="worldState.relayEventPlutoOverride" data-loc="worldState_relayEvent" data-loc-replace="PlutoHUB"></label>
+                                        <select class="form-control" id="worldState.relayEventPlutoOverride" data-default="">
+                                            <option value="" data-loc="normal"></option>
+                                            <option value="FC_GRINEER" data-loc-itemMap="/Lotus/Language/G1Quests/FomorianRevengeBattleName"></option>
+                                            <option value="FC_CORPUS" data-loc-itemMap="/Lotus/Language/Menu/CorpusRazorbackProject"></option>
                                             <option value="disabled" data-loc="disabled"></option>
                                         </select>
                                     </div>

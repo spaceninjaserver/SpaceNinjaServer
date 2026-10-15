@@ -348,24 +348,22 @@ export interface IInvasion {
 
 export interface IInvasionDatabase {
     _id: Types.ObjectId;
-    Slot: number;
     Node: string;
     Faction: string;
     DefenderFaction: string;
-    Count: number; // Positive when the attackers lead. Not an integer when simulated players are involved.
+    Count: number;
     Goal: number;
-    GoalScale?: number; // Goal relative to the configured one
     AttackerReward: ITypeCount[];
     DefenderReward: ITypeCount[];
     AttackerSeed: number;
     DefenderSeed: number;
-    SimulatedSide: number; // 1 or -1, the side simulated players fight for
+    SimulatedSide: number; // 1 = attacker, -1 = defender
     LastSimulated: Date;
     Activation: Date;
     CompletedAt?: Date;
-    ChainID?: Types.ObjectId; // Shared by the invasions of a front
-    SpreadAt?: Date; // When an infested node spreads to the nodes around it
-    FollowedUp?: boolean; // Set once a completed invasion has been checked for a follow-up
+    ChainID?: Types.ObjectId;
+    SpreadAt?: Date;
+    FollowedUp?: boolean;
 }
 
 export interface IConstructionProjectDatabase {
@@ -374,7 +372,6 @@ export interface IConstructionProjectDatabase {
     LastGrowth: Date;
 }
 
-// A Fomorian Sabotage or Razorback Armada event
 export interface IConstructionEventDatabase {
     _id: Types.ObjectId;
     Faction: string;
@@ -383,8 +380,7 @@ export interface IConstructionEventDatabase {
     Expiry: Date;
     Health: number;
     LastUpdate: Date;
-    Automatic: boolean; // Started by a finished construction project rather than a setting
-    EndedAt?: Date;
+    Automatic: boolean; // started by construction project rather than relayEvent config
     Destroyed?: boolean;
 }
 

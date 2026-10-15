@@ -1,5 +1,5 @@
 import { toMongoDate2, toOid2 } from "../helpers/inventoryHelpers.ts";
-import type { IMessageClient, IMessageDatabase } from "../types/inboxTypes.ts";
+import type { IMessage, IMessageClient, IMessageDatabase } from "../types/inboxTypes.ts";
 import type { TMessageDocument } from "../models/inboxModel.ts";
 import { Inbox } from "../models/inboxModel.ts";
 import type { QueryFilter, Types } from "mongoose";
@@ -124,4 +124,41 @@ export const exportInboxMessage = (messageDatabase: TMessageDocument, buildLabel
     }
 
     return messageClient;
+};
+
+export const goalEventMessagesByTag: Record<string, { start: IMessage; end: IMessage }> = {
+    GrineerFomorian: {
+        start: {
+            sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+            sub: "/Lotus/Language/G1Quests/FomorianRevengeAnnounceTitle",
+            msg: "/Lotus/Language/G1Quests/FomorianRevengeAnnounceBody",
+            att: ["/Lotus/Types/StoreItems/Consumables/Restoratives/FomorianNegatorBlueprint"],
+            icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+            CrossPlatform: true
+        },
+        end: {
+            sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+            sub: "/Lotus/Language/G1Quests/GenericTacAlertSmallRewardMsgTitle",
+            msg: "/Lotus/Language/G1Quests/FomorianRevengeDestroyedBody",
+            icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+            CrossPlatform: true
+        }
+    },
+    FriendlyFireTacAlert: {
+        start: {
+            sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+            sub: "/Lotus/Language/G1Quests/RazorbackArmadaAnnounceTitle",
+            msg: "/Lotus/Language/G1Quests/RazorbackArmadaAnnounceBody",
+            att: ["/Lotus/Types/StoreItems/Consumables/Restoratives/RazorbackCipherBlueprint"],
+            icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+            CrossPlatform: true
+        },
+        end: {
+            sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+            sub: "/Lotus/Language/G1Quests/GenericTacAlertSmallRewardMsgTitle",
+            msg: "/Lotus/Language/G1Quests/RazorbackArmadaDestroyedBody",
+            icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+            CrossPlatform: true
+        }
+    }
 };
