@@ -1435,6 +1435,24 @@
                                 </div>
                                 <div class="form-group mt-2 d-flex gap-2">
                                     <div class="flex-fill">
+                                        <label class="form-label" for="worldState.epochOperationTaubound" data-loc-itemMap="/Lotus/Language/TauPrologue/RoadToTauEventName"></label>
+                                        <select class="form-control" id="worldState.epochOperationTaubound" data-default="false">
+                                            <option value="true" data-loc="enabled"></option>
+                                            <option value="false" data-loc="disabled"></option>
+                                        </select>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <form class="form-group" onsubmit="doSaveConfigInt('worldState.epochOperationTauboundProgressOverride'); return false;">
+                                            <label class="form-label" for="worldState.epochOperationTauboundProgressOverride" data-loc="worldState_epochOperationTauboundProgressOverride"></label>
+                                            <div class="input-group">
+                                                <input id="worldState.epochOperationTauboundProgressOverride" class="form-control" type="number" min="0" max="100" data-default="0" />
+                                                <button class="btn btn-secondary" type="submit" data-loc="cheats_save"></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-2 d-flex gap-2">
+                                    <div class="flex-fill">
                                         <form class="form-group" onsubmit="doSaveConfigInt('worldState.invasionGrineerCount'); return false;">
                                             <label class="form-label" for="worldState.invasionGrineerCount" data-loc="worldState_invasionGrineerCount"></label>
                                             <div class="input-group">

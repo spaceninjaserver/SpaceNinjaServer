@@ -323,6 +323,7 @@ dict = {
     worldState_bellyOfTheBeastProgressOverride: `Postęp Operacji: W Jamie Besti`,
     worldState_eightClawProgressOverride: `Postęp Operacji: Osiem Pazurów`,
     worldState_thermiaFracturesProgressOverride: `Postęp Pęknięć Termii`,
+    worldState_epochOperationTauboundProgressOverride: `[UNTRANSLATED] Epoch: Operation Taubound Progress`,
     worldState_invasionGrineerCount: `[UNTRANSLATED] Grineer Invasion Fronts`,
     worldState_invasionCorpusCount: `[UNTRANSLATED] Corpus Invasion Fronts`,
     worldState_invasionOutbreakCount: `[UNTRANSLATED] Infested Outbreaks`,

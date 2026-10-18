@@ -1370,7 +1370,11 @@ export const addMissionRewards = async (
                     inventory.CompletedAlerts.push(rewardInfo.alertId);
                 }
                 if (alert.MissionInfo.missionReward) {
-                    if (alert.Tag && ["12MinWarEvent", "JadeShadows"].includes(alert.Tag) && isSteelPath) {
+                    if (
+                        alert.Tag &&
+                        ["12MinWarEvent", "JadeShadows", "RoadToTauEvent"].includes(alert.Tag) &&
+                        isSteelPath
+                    ) {
                         if (alert.MissionInfo.missionReward.countedItems) {
                             alert.MissionInfo.missionReward.countedItems.forEach(item => {
                                 item.ItemCount *= 1.5;
@@ -1383,6 +1387,27 @@ export const addMissionRewards = async (
                         buildLabel,
                         rewardInfo
                     );
+                    if (alert.Tag == "RoadToTauEvent" && inventory.GuildId) {
+                        const goal = getWorldState(buildLabel, false).Goals.find(x => x.Tag == alert.Tag);
+                        if (goal && "ClanGoal" in goal && goal.ClanGoal) {
+                            const count = alert.MissionInfo.missionReward.countedItems?.find(
+                                x => x.ItemType == goal.ItemType
+                            )?.ItemCount;
+                            if (count) {
+                                const guild = await Guild.findById(
+                                    inventory.GuildId,
+                                    "GoalProgress Tier VaultDecoRecipes"
+                                );
+                                if (guild) {
+                                    await handleGuildGoalProgress(guild, {
+                                        Count: count,
+                                        Tag: goal.Tag,
+                                        goalId: new Types.ObjectId(fromOid(goal._id))
+                                    });
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

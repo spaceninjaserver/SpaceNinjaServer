@@ -451,6 +451,7 @@ const alertGeneratorConfig: Record<
         alertInterval: number;
         alertLength: number;
         allowedSystemIndexes: number[];
+        allowedMissionType?: TMissionType[];
         baseAlert: Partial<IAlert>;
         baseMissionInfo: Partial<IAlertMissionInfo>;
     }
@@ -504,6 +505,32 @@ const alertGeneratorConfig: Record<
             },
             descText: "/Lotus/Language/JadeShadows/EventAlertTitle",
             questReq: "/Lotus/Types/Keys/JadeShadows/JadeShadowQuestKeyChain",
+            leadersAlwaysAllowed: true
+        }
+    },
+    RoadToTauEvent: {
+        alertInterval: unixTimesInMs.hour / 2,
+        alertLength: unixTimesInMs.hour * 1.5,
+        allowedSystemIndexes: [10],
+        allowedMissionType: ["MT_EXTERMINATION", "MT_MOBILE_DEFENSE", "MT_SURVIVAL", "MT_HIVE"],
+        baseAlert: {
+            Tag: "RoadToTauEvent",
+            Icon: "/Lotus/Interface/Icons/StoreIcons/Resources/Events/Moonflesh.png"
+        },
+        baseMissionInfo: {
+            minEnemyLevel: 50,
+            maxEnemyLevel: 50,
+            maxRotations: 1,
+            missionReward: {
+                credits: 17000,
+                countedItems: [
+                    {
+                        ItemType: "/Lotus/Types/Gameplay/Events/RoadToTauEvent/RoadToTauEventResource",
+                        ItemCount: 50
+                    }
+                ]
+            },
+            descText: "/Lotus/Language/TauPrologue/EventAlertTitle",
             leadersAlwaysAllowed: true
         }
     }
@@ -4169,6 +4196,29 @@ export const getWorldState = (
         pushGoalAlerts(worldState, "12MinWarEvent", buildVersion);
     }
 
+    if (config.worldState?.epochOperationTaubound && buildVersion >= gameToBuildVersionInt["44.1.2"]) {
+        worldState.Goals.push({
+            _id: { $oid: "6ad0ea700000000000000000" },
+            Activation: { $date: { $numberLong: "1792076400000" } },
+            Count: 0,
+            Desc: "/Lotus/Language/TauPrologue/RoadToTauEventName",
+            Expiry: { $date: { $numberLong: "2000000000000" } },
+            Faction: "FC_INFESTATION",
+            Goal: 0,
+            ClanGoal: [72, 216, 648, 1944, 5832],
+            HealthPct: (config.worldState.epochOperationTauboundProgressOverride ?? 0) / 100,
+            Icon: "/Lotus/Interface/Icons/WorldStatePanel/EpochOperationEventBadge.png",
+            ScoreLocTag: "/Lotus/Language/TauPrologue/RoadToTauEventScore",
+            Tag: "RoadToTauEvent",
+            ToolTip: "/Lotus/Language/TauPrologue/RoadToTauShortEventDesc",
+            Community: true,
+            RegionDrops: ["/Lotus/Types/Gameplay/Events/RoadToTauEvent/RoadToTauEventPickup"],
+            Regions: [10],
+            ItemType: "/Lotus/Types/Gameplay/Events/RoadToTauEvent/RoadToTauEventResource"
+        });
+        pushGoalAlerts(worldState, "RoadToTauEvent", buildVersion);
+    }
+
     if (config.worldState?.lunarNewYear) {
         const reapeingItems: Record<string, (Partial<IFlashSale> & { TypeName: string })[]> = {
             "2022": [
@@ -6605,20 +6655,25 @@ const generateGoalAlert = (tag: string, alertIdx: number, wsAlerts: IAlert[], bu
                 !wsAlerts.map(a => a.MissionInfo.location).includes(nodeTag)
         )
     );
+    const isAllowedMissionType = (missionType: string): boolean =>
+        !["MT_ASSASSINATION", "MT_LANDSCAPE", "MT_RAILJACK", "MT_PVPVE", "MT_PVP", "MT_ARENA"].includes(missionType) &&
+        (!genMeta.allowedMissionType || genMeta.allowedMissionType.includes(missionType as TMissionType));
     let nodeTag: string;
     let node: IRegion;
+    let hasAllowedMission: boolean;
     do {
         [nodeTag, node] = rng.randomElement(Object.entries(allowedNodes))!;
+        hasAllowedMission =
+            !!node.tileset && Object.keys(ExportTilesets[node.tileset].missions).some(isAllowedMissionType);
         if (!node.tileset) logger.debug(`node ${nodeTag} without tileset - reroll it`);
         else if (!node.faction) logger.debug(`node ${nodeTag} without faction - reroll it`);
-    } while (!node.tileset || !node.faction);
+        else if (!hasAllowedMission) logger.debug(`node ${nodeTag} without allowed mission types - reroll it`);
+    } while (!node.tileset || !node.faction || !hasAllowedMission);
     let missionType: string;
     let mission: ITilesetMission;
     do {
         [missionType, mission] = rng.randomElement(Object.entries(ExportTilesets[node.tileset].missions))!;
-    } while (
-        ["MT_ASSASSINATION", "MT_LANDSCAPE", "MT_RAILJACK", "MT_PVPVE", "MT_PVP", "MT_ARENA"].includes(missionType)
-    );
+    } while (!isAllowedMissionType(missionType));
     const oid =
         ((activation / 1000) & 0xffffffff).toString(16).padStart(8, "0") +
         tagHash.toString(16).padEnd(8, "0") +
