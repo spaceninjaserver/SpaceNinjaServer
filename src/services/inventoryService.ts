@@ -397,8 +397,7 @@ export const addStartingGear = async (
 export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, delta: IInventoryChanges): void => {
     for (const key in delta) {
         if (!(key in InventoryChanges)) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            (InventoryChanges as Record<string, any>)[key] = (delta as Record<string, any>)[key];
+            (InventoryChanges as Record<string, unknown>)[key] = (delta as Record<string, unknown>)[key];
         } else if (key == "MiscItems") {
             for (const deltaItem of delta[key]!) {
                 const existing = InventoryChanges[key]!.find(x => x.ItemType == deltaItem.ItemType);
@@ -409,8 +408,8 @@ export const combineInventoryChanges = (InventoryChanges: IInventoryChanges, del
                 }
             }
         } else if (Array.isArray(delta[key as keyof IInventoryChanges])) {
-            const left = InventoryChanges[key as keyof IInventoryChanges] as any[];
-            const right = delta[key as keyof IInventoryChanges] as any[];
+            const left = InventoryChanges[key as keyof IInventoryChanges] as unknown[];
+            const right = delta[key as keyof IInventoryChanges] as unknown[];
             for (const item of right) {
                 left.push(item);
             }
