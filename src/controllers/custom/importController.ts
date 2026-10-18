@@ -8,6 +8,7 @@ import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import type { IInventoryClient } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IGetShipResponse } from "../../types/personalRoomsTypes.ts";
 import type { RequestHandler } from "express";
+import { logger } from "../../utils/logger.ts";
 
 export const importController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -57,7 +58,7 @@ export const importController: RequestHandler = async (req, res) => {
 
         broadcastInventoryUpdate(req);
     } catch (e) {
-        console.error(e);
+        logger.error(`import failed: ${(e as Error).message}`, e);
         res.send((e as Error).message);
     }
     res.end();

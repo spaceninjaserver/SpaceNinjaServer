@@ -4,6 +4,7 @@ import { getPersonalRooms } from "../../services/personalRoomsService.ts";
 import type { RequestHandler } from "express";
 import { getInventoryResponse } from "../api/inventoryController.ts";
 import { BL_LATEST } from "../../constants/gameVersions.ts";
+import { logger } from "../../utils/logger.ts";
 
 export const exportController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -30,7 +31,7 @@ export const exportController: RequestHandler = async (req, res) => {
             )
         );
     } catch (e) {
-        console.error(e);
+        logger.error(`export failed: ${(e as Error).message}`, e);
         res.send((e as Error).message);
     }
     res.end();

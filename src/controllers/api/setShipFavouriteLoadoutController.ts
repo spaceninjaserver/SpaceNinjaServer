@@ -3,6 +3,7 @@ import type { RequestHandler } from "express";
 import { getPersonalRooms } from "../../services/personalRoomsService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import { Types } from "mongoose";
+import { logger } from "../../utils/logger.ts";
 import type { IFavouriteLoadoutDatabase, TBootLocation } from "../../types/personalRoomsTypes.ts";
 
 export const setShipFavouriteLoadoutController: RequestHandler = async (req, res) => {
@@ -16,7 +17,7 @@ export const setShipFavouriteLoadoutController: RequestHandler = async (req, res
     } else if (body.BootLocation == "SHOP") {
         updateTaggedDisplay(personalRooms.TailorShop.FavouriteLoadouts, body);
     } else {
-        console.log(body);
+        logger.error(`unexpected BootLocation in request body`, body);
         throw new Error(`unexpected BootLocation: ${body.BootLocation}`);
     }
     await personalRooms.save();

@@ -47,5 +47,12 @@ export default [
             "no-mixed-spaces-and-tabs": "error",
             "prettier/prettier": "error"
         }
+    },
+    {
+        // node:test's describe()/it() return promises that the runner collects itself.
+        files: ["tests/**/*.ts"],
+        rules: {
+            "@typescript-eslint/no-floating-promises": "off"
+        }
     }
 ];
