@@ -16,6 +16,7 @@
     "verify:tsc": "tsc --noEmit",
     "raw": "node scripts/raw-precheck.js && node --experimental-strip-types src/index.ts",
     "raw:bun": "bun src/index.ts",
+    "test": "node --experimental-strip-types --test \"tests/**/*.test.ts\"",
     "lint": "eslint \"**/*.ts\"",
     "lint:ci": "eslint \"**/*.ts\" --rule \"prettier/prettier: off\"",
     "lint:fix": "eslint --fix \"**/*.ts\"",

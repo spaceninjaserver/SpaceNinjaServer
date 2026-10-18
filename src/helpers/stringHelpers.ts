@@ -38,21 +38,8 @@ export const catBreadHash = (name: string): number => {
 };
 
 export const regexEscape = (str: string): string => {
-    str = str.replaceAll(".", "\\.");
-    str = str.replaceAll("\\", "\\\\");
-    str = str.replaceAll("[", "\\[");
-    str = str.replaceAll("]", "\\]");
-    str = str.replaceAll("+", "\\+");
-    str = str.replaceAll("*", "\\*");
-    str = str.replaceAll("$", "\\$");
-    str = str.replaceAll("^", "\\^");
-    str = str.replaceAll("?", "\\?");
-    str = str.replaceAll("|", "\\|");
-    str = str.replaceAll("(", "\\(");
-    str = str.replaceAll(")", "\\)");
-    str = str.replaceAll("{", "\\{");
-    str = str.replaceAll("}", "\\}");
-    return str;
+    // Single pass so that backslashes added by escaping are not escaped again.
+    return str.replace(/[.\\[\]+*$^?|(){}]/g, "\\$&");
 };
 
 export const addString = (arr: string[], str: string): void => {

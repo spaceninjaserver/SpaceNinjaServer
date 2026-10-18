@@ -19,6 +19,7 @@ jobs:
             - run: cp config-vanilla.json config.json
             - run: npm run verify
             - run: npm run raw -- --test
+            - run: npm test
             - run: npm run lint:ci
             - run: npm run knip
             - run: npm run prettier
