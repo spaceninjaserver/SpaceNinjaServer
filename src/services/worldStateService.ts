@@ -451,6 +451,7 @@ const alertGeneratorConfig: Record<
         alertInterval: number;
         alertLength: number;
         allowedSystemIndexes: number[];
+        allowedMissionType?: TMissionType[];
         baseAlert: Partial<IAlert>;
         baseMissionInfo: Partial<IAlertMissionInfo>;
     }
@@ -511,6 +512,7 @@ const alertGeneratorConfig: Record<
         alertInterval: unixTimesInMs.hour / 2,
         alertLength: unixTimesInMs.hour * 1.5,
         allowedSystemIndexes: [10],
+        allowedMissionType: ["MT_EXTERMINATION", "MT_MOBILE_DEFENSE", "MT_SURVIVAL", "MT_HIVE"],
         baseAlert: {
             Tag: "RoadToTauEvent",
             Icon: "/Lotus/Interface/Icons/StoreIcons/Resources/Events/Moonflesh.png"
@@ -6653,20 +6655,25 @@ const generateGoalAlert = (tag: string, alertIdx: number, wsAlerts: IAlert[], bu
                 !wsAlerts.map(a => a.MissionInfo.location).includes(nodeTag)
         )
     );
+    const isAllowedMissionType = (missionType: string): boolean =>
+        !["MT_ASSASSINATION", "MT_LANDSCAPE", "MT_RAILJACK", "MT_PVPVE", "MT_PVP", "MT_ARENA"].includes(missionType) &&
+        (!genMeta.allowedMissionType || genMeta.allowedMissionType.includes(missionType as TMissionType));
     let nodeTag: string;
     let node: IRegion;
+    let hasAllowedMission: boolean;
     do {
         [nodeTag, node] = rng.randomElement(Object.entries(allowedNodes))!;
+        hasAllowedMission =
+            !!node.tileset && Object.keys(ExportTilesets[node.tileset].missions).some(isAllowedMissionType);
         if (!node.tileset) logger.debug(`node ${nodeTag} without tileset - reroll it`);
         else if (!node.faction) logger.debug(`node ${nodeTag} without faction - reroll it`);
-    } while (!node.tileset || !node.faction);
+        else if (!hasAllowedMission) logger.debug(`node ${nodeTag} without allowed mission types - reroll it`);
+    } while (!node.tileset || !node.faction || !hasAllowedMission);
     let missionType: string;
     let mission: ITilesetMission;
     do {
         [missionType, mission] = rng.randomElement(Object.entries(ExportTilesets[node.tileset].missions))!;
-    } while (
-        ["MT_ASSASSINATION", "MT_LANDSCAPE", "MT_RAILJACK", "MT_PVPVE", "MT_PVP", "MT_ARENA"].includes(missionType)
-    );
+    } while (!isAllowedMissionType(missionType));
     const oid =
         ((activation / 1000) & 0xffffffff).toString(16).padStart(8, "0") +
         tagHash.toString(16).padEnd(8, "0") +
