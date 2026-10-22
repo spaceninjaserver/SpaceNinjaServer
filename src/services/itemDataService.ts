@@ -4104,6 +4104,25 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
                 buildTime: 259200
             };
         }
+    } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/HeatSwordBlueprint") {
+        if (version_compare(buildLabel, gameToBuildVersion["30.9.0"]) < 0) {
+            data = {
+                ...data,
+                ingredients: [
+                    {
+                        ...data.ingredients[0],
+                        ItemType: "/Lotus/Types/Items/MiscItems/NeuralSensor"
+                    },
+                    data.ingredients[1],
+                    data.ingredients[2],
+                    data.ingredients[3]
+                ]
+            };
+            if (version_compare(buildLabel, gameToBuildVersion["9.1.2"]) < 0) {
+                // This is an undocumented change from sometime between 8.3.0 and 9.1.2...
+                data.ingredients[3].ItemCount = 75;
+            }
+        }
     }
 
     if (version_compare(buildLabel, gameToBuildVersion["9.1.2"]) < 0) {
@@ -4427,19 +4446,6 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
                     {
                         ...data.ingredients[3],
                         ItemCount: 120
-                    }
-                ]
-            };
-        } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/HeatSwordBlueprint") {
-            data = {
-                ...data,
-                ingredients: [
-                    data.ingredients[0],
-                    data.ingredients[1],
-                    data.ingredients[2],
-                    {
-                        ...data.ingredients[3],
-                        ItemCount: 75
                     }
                 ]
             };
