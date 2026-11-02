@@ -27,17 +27,23 @@ import { eGuildPermission } from "../types/guildTypes.ts";
 import { toMongoDate, toMongoDate2, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
 import type { Types } from "mongoose";
 import type { IDojoBuild, IDojoResearch } from "warframe-public-export-plus";
-import { ExportDojoRecipes, ExportResources } from "warframe-public-export-plus";
+import { ExportDojoRecipes, ExportRegions, ExportResources } from "warframe-public-export-plus";
 import { logger } from "../utils/logger.ts";
 import { config } from "./configService.ts";
-import { getRandomInt } from "./rngService.ts";
+import { getRandomInt, SRng } from "./rngService.ts";
 import { Inbox } from "../models/inboxModel.ts";
-import type { IFusionTreasure } from "../types/inventoryTypes/inventoryTypes.ts";
+import type {
+    IFusionTreasure,
+    IWeekGuildVaultBonusReward,
+    IWeeklyGuildVaultBonus
+} from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IInventoryChanges } from "../types/purchaseTypes.ts";
 import { parallelForeach } from "../utils/async-utils.ts";
 import { createMessage } from "./inboxService.ts";
 import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "./friendService.ts";
 import type { ITypeCount } from "../types/commonTypes.ts";
+import type { IMissionInventoryUpdateRequest } from "../types/requestTypes.ts";
+import { KAHL_EPOCH, unixTimesInMs } from "../constants/timeConstants.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import { getItemCategoryByUniqueName } from "./itemDataService.ts";
 
@@ -617,6 +623,275 @@ export const addVaultMiscItems = (vault: IVaultDatabase, miscItems: ITypeCount[]
             vault.VaultMiscItems.push(item);
         }
     }
+};
+
+const guildVaultBonusRegions = [
+    "/Lotus/Language/Locations/Mercury",
+    "/Lotus/Language/Locations/Venus",
+    "/Lotus/Language/Locations/Earth",
+    "/Lotus/Language/Locations/Mars",
+    "/Lotus/Language/Locations/Jupiter",
+    "/Lotus/Language/Locations/Saturn",
+    "/Lotus/Language/Locations/Uranus",
+    "/Lotus/Language/Locations/Neptune",
+    "/Lotus/Language/Locations/Pluto",
+    "/Lotus/Language/Locations/Ceres",
+    "/Lotus/Language/Locations/Eris",
+    "/Lotus/Language/Locations/Sedna",
+    "/Lotus/Language/Locations/Europa",
+    "/Lotus/Language/Locations/Void",
+    "/Lotus/Language/Locations/Phobos",
+    "/Lotus/Language/Locations/PhobosArchwingNode1", // Deimos
+    "/Lotus/Language/Locations/Moon",
+    "/Lotus/Language/Locations/Fortress",
+    "/Lotus/Language/Locations/DeepSpace",
+    "/Lotus/Language/Locations/Duviri"
+] as const;
+
+export const createWeeklyGuildVaultBonus = (weekCount: number): Omit<IWeeklyGuildVaultBonus, "Progress"> => {
+    const rng = new SRng(weekCount);
+    const getReward = (tier: ITypeCount[], pointThreshold: number): IWeekGuildVaultBonusReward => {
+        const reward = rng.randomElement(tier)!;
+        return {
+            RewardClaimed: false,
+            PointThreshold: pointThreshold,
+            ItemCount: reward.ItemCount,
+            Reward: reward.ItemType
+        };
+    };
+    const bonus: Omit<IWeeklyGuildVaultBonus, "Progress"> = {
+        WeekCount: weekCount,
+        BonusRegion: rng.randomElement(guildVaultBonusRegions)!,
+        Rewards: [
+            getReward(tierARewards, 500),
+            getReward(tierBRewards, 1000),
+            getReward(tierCRewards, 1500),
+            getReward(tierDRewards, 2000)
+        ]
+    };
+    return bonus;
+};
+
+// https://wiki.warframe.com/w/Clan_Weekly_Initiatives
+
+const tierARewards: ITypeCount[] = [
+    // 50 Squad Energy Restore (Large)
+    { ItemType: "/Lotus/StoreItems/Types/Restoratives/SyndicateTeamEnergyTotem", ItemCount: 50 },
+
+    // 50 Squad Health Restore (Large)
+    { ItemType: "/Lotus/StoreItems/Types/Restoratives/SyndicateTeamHealTotem", ItemCount: 50 },
+
+    // 12 Neurodes
+    { ItemType: "/Lotus/StoreItems/Types/Items/MiscItems/Neurode", ItemCount: 12 },
+
+    // 12 Neural Sensors
+    { ItemType: "/Lotus/StoreItems/Types/Items/MiscItems/NeuralSensor", ItemCount: 12 },
+
+    // 12 Orokin Cell
+    { ItemType: "/Lotus/StoreItems/Types/Items/MiscItems/OrokinCell", ItemCount: 12 },
+
+    // 1,000 Endo
+    { ItemType: "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/CircuitRepeatableSteelPathFusionBundle", ItemCount: 1 },
+
+    // 5 Mutagen Mass
+    { ItemType: "/Lotus/StoreItems/Types/Items/Research/BioComponent", ItemCount: 5 },
+
+    // 5 Detonite Injector
+    { ItemType: "/Lotus/StoreItems/Types/Items/Research/ChemComponent", ItemCount: 5 },
+
+    // 5 Fieldron
+    { ItemType: "/Lotus/StoreItems/Types/Items/Research/EnergyComponent", ItemCount: 5 },
+
+    // 3 Aya
+    { ItemType: "/Lotus/StoreItems/Types/Items/MiscItems/SchismKey", ItemCount: 3 },
+
+    // Ayatan Anasa Sculpture
+    { ItemType: "/Lotus/StoreItems/Types/Items/FusionTreasures/OroFusexF", ItemCount: 1 }
+];
+
+const tierBRewards: ITypeCount[] = [
+    // 50,000 Credits
+    { ItemType: "/Lotus/StoreItems/Types/PickUps/Credits/10000Credits", ItemCount: 5 },
+
+    // 2,000 Endo
+    { ItemType: "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/CircuitRepeatableSteelPathFusionBundle", ItemCount: 2 },
+
+    // 10x Cosmic Specter
+    { ItemType: "/Lotus/StoreItems/Types/Restoratives/Consumable/PlatinumSpectre", ItemCount: 10 },
+
+    // 7,000 Kuva
+    { ItemType: "/Lotus/StoreItems/Types/Items/MiscItems/Kuva", ItemCount: 7000 },
+
+    // 100 Vosfor
+    { ItemType: "/Lotus/StoreItems/Types/Items/MiscItems/DistillPoints", ItemCount: 100 },
+
+    // 3 Aya
+    { ItemType: "/Lotus/StoreItems/Types/Items/MiscItems/SchismKey", ItemCount: 3 },
+
+    // Forma Blueprint
+    { ItemType: "/Lotus/StoreItems/Types/Recipes/Components/FormaBlueprint", ItemCount: 1 },
+
+    // Veiled Riven Mod (random type)
+    { ItemType: "/Lotus/StoreItems/Upgrades/Mods/Randomized/RawMeleeRandomMod", ItemCount: 1 },
+    { ItemType: "/Lotus/StoreItems/Upgrades/Mods/Randomized/RawRifleRandomMod", ItemCount: 1 },
+    { ItemType: "/Lotus/StoreItems/Upgrades/Mods/Randomized/RawPistolRandomMod", ItemCount: 1 },
+    { ItemType: "/Lotus/StoreItems/Upgrades/Mods/Randomized/RawModularMeleeRandomMod", ItemCount: 1 },
+    { ItemType: "/Lotus/StoreItems/Upgrades/Mods/Randomized/RawModularPistolRandomMod", ItemCount: 1 }
+];
+
+const tierCRewards: ITypeCount[] = [
+    // 100,000 Credits
+    { ItemType: "/Lotus/StoreItems/Types/PickUps/Credits/10000Credits", ItemCount: 10 },
+
+    // 3,000 Endo
+    { ItemType: "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/CircuitRepeatableSteelPathFusionBundle", ItemCount: 3 },
+
+    // 14,000 Kuva
+    { ItemType: "/Lotus/StoreItems/Types/Items/MiscItems/Kuva", ItemCount: 14000 },
+
+    // 200 Vosfor
+    { ItemType: "/Lotus/StoreItems/Types/Items/MiscItems/DistillPoints", ItemCount: 200 },
+
+    // 5 Aya
+    { ItemType: "/Lotus/StoreItems/Types/Items/MiscItems/SchismKey", ItemCount: 5 },
+
+    // Orokin Reactor
+    { ItemType: "/Lotus/StoreItems/Types/Items/MiscItems/OrokinReactor", ItemCount: 1 },
+
+    // Orokin Catalyst
+    { ItemType: "/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst", ItemCount: 1 },
+
+    // 2 Relic Packs
+    { ItemType: "/Lotus/StoreItems/Types/BoosterPacks/LoginRewardRandomProjection", ItemCount: 2 }
+];
+
+const tierDRewards: ITypeCount[] = [
+    // 5,000 Endo
+    { ItemType: "/Lotus/StoreItems/Upgrades/Mods/FusionBundles/CircuitRepeatableSteelPathFusionBundle", ItemCount: 5 },
+
+    // 21,000 Kuva
+    { ItemType: "/Lotus/StoreItems/Types/Items/MiscItems/Kuva", ItemCount: 21000 },
+
+    // 200 Vosfor
+    { ItemType: "/Lotus/StoreItems/Types/Items/MiscItems/DistillPoints", ItemCount: 200 },
+
+    // Forma (Built)
+    { ItemType: "/Lotus/StoreItems/Types/Items/MiscItems/Forma", ItemCount: 1 },
+
+    // Eidolon Lens Blueprint
+    { ItemType: "/Lotus/StoreItems/Types/Recipes/Lens/GenericLensOstronBlueprint", ItemCount: 1 },
+
+    // Omni Forma (Built)
+    { ItemType: "/Lotus/StoreItems/Types/Items/MiscItems/FormaAura", ItemCount: 1 }
+];
+
+// Points a resource gives towards the weekly personal rewards, from /Lotus/Types/Game/GuildVaultBonusManifest (ResourcePointOverrides).
+const guildVaultBonusPointOverrides: Record<string, number> = {
+    "/Lotus/Types/Items/MiscItems/Ferrite": 0.03,
+    "/Lotus/Types/Items/MiscItems/Nanospores": 0.03,
+    "/Lotus/Types/Items/MiscItems/Salvage": 0.03,
+    "/Lotus/Types/Items/MiscItems/OxiumAlloy": 2,
+    "/Lotus/Types/Gameplay/Zariman/Resources/VoidWraithItem": 0.5,
+    "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanMiscItemA": 5,
+    "/Lotus/Types/Gameplay/Zariman/Resources/ZarimanMiscItemB": 25,
+    "/Lotus/Types/Gameplay/1999Wf/Resources/1999ResourceCommonA": 0.68,
+    "/Lotus/Types/Gameplay/1999Wf/Resources/1999ResourceCommonB": 0.76,
+    "/Lotus/Types/Gameplay/1999Wf/Resources/1999ResourceUncommonA": 1.43,
+    "/Lotus/Types/Gameplay/1999Wf/Resources/1999ResourceUncommonB": 4.5,
+    "/Lotus/Types/Gameplay/1999Wf/Resources/1999ResourceRareA": 9.21,
+    "/Lotus/Types/Gameplay/Duviri/Resource/DuviriRockItem": 1.27,
+    "/Lotus/Types/Gameplay/Duviri/Resource/Fish/GenericDuviriFishPartBItem": 1.64,
+    "/Lotus/Types/Gameplay/Duviri/Resource/DuviriPlantItemC": 7.16,
+    "/Lotus/Types/Gameplay/Duviri/Resource/DuviriPlantItemF": 4.04,
+    "/Lotus/Types/Gameplay/Duviri/Resource/DuviriPlantItemB": 7.16,
+    "/Lotus/Types/Gameplay/Duviri/Resource/DuviriPlantItemA": 2.4,
+    "/Lotus/Types/Gameplay/Duviri/Resource/DuviriEnemyDropItem": 2.4,
+    "/Lotus/Types/Gameplay/Duviri/Resource/Fish/GenericDuviriFishPartCItem": 18.31,
+    "/Lotus/Types/Gameplay/Duviri/Resource/Fish/GenericDuviriFishPartAItem": 3.85,
+    "/Lotus/Types/Gameplay/Duviri/Resource/DuviriFractalItem": 4.04,
+    "/Lotus/Types/Gameplay/Duviri/Resource/DuviriProcessedItem": 1.94,
+    "/Lotus/Types/Gameplay/Duviri/Resource/DuviriPlantItemE": 7.16,
+    "/Lotus/Types/Gameplay/Duviri/Resource/DuviriMushroomItem": 7.16,
+    "/Lotus/Types/Gameplay/Duviri/Resource/DuviriPlantItemG": 7.16,
+    "/Lotus/Types/Gameplay/Duviri/Resource/DuviriPlantItemD": 7.16,
+    "/Lotus/Types/Gameplay/Duviri/Resource/DuviriDragonDropItem": 45.18,
+    "/Lotus/Types/Items/MiscItems/ArgonCrystal": 5
+};
+
+// U42 Clan Weekly Initiatives: a share of the resources picked up with clanmates in the squad goes to the clan vault and counts towards the player's weekly rewards.
+// The client only says which clanmates were there. It shows the percentage itself and adds up the items of everyone's response.
+export const addGuildVaultBonus = async (
+    inventory: TInventoryDatabaseDocument,
+    missionReport: IMissionInventoryUpdateRequest
+): Promise<{ GuildVaultBonusResources: ITypeCount[]; GuildVaultBonusMultiplier: number } | undefined> => {
+    if (!inventory.GuildId) {
+        return undefined;
+    }
+    const clanmates =
+        missionReport.GuildVaultBonusMembers && inventory.GuildId.equals(missionReport.GuildVaultBonusId?.$oid ?? "")
+            ? await GuildMember.countDocuments({
+                  guildId: inventory.GuildId,
+                  accountId: { $in: missionReport.GuildVaultBonusMembers },
+                  status: 0
+              })
+            : 0;
+    // 5% for every clan member in the squad, the player included: 10% with one clanmate, 20% in a full squad.
+    const squadSize = Math.min(clanmates ? clanmates + 1 : (inventory.guildVaultBonusSoloSquadSize ?? 0), 4);
+    if (!squadSize) {
+        return undefined;
+    }
+    const weekCount = Math.trunc((Date.now() - KAHL_EPOCH) / unixTimesInMs.week);
+    const weeklyBonus = Array.isArray(inventory.WeeklyGuildVaultBonusInfo)
+        ? inventory.WeeklyGuildVaultBonusInfo.find(x => x.WeekCount == weekCount)
+        : undefined;
+    // The week's entry is only rolled once the clan screen is opened. The region is the same without it.
+    const bonusRegion = weeklyBonus?.BonusRegion ?? new SRng(weekCount).randomElement(guildVaultBonusRegions)!;
+    const node = missionReport.RewardInfo?.node;
+    const systemName = node && node in ExportRegions ? ExportRegions[node].systemName : undefined;
+    // The bonus region is doubled. Railjack nodes have a _SPACE suffix that the client's region name for Veil Proxima doesn't.
+    const multiplier =
+        inventory.guildVaultBonusAlwaysDoubled ||
+        (systemName &&
+            systemName
+                .replace(
+                    "/Lotus/Language/InfestedMicroplanet/SolarMapDeimosName",
+                    "/Lotus/Language/Locations/PhobosArchwingNode1"
+                )
+                .replace(/DeepSpace_SPACE$/, "DeepSpace") == bonusRegion)
+            ? 2
+            : 1;
+
+    const resources: ITypeCount[] = [];
+    let points = 0;
+    for (const item of [...(missionReport.MiscItems ?? []), ...(missionReport.BonusMiscItems ?? [])]) {
+        // Only things that drop in stacks count as resources.
+        const pickupQuantity =
+            item.ItemType in ExportResources ? ExportResources[item.ItemType].pickupQuantity : undefined;
+        const count = Math.floor(item.ItemCount * squadSize * 0.05 * multiplier);
+        if (pickupQuantity && count > 0) {
+            resources.push({ ItemType: item.ItemType, ItemCount: count });
+            // How live turns resources into points isn't known. The manifest has an exponent of -0.75 (PointConversionExponent) and values for some resources.
+            // Applying the exponent to the pickup size is close to those values, but gives about a third of the progress players reported, hence the multiplier's default of 3.
+            points +=
+                count *
+                (guildVaultBonusPointOverrides[item.ItemType] ??
+                    Math.pow((pickupQuantity.minValue + pickupQuantity.maxValue) / 2, -0.75));
+        }
+    }
+    if (resources.length == 0) {
+        return undefined;
+    }
+    const guild = (await Guild.findById(inventory.GuildId, "VaultMiscItems"))!;
+    addVaultMiscItems(
+        guild,
+        resources.map(x => ({ ...x }))
+    );
+    await guild.save();
+    if (weeklyBonus) {
+        weeklyBonus.Progress =
+            (weeklyBonus.Progress ?? 0) + points * (inventory.guildVaultBonusProgressMultiplierOverride ?? 3);
+    }
+    return { GuildVaultBonusResources: resources, GuildVaultBonusMultiplier: multiplier };
 };
 
 export const addVaultShipDecos = (guild: TGuildDatabaseDocument, shipDecos: ITypeCount[]): void => {

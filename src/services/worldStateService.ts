@@ -9,7 +9,7 @@ import invasionNodes from "../../static/fixed_responses/worldState/invasionNodes
 import infestationOnlyInvasionNodes from "../../static/fixed_responses/worldState/infestationOnlyInvasionNodes.json" with { type: "json" };
 import invasionRewards from "../../static/fixed_responses/worldState/invasionRewards.json" with { type: "json" };
 import pvpChallenges from "../../static/fixed_responses/worldState/pvpChallenges.json" with { type: "json" };
-import { EPOCH, unixTimesInMs } from "../constants/timeConstants.ts";
+import { EPOCH, KAHL_EPOCH, unixTimesInMs } from "../constants/timeConstants.ts";
 import { config } from "./configService.ts";
 import { getRandomElement, getRandomInt, sequentiallyUniqueRandomElement, SRng } from "./rngService.ts";
 import type { IMissionReward, IRegion, ITilesetMission, TFaction, TMissionType } from "warframe-public-export-plus";
@@ -70,6 +70,7 @@ import { BL_LATEST, BV_LATEST } from "../constants/gameVersions.ts";
 import { isRegionAvailableIn } from "./itemDataService.ts";
 import gameToBuildVersionInt from "../constants/gameToBuildVersionInt.ts";
 import { buildVersionToInt, intToBuildVersion } from "../helpers/versionHelper.ts";
+import { createWeeklyGuildVaultBonus } from "./guildService.ts";
 import {
     dogDaysFlashSales,
     naberusNightsFlashSales,
@@ -2595,6 +2596,7 @@ export const getWorldState = (
     const { timeSecs, timeMs, day, week, weekStart, weekEnd, date } = getWorldStateTime();
     const buildVersion = buildVersionToInt(buildLabel);
     const defenseWavesPerRotation = buildVersion < gameToBuildVersionInt["38.5.0"] ? 5 : 3;
+    const guildVaultBonusWeekCount = Math.trunc((timeMs - KAHL_EPOCH) / unixTimesInMs.week);
 
     const worldState: IWorldState = {
         Version: 10,
@@ -2613,6 +2615,13 @@ export const getWorldState = (
         PrimeVaultTraders: [],
         VoidStorms: [],
         DailyDeals: [],
+        ...(buildVersion >= gameToBuildVersionInt["42.0.0"]
+            ? {
+                  WeeklyVaultBonusRewards: [guildVaultBonusWeekCount, guildVaultBonusWeekCount + 1].map(
+                      createWeeklyGuildVaultBonus
+                  )
+              }
+            : {}),
         //EndlessXpChoices: [],
         //EndlessXpSchedule: [],
         KnownCalendarSeasons: [],

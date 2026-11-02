@@ -30,6 +30,16 @@ export interface IWorldState {
     PrimeVaultTraders: IPrimeVaultTrader[];
     VoidStorms: IVoidStorm[];
     DailyDeals: IDailyDeal[];
+    WeeklyVaultBonusRewards?: {
+        WeekCount: number;
+        BonusRegion: string;
+        Rewards: {
+            RewardClaimed: boolean;
+            PointThreshold: number;
+            ItemCount: number;
+            Reward: string;
+        }[];
+    }[];
     LibraryInfo?: {
         CurrentTarget?: {
             StartTime: IMongoDateWithLegacySupport;

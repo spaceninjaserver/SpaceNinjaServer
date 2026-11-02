@@ -12,6 +12,7 @@ import {
     dispatchPendingPremiumCredits,
     getInventory
 } from "../../services/inventoryService.ts";
+import { addGuildVaultBonus } from "../../services/guildService.ts";
 import { getInventoryResponse } from "./inventoryController.ts";
 import { logger } from "../../utils/logger.ts";
 import type {
@@ -111,6 +112,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         RecoveredItemInfo
     } = await addMissionRewards(account, buildLabel, inventory, missionReport, firstCompletion);
     await handleConservation(inventory, buildLabel, missionReport, AffiliationMods); // Conservation reports have GS_SUCCESS
+    const guildVaultBonus = await addGuildVaultBonus(inventory, missionReport);
 
     if (inventory.pendingPremiumCredits) {
         await dispatchPendingPremiumCredits(inventory);
@@ -141,7 +143,8 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         AffiliationMods,
         ConquestCompletedMissionsCount,
         NemesisTaxInfo,
-        RecoveredItemInfo
+        RecoveredItemInfo,
+        ...guildVaultBonus
     };
     if (
         missionReport.BMI ||

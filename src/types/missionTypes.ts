@@ -44,6 +44,8 @@ export interface IMissionInventoryUpdateResponseRailjackInterstitial extends Par
     SyndicateXPItemReward?: number;
     AffiliationMods?: IAffiliationMods[];
     NemesisTaxInfo?: INemesisTaxInfo;
+    GuildVaultBonusResources?: ITypeCount[]; // shown as "x% bonus for clan vault" with the squad's items added up
+    GuildVaultBonusMultiplier?: number;
 }
 
 export interface IMissionInventoryUpdateResponse extends IMissionInventoryUpdateResponseRailjackInterstitial {

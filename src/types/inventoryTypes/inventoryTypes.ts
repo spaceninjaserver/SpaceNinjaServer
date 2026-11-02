@@ -50,6 +50,7 @@ export const accountCheatBooleans = [
     "dontSubtractConsumables",
     "dontSubtractKeys",
     "finishInvasionsInOneMission",
+    "guildVaultBonusAlwaysDoubled",
     "infiniteCredits",
     "infinitePlatinum",
     "infiniteEndo",
@@ -107,7 +108,9 @@ export const accountCheatNumbers = {
     teralystCapturePlatinumBonus: { min: 0, max: 1000000, default: 0 },
     gantulystCapturePlatinumBonus: { min: 0, max: 1000000, default: 0 },
     hydrolystCapturePlatinumBonus: { min: 0, max: 1000000, default: 0 },
-    nightwaveStandingMultiplier: { min: 1, max: 1000000, default: 1 }
+    nightwaveStandingMultiplier: { min: 1, max: 1000000, default: 1 },
+    guildVaultBonusSoloSquadSize: { min: 0, max: 4, default: 0 },
+    guildVaultBonusProgressMultiplierOverride: { min: 0, max: 1000000, default: 3 }
 } as const;
 
 export type TAccountCheatBooleanKey = (typeof accountCheatBooleans)[number];

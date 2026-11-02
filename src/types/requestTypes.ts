@@ -47,6 +47,8 @@ export type IMissionInventoryUpdateRequest = {
     CrewShipRawSalvage?: ITypeCount[];
     CrewShipAmmo?: ITypeCount[];
     BonusMiscItems?: ITypeCount[];
+    GuildVaultBonusId?: IOid; // U42+, only sent with clanmates in the squad
+    GuildVaultBonusMembers?: string[]; // account ids of the clanmates in the squad
     EmailItems?: ITypeCount[];
     ShipDecorations?: ITypeCount[];
     LevelKeys?: ITypeCount[];
