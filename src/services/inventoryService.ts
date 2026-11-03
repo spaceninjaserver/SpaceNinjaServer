@@ -295,6 +295,7 @@ export const createInventory = async (
                     ItemId: new Types.ObjectId(fromOid(startingGear.SpecialItems![0].ItemId))
                 }
             });
+            inventory.CurrentLoadOutIds[0] = loadout.NORMAL[0]._id;
             await loadout.save();
 
             const completedMissions = ["SolNode27", "SolNode89", "SolNode63", "SolNode85", "SolNode15", "SolNode79"];

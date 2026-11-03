@@ -1289,9 +1289,14 @@ const mapLegacyLoadoutConfig = (
                     }
                 );
             } else {
-                logger.warn(
-                    `Could not find SENTINEL loadout with id ${inventory.CurrentLoadOutIds[eLoadoutIndex.SENTINEL]?.toString()}, this part of the loadout will be empty`
-                );
+                if (
+                    inventory.CurrentLoadOutIds[eLoadoutIndex.SENTINEL] &&
+                    inventory.CurrentLoadOutIds[eLoadoutIndex.SENTINEL].toString() !== "000000000000000000000000"
+                ) {
+                    logger.warn(
+                        `Could not find SENTINEL loadout with id ${inventory.CurrentLoadOutIds[eLoadoutIndex.SENTINEL].toString()}, this part of the loadout will be empty`
+                    );
+                }
 
                 loadoutConfig.Presets.push(
                     {
