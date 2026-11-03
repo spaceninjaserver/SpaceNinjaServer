@@ -520,7 +520,7 @@ export const addMissionInventoryUpdates = async (
                 break;
             case "LevelKeys":
                 // Void keys are given this way in the relevant versions.
-                addLevelKeys(inventory, value);
+                addLevelKeys(inventory, inventory.dontSubtractKeys ? value.filter(x => x.ItemCount > 0) : value);
                 break;
             case "FusionBundles": {
                 let fusionPointsDelta = 0;
