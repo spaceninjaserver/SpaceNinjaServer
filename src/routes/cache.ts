@@ -34,6 +34,8 @@ cacheRouter.get(/^\/[0-9]+\/H\.Cache\.bin.*$/, (_req, res) => {
     res.sendFile(`static/data/H.Cache.bin`, { root: "./" });
 });
 
+cacheRouter.get(/^\/H\.Cache\.bin!/, (_req, res) => res.status(404).end());
+
 cacheRouter.get(/^(\/\/|\/)(SplitCaches|Lotus|Tools|7|7_en)\/.*$/, async (req, res) => {
     try {
         const dir = req.path.replaceAll("//", "/").substring(0, req.path.lastIndexOf("/"));
