@@ -4090,7 +4090,7 @@ const goalMessagesByKey: Record<
         sub: "/Lotus/Language/Inbox/WolfTacAlertTitle",
         icon: "/Lotus/Interface/Icons/Npcs/Seasonal/NoraNight.png"
     },
-    "/Lotus/Types/Keys/WolfTacAlertxB": {
+    "/Lotus/Types/Keys/WolfTacAlertB": {
         sndr: "/Lotus/Language/Bosses/NoraNight",
         msg: "/Lotus/Language/Inbox/WolfTacAlertHardBody",
         sub: "/Lotus/Language/Inbox/WolfTacAlertHardTitle",
