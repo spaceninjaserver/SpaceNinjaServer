@@ -1268,6 +1268,9 @@ const isEligibleForCreditReward = async (
     node: IRegion,
     buildLabel: string
 ): Promise<boolean> => {
+    if (rewardInfo.sortieTag) {
+        return false;
+    }
     // (E)SO should not give credits for only completing zone 1, in which case it has no rewardQualifications (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1823)
     if ((await getRotations(rewardInfo, buildLabel)).length == 0) {
         return missions.Tag == "SolNode720"; // Netracells don't use rewardQualifications but probably should give credits anyway
@@ -1515,7 +1518,7 @@ export const addMissionRewards = async (
         }
         if (fixedLevelRewards.levelKeyRewards2) {
             for (const reward of fixedLevelRewards.levelKeyRewards2) {
-                //quest stage completion credit rewards
+                // quest stage completion credit rewards
                 if (reward.rewardType == "RT_CREDITS") {
                     missionCompletionCredits += reward.amount;
                     continue;
@@ -1542,7 +1545,7 @@ export const addMissionRewards = async (
         const node = await getRegion(missions.Tag, buildLabel);
         if (node) {
             if (await isEligibleForCreditReward(rewardInfo, missions, node, buildLabel)) {
-                //node based credit rewards for mission completion
+                // node based credit rewards for mission completion
                 const levelCreditReward = getLevelCreditRewards(node);
                 if (levelCreditReward) {
                     missionCompletionCredits += levelCreditReward;
@@ -1561,10 +1564,13 @@ export const addMissionRewards = async (
 
             if (rewardInfo.sortieTag == "Mission1") {
                 missionCompletionCredits += 20_000;
+                logger.debug(`sortieCreditReward 20000`);
             } else if (rewardInfo.sortieTag == "Mission2") {
                 missionCompletionCredits += 30_000;
+                logger.debug(`sortieCreditReward 30000`);
             } else if (rewardInfo.sortieTag == "Final") {
                 missionCompletionCredits += 50_000;
+                logger.debug(`sortieCreditReward 50000`);
             }
 
             if (missions.Tag == "PlutoToErisJunction") {
