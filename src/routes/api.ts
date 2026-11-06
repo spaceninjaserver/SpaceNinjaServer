@@ -177,6 +177,7 @@ import { startRecipeController } from "../controllers/api/startRecipeController.
 import { stepSequencersController } from "../controllers/api/stepSequencersController.ts";
 import { surveysController } from "../controllers/api/surveysController.ts";
 import { syncRetroSettingsController } from "../controllers/api/syncRetroSettingsController.ts";
+import { syndicateFavorController } from "../controllers/api/syndicateFavorController.ts";
 import { syndicateSacrificeController } from "../controllers/api/syndicateSacrificeController.ts";
 import { syndicateStandingBonusController } from "../controllers/api/syndicateStandingBonusController.ts";
 import { tauntHistoryController } from "../controllers/api/tauntHistoryController.ts";
@@ -420,6 +421,7 @@ apiRouter.post("/startGuildRecipe.php", startGuildRecipeController);
 apiRouter.post("/startRecipe.php", startRecipeController);
 apiRouter.post("/stepSequencers.php", stepSequencersController);
 apiRouter.post("/syncRetroSettings.php", syncRetroSettingsController);
+apiRouter.post("/syndicateFavor.php", syndicateFavorController); // U15
 apiRouter.post("/syndicateSacrifice.php", syndicateSacrificeController);
 apiRouter.post("/syndicateStandingBonus.php", syndicateStandingBonusController);
 apiRouter.post("/tauntHistory.php", tauntHistoryController);
