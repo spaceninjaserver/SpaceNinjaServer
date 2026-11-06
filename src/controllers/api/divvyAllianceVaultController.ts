@@ -1,5 +1,6 @@
 import { Alliance, AllianceMember, Guild, GuildMember } from "../../models/guildModel.ts";
 import { getAccountForRequest } from "../../services/loginService.ts";
+import { hasAlliancePermission } from "../../services/guildService.ts";
 import { eGuildPermission } from "../../types/guildTypes.ts";
 import { parallelForeach } from "../../utils/async-utils.ts";
 import { logger } from "../../utils/logger.ts";
@@ -16,12 +17,13 @@ export const divvyAllianceVaultController: RequestHandler = async (req, res) => 
             return;
         }
 
-        // Check guild has treasurer permissions in the alliance
-        const allianceMember = (await AllianceMember.findOne({
-            allianceId: req.query.allianceId as string,
-            guildId: guildMember.guildId
-        }))!;
-        if (!(allianceMember.Permissions & eGuildPermission.Treasurer)) {
+        if (
+            !(await hasAlliancePermission(
+                req.query.allianceId as string,
+                guildMember.guildId,
+                eGuildPermission.Treasurer
+            ))
+        ) {
             res.status(400).end();
             return;
         }
@@ -38,7 +40,7 @@ export const divvyAllianceVaultController: RequestHandler = async (req, res) => 
         });
         logger.debug(`alliance has ${totalMembers} members between all its clans`);
 
-        const alliance = (await Alliance.findById(allianceMember.allianceId, "VaultRegularCredits"))!;
+        const alliance = (await Alliance.findById(req.query.allianceId as string, "VaultRegularCredits"))!;
         if (alliance.VaultRegularCredits) {
             let creditsHandedOutInTotal = 0;
             await parallelForeach(allianceMembers, async allianceMember => {

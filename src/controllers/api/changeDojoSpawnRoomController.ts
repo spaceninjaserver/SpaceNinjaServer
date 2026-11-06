@@ -2,6 +2,7 @@ import type { RequestHandler } from "express";
 //import type { IOidWithLegacySupport } from "../../types/commonTypes.ts";
 import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { getDojoClient, getGuildForRequest } from "../../services/guildService.ts";
+import { eDojoRequestStatus } from "../../types/guildTypes.ts";
 
 export const changeDojoSpawnRoomController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -12,7 +13,7 @@ export const changeDojoSpawnRoomController: RequestHandler = async (req, res) =>
     guild.DojoComponents[0].pf = "/Lotus/Levels/ClanDojo/DojoHall.level";
     await guild.save();
     const buildLabel = getBuildLabel(req, account);
-    res.json(await getDojoClient(guild, 0, undefined, buildLabel));
+    res.json(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, undefined, buildLabel));
 };
 
 /*interface IChangeDojoSpawnRoomRequest {

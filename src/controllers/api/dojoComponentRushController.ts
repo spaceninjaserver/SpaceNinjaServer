@@ -8,7 +8,7 @@ import {
 } from "../../services/guildService.ts";
 import { getInventory2, updatePlatinum } from "../../services/inventoryService.ts";
 import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
-import type { IDojoContributable } from "../../types/guildTypes.ts";
+import { eDojoRequestStatus, type IDojoContributable } from "../../types/guildTypes.ts";
 import type { RequestHandler, Request, Response } from "express";
 import type { IDojoBuild } from "warframe-public-export-plus";
 import { ExportDojoRecipes } from "warframe-public-export-plus";
@@ -66,7 +66,7 @@ const processDojoComponentRush = async (
         "PremiumCreditsFree"
     );
     if (!hasAccessToDojo(inventory)) {
-        res.json({ DojoRequestStatus: -1 });
+        res.json({ DojoRequestStatus: eDojoRequestStatus.INVALID_PERMISSION });
         return;
     }
     const guild = await getGuildForRequestEx(req, inventory);
@@ -105,7 +105,7 @@ const processDojoComponentRush = async (
 
     const buildLabel = getBuildLabel(req, account);
     res.json({
-        ...(await getDojoClient(guild, 0, component._id, buildLabel)),
+        ...(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, component._id, buildLabel)),
         InventoryChanges: inventoryChanges
     });
 };

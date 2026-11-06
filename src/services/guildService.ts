@@ -21,6 +21,7 @@ import type {
     ITechProjectDatabase,
     IVaultDatabase,
     IVaultPendingRecipeClient,
+    TDojoRequestStatus,
     TGuildPermission
 } from "../types/guildTypes.ts";
 import { eGuildPermission } from "../types/guildTypes.ts";
@@ -283,7 +284,6 @@ const getAllianceVaultEx = (
         MinMissionBattlePay: alliance.MinMissionBattlePay
     };
 
-    // it just softlocks game for some reason
     {
         const pendingRecipes: Record<string, IVaultPendingRecipeClient[]> = {};
         const toRemove: Map<string, Set<string>> = new Map();
@@ -346,7 +346,7 @@ const getAllianceVaultEx = (
 
 export const getDojoClient = async (
     guild: TGuildDatabaseDocument,
-    status: number,
+    status: TDojoRequestStatus,
     componentId: Types.ObjectId | string | undefined,
     buildLabel: string
 ): Promise<IDojoClient> => {
@@ -999,6 +999,15 @@ export const hasGuildPermission = async (
         return hasGuildPermissionEx(guild, member, perm);
     }
     return false;
+};
+
+export const hasAlliancePermission = async (
+    allianceId: string | Types.ObjectId,
+    guildId: string | Types.ObjectId,
+    perm: TGuildPermission
+): Promise<boolean> => {
+    const allianceMember = await AllianceMember.findOne({ allianceId, guildId, Pending: false }, "Permissions");
+    return !!allianceMember && (allianceMember.Permissions & perm) != 0;
 };
 
 export const hasPermissionToDecorateComponent = async (

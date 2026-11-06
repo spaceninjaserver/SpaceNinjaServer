@@ -8,6 +8,7 @@ import {
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
+import { eDojoRequestStatus } from "../../types/guildTypes.ts";
 
 export const setDojoComponentSettingsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -18,7 +19,7 @@ export const setDojoComponentSettingsController: RequestHandler = async (req, re
         !hasAccessToDojo(inventory) ||
         !(await hasPermissionToDecorateComponent(guild, account._id.toString(), componentId))
     ) {
-        res.json({ DojoRequestStatus: -1 });
+        res.json({ DojoRequestStatus: eDojoRequestStatus.INVALID_PERMISSION });
         return;
     }
     const component = guild.DojoComponents.id(componentId)!;
@@ -26,7 +27,7 @@ export const setDojoComponentSettingsController: RequestHandler = async (req, re
     component.Settings = data.Settings;
     await guild.save();
     const buildLabel = getBuildLabel(req, account);
-    res.json(await getDojoClient(guild, 0, component._id, buildLabel));
+    res.json(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, component._id, buildLabel));
 };
 
 interface ISetDojoComponentSettingsRequest {

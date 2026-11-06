@@ -12,6 +12,7 @@ import { getAccountForRequest, getBuildLabel } from "../../services/loginService
 import type { RequestHandler } from "express";
 import { Types } from "mongoose";
 import { ExportDojoRecipes, ExportResources } from "warframe-public-export-plus";
+import { eDojoRequestStatus } from "../../types/guildTypes.ts";
 
 export const placeDecoInComponentController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -21,7 +22,7 @@ export const placeDecoInComponentController: RequestHandler = async (req, res) =
     const request = JSON.parse(String(req.body)) as IPlaceDecoInComponentRequest;
     const componentId = request.ComponentId ?? (req.query.componentId as string);
     if (!hasAccessToDojo(inventory) || !(await hasPermissionToDecorateComponent(guild, accountId, componentId))) {
-        res.json({ DojoRequestStatus: -1 });
+        res.json({ DojoRequestStatus: eDojoRequestStatus.INVALID_PERMISSION });
         return;
     }
     const component = guild.DojoComponents.id(componentId)!;
@@ -121,7 +122,7 @@ export const placeDecoInComponentController: RequestHandler = async (req, res) =
 
     await guild.save();
     const buildLabel = getBuildLabel(req, account);
-    res.json(await getDojoClient(guild, 0, component._id, buildLabel));
+    res.json(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, component._id, buildLabel));
 };
 
 interface IPlaceDecoInComponentRequest {

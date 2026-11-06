@@ -4,6 +4,7 @@ import { Types } from "mongoose";
 import { getDojoClient, getGuildForRequest } from "../../services/guildService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { eDojoRequestStatus } from "../../types/guildTypes.ts";
 
 export const createGuildDojoController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -22,7 +23,7 @@ export const createGuildDojoController: RequestHandler = async (req, res) => {
         await guild.save();
     }
 
-    res.json(await getDojoClient(guild, 0, undefined, buildLabel));
+    res.json(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, undefined, buildLabel));
 };
 
 interface ICreateGuildDojoRequest {

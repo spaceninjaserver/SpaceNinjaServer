@@ -1,8 +1,9 @@
-import type { TGuildDatabaseDocument } from "../../models/guildModel.ts";
-import { GuildMember } from "../../models/guildModel.ts";
+import type { TAllianceDatabaseDocument, TGuildDatabaseDocument } from "../../models/guildModel.ts";
+import { Alliance, GuildMember } from "../../models/guildModel.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
 import {
     addGuildMemberMiscItemContribution,
+    getAllianceVault,
     getDojoClient,
     getGuildForRequestEx,
     hasAccessToDojo,
@@ -12,7 +13,7 @@ import {
 } from "../../services/guildService.ts";
 import { addMiscItems, getInventory2, updateCredits } from "../../services/inventoryService.ts";
 import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
-import type { IDojoContributable, IGuildMemberDatabase } from "../../types/guildTypes.ts";
+import { eDojoRequestStatus, type IDojoContributable, type IGuildMemberDatabase } from "../../types/guildTypes.ts";
 import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { RequestHandler } from "express";
@@ -36,6 +37,7 @@ interface IContributeToDojoComponentRequest {
     VaultIngredientContributions?: IMiscItem[];
 
     ResultType?: string;
+    Alliance?: boolean;
 }
 
 export const contributeToDojoComponentController: RequestHandler = async (req, res) => {
@@ -51,7 +53,7 @@ export const contributeToDojoComponentController: RequestHandler = async (req, r
     );
     // Any clan member should have permission to contribute although notably permission is denied if they have not crafted the dojo key and were simply invited in.
     if (!hasAccessToDojo(inventory)) {
-        res.json({ DojoRequestStatus: -1 });
+        res.json({ DojoRequestStatus: eDojoRequestStatus.INVALID_PERMISSION });
         return;
     }
     const guild = await getGuildForRequestEx(req, inventory);
@@ -68,13 +70,16 @@ export const contributeToDojoComponentController: RequestHandler = async (req, r
     request.VaultIngredientContributions ??= request.VaultMiscItems;
     const component = guild.DojoComponents.id(request.ComponentId)!;
     const inventoryChanges: IInventoryChanges = {};
+    let alliance: TAllianceDatabaseDocument | undefined;
     if (request.ResultType) {
-        guild.VaultPendingRecipes ??= [];
-        if (!guild.VaultPendingRecipes.find(r => String(r.ParentRoom) == request.ComponentId)) {
+        if (request.Alliance) {
+            alliance = (await Alliance.findById(guild.AllianceId))!;
+        }
+        const cRecipe = (alliance ?? guild).VaultPendingRecipes?.find(r => String(r.ParentRoom) == request.ComponentId);
+        if (!cRecipe) {
             throw new Error("attempt to contribute to non-existent vault recipe?!");
         }
 
-        const cRecipe = guild.VaultPendingRecipes.find(r => String(r.ParentRoom) == request.ComponentId)!;
         const recipe = getRecipe(cRecipe.RecipeType, buildLabel)!;
         const meta: IDojoBuild = {
             name: "",
@@ -107,9 +112,10 @@ export const contributeToDojoComponentController: RequestHandler = async (req, r
         }
     }
 
-    await Promise.all([guild.save(), inventory.save(), guildMember.save()]);
+    await Promise.all([guild.save(), inventory.save(), guildMember.save(), alliance?.save()]);
     res.json({
-        ...(await getDojoClient(guild, 0, component._id, buildLabel)),
+        ...(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, request.ComponentId, buildLabel)),
+        ...(alliance && { AllianceVault: await getAllianceVault(alliance, buildLabel) }),
         InventoryChanges: inventoryChanges
     });
 };

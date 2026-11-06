@@ -10,6 +10,7 @@ import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
+import { eDojoRequestStatus } from "../../types/guildTypes.ts";
 
 export const destroyDojoDecoController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -20,7 +21,7 @@ export const destroyDojoDecoController: RequestHandler = async (req, res) => {
         !hasAccessToDojo(inventory) ||
         !(await hasPermissionToDecorateComponent(guild, account._id.toString(), request.ComponentId))
     ) {
-        res.json({ DojoRequestStatus: -1 });
+        res.json({ DojoRequestStatus: eDojoRequestStatus.INVALID_PERMISSION });
         return;
     }
     if ("DecoType" in request) {
@@ -39,7 +40,7 @@ export const destroyDojoDecoController: RequestHandler = async (req, res) => {
 
     await guild.save();
     const buildLabel = getBuildLabel(req, account);
-    res.json(await getDojoClient(guild, 0, request.ComponentId, buildLabel));
+    res.json(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, request.ComponentId, buildLabel));
 };
 
 interface IDestroyDojoDecoRequest {

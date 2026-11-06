@@ -110,6 +110,37 @@ export const eGuildPermission = {
 } as const;
 export type TGuildPermission = (typeof eGuildPermission)[keyof typeof eGuildPermission];
 
+export const eDojoRequestStatus = {
+    INVALID_PERMISSION: -1,
+    RECIPE_NOT_FOUND: -2,
+    BAD_REQUEST: -3,
+    INSUFFICIENT_FUNDS: -4,
+    NO_PURCHASES: -5,
+    ALLIANCE_MAX_SIZE: -6,
+    GUILD_INCREASE_MORATORIUM_ACTIVE: -7,
+    CDN_URL_STALE: -8,
+    VALID_REQUEST: 0,
+    REVISION_NOT_LATEST: 1,
+    PARENT_NO_LONGER_EXISTS: 2,
+    PARENT_DESTRUCTION_QUEUED: 3,
+    INSUFFICIENT_ENERGY: 4,
+    INSUFFICIENT_CAPACITY: 5,
+    MISSING_PREREQ: 6,
+    COMPONENT_NOT_FOUND: 7,
+    CONSTRUCTION_STARTED: 8,
+    ALREADY_ABORTING: 9,
+    PREVENTED_OVERCONTRIBUTION: 10,
+    NOT_BUILDING_YET: 11,
+    ALREADY_COMPLETED: 12,
+    HAS_CHILD: 13,
+    DESTRUCTION_ALREADY_QUEUED: 14,
+    NOT_QUEUED_FOR_DESTRUCTION: 15,
+    COMPONENT_DESTROYED: 16,
+    LOCATION_OCCUPIED: 17,
+    COMPONENT_LOCKED: 18
+} as const;
+export type TDojoRequestStatus = (typeof eDojoRequestStatus)[keyof typeof eDojoRequestStatus];
+
 export interface IGuildRank {
     Name: string;
     Permissions: number;
@@ -205,7 +236,7 @@ export interface IDojoClient {
     RevisionTime: number;
     Energy: number;
     Capacity: number;
-    DojoRequestStatus: number;
+    DojoRequestStatus: TDojoRequestStatus;
     ContentURL?: string;
     GuildEmblem?: boolean;
     DojoComponents: IDojoComponentClient[];

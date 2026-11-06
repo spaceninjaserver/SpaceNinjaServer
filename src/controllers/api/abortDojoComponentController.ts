@@ -1,4 +1,5 @@
 import {
+    getAllianceVault,
     getDojoClient,
     getGuildForRequestEx,
     hasAccessToDojo,
@@ -10,7 +11,14 @@ import {
 } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
-import { eGuildPermission, type IDojoClient } from "../../types/guildTypes.ts";
+import {
+    eDojoRequestStatus,
+    eGuildPermission,
+    type IDojoClient,
+    type IGuildVaultClient,
+    type TDojoRequestStatus
+} from "../../types/guildTypes.ts";
+import { Alliance } from "../../models/guildModel.ts";
 import type { Request, RequestHandler } from "express";
 
 export const abortDojoComponentGetController: RequestHandler = async (req, res) => {
@@ -19,15 +27,16 @@ export const abortDojoComponentGetController: RequestHandler = async (req, res) 
 
 export const abortDojoComponentPostController: RequestHandler = async (req, res) => {
     const request = JSON.parse(String(req.body)) as IAbortDojoComponentRequest;
-    res.json(await abortDojoComponent(req, request.ComponentId, request.DecoId, request.ResultType));
+    res.json(await abortDojoComponent(req, request.ComponentId, request.DecoId, request.ResultType, request.Alliance));
 };
 
 const abortDojoComponent = async (
     req: Request,
     componentId: string,
     decoId?: string,
-    resultType?: string
-): Promise<{ DojoRequestStatus: number } | IDojoClient> => {
+    resultType?: string,
+    isAlliance?: boolean
+): Promise<{ DojoRequestStatus: TDojoRequestStatus } | (IDojoClient & { AllianceVault?: IGuildVaultClient })> => {
     const account = await getAccountForRequest(req);
     const buildLabel = getBuildLabel(req, account);
     const inventory = await getInventory(account._id, "GuildId LevelKeys");
@@ -38,34 +47,43 @@ const abortDojoComponent = async (
             !hasAccessToDojo(inventory) ||
             !(await hasGuildPermission(guild, account._id, eGuildPermission.Tactician))
         ) {
-            return { DojoRequestStatus: -1 };
+            return { DojoRequestStatus: eDojoRequestStatus.INVALID_PERMISSION };
         }
 
+        if (isAlliance) {
+            const alliance = (await Alliance.findById(guild.AllianceId))!;
+            removeVaultPendingRecipe(alliance, componentId, resultType);
+            await alliance.save();
+            return {
+                ...(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, undefined, buildLabel)),
+                AllianceVault: await getAllianceVault(alliance, buildLabel)
+            };
+        }
         removeVaultPendingRecipe(guild, componentId, resultType);
         await guild.save();
-        return await getDojoClient(guild, 0, undefined, buildLabel);
+        return await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, undefined, buildLabel);
     } else if (decoId) {
         if (
             !hasAccessToDojo(inventory) ||
             !(await hasPermissionToDecorateComponent(guild, account._id.toString(), componentId))
         ) {
-            return { DojoRequestStatus: -1 };
+            return { DojoRequestStatus: eDojoRequestStatus.INVALID_PERMISSION };
         }
 
         removeDojoDeco(guild, componentId, decoId);
         await guild.save();
-        return await getDojoClient(guild, 0, componentId, buildLabel);
+        return await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, componentId, buildLabel);
     } else {
         if (
             !hasAccessToDojo(inventory) ||
             !(await hasGuildPermission(guild, account._id, eGuildPermission.Architect))
         ) {
-            return { DojoRequestStatus: -1 };
+            return { DojoRequestStatus: eDojoRequestStatus.INVALID_PERMISSION };
         }
 
         removeDojoRoom(guild, componentId);
         await guild.save();
-        return await getDojoClient(guild, 0, undefined, buildLabel);
+        return await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, undefined, buildLabel);
     }
 };
 
@@ -74,4 +92,5 @@ interface IAbortDojoComponentRequest {
     ComponentId: string;
     DecoId?: string;
     ResultType?: string;
+    Alliance?: boolean;
 }

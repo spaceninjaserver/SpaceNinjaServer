@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import type { IDojoComponentClient } from "../../types/guildTypes.ts";
+import { eDojoRequestStatus, type IDojoComponentClient } from "../../types/guildTypes.ts";
 import { eGuildPermission } from "../../types/guildTypes.ts";
 import {
     getDojoClient,
@@ -26,7 +26,7 @@ export const startDojoRecipeController: RequestHandler = async (req, res) => {
     const inventory = await getInventory(account._id, "GuildId LevelKeys");
     const guild = await getGuildForRequestEx(req, inventory);
     if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, account._id, eGuildPermission.Architect))) {
-        res.json({ DojoRequestStatus: -1 });
+        res.json({ DojoRequestStatus: eDojoRequestStatus.INVALID_PERMISSION });
         return;
     }
     const request = JSON.parse(String(req.body)) as IStartDojoRecipeRequest;
@@ -36,7 +36,7 @@ export const startDojoRecipeController: RequestHandler = async (req, res) => {
         guild.GuildTierIncMoratorium &&
         guild.GuildTierIncMoratorium.getTime() > Date.now()
     ) {
-        res.json({ DojoRequestStatus: -7 });
+        res.json({ DojoRequestStatus: eDojoRequestStatus.GUILD_INCREASE_MORATORIUM_ACTIVE });
         return;
     }
 
@@ -76,5 +76,5 @@ export const startDojoRecipeController: RequestHandler = async (req, res) => {
     }
     await guild.save();
     const buildLabel = getBuildLabel(req, account);
-    res.json(await getDojoClient(guild, 0, undefined, buildLabel));
+    res.json(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, undefined, buildLabel));
 };

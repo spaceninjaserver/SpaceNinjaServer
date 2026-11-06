@@ -2,6 +2,7 @@ import { getJSONfromString, regexEscape } from "../../helpers/stringHelpers.ts";
 import { Alliance, AllianceMember, Guild, GuildMember } from "../../models/guildModel.ts";
 import { createMessage } from "../../services/inboxService.ts";
 import { getEffectiveAvatarImageType, getInventory } from "../../services/inventoryService.ts";
+import { hasAlliancePermission } from "../../services/guildService.ts";
 import { getAccountForRequest, getSuffixedName } from "../../services/loginService.ts";
 import { eGuildPermission } from "../../types/guildTypes.ts";
 import { logger } from "../../utils/logger.ts";
@@ -17,12 +18,9 @@ export const addToAllianceController: RequestHandler = async (req, res) => {
         return;
     }
 
-    // Check guild has invite permissions in the alliance
-    const allianceMember = (await AllianceMember.findOne({
-        allianceId: req.query.allianceId as string,
-        guildId: guildMember.guildId
-    }))!;
-    if (!(allianceMember.Permissions & eGuildPermission.Recruiter)) {
+    if (
+        !(await hasAlliancePermission(req.query.allianceId as string, guildMember.guildId, eGuildPermission.Recruiter))
+    ) {
         res.status(400).json({ Error: 104 });
         return;
     }
@@ -74,7 +72,7 @@ export const addToAllianceController: RequestHandler = async (req, res) => {
     // TOVERIFY: Should this message be highPriority?
     const invitedClanOwnerMember = (await GuildMember.findOne({ guildId: guilds[0]._id, rank: 0 }))!;
     const senderInventory = await getInventory(account._id, "ActiveAvatarImageType");
-    const senderGuild = (await Guild.findById(allianceMember.guildId, "Name"))!;
+    const senderGuild = (await Guild.findById(guildMember.guildId, "Name"))!;
     const alliance = (await Alliance.findById(req.query.allianceId as string, "Name"))!;
     await createMessage(invitedClanOwnerMember.accountId, [
         {

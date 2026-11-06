@@ -1,90 +1,68 @@
 import type { RequestHandler } from "express";
-import { eGuildPermission } from "../../types/guildTypes.ts";
+import { eDojoRequestStatus, eGuildPermission } from "../../types/guildTypes.ts";
 import {
+    getAllianceVault,
     getDojoClient,
     getGuildForRequestEx,
     hasAccessToDojo,
+    hasAlliancePermission,
     hasGuildPermission
 } from "../../services/guildService.ts";
 import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { getRecipe } from "../../services/itemDataService.ts";
-import { Alliance, type TGuildDatabaseDocument } from "../../models/guildModel.ts";
+import { Alliance } from "../../models/guildModel.ts";
 import { Types } from "mongoose";
 
 export const startGuildRecipeController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
+    const buildLabel = getBuildLabel(req, account);
     const inventory = await getInventory(account._id, "GuildId LevelKeys");
     const guild = await getGuildForRequestEx(req, inventory);
     const payload = getJSONfromString<IStartGuildRecipeRequest>(String(req.body));
 
     if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, account._id, eGuildPermission.Tactician))) {
-        res.json({ DojoRequestStatus: -1 });
+        res.json({ DojoRequestStatus: eDojoRequestStatus.INVALID_PERMISSION });
         return;
     }
 
-    if (await isRoomCrafting(guild, payload.ParentRoom, payload.Alliance)) {
-        res.json({ DojoRequestStatus: -1 });
+    const recipe = getRecipe(payload.Recipe, buildLabel);
+    if (!recipe) {
+        res.json({ DojoRequestStatus: eDojoRequestStatus.RECIPE_NOT_FOUND });
         return;
     }
 
-    const buildLabel = getBuildLabel(req, account);
-    const recipe = getRecipe(payload.Recipe, buildLabel)!;
-    if (payload.Alliance) {
-        res.json({ DojoRequestStatus: -1 });
+    const alliance = guild.AllianceId ? await Alliance.findById(guild.AllianceId) : null;
+    if (
+        [guild, alliance].some(vault => vault?.VaultPendingRecipes?.some(r => r.ParentRoom.equals(payload.ParentRoom)))
+    ) {
+        res.json({ DojoRequestStatus: eDojoRequestStatus.CONSTRUCTION_STARTED });
         return;
-        // Alliance crafting for some reason softlocks client
-        // const alliance = (await Alliance.findById(guild.AllianceId))!;
-        // const allianceMember = await AllianceMember.findOne({
-        //     guildId: guild._id,
-        //     Pending: false
-        // });
-
-        // if (!allianceMember || !(allianceMember.Permissions & GuildPermission.Tactician)) {
-        //     res.json({ DojoRequestStatus: -1 });
-        //     return;
-        // }
-
-        // alliance.VaultPendingRecipes ??= [];
-        // alliance.VaultPendingRecipes.push({
-        //     ParentRoom: new Types.ObjectId(payload.ParentRoom),
-        //     ParentGuildId: guild._id,
-        //     Type: recipe.resultType,
-        //     RecipeType: payload.Recipe;
-        // });
-        // await alliance.save();
-        // res.json(await getDojoClient(guild, 0, undefined, account.BuildLabel));
-    } else {
-        guild.VaultPendingRecipes ??= [];
-        guild.VaultPendingRecipes.push({
-            ParentRoom: new Types.ObjectId(payload.ParentRoom),
-            ParentGuildId: guild._id,
-            Type: recipe.resultType,
-            RecipeType: payload.Recipe
-        });
-        await guild.save();
-        res.json(await getDojoClient(guild, 0, undefined, buildLabel));
     }
-};
 
-const isRoomCrafting = async (
-    guild: TGuildDatabaseDocument,
-    ParentRoom: string,
-    isAlliance?: true
-): Promise<boolean> => {
-    guild.VaultPendingRecipes ??= [];
-    if (guild.VaultPendingRecipes.find(r => String(r.ParentRoom) == ParentRoom)) {
-        return true;
+    if (
+        payload.Alliance &&
+        !(alliance && (await hasAlliancePermission(alliance._id, guild._id, eGuildPermission.Tactician)))
+    ) {
+        res.json({ DojoRequestStatus: eDojoRequestStatus.INVALID_PERMISSION });
+        return;
     }
-    if (isAlliance) {
-        const alliance = (await Alliance.findById(guild.AllianceId))!;
-        alliance.VaultPendingRecipes ??= [];
-        if (alliance.VaultPendingRecipes.find(r => String(r.ParentRoom) == ParentRoom)) {
-            return true;
-        }
-    }
-    return false;
+
+    const vault = payload.Alliance ? alliance! : guild;
+    vault.VaultPendingRecipes ??= [];
+    vault.VaultPendingRecipes.push({
+        ParentRoom: new Types.ObjectId(payload.ParentRoom),
+        ParentGuildId: guild._id,
+        Type: recipe.resultType,
+        RecipeType: payload.Recipe
+    });
+    await vault.save();
+
+    res.json({
+        ...(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, undefined, buildLabel)),
+        ...(payload.Alliance && { AllianceVault: await getAllianceVault(alliance!, buildLabel) })
+    });
 };
 
 interface IStartGuildRecipeRequest {

@@ -7,7 +7,7 @@ import {
     hasGuildPermission,
     setGuildTier
 } from "../../services/guildService.ts";
-import { eGuildPermission } from "../../types/guildTypes.ts";
+import { eDojoRequestStatus, eGuildPermission } from "../../types/guildTypes.ts";
 import { unixTimesInMs } from "../../constants/timeConstants.ts";
 
 export const reduceGuildTierController: RequestHandler = async (req, res) => {
@@ -17,7 +17,7 @@ export const reduceGuildTierController: RequestHandler = async (req, res) => {
 
     // TOVERIFY: Which permission is required for this?
     if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, account._id, eGuildPermission.Ruler))) {
-        res.json({ DojoRequestStatus: -1 });
+        res.json({ DojoRequestStatus: eDojoRequestStatus.INVALID_PERMISSION });
         return;
     }
 

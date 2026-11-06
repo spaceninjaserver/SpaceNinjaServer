@@ -6,7 +6,7 @@ import {
     hasGuildPermission
 } from "../../services/guildService.ts";
 import { logger } from "../../utils/logger.ts";
-import type { IDojoComponentDatabase } from "../../types/guildTypes.ts";
+import { eDojoRequestStatus, type IDojoComponentDatabase } from "../../types/guildTypes.ts";
 import { eGuildPermission } from "../../types/guildTypes.ts";
 import { Types } from "mongoose";
 import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
@@ -17,7 +17,7 @@ export const changeDojoRootController: RequestHandler = async (req, res) => {
     const inventory = await getInventory(account._id, "GuildId LevelKeys");
     const guild = await getGuildForRequestEx(req, inventory);
     if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, account._id, eGuildPermission.Architect))) {
-        res.json({ DojoRequestStatus: -1 });
+        res.json({ DojoRequestStatus: eDojoRequestStatus.INVALID_PERMISSION });
         return;
     }
 
@@ -68,7 +68,7 @@ export const changeDojoRootController: RequestHandler = async (req, res) => {
     await guild.save();
 
     const buildLabel = getBuildLabel(req, account);
-    res.json(await getDojoClient(guild, 0, undefined, buildLabel));
+    res.json(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, undefined, buildLabel));
 };
 
 interface INode {
