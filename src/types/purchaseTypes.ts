@@ -46,6 +46,8 @@ export interface IPurchaseRequestU16 {
     quantity: number;
     usePremium: "1" | "0";
     voidTraderId?: string;
+    affTag?: string;
+    freeFavor?: "1" | "0";
 }
 
 export interface IPurchaseParams {

@@ -5178,8 +5178,8 @@ export const getBoosterPack = async (
     buildLabel: string = ""
 ): Promise<IBoosterPack | undefined> => {
     if (
-        version_compare(buildLabel, gameToBuildVersion["18.16.0"]) < 0 &&
-        uniqueName == "/Lotus/Types/BoosterPacks/RandomKey"
+        version_compare(buildLabel, gameToBuildVersion["18.18.0"]) < 0 &&
+        ["/Lotus/Types/BoosterPacks/RandomKey", "/Lotus/Types/BoosterPacks/SyndicateRandomKey"].includes(uniqueName)
     ) {
         const boosterPack: Mutable<IBoosterPack> = {
             name: "/Lotus/Language/Items/RandomKey",
@@ -5267,6 +5267,15 @@ export const getBoosterPack = async (
                 },
                 { Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerSabotageTier4Key", Rarity: "RARE", Amount: 1 }
             );
+        }
+        if (uniqueName == "/Lotus/Types/BoosterPacks/SyndicateRandomKey") {
+            boosterPack.name = "/Lotus/Language/Items/SyndicateRandomKey";
+            boosterPack.description = "/Lotus/Language/Items/SyndicateRandomKeyDesc";
+            boosterPack.rarityWeightsPerRoll = [
+                { COMMON: 0, UNCOMMON: 0, RARE: 1, LEGENDARY: 0 },
+                { COMMON: 0.75, UNCOMMON: 0.25, RARE: 0, LEGENDARY: 0 },
+                { COMMON: 0.75, UNCOMMON: 0.25, RARE: 0, LEGENDARY: 0 }
+            ];
         }
         return boosterPack;
     }

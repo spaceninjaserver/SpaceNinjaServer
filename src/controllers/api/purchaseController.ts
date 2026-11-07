@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
 import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { ePurchaseSource } from "../../types/purchaseTypes.ts";
-import type { IPurchaseRequest, IPurchaseRequestU16 } from "../../types/purchaseTypes.ts";
+import type { IPurchaseParams, IPurchaseRequest, IPurchaseRequestU16 } from "../../types/purchaseTypes.ts";
 import { handlePurchase } from "../../services/purchaseService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { sendWsBroadcastTo } from "../../services/wsService.ts";
@@ -15,16 +15,22 @@ export const purchasePostController: RequestHandler = async (req, res) => {
     let purchaseRequest = JSON.parse(String(req.body)) as IPurchaseRequest | IPurchaseRequestU16;
     if (!("PurchaseParams" in purchaseRequest)) {
         logger.debug("converting legacy purchase request", purchaseRequest);
-        purchaseRequest = {
-            PurchaseParams: {
-                Source: purchaseRequest.voidTraderId ? ePurchaseSource.VoidTrader : ePurchaseSource.Market,
-                SourceId: purchaseRequest.voidTraderId,
-                StoreItem: toStoreItem(purchaseRequest.productName),
-                Quantity: purchaseRequest.quantity,
-                UsePremium: purchaseRequest.usePremium == "1"
-            },
-            buildLabel: ""
-        } satisfies IPurchaseRequest;
+        const legacyRequest = purchaseRequest;
+        const purchaseParams: IPurchaseParams = {
+            Source: ePurchaseSource.Market,
+            StoreItem: toStoreItem(legacyRequest.productName),
+            Quantity: legacyRequest.quantity,
+            UsePremium: legacyRequest.usePremium == "1"
+        };
+        if (legacyRequest.voidTraderId) {
+            purchaseParams.Source = ePurchaseSource.VoidTrader;
+            purchaseParams.SourceId = legacyRequest.voidTraderId;
+        } else if (legacyRequest.affTag) {
+            purchaseParams.Source = ePurchaseSource.SyndicateFavor;
+            purchaseParams.SyndicateTag = legacyRequest.affTag;
+            purchaseParams.UseFreeFavor = legacyRequest.freeFavor == "1";
+        }
+        purchaseRequest = { PurchaseParams: purchaseParams, buildLabel: "" };
     }
     const account = await getAccountForRequest(req);
     if (!purchaseRequest.buildLabel) {
