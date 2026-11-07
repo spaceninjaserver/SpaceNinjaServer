@@ -397,6 +397,15 @@ export const inventoryController: RequestHandler = async (request, response) => 
     );
 };
 
+const classicSyndicates = new Set([
+    "ArbitersSyndicate",
+    "CephalonSudaSyndicate",
+    "NewLokaSyndicate",
+    "PerrinSyndicate",
+    "RedVeilSyndicate",
+    "SteelMeridianSyndicate"
+]);
+
 export const getInventoryResponse = async (
     request: Request,
     inventory: TInventoryDatabaseDocument,
@@ -424,6 +433,14 @@ export const getInventoryResponse = async (
         }
         for (const key of Object.keys(accountCheatNumbers)) {
             delete inventoryResponse[key as keyof typeof inventoryResponse];
+        }
+    }
+
+    if (!forWebui && !forExport) {
+        for (const affiliation of inventoryResponse.Affiliations) {
+            if (affiliation.Title && classicSyndicates.has(affiliation.Tag)) {
+                affiliation.Initiated = true;
+            }
         }
     }
 
