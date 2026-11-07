@@ -431,6 +431,13 @@ export const addMissionInventoryUpdates = async (
                 if (value.indexOf("e1i03119f130000000000000") != -1) {
                     addMissionComplete(inventory, { Tag: "SolNode12", Completes: 1 });
                 }
+                if (!inventory.alertsRepeatable) {
+                    for (const alertId of value) {
+                        if (!inventory.CompletedAlerts.includes(alertId)) {
+                            inventory.CompletedAlerts.push(alertId);
+                        }
+                    }
+                }
                 break;
             case "LastRegionPlayed":
                 if (!(config.unfaithfulBugFixes?.ignore1999LastRegionPlayed && value === "1999MapName")) {
