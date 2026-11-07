@@ -645,7 +645,7 @@ const pushSyndicateMissions = (
 
     const rng = new SRng(seed);
     const nodes: string[] = [];
-    for (let i = 0; i != 6; ++i) {
+    for (let i = 0; i != 7; ++i) {
         const index = rng.randomInt(0, nodeOptions.length - 1);
         nodes.push(nodeOptions[index]);
         nodeOptions.splice(index, 1);
