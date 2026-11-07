@@ -233,5 +233,10 @@
   "/Lotus/Language/Labels/DAMAGED",
   "/Lotus/Language/G1Quests/FomorianRevengeBattleName",
   "/Lotus/Language/Menu/CorpusRazorbackProject",
-  "/Lotus/Language/TauPrologue/RoadToTauEventName"
+  "/Lotus/Language/TauPrologue/RoadToTauEventName",
+  "/Lotus/Language/Dojo/FeaturedDojo",
+  "/Lotus/Language/Menu/Options_Controls_ControllerIconSet_TennoCon",
+  "/Lotus/Language/EntratiLab/EntratiGeneral/EntratiEventTrophyTierTwo",
+  "/Lotus/Language/EntratiLab/EntratiGeneral/EntratiEventTrophyTierThree",
+  "/Lotus/Language/EntratiLab/EntratiGeneral/EntratiEventTrophyTierFour"
 ]

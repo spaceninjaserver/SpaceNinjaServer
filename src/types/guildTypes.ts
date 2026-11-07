@@ -47,6 +47,8 @@ export interface IGuildCheats {
     noDojoResearchCosts?: boolean;
     noDojoResearchTime?: boolean;
     fastClanAscension?: boolean;
+    featuredDojo?: boolean;
+    featuredDojoIcon?: number;
 }
 
 export interface IGuildDatabase extends IGuildCheats, IVaultDatabase {

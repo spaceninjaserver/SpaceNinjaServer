@@ -6726,15 +6726,39 @@ const generateGoalAlert = (tag: string, alertIdx: number, wsAlerts: IAlert[], bu
 };
 
 export const populateFeaturedGuilds = async (worldState: IWorldState): Promise<void> => {
-    const guilds = await Guild.find({ Featured: true }, "Name Tier AllianceId Emblem");
-    for (const guild of guilds) {
-        worldState.FeaturedGuilds.push({
+    const guilds = await Guild.find(
+        { $or: [{ Featured: true }, { featuredDojo: true }] },
+        "Name Tier AllianceId Emblem featuredDojoIcon"
+    ).sort({ _id: 1 });
+
+    // The star chart puts icons 7 & 8 at a fixed spot each, so only one guild can use each of them.
+    const specialIcons = new Set<number>();
+    const featuredGuilds = guilds.map(guild => {
+        let icon = guild.featuredDojoIcon;
+        if (icon == 7 || icon == 8) {
+            if (specialIcons.has(icon)) {
+                icon = undefined;
+            } else {
+                specialIcons.add(icon);
+            }
+        }
+        return {
             _id: toOid(guild._id),
             Name: guild.Name,
             Tier: guild.Tier,
             AllianceId: guild.AllianceId ? toOid(guild.AllianceId) : undefined,
-            Emblem: guild.Emblem
-        });
+            Emblem: guild.Emblem,
+            IconOveride: icon as IWorldState["FeaturedGuilds"][number]["IconOveride"]
+        };
+    });
+
+    // All other guilds are placed 30° apart in a circle around the Void, which has room for 12 minus the special icons.
+    const maxRegularGuilds = 12 - specialIcons.size;
+    let numRegularGuilds = 0;
+    for (const featuredGuild of featuredGuilds) {
+        if (featuredGuild.IconOveride == 7 || featuredGuild.IconOveride == 8 || numRegularGuilds++ < maxRegularGuilds) {
+            worldState.FeaturedGuilds.push(featuredGuild);
+        }
     }
 };
 

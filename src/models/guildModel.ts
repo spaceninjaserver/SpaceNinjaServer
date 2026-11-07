@@ -223,6 +223,8 @@ const guildSchema = new Schema<IGuildDatabase>(
         noDojoResearchCosts: Boolean,
         noDojoResearchTime: Boolean,
         fastClanAscension: Boolean,
+        featuredDojo: Boolean,
+        featuredDojoIcon: Number,
 
         Name: { type: String, required: true, unique: true },
         MOTD: { type: String, default: "" },

@@ -3699,12 +3699,35 @@ function attachAccountCheatsHandlers() {
                     })
                 }).done(() => {
                     input.value = value;
-                    inventory_data[elm.id] = value;
+                    inventory_data[input.id] = value;
                 });
             });
         };
     });
 }
+
+document.querySelectorAll("#guild-cheats .input-group").forEach(grp => {
+    const select = grp.querySelector("select");
+    const btn = grp.querySelector("button");
+    select.oninput = select.onchange = function () {
+        btn.classList.remove("btn-secondary");
+        btn.classList.add("btn-primary");
+    };
+    btn.onclick = function () {
+        btn.classList.remove("btn-primary");
+        btn.classList.add("btn-secondary");
+        revalidateAuthz().then(() => {
+            $.post({
+                url: "/custom/setGuildCheat?" + window.authz + "&guildId=" + window.guildId,
+                contentType: "application/json",
+                data: JSON.stringify({
+                    key: select.id,
+                    value: Number(select.value)
+                })
+            });
+        });
+    };
+});
 
 document.querySelectorAll("#guild-cheats input[type=checkbox]").forEach(elm => {
     elm.onchange = function () {
@@ -4379,9 +4402,15 @@ single.getRoute("#guild-route").on("beforeload", function () {
                     }
                 }
 
-                const guildCheats = document.querySelectorAll("#guild-cheats input[id]");
+                const guildCheats = document.querySelectorAll(
+                    "#guild-cheats input[id], #guild-cheats select[id], #guild-cheats button"
+                );
                 for (const elm of guildCheats) {
-                    elm.checked = !!guildData[elm.id];
+                    if (elm.tagName == "SELECT") {
+                        elm.value = guildData[elm.id] ?? 0;
+                    } else if (elm.tagName == "INPUT") {
+                        elm.checked = !!guildData[elm.id];
+                    }
                     if (!userGuildMember || userGuildMember.Rank > 1) {
                         elm.disabled = true;
                     } else {
