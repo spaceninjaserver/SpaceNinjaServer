@@ -21,11 +21,12 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
     const account = await getAccountForRequest(req);
     const buildLabel = getBuildLabel(req, account);
     const request = JSON.parse(String(req.body)) as ISyndicateStandingBonusRequest;
+    logger.trace("syndicateStandingBonus request:", request);
 
     const affiliationTag = "Operation" in request ? request.Operation.AffiliationTag : request.AffiliationTag;
     const items = "Operation" in request ? request.Operation.Items : request.Items;
     const modularWeaponIdRaw = "Operation" in request ? request.Operation.ModularWeaponId : request.ModularWeaponId;
-    const modularWeaponId = fromOid(modularWeaponIdRaw);
+    const modularWeaponId = modularWeaponIdRaw ? fromOid(modularWeaponIdRaw) : "";
 
     const syndicateMeta = (await getSyndicate(affiliationTag, buildLabel))!;
 
@@ -45,7 +46,7 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
     inventoryChanges.MiscItems = items;
 
     // Process modular weapon
-    if (modularWeaponId != "" && modularWeaponId != "000000000000000000000000") {
+    if (modularWeaponIdRaw && modularWeaponId != "" && modularWeaponId != "000000000000000000000000") {
         const category = req.query.Category as "LongGuns" | "Pistols" | "Melee" | "OperatorAmps";
         const weapon = inventory[category].id(modularWeaponId)!;
         if (gainedStanding !== 0) {
@@ -105,5 +106,5 @@ type ISyndicateStandingBonusRequest =
           // Older versions
           AffiliationTag: string;
           Items: IMiscItem[];
-          ModularWeaponId: IOid;
+          ModularWeaponId?: IOid;
       };
