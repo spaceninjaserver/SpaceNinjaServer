@@ -3801,6 +3801,77 @@ export const U5Modules: Record<string, IU5FingerprintData> = {
     }
 };
 
+export const foldedFusionCoreTypes = [
+    "/Lotus/Upgrades/Mods/Fusers/CommonLvl1ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/CommonLvl2ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/CommonLvl3ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/UncommonLvl1ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/UncommonLvl2ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/UncommonLvl3ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/UncommonLvl4ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/UncommonLvl5ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/RareLvl1ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/RareLvl2ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/RareLvl3ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/RareLvl4ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/RareLvl5ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl1ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl2ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl3ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl4ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl5ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl6ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl7ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl8ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl9ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl10ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl1ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl2ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl3ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl4ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl5ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl6ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl7ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl8ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl9ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl10ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl1ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl2ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl3ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl4ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl5ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl6ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl7ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl8ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl9ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl10ModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser"
+];
+
+export const unfoldedFusionCoreTypes = [
+    "/Lotus/Upgrades/Mods/Fusers/CommonModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/UncommonModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/RareModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyCommonModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonModFuser",
+    "/Lotus/Upgrades/Mods/Fusers/LegacyRareModFuser"
+];
+
+/**
+ * @returns a string of a Fusion Core type name determined by the input type name and UpgradeFingerprint
+ * @param inputType - the input type name; must be in unfoldedFusionCoreTypes
+ * @see unfoldedFusionCoreTypes
+ */
+export const getFusionCoreTypeName = (inputType: string, upgradeFingerprint?: string): string => {
+    if (unfoldedFusionCoreTypes.includes(inputType)) {
+        const parsedFingerprint = JSON.parse(upgradeFingerprint || `{"lvl":0}`) as { lvl: number };
+        if (parsedFingerprint.lvl > 0) {
+            return inputType.replace("ModFuser", `Lvl${Math.floor(parsedFingerprint.lvl)}ModFuser`);
+        }
+    }
+    return inputType;
+};
+
 const modularPartIntroductions: Record<string, number> = {
     // Zaws
     "/Lotus/Weapons/Ostron/Melee/ModularMelee01/": gameToBuildVersionInt["22.0.0"],

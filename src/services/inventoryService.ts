@@ -39,6 +39,7 @@ import {
     convertInboxMessage,
     isStoreItem,
     fromStoreItem,
+    getFusionCoreTypeName,
     getKey,
     getKeyChainItems,
     getPowerSuit,
@@ -48,7 +49,9 @@ import {
     supplementalUpgrades,
     U5ModsWeights,
     U5Modules,
-    getDefaultUpgrades
+    getDefaultUpgrades,
+    foldedFusionCoreTypes,
+    unfoldedFusionCoreTypes
 } from "./itemDataService.ts";
 import type { IFlavourItem, IItemConfig, IItemConfigDatabase } from "../types/inventoryTypes/commonInventoryTypes.ts";
 import type { IDefaultUpgrade, IRegion, ISentinel, TStandingLimitBin } from "warframe-public-export-plus";
@@ -734,6 +737,24 @@ export const addItem = async (
                 fits: equipment.type,
                 upgrades: upgrades
             });
+        }
+        if (unfoldedFusionCoreTypes.includes(typeName)) {
+            // Force Fusion Cores to be acquired as their stackable RawUpgrade types.
+            targetFingerprint ??= `{"lvl":0}`;
+            const coreType = getFusionCoreTypeName(typeName, targetFingerprint);
+            if (coreType != typeName) {
+                logger.trace(`acquiring ${typeName} ${targetFingerprint} as a ${coreType}`);
+            }
+            const changes = [
+                {
+                    ItemType: coreType,
+                    ItemCount: quantity
+                }
+            ];
+            addMods(inventory, changes);
+            return {
+                RawUpgrades: changes
+            };
         }
         if (targetFingerprint && typeName.startsWith("/Lotus/Upgrades/Mods/Randomized/Raw")) {
             logger.debug(`ignoring fingerprint for raw riven mod`);
@@ -3149,6 +3170,8 @@ export const cleanupInventory = (inventory: TInventoryDatabaseDocument, buildLab
         }
     }
 
+    foldFusionCores(inventory);
+
     let index = inventory.MiscItems.findIndex(x => x.ItemType == "");
     if (index != -1) {
         inventory.MiscItems.splice(index, 1);
@@ -4036,6 +4059,71 @@ export const handleOneTimePurchasable = (
         logger.warn(`${typeName} is already in OneTimePurchases`);
     }
     return inventoryChanges;
+};
+
+/**
+ * U13.2.0 introduced "Fusion Core Folding" (stackable Fusion Cores);
+ * this function converts old Fusion Cores in an inventories Upgrades to the stackable RawUpgrade types that succeeded them.
+ *
+ * Additionally, migrates any stackable types that are erroneously in Upgrades to RawUpgrades where they belong.
+ *
+ * This should only be ran during inventory cleanup, it can be quite an intensive process for inventories with an absurd amount of old Fusion Cores.
+ * @param inventory - the inventory to modify
+ */
+const foldFusionCores = (inventory: TInventoryDatabaseDocument): void => {
+    const foldedCores: IRawUpgrade[] = [];
+
+    unfoldedFusionCoreTypes.forEach(type => {
+        const cores = inventory.Upgrades.filter(x => x.ItemType == type);
+        if (cores.length) {
+            const coresOfLvl = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            cores.forEach(core => {
+                // Normally not possible for Fusion Cores to have a non-integer level, this is just to fix broken inventories.
+                const lvl = Math.floor((JSON.parse(core.UpgradeFingerprint || `{"lvl":0}`) as { lvl: number }).lvl);
+                coresOfLvl[lvl]++;
+            });
+
+            coresOfLvl.forEach((count, lvl) => {
+                if (count) {
+                    foldedCores.push({
+                        ItemType: lvl ? type.replace("ModFuser", `Lvl${lvl}ModFuser`) : type,
+                        ItemCount: count
+                    });
+                }
+            });
+
+            logger.debug(`folded ${cores.length} ${type}`);
+        }
+    });
+
+    const foldableCoresThatShouldntBeInUpgrades = inventory.Upgrades.filter(x => x.ItemType in foldedFusionCoreTypes);
+    if (foldableCoresThatShouldntBeInUpgrades.length) {
+        let fixed = 0;
+        // Fix foldable Fusion Core types that somehow ended up in Upgrades
+        foldedFusionCoreTypes.forEach(type => {
+            const coresOfType = inventory.Upgrades.filter(x => x.ItemType == type);
+            if (coresOfType.length) {
+                foldedCores.push({
+                    ItemType: type,
+                    ItemCount: coresOfType.length
+                });
+                fixed += coresOfType.length;
+            }
+        });
+
+        if (fixed) {
+            logger.debug(
+                `migrated ${foldableCoresThatShouldntBeInUpgrades.length} foldable Fusion Cores that shouldn't be in Upgrades to RawUpgrades`
+            );
+        }
+    }
+
+    if (foldedCores.length) {
+        inventory.Upgrades = new Types.DocumentArray(
+            inventory.Upgrades.filter(x => ![...foldedFusionCoreTypes, ...unfoldedFusionCoreTypes].includes(x.ItemType))
+        );
+        addMods(inventory, foldedCores);
+    }
 };
 
 const goalMessagesByKey: Record<

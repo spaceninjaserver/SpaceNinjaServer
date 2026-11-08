@@ -994,12 +994,38 @@ export const getInventoryResponse = async (
     }
     delete inventoryResponse.LoadOutPresets;
 
+    // Filter out Ancient Fusion Core types for builds older than U14.0.9 as they don't exist there; they override U5 mods instead in those builds
+    if (version_compare(buildLabel, gameToBuildVersion["14.0.9"]) < 0) {
+        inventoryResponse.Upgrades = inventoryResponse.Upgrades.filter(
+            x => !x.ItemType.startsWith("/Lotus/Upgrades/Mods/Fusers/Legacy")
+        );
+        inventoryResponse.RawUpgrades = inventoryResponse.RawUpgrades.filter(
+            x => !x.ItemType.startsWith("/Lotus/Upgrades/Mods/Fusers/Legacy")
+        );
+    }
+
+    // Filter out Legendary Cores for builds older than U12.2.0
+    if (version_compare(buildLabel, gameToBuildVersion["12.2.0"]) < 0) {
+        inventoryResponse.RawUpgrades = inventoryResponse.RawUpgrades.filter(
+            x => x.ItemType != "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser"
+        );
+    }
+
     // Pre-U12 builds store mods in an array called Cards, and have no concept of RawUpgrades
     if (version_compare(buildLabel, "2014.02.05.00.00") >= 0) {
         return inventoryResponse;
     }
     inventoryResponse.Cards = [];
     if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0) {
+        if (version_compare(buildLabel, gameToBuildVersion["13.2.0"]) < 0) {
+            // Unfold Fusion Cores for clients older than U13.2.0
+            const unfoldedFusionCores = unfoldFusionCoresForResponse(inventory);
+            inventoryResponse.RawUpgrades = inventoryResponse.RawUpgrades.filter(
+                x => !(x.ItemType.startsWith("/Lotus/Upgrades/Mods/Fusers") && x.ItemType.includes("Lvl"))
+            );
+            inventoryResponse.Cards.push(...unfoldedFusionCores);
+            inventoryResponse.Upgrades.push(...unfoldedFusionCores);
+        }
         for (const rawUpgrade of inventoryResponse.RawUpgrades) {
             const id = inventory.RawUpgrades.find(x => x.ItemType == rawUpgrade.ItemType)?._id;
             if (id) {
@@ -1433,6 +1459,39 @@ const mapLegacyLoadoutConfig = (
     );
 
     return undefined;
+};
+
+const unfoldFusionCoresForResponse = (inventory: TInventoryDatabaseDocument): IUpgradeClient[] => {
+    const foldedCores = inventory.RawUpgrades.filter(
+        x =>
+            x.ItemType.startsWith("/Lotus/Upgrades/Mods/Fusers") &&
+            x.ItemType.includes("Lvl") &&
+            !x.ItemType.includes("Legacy")
+    );
+    const cards: IUpgradeClient[] = [];
+
+    if (foldedCores.length > 0) {
+        foldedCores.forEach(coreStack => {
+            const id = inventory.RawUpgrades.find(x => x.ItemType == coreStack.ItemType)?._id;
+            if (id) {
+                const numCards = Math.min(coreStack.ItemCount, MAX_CARDS_PER_MOD);
+                const lvl = Number.parseInt(
+                    coreStack.ItemType.slice(
+                        coreStack.ItemType.indexOf("Lvl") + 3,
+                        coreStack.ItemType.indexOf("ModFuser")
+                    )
+                );
+                const unfoldedCores = Array<IUpgradeClient>(numCards).fill({
+                    ItemType: coreStack.ItemType.replace(`Lvl${lvl}`, ""),
+                    UpgradeFingerprint: convertToLegacyFingerprint(JSON.stringify({ lvl: lvl })),
+                    ItemId: { $id: id.toString() }
+                });
+                cards.push(...unfoldedCores);
+            }
+        });
+    }
+
+    return cards;
 };
 
 const getExpRequiredForMr = (rank: number): number => {

@@ -11,8 +11,9 @@ import {
     updateCredits
 } from "../../services/inventoryService.ts";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
-import { fromOid, version_compare } from "../../helpers/inventoryHelpers.ts";
+import { convertFromLegacyFingerprint, fromOid, version_compare } from "../../helpers/inventoryHelpers.ts";
 import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { getFusionCoreTypeName } from "../../services/itemDataService.ts";
 
 export const artifactsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -88,7 +89,7 @@ export const artifactsController: RequestHandler = async (req, res) => {
     } else {
         // Pre-U18.18.0 uses the old pre-Endo fusion system which uses a different UpgradeFingerprint format
         // that has to be converted and consumes upgrades in the fusion proccess
-        const safeUpgradeFingerprint = `{"lvl":${Fingerprint?.substring(4, Fingerprint.lastIndexOf("|"))}}`;
+        const safeUpgradeFingerprint = convertFromLegacyFingerprint(Fingerprint ?? "lvl=0|");
         const parsedUpgradeFingerprint = JSON.parse(safeUpgradeFingerprint) as { lvl: number };
         if (LevelDiff) {
             parsedUpgradeFingerprint.lvl += LevelDiff;
@@ -120,15 +121,34 @@ export const artifactsController: RequestHandler = async (req, res) => {
         if (Consumed && Consumed.length > 0) {
             for (const upgrade of Consumed) {
                 // The client does not send the expected information about the mods, so we have to check if it's an Upgrade or RawUpgrade manually.
-                if (Upgrades.id(fromOid(upgrade.ItemId))) {
-                    Upgrades.pull({ _id: upgrade.ItemId.$id });
-                } else {
+                if (
+                    version_compare(buildLabel, gameToBuildVersion["13.2.0"]) < 0 &&
+                    upgrade.ItemType.includes("ModFuser") &&
+                    !upgrade.ItemType.includes("Legendary")
+                ) {
+                    // Handle using Fusion Cores in pre-U13.2.0 clients.
+                    const fingerprint = convertFromLegacyFingerprint((upgrade.UpgradeFingerprint ||= "lvl=0|"));
                     addMods(inventory, [
                         {
-                            ItemType: upgrade.ItemType,
+                            ItemType: getFusionCoreTypeName(upgrade.ItemType, fingerprint),
                             ItemCount: -1
                         }
                     ]);
+                } else if (Upgrades.id(fromOid(upgrade.ItemId))) {
+                    Upgrades.pull({ _id: upgrade.ItemId.$id });
+                } else {
+                    if (upgrade.ItemCount) {
+                        addMods(inventory, [
+                            {
+                                ItemType: upgrade.ItemType,
+                                ItemCount: -upgrade.ItemCount
+                            }
+                        ]);
+                    } else {
+                        throw new Error(
+                            `attempted to consume RawUpgrade of type ${upgrade.ItemType}, but it didn't have an ItemCount?`
+                        );
+                    }
                 }
             }
 

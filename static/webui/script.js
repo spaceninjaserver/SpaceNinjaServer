@@ -827,31 +827,395 @@ function fetchItemList() {
             data.mods.push(
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Fusers/CommonModFuser",
-                    name: loc("code_fusionCoreCommon"),
-                    fusionLimit: 3
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/FusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/COMMON"))
+                        .replace("|VALUE|", "0"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/CommonLvl1ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/FusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/COMMON"))
+                        .replace("|VALUE|", "1"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/CommonLvl2ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/FusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/COMMON"))
+                        .replace("|VALUE|", "2"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/CommonLvl3ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/FusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/COMMON"))
+                        .replace("|VALUE|", "3"),
+                    fusionLimit: 0
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Fusers/UncommonModFuser",
-                    name: loc("code_fusionCoreUncommon")
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/FusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/UNCOMMON"))
+                        .replace("|VALUE|", "0"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/UncommonLvl1ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/FusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/UNCOMMON"))
+                        .replace("|VALUE|", "1"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/UncommonLvl2ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/FusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/UNCOMMON"))
+                        .replace("|VALUE|", "2"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/UncommonLvl3ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/FusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/UNCOMMON"))
+                        .replace("|VALUE|", "3"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/UncommonLvl4ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/FusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/UNCOMMON"))
+                        .replace("|VALUE|", "4"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/UncommonLvl5ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/FusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/UNCOMMON"))
+                        .replace("|VALUE|", "5"),
+                    fusionLimit: 0
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Fusers/RareModFuser",
-                    name: loc("code_fusionCoreRare")
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/FusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/RARE"))
+                        .replace("|VALUE|", "0"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/RareLvl1ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/FusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/RARE"))
+                        .replace("|VALUE|", "1"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/RareLvl2ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/FusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/RARE"))
+                        .replace("|VALUE|", "2"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/RareLvl3ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/FusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/RARE"))
+                        .replace("|VALUE|", "3"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/RareLvl4ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/FusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/RARE"))
+                        .replace("|VALUE|", "4"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/RareLvl5ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/FusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/RARE"))
+                        .replace("|VALUE|", "5"),
+                    fusionLimit: 0
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyCommonModFuser",
-                    name: loc("code_ancientFusionCoreCommon"),
-                    fusionLimit: 10
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/COMMON"))
+                        .replace("|VALUE|", "0"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl1ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/COMMON"))
+                        .replace("|VALUE|", "1"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl2ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/COMMON"))
+                        .replace("|VALUE|", "2"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl3ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/COMMON"))
+                        .replace("|VALUE|", "3"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl4ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/COMMON"))
+                        .replace("|VALUE|", "4"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl5ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/COMMON"))
+                        .replace("|VALUE|", "5"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl6ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/COMMON"))
+                        .replace("|VALUE|", "6"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl7ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/COMMON"))
+                        .replace("|VALUE|", "7"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl8ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/COMMON"))
+                        .replace("|VALUE|", "8"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl9ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/COMMON"))
+                        .replace("|VALUE|", "9"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyCommonLvl10ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/COMMON"))
+                        .replace("|VALUE|", "10"),
+                    fusionLimit: 0
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonModFuser",
-                    name: loc("code_ancientFusionCoreUncommon"),
-                    fusionLimit: 10
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/UNCOMMON"))
+                        .replace("|VALUE|", "0"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl1ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/UNCOMMON"))
+                        .replace("|VALUE|", "1"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl2ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/UNCOMMON"))
+                        .replace("|VALUE|", "2"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl3ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/UNCOMMON"))
+                        .replace("|VALUE|", "3"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl4ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/UNCOMMON"))
+                        .replace("|VALUE|", "4"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl5ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/UNCOMMON"))
+                        .replace("|VALUE|", "5"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl6ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/UNCOMMON"))
+                        .replace("|VALUE|", "6"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl7ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/UNCOMMON"))
+                        .replace("|VALUE|", "7"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl8ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/UNCOMMON"))
+                        .replace("|VALUE|", "8"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl9ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/UNCOMMON"))
+                        .replace("|VALUE|", "9"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyUncommonLvl10ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/UNCOMMON"))
+                        .replace("|VALUE|", "10"),
+                    fusionLimit: 0
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyRareModFuser",
-                    name: loc("code_ancientFusionCoreRare"),
-                    fusionLimit: 10
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/RARE"))
+                        .replace("|VALUE|", "0"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl1ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/RARE"))
+                        .replace("|VALUE|", "1"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl2ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/RARE"))
+                        .replace("|VALUE|", "2"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl3ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/RARE"))
+                        .replace("|VALUE|", "3"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl4ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/RARE"))
+                        .replace("|VALUE|", "4"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl5ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/RARE"))
+                        .replace("|VALUE|", "5"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl6ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/RARE"))
+                        .replace("|VALUE|", "6"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl7ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/RARE"))
+                        .replace("|VALUE|", "7"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl8ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/RARE"))
+                        .replace("|VALUE|", "8"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl9ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/RARE"))
+                        .replace("|VALUE|", "9"),
+                    fusionLimit: 0
+                },
+                {
+                    uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegacyRareLvl10ModFuser",
+                    name: loc("code_fusionCore")
+                        .replace("|TYPE|", getAddDict("/Lotus/Language/Items/LegacyFusionPart"))
+                        .replace("|RARITY|", getAddDict("/Lotus/Language/Labels/RARE"))
+                        .replace("|VALUE|", "10"),
+                    fusionLimit: 0
                 },
                 {
                     uniqueName: "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser",
