@@ -165,6 +165,19 @@ function openWebSocket() {
     };
 }
 
+function addCheatDescription(label, key) {
+    const descKey = "cheats_" + key + "Desc";
+    window.dictPromise.then(() => {
+        if (descKey in window.dict) {
+            const abbr = document.createElement("abbr");
+            abbr.setAttribute("data-loc-title", descKey);
+            abbr.title = loc(descKey);
+            abbr.innerHTML = icons.note;
+            label.after(" ", abbr);
+        }
+    });
+}
+
 function buildAccountCheatsCard(webuiData) {
     const booleansContainer = document.getElementById("account-cheats-booleans");
     for (const key of webuiData.accountCheats.booleans) {
@@ -183,6 +196,7 @@ function buildAccountCheatsCard(webuiData) {
         label.htmlFor = key;
         label.setAttribute("data-loc", "cheats_" + key);
         div.appendChild(label);
+        addCheatDescription(label, key);
 
         booleansContainer.appendChild(div);
     }
@@ -197,6 +211,7 @@ function buildAccountCheatsCard(webuiData) {
         label.htmlFor = key;
         label.setAttribute("data-loc", "cheats_" + key);
         form.appendChild(label);
+        addCheatDescription(label, key);
 
         const group = document.createElement("div");
         group.className = "input-group";
@@ -221,26 +236,344 @@ function buildAccountCheatsCard(webuiData) {
     }
 }
 
-$.get("/custom/getWebuiData").done(webuiData => {
-    buildAccountCheatsCard(webuiData);
+function buildServerCheatsCard(webuiData) {
+    const booleansContainer = document.getElementById("server-cheats-booleans");
+    for (const key of webuiData.serverCheats.booleans) {
+        const div = document.createElement("div");
+        div.className = "form-check";
 
-    document.querySelectorAll("[data-enabling-permission]").forEach(elm => {
-        const perm = elm.getAttribute("data-enabling-permission");
-        if (allPermissions.indexOf(perm) == -1) {
-            allPermissions.push(perm);
+        const input = document.createElement("input");
+        input.className = "form-check-input";
+        input.type = "checkbox";
+        input.id = key;
+        div.appendChild(input);
+
+        const label = document.createElement("label");
+        label.className = "form-check-label";
+        label.htmlFor = key;
+        label.setAttribute("data-loc", "cheats_" + key);
+        div.appendChild(label);
+        addCheatDescription(label, key);
+
+        booleansContainer.appendChild(div);
+
+        uiConfigs.push(key);
+        attachConfigHandler(input);
+    }
+}
+
+function applyLocAttrs(elm, attrs) {
+    for (const [name, value] of Object.entries(attrs ?? {})) {
+        elm.setAttribute(name, value);
+    }
+}
+
+function createElm(tagName, className) {
+    const elm = document.createElement(tagName);
+    if (className) {
+        elm.className = className;
+    }
+    return elm;
+}
+
+function createConfigLabel(item, className) {
+    const label = createElm("label", className);
+    label.htmlFor = item.key;
+    applyLocAttrs(label, item.label);
+    return label;
+}
+
+function addConfigNote(label, note) {
+    if (!note) {
+        return;
+    }
+    const abbr = document.createElement("abbr");
+    applyLocAttrs(abbr, note);
+    abbr.innerHTML = icons.note;
+    label.after(" ", abbr);
+}
+
+function registerConfigInput(input) {
+    uiConfigs.push(input.id);
+    attachConfigHandler(input);
+}
+
+function labelLine(label, inRow) {
+    if (!inRow) {
+        return label;
+    }
+    const div = document.createElement("div");
+    div.appendChild(label);
+    return div;
+}
+
+function buildConfigItem(item, inRow = false) {
+    switch (item.type) {
+        case "toggle": {
+            const div = createElm("div", "form-check");
+            const input = createElm("input", "form-check-input");
+            input.type = "checkbox";
+            input.id = item.key;
+            const label = createConfigLabel(item, "form-check-label");
+            div.append(input, label);
+            addConfigNote(label, item.note);
+            registerConfigInput(input);
+            return div;
         }
+        case "select": {
+            const div = createElm("div", inRow ? "h-100 d-flex flex-column justify-content-end" : "form-group mt-2");
+            const label = createConfigLabel(item, "form-label");
+            const select = createElm("select", "form-control");
+            select.id = item.key;
+            select.setAttribute("data-default", item.default);
+            for (const option of item.options ?? []) {
+                const elm = document.createElement("option");
+                elm.value = option.value;
+                applyLocAttrs(elm, option.label);
+                select.appendChild(elm);
+            }
+            div.append(labelLine(label, inRow), select);
+            addConfigNote(label, item.note);
+            registerConfigInput(select);
+            return div;
+        }
+        case "number":
+        case "tags": {
+            const form = createElm(
+                "form",
+                inRow ? "form-group h-100 d-flex flex-column justify-content-end" : "form-group mt-2"
+            );
+            const save =
+                item.type == "tags" ? doSaveConfigStringArray : item.float ? doSaveConfigFloat : doSaveConfigInt;
+            form.onsubmit = function () {
+                save(item.key);
+                return false;
+            };
+            const label = createConfigLabel(item, "form-label");
+            const group = createElm("div", "input-group");
+            const input = createElm("input", "form-control");
+            input.id = item.key;
+            if (item.type == "tags") {
+                input.type = "text";
+                input.classList.add("tags-input");
+                input.setAttribute("list", item.list);
+                input.autocomplete = "off";
+            } else {
+                input.type = "number";
+                for (const attr of ["min", "max", "step"]) {
+                    if (item[attr] !== undefined) {
+                        input.setAttribute(attr, item[attr]);
+                    }
+                }
+                input.setAttribute("data-default", item.default);
+            }
+            const btn = createElm("button", "btn btn-secondary");
+            btn.type = "submit";
+            btn.setAttribute("data-loc", "cheats_save");
+            group.append(input, btn);
+            form.append(labelLine(label, inRow), group);
+            addConfigNote(label, item.note);
+            registerConfigInput(input);
+            attachConfigInputGroup(group);
+            if (item.type == "tags") {
+                initTagsInput(input);
+            }
+            return form;
+        }
+        case "row": {
+            const div = createElm("div", "form-group mt-2 row gx-2");
+            for (const child of item.items) {
+                const cell = createElm("div", "col");
+                cell.appendChild(buildConfigItem(child, true));
+                div.appendChild(cell);
+            }
+            return div;
+        }
+        case "itemList": {
+            const form = createElm("form", "input-group mb-3");
+            const input = createElm("input", "form-control");
+            input.setAttribute("list", item.list);
+            input.autocomplete = "off";
+            const btn = createElm("button", "btn btn-primary");
+            btn.type = "submit";
+            btn.setAttribute("data-loc", "general_addButton");
+            form.append(input, btn);
+            form.onsubmit = function () {
+                doAddConfigListItem(item.key, input);
+                return false;
+            };
+            const tbody = createElm("tbody", "config-item-list");
+            tbody.id = item.key;
+            const table = createElm("table", "table table-hover w-100");
+            table.appendChild(tbody);
+            const scroll = createElm("div", "overflow-auto");
+            scroll.appendChild(table);
+            uiConfigs.push(item.key);
+            const fragment = document.createDocumentFragment();
+            fragment.append(form, scroll);
+            return fragment;
+        }
+        case "group": {
+            const div = createElm("div", "mt-2");
+            if (item.label) {
+                const label = createElm("label", "form-label");
+                applyLocAttrs(label, item.label);
+                div.appendChild(label);
+            }
+            const items = createElm("div", "d-flex flex-wrap gap-3");
+            for (const child of item.items) {
+                items.appendChild(buildConfigItem(child));
+            }
+            div.appendChild(items);
+            return div;
+        }
+    }
+    throw new Error(`unknown config item type: ${item.type}`);
+}
+
+function locAttrs(key, replace) {
+    return replace === undefined ? { "data-loc": key } : { "data-loc": key, "data-loc-replace": replace };
+}
+
+function worldStateOption(value) {
+    if (typeof value == "object") {
+        return value;
+    }
+    return { value, label: locAttrs({ true: "enabled", false: "disabled", null: "normal" }[value]) };
+}
+
+function toWorldStateConfigItem(entry, inRow = false) {
+    const item = { key: entry.key, label: entry.label, note: entry.note };
+    switch (entry.type) {
+        case "boolean":
+            if (entry.nullable || inRow) {
+                return {
+                    ...item,
+                    type: "select",
+                    default: entry.nullable ? "null" : "false",
+                    options: (entry.nullable ? ["null", "true", "false"] : ["true", "false"]).map(worldStateOption)
+                };
+            }
+            return { ...item, type: "toggle" };
+        case "enum":
+            return {
+                ...item,
+                type: "select",
+                default: entry.default,
+                options: entry.values?.map(worldStateOption)
+            };
+        case "int":
+        case "float":
+            return {
+                ...item,
+                type: "number",
+                default: entry.default === undefined ? "" : String(entry.default),
+                min: entry.min,
+                max: entry.max,
+                step: entry.step,
+                float: entry.type == "float"
+            };
+        case "stringArray": {
+            const list = "config-values-" + entry.key;
+            const datalist = document.createElement("datalist");
+            datalist.id = list;
+            for (const value of entry.values ?? []) {
+                const option = document.createElement("option");
+                option.textContent = value;
+                datalist.appendChild(option);
+            }
+            document.body.appendChild(datalist);
+            return { ...item, type: "tags", list };
+        }
+        case "itemList": {
+            const list = "datalist-" + entry.itemList;
+            if (!document.getElementById(list)) {
+                const datalist = document.createElement("datalist");
+                datalist.id = list;
+                document.body.appendChild(datalist);
+            }
+            return { ...item, type: "itemList", list };
+        }
+    }
+    throw new Error(`unknown world state option type: ${entry.type}`);
+}
+
+function toWorldStateConfigItems(entries) {
+    const items = [];
+    const runEnd = (i, flag) => {
+        let end = i + 1;
+        while (entries[end]?.[flag]) {
+            ++end;
+        }
+        return end;
+    };
+    for (let i = 0; i < entries.length; ) {
+        const rowEnd = runEnd(i, "sameRow");
+        const groupEnd = runEnd(i, "sameGroup");
+        if (rowEnd > i + 1) {
+            items.push({
+                type: "row",
+                items: entries.slice(i, rowEnd).map(entry => toWorldStateConfigItem(entry, true))
+            });
+            i = rowEnd;
+        } else if (groupEnd > i + 1) {
+            items.push({
+                type: "group",
+                label: entries[i].groupLabel,
+                items: entries.slice(i, groupEnd).map(entry => toWorldStateConfigItem(entry))
+            });
+            i = groupEnd;
+        } else {
+            items.push(toWorldStateConfigItem(entries[i]));
+            ++i;
+        }
+    }
+    return items;
+}
+
+function buildWorldStateCards(webuiData) {
+    for (const [name, card] of Object.entries(webuiData.worldStateCheats)) {
+        const div = createElm("div", "card mb-3 d-none admin-show config-form");
+        const header = createElm("h5", "card-header");
+        header.setAttribute("data-loc", "worldState_" + name);
+        const body = createElm("div", "card-body");
+        if (card.options.some(entry => entry.type == "itemList")) {
+            div.style.height = "400px";
+            body.classList.add("d-flex", "flex-column");
+        }
+        for (const item of toWorldStateConfigItems(card.options)) {
+            body.appendChild(buildConfigItem(item));
+        }
+        div.append(header, body);
+        document.getElementById("worldStateCheats-" + card.column).appendChild(div);
+    }
+}
+
+window.webuiDataPromise = new Promise(resolve => {
+    $.get("/custom/getWebuiData").done(webuiData => {
+        buildAccountCheatsCard(webuiData);
+        buildServerCheatsCard(webuiData);
+        buildWorldStateCards(webuiData);
+
+        document.querySelectorAll("[data-enabling-permission]").forEach(elm => {
+            const perm = elm.getAttribute("data-enabling-permission");
+            if (allPermissions.indexOf(perm) == -1) {
+                allPermissions.push(perm);
+            }
+        });
+
+        accountCheats = document.querySelectorAll(".account-cheats input[id]");
+        attachAccountCheatsHandlers();
+
+        resolve(webuiData);
+        openWebSocket();
     });
-
-    accountCheats = document.querySelectorAll("#account-cheats input[id]");
-    attachAccountCheatsHandlers();
-
-    openWebSocket();
 });
 
 function refreshServerConfig() {
     window.is_admin = undefined;
     config_data = undefined;
-    if (single.getCurrentPath() == "/webui/cheats" || single.getCurrentPath() == "/webui/users") {
+    if (single.getCurrentPath() == "/webui/serverCheats" || single.getCurrentPath() == "/webui/users") {
         single.loadRoute(single.getCurrentPath());
     }
 }
@@ -510,6 +843,12 @@ function loc(tag) {
         .replaceAll("|EMAIL|", localStorage.getItem("email"));
 }
 
+function locTitle(elm) {
+    const text = loc(elm.getAttribute("data-loc-title"));
+    const val = elm.getAttribute("data-loc-title-replace");
+    return val === null ? text : text.replace("|VAL|", val);
+}
+
 function updateLocElements() {
     document.querySelectorAll("[data-loc]").forEach(elm => {
         elm.innerHTML = loc(elm.getAttribute("data-loc"));
@@ -518,7 +857,7 @@ function updateLocElements() {
         elm.placeholder = loc(elm.getAttribute("data-loc-placeholder"));
     });
     document.querySelectorAll("[data-loc-title]").forEach(elm => {
-        elm.title = loc(elm.getAttribute("data-loc-title"));
+        elm.title = locTitle(elm);
     });
     $(".inventory-update-note").text(
         loc(window.have_game_ws ? "general_inventoryUpdateNoteGameWs" : "general_inventoryUpdateNote")
@@ -550,7 +889,8 @@ function updateLocElements() {
                     return loc(key).replace(/<[^>]+>/g, "");
                 })
                 .join(", ");
-            elm.title = `${loc("worldState_incompatibleWith")} ${incWith}`;
+            const incText = `${loc("worldState_incompatibleWith")} ${incWith}`;
+            elm.title = elm.hasAttribute("data-loc-title") ? `${locTitle(elm)}\n\n${incText}` : incText;
         });
         document.querySelectorAll("[data-loc-replace]").forEach(elm => {
             elm.innerHTML = elm.innerHTML
@@ -693,9 +1033,10 @@ function fetchItemList() {
         const req = $.get("/custom/getItemLists?lang=" + window.lang);
         req.done(async data => {
             await dictPromise;
+            const webuiData = await window.webuiDataPromise;
 
             document.querySelectorAll('[id^="datalist-"]').forEach(datalist => {
-                if (datalist.id != "datalist-circuitGameModes" && datalist.id != "datalist-usernames") {
+                if (datalist.id != "datalist-usernames") {
                     datalist.innerHTML = "";
                 }
             });
@@ -1395,18 +1736,16 @@ function fetchItemList() {
                     }
                     select.value = rememberedNWOverride;
                 } else if (type == "Syndicates") {
-                    items.forEach(item => {
-                        if (["ConclaveSyndicate", "NightcapJournalSyndicate"].includes(item.uniqueName)) {
-                            return;
-                        }
-                        if (item.uniqueName.startsWith("RadioLegion")) {
-                            item.name += " (" + item.uniqueName + ")";
-                        }
+                    const names = Object.fromEntries(items.map(item => [item.uniqueName, item.name]));
+                    for (const uniqueName of webuiData.accountCheats.supportedSyndicates) {
                         const option = document.createElement("option");
-                        option.value = item.uniqueName;
-                        option.textContent = item.name;
+                        option.value = uniqueName;
+                        option.textContent = names[uniqueName];
+                        if (uniqueName.startsWith("RadioLegion")) {
+                            option.textContent += " (" + uniqueName + ")";
+                        }
                         document.getElementById("changeSyndicate").appendChild(option);
-                    });
+                    }
                 } else if (type == "FlavourItems") {
                     const cursorPrefixes = {
                         Controller: loc("code_controller"),
@@ -3784,7 +4123,11 @@ function doAcquireModMax() {
 const uiConfigs = [...$(".config-form input[id], .config-form select[id]")].map(x => x.id);
 
 for (const id of uiConfigs) {
-    const elm = document.getElementById(id);
+    attachConfigHandler(document.getElementById(id));
+}
+
+function attachConfigHandler(elm) {
+    const id = elm.id;
     if (elm.tagName == "SELECT") {
         elm.onchange = function () {
             let value = this.value;
@@ -3819,7 +4162,9 @@ for (const id of uiConfigs) {
     }
 }
 
-document.querySelectorAll(".config-form .input-group").forEach(grp => {
+document.querySelectorAll(".config-form .input-group").forEach(attachConfigInputGroup);
+
+function attachConfigInputGroup(grp) {
     const input = grp.querySelector("input");
     const btn = grp.querySelector("button");
     input.oninput = input.onchange = function () {
@@ -3830,7 +4175,7 @@ document.querySelectorAll(".config-form .input-group").forEach(grp => {
         btn.classList.remove("btn-primary");
         btn.classList.add("btn-secondary");
     };
-});
+}
 
 function doSaveConfigInt(id) {
     const value = parseInt(document.getElementById(id).value);
@@ -3875,6 +4220,66 @@ function doSaveConfigStringArray(id) {
     });
 }
 
+function renderConfigItemList(id) {
+    const value = config_data?.[id] ?? [];
+    window.itemListPromise.then(itemMap => {
+        const tbody = document.getElementById(id);
+        tbody.innerHTML = "";
+        for (const uniqueName of value) {
+            const tr = document.createElement("tr");
+            {
+                const td = document.createElement("td");
+                td.textContent = itemMap[uniqueName]?.name ?? uniqueName;
+                tr.appendChild(td);
+            }
+            {
+                const td = document.createElement("td");
+                td.classList = "text-end text-nowrap";
+                const a = document.createElement("a");
+                a.href = "#";
+                a.onclick = function (event) {
+                    event.preventDefault();
+                    doSaveConfigItemList(
+                        id,
+                        value.filter(x => x != uniqueName)
+                    );
+                };
+                a.title = loc("code_remove");
+                a.innerHTML = icons.trash;
+                td.appendChild(a);
+                tr.appendChild(td);
+            }
+            tbody.appendChild(tr);
+        }
+    });
+}
+
+function doSaveConfigItemList(id, value) {
+    $.post({
+        url: "/custom/setConfig?" + window.authz,
+        contentType: "application/json",
+        data: JSON.stringify({
+            [id]: value
+        })
+    }).done(function () {
+        config_data[id] = value;
+        renderConfigItemList(id);
+    });
+}
+
+function doAddConfigListItem(id, input) {
+    const uniqueName = getKey(input);
+    if (!uniqueName) {
+        $(input).addClass("is-invalid").focus();
+        return;
+    }
+    input.value = "";
+    const value = config_data?.[id] ?? [];
+    if (!value.includes(uniqueName)) {
+        doSaveConfigItemList(id, [...value, uniqueName]);
+    }
+}
+
 let config_data;
 // Assumes that caller revalidates authz
 function getServerConfig() {
@@ -3912,6 +4317,11 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
                 }
             }
         });
+    });
+});
+
+single.getRoute("/webui/serverCheats").on("beforeload", function () {
+    awaitAuthz().then(() => {
         getServerConfig().then(json => {
             if (json) {
                 $(".admin-hide").addClass("d-none");
@@ -3924,6 +4334,8 @@ single.getRoute("/webui/cheats").on("beforeload", function () {
                     } else if (elm.classList.contains("tags-input")) {
                         elm.value = (value ?? []).join(", ");
                         elm.oninput();
+                    } else if (elm.classList.contains("config-item-list")) {
+                        renderConfigItemList(key);
                     } else {
                         elm.value = value ?? elm.getAttribute("data-default");
                     }
@@ -4007,7 +4419,7 @@ function doIntrinsicsUnlockAll() {
 }
 
 function attachAccountCheatsHandlers() {
-    document.querySelectorAll("#account-cheats input[type=checkbox]").forEach(elm => {
+    document.querySelectorAll(".account-cheats input[type=checkbox]").forEach(elm => {
         elm.onchange = function () {
             revalidateAuthz().then(() => {
                 const value = elm.checked;
@@ -4031,7 +4443,7 @@ function attachAccountCheatsHandlers() {
         };
     });
 
-    document.querySelectorAll("#account-cheats .input-group").forEach(grp => {
+    document.querySelectorAll(".account-cheats .input-group").forEach(grp => {
         const input = grp.querySelector("input");
         const select = grp.querySelector("select");
         const btn = grp.querySelector("button");
@@ -5366,7 +5778,9 @@ function setImportSample(key) {
     $("#import-inventory").val(JSON.stringify(importSamples[key], null, 2));
 }
 
-document.querySelectorAll(".tags-input").forEach(input => {
+document.querySelectorAll(".tags-input").forEach(initTagsInput);
+
+function initTagsInput(input) {
     const datalist = document.getElementById(input.getAttribute("list"));
     let shadowDatalist;
     const optionsAreUnique = input.classList.contains("tags-input-unique");
@@ -5408,7 +5822,7 @@ document.querySelectorAll(".tags-input").forEach(input => {
         }
     };
     input.oninput();
-});
+}
 
 function fromUpgradeFingerprintValue(raw, min) {
     const range = 0.6 - min;

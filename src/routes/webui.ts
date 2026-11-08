@@ -42,6 +42,7 @@ webuiRouter.get("/webui/detailedView", virtualRouteController);
 webuiRouter.get("/webui/mods", virtualRouteController);
 webuiRouter.get("/webui/cheats", virtualRouteController);
 webuiRouter.get("/webui/settings", virtualRouteController);
+webuiRouter.get("/webui/serverCheats", virtualRouteController);
 webuiRouter.get("/webui/import", virtualRouteController);
 webuiRouter.get("/webui/clan", virtualRouteController);
 webuiRouter.get("/webui/guildView", virtualRouteController);

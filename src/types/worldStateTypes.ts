@@ -621,14 +621,16 @@ export interface ICalendarEvent {
     dialogueConvo?: string;
 }
 
-export type TCircuitGameMode =
-    | "Survival"
-    | "VoidFlood"
-    | "Excavation"
-    | "Defense"
-    | "Exterminate"
-    | "Assassination"
-    | "Alchemy";
+export const circuitGameModes = [
+    "Survival",
+    "VoidFlood",
+    "Excavation",
+    "Defense",
+    "Exterminate",
+    "Assassination",
+    "Alchemy"
+] as const;
+export type TCircuitGameMode = (typeof circuitGameModes)[number];
 
 export interface IFlashSale {
     TypeName: string;

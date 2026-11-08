@@ -7,6 +7,7 @@ import {
     configRemovedOptionsKeys,
     getWebServerParams,
     loadConfig,
+    worldStateNumberOptions,
     type IConfig
 } from "./configService.ts";
 import { saveConfig, shouldReloadConfig } from "./configWriterService.ts";
@@ -20,6 +21,9 @@ import {
     type IWsMsgToClient
 } from "./wsService.ts";
 import varzia from "../constants/varzia.ts";
+import { baroRelayNodes } from "../constants/baro.ts";
+import { anniversaryGoalsByWeek } from "../constants/anniversary.ts";
+import { lunarNewYearFlashSales } from "../constants/flashSales.ts";
 import { getTunablesForClient } from "./tunablesService.ts";
 import { Account } from "../models/loginModel.ts";
 import { Inbox } from "../models/inboxModel.ts";
@@ -210,42 +214,32 @@ export const validateConfig = (): void => {
         modified = true;
     }
     if (
-        config.worldState?.nightwaveEpisode &&
-        (config.worldState.nightwaveEpisode > 5 || config.worldState.nightwaveEpisode < 1)
-    ) {
-        config.worldState.nightwaveEpisode = 1;
-        modified = true;
-    }
-    if (
         config.worldState?.baroRelayOverride &&
-        (config.worldState.baroRelayOverride > 4 || config.worldState.baroRelayOverride < 0)
+        (config.worldState.baroRelayOverride > baroRelayNodes.length || config.worldState.baroRelayOverride < 0)
     ) {
         config.worldState.baroRelayOverride = 0;
         modified = true;
     }
     if (
         config.worldState?.lunarNewYear &&
-        !["all", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026"].includes(
-            config.worldState.lunarNewYear
-        )
+        !["all", ...Object.keys(lunarNewYearFlashSales)].includes(config.worldState.lunarNewYear)
     ) {
         delete config.worldState.lunarNewYear;
         modified = true;
     }
-    if (
-        config.worldState?.communitySynthesisTarget &&
-        (config.worldState.communitySynthesisTarget < 0 || config.worldState.communitySynthesisTarget > 10)
-    ) {
-        config.worldState.communitySynthesisTarget = 0;
+    if (config.worldState?.anniversary != undefined && !(config.worldState.anniversary in anniversaryGoalsByWeek)) {
+        delete config.worldState.anniversary;
         modified = true;
     }
-    if (config.worldState?.communitySynthesisProgress) {
-        if (config.worldState.communitySynthesisProgress < 0) {
-            config.worldState.communitySynthesisProgress = 0;
-            modified = true;
-        } else if (config.worldState.communitySynthesisProgress > 100) {
-            config.worldState.communitySynthesisProgress = 100;
-            modified = true;
+    if (config.worldState) {
+        for (const [key, options] of Object.entries(worldStateNumberOptions)) {
+            const min = "min" in options ? options.min : -Infinity;
+            const max = "max" in options ? options.max : Infinity;
+            const value = config.worldState[key as keyof typeof worldStateNumberOptions];
+            if (typeof value == "number" && (value < min || value > max)) {
+                config.worldState[key as keyof typeof worldStateNumberOptions] = Math.min(Math.max(value, min), max);
+                modified = true;
+            }
         }
     }
     if (modified) {

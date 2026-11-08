@@ -1,4 +1,4 @@
-import baro, { type IBaroDataTradeOffer } from "../constants/baro.ts";
+import baro, { baroRelayNodes, type IBaroDataTradeOffer } from "../constants/baro.ts";
 import varzia from "../constants/varzia.ts";
 import fissureMissions from "../../static/fixed_responses/worldState/fissureMissions.json" with { type: "json" };
 import sortieTilesets from "../../static/fixed_responses/worldState/sortieTilesets.json" with { type: "json" };
@@ -10,7 +10,11 @@ import infestationOnlyInvasionNodes from "../../static/fixed_responses/worldStat
 import invasionRewards from "../../static/fixed_responses/worldState/invasionRewards.json" with { type: "json" };
 import pvpChallenges from "../../static/fixed_responses/worldState/pvpChallenges.json" with { type: "json" };
 import { EPOCH, KAHL_EPOCH, unixTimesInMs } from "../constants/timeConstants.ts";
-import { config } from "./configService.ts";
+import { config, worldStateNumberOptions } from "./configService.ts";
+import { configAlerts, type TConfigAlert, type TConfigAlertKey } from "../constants/configAlerts.ts";
+import { anniversaryGoalsByWeek } from "../constants/anniversary.ts";
+import { constructionEventRelays } from "../constants/constructionEvents.ts";
+import { duviriMoods } from "../constants/duviri.ts";
 import { getRandomElement, getRandomInt, sequentiallyUniqueRandomElement, SRng } from "./rngService.ts";
 import type { IMissionReward, IRegion, ITilesetMission, TFaction, TMissionType } from "warframe-public-export-plus";
 import { ExportRegions, ExportSyndicates, ExportTilesets, ExportRecipes } from "warframe-public-export-plus";
@@ -73,6 +77,7 @@ import { buildVersionToInt, intToBuildVersion } from "../helpers/versionHelper.t
 import { createWeeklyGuildVaultBonus } from "./guildService.ts";
 import {
     dogDaysFlashSales,
+    lunarNewYearFlashSales,
     naberusNightsFlashSales,
     prideMonthFlashSales,
     qqtcFlashSales,
@@ -154,297 +159,6 @@ const sortieBossNode: Record<Exclude<TSortieBoss, "SORTIE_BOSS_CORRUPTED_VOR">, 
 };
 
 const sortieAssassinationOnlyNodes: string[] = ["SolNode193", "SolNode105", "SolNode108"];
-
-const configAlerts: Record<string, IAlert & { minBuildVersion?: number }> = {
-    voidCorruption2025Week1: {
-        _id: { $oid: "677d452e2f324ee7b90f8ccf" },
-        Activation: { $date: { $numberLong: "1736524800000" } },
-        Expiry: { $date: { $numberLong: "2000000000000" } },
-        MissionInfo: {
-            location: "SolNode61",
-            missionType: "MT_SABOTAGE",
-            faction: "FC_CORPUS",
-            difficulty: 1,
-            missionReward: {
-                credits: 30000,
-                items: ["/Lotus/StoreItems/Upgrades/Mods/Pistol/DualStat/CorruptedFireRateDamagePistol"]
-            },
-            levelOverride: "/Lotus/Levels/Proc/Corpus/CorpusShipCoreSabotage",
-            enemySpec: "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSquadA",
-            extraEnemySpec: "/Lotus/Types/Game/EnemySpecs/GamemodeExtraEnemySpecs/CorpusSabotageTiersA",
-            minEnemyLevel: 10,
-            maxEnemyLevel: 15
-        }
-    },
-    voidCorruption2025Week2: {
-        _id: { $oid: "677d45811daeae9de40e8c0f" },
-        Activation: { $date: { $numberLong: "1737129600000" } },
-        Expiry: { $date: { $numberLong: "2000000000000" } },
-        MissionInfo: {
-            location: "SettlementNode11",
-            missionType: "MT_DEFENSE",
-            faction: "FC_CORPUS",
-            difficulty: 1,
-            missionReward: {
-                credits: 30000,
-                items: ["/Lotus/StoreItems/Upgrades/Mods/Pistol/DualStat/CorruptedCritChanceFireRatePistol"]
-            },
-            levelOverride: "/Lotus/Levels/Proc/Corpus/CorpusShipDefense",
-            enemySpec: "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSquadDefenseB",
-            minEnemyLevel: 20,
-            maxEnemyLevel: 25,
-            maxRotations: 2
-        }
-    },
-    voidCorruption2025Week3: {
-        _id: { $oid: "677d45a494ad716c90006b9a" },
-        Activation: { $date: { $numberLong: "1737734400000" } },
-        Expiry: { $date: { $numberLong: "2000000000000" } },
-        MissionInfo: {
-            location: "SolNode118",
-            missionType: "MT_ARTIFACT",
-            faction: "FC_CORPUS",
-            difficulty: 1,
-            missionReward: {
-                credits: 30000,
-                items: ["/Lotus/StoreItems/Upgrades/Mods/Pistol/DualStat/CorruptedCritDamagePistol"]
-            },
-            levelOverride: "/Lotus/Levels/Proc/Corpus/CorpusShipDisruption",
-            enemySpec: "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipSurvivalA",
-            extraEnemySpec: "/Lotus/Types/Game/EnemySpecs/SpecialMissionSpecs/DisruptionCorpusShip",
-            customAdvancedSpawners: ["/Lotus/Types/Enemies/AdvancedSpawners/ErrantSpecterInvasion"],
-            minEnemyLevel: 30,
-            maxEnemyLevel: 35
-        }
-    },
-    voidCorruption2025Week4: {
-        _id: { $oid: "677d4700682d173abb0e19fe" },
-        Activation: { $date: { $numberLong: "1738339200000" } },
-        Expiry: { $date: { $numberLong: "2000000000000" } },
-        MissionInfo: {
-            location: "SolNode4",
-            missionType: "MT_EXTERMINATION",
-            faction: "FC_CORPUS",
-            difficulty: 1,
-            missionReward: {
-                credits: 30000,
-                items: ["/Lotus/StoreItems/Upgrades/Mods/Pistol/DualStat/CorruptedDamageRecoilPistol"]
-            },
-            levelOverride: "/Lotus/Levels/Proc/Corpus/CorpusShipExterminate",
-            enemySpec: "/Lotus/Types/Game/EnemySpecs/CorpusShipEnemySpecs/CorpusShipExterminateMixed",
-            minEnemyLevel: 40,
-            maxEnemyLevel: 45
-        }
-    },
-    dagathAlerts2026Week1: {
-        _id: { $oid: "6949862e3f3f35491e02232c" },
-        Activation: { $date: { $numberLong: "1769022000000" } },
-        Expiry: { $date: { $numberLong: "2000000000000" } },
-        MissionInfo: {
-            location: "SolNode147",
-            missionType: "MT_TERRITORY",
-            faction: "FC_GRINEER",
-            difficulty: 1,
-            missionReward: {
-                credits: 10000,
-                items: ["/Lotus/StoreItems/Types/Recipes/WarframeRecipes/DagathChassisComponent"]
-            },
-            levelOverride: "/Lotus/Levels/Proc/Grineer/GrineerShipyardsInterception",
-            enemySpec: "/Lotus/Types/Game/EnemySpecs/GrineerShipyardsDefenseA",
-            minEnemyLevel: 25,
-            maxEnemyLevel: 35,
-            descText: "/Lotus/Language/Alerts/LotusGiftDesc"
-        },
-        Tag: "LotusGift",
-        ForceUnlock: true
-    },
-    dagathAlerts2026Week2: {
-        _id: { $oid: "6949863a548d83b650011de8" },
-        Activation: { $date: { $numberLong: "1769626800000" } },
-        Expiry: { $date: { $numberLong: "2000000000000" } },
-        MissionInfo: {
-            location: "SolNode404",
-            missionType: "MT_SABOTAGE",
-            faction: "FC_OROKIN",
-            difficulty: 1,
-            missionReward: {
-                credits: 10000,
-                items: ["/Lotus/StoreItems/Types/Recipes/WarframeRecipes/DagathHelmetComponent"]
-            },
-            levelOverride: "/Lotus/Levels/Proc/Orokin/OrokinTowerSabotageForest",
-            enemySpec: "/Lotus/Types/Game/EnemySpecs/OrokinSquadOne",
-            extraEnemySpec: "/Lotus/Types/Game/EnemySpecs/OrokinSabotageGrineerForest",
-            minEnemyLevel: 25,
-            maxEnemyLevel: 35,
-            vipAgent: "/Lotus/Types/Enemies/Grineer/Vip/JetpackSisters/JetpackSisters",
-            descText: "/Lotus/Language/Alerts/LotusGiftDesc"
-        },
-        Tag: "LotusGift",
-        ForceUnlock: true
-    },
-    dagathAlerts2026Week3: {
-        _id: { $oid: "69498642a0836c98e10f5e34" },
-        Activation: { $date: { $numberLong: "1770231600000" } },
-        Expiry: { $date: { $numberLong: "2000000000000" } },
-        MissionInfo: {
-            location: "SolNode100",
-            missionType: "MT_SURVIVAL",
-            faction: "FC_CORPUS",
-            difficulty: 1,
-            missionReward: {
-                credits: 10000,
-                items: ["/Lotus/StoreItems/Types/Recipes/WarframeRecipes/DagathSystemsComponent"]
-            },
-            levelOverride: "/Lotus/Levels/Proc/Corpus/CorpusGasCitySurvival",
-            enemySpec: "/Lotus/Types/Game/EnemySpecs/CorpusGasSurvival",
-            minEnemyLevel: 25,
-            maxEnemyLevel: 35,
-            descText: "/Lotus/Language/Alerts/LotusGiftDesc"
-        },
-        Tag: "LotusGift",
-        ForceUnlock: true
-    },
-    dagathAlerts2026Week4: {
-        _id: { $oid: "69498623a7342ab1500cc99b" },
-        Activation: { $date: { $numberLong: "1768417200000" } },
-        Expiry: { $date: { $numberLong: "2000000000000" } },
-        MissionInfo: {
-            location: "SolNode103",
-            missionType: "MT_EXTERMINATION",
-            faction: "FC_GRINEER",
-            difficulty: 1,
-            missionReward: {
-                credits: 10000,
-                items: ["/Lotus/StoreItems/Types/Recipes/WarframeRecipes/DagathBlueprint"]
-            },
-            levelOverride: "/Lotus/Levels/Proc/Grineer/GrineerAsteroidExterminate",
-            enemySpec: "/Lotus/Types/Game/EnemySpecs/GrineerExterminateBlades",
-            minEnemyLevel: 25,
-            maxEnemyLevel: 35,
-            descText: "/Lotus/Language/Alerts/LotusGiftDesc"
-        },
-        Tag: "LotusGift",
-        ForceUnlock: true
-    },
-    starDaysAlerts2026Week1: {
-        _id: { $oid: "696935998429008d89100af9" },
-        Activation: { $date: { $numberLong: "1770393600000" } },
-        Expiry: { $date: { $numberLong: "2000000000000" } },
-        MissionInfo: {
-            location: "SolNode22",
-            missionType: "MT_DEFENSE",
-            faction: "FC_CORPUS",
-            difficulty: 1,
-            missionReward: {
-                credits: 25000,
-                items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageStarDaysStarDaysMarieGlyph"],
-                countedItems: [{ ItemType: "/Lotus/Types/Items/MiscItems/OrokinCatalyst", ItemCount: 1 }]
-            },
-            levelOverride: "/Lotus/Levels/Proc/Corpus/CorpusOutpostDefense",
-            enemySpec: "/Lotus/Types/Game/EnemySpecs/CorpusSquadDefenseB",
-            minEnemyLevel: 25,
-            maxEnemyLevel: 30,
-            descText: "/Lotus/Language/Alerts/LotusGiftDesc",
-            maxRotations: 1
-        },
-        Tag: "LotusGift",
-        ForceUnlock: true
-    },
-    starDaysAlerts2026Week2: {
-        _id: { $oid: "696935b47918af0b1c0c4c2f" },
-        Activation: { $date: { $numberLong: "1770998400000" } },
-        Expiry: { $date: { $numberLong: "2000000000000" } },
-        MissionInfo: {
-            location: "SolNode11",
-            missionType: "MT_MOBILE_DEFENSE",
-            faction: "FC_GRINEER",
-            difficulty: 1,
-            missionReward: {
-                credits: 25000,
-                items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageStarDaysLyonGlyph"],
-                countedItems: [{ ItemType: "/Lotus/Types/Items/MiscItems/OrokinReactor", ItemCount: 1 }]
-            },
-            levelOverride: "/Lotus/Levels/Proc/Grineer/GrineerSettlementMobileDefense",
-            enemySpec: "/Lotus/Types/Game/EnemySpecs/DesertGrineerSquadOne",
-            minEnemyLevel: 25,
-            maxEnemyLevel: 30,
-            descText: "/Lotus/Language/Alerts/LotusGiftDesc"
-        },
-        Tag: "LotusGift",
-        ForceUnlock: true
-    },
-    starDaysAlerts2026Week3: {
-        _id: { $oid: "696935d518288b03bb0224ae" },
-        Activation: { $date: { $numberLong: "1771603200000" } },
-        Expiry: { $date: { $numberLong: "2000000000000" } },
-        MissionInfo: {
-            location: "SolNode121",
-            missionType: "MT_EXTERMINATION",
-            faction: "FC_CORPUS",
-            difficulty: 1,
-            missionReward: {
-                credits: 25000,
-                items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageStarDaysRoatheGlyph"],
-                countedItems: [{ ItemType: "/Lotus/Types/Items/MiscItems/Forma", ItemCount: 1 }]
-            },
-            levelOverride: "/Lotus/Levels/Proc/Corpus/CorpusGasCityExterminate",
-            enemySpec: "/Lotus/Types/Game/EnemySpecs/CorpusGasExterminateMixed",
-            minEnemyLevel: 25,
-            maxEnemyLevel: 30,
-            descText: "/Lotus/Language/Alerts/LotusGiftDesc"
-        },
-        Tag: "LotusGift",
-        ForceUnlock: true
-    },
-    starDaysAlerts2026Week4: {
-        _id: { $oid: "696935ed8429008d89100cea" },
-        Activation: { $date: { $numberLong: "1772208000000" } },
-        Expiry: { $date: { $numberLong: "2000000000000" } },
-        MissionInfo: {
-            location: "SolNode82",
-            missionType: "MT_SABOTAGE",
-            faction: "FC_GRINEER",
-            difficulty: 1,
-            missionReward: {
-                credits: 25000,
-                items: ["/Lotus/StoreItems/Types/Items/ShipDecos/Props/Seasonal/StarDays2026HeartPictureFrame"],
-                countedItems: [{ ItemType: "/Lotus/Types/Items/MiscItems/UtilityUnlocker", ItemCount: 1 }]
-            },
-            levelOverride: "/Lotus/Levels/Proc/Grineer/GrineerGalleonCoreSabotage",
-            enemySpec: "/Lotus/Types/Game/EnemySpecs/GrineerSquadSix",
-            extraEnemySpec: "/Lotus/Types/Game/EnemySpecs/GamemodeExtraEnemySpecs/GrineerSabotageTiersTwo",
-            minEnemyLevel: 25,
-            maxEnemyLevel: 30,
-            descText: "/Lotus/Language/Alerts/LotusGiftDesc"
-        },
-        Tag: "LotusGift",
-        ForceUnlock: true
-    },
-    destiny2TributeAlert: {
-        _id: { $oid: "6a29b21c614c39ecbb0aa925" },
-        Activation: { $date: { $numberLong: "1781708400000" } },
-        Expiry: { $date: { $numberLong: "2000000000000" } },
-        MissionInfo: {
-            location: "SolNode20",
-            missionType: "MT_EXTERMINATION",
-            faction: "FC_GRINEER",
-            difficulty: 1,
-            missionReward: {
-                credits: 10000,
-                countedItems: [{ ItemType: "/Lotus/Types/Items/Titles/GuardianTitle", ItemCount: 1 }]
-            },
-            levelOverride: "/Lotus/Levels/Proc/Grineer/GrineerGalleonExterminate",
-            enemySpec: "/Lotus/Types/Game/EnemySpecs/GrineerExterminateSimple",
-            minEnemyLevel: 10,
-            maxEnemyLevel: 15,
-            descText: "/Lotus/Language/Alerts/LotusGiftDesc",
-            maxWaveNum: 167
-        },
-        Tag: "LotusGift",
-        ForceUnlock: true,
-        minBuildVersion: gameToBuildVersionInt["43.0.0"]
-    }
-};
 
 const alertGeneratorConfig: Record<
     string,
@@ -2069,14 +1783,14 @@ const startInvasion = async (node: string, attacker: string, chainId?: Types.Obj
             : ((30 + getRandomInt(0, 20)) / 30) * (isRare ? 2 : 1); // 30000 on boss nodes, otherwise 30000-50000, doubled for rare rewards
     const now = new Date();
     const _id = new Types.ObjectId();
-    const spreadHours = config.worldState?.invasionSpreadHours ?? 2;
+    const spreadHours = config.worldState?.invasionSpreadHours ?? worldStateNumberOptions.invasionSpreadHours.default;
     await Invasion.insertOne({
         _id,
         Node: node,
         Faction: attacker,
         DefenderFaction: defender,
         Count: 0,
-        Goal: Math.round((config.worldState?.invasionGoal ?? 30_000) * goalScale),
+        Goal: Math.round((config.worldState?.invasionGoal ?? worldStateNumberOptions.invasionGoal.default) * goalScale),
         AttackerReward: attackerReward ? [attackerReward] : [],
         DefenderReward: [defenderReward],
         AttackerSeed: getRandomInt(0, 1_000_000),
@@ -2092,24 +1806,14 @@ const startInvasion = async (node: string, attacker: string, chainId?: Types.Obj
     });
 };
 
-// Fomorian Sabotage & Razorback Armada share the same node, so only one per relay.
-const constructionEventRelays = [
-    { Node: "EventNode0", VictimNode: "MercuryHUB" },
-    { Node: "EventNode2", VictimNode: "EarthHUB" },
-    { Node: "EventNode5", VictimNode: "SaturnHUB" },
-    { Node: "EventNode8", VictimNode: "PlutoHUB" }
-] as const;
-
 const updateConstructionProjects = async (now: number): Promise<void> => {
-    const pctPerDay = config.worldState?.constructionPctPerDay ?? 0.75;
-    const simulated = (config.worldState?.invasionSimulatedHours ?? 36) != 0;
-    const eventMs = (config.worldState?.constructionEventDays ?? 4) * unixTimesInMs.day;
-    const relayOverrides = [
-        config.worldState?.relayEventMercuryOverride,
-        config.worldState?.relayEventEarthOverride,
-        config.worldState?.relayEventSaturnOverride,
-        config.worldState?.relayEventPlutoOverride
-    ];
+    const pctPerDay = config.worldState?.constructionPctPerDay ?? worldStateNumberOptions.constructionPctPerDay.default;
+    const simulated =
+        (config.worldState?.invasionSimulatedHours ?? worldStateNumberOptions.invasionSimulatedHours.default) != 0;
+    const eventMs =
+        (config.worldState?.constructionEventDays ?? worldStateNumberOptions.constructionEventDays.default) *
+        unixTimesInMs.day;
+    const relayOverrides = constructionEventRelays.map(relay => config.worldState?.[relay.configKey]);
     let eventsChanged = false;
 
     const active: IConstructionEventDatabase[] = [];
@@ -2218,7 +1922,8 @@ const updateConstructionProjects = async (now: number): Promise<void> => {
 
 export const damageConstructionEvent = async (goalId: string): Promise<void> => {
     if (isValidObjectId(goalId)) {
-        const missionsToDestroy = config.worldState?.constructionEventMissions ?? 30;
+        const missionsToDestroy =
+            config.worldState?.constructionEventMissions ?? worldStateNumberOptions.constructionEventMissions.default;
         await ConstructionEvent.updateOne(
             { _id: goalId, Destroyed: { $ne: true } },
             { $inc: { Health: -1 / missionsToDestroy } }
@@ -2353,7 +2058,8 @@ export const populateConstructionEvents = async (worldState: IWorldState): Promi
 };
 
 const updateInvasions = async (): Promise<void> => {
-    const simulatedHours = config.worldState?.invasionSimulatedHours ?? 36;
+    const simulatedHours =
+        config.worldState?.invasionSimulatedHours ?? worldStateNumberOptions.invasionSimulatedHours.default;
     const restHours = config.worldState?.invasionRestHoursOverride;
     const now = Date.now();
 
@@ -2410,7 +2116,13 @@ const updateInvasions = async (): Promise<void> => {
             if (invasion.Faction != "FC_INFESTATION") {
                 await ConstructionProject.updateOne(
                     { Faction: invasion.Count > 0 ? invasion.Faction : invasion.DefenderFaction },
-                    { $inc: { Pct: config.worldState?.constructionPctPerWin ?? 1 } }
+                    {
+                        $inc: {
+                            Pct:
+                                config.worldState?.constructionPctPerWin ??
+                                worldStateNumberOptions.constructionPctPerWin.default
+                        }
+                    }
                 );
             }
             await Invasion.updateOne({ _id: invasion._id }, { $set: { FollowedUp: true } });
@@ -2440,9 +2152,12 @@ const updateInvasions = async (): Promise<void> => {
         "Faction ChainID CompletedAt"
     );
     for (const [attacker, count] of [
-        ["FC_GRINEER", config.worldState?.invasionGrineerCount ?? 1],
-        ["FC_CORPUS", config.worldState?.invasionCorpusCount ?? 1],
-        ["FC_INFESTATION", config.worldState?.invasionOutbreakCount ?? 2]
+        ["FC_GRINEER", config.worldState?.invasionGrineerCount ?? worldStateNumberOptions.invasionGrineerCount.default],
+        ["FC_CORPUS", config.worldState?.invasionCorpusCount ?? worldStateNumberOptions.invasionCorpusCount.default],
+        [
+            "FC_INFESTATION",
+            config.worldState?.invasionOutbreakCount ?? worldStateNumberOptions.invasionOutbreakCount.default
+        ]
     ] as const) {
         const chainToLast = new Map<string, IInvasionDatabase>();
         for (const invasion of fronts) {
@@ -2539,12 +2254,12 @@ export const getWorldStateTime = (): {
         constraints.push(config.worldState.vallisOverride == "cold" ? venusColdConstraint : venusWarmConstraint);
     }
     if (config.worldState?.duviriOverride) {
-        const duviriMoods = ["sorrow", "fear", "joy", "anger", "envy"];
-        const desiredMood = duviriMoods.indexOf(config.worldState.duviriOverride);
+        const duviriOverride = config.worldState.duviriOverride;
+        const desiredMood = duviriMoods.findIndex(x => x.mood == duviriOverride);
         if (desiredMood == -1) {
             logger.warn(`ignoring invalid config value for worldState.duviriOverride`, {
                 value: config.worldState.duviriOverride,
-                valid_values: duviriMoods
+                valid_values: duviriMoods.map(x => x.mood)
             });
         } else {
             constraints.push({
@@ -2843,9 +2558,10 @@ export const getWorldState = (
 
     if (config.worldState) {
         for (const [key, alert] of Object.entries(configAlerts)) {
-            if (config.worldState[key as keyof typeof config.worldState]) {
-                const { minBuildVersion, ...wsAlert } = alert;
+            if (config.worldState[key as TConfigAlertKey]) {
+                const { minBuildVersion, ...alertData }: typeof alert & Pick<TConfigAlert, "minBuildVersion"> = alert;
                 if (!minBuildVersion || buildVersion >= minBuildVersion) {
+                    const wsAlert: IAlert = { ...alertData, MissionInfo: { ...alertData.MissionInfo } };
                     if (wsAlert.MissionInfo.missionType == "MT_DEFENSE") {
                         wsAlert.MissionInfo.maxWaveNum =
                             defenseWavesPerRotation * (wsAlert.MissionInfo.maxRotations ?? 1);
@@ -3419,161 +3135,7 @@ export const getWorldState = (
 
     if (config.worldState?.anniversary != undefined) {
         // Incompatible with: Wolf Hunt, Galleon Of Ghouls, Hallowed Flame, Hallowed Nightmares, Dog Days, Proxy Rebellion, Long Shadow, Orphix Venom
-        const goalsByWeek: Partial<IGoal>[][] = [
-            [
-                {
-                    Node: "EventNode28",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2019E",
-                    Tag: "Anniversary2019TacAlert",
-                    Reward: { items: ["/Lotus/StoreItems/Upgrades/Skins/Excalibur/ExcaliburDexSkin"] }
-                },
-                {
-                    Node: "EventNode26",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2020F",
-                    Tag: "Anniversary2020TacAlert",
-                    Reward: { items: ["/Lotus/StoreItems/Types/Items/ShipDecos/ExcaliburDexBobbleHead"] }
-                },
-                {
-                    Node: "EventNode19",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2024ChallengeModeA",
-                    Tag: "Anniversary2024TacAlertCMA",
-                    Reward: { items: ["/Lotus/StoreItems/Types/Items/MiscItems/WeaponUtilityUnlocker"] }
-                }
-            ],
-            [
-                {
-                    Node: "EventNode24",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2017C",
-                    Tag: "Anniversary2018TacAlert",
-                    Reward: { items: ["/Lotus/StoreItems/Weapons/Tenno/LongGuns/DexTheThird/DexTheThird"] }
-                },
-                {
-                    Node: "EventNode18",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2020H",
-                    Tag: "Anniversary2020TacAlert",
-                    Reward: { items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/ImageDexAnniversary"] }
-                }
-            ],
-            [
-                {
-                    Node: "EventNode18",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2022J",
-                    Tag: "Anniversary2022TacAlert",
-                    Reward: { items: ["/Lotus/StoreItems/Upgrades/Skins/Rhino/RhinoDexSkin"] }
-                },
-                {
-                    Node: "EventNode38",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2025D",
-                    Tag: "Anniversary2020TacAlert",
-                    Reward: { items: ["/Lotus/StoreItems/Types/Items/ShipDecos/RhinoDexBobbleHead"] }
-                },
-                {
-                    Node: "EventNode27",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2025ChallengeModeA",
-                    Tag: "Anniversary2024TacAlertCMA",
-                    Reward: { items: ["/Lotus/StoreItems/Types/Items/MiscItems/OrokinCatalyst"] }
-                }
-            ],
-            [
-                {
-                    Node: "EventNode2",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2020G",
-                    Tag: "Anniversary2020TacAlert",
-                    Reward: { items: ["/Lotus/StoreItems/Upgrades/Skins/Liset/DexLisetSkin"] }
-                },
-                {
-                    Node: "EventNode17",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2017B",
-                    Tag: "Anniversary2018TacAlert",
-                    Reward: { items: ["/Lotus/StoreItems/Weapons/Tenno/Melee/Swords/DexTheSecond/DexTheSecond"] }
-                }
-            ],
-            [
-                {
-                    Node: "EventNode18",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2017A",
-                    Tag: "Anniversary2018TacAlert",
-                    Reward: { items: ["/Lotus/StoreItems/Weapons/Tenno/Pistols/DexFuris/DexFuris"] }
-                },
-                {
-                    Node: "EventNode26",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2023K",
-                    Tag: "Anniversary2025TacAlert",
-                    Reward: { items: ["/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageCommunityClemComic"] }
-                },
-                {
-                    Node: "EventNode12",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2025ChallengeModeB",
-                    Tag: "Anniversary2025TacAlertCMB",
-                    Reward: { items: ["/Lotus/StoreItems/Types/Items/MiscItems/WeaponPrimaryArcaneUnlocker"] }
-                }
-            ],
-            [
-                {
-                    Node: "EventNode17",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2025A",
-                    Tag: "Anniversary2025TacAlert",
-                    Reward: {
-                        items: [
-                            "/Lotus/StoreItems/Weapons/Tenno/Melee/Swords/KatanaAndWakizashi/Dex2023Nikana/Dex2023Nikana"
-                        ]
-                    }
-                },
-                {
-                    Node: "EventNode27",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2018D",
-                    Tag: "Anniversary2018TacAlert",
-                    Reward: { items: ["/Lotus/StoreItems/Upgrades/Skins/Scarves/DexScarf"] }
-                }
-            ],
-            [
-                {
-                    Node: "EventNode38",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2025C",
-                    Tag: "Anniversary2018TacAlert",
-                    Reward: { items: ["/Lotus/StoreItems/Upgrades/Skins/Wisp/DexWispSkin"] }
-                },
-                {
-                    Node: "EventNode12",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2024L",
-                    Tag: "Anniversary2024TacAlert",
-                    Reward: { items: ["/Lotus/Types/StoreItems/Packages/OperatorDrifterDexBundle"] }
-                },
-                {
-                    Node: "EventNode26",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2024ChallengeModeB",
-                    Tag: "Anniversary2024TacAlertCMB",
-                    Reward: { items: ["/Lotus/StoreItems/Types/Recipes/Components/UmbraFormaBlueprint"] }
-                }
-            ],
-            [
-                {
-                    Node: "EventNode37",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2021I",
-                    Tag: "Anniversary2021TacAlert",
-                    Reward: {
-                        items: [
-                            "/Lotus/StoreItems/Upgrades/Skins/Armor/Dex2020Armor/Dex2020ArmorAArmor",
-                            "/Lotus/StoreItems/Upgrades/Skins/Armor/Dex2020Armor/Dex2020ArmorCArmor",
-                            "/Lotus/StoreItems/Upgrades/Skins/Armor/Dex2020Armor/Dex2020ArmorLArmor",
-                            "/Lotus/StoreItems/Types/Game/CatbrowPet/CatbrowGeneticSignature"
-                        ],
-                        countedItems: [
-                            { ItemType: "/Lotus/Types/Game/CatbrowPet/CatbrowGeneticSignature", ItemCount: 10 }
-                        ]
-                    }
-                },
-                {
-                    Node: "EventNode9",
-                    MissionKeyName: "/Lotus/Types/Keys/TacAlertKeyAnniversary2025B",
-                    Tag: "Anniversary2025TacAlert",
-                    Reward: {
-                        items: ["/Lotus/StoreItems/Types/StoreItems/SuitCustomizations/ColourPickerAnniversaryEleven"]
-                    }
-                }
-            ]
-        ];
-        goalsByWeek[config.worldState.anniversary].forEach((goal, i) => {
+        anniversaryGoalsByWeek[config.worldState.anniversary].forEach((goal, i) => {
             worldState.Goals.push({
                 _id: {
                     $oid:
@@ -4024,8 +3586,12 @@ export const getWorldState = (
             _id: toOid2("67a5035c2a198564d62e165e", buildVersion),
             Activation: toMongoDate2(1738868400000, buildVersion),
             Expiry: toMongoDate2(2000000000000, buildVersion),
-            Count: config.worldState.bellyOfTheBeastProgressOverride ?? 0,
-            HealthPct: (config.worldState.bellyOfTheBeastProgressOverride ?? 0) / 100,
+            Count:
+                config.worldState.bellyOfTheBeastProgressOverride ??
+                worldStateNumberOptions.bellyOfTheBeastProgressOverride.default,
+            HealthPct:
+                (config.worldState.bellyOfTheBeastProgressOverride ??
+                    worldStateNumberOptions.bellyOfTheBeastProgressOverride.default) / 100,
             Goal: 0,
             Personal: true,
             Community: true,
@@ -4048,8 +3614,12 @@ export const getWorldState = (
             _id: toOid2("69ce8b780000000000000000", buildVersion),
             Activation: toMongoDate2(1738868400000, buildVersion),
             Expiry: toMongoDate2(2000000000000, buildVersion),
-            Count: config.worldState.operationAtramentumProgressOverride ?? 0,
-            HealthPct: (config.worldState.operationAtramentumProgressOverride ?? 0) / 100,
+            Count:
+                config.worldState.operationAtramentumProgressOverride ??
+                worldStateNumberOptions.operationAtramentumProgressOverride.default,
+            HealthPct:
+                (config.worldState.operationAtramentumProgressOverride ??
+                    worldStateNumberOptions.operationAtramentumProgressOverride.default) / 100,
             Goal: 0,
             Personal: true,
             Community: true,
@@ -4072,8 +3642,12 @@ export const getWorldState = (
             _id: toOid2("685c15f80000000000000000", buildVersion),
             Activation: toMongoDate2(1750865400000, buildVersion),
             Expiry: toMongoDate2(2000000000000, buildVersion),
-            Count: config.worldState.eightClawProgressOverride ?? 0,
-            HealthPct: (config.worldState.eightClawProgressOverride ?? 0) / 100,
+            Count:
+                config.worldState.eightClawProgressOverride ??
+                worldStateNumberOptions.eightClawProgressOverride.default,
+            HealthPct:
+                (config.worldState.eightClawProgressOverride ??
+                    worldStateNumberOptions.eightClawProgressOverride.default) / 100,
             Goal: 0,
             Personal: true,
             Community: true,
@@ -4223,7 +3797,9 @@ export const getWorldState = (
             Faction: "FC_INFESTATION",
             Goal: 0,
             ClanGoal: [72, 216, 648, 1944, 5832],
-            HealthPct: (config.worldState.epochOperationTauboundProgressOverride ?? 0) / 100,
+            HealthPct:
+                (config.worldState.epochOperationTauboundProgressOverride ??
+                    worldStateNumberOptions.epochOperationTauboundProgressOverride.default) / 100,
             Icon: "/Lotus/Interface/Icons/WorldStatePanel/EpochOperationEventBadge.png",
             ScoreLocTag: "/Lotus/Language/TauPrologue/RoadToTauEventScore",
             Tag: "RoadToTauEvent",
@@ -4237,204 +3813,12 @@ export const getWorldState = (
     }
 
     if (config.worldState?.lunarNewYear) {
-        const reapeingItems: Record<string, (Partial<IFlashSale> & { TypeName: string })[]> = {
-            "2022": [
-                { TypeName: "/Lotus/Types/Items/ShipDecos/Plushies/PlushyTiger", PremiumOverride: 35 },
-                {
-                    TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2022HeavyBladeSkin",
-                    PremiumOverride: 45
-                },
-                { TypeName: "/Lotus/Upgrades/Skins/MeleeDangles/LNYCarpSugatra", PremiumOverride: 15 },
-                {
-                    TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2022IgnisSkin",
-                    PremiumOverride: 25
-                },
-                { TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2022Zarr", PremiumOverride: 25 },
-                { TypeName: "/Lotus/Upgrades/Skins/Kubrows/Armor/Lunar2022KubrowArmor", PremiumOverride: 25 },
-                { TypeName: "/Lotus/Upgrades/Skins/Effects/PeachBlossomsEphemera", PremiumOverride: 60 },
-                { TypeName: "/Lotus/Types/Items/ShipDecos/CNY2021Poster", RegularOverride: 1 },
-                { TypeName: "/Lotus/Types/StoreItems/AvatarImages/ChineseNewYear2021Glyph", RegularOverride: 1 },
-                { TypeName: "/Lotus/Types/Items/ShipDecos/WeGame/LuckyKavat", PremiumOverride: 35 },
-                { TypeName: "/Lotus/Types/Items/ShipDecos/WeGame/LuckyKavatWhite", PremiumOverride: 35 },
-                { TypeName: "/Lotus/Types/Items/ShipDecos/WeGame/LuckyKavatGold", PremiumOverride: 35 },
-                { TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2020AcceltraSkin", PremiumOverride: 25 },
-                { TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2020OrthosSkin", PremiumOverride: 20 },
-                { TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2020PyranaSkin", PremiumOverride: 25 },
-                { TypeName: "/Lotus/Upgrades/Skins/Promo/WeGame/WeGameMacheteSkin", PremiumOverride: 25 },
-                { TypeName: "/Lotus/Upgrades/Skins/MeleeDangles/WegameChinaKnotDangle", PremiumOverride: 15 },
-                { TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2020PyranaSkin", PremiumOverride: 25 }
-            ],
-            "2023": [
-                { TypeName: "/Lotus/Types/Items/ShipDecos/Plushies/PlushyLNY2023Rabbit", PremiumOverride: 35 },
-                {
-                    TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2023CedoSkin",
-                    PremiumOverride: 25
-                },
-                { TypeName: "/Lotus/Upgrades/Skins/Sigils/WeGameNewYearTigerSigil", PremiumOverride: 40 },
-                { TypeName: "/Lotus/Upgrades/Skins/Sigils/WeGameNewYearRabbitSigil", PremiumOverride: 40 },
-                { TypeName: "/Lotus/Interface/Graphics/CustomUI/LunarNewYearStyle", PremiumOverride: 50 },
-                {
-                    TypeName: "/Lotus/Interface/Graphics/CustomUI/Backgrounds/SpringFestivalBackground",
-                    PremiumOverride: 50
-                },
-                {
-                    TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2023NagantakaSkin",
-                    PremiumOverride: 25
-                },
-                { TypeName: "/Lotus/Upgrades/Skins/Effects/LunarEphemera", PremiumOverride: 60 },
-                {
-                    TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2023CernosSkin",
-                    PremiumOverride: 25
-                },
-                { TypeName: "/Lotus/Types/Items/Emotes/LNY2023Emote", PremiumOverride: 25 }
-            ],
-            "2024": [
-                { TypeName: "/Lotus/Types/Items/ShipDecos/Plushies/PlushyLNY2024Dragon", PremiumOverride: 35 },
-                {
-                    TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/LNY2024Nukor",
-                    PremiumOverride: 25
-                },
-                { TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/LNY2024DragonSigil", PremiumOverride: 40 },
-                {
-                    TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/LNYHookSword",
-                    PremiumOverride: 75
-                },
-                {
-                    TypeName: "/Lotus/Upgrades/Skins/MeleeDangles/LNYBirdSugatra",
-                    PremiumOverride: 15
-                },
-                { TypeName: "/Lotus/Upgrades/Skins/Effects/LNYDragonEphemera", PremiumOverride: 60 },
-                {
-                    TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/LNY2024Ogris",
-                    PremiumOverride: 25
-                },
-                { TypeName: "/Lotus/Types/Items/Emotes/LNY2024DragonEmote", PremiumOverride: 25 },
-                { TypeName: "/Lotus/Upgrades/Skins/Sentinels/Skins/LNYDragonSentinelSkin", PremiumOverride: 85 },
-                { TypeName: "/Lotus/Upgrades/Skins/Sentinels/Masks/LNYDragonMask", PremiumOverride: 30 },
-                { TypeName: "/Lotus/Upgrades/Skins/Sentinels/Wings/LNYDragonWings", PremiumOverride: 15 },
-                { TypeName: "/Lotus/Upgrades/Skins/Sentinels/Tails/LNYDragonTail", PremiumOverride: 15 }
-            ],
-            "2025": [
-                { TypeName: "/Lotus/Types/Items/ShipDecos/Plushies/PlushySnake", PremiumOverride: 35 },
-                { TypeName: "/Lotus/Types/Items/ShipDecos/Plushies/PlushyLNYMirage", PremiumOverride: 35 },
-                {
-                    TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/CNY2025ScytheSkin",
-                    PremiumOverride: 25
-                },
-                {
-                    TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/LNY2025BoltorSkin",
-                    PremiumOverride: 20
-                },
-                {
-                    TypeName: "/Lotus/StoreItems/Upgrades/Skins/Catbrows/Armor/LNYKavatBoltorArmor",
-                    PremiumOverride: 90
-                },
-                { TypeName: "/Lotus/Upgrades/Skins/Effects/LNYStonesEphemera", PremiumOverride: 60 },
-                { TypeName: "/Lotus/Upgrades/Skins/Sigils/WeGameNewYearSnakeSigil", PremiumOverride: 40 },
-                {
-                    TypeName: "/Lotus/Upgrades/Skins/MeleeDangles/LNYSnakeMeleeDangle",
-                    PremiumOverride: 15
-                },
-                { TypeName: "/Lotus/Types/Items/Emotes/LNY2025SnakeEmote", PremiumOverride: 15 }
-            ],
-            "2026": [
-                { TypeName: "/Lotus/Upgrades/Skins/Horse/DagathDeluxeLNYHorseBodySkin", PremiumOverride: 220 },
-                { TypeName: "/Lotus/Upgrades/Skins/Horse/DagathDeluxeLNYHorseTail", PremiumOverride: 30 },
-                { TypeName: "/Lotus/Types/Items/ShipDecos/Plushies/PlushyLNYKaithe", PremiumOverride: 35 },
-                {
-                    TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/CNY2025ScytheSkin",
-                    PremiumOverride: 25
-                },
-                {
-                    TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/LNY2025BoltorSkin",
-                    PremiumOverride: 20
-                },
-                { TypeName: "/Lotus/Upgrades/Skins/Effects/LNYKaitheDagathEphemera", PremiumOverride: 60 },
-                { TypeName: "/Lotus/Upgrades/Skins/Sigils/WeGameNewYearHorseSigil", PremiumOverride: 40 },
-                {
-                    TypeName: "/Lotus/Upgrades/Skins/MeleeDangles/LNYFireSugatra",
-                    PremiumOverride: 15
-                },
-                { TypeName: "/Lotus/Types/Items/Emotes/LNY2026HorseEmote", PremiumOverride: 15 }
-            ]
-        };
-        const storeItems: Record<string, (Partial<IFlashSale> & { TypeName: string })[]> = {
-            "2019": [{ TypeName: "/Lotus/Types/Items/ShipLayerCNY", RegularOverride: 1 }],
-            "2020": [{ TypeName: "/Lotus/Types/StoreItems/AvatarImages/ImageGengzi", RegularOverride: 1 }],
-            "2021": [
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2021BlessingsBundle", PremiumOverride: 130 },
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2021AnewBundle", PremiumOverride: 185 },
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2021LuminousBundle", PremiumOverride: 470 }
-            ],
-            "2022": [
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2022BundleA", PremiumOverride: 135 },
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2022BundleB", PremiumOverride: 275 },
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2022BundleC", PremiumOverride: 515 },
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2022BundleD", PremiumOverride: 105 },
-                ...[...reapeingItems["2022"]].sort((a, b) => a.TypeName.localeCompare(b.TypeName))
-            ],
-            "2023": [
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2023BundleA", PremiumOverride: 135 },
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2023BundleB", PremiumOverride: 265 },
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2023BundleC", PremiumOverride: 500 },
-                { TypeName: "/Lotus/Types/StoreItems/AvatarImages/CNY2023RabbitGlyph", RegularOverride: 1 },
-                ...[...reapeingItems["2022"], ...reapeingItems["2023"]].sort((a, b) =>
-                    a.TypeName.localeCompare(b.TypeName)
-                )
-            ],
-            "2024": [
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2024BundleA", PremiumOverride: 135 },
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2024BundleB", PremiumOverride: 295 },
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2024BundleC", PremiumOverride: 575 },
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2024SentinelSkinBundle", PremiumOverride: 95 },
-                {
-                    TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageYearOfTheDragonGlyph",
-                    RegularOverride: 1
-                },
-                ...[...reapeingItems["2022"], ...reapeingItems["2023"], ...reapeingItems["2024"]].sort((a, b) =>
-                    a.TypeName.localeCompare(b.TypeName)
-                )
-            ],
-            "2025": [
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2025BundleA", PremiumOverride: 215 },
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2025BundleB", PremiumOverride: 590 },
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2025BundleC", PremiumOverride: 805 },
-                {
-                    TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageCNY2025SnakeGlyphB",
-                    RegularOverride: 1
-                },
-                { TypeName: "/Lotus/Upgrades/Skins/Clan/CNY2025SnakeEmblem", RegularOverride: 1 },
-                ...[
-                    ...reapeingItems["2022"],
-                    ...reapeingItems["2023"],
-                    ...reapeingItems["2024"],
-                    ...reapeingItems["2025"]
-                ].sort((a, b) => a.TypeName.localeCompare(b.TypeName))
-            ],
-            "2026": [
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2026BundleA", PremiumOverride: 295 },
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2026BundleB", PremiumOverride: 480 },
-                { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2026BundleC", PremiumOverride: 700 },
-                {
-                    TypeName: "/Lotus/Types/StoreItems/AvatarImages/LNY2026HorseGlyph",
-                    RegularOverride: 1
-                },
-                { TypeName: "/Lotus/Upgrades/Skins/Clan/LNY2026HorseGlyph", RegularOverride: 1 },
-                ...[
-                    ...reapeingItems["2022"],
-                    ...reapeingItems["2023"],
-                    ...reapeingItems["2024"],
-                    ...reapeingItems["2025"],
-                    ...reapeingItems["2026"]
-                ].sort((a, b) => a.TypeName.localeCompare(b.TypeName))
-            ]
-        };
         const selectedStoreItems: (Partial<IFlashSale> & { TypeName: string })[] = [];
         if (config.worldState.lunarNewYear == "all") {
             const addedTypeNames = new Set<string>();
             const packageItems = [];
             const otherItems = [];
-            for (const items of Object.values(storeItems)) {
+            for (const items of Object.values(lunarNewYearFlashSales)) {
                 for (const item of items) {
                     if (!addedTypeNames.has(item.TypeName)) {
                         addedTypeNames.add(item.TypeName);
@@ -4450,8 +3834,10 @@ export const getWorldState = (
                 ...packageItems.sort((a, b) => a.TypeName.localeCompare(b.TypeName)),
                 ...otherItems.sort((a, b) => a.TypeName.localeCompare(b.TypeName))
             );
-        } else if (config.worldState.lunarNewYear in storeItems) {
-            selectedStoreItems.push(...storeItems[config.worldState.lunarNewYear]);
+        } else if (config.worldState.lunarNewYear in lunarNewYearFlashSales) {
+            selectedStoreItems.push(
+                ...lunarNewYearFlashSales[config.worldState.lunarNewYear as keyof typeof lunarNewYearFlashSales]
+            );
         }
         pushFlashSales(worldState, selectedStoreItems, 1750865400000, 2000000000000, "SEASONAL", buildVersion);
     }
@@ -4469,7 +3855,9 @@ export const getWorldState = (
     ) {
         const activeStartDay = day - activeThermiaFracturesCycleDay;
 
-        const count = config.worldState?.thermiaFracturesProgressOverride ?? 0;
+        const count =
+            config.worldState?.thermiaFracturesProgressOverride ??
+            worldStateNumberOptions.thermiaFracturesProgressOverride.default;
         const activation = config.worldState?.thermiaFracturesOverride ? 1740416400000 : getSortieTime(activeStartDay);
         const expiry = config.worldState?.thermiaFracturesOverride ? 2000000000000 : getSortieTime(activeStartDay + 14);
 
@@ -4554,7 +3942,9 @@ export const getWorldState = (
     if (nightwaveSyndicateTag) {
         const nightwaveStartTimestamp = nightwaveTagToActivation[nightwaveSyndicateTag] ?? 1747851300000;
         const nightwaveSeason = nightwaveTagToSeason[nightwaveSyndicateTag];
-        const nightwaveEpisode = ([0, 2, 4].includes(nightwaveSeason) && config.worldState?.nightwaveEpisode) || 1;
+        const nightwaveEpisode =
+            ([0, 2, 4].includes(nightwaveSeason) && config.worldState?.nightwaveEpisode) ||
+            worldStateNumberOptions.nightwaveEpisode.default;
         worldState.SeasonInfo = {
             Activation: { $date: { $numberLong: nightwaveStartTimestamp.toString() } },
             Expiry: { $date: { $numberLong: "2000000000000" } },
@@ -4844,7 +4234,7 @@ export const getWorldState = (
         const baroEnd = baroStart + unixTimesInMs.day * 14;
         const baroRelayOverride = config.worldState?.baroRelayOverride;
         const baroNodeIndex = baroRelayOverride && baroRelayOverride > 0 ? baroRelayOverride - 1 : baroIndex % 4;
-        let baroNode = ["EarthHUB", "MercuryHUB", "SaturnHUB", "PlutoHUB"][baroNodeIndex];
+        let baroNode: string = baroRelayNodes[baroNodeIndex];
         if (baroNode == "MercuryHUB" && buildVersion < gameToBuildVersionInt["18.18.0"]) {
             // This Pre-Star Chart 3.0 client won't know Larunda Relay, so move Baro elsewhere.
             baroNode = "EarthHUB";
@@ -5007,7 +4397,9 @@ export const getWorldState = (
                 TargetType: targetType,
                 EnemyType: libraryTargetToAvatar[targetType],
                 PersonalScansRequired: 10,
-                ProgressPercent: config.worldState.communitySynthesisProgress ?? 0
+                ProgressPercent:
+                    config.worldState.communitySynthesisProgress ??
+                    worldStateNumberOptions.communitySynthesisProgress.default
             }
         };
         if (config.worldState.communitySynthesisTarget != 1) {
@@ -5418,7 +4810,11 @@ export const populateDailyDeal = async (worldState: IWorldState): Promise<void> 
                 Discount: dailyDeal.Discount,
                 OriginalPrice: dailyDeal.OriginalPrice,
                 SalePrice: dailyDeal.SalePrice,
-                AmountTotal: Math.round(dailyDeal.AmountTotal * (config.worldState?.darvoStockMultiplier ?? 1)),
+                AmountTotal: Math.round(
+                    dailyDeal.AmountTotal *
+                        (config.worldState?.darvoStockMultiplier ??
+                            worldStateNumberOptions.darvoStockMultiplier.default)
+                ),
                 AmountSold: dailyDeal.AmountSold
             });
         }

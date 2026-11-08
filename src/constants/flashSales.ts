@@ -551,6 +551,202 @@ export const tennobaumFlashSales: IFlashSaleData[] = [
     }
 ];
 
+const lunarNewYearReappearingItems = {
+    "2022": [
+        { TypeName: "/Lotus/Types/Items/ShipDecos/Plushies/PlushyTiger", PremiumOverride: 35 },
+        {
+            TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2022HeavyBladeSkin",
+            PremiumOverride: 45
+        },
+        { TypeName: "/Lotus/Upgrades/Skins/MeleeDangles/LNYCarpSugatra", PremiumOverride: 15 },
+        {
+            TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2022IgnisSkin",
+            PremiumOverride: 25
+        },
+        { TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2022Zarr", PremiumOverride: 25 },
+        { TypeName: "/Lotus/Upgrades/Skins/Kubrows/Armor/Lunar2022KubrowArmor", PremiumOverride: 25 },
+        { TypeName: "/Lotus/Upgrades/Skins/Effects/PeachBlossomsEphemera", PremiumOverride: 60 },
+        { TypeName: "/Lotus/Types/Items/ShipDecos/CNY2021Poster", RegularOverride: 1 },
+        { TypeName: "/Lotus/Types/StoreItems/AvatarImages/ChineseNewYear2021Glyph", RegularOverride: 1 },
+        { TypeName: "/Lotus/Types/Items/ShipDecos/WeGame/LuckyKavat", PremiumOverride: 35 },
+        { TypeName: "/Lotus/Types/Items/ShipDecos/WeGame/LuckyKavatWhite", PremiumOverride: 35 },
+        { TypeName: "/Lotus/Types/Items/ShipDecos/WeGame/LuckyKavatGold", PremiumOverride: 35 },
+        { TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2020AcceltraSkin", PremiumOverride: 25 },
+        { TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2020OrthosSkin", PremiumOverride: 20 },
+        { TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2020PyranaSkin", PremiumOverride: 25 },
+        { TypeName: "/Lotus/Upgrades/Skins/Promo/WeGame/WeGameMacheteSkin", PremiumOverride: 25 },
+        { TypeName: "/Lotus/Upgrades/Skins/MeleeDangles/WegameChinaKnotDangle", PremiumOverride: 15 },
+        { TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2020PyranaSkin", PremiumOverride: 25 }
+    ],
+    "2023": [
+        { TypeName: "/Lotus/Types/Items/ShipDecos/Plushies/PlushyLNY2023Rabbit", PremiumOverride: 35 },
+        {
+            TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2023CedoSkin",
+            PremiumOverride: 25
+        },
+        { TypeName: "/Lotus/Upgrades/Skins/Sigils/WeGameNewYearTigerSigil", PremiumOverride: 40 },
+        { TypeName: "/Lotus/Upgrades/Skins/Sigils/WeGameNewYearRabbitSigil", PremiumOverride: 40 },
+        { TypeName: "/Lotus/Interface/Graphics/CustomUI/LunarNewYearStyle", PremiumOverride: 50 },
+        {
+            TypeName: "/Lotus/Interface/Graphics/CustomUI/Backgrounds/SpringFestivalBackground",
+            PremiumOverride: 50
+        },
+        {
+            TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2023NagantakaSkin",
+            PremiumOverride: 25
+        },
+        { TypeName: "/Lotus/Upgrades/Skins/Effects/LunarEphemera", PremiumOverride: 60 },
+        {
+            TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/Lunar2023CernosSkin",
+            PremiumOverride: 25
+        },
+        { TypeName: "/Lotus/Types/Items/Emotes/LNY2023Emote", PremiumOverride: 25 }
+    ],
+    "2024": [
+        { TypeName: "/Lotus/Types/Items/ShipDecos/Plushies/PlushyLNY2024Dragon", PremiumOverride: 35 },
+        {
+            TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/LNY2024Nukor",
+            PremiumOverride: 25
+        },
+        { TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/LNY2024DragonSigil", PremiumOverride: 40 },
+        {
+            TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/LNYHookSword",
+            PremiumOverride: 75
+        },
+        {
+            TypeName: "/Lotus/Upgrades/Skins/MeleeDangles/LNYBirdSugatra",
+            PremiumOverride: 15
+        },
+        { TypeName: "/Lotus/Upgrades/Skins/Effects/LNYDragonEphemera", PremiumOverride: 60 },
+        {
+            TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/LNY2024Ogris",
+            PremiumOverride: 25
+        },
+        { TypeName: "/Lotus/Types/Items/Emotes/LNY2024DragonEmote", PremiumOverride: 25 },
+        { TypeName: "/Lotus/Upgrades/Skins/Sentinels/Skins/LNYDragonSentinelSkin", PremiumOverride: 85 },
+        { TypeName: "/Lotus/Upgrades/Skins/Sentinels/Masks/LNYDragonMask", PremiumOverride: 30 },
+        { TypeName: "/Lotus/Upgrades/Skins/Sentinels/Wings/LNYDragonWings", PremiumOverride: 15 },
+        { TypeName: "/Lotus/Upgrades/Skins/Sentinels/Tails/LNYDragonTail", PremiumOverride: 15 }
+    ],
+    "2025": [
+        { TypeName: "/Lotus/Types/Items/ShipDecos/Plushies/PlushySnake", PremiumOverride: 35 },
+        { TypeName: "/Lotus/Types/Items/ShipDecos/Plushies/PlushyLNYMirage", PremiumOverride: 35 },
+        {
+            TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/CNY2025ScytheSkin",
+            PremiumOverride: 25
+        },
+        {
+            TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/LNY2025BoltorSkin",
+            PremiumOverride: 20
+        },
+        {
+            TypeName: "/Lotus/StoreItems/Upgrades/Skins/Catbrows/Armor/LNYKavatBoltorArmor",
+            PremiumOverride: 90
+        },
+        { TypeName: "/Lotus/Upgrades/Skins/Effects/LNYStonesEphemera", PremiumOverride: 60 },
+        { TypeName: "/Lotus/Upgrades/Skins/Sigils/WeGameNewYearSnakeSigil", PremiumOverride: 40 },
+        {
+            TypeName: "/Lotus/Upgrades/Skins/MeleeDangles/LNYSnakeMeleeDangle",
+            PremiumOverride: 15
+        },
+        { TypeName: "/Lotus/Types/Items/Emotes/LNY2025SnakeEmote", PremiumOverride: 15 }
+    ],
+    "2026": [
+        { TypeName: "/Lotus/Upgrades/Skins/Horse/DagathDeluxeLNYHorseBodySkin", PremiumOverride: 220 },
+        { TypeName: "/Lotus/Upgrades/Skins/Horse/DagathDeluxeLNYHorseTail", PremiumOverride: 30 },
+        { TypeName: "/Lotus/Types/Items/ShipDecos/Plushies/PlushyLNYKaithe", PremiumOverride: 35 },
+        {
+            TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/CNY2025ScytheSkin",
+            PremiumOverride: 25
+        },
+        {
+            TypeName: "/Lotus/Upgrades/Skins/LunarNewYear/LNY2025BoltorSkin",
+            PremiumOverride: 20
+        },
+        { TypeName: "/Lotus/Upgrades/Skins/Effects/LNYKaitheDagathEphemera", PremiumOverride: 60 },
+        { TypeName: "/Lotus/Upgrades/Skins/Sigils/WeGameNewYearHorseSigil", PremiumOverride: 40 },
+        {
+            TypeName: "/Lotus/Upgrades/Skins/MeleeDangles/LNYFireSugatra",
+            PremiumOverride: 15
+        },
+        { TypeName: "/Lotus/Types/Items/Emotes/LNY2026HorseEmote", PremiumOverride: 15 }
+    ]
+} as const satisfies Record<string, IFlashSaleData[]>;
+
+export const lunarNewYearFlashSales = {
+    "2019": [{ TypeName: "/Lotus/Types/Items/ShipLayerCNY", RegularOverride: 1 }],
+    "2020": [{ TypeName: "/Lotus/Types/StoreItems/AvatarImages/ImageGengzi", RegularOverride: 1 }],
+    "2021": [
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2021BlessingsBundle", PremiumOverride: 130 },
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2021AnewBundle", PremiumOverride: 185 },
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2021LuminousBundle", PremiumOverride: 470 }
+    ],
+    "2022": [
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2022BundleA", PremiumOverride: 135 },
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2022BundleB", PremiumOverride: 275 },
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2022BundleC", PremiumOverride: 515 },
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2022BundleD", PremiumOverride: 105 },
+        ...[...lunarNewYearReappearingItems["2022"]].sort((a, b) => a.TypeName.localeCompare(b.TypeName))
+    ],
+    "2023": [
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2023BundleA", PremiumOverride: 135 },
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2023BundleB", PremiumOverride: 265 },
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2023BundleC", PremiumOverride: 500 },
+        { TypeName: "/Lotus/Types/StoreItems/AvatarImages/CNY2023RabbitGlyph", RegularOverride: 1 },
+        ...[...lunarNewYearReappearingItems["2022"], ...lunarNewYearReappearingItems["2023"]].sort((a, b) =>
+            a.TypeName.localeCompare(b.TypeName)
+        )
+    ],
+    "2024": [
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2024BundleA", PremiumOverride: 135 },
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2024BundleB", PremiumOverride: 295 },
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2024BundleC", PremiumOverride: 575 },
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2024SentinelSkinBundle", PremiumOverride: 95 },
+        {
+            TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageYearOfTheDragonGlyph",
+            RegularOverride: 1
+        },
+        ...[
+            ...lunarNewYearReappearingItems["2022"],
+            ...lunarNewYearReappearingItems["2023"],
+            ...lunarNewYearReappearingItems["2024"]
+        ].sort((a, b) => a.TypeName.localeCompare(b.TypeName))
+    ],
+    "2025": [
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2025BundleA", PremiumOverride: 215 },
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2025BundleB", PremiumOverride: 590 },
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2025BundleC", PremiumOverride: 805 },
+        {
+            TypeName: "/Lotus/Types/StoreItems/AvatarImages/Seasonal/AvatarImageCNY2025SnakeGlyphB",
+            RegularOverride: 1
+        },
+        { TypeName: "/Lotus/Upgrades/Skins/Clan/CNY2025SnakeEmblem", RegularOverride: 1 },
+        ...[
+            ...lunarNewYearReappearingItems["2022"],
+            ...lunarNewYearReappearingItems["2023"],
+            ...lunarNewYearReappearingItems["2024"],
+            ...lunarNewYearReappearingItems["2025"]
+        ].sort((a, b) => a.TypeName.localeCompare(b.TypeName))
+    ],
+    "2026": [
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2026BundleA", PremiumOverride: 295 },
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2026BundleB", PremiumOverride: 480 },
+        { TypeName: "/Lotus/Types/StoreItems/Packages/LNY2026BundleC", PremiumOverride: 700 },
+        {
+            TypeName: "/Lotus/Types/StoreItems/AvatarImages/LNY2026HorseGlyph",
+            RegularOverride: 1
+        },
+        { TypeName: "/Lotus/Upgrades/Skins/Clan/LNY2026HorseGlyph", RegularOverride: 1 },
+        ...[
+            ...lunarNewYearReappearingItems["2022"],
+            ...lunarNewYearReappearingItems["2023"],
+            ...lunarNewYearReappearingItems["2024"],
+            ...lunarNewYearReappearingItems["2025"],
+            ...lunarNewYearReappearingItems["2026"]
+        ].sort((a, b) => a.TypeName.localeCompare(b.TypeName))
+    ]
+} as const satisfies Record<string, IFlashSaleData[]>;
+
 export interface IFlashSaleData extends Partial<IFlashSale> {
     TypeName: string;
     minBuildVersionInt?: number;

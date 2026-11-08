@@ -2812,4 +2812,6 @@ interface IBaro {
     allIfAny: string[][];
 }
 
+export const baroRelayNodes = ["EarthHUB", "MercuryHUB", "SaturnHUB", "PlutoHUB"] as const;
+
 export default baro;

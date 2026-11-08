@@ -5,6 +5,7 @@ import { args } from "../helpers/commandLineArguments.ts";
 import type { Request } from "express";
 import { version_compare } from "../helpers/inventoryHelpers.ts";
 import configDefaults from "../../config-vanilla.json" with { type: "json" };
+import type { TConfigAlertKey } from "../constants/configAlerts.ts";
 
 export type TRegionId = "ASIA" | "OCEANIA" | "EUROPE" | "RUSSIA" | "NORTH_AMERICA" | "SOUTH_AMERICA";
 
@@ -99,20 +100,7 @@ export interface IConfig {
         naberusNightsOverride?: boolean;
         proxyRebellion?: boolean;
         proxyRebellionRewardsOverride?: number;
-        voidCorruption2025Week1?: boolean;
-        voidCorruption2025Week2?: boolean;
-        voidCorruption2025Week3?: boolean;
-        voidCorruption2025Week4?: boolean;
-        dagathAlerts2026Week1?: boolean;
-        dagathAlerts2026Week2?: boolean;
-        dagathAlerts2026Week3?: boolean;
-        dagathAlerts2026Week4?: boolean;
-        starDaysAlerts2026Week1?: boolean;
-        starDaysAlerts2026Week2?: boolean;
-        starDaysAlerts2026Week3?: boolean;
-        starDaysAlerts2026Week4?: boolean;
         qtccAlerts?: boolean;
-        destiny2TributeAlert?: boolean;
         galleonOfGhouls?: number;
         ghoulEmergenceOverride?: boolean;
         plagueStarOverride?: boolean;
@@ -162,7 +150,7 @@ export interface IConfig {
         communitySynthesisProgress?: number;
         snowdayShowdown?: boolean;
         breedingGrounds?: boolean;
-    };
+    } & Partial<Record<TConfigAlertKey, boolean>>;
     serversideQualityOfLife?: Record<TQolConfigKey, boolean | null>;
     inventoryDefaults?: Record<string, any>;
     tunables?: {
@@ -180,6 +168,41 @@ export interface IConfig {
         keepVendorsExpired?: boolean;
     };
 }
+
+export const serverCheatBooleans = [
+    "skipTutorial",
+    "skipClanKeyCrafting",
+    "fullyStockedVendors",
+    "noHubDiscrimination"
+] as const satisfies readonly (keyof IConfig)[];
+
+export const worldStateNumberOptions = {
+    darvoStockMultiplier: { default: 1, step: 0.01 },
+    creditBoostMultiplier: { default: 0, min: 0, max: 1000000 },
+    affinityBoostMultiplier: { default: 0, min: 0, max: 1000000 },
+    resourceBoostMultiplier: { default: 0, min: 0, max: 1000000 },
+    nightwaveEpisode: { default: 1, min: 1, max: 5 },
+    invasionGrineerCount: { default: 1, min: 0, max: 5 },
+    invasionCorpusCount: { default: 1, min: 0, max: 5 },
+    invasionOutbreakCount: { default: 2, min: 0, max: 5 },
+    invasionGoal: { default: 30000, min: 1, max: 100000 },
+    invasionSimulatedHours: { default: 36, min: 0, max: 720 },
+    invasionSpreadHours: { default: 2, min: 0, max: 72 },
+    invasionRestHoursOverride: { min: 0, max: 72 },
+    constructionPctPerDay: { default: 0.75, min: 0, max: 100, step: 0.01 },
+    constructionPctPerWin: { default: 1, min: 0, max: 100, step: 0.01 },
+    constructionEventMissions: { default: 30, min: 1, max: 100000 },
+    constructionEventDays: { default: 4, min: 1, max: 30 },
+    operationAtramentumProgressOverride: { default: 0, min: 0, max: 100 },
+    bellyOfTheBeastProgressOverride: { default: 0, min: 0, max: 100 },
+    eightClawProgressOverride: { default: 0, min: 0, max: 100 },
+    thermiaFracturesProgressOverride: { default: 0, min: 0, max: 100 },
+    epochOperationTauboundProgressOverride: { default: 0, min: 0, max: 100 },
+    communitySynthesisTarget: { default: 0, min: 0, max: 10 },
+    communitySynthesisProgress: { default: 0, min: 0, max: 100, step: 0.1 }
+} as const satisfies Partial<
+    Record<keyof NonNullable<IConfig["worldState"]>, { default?: number; min?: number; max?: number; step?: number }>
+>;
 
 export const configRemovedOptionsKeys = [
     "unlockallShipFeatures",
