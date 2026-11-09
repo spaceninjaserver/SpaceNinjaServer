@@ -2206,7 +2206,7 @@ async function populateInventoryRoute() {
                         a.href = "#";
                         a.onclick = function (event) {
                             event.preventDefault();
-                            equipmentFeatures(category, item.ItemId.$oid, 8);
+                            equipmentFeatures(category, item.ItemId.$oid, 8).then(() => a.remove());
                         };
                         a.title = loc("code_gild");
                         a.innerHTML = icons.star;
@@ -3896,14 +3896,14 @@ function disposeOfItems(category, type, count) {
 }
 
 function equipmentFeatures(category, oid, bit) {
-    revalidateAuthz().then(() => {
+    return revalidateAuthz().then(() =>
         $.get(
             "/custom/equipmentFeatures?" + window.authz + "&ItemId=" + oid + "&Category=" + category + "&bit=" + bit
         ).done(function () {
             inventory_data[category].find(x => x.ItemId.$oid == oid).Features ^= bit;
             // toggle state was already updated when the user clicked on it
-        });
-    });
+        })
+    );
 }
 
 function unlockLevelCap(category, oid, formas) {
