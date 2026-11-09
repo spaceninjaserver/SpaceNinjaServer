@@ -828,6 +828,17 @@ export const getInventoryResponse = async (
         }
     }
 
+    // Before U23.9.1 the client displays an empty loadout name as "unnamed"
+    if (version_compare(buildLabel, gameToBuildVersion["23.9.1"]) < 0) {
+        for (const category of loadoutKeysLegacy) {
+            if (category in inventoryResponse.LoadOutPresets!) {
+                for (const item of inventoryResponse.LoadOutPresets![category]) {
+                    if (!item.n) item.n = "Default Loadout";
+                }
+            }
+        }
+    }
+
     // Before U22.14.0 Arcanes was installed directly at cosmetic items so client doesn't know about ranked up arcanes and UI displays them unproperly
     if (version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0) {
         return inventoryResponse;

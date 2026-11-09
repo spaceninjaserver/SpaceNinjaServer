@@ -471,7 +471,7 @@ const saveLegacyLoadoutPreset = async (
     if (loadout.NORMAL.length == 0) {
         const loadoutId = new Types.ObjectId("000000000000000000000000");
         loadout.NORMAL.push({
-            n: "Default Loadout",
+            n: name,
             s: s,
             l: l,
             p: p,
@@ -520,7 +520,7 @@ const saveLegacyLoadoutPreset = async (
         if (loadout.SENTINEL.length == 0) {
             const loadoutId = new Types.ObjectId("000000000000000000000000");
             loadout.SENTINEL.push({
-                n: "Default Loadout",
+                n: name,
                 s: s,
                 l: l,
                 _id: loadoutId
@@ -560,7 +560,7 @@ const saveLegacyLoadoutPreset = async (
         if (loadout.ARCHWING.length == 0) {
             const loadoutId = new Types.ObjectId("000000000000000000000000");
             loadout.ARCHWING.push({
-                n: "Default Loadout",
+                n: name,
                 s: s,
                 l: l,
                 m: m,
