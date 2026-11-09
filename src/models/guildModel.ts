@@ -235,6 +235,7 @@ const guildSchema = new Schema<IGuildDatabase>(
         AutoContributeFromVault: Boolean,
         AllianceId: Types.ObjectId,
         Featured: Boolean,
+        FeaturedIcon: Number,
 
         DojoComponents: { type: [dojoComponentSchema], default: [] },
         DojoCapacity: { type: Number, default: 100 },

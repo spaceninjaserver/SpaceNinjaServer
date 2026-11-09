@@ -31,6 +31,10 @@ function itemMapTcAttrs(key: string): TWebuiLoc {
     return { "data-loc-itemMap-tc": key };
 }
 
+function placeholderAttrs(key: string): TWebuiLoc {
+    return { "data-loc-placeholder": key };
+}
+
 function descAttrs(key: string): TWebuiLoc {
     return { "data-loc-title": key };
 }
@@ -64,7 +68,18 @@ type TWorldStateCheat = {
           type: "stringArray";
           values?: readonly string[];
       }
-    | { type: "itemList"; itemList: string } // shown as a card of its own, items are from getItemLists[itemList]
+    | {
+          // shown as a card of its own, items are from getItemLists[itemList]
+          type: "itemList";
+          itemList: string;
+      }
+    | {
+          // shown as a card of its own, entries are stored in the database instead of the config
+          type: "dbList";
+          endpoint: string; // GET returns IDbListData, POST takes TDbListUpdate
+          placeholder?: TWebuiLoc; // of the name input
+          values?: { value: string; label: TWebuiLoc }[]; // if given, each entry has one of these as its value
+      }
 );
 
 const configAlertCheats = (): TWorldStateCheat[] => {
@@ -109,6 +124,7 @@ const worldStateCheats: Record<
     string,
     {
         column: 0 | 1; // which column of "Server Cheats" tab the card goes in
+        label?: TWebuiLoc;
         options: TWorldStateCheat[];
     }
 > = {
@@ -590,6 +606,41 @@ const worldStateCheats: Record<
                 key: "worldState.communitySynthesisProgress",
                 type: "float",
                 ...worldStateNumberOptions.communitySynthesisProgress
+            }
+        ]
+    },
+    featuredGuilds: {
+        column: 0,
+        label: itemMapAttrs("/Lotus/Language/Dojo/FeaturedDojo"),
+        options: [
+            {
+                key: "featuredGuilds",
+                type: "dbList",
+                endpoint: "/custom/featuredGuilds",
+                placeholder: placeholderAttrs("worldState_featuredDojoClanName"),
+                values: [
+                    { value: "0", label: locAttrs("worldState_featuredDojoIcon_default") },
+                    { value: "1", label: locAttrs("worldState_featuredDojoIcon_bestNew") },
+                    { value: "2", label: locAttrs("worldState_featuredDojoIcon_allStar") },
+                    {
+                        value: "3",
+                        label: itemMapAttrs("/Lotus/Language/Menu/Options_Controls_ControllerIconSet_TennoCon")
+                    },
+                    {
+                        value: "4",
+                        label: itemMapAttrs("/Lotus/Language/EntratiLab/EntratiGeneral/EntratiEventTrophyTierTwo")
+                    },
+                    {
+                        value: "5",
+                        label: itemMapAttrs("/Lotus/Language/EntratiLab/EntratiGeneral/EntratiEventTrophyTierThree")
+                    },
+                    {
+                        value: "6",
+                        label: itemMapAttrs("/Lotus/Language/EntratiLab/EntratiGeneral/EntratiEventTrophyTierFour")
+                    },
+                    { value: "7", label: locAttrs("worldState_featuredDojoIcon_qtcc") },
+                    { value: "8", label: locAttrs("worldState_featuredDojoIcon_qtccArthur") }
+                ]
             }
         ]
     }

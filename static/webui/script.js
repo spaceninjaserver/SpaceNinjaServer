@@ -307,6 +307,8 @@ function labelLine(label, inRow) {
     return div;
 }
 
+const dbLists = [];
+
 function buildConfigItem(item, inRow = false) {
     switch (item.type) {
         case "toggle": {
@@ -413,6 +415,45 @@ function buildConfigItem(item, inRow = false) {
             fragment.append(form, scroll);
             return fragment;
         }
+        case "dbList": {
+            const list = { endpoint: item.endpoint };
+            list.datalist = createElm("datalist");
+            list.datalist.id = "datalist-" + item.key;
+            document.body.appendChild(list.datalist);
+            const form = createElm("form", "input-group mb-3");
+            list.input = createElm("input", "form-control");
+            list.input.setAttribute("list", list.datalist.id);
+            list.input.autocomplete = "off";
+            applyLocAttrs(list.input, item.placeholder);
+            form.appendChild(list.input);
+            if (item.options) {
+                list.select = createElm("select", "form-control");
+                for (const option of item.options) {
+                    const elm = document.createElement("option");
+                    elm.value = option.value;
+                    applyLocAttrs(elm, option.label);
+                    list.select.appendChild(elm);
+                }
+                form.appendChild(list.select);
+            }
+            const btn = createElm("button", "btn btn-primary");
+            btn.type = "submit";
+            btn.setAttribute("data-loc", "general_addButton");
+            form.appendChild(btn);
+            form.onsubmit = function () {
+                doAddDbListEntry(list);
+                return false;
+            };
+            list.tbody = createElm("tbody");
+            const table = createElm("table", "table table-hover w-100 align-middle");
+            table.appendChild(list.tbody);
+            const scroll = createElm("div", "overflow-auto");
+            scroll.appendChild(table);
+            dbLists.push(list);
+            const fragment = document.createDocumentFragment();
+            fragment.append(form, scroll);
+            return fragment;
+        }
         case "group": {
             const div = createElm("div", "mt-2");
             if (item.label) {
@@ -494,6 +535,14 @@ function toWorldStateConfigItem(entry, inRow = false) {
             }
             return { ...item, type: "itemList", list };
         }
+        case "dbList":
+            return {
+                ...item,
+                type: "dbList",
+                endpoint: entry.endpoint,
+                placeholder: entry.placeholder,
+                options: entry.values
+            };
     }
     throw new Error(`unknown world state option type: ${entry.type}`);
 }
@@ -535,9 +584,9 @@ function buildWorldStateCards(webuiData) {
     for (const [name, card] of Object.entries(webuiData.worldStateCheats)) {
         const div = createElm("div", "card mb-3 d-none admin-show config-form");
         const header = createElm("h5", "card-header");
-        header.setAttribute("data-loc", "worldState_" + name);
+        applyLocAttrs(header, card.label ?? locAttrs("worldState_" + name));
         const body = createElm("div", "card-body");
-        if (card.options.some(entry => entry.type == "itemList")) {
+        if (card.options.some(entry => entry.type == "itemList" || entry.type == "dbList")) {
             div.style.height = "400px";
             body.classList.add("d-flex", "flex-column");
         }
@@ -4280,6 +4329,89 @@ function doAddConfigListItem(id, input) {
     }
 }
 
+async function refreshDbLists() {
+    await window.webuiDataPromise;
+    dbLists.forEach(refreshDbList);
+}
+
+function refreshDbList(list) {
+    $.get(list.endpoint + "?" + window.authz).done(data => {
+        const listed = new Set(data.entries.map(entry => entry.name));
+        list.datalist.innerHTML = "";
+        for (const name of data.names.filter(name => !listed.has(name))) {
+            const option = document.createElement("option");
+            option.value = name;
+            list.datalist.appendChild(option);
+        }
+
+        list.tbody.innerHTML = "";
+        for (const entry of data.entries) {
+            const tr = document.createElement("tr");
+            {
+                const td = document.createElement("td");
+                td.textContent = entry.name;
+                tr.appendChild(td);
+            }
+            if (list.select) {
+                const td = document.createElement("td");
+                const select = list.select.cloneNode(true);
+                select.value = entry.value;
+                select.onchange = function () {
+                    doSetDbListEntry(list, { name: entry.name, value: select.value });
+                };
+                td.appendChild(select);
+                tr.appendChild(td);
+            }
+            {
+                const td = document.createElement("td");
+                td.classList = "text-end text-nowrap";
+                const a = document.createElement("a");
+                a.href = "#";
+                a.onclick = function (event) {
+                    event.preventDefault();
+                    doSetDbListEntry(list, { name: entry.name, remove: true });
+                };
+                a.title = loc("code_remove");
+                a.innerHTML = icons.trash;
+                td.appendChild(a);
+                tr.appendChild(td);
+            }
+            list.tbody.appendChild(tr);
+        }
+    });
+}
+
+function doSetDbListEntry(list, update) {
+    return revalidateAuthz().then(() =>
+        $.post({
+            url: list.endpoint + "?" + window.authz,
+            contentType: "application/json",
+            data: JSON.stringify(update)
+        })
+            .fail(res => {
+                const key = res.responseText?.startsWith("code_") ? res.responseText : "code_dbListRejected";
+                toast(loc(key), "danger");
+            })
+            .always(() => refreshDbList(list))
+    );
+}
+
+function doAddDbListEntry(list) {
+    const input = list.input;
+    const name = input.value.trim();
+    if (!Array.from(list.datalist.options).some(option => option.value == name)) {
+        $(input).addClass("is-invalid").focus();
+        return;
+    }
+    doSetDbListEntry(list, { name, value: list.select?.value })
+        .then(() => {
+            input.value = "";
+        })
+        .catch(() => {
+            $(input).addClass("is-invalid").focus();
+        });
+}
+
 let config_data;
 // Assumes that caller revalidates authz
 function getServerConfig() {
@@ -4326,6 +4458,7 @@ single.getRoute("/webui/serverCheats").on("beforeload", function () {
             if (json) {
                 $(".admin-hide").addClass("d-none");
                 $(".admin-show").removeClass("d-none");
+                refreshDbLists();
                 Object.entries(json).forEach(entry => {
                     const [key, value] = entry;
                     const elm = document.getElementById(key);
@@ -4475,7 +4608,7 @@ function attachAccountCheatsHandlers() {
                     })
                 }).done(() => {
                     input.value = value;
-                    inventory_data[elm.id] = value;
+                    inventory_data[input.id] = value;
                 });
             });
         };

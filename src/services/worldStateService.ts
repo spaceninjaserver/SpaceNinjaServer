@@ -10,6 +10,7 @@ import infestationOnlyInvasionNodes from "../../static/fixed_responses/worldStat
 import invasionRewards from "../../static/fixed_responses/worldState/invasionRewards.json" with { type: "json" };
 import pvpChallenges from "../../static/fixed_responses/worldState/pvpChallenges.json" with { type: "json" };
 import { EPOCH, KAHL_EPOCH, unixTimesInMs } from "../constants/timeConstants.ts";
+import { applyFeaturedGuildLimits } from "../helpers/featuredGuildHelper.ts";
 import { config, worldStateNumberOptions } from "./configService.ts";
 import { configAlerts, type TConfigAlert, type TConfigAlertKey } from "../constants/configAlerts.ts";
 import { anniversaryGoalsByWeek } from "../constants/anniversary.ts";
@@ -6122,14 +6123,16 @@ const generateGoalAlert = (tag: string, alertIdx: number, wsAlerts: IAlert[], bu
 };
 
 export const populateFeaturedGuilds = async (worldState: IWorldState): Promise<void> => {
-    const guilds = await Guild.find({ Featured: true }, "Name Tier AllianceId Emblem");
-    for (const guild of guilds) {
+    const guilds = await Guild.find({ Featured: true }, "Name Tier AllianceId Emblem FeaturedIcon").sort({ _id: 1 });
+    const featuredGuilds = applyFeaturedGuildLimits(guilds.map(guild => ({ guild, icon: guild.FeaturedIcon })));
+    for (const { guild, icon } of featuredGuilds) {
         worldState.FeaturedGuilds.push({
             _id: toOid(guild._id),
             Name: guild.Name,
             Tier: guild.Tier,
             AllianceId: guild.AllianceId ? toOid(guild.AllianceId) : undefined,
-            Emblem: guild.Emblem
+            Emblem: guild.Emblem,
+            IconOveride: icon as IWorldState["FeaturedGuilds"][number]["IconOveride"]
         });
     }
 };
