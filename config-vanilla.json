@@ -134,6 +134,7 @@
     "duviriOverride": "",
     "nightwaveOverride": "",
     "nightwaveEpisode": 1,
+    "nightwaveExcludedChallenges": [],
     "allTheFissures": "",
     "classicAlerts": null,
     "varziaOverride": "",

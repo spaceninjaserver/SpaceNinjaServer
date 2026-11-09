@@ -141,6 +141,7 @@ export interface IConfig {
         duviriOverride?: string;
         nightwaveOverride?: string;
         nightwaveEpisode?: number;
+        nightwaveExcludedChallenges?: string[];
         classicAlerts?: boolean;
         allTheFissures?: string;
         varziaOverride?: string;

@@ -595,11 +595,26 @@ const validateSortieSeed = (seed: number, enemyFaction: TFaction, variants: ISor
 };
 
 interface IRotatingSeasonChallengePools {
-    daily: readonly string[];
+    daily: string[];
     weekly: string[];
     hardWeekly: string[];
     weeklyPermanent: string[];
 }
+
+const withoutExcludedChallenges = (poolName: string, pool: readonly string[], minSize: number): string[] => {
+    const excluded = config.worldState?.nightwaveExcludedChallenges;
+    if (!excluded?.length || pool.length == 0) {
+        return [...pool];
+    }
+    const included = pool.filter(x => !excluded.includes(x));
+    if (included.length < minSize) {
+        logger.warn(
+            `ignoring worldState.nightwaveExcludedChallenges for the ${poolName} pool since that leaves ${included.length} challenges but at least ${minSize} are needed`
+        );
+        return [...pool];
+    }
+    return included;
+};
 
 export const getSeasonChallengePools = (syndicateTag: string): IRotatingSeasonChallengePools => {
     if (syndicateTag in ExportSyndicates) {
@@ -607,19 +622,26 @@ export const getSeasonChallengePools = (syndicateTag: string): IRotatingSeasonCh
         if (!syndicate.dailyChallenges || !syndicate.weeklyChallenges) {
             throw new Error(`invalid syndicate tag for nightwave: ${syndicateTag}`);
         }
+        const weeklyPermanent = syndicate.weeklyChallenges.filter(x =>
+            x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanent")
+        );
         return {
-            daily: syndicate.dailyChallenges,
-            weekly: syndicate.weeklyChallenges.filter(
-                x =>
-                    x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/") &&
-                    !x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanent")
+            daily: withoutExcludedChallenges("daily", syndicate.dailyChallenges, 6),
+            weekly: withoutExcludedChallenges(
+                "weekly",
+                syndicate.weeklyChallenges.filter(
+                    x =>
+                        x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/") &&
+                        !x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanent")
+                ),
+                weeklyPermanent.length > 0 ? 2 : 5
             ),
-            hardWeekly: syndicate.weeklyChallenges.filter(x =>
-                x.startsWith("/Lotus/Types/Challenges/Seasons/WeeklyHard/")
+            hardWeekly: withoutExcludedChallenges(
+                "elite weekly",
+                syndicate.weeklyChallenges.filter(x => x.startsWith("/Lotus/Types/Challenges/Seasons/WeeklyHard/")),
+                2
             ),
-            weeklyPermanent: syndicate.weeklyChallenges.filter(x =>
-                x.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanent")
-            )
+            weeklyPermanent
         };
     } else {
         return {

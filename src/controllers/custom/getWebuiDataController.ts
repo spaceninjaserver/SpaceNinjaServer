@@ -252,6 +252,10 @@ const worldStateCheats: Record<
             }
         ]
     },
+    nightwaveExcludedChallenges: {
+        column: 0,
+        options: [{ key: "worldState.nightwaveExcludedChallenges", type: "itemList", itemList: "NightwaveChallenges" }]
+    },
     invasionsAndConstruction: {
         column: 0,
         options: [

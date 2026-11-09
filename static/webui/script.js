@@ -1064,6 +1064,8 @@ const icons = {
 const itemToString = item => item.name;
 const itemToStringWithSubtype = item => (item.subtype ? item.name + " (" + item.subtype + ")" : item.name);
 const itemToStringWithUniqueName = item => item.name + " [" + item.uniqueName.split("/").pop() + "]";
+const itemToStringWithSubtypeAndUniqueName = item =>
+    itemToStringWithSubtype(item) + " [" + item.uniqueName.split("/").pop() + "]";
 
 const areItemsUnambiguous = (items, stringifier) => {
     const set = new Set();
@@ -1857,6 +1859,9 @@ function fetchItemList() {
                 } else if (type != "blueprintAndItem") {
                     const nameToItems = {};
                     items.forEach(item => {
+                        if (item.challengeType) {
+                            item.subtype = loc("worldState_nightwaveChallenge_" + item.challengeType);
+                        }
                         item.name = item.name.replace(/<.+>/g, "").trim();
                         if (item.name == "") {
                             //console.log(`changed ${item.uniqueName} name to path`);
@@ -1934,12 +1939,18 @@ function fetchItemList() {
                                     .getElementById("datalist-" + type + "-" + item.partType.slice(5))
                                     .appendChild(option);
                             }
-                        } else if (item.badReason != "notraw" && item.badReason != "metadataPatch") {
-                            let stringifier = itemToString;
+                        } else if (
+                            item.badReason != "notraw" &&
+                            item.badReason != "metadataPatch" &&
+                            item.challengeType != "permanentWeekly"
+                        ) {
+                            let stringifier = item.challengeType ? itemToStringWithSubtype : itemToString;
                             if (nameToItems[item.name].length > 1) {
                                 stringifier = itemToStringWithSubtype;
                                 if (!areItemsUnambiguous(nameToItems[item.name], stringifier)) {
-                                    stringifier = itemToStringWithUniqueName;
+                                    stringifier = item.challengeType
+                                        ? itemToStringWithSubtypeAndUniqueName
+                                        : itemToStringWithUniqueName;
                                     if (!areItemsUnambiguous(nameToItems[item.name], stringifier)) {
                                         console.log(
                                             `Not adding ${item.uniqueName} to datalist for ${type} due to ambiguous display name: ${item.name}`
@@ -4278,7 +4289,14 @@ function renderConfigItemList(id) {
             const tr = document.createElement("tr");
             {
                 const td = document.createElement("td");
-                td.textContent = itemMap[uniqueName]?.name ?? uniqueName;
+                td.textContent = itemMap[uniqueName] ? itemToStringWithSubtype(itemMap[uniqueName]) : uniqueName;
+                if (itemMap[uniqueName]?.description) {
+                    td.append(" ");
+                    const abbr = document.createElement("abbr");
+                    abbr.innerHTML = icons.note;
+                    abbr.title = itemMap[uniqueName].description;
+                    td.appendChild(abbr);
+                }
                 tr.appendChild(td);
             }
             {

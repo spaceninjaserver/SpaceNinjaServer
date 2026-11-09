@@ -18,6 +18,7 @@ import {
     ExportArcanes,
     ExportAvionics,
     ExportBoosters,
+    ExportChallenges,
     ExportCustoms,
     ExportDojoRecipes,
     ExportDrones,
@@ -63,6 +64,8 @@ interface ListedItem {
     evolutionWeapon?: true;
     baseEvolutionWeapon?: true;
     permanentEvolutionWeapon?: true;
+    challengeType?: "daily" | "weekly" | "eliteWeekly" | "permanentWeekly";
+    description?: string;
 }
 
 interface ItemLists {
@@ -94,6 +97,7 @@ interface ItemLists {
     MissionTypes: ListedItem[];
     Nodes: ListedItem[];
     NightwaveTags: ListedItem[];
+    NightwaveChallenges: ListedItem[];
     AdditionalDict: ListedItem[];
     //circuitGameModes: ListedItem[];
     blueprintAndItem: string;
@@ -141,6 +145,7 @@ const getItemListsController: RequestHandler = (req, response) => {
         MissionTypes: [],
         Nodes: [],
         NightwaveTags: [],
+        NightwaveChallenges: [],
         AdditionalDict: [],
         /*circuitGameModes: [
             {
@@ -623,6 +628,32 @@ const getItemListsController: RequestHandler = (req, response) => {
         res.NightwaveTags.push({
             uniqueName,
             name: getString(name, lang) || name
+        });
+    }
+
+    const nightwaveChallenges = new Set<string>();
+    for (const syndicate of Object.values(ExportSyndicates)) {
+        for (const uniqueName of [...(syndicate.dailyChallenges ?? []), ...(syndicate.weeklyChallenges ?? [])]) {
+            nightwaveChallenges.add(uniqueName);
+        }
+    }
+    for (const uniqueName of nightwaveChallenges) {
+        const meta = uniqueName in ExportChallenges ? ExportChallenges[uniqueName] : undefined;
+        const descriptionKey = meta?.description ?? meta?.name?.replace(/_Name$/, "_Description");
+        res.NightwaveChallenges.push({
+            uniqueName,
+            name: meta?.name ? getString(meta.name, lang) : "",
+            description:
+                descriptionKey && descriptionKey in lang
+                    ? getString(descriptionKey, lang).replaceAll("|COUNT|", String(meta?.requiredCount ?? 1))
+                    : undefined,
+            challengeType: uniqueName.startsWith("/Lotus/Types/Challenges/Seasons/Daily/")
+                ? "daily"
+                : uniqueName.startsWith("/Lotus/Types/Challenges/Seasons/WeeklyHard/")
+                  ? "eliteWeekly"
+                  : uniqueName.startsWith("/Lotus/Types/Challenges/Seasons/Weekly/SeasonWeeklyPermanent")
+                    ? "permanentWeekly"
+                    : "weekly"
         });
     }
 
