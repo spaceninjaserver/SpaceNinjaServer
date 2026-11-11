@@ -3290,6 +3290,7 @@ function addMissingEquipment(categories) {
 
 function addMissingDangerRooms() {
     revalidateAuthz().then(() => {
+        inventory_data = undefined;
         getInventoryData().then(data => {
             const requests = [];
             window.itemListPromise.then(itemMap => {
