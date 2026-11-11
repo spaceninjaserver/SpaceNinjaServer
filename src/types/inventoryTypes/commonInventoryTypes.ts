@@ -74,6 +74,10 @@ export interface IOperatorConfigDatabase extends IItemConfigDatabase {
     _id: Types.ObjectId;
 }
 
+export interface ITennoOperatorDatabase extends Omit<IOperatorConfigDatabase, "OperatorAmp"> {
+    OperatorAmp?: Types.ObjectId;
+}
+
 export interface IOperatorConfigClient extends Omit<IOperatorConfigDatabase, "_id"> {
     ItemId: IOid;
 }

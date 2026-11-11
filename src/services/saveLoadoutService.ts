@@ -37,6 +37,7 @@ export const handleInventoryItemConfigChange = async (
     buildLabel: string
 ): Promise<string | void> => {
     const inventory = await getInventory(accountId, undefined);
+    let newLoadoutId: Types.ObjectId | undefined;
 
     for (const [_equipmentName, equipment] of Object.entries(equipmentChanges)) {
         const equipmentName = _equipmentName as keyof ISaveLoadoutRequestNoUpgradeVer;
@@ -46,6 +47,27 @@ export const handleInventoryItemConfigChange = async (
         }
         // non-empty is a change in loadout(or suit...)
         switch (equipmentName) {
+            case "TennoOperator": {
+                // U18
+                const submitted = equipment as ISaveLoadoutRequestNoUpgradeVer["TennoOperator"];
+                const config = "config" in submitted ? submitted.config : submitted;
+                if (!config) break;
+                logger.debug(`operator loadout received ${equipmentName}`, config);
+                const { OperatorAmp, ...changes } = config as IItemConfig & { ItemId?: IOidWithLegacySupport };
+                delete changes.ItemId;
+                if (changes.Skins) {
+                    changes.Skins = [
+                        ...changes.Skins,
+                        ...(inventory.TennoOperator.Skins?.slice(changes.Skins.length) ?? [])
+                    ];
+                }
+                if (changes.Upgrades) {
+                    changes.Upgrades = changes.Upgrades.map(x => (typeof x == "string" ? x : fromOid(x)));
+                }
+                inventory.TennoOperator.set(changes);
+                if (OperatorAmp) inventory.TennoOperator.OperatorAmp = new Types.ObjectId(fromOid(OperatorAmp));
+                break;
+            }
             case "AdultOperatorLoadOuts":
             case "OperatorLoadOuts":
             case "KahlLoadOuts": {
@@ -92,7 +114,6 @@ export const handleInventoryItemConfigChange = async (
                         throw new Error("loadout not found");
                     }
 
-                    let newLoadoutId: Types.ObjectId | undefined;
                     for (const [_loadoutSlot, _loadout] of Object.entries(equipment)) {
                         const loadoutSlot = _loadoutSlot as keyof ILoadoutClient;
                         const newLoadout = _loadout as ILoadoutEntry;
@@ -141,11 +162,6 @@ export const handleInventoryItemConfigChange = async (
                         }
                     }
                     await loadout.save();
-
-                    //only return an id if a new loadout was added
-                    if (newLoadoutId) {
-                        return newLoadoutId.toString();
-                    }
                 }
 
                 break;
@@ -416,6 +432,7 @@ export const handleInventoryItemConfigChange = async (
         }
     }
     await inventory.save();
+    return newLoadoutId?.toString();
 };
 
 const saveLegacyLoadoutPreset = async (

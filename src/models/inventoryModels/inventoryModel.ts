@@ -123,6 +123,7 @@ import type {
     IItemConfig,
     ILotusCustomization,
     IOperatorConfigDatabase,
+    ITennoOperatorDatabase,
     IPolarity
 } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import { toMongoDate, toOid } from "../../helpers/inventoryHelpers.ts";
@@ -229,6 +230,19 @@ operatorConfigSchema.virtual("ItemId").get(function () {
 operatorConfigSchema.set("toJSON", {
     virtuals: true,
     transform(_document, returnedObject: Record<string, any>) {
+        delete returnedObject._id;
+        delete returnedObject.__v;
+    }
+});
+
+const tennoOperatorSchema = operatorConfigSchema.clone() as Schema<ITennoOperatorDatabase>;
+tennoOperatorSchema.add({ OperatorAmp: Schema.Types.ObjectId });
+tennoOperatorSchema.set("toJSON", {
+    virtuals: true,
+    transform(_document, returnedObject: Record<string, any>) {
+        if (returnedObject.OperatorAmp) {
+            returnedObject.OperatorAmp = toOid(returnedObject.OperatorAmp as Types.ObjectId);
+        }
         delete returnedObject._id;
         delete returnedObject.__v;
     }
@@ -1848,6 +1862,7 @@ const inventorySchema = new Schema<IInventoryDatabase, InventoryDocumentProps>(
         UseAdultOperatorLoadout: Boolean,
         //Operator
         OperatorLoadOuts: [operatorConfigSchema],
+        TennoOperator: { type: tennoOperatorSchema, default: (): Partial<ITennoOperatorDatabase> => ({}) },
         //Drifter
         AdultOperatorLoadOuts: [operatorConfigSchema],
         OperatorSuits: { type: [EquipmentSchema], default: [] },
@@ -2213,6 +2228,7 @@ export type InventoryDocumentProps = {
     MiscItems: Types.DocumentArray<IMiscItem>;
     Boosters: Types.DocumentArray<IBooster>;
     OperatorLoadOuts: Types.DocumentArray<IOperatorConfigDatabase>;
+    TennoOperator: Types.Subdocument & ITennoOperatorDatabase;
     AdultOperatorLoadOuts: Types.DocumentArray<IOperatorConfigDatabase>;
     KahlLoadOuts: Types.DocumentArray<IOperatorConfigDatabase>;
     OperatorSuits: Types.DocumentArray<IEquipmentDatabase>;

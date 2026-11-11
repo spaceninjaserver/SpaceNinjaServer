@@ -421,6 +421,9 @@ export const getInventoryResponse = async (
         PendingTrade.find({ $or: [{ a: inventory.accountOwnerId }, { b: inventory.accountOwnerId }] })
     ]);
     const inventoryResponse = inventoryWithLoadOutPresets.toJSON<IInventoryClient>();
+    if (version_compare(buildLabel, gameToBuildVersion["23.10.0"]) >= 0) {
+        delete inventoryResponse.TennoOperator;
+    }
     inventoryResponse.Ships = ships.map(x => x.toJSON<IShipInventory>());
     inventoryResponse.PendingTrades = pendingTrades.map(trade => {
         const us = trade.a.equals(inventory.accountOwnerId) ? "a" : "b";
@@ -854,6 +857,12 @@ export const getInventoryResponse = async (
     // U19.5 and below use $id instead of $oid as well as a different date format
     if (version_compare(buildLabel, gameToBuildVersion["19.5.3"]) > 0) {
         return inventoryResponse;
+    }
+    if (inventoryResponse.TennoOperator) {
+        toLegacyOid(inventoryResponse.TennoOperator.ItemId);
+        if (inventoryResponse.TennoOperator.OperatorAmp) {
+            toLegacyOid(inventoryResponse.TennoOperator.OperatorAmp);
+        }
     }
     for (const category of equipmentKeys) {
         for (const item of inventoryResponse[category]) {

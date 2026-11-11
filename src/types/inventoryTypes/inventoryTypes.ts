@@ -11,6 +11,7 @@ import type {
     IItemConfig,
     IOperatorConfigClient,
     IOperatorConfigDatabase,
+    ITennoOperatorDatabase,
     IFlavourItem,
     ILotusCustomization,
     IShipCustomization
@@ -144,6 +145,7 @@ export interface IInventoryDatabase
             | "CrewShipSalvagedWeaponSkins"
             | "AdultOperatorLoadOuts"
             | "OperatorLoadOuts"
+            | "TennoOperator"
             | "KahlLoadOuts"
             | "InfestedFoundry"
             | "DialogueHistory"
@@ -211,6 +213,7 @@ export interface IInventoryDatabase
     CrewShipSalvagedWeaponSkins: IUpgradeDatabase[];
     AdultOperatorLoadOuts: IOperatorConfigDatabase[];
     OperatorLoadOuts: IOperatorConfigDatabase[];
+    TennoOperator?: ITennoOperatorDatabase;
     KahlLoadOuts: IOperatorConfigDatabase[];
     InfestedFoundry?: IInfestedFoundryDatabase;
     DialogueHistory?: IDialogueHistoryDatabase;
@@ -402,6 +405,7 @@ export interface IInventoryClient
     extends IDailyAffiliations, IInventoryAccolades, InventoryClientEquipment, InventorySlots {
     AdultOperatorLoadOuts: IOperatorConfigClient[];
     OperatorLoadOuts: IOperatorConfigClient[];
+    TennoOperator?: IOperatorConfigClient; // U18
     KahlLoadOuts: IOperatorConfigClient[];
     FocusLoadouts?: IFocusLoadoutClient[];
     OneTimePurchases?: string[];

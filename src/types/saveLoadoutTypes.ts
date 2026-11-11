@@ -17,6 +17,7 @@ import type {
 import type { IFocusLoadoutClient, ISketch } from "./inventoryTypes/inventoryTypes.ts";
 
 export interface ISaveLoadoutRequest {
+    TennoOperator: IItemConfig | { config?: IItemConfig }; // U18
     LoadOuts: ILoadoutClient | ILoadoutConfigClientLegacy;
     LoadOut?: ILoadoutPresetClientLegacy[]; // U10-U13
     Presets?: ILoadoutPresetClientLegacy[]; // U8
