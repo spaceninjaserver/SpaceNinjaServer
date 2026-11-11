@@ -137,18 +137,13 @@ export const artifactsController: RequestHandler = async (req, res) => {
                 } else if (Upgrades.id(fromOid(upgrade.ItemId))) {
                     Upgrades.pull({ _id: upgrade.ItemId.$id });
                 } else {
-                    if (upgrade.ItemCount) {
-                        addMods(inventory, [
-                            {
-                                ItemType: upgrade.ItemType,
-                                ItemCount: -upgrade.ItemCount
-                            }
-                        ]);
-                    } else {
-                        throw new Error(
-                            `attempted to consume RawUpgrade of type ${upgrade.ItemType}, but it didn't have an ItemCount?`
-                        );
-                    }
+                    const count = upgrade.ItemCount ?? 1; // Builds older than U12 don't have ItemCount.
+                    addMods(inventory, [
+                        {
+                            ItemType: upgrade.ItemType,
+                            ItemCount: -count
+                        }
+                    ]);
                 }
             }
 
