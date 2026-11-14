@@ -8,6 +8,7 @@ import { Loadout } from "../../models/inventoryModels/loadoutModel.ts";
 import { eLoadoutIndex } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { toObjectId } from "../../helpers/inventoryHelpers.ts";
 import { BL_LATEST } from "../../constants/gameVersions.ts";
+import type { Types } from "mongoose";
 
 export const asyncMissionAssistController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -16,7 +17,7 @@ export const asyncMissionAssistController: RequestHandler = async (req, res) => 
     const accounts = await Account.find(
         { DisplayName: { $in: payload.ExcludedNames.map(stripUnicodeSuffix) } },
         { _id: 1 }
-    );
+    ).lean<{ _id: Types.ObjectId }[]>();
     for (const acc of accounts) {
         excludedOwnerIds.push(acc._id);
     }

@@ -466,7 +466,10 @@ export const getInventory2 = async <K extends keyof TInventoryDatabaseDocument>(
         K | "save" | "toObject" | "toJSON" | "populate" | "isModified" | "get" | "set" | "validate" | "validateSync"
     >
 > => {
-    const inventory = await Inventory.findOne({ accountOwnerId: accountOwnerId }, projection);
+    const inventory = await Inventory.findOne<TInventoryDatabaseDocument>(
+        { accountOwnerId: accountOwnerId },
+        projection
+    );
 
     if (!inventory) {
         throw new Error(`Didn't find an inventory for ${String(accountOwnerId)}`);
