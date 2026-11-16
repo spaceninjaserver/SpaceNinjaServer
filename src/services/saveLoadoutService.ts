@@ -49,11 +49,8 @@ export const handleInventoryItemConfigChange = async (
         switch (equipmentName) {
             case "TennoOperator": {
                 // U18
-                const submitted = equipment as ISaveLoadoutRequestNoUpgradeVer["TennoOperator"];
-                const config = "config" in submitted ? submitted.config : submitted;
-                if (!config) break;
-                logger.debug(`operator loadout received ${equipmentName}`, config);
-                const { OperatorAmp, ...changes } = config as IItemConfig & { ItemId?: IOidWithLegacySupport };
+                logger.debug(`operator loadout received ${equipmentName}`, equipment);
+                const { OperatorAmp, ...changes } = equipment as IItemConfig & { ItemId?: IOidWithLegacySupport };
                 delete changes.ItemId;
                 if (changes.Skins) {
                     changes.Skins = [

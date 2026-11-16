@@ -1393,11 +1393,11 @@ const mapLegacyLoadoutConfig = (
                     inventory.CurrentLoadOutIds[eLoadoutIndex.ARCHWING].equals(fromOid(x.ItemId))
                 );
             if (archPreset) {
-                const sId = normPreset.s?.ItemId && fromOid(normPreset.s.ItemId);
-                const pId = normPreset.p?.ItemId && fromOid(normPreset.p.ItemId);
-                const mId = normPreset.m?.ItemId && fromOid(normPreset.m.ItemId);
+                const sId = archPreset.s?.ItemId && fromOid(archPreset.s.ItemId);
+                const lId = archPreset.l?.ItemId && fromOid(archPreset.l.ItemId);
+                const mId = archPreset.m?.ItemId && fromOid(archPreset.m.ItemId);
                 const s = sId ? inventory.SpaceSuits.id(sId) : null;
-                const l = pId ? inventory.SpaceGuns.id(pId) : null;
+                const l = lId ? inventory.SpaceGuns.id(lId) : null;
                 const m = mId ? inventory.SpaceMelee.id(mId) : null;
                 loadoutConfig.Presets.push(
                     {
@@ -1407,7 +1407,7 @@ const mapLegacyLoadoutConfig = (
                         Customization: {
                             Emblem: "",
                             Colors: convertIColorToLegacyColors(s?.Configs[archPreset.s?.cus ?? 0]?.pricol),
-                            Skins: s?.Configs[0]?.Skins ?? []
+                            Skins: s?.Configs[archPreset.s?.cus ?? 0]?.Skins ?? []
                         }
                     },
                     {
@@ -1417,7 +1417,7 @@ const mapLegacyLoadoutConfig = (
                         Customization: {
                             Emblem: "",
                             Colors: convertIColorToLegacyColors(l?.Configs[archPreset.l?.cus ?? 0]?.pricol),
-                            Skins: l?.Configs[0]?.Skins ?? []
+                            Skins: l?.Configs[archPreset.l?.cus ?? 0]?.Skins ?? []
                         }
                     },
                     {
@@ -1427,14 +1427,19 @@ const mapLegacyLoadoutConfig = (
                         Customization: {
                             Emblem: "",
                             Colors: convertIColorToLegacyColors(m?.Configs[archPreset.m?.cus ?? 0]?.pricol),
-                            Skins: m?.Configs[0]?.Skins ?? []
+                            Skins: m?.Configs[archPreset.m?.cus ?? 0]?.Skins ?? []
                         }
                     }
                 );
             } else {
-                logger.warn(
-                    `Could not find ARCHWING loadout with id ${inventory.CurrentLoadOutIds[eLoadoutIndex.ARCHWING]?.toString()}, this part of the loadout will be empty`
-                );
+                if (
+                    inventory.CurrentLoadOutIds[eLoadoutIndex.ARCHWING] &&
+                    inventory.CurrentLoadOutIds[eLoadoutIndex.ARCHWING].toString() !== "000000000000000000000000"
+                ) {
+                    logger.warn(
+                        `Could not find ARCHWING loadout with id ${inventory.CurrentLoadOutIds[eLoadoutIndex.ARCHWING].toString()}, this part of the loadout will be empty`
+                    );
+                }
 
                 loadoutConfig.Presets.push(
                     {
