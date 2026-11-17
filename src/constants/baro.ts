@@ -56,6 +56,66 @@ const baro: IBaro = {
             PrimePrice: 21,
             RegularPrice: 88000,
             minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyBaroEvil",
+            PrimePrice: 111,
+            RegularPrice: 111111,
+            minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Types/StoreItems/AvatarImages/ImageBaroKiteerEvil",
+            PrimePrice: 67,
+            RegularPrice: 67,
+            minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Upgrades/Skins/MeleeDangles/EvilBaroSugatraMeleeDangle",
+            PrimePrice: 181,
+            RegularPrice: 209066,
+            minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Necramech/EvilBaroNecramechSkin",
+            PrimePrice: 236,
+            RegularPrice: 448114,
+            minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Armor/EvilBaroArmour/EvilBaroArmourA",
+            PrimePrice: 303,
+            RegularPrice: 303303,
+            minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Clan/EvilBaroHaloBadgeItem",
+            PrimePrice: 172,
+            RegularPrice: 336801,
+            minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Effects/BaroEvilEphemeraB",
+            PrimePrice: 88,
+            RegularPrice: 98002,
+            minBuildVersionInt: gameToBuildVersionInt["44.1.2"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Necramech/MechWeapon/EvilBaroMausolonSkin",
+            PrimePrice: 134,
+            RegularPrice: 341876,
+            minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Parazon/EvilBaroParazonSkin",
+            PrimePrice: 163,
+            RegularPrice: 220022,
+            minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageEvilBaroIcon",
+            PrimePrice: 67,
+            RegularPrice: 67,
+            minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
         }
     ],
     evergreen: [
@@ -632,7 +692,19 @@ const baro: IBaro = {
             minBuildVersionInt: gameToBuildVersionInt["27.3.0"]
         },
         {
+            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Clan/CNY2025SnakeEmblem",
+            PrimePrice: 55,
+            RegularPrice: 45000,
+            minBuildVersionInt: gameToBuildVersionInt["38.0.0"]
+        },
+        {
             ItemType: "/Lotus/StoreItems/Upgrades/Skins/Clan/CNY2023EmblemItem",
+            PrimePrice: 55,
+            RegularPrice: 45000,
+            minBuildVersionInt: gameToBuildVersionInt["33.5.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Types/StoreItems/AvatarImages/CNY2023RabbitGlyph",
             PrimePrice: 55,
             RegularPrice: 45000,
             minBuildVersionInt: gameToBuildVersionInt["33.5.0"]
@@ -2391,6 +2463,12 @@ const baro: IBaro = {
             minBuildVersionInt: gameToBuildVersionInt["38.6.0"]
         },
         {
+            ItemType: "/Lotus/StoreItems/Types/StoreItems/AvatarImages/Factions/GlyphFactionOrokin",
+            PrimePrice: 60,
+            RegularPrice: 75000,
+            minBuildVersionInt: gameToBuildVersionInt["38.6.0"]
+        },
+        {
             ItemType: "/Lotus/StoreItems/Types/StoreItems/AvatarImages/Warframes/VorunaActionGlyph",
             PrimePrice: 75,
             RegularPrice: 60000,
@@ -2785,6 +2863,48 @@ const baro: IBaro = {
             PrimePrice: 300,
             RegularPrice: 420000,
             minBuildVersionInt: gameToBuildVersionInt["41.1.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Types/Restoratives/Consumable/CorruptedBombardBall",
+            PrimePrice: 100,
+            RegularPrice: 50000,
+            minBuildVersionInt: gameToBuildVersionInt["22.20.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Clan/Horse2026BadgeItem",
+            PrimePrice: 0,
+            RegularPrice: 1,
+            minBuildVersionInt: gameToBuildVersionInt["41.1.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Types/StoreItems/AvatarImages/Seasonal/AvatarImageCNY2025SnakeGlyphA",
+            PrimePrice: 55,
+            RegularPrice: 45000,
+            minBuildVersionInt: gameToBuildVersionInt["38.0.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Types/StoreItems/AvatarImages/Seasonal/AvatarImageCNY2025SnakeGlyphB",
+            PrimePrice: 55,
+            RegularPrice: 45000,
+            minBuildVersionInt: gameToBuildVersionInt["38.0.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Types/StoreItems/AvatarImages/Seasonal/AvatarImageYearOfTheDragonGlyph",
+            PrimePrice: 55,
+            RegularPrice: 45000,
+            minBuildVersionInt: gameToBuildVersionInt["35.1.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Types/StoreItems/AvatarImages/ChineseNewYear2021Glyph",
+            PrimePrice: 55,
+            RegularPrice: 45000,
+            minBuildVersionInt: gameToBuildVersionInt["30.0.0"]
+        },
+        {
+            ItemType: "/Lotus/StoreItems/Types/Items/ShipDecos/TeshinBobbleHead",
+            PrimePrice: 75,
+            RegularPrice: 300000,
+            minBuildVersionInt: gameToBuildVersionInt["31.0.0"]
         }
     ],
     allIfAny: [
