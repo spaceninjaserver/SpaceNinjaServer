@@ -5,13 +5,13 @@ import {
     hasGuildPermission
 } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { eDojoRequestStatus, eGuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 
 export const queueDojoComponentDestructionController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const inventory = await getInventory(account._id, "GuildId LevelKeys");
     const guild = await getGuildForRequestEx(req, inventory);
     if (!hasAccessToDojo(inventory) || !(await hasGuildPermission(guild, account._id, eGuildPermission.Architect))) {
@@ -25,5 +25,5 @@ export const queueDojoComponentDestructionController: RequestHandler = async (re
     );
 
     await guild.save();
-    res.json(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, componentId, buildLabel));
+    res.json(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, componentId, buildVersion));
 };

@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest, getBuildLabel, type TAccountDocument } from "../../services/loginService.ts";
+import { getAccountForRequest, type TAccountDocument, getBuildVersion } from "../../services/loginService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { Guild, GuildMember } from "../../models/guildModel.ts";
 import { createUniqueClanName, getGuildClient, giveClanKey } from "../../services/guildService.ts";
@@ -10,23 +10,23 @@ import type { IGuildClient } from "../../types/guildTypes.ts";
 
 export const createGuildGetController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const guildName = decodeURIComponent(req.query.guildName as string);
-    const response = await processCreateGuildRequest(account, buildLabel, { guildName });
+    const response = await processCreateGuildRequest(account, buildVersion, { guildName });
     res.json(response);
 };
 
 export const createGuildPostController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const payload = getJSONfromString<ICreateGuildRequest>(String(req.body));
-    const response = await processCreateGuildRequest(account, buildLabel, payload);
+    const response = await processCreateGuildRequest(account, buildVersion, payload);
     res.json(response);
 };
 
 const processCreateGuildRequest = async (
     account: TAccountDocument,
-    buildLabel: string,
+    buildVersion: number,
     payload: ICreateGuildRequest
 ): Promise<ICreateGuildResponse> => {
     const inventory = await getInventory(account._id, "GuildId LevelKeys Recipes");
@@ -34,7 +34,7 @@ const processCreateGuildRequest = async (
         const guild = await Guild.findById(inventory.GuildId);
         if (guild) {
             return {
-                ...(await getGuildClient(guild, account, buildLabel))
+                ...(await getGuildClient(guild, account, buildVersion))
             };
         }
     }
@@ -63,7 +63,7 @@ const processCreateGuildRequest = async (
 
     sendWsBroadcastTo(account._id.toString(), { update_inventory: true });
     return {
-        ...(await getGuildClient(guild, account, buildLabel)),
+        ...(await getGuildClient(guild, account, buildVersion)),
         InventoryChanges: inventoryChanges
     };
 };

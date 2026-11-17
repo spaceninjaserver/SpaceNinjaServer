@@ -8,15 +8,15 @@ import { getUnicodeName } from "./loginService.ts";
 
 export const addAccountDataToFriendInfo = async (
     info: IFriendInfo,
-    buildLabel: string,
+    buildVersion: number,
     useUnicodeName?: boolean
 ): Promise<void> => {
     const account = (await Account.findById(
         fromOid(info._id),
         useUnicodeName ? undefined : "DisplayName LastLogin LastPlatform"
     ))!;
-    info.DisplayName = useUnicodeName ? getUnicodeName(account, buildLabel) : account.DisplayName;
-    info.LastLogin = toMongoDate2(account.LastLogin, buildLabel);
+    info.DisplayName = useUnicodeName ? getUnicodeName(account, buildVersion) : account.DisplayName;
+    info.LastLogin = toMongoDate2(account.LastLogin, buildVersion);
     info.LastPlatform = account.LastPlatform;
 };
 

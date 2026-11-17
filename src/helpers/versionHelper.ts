@@ -17,7 +17,7 @@ export const intToBuildVersion = (versionInt: number): string => {
     return `${year}.${month.toString().padStart(2, "0")}.${day.toString().padStart(2, "0")}.${hour.toString().padStart(2, "0")}.${minute.toString().padStart(2, "0")}`;
 };
 
-export const wikiDateToBuildVersion = (wikiDate: number): string => {
+const wikiDateToBuildVersion = (wikiDate: number): string => {
     const date = new Date(wikiDate * 1000);
     return `${date.getUTCFullYear()}.${date.getUTCMonth()}.${date.getUTCDate()}.${date.getUTCHours()}.${date.getUTCMinutes()}`;
 };

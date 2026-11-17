@@ -12,7 +12,8 @@ import { addMods, getInventory } from "./inventoryService.ts";
 import type { IOidWithLegacySupport } from "../types/commonTypes.ts";
 import { Types } from "mongoose";
 import { isEmptyObject, isObjectEmpty } from "../helpers/general.ts";
-import { convertLegacyColorsToIColor, fromOid, toObjectId, version_compare } from "../helpers/inventoryHelpers.ts";
+import { convertLegacyColorsToIColor, fromOid, toObjectId } from "../helpers/inventoryHelpers.ts";
+import { buildVersionToInt } from "../helpers/versionHelper.ts";
 import { logger } from "../utils/logger.ts";
 import type { ISketch, TEquipmentKey } from "../types/inventoryTypes/inventoryTypes.ts";
 import { eLoadoutIndex, equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
@@ -20,7 +21,7 @@ import type { IItemConfig, IItemConfigDatabase } from "../types/inventoryTypes/c
 import { importCrewShipMembers, importCrewShipWeapon, importLoadOutConfig } from "./importService.ts";
 import type { IEquipmentDatabase, IEquipmentSelectionDatabase } from "../types/equipmentTypes.ts";
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
-import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../constants/gameToBuildVersionInt.ts";
 import type { IFocusLoadoutClient } from "../types/inventoryTypes/inventoryTypes.ts";
 
 //TODO: setup default items on account creation or like originally in giveStartingItems.php
@@ -34,7 +35,7 @@ itemconfig has multiple config ids
 export const handleInventoryItemConfigChange = async (
     equipmentChanges: ISaveLoadoutRequestNoUpgradeVer,
     accountId: string | Types.ObjectId,
-    buildLabel: string
+    buildVersion: number
 ): Promise<string | void> => {
     const inventory = await getInventory(accountId, undefined);
     let newLoadoutId: Types.ObjectId | undefined;
@@ -91,8 +92,8 @@ export const handleInventoryItemConfigChange = async (
             }
             case "LoadOuts": {
                 if (
-                    version_compare(buildLabel, gameToBuildVersion["13.0.0"]) >= 0 &&
-                    version_compare(buildLabel, "2015.03.19.00.00") < 0
+                    buildVersion >= gameToBuildVersionInt["13.0.0"] &&
+                    buildVersion < buildVersionToInt("2015.03.19.00.00")
                 ) {
                     // U14-U15
                     const configs = equipment as {
@@ -103,7 +104,7 @@ export const handleInventoryItemConfigChange = async (
 
                     for (const key in configs) {
                         const x = configs[key];
-                        await saveLegacyLoadoutPreset(inventory, x.Presets, x.Name, buildLabel);
+                        await saveLegacyLoadoutPreset(inventory, x.Presets, x.Name, buildVersion);
                     }
                 } else {
                     const loadout = await Loadout.findOne({ loadoutOwnerId: accountId });
@@ -168,7 +169,7 @@ export const handleInventoryItemConfigChange = async (
                 const config = equipment as ILoadoutConfigClientLegacy;
                 logger.debug("legacy loadout received (U10-U13 format)", config);
 
-                await saveLegacyLoadoutPreset(inventory, config.Presets, config.Name, buildLabel);
+                await saveLegacyLoadoutPreset(inventory, config.Presets, config.Name, buildVersion);
                 break;
             }
             case "Presets": {
@@ -176,7 +177,7 @@ export const handleInventoryItemConfigChange = async (
                 const presets = equipment as ILoadoutPresetClientLegacy[];
                 logger.debug("legacy loadout received (U8 format)", presets);
 
-                await saveLegacyLoadoutPreset(inventory, presets, undefined, buildLabel);
+                await saveLegacyLoadoutPreset(inventory, presets, undefined, buildVersion);
                 break;
             }
             case "CurrentLoadout": {
@@ -312,7 +313,7 @@ export const handleInventoryItemConfigChange = async (
                         const prevAbilityOverrides = inventoryItem.Configs.map(x => x.AbilityOverride);
 
                         let abilityMapping: Record<string, string> | undefined;
-                        if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) < 0) {
+                        if (buildVersion < gameToBuildVersionInt["42.0.0"]) {
                             abilityMapping = {};
                             for (const config of inventoryItem.Configs) {
                                 if (config.AbilityOverride) {
@@ -324,14 +325,14 @@ export const handleInventoryItemConfigChange = async (
                         for (const [configId, config] of Object.entries(itemConfigEntries)) {
                             if (/^[0-9]+$/.test(configId)) {
                                 const c = config as IItemConfig;
-                                if (version_compare(buildLabel, gameToBuildVersion["29.0.0"]) >= 0) {
+                                if (buildVersion >= gameToBuildVersionInt["29.0.0"]) {
                                     if (abilityMapping && c.AbilityOverride) {
                                         c.AbilityOverride.Ability =
                                             abilityMapping[c.AbilityOverride.Ability.split("/").pop()!];
                                     }
                                 } else {
                                     c.AbilityOverride = prevAbilityOverrides[parseInt(configId)];
-                                    if (version_compare(buildLabel, gameToBuildVersion["16.0.2"]) <= 0) {
+                                    if (buildVersion <= gameToBuildVersionInt["16.0.2"]) {
                                         const legacyColors = c.Customization?.Colors ?? c.Colors;
                                         if (legacyColors) {
                                             if (legacyColors.length == 10) {
@@ -345,7 +346,7 @@ export const handleInventoryItemConfigChange = async (
                                         if (legacySkins) {
                                             c.Skins = legacySkins;
                                         }
-                                        if (version_compare(buildLabel, gameToBuildVersion["12.1.2"]) < 0) {
+                                        if (buildVersion < gameToBuildVersionInt["12.1.2"]) {
                                             if (c.Upgrades) {
                                                 // U10-U11 store mods in the item config as $id instead of a string, need to convert that here
                                                 const convertedUpgrades: string[] = [];
@@ -436,7 +437,7 @@ const saveLegacyLoadoutPreset = async (
     inventory: TInventoryDatabaseDocument,
     presets: ILoadoutPresetClientLegacy[],
     name: string | undefined,
-    buildLabel: string
+    buildVersion: number
 ): Promise<void> => {
     const loadout = await Loadout.findOne({ loadoutOwnerId: inventory.accountOwnerId });
     if (!loadout) {
@@ -449,7 +450,7 @@ const saveLegacyLoadoutPreset = async (
         fromOid(presets[0].ItemId) != "ffffffffffffffffffffffff"
             ? configureLegacyEquipmentSelection(
                   presets[0],
-                  buildLabel,
+                  buildVersion,
                   inventory.Suits.id(fromOid(presets[0].ItemId)),
                   loadout.NORMAL.id(currentLoadouts[eLoadoutIndex.NORMAL])?.s?.cus
               )
@@ -458,7 +459,7 @@ const saveLegacyLoadoutPreset = async (
         fromOid(presets[1].ItemId) != "ffffffffffffffffffffffff"
             ? configureLegacyEquipmentSelection(
                   presets[1],
-                  buildLabel,
+                  buildVersion,
                   inventory.Pistols.id(fromOid(presets[1].ItemId)),
                   loadout.NORMAL.id(currentLoadouts[eLoadoutIndex.NORMAL])?.p?.cus
               )
@@ -467,7 +468,7 @@ const saveLegacyLoadoutPreset = async (
         fromOid(presets[2].ItemId) != "ffffffffffffffffffffffff"
             ? configureLegacyEquipmentSelection(
                   presets[2],
-                  buildLabel,
+                  buildVersion,
                   inventory.LongGuns.id(fromOid(presets[2].ItemId)),
                   loadout.NORMAL.id(currentLoadouts[eLoadoutIndex.NORMAL])?.l?.cus
               )
@@ -476,7 +477,7 @@ const saveLegacyLoadoutPreset = async (
         fromOid(presets[3].ItemId) != "ffffffffffffffffffffffff"
             ? configureLegacyEquipmentSelection(
                   presets[3],
-                  buildLabel,
+                  buildVersion,
                   inventory.Melee.id(fromOid(presets[3].ItemId)),
                   loadout.NORMAL.id(currentLoadouts[eLoadoutIndex.NORMAL])?.m?.cus
               )
@@ -516,7 +517,7 @@ const saveLegacyLoadoutPreset = async (
             fromOid(presets[4].ItemId) != "ffffffffffffffffffffffff"
                 ? configureLegacyEquipmentSelection(
                       presets[4],
-                      buildLabel,
+                      buildVersion,
                       inventory.Sentinels.id(fromOid(presets[4].ItemId)),
                       loadout.SENTINEL.id(currentLoadouts[eLoadoutIndex.SENTINEL])?.s?.cus
                   )
@@ -525,7 +526,7 @@ const saveLegacyLoadoutPreset = async (
             fromOid(presets[5].ItemId) != "ffffffffffffffffffffffff"
                 ? configureLegacyEquipmentSelection(
                       presets[5],
-                      buildLabel,
+                      buildVersion,
                       inventory.SentinelWeapons.id(fromOid(presets[5].ItemId)),
                       loadout.SENTINEL.id(currentLoadouts[eLoadoutIndex.SENTINEL])?.l?.cus
                   )
@@ -560,15 +561,15 @@ const saveLegacyLoadoutPreset = async (
     if (presets.length == 9) {
         const s =
             fromOid(presets[6].ItemId) != "ffffffffffffffffffffffff"
-                ? configureLegacyEquipmentSelection(presets[6], buildLabel, null, 0)
+                ? configureLegacyEquipmentSelection(presets[6], buildVersion, null, 0)
                 : undefined;
         const l =
             fromOid(presets[7].ItemId) != "ffffffffffffffffffffffff"
-                ? configureLegacyEquipmentSelection(presets[7], buildLabel, null, 0)
+                ? configureLegacyEquipmentSelection(presets[7], buildVersion, null, 0)
                 : undefined;
         const m =
             fromOid(presets[8].ItemId) != "ffffffffffffffffffffffff"
-                ? configureLegacyEquipmentSelection(presets[8], buildLabel, null, 0)
+                ? configureLegacyEquipmentSelection(presets[8], buildVersion, null, 0)
                 : undefined;
 
         if (loadout.ARCHWING.length == 0) {
@@ -604,7 +605,7 @@ const saveLegacyLoadoutPreset = async (
 
 const configureLegacyEquipmentSelection = (
     preset: ILoadoutPresetClientLegacy,
-    buildLabel: string,
+    buildVersion: number,
     item: IEquipmentDatabase | null,
     appearanceConfig: number | undefined
 ): IEquipmentSelectionDatabase | undefined => {
@@ -615,7 +616,7 @@ const configureLegacyEquipmentSelection = (
             cus: preset.CustSlot ?? 0
         };
 
-        if (item && version_compare(buildLabel, "2013.09.13.00.00") < 0) {
+        if (item && buildVersion < buildVersionToInt("2013.09.13.00.00")) {
             // Specific code path for U8 and below for applying cosmetics
             const config = item.Configs[appearanceConfig ?? 0];
             if (item.Configs[appearanceConfig ?? 0]) {

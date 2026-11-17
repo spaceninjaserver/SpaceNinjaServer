@@ -12,8 +12,7 @@ import type {
 import { logger } from "../utils/logger.ts";
 import { addEmailItem, getInventory } from "./inventoryService.ts";
 import { submitLeaderboardScore } from "./leaderboardService.ts";
-import { version_compare } from "../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../constants/gameToBuildVersionInt.ts";
 import type { Types } from "mongoose";
 
 export const createStats = async (accountId: string | Types.ObjectId): Promise<TStatsDatabaseDocument> => {
@@ -33,7 +32,7 @@ export const getStats = async (accountOwnerId: string | Types.ObjectId): Promise
 export const updateStats = async (
     accountOwnerId: string | Types.ObjectId,
     payload: IStatsUpdate,
-    buildLabel: string
+    buildVersion: number
 ): Promise<void> => {
     const unknownCategories: Record<string, string[]> = {};
     const playerStats = await getStats(accountOwnerId);
@@ -488,7 +487,7 @@ export const updateStats = async (
 
     if (
         playerStats.Enemies &&
-        version_compare(buildLabel, gameToBuildVersion["11.5.3"]) <= 0 // Should be 11.7.1
+        buildVersion <= gameToBuildVersionInt["11.5.3"] // Should be 11.7.1
     ) {
         const totalKills = playerStats.Enemies.reduce((sum, e) => sum + (e.kills ?? 0), 0);
         if (totalKills > 0) {

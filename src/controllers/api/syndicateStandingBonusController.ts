@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import {
     addMiscItems,
     addStanding,
@@ -19,7 +19,7 @@ import { getSyndicate } from "../../services/itemDataService.ts";
 
 export const syndicateStandingBonusController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const request = JSON.parse(String(req.body)) as ISyndicateStandingBonusRequest;
     logger.trace("syndicateStandingBonus request:", request);
 
@@ -28,7 +28,7 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
     const modularWeaponIdRaw = "Operation" in request ? request.Operation.ModularWeaponId : request.ModularWeaponId;
     const modularWeaponId = modularWeaponIdRaw ? fromOid(modularWeaponIdRaw) : "";
 
-    const syndicateMeta = (await getSyndicate(affiliationTag, buildLabel))!;
+    const syndicateMeta = (await getSyndicate(affiliationTag, buildVersion))!;
 
     // Process items
     let gainedStanding = 0;
@@ -73,7 +73,7 @@ export const syndicateStandingBonusController: RequestHandler = async (req, res)
     const affiliationMods: IAffiliationMods[] = [];
     await addStanding(
         inventory,
-        buildLabel,
+        buildVersion,
         affiliationTag,
         gainedStanding,
         affiliationMods,

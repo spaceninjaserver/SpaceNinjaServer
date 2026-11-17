@@ -22,7 +22,7 @@ export const getTunablesForClient = (clientAddress: string, reflexiveAddress: st
         // To successfully update the NRS address for pre-U15.14 clients, this needs to be set before login.
         nrs: ((config.nrsAddresses ?? [])[0] || "%THIS_MACHINE%").replaceAll("%THIS_MACHINE%", reflexiveAddress),
 
-        // if (version_compare(buildLabel, gameToBuildVersion["16.5.5"]) < 0) {
+        // if (buildVersion < gameToBuildVersionInt["16.5.5"]) {
         irc: (config.ircAddress || "%THIS_MACHINE%").replaceAll("%THIS_MACHINE%", reflexiveAddress)
     };
     if (config.tunables?.useLoginToken) {

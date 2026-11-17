@@ -71,7 +71,7 @@ import { Account } from "../models/loginModel.ts";
 import { Inbox } from "../models/inboxModel.ts";
 import { goalEventMessagesByTag } from "./inboxService.ts";
 import { libraryTargetToAvatar } from "../constants/synthesis.ts";
-import { BL_LATEST, BV_LATEST } from "../constants/gameVersions.ts";
+import { BV_LATEST } from "../constants/gameVersions.ts";
 import { isRegionAvailableIn } from "./itemDataService.ts";
 import gameToBuildVersionInt from "../constants/gameToBuildVersionInt.ts";
 import { buildVersionToInt, intToBuildVersion } from "../helpers/versionHelper.ts";
@@ -2327,18 +2327,17 @@ export const getWorldStateTime = (): {
 };
 
 export const getWorldState = (
-    buildLabel: string = BL_LATEST,
+    buildVersion: number = BV_LATEST,
     convertGoals: boolean = true,
     changeLegacyTags: boolean = config.unfaithfulBugFixes?.useAnniversaryTagForOldGoals || false
 ): IWorldState => {
     const { timeSecs, timeMs, day, week, weekStart, weekEnd, date } = getWorldStateTime();
-    const buildVersion = buildVersionToInt(buildLabel);
     const defenseWavesPerRotation = buildVersion < gameToBuildVersionInt["38.5.0"] ? 5 : 3;
     const guildVaultBonusWeekCount = Math.trunc((timeMs - KAHL_EPOCH) / unixTimesInMs.week);
 
     const worldState: IWorldState = {
         Version: 10,
-        BuildLabel: buildLabel,
+        BuildLabel: intToBuildVersion(buildVersion),
         Time: timeSecs,
         Goals: [],
         Events: [],
@@ -5574,7 +5573,7 @@ const getFilteredAlertHelmets = (buildVersion: number): string[] => {
 const generateSeededAlert = async (alertIndex: number, buildVersion: number): Promise<IAlert> => {
     const seed = new SRng(alertIndex * 2654435761).randomInt(0, 100_000);
     const rng = new SRng(seed);
-    const regions = await getRegions(intToBuildVersion(buildVersion));
+    const regions = await getRegions(buildVersion);
     const eligibleNodes = getEligibleAlertNodes(regions, buildVersion);
     const node = sequentiallyUniqueRandomElement(eligibleNodes, alertIndex, 10, 569354)!;
     const nodeData = regions[node];

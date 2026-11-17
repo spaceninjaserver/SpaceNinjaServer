@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import {
     getInventory2,
@@ -18,7 +18,7 @@ import type {
 import { eInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { ExportResources } from "warframe-public-export-plus";
 import { getRecipe } from "../../services/itemDataService.ts";
-import { toMongoDate, version_compare } from "../../helpers/inventoryHelpers.ts";
+import { toMongoDate } from "../../helpers/inventoryHelpers.ts";
 import { logger } from "../../utils/logger.ts";
 import { colorToShard } from "../../helpers/shardHelper.ts";
 import {
@@ -27,7 +27,7 @@ import {
     handleSubsumeCompletion
 } from "../../services/infestedFoundryService.ts";
 import { sendWsBroadcastToGame, sendWsBroadcastToWebui } from "../../services/wsService.ts";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 
 export const infestedFoundryController: RequestHandler = async (req, res) => {
@@ -65,7 +65,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
 
         case "x": {
             // shard removal
-            const buildLabel = getBuildLabel(req, account);
+            const buildVersion = getBuildVersion(req, account);
             const request = getJSONfromString<IShardUninstallRequest>(String(req.body));
             const inventory = await getInventory2(
                 account._id,
@@ -92,7 +92,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                 if (!inventory.infiniteHelminthMaterials) {
                     let type: string;
                     let count: number;
-                    if (version_compare(buildLabel, gameToBuildVersion["38.6.0"]) < 0) {
+                    if (buildVersion < gameToBuildVersionInt["38.6.0"]) {
                         type = "/Lotus/Types/Items/InfestedFoundry/HelminthBile";
                         count = 300;
                     } else {
@@ -274,7 +274,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
 
         case "a": {
             // subsume warframe
-            const buildLabel = getBuildLabel(req, account);
+            const buildVersion = getBuildVersion(req, account);
             const request = getJSONfromString<IHelminthSubsumeRequest>(String(req.body));
             const inventory = await getInventory2(
                 account._id,
@@ -284,7 +284,7 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                 "Recipes",
                 "SuitBin"
             );
-            const recipe = getRecipe(request.Recipe, buildLabel)!;
+            const recipe = getRecipe(request.Recipe, buildVersion)!;
             if (!inventory.infiniteHelminthMaterials) {
                 for (const ingredient of recipe.secretIngredients!) {
                     const resource = inventory.InfestedFoundry!.Resources!.find(x => x.ItemType == ingredient.ItemType);

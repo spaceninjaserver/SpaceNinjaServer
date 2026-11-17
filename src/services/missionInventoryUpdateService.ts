@@ -116,26 +116,24 @@ import {
 import { config, shouldDoServerQol } from "./configService.ts";
 import libraryDailyTasks from "../../static/fixed_responses/libraryDailyTasks.json" with { type: "json" };
 import type { IGoal, ISyndicateJob, ISyndicateMissionInfo } from "../types/worldStateTypes.ts";
-import {
-    convertFromLegacyFingerprint,
-    fromOid,
-    toObjectId,
-    toOid2,
-    version_compare
-} from "../helpers/inventoryHelpers.ts";
+import { convertFromLegacyFingerprint, fromOid, toObjectId, toOid2 } from "../helpers/inventoryHelpers.ts";
 import type { TAccountDocument } from "./loginService.ts";
 import type { ITypeCount } from "../types/commonTypes.ts";
 import type { IEquipmentClient } from "../types/equipmentTypes.ts";
 import { Guild } from "../models/guildModel.ts";
 import { handleGuildGoalProgress } from "./guildService.ts";
 import { importLoadOutConfig } from "./importService.ts";
-import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../constants/gameToBuildVersionInt.ts";
 import { corpusDeathSquadInfo, grineerDeathSquadInfo } from "./invasionService.ts";
 import { libraryTargetToAvatar } from "../constants/synthesis.ts";
 import { buildVersionToInt, wikiDateToBuildVersionInt } from "../helpers/versionHelper.ts";
 import baro from "../constants/baro.ts";
 
-const getRotations = async (rewardInfo: IRewardInfo, buildLabel: string, tierOverride?: number): Promise<number[]> => {
+const getRotations = async (
+    rewardInfo: IRewardInfo,
+    buildVersion: number,
+    tierOverride?: number
+): Promise<number[]> => {
     // For Spy missions, e.g. 3 vaults cracked = A, B, C
     if (rewardInfo.VaultsCracked) {
         const rotations: number[] = [];
@@ -150,7 +148,7 @@ const getRotations = async (rewardInfo: IRewardInfo, buildLabel: string, tierOve
         return [0, 1];
     }
 
-    const region = await getRegion(rewardInfo.node, buildLabel);
+    const region = await getRegion(rewardInfo.node, buildVersion);
     const missionType: TMissionType | undefined = region?.missionType;
 
     // Disruption uses 'rewardTierOverrides' to tell us (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/2599)
@@ -186,7 +184,7 @@ const getRotations = async (rewardInfo: IRewardInfo, buildLabel: string, tierOve
 
     if (
         rewardInfo.node == "SolNode105" &&
-        shouldDoServerQol("tylRegorDropsTwoEquinoxParts", buildLabel, gameToBuildVersion["42.0.0"])
+        shouldDoServerQol("tylRegorDropsTwoEquinoxParts", buildVersion, gameToBuildVersionInt["42.0.0"])
     ) {
         // U42 QoL change:
         // Defeating Tyl Regor now rewards two Equinox Component Blueprints — one guaranteed for the Night and Day Aspect each.
@@ -249,16 +247,15 @@ interface MissionInventoryUpdatesReturnType {
 
 export const addMissionInventoryUpdates = async (
     account: TAccountDocument,
-    buildLabel: string,
+    buildVersion: number,
     inventory: TInventoryDatabaseDocument,
     inventoryUpdates: IMissionInventoryUpdateRequest
 ): Promise<MissionInventoryUpdatesReturnType> => {
-    const buildVersion = buildVersionToInt(buildLabel);
     const ret: MissionInventoryUpdatesReturnType = {
         InventoryChanges: {}
     };
     if (inventoryUpdates.Missions && inventoryUpdates.EndOfMatchUpload) {
-        const node = await getRegion(inventoryUpdates.Missions.Tag, buildLabel);
+        const node = await getRegion(inventoryUpdates.Missions.Tag, buildVersion);
         if (
             node &&
             node.miscItemFee &&
@@ -642,7 +639,7 @@ export const addMissionInventoryUpdates = async (
                     const id = fromOid(clientUpgrade.ItemId);
                     // U11 and below also don't initialize ItemCount since RawUpgrade doesn't exist in them
                     clientUpgrade.ItemCount ??= 1;
-                    if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) < 0) {
+                    if (buildVersion < gameToBuildVersionInt["18.18.0"]) {
                         // Acquired Mods have a different UpgradeFingerprint format in pre-U18.18.0 builds, this converts them to the format the database expects
                         clientUpgrade.UpgradeFingerprint = convertFromLegacyFingerprint(
                             (clientUpgrade.UpgradeFingerprint ||= "lvl=0|")
@@ -665,7 +662,7 @@ export const addMissionInventoryUpdates = async (
                         }
                         addMods(inventory, [{ ItemType: coreType, ItemCount: 1 }]);
                     } else {
-                        if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0) {
+                        if (buildVersion >= gameToBuildVersionInt["7.3.0"]) {
                             // U19 does not provide RawUpgrades and instead interleaves them with riven progress here
                             addMods(inventory, [
                                 {
@@ -817,7 +814,7 @@ export const addMissionInventoryUpdates = async (
                 await processGoalProgressUpdates(
                     inventory,
                     account,
-                    buildLabel,
+                    buildVersion,
                     value,
                     inventoryUpdates.RewardInfo!.node,
                     Boolean(inventoryUpdates.Missions?.Tier)
@@ -1043,7 +1040,7 @@ export const addMissionInventoryUpdates = async (
                         inventory,
                         value as IEquipmentClient[],
                         key as TEquipmentKey,
-                        buildLabel
+                        buildVersion
                     );
                 } else if (allDailyAffiliationKeys.includes(key as keyof IDailyAffiliations)) {
                     inventory[key as keyof IDailyAffiliations] -= value as number;
@@ -1278,13 +1275,13 @@ const isEligibleForCreditReward = async (
     rewardInfo: IRewardInfo,
     missions: IMission,
     node: IRegion,
-    buildLabel: string
+    buildVersion: number
 ): Promise<boolean> => {
     if (rewardInfo.sortieTag) {
         return false;
     }
     // (E)SO should not give credits for only completing zone 1, in which case it has no rewardQualifications (https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1823)
-    if ((await getRotations(rewardInfo, buildLabel)).length == 0) {
+    if ((await getRotations(rewardInfo, buildVersion)).length == 0) {
         return missions.Tag == "SolNode720"; // Netracells don't use rewardQualifications but probably should give credits anyway
     }
     // The rest here might not be needed anymore, but just to be sure we don't give undue credits...
@@ -1305,7 +1302,7 @@ const isEligibleForCreditReward = async (
 //TODO: return type of partial missioninventoryupdate response
 export const addMissionRewards = async (
     account: TAccountDocument,
-    buildLabel: string,
+    buildVersion: number,
     inventory: TInventoryDatabaseDocument,
     {
         wagerTier: wagerTier,
@@ -1344,7 +1341,7 @@ export const addMissionRewards = async (
 
     //TODO: check double reward merging
     const MissionRewards: IMissionReward[] = await getRandomMissionDrops(
-        buildLabel,
+        buildVersion,
         inventory,
         rewardInfo,
         levelKeyName,
@@ -1377,9 +1374,9 @@ export const addMissionRewards = async (
     let missionCompletionCredits = 0;
 
     if (rewardInfo.alertId) {
-        let alert = await getAlertByOid(rewardInfo.alertId, buildVersionToInt(buildLabel));
+        let alert = await getAlertByOid(rewardInfo.alertId, buildVersion);
         if (!alert) {
-            const worldState = getWorldState(buildLabel);
+            const worldState = getWorldState(buildVersion);
             alert = worldState.Alerts.find(x => fromOid(x._id) == rewardInfo.alertId);
         }
 
@@ -1407,11 +1404,11 @@ export const addMissionRewards = async (
                     missionCompletionCredits += await addFixedLevelRewards(
                         alert.MissionInfo.missionReward,
                         MissionRewards,
-                        buildLabel,
+                        buildVersion,
                         rewardInfo
                     );
                     if (alert.Tag == "RoadToTauEvent" && inventory.GuildId) {
-                        const goal = getWorldState(buildLabel, false).Goals.find(x => x.Tag == alert.Tag);
+                        const goal = getWorldState(buildVersion, false).Goals.find(x => x.Tag == alert.Tag);
                         if (goal && "ClanGoal" in goal && goal.ClanGoal) {
                             const count = alert.MissionInfo.missionReward.countedItems?.find(
                                 x => x.ItemType == goal.ItemType
@@ -1454,7 +1451,7 @@ export const addMissionRewards = async (
     }
 
     if (rewardInfo.goalId) {
-        const worldState = getWorldState(buildLabel);
+        const worldState = getWorldState(buildVersion);
         await populateConstructionEvents(worldState);
         const goal = worldState.Goals.find(x => fromOid(x._id) == rewardInfo.goalId);
         if (goal) {
@@ -1462,7 +1459,7 @@ export const addMissionRewards = async (
                 missionCompletionCredits += await addFixedLevelRewards(
                     goal.MissionInfo.missionReward,
                     MissionRewards,
-                    buildLabel
+                    buildVersion
                 );
             }
             if (rewardInfo.node == goal.Node && goal.MissionKeyName) levelKeyName = goal.MissionKeyName;
@@ -1495,11 +1492,11 @@ export const addMissionRewards = async (
     if (
         config.worldState?.operationAtramentum &&
         inventory.QuestKeys.some(x => x.ItemType.endsWith("PriestQuestKeyChain") && x.Completed) &&
-        version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0 &&
+        buildVersion >= gameToBuildVersionInt["42.0.0"] &&
         rewardInfo.nightmareMode
     ) {
         if (inventory.GuildId) {
-            const goal = getWorldState(buildLabel, false).Goals.find(x => x.Tag == "ShadowgrapherEvent");
+            const goal = getWorldState(buildVersion, false).Goals.find(x => x.Tag == "ShadowgrapherEvent");
             if (goal && "ClanGoal" in goal && goal.ClanGoal) {
                 const guild = await Guild.findById(inventory.GuildId, "GoalProgress Tier VaultDecoRecipes");
                 if (guild) {
@@ -1518,13 +1515,13 @@ export const addMissionRewards = async (
     }
 
     if (levelKeyName) {
-        const fixedLevelRewards = getLevelKeyRewards(levelKeyName, buildLabel);
+        const fixedLevelRewards = getLevelKeyRewards(levelKeyName, buildVersion);
         logger.trace("fixedLevelRewards", fixedLevelRewards);
         if (fixedLevelRewards.levelKeyRewards) {
             missionCompletionCredits += await addFixedLevelRewards(
                 fixedLevelRewards.levelKeyRewards,
                 MissionRewards,
-                buildLabel,
+                buildVersion,
                 rewardInfo
             );
         }
@@ -1554,9 +1551,9 @@ export const addMissionRewards = async (
     // - https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1013
     // - https://onlyg.it/OpenWF/SpaceNinjaServer/issues/1365
     if (missions) {
-        const node = await getRegion(missions.Tag, buildLabel);
+        const node = await getRegion(missions.Tag, buildVersion);
         if (node) {
-            if (await isEligibleForCreditReward(rewardInfo, missions, node, buildLabel)) {
+            if (await isEligibleForCreditReward(rewardInfo, missions, node, buildVersion)) {
                 // node based credit rewards for mission completion
                 const levelCreditReward = getLevelCreditRewards(node);
                 if (levelCreditReward) {
@@ -1569,7 +1566,7 @@ export const addMissionRewards = async (
                 missionCompletionCredits += await addFixedLevelRewards(
                     node.missionReward,
                     MissionRewards,
-                    buildLabel,
+                    buildVersion,
                     rewardInfo
                 );
             }
@@ -1706,7 +1703,7 @@ export const addMissionRewards = async (
     }
 
     if (rewardInfo.JobStage != undefined && rewardInfo.jobId) {
-        const result = getSyndicateJob(rewardInfo, buildLabel);
+        const result = getSyndicateJob(rewardInfo, buildVersion);
         if (result) {
             const currentJob = result.currentJob;
             const syndicateTag = result.syndicateTag;
@@ -1744,7 +1741,7 @@ export const addMissionRewards = async (
                 }
                 await addStanding(
                     inventory,
-                    buildLabel,
+                    buildVersion,
                     syndicateTag,
                     Math.floor(xpAmount / (rewardInfo.Q ? 0.8 : 1)),
                     AffiliationMods
@@ -1789,7 +1786,7 @@ export const addMissionRewards = async (
             let standingAmount = (tier + 1) * 1000;
             if (tier > 5) standingAmount = 7500; // InfestedLichBounty
             if (isSteelPath) standingAmount *= 1.5;
-            await addStanding(inventory, buildLabel, syndicateTag, standingAmount, AffiliationMods);
+            await addStanding(inventory, buildVersion, syndicateTag, standingAmount, AffiliationMods);
         }
         if (syndicateTag == "HexSyndicate" && tier < 6) {
             const buddy = chemistryBuddies[chemistryBuddy];
@@ -2166,7 +2163,7 @@ export const addMissionRewards = async (
         inventory.ChallengeInstanceStates ??= [];
         for (const challenge of challengeInstanceStates) {
             const inventoryState = inventory.ChallengeInstanceStates.find(
-                c => toOid2(c._id, buildLabel) == challenge.id
+                c => toOid2(c._id, buildVersion) == challenge.id
             );
             if (inventoryState) {
                 inventoryState.Progress = challenge.Progress;
@@ -2244,7 +2241,7 @@ const addCredits = async (
 export const addFixedLevelRewards = async (
     rewards: IMissionRewardExternal & { randomizedItems?: string },
     MissionRewards: IMissionReward[],
-    buildLabel: string,
+    buildVersion: number,
     rewardInfo?: IRewardInfo
 ): Promise<number> => {
     let missionBonusCredits = 0;
@@ -2274,11 +2271,11 @@ export const addFixedLevelRewards = async (
     }
     const droptableName = rewards.droptable ?? rewards.randomizedItems;
     if (droptableName) {
-        const droptable = getMissionDeck(droptableName, buildLabel);
+        const droptable = getMissionDeck(droptableName, buildVersion);
         if (droptable) {
             const rotations: number[] =
                 rewardInfo && droptableName != "/Lotus/Types/Game/MissionDecks/ProjectNightwatchBonusRewards"
-                    ? await getRotations(rewardInfo, buildLabel)
+                    ? await getRotations(rewardInfo, buildVersion)
                     : [0];
             if (droptableName.startsWith("/Lotus/Types/Game/MissionDecks/VoidKeyMissionRewards/")) {
                 logger.debug(`rolling ${droptableName} for ${rotations.length} void tower rewards`);
@@ -2330,7 +2327,7 @@ function getLevelCreditRewards(node: Partial<IRegion>): number | undefined {
 }
 
 async function getRandomMissionDrops(
-    buildLabel: string,
+    buildVersion: number,
     inventory: TInventoryDatabaseDocument,
     RewardInfo: IRewardInfo,
     levelKeyName: string | undefined,
@@ -2412,14 +2409,14 @@ async function getRandomMissionDrops(
     if (
         RewardInfo.node.includes("CrewBattleNode") &&
         mission?.Tier &&
-        shouldDoServerQol("railjackSteelEssencesReward", buildLabel, "2026.06.30.09.08")
+        shouldDoServerQol("railjackSteelEssencesReward", buildVersion, buildVersionToInt("2026.06.30.09.08"))
     ) {
         drops.push({
             StoreItem: "/Lotus/StoreItems/Types/Items/MiscItems/SteelEssence",
             ItemCount: 2
         });
     }
-    const region = await getRegion(RewardInfo.node, buildLabel);
+    const region = await getRegion(RewardInfo.node, buildVersion);
     if (region) {
         let rewardManifests: readonly string[];
         if (RewardInfo.periodicMissionTag == "EliteAlert" || RewardInfo.periodicMissionTag == "EliteAlertB") {
@@ -2438,7 +2435,7 @@ async function getRandomMissionDrops(
                 const arr = RewardInfo.sortieId.split("_");
                 let giveNodeReward = false;
                 if (arr[1] != "Lite") {
-                    const sortie = getSortie(idToDay(arr[1]), buildVersionToInt(buildLabel));
+                    const sortie = getSortie(idToDay(arr[1]), buildVersion);
                     giveNodeReward = sortie.Variants.find(x => x.node == arr[0])!.missionType == "MT_ASSASSINATION";
                 }
                 rewardManifests = giveNodeReward ? region.rewardManifests : [];
@@ -2517,7 +2514,7 @@ async function getRandomMissionDrops(
 
         let rotations: number[] = [];
         if (RewardInfo.jobId && RewardInfo.JobStage! >= 0) {
-            const result = getSyndicateJob(RewardInfo, buildLabel);
+            const result = getSyndicateJob(RewardInfo, buildVersion);
 
             if (result) {
                 const currentJob = result.currentJob;
@@ -2629,7 +2626,7 @@ async function getRandomMissionDrops(
                 }
                 tierOverride = 0;
             }
-            rotations = await getRotations(RewardInfo, buildLabel, tierOverride);
+            rotations = await getRotations(RewardInfo, buildVersion, tierOverride);
         }
         if (rewardManifests.length != 0) {
             logger.debug(`generating random mission rewards`, { rewardManifests, rotations });
@@ -2642,7 +2639,7 @@ async function getRandomMissionDrops(
         }*/
         const rng = new SRng(BigInt(RewardInfo.rewardSeed ?? generateRewardSeed()) ^ 0xffffffffffffffffn);
         rewardManifests.forEach(name => {
-            const table = getMissionDeck(name, buildLabel);
+            const table = getMissionDeck(name, buildVersion);
             if (!table) {
                 logger.error(`unknown droptable: ${name}`);
                 return;
@@ -2694,7 +2691,7 @@ async function getRandomMissionDrops(
         //Railjack Extra End-Of-Mission Reward. Extra resource bundles rewarded on mission completion.
         if (
             region.missionType == "MT_RAILJACK" &&
-            shouldDoServerQol("railjackExtraResourceBundlesReward", buildLabel, gameToBuildVersion["27.2.0"])
+            shouldDoServerQol("railjackExtraResourceBundlesReward", buildVersion, gameToBuildVersionInt["27.2.0"])
         ) {
             if (
                 ![
@@ -2708,21 +2705,21 @@ async function getRandomMissionDrops(
                 if (region.faction == "FC_GRINEER") {
                     table = getMissionDeck(
                         "/Lotus/Types/Game/MissionDecks/RailjackMissionRewards/GrineerRailjackResourceRewards",
-                        buildLabel
+                        buildVersion
                     );
                     droptimes = 2;
                 }
                 if (region.faction == "FC_CORPUS") {
                     table = getMissionDeck(
                         "/Lotus/Types/Game/MissionDecks/RailjackMissionRewards/CorpusRailjackResourceRewards",
-                        buildLabel
+                        buildVersion
                     );
                     droptimes = 2;
                 }
                 if (["CrewBattleNode560", "CrewBattleNode561"].includes(RewardInfo.node)) {
                     table = getMissionDeck(
                         "/Lotus/Types/Game/MissionDecks/JadeShadowsConstellationsRewards/JS2ScoriasAngelRewardsExtra",
-                        buildLabel
+                        buildVersion
                     );
                     droptimes = 1;
                     {
@@ -2762,7 +2759,7 @@ async function getRandomMissionDrops(
                     StoreItem: reward.type,
                     ItemCount: reward.itemCount
                 });
-                if (version_compare(buildLabel, gameToBuildVersion["39.0.0"]) >= 0) {
+                if (buildVersion >= gameToBuildVersionInt["39.0.0"]) {
                     if (region.systemIndex == 20) {
                         drops.push({
                             StoreItem: "/Lotus/StoreItems/Types/Items/MiscItems/GranumBucks",
@@ -2792,7 +2789,7 @@ async function getRandomMissionDrops(
             // Pre-U19 nightmare mode used a single combined pool without A/B/C rotations
             // In U19, Chilling Reload, Drifting Contact, and Streamlined Form were added
             // and the rewards were split into A/B/C pools
-            if (version_compare(buildLabel, "2016.10.27.13.03") < 0) {
+            if (buildVersion < buildVersionToInt("2016.10.27.13.03")) {
                 // In U19, they still had A/B/C probabilities, taken from wiki; all in one pool
                 const preU19Pool: IReward[] = [
                     // 8.431%
@@ -2948,7 +2945,7 @@ async function getRandomMissionDrops(
 
     if (RewardInfo.EnemyCachesFound) {
         if (RewardInfo.goalId) {
-            const goal = getWorldState(buildLabel).Goals.find(x => fromOid(x._id) == RewardInfo.goalId);
+            const goal = getWorldState(buildVersion).Goals.find(x => fromOid(x._id) == RewardInfo.goalId);
             if (goal) {
                 let currentMissionKey: string | undefined;
                 if (RewardInfo.node == goal.Node) {
@@ -2966,7 +2963,7 @@ async function getRandomMissionDrops(
                     if (!keyMeta) {
                         logger.error(`unknown levelKey ${currentMissionKey} while proccesing EnemyCachesFound`);
                     } else if (keyMeta.cacheRewardManifest) {
-                        const deck = getMissionDeck(keyMeta.cacheRewardManifest, buildLabel);
+                        const deck = getMissionDeck(keyMeta.cacheRewardManifest, buildVersion);
                         if (!deck) {
                             logger.error(
                                 `unknown droptable ${keyMeta.cacheRewardManifest} while proccesing EnemyCachesFound`
@@ -2987,9 +2984,9 @@ async function getRandomMissionDrops(
                 }
             }
         } else if (RewardInfo.alertId) {
-            let alert = await getAlertByOid(RewardInfo.alertId, buildVersionToInt(buildLabel));
+            let alert = await getAlertByOid(RewardInfo.alertId, buildVersion);
             if (!alert) {
-                const worldState = getWorldState(buildLabel);
+                const worldState = getWorldState(buildVersion);
                 alert = worldState.Alerts.find(x => fromOid(x._id) == RewardInfo.alertId);
             }
             if (alert && alert.MissionInfo.enemyCacheOverride) {
@@ -3010,7 +3007,7 @@ async function getRandomMissionDrops(
             if (!keyMeta) {
                 logger.error(`unknown levelKey ${levelKeyName} while proccesing EnemyCachesFound`);
             } else if (keyMeta.cacheRewardManifest) {
-                const deck = getMissionDeck(keyMeta.cacheRewardManifest, buildLabel);
+                const deck = getMissionDeck(keyMeta.cacheRewardManifest, buildVersion);
                 if (!deck) {
                     logger.error(`unknown droptable ${keyMeta.cacheRewardManifest} while proccesing EnemyCachesFound`);
                 } else {
@@ -3039,7 +3036,7 @@ async function getRandomMissionDrops(
                 chest == "GoldChest"
                     ? "/Lotus/Types/Game/MissionDecks/KuvaPathRewards/KuvaPathGoldRewards"
                     : "/Lotus/Types/Game/MissionDecks/KuvaPathRewards/KuvaPathSilverRewards",
-                buildLabel
+                buildVersion
             )!;
             const rng = new SRng(BigInt(RewardInfo.ActiveKuvaKey.Seed));
             if (chest == "SilverChest") {
@@ -3053,7 +3050,6 @@ async function getRandomMissionDrops(
     }
 
     {
-        const buildVersion = buildVersionToInt(buildLabel);
         for (let i = drops.length - 1; i >= 0; i--) {
             const drop = drops[i];
             if (!isStoreItem(drop.StoreItem)) {
@@ -3105,7 +3101,7 @@ async function getRandomMissionDrops(
 
 export const handleConservation = async (
     inventory: TInventoryDatabaseDocument,
-    buildLabel: string,
+    buildVersion: number,
     missionReport: IMissionInventoryUpdateRequest,
     AffiliationMods: IAffiliationMods[]
 ): Promise<void> => {
@@ -3140,7 +3136,7 @@ export const handleConservation = async (
                 if (meta.standingReward) {
                     await addStanding(
                         inventory,
-                        buildLabel,
+                        buildVersion,
                         missionReport.Missions!.Tag == "SolNode129" ? "SolarisSyndicate" : "CetusSyndicate",
                         [2, 1.5, 1][capturedAnimal.CaptureRating] * meta.standingReward * capturedAnimal.Count,
                         AffiliationMods
@@ -3155,7 +3151,7 @@ export const handleConservation = async (
 
 const getSyndicateJob = (
     rewardInfo: IRewardInfo,
-    buildLabel: string
+    buildVersion: number
 ): { currentJob: ISyndicateJob; syndicateTag: string } | undefined => {
     if (!rewardInfo.jobId) return;
 
@@ -3171,11 +3167,11 @@ const getSyndicateJob = (
 
     let syndicateEntry: ISyndicateMissionInfo | IGoal | undefined;
     if (isGoalJob) {
-        syndicateEntry = getWorldState(buildLabel).Goals.find(g => fromOid(g._id) === syndicateMissionId);
+        syndicateEntry = getWorldState(buildVersion).Goals.find(g => fromOid(g._id) === syndicateMissionId);
         if (syndicateEntry) syndicateTag = syndicateEntry.JobAffiliationTag!;
     } else if (syndicateMissionId) {
         const syndicateMissions: ISyndicateMissionInfo[] = [];
-        pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId), buildVersionToInt(buildLabel));
+        pushClassicBounties(syndicateMissions, idToBountyCycle(syndicateMissionId), buildVersion);
         syndicateEntry = syndicateMissions.find(m => fromOid(m._id) == syndicateMissionId);
         if (syndicateEntry) syndicateTag = syndicateEntry.Tag;
     }

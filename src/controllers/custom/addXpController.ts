@@ -1,4 +1,4 @@
-import { BL_LATEST } from "../../constants/gameVersions.ts";
+import { BV_LATEST } from "../../constants/gameVersions.ts";
 import { applyClientEquipmentUpdates, getInventory2 } from "../../services/inventoryService.ts";
 import { getMaxLevelCap } from "../../services/itemDataService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
@@ -28,7 +28,7 @@ export const addXpController: RequestHandler = async (req, res) => {
                 }
             }
         }
-        applyClientEquipmentUpdates(inventory, gear, category as TEquipmentKey, BL_LATEST);
+        applyClientEquipmentUpdates(inventory, gear, category as TEquipmentKey, BV_LATEST);
     }
     await inventory.save();
     res.end();

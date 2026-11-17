@@ -4,7 +4,7 @@ import {
     getRandomLoginRewards,
     setAccountGotLoginRewardToday
 } from "../../services/loginRewardService.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { handleStoreItemAcquisition } from "../../services/purchaseService.ts";
 import { sendWsBroadcastTo } from "../../services/wsService.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
@@ -13,7 +13,7 @@ import type { RequestHandler } from "express";
 
 export const loginRewardsSelectionController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const inventory = await getInventory(account._id, undefined);
     const body = JSON.parse(String(req.body)) as ILoginRewardsSelectionRequest;
     const isMilestoneDay = account.LoginDays == 5 || account.LoginDays % 50 == 0;
@@ -32,7 +32,7 @@ export const loginRewardsSelectionController: RequestHandler = async (req, res) 
             inventory.LoginMilestoneRewards.push(body.ChosenReward);
         }
     } else {
-        const randomRewards = await getRandomLoginRewards(account, inventory, buildLabel);
+        const randomRewards = await getRandomLoginRewards(account, inventory, buildVersion);
         chosenReward = randomRewards.find(x => x.StoreItemType == body.ChosenReward)!;
         inventoryChanges = await claimLoginReward(inventory, chosenReward);
     }

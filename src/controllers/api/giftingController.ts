@@ -9,7 +9,7 @@ import {
     getInventory,
     updateCurrency
 } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getBuildLabel, getSuffixedName } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion, getSuffixedName } from "../../services/loginService.ts";
 import { handleDailyDealPurchase, handleStoreItemAcquisition } from "../../services/purchaseService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import type { IPurchaseParams, IPurchaseResponse } from "../../types/purchaseTypes.ts";
@@ -18,6 +18,7 @@ import type { RequestHandler } from "express";
 import { ExportBundles, ExportFlavour } from "warframe-public-export-plus";
 import { logger } from "../../utils/logger.ts";
 import { getBundle, getPrice } from "../../services/itemDataService.ts";
+import { buildVersionToInt } from "../../helpers/versionHelper.ts";
 
 const checkPurchaseParams = (params: IPurchaseParams): boolean => {
     switch (params.Source) {
@@ -63,7 +64,7 @@ export const giftingController: RequestHandler = async (req, res) => {
 
     // Cannot gift to players who have gifting disabled.
     const senderAccount = await getAccountForRequest(req);
-    const senderBuildLabel = getBuildLabel(req, account);
+    const senderBuildVersion = getBuildVersion(req, account);
     if (
         inventory.Settings?.GiftMode == "GIFT_MODE_NONE" ||
         (inventory.Settings?.GiftMode == "GIFT_MODE_FRIENDS" && !(await areFriends(account._id, senderAccount._id)))
@@ -99,7 +100,7 @@ export const giftingController: RequestHandler = async (req, res) => {
                 data.PurchaseParams.Quantity,
                 data.PurchaseParams.Durability,
                 data.PurchaseParams.UsePremium,
-                data.buildLabel ?? senderBuildLabel
+                data.buildLabel ? buildVersionToInt(data.buildLabel) : senderBuildVersion
             );
         }
         updateCurrency(
@@ -110,7 +111,7 @@ export const giftingController: RequestHandler = async (req, res) => {
         );
     }
     if (data.PurchaseParams.StoreItem in ExportBundles) {
-        const bundle = getBundle(data.PurchaseParams.StoreItem, senderBuildLabel)!;
+        const bundle = getBundle(data.PurchaseParams.StoreItem, senderBuildVersion)!;
         if (bundle.giftingBonus) {
             combineInventoryChanges(
                 response.InventoryChanges,

@@ -12,8 +12,8 @@ import { getInventory } from "../../services/inventoryService.ts";
 import {
     getAccountForRequest,
     getAccountIdForRequest,
-    getBuildLabel,
-    getSuffixedName
+    getSuffixedName,
+    getBuildVersion
 } from "../../services/loginService.ts";
 import { broadcastGuildUpdate, sendWsBroadcastToWebui } from "../../services/wsService.ts";
 import { eGuildPermission } from "../../types/guildTypes.ts";
@@ -67,9 +67,9 @@ export const confirmGuildInvitationGetController: RequestHandler = async (req, r
         });
         await guild.save();
 
-        const buildLabel = getBuildLabel(req, account);
+        const buildVersion = getBuildVersion(req, account);
         res.json({
-            ...(await getGuildClient(guild, account, buildLabel)),
+            ...(await getGuildClient(guild, account, buildVersion)),
             InventoryChanges: inventoryChanges
         });
         sendWsBroadcastToWebui({ update_guild: true }, account._id.toString());

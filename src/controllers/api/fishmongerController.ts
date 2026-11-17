@@ -1,6 +1,6 @@
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { addMiscItems, addStanding, getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
 import { ExportResources } from "warframe-public-export-plus";
@@ -8,7 +8,7 @@ import type { IAffiliationMods } from "../../types/purchaseTypes.ts";
 
 export const fishmongerController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const inventory = await getInventory(account._id, undefined); // Standing limits complicate this a bit, so no projection for now. :(
     const body = getJSONfromString<IFishmongerRequest>(String(req.body));
     const miscItemChanges: IMiscItem[] = [];
@@ -34,7 +34,7 @@ export const fishmongerController: RequestHandler = async (req, res) => {
     addMiscItems(inventory, miscItemChanges);
     const affiliationMods: IAffiliationMods[] = [];
     if (gainedStanding && syndicateTag)
-        await addStanding(inventory, buildLabel, syndicateTag, gainedStanding, affiliationMods);
+        await addStanding(inventory, buildVersion, syndicateTag, gainedStanding, affiliationMods);
     await inventory.save();
     res.json({
         InventoryChanges: {

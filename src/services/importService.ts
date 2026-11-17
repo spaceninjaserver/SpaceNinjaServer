@@ -98,7 +98,7 @@ import { fromMongoDate, fromOid } from "../helpers/inventoryHelpers.ts";
 import { getRecipe } from "./itemDataService.ts";
 import { logger } from "../utils/logger.ts";
 import { isEligibleForThousandYearFishDeco, migrateFusionTreasures } from "./inventoryService.ts";
-import { BL_LATEST } from "../constants/gameVersions.ts";
+import { BV_LATEST } from "../constants/gameVersions.ts";
 import { getFallbackHelmet } from "../helpers/nemesisHelpers.ts";
 
 const convertOptionalDate = (value: IMongoDateWithLegacySupport | undefined): Date | undefined => {
@@ -682,7 +682,7 @@ export const importInventory = (db: TInventoryDatabaseDocument, client: Partial<
 
     // Final sanity check over data
     for (const pr of db.PendingRecipes) {
-        const recipe = getRecipe(pr.ItemType, BL_LATEST);
+        const recipe = getRecipe(pr.ItemType, BV_LATEST);
         if (recipe?.secretIngredientAction == "SIA_CREATE_KUBROW" && !pr.KubrowPet) {
             pr.KubrowPet = db.KubrowPets.find(x => x.Details.Status == eStatus.StatusIncubating)?._id;
             logger.warn(

@@ -25,7 +25,7 @@ import type {
     TGuildPermission
 } from "../types/guildTypes.ts";
 import { eGuildPermission } from "../types/guildTypes.ts";
-import { toMongoDate, toMongoDate2, toOid2, version_compare } from "../helpers/inventoryHelpers.ts";
+import { toMongoDate, toMongoDate2, toOid2 } from "../helpers/inventoryHelpers.ts";
 import type { Types } from "mongoose";
 import type { IDojoBuild, IDojoResearch } from "warframe-public-export-plus";
 import { ExportDojoRecipes, ExportRegions, ExportResources } from "warframe-public-export-plus";
@@ -45,7 +45,7 @@ import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "./frie
 import type { ITypeCount } from "../types/commonTypes.ts";
 import type { IMissionInventoryUpdateRequest } from "../types/requestTypes.ts";
 import { KAHL_EPOCH, unixTimesInMs } from "../constants/timeConstants.ts";
-import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../constants/gameToBuildVersionInt.ts";
 import { getItemCategoryByUniqueName } from "./itemDataService.ts";
 
 export const getGuildForRequest = async (
@@ -84,9 +84,9 @@ export const getGuildForRequestEx = async (
     return guild;
 };
 
-export const getGuildRankBase = (buildLabel: string): number => {
+export const getGuildRankBase = (buildVersion: number): number => {
     // Use 1-based indexing for clan ranks for versions before U24. In my testing, 2018.06.14.23.21 and below used 1-based indexing and 2019.04.04.21.31 and above used 0-based indexing. I didn't narrow it down further, but I think U24 is a good spot for them to have changed it.
-    return version_compare(buildLabel, gameToBuildVersion["24.0.0"]) < 0 ? 1 : 0;
+    return buildVersion < gameToBuildVersionInt["24.0.0"] ? 1 : 0;
 };
 
 const rankTagToName: Record<string, string> = {
@@ -104,17 +104,17 @@ const rankTagToName: Record<string, string> = {
 export const getGuildClient = async (
     guild: TGuildDatabaseDocument,
     account: TAccountDocument,
-    buildLabel: string
+    buildVersion: number
 ): Promise<IGuildClient> => {
     const guildMembers = await GuildMember.find({ guildId: guild._id });
 
-    const rankBase = getGuildRankBase(buildLabel);
+    const rankBase = getGuildRankBase(buildVersion);
     const members: IGuildMemberClient[] = [];
     let missingEntry = true;
     const dataFillInPromises: Promise<void>[] = [];
     for (const guildMember of guildMembers) {
         const member: IGuildMemberClient = {
-            _id: toOid2(guildMember.accountId, buildLabel),
+            _id: toOid2(guildMember.accountId, buildVersion),
             Rank: guildMember.rank + rankBase,
             Status: guildMember.status,
             Note: guildMember.RequestMsg,
@@ -123,7 +123,7 @@ export const getGuildClient = async (
         if (guildMember.accountId.equals(account._id)) {
             missingEntry = false;
         } else {
-            dataFillInPromises.push(addAccountDataToFriendInfo(member, buildLabel, true));
+            dataFillInPromises.push(addAccountDataToFriendInfo(member, buildVersion, true));
             dataFillInPromises.push(addInventoryDataToFriendInfo(member));
         }
         members.push(member);
@@ -137,7 +137,7 @@ export const getGuildClient = async (
             rank: 0
         });
         members.push({
-            _id: toOid2(account._id, buildLabel),
+            _id: toOid2(account._id, buildVersion),
             Status: 0,
             Rank: 0
         });
@@ -146,7 +146,7 @@ export const getGuildClient = async (
     await Promise.all(dataFillInPromises);
 
     let ranks = guild.Ranks;
-    if (version_compare(buildLabel, gameToBuildVersion["24.0.0"]) < 0) {
+    if (buildVersion < gameToBuildVersionInt["24.0.0"]) {
         ranks = ranks.map(x => ({
             Name: rankTagToName[x.Name] ?? x.Name,
             Permissions: x.Permissions
@@ -154,7 +154,7 @@ export const getGuildClient = async (
     }
 
     return {
-        _id: toOid2(guild._id, buildLabel),
+        _id: toOid2(guild._id, buildVersion),
         Name: guild.Name,
         MOTD: guild.MOTD,
         LongMOTD: guild.LongMOTD,
@@ -162,18 +162,18 @@ export const getGuildClient = async (
         Ranks: ranks,
         Tier: guild.Tier,
         GuildTierIncMoratorium: guild.GuildTierIncMoratorium
-            ? toMongoDate2(guild.GuildTierIncMoratorium, buildLabel)
+            ? toMongoDate2(guild.GuildTierIncMoratorium, buildVersion)
             : undefined,
         Emblem: guild.Emblem,
-        Vault: await getGuildVault(guild, buildLabel),
+        Vault: await getGuildVault(guild, buildVersion),
         ActiveDojoColorResearch: guild.ActiveDojoColorResearch,
         Class: guild.Class,
         XP: guild.XP,
         IsContributor: !!guild.CeremonyContributors?.find(x => x.equals(account._id)),
         NumContributors: guild.CeremonyContributors?.length ?? 0,
-        CeremonyResetDate: guild.CeremonyResetDate ? toMongoDate2(guild.CeremonyResetDate, buildLabel) : undefined,
+        CeremonyResetDate: guild.CeremonyResetDate ? toMongoDate2(guild.CeremonyResetDate, buildVersion) : undefined,
         AutoContributeFromVault: guild.AutoContributeFromVault,
-        AllianceId: guild.AllianceId ? toOid2(guild.AllianceId, buildLabel) : undefined,
+        AllianceId: guild.AllianceId ? toOid2(guild.AllianceId, buildVersion) : undefined,
         GoalProgress: guild.GoalProgress
             ? guild.GoalProgress.map(gp => ({
                   Count: gp.Count,
@@ -184,15 +184,18 @@ export const getGuildClient = async (
     };
 };
 
-export const getGuildVault = async (guild: TGuildDatabaseDocument, buildLabel: string): Promise<IGuildVaultClient> => {
-    const { vault, needsSave } = getGuildVaultEx(guild, buildLabel);
+export const getGuildVault = async (
+    guild: TGuildDatabaseDocument,
+    buildVersion: number
+): Promise<IGuildVaultClient> => {
+    const { vault, needsSave } = getGuildVaultEx(guild, buildVersion);
     if (needsSave) await guild.save();
     return vault;
 };
 
 const getGuildVaultEx = (
     guild: TGuildDatabaseDocument,
-    buildLabel: string,
+    buildVersion: number,
     needsSave: boolean = false
 ): { vault: IGuildVaultClient; needsSave: boolean } => {
     const vault: IGuildVaultClient = {
@@ -227,8 +230,8 @@ const getGuildVaultEx = (
 
             pendingRecipes[category] ??= [];
             pendingRecipes[category].push({
-                ParentGuildId: toOid2(recipe.ParentGuildId, buildLabel),
-                ParentRoom: toOid2(recipe.ParentRoom, buildLabel),
+                ParentGuildId: toOid2(recipe.ParentGuildId, buildVersion),
+                ParentRoom: toOid2(recipe.ParentRoom, buildVersion),
                 MiscItems: recipe.MiscItems,
                 RegularCredits: recipe.RegularCredits,
                 RushPlatinum: recipe.RushPlatinum,
@@ -271,16 +274,16 @@ const getGuildVaultEx = (
 
 export const getAllianceVault = async (
     alliance: TAllianceDatabaseDocument,
-    buildLabel: string
+    buildVersion: number
 ): Promise<IGuildVaultClient> => {
-    const { vault, needsSave } = getAllianceVaultEx(alliance, buildLabel);
+    const { vault, needsSave } = getAllianceVaultEx(alliance, buildVersion);
     if (needsSave) await alliance.save();
     return vault;
 };
 
 const getAllianceVaultEx = (
     alliance: TAllianceDatabaseDocument,
-    buildLabel: string,
+    buildVersion: number,
     needsSave: boolean = false
 ): { vault: IGuildVaultClient; needsSave: boolean } => {
     const vault: IGuildVaultClient = {
@@ -311,8 +314,8 @@ const getAllianceVaultEx = (
 
             pendingRecipes[category] ??= [];
             pendingRecipes[category].push({
-                ParentGuildId: toOid2(recipe.ParentGuildId, buildLabel),
-                ParentRoom: toOid2(recipe.ParentRoom, buildLabel),
+                ParentGuildId: toOid2(recipe.ParentGuildId, buildVersion),
+                ParentRoom: toOid2(recipe.ParentRoom, buildVersion),
                 MiscItems: recipe.MiscItems,
                 RegularCredits: recipe.RegularCredits,
                 RushPlatinum: recipe.RushPlatinum,
@@ -357,12 +360,12 @@ export const getDojoClient = async (
     guild: TGuildDatabaseDocument,
     status: TDojoRequestStatus,
     componentId: Types.ObjectId | string | undefined,
-    buildLabel: string
+    buildVersion: number
 ): Promise<IDojoClient> => {
-    const v = getGuildVaultEx(guild, buildLabel);
+    const v = getGuildVaultEx(guild, buildVersion);
     let needSave = v.needsSave;
     const dojo: IDojoClient = {
-        _id: toOid2(guild._id, buildLabel),
+        _id: toOid2(guild._id, buildVersion),
         Name: guild.Name,
         Tier: guild.Tier,
         GuildEmblem: guild.Emblem,
@@ -383,11 +386,11 @@ export const getDojoClient = async (
     for (const dojoComponent of guild.DojoComponents) {
         if (!componentId || dojoComponent._id.equals(componentId)) {
             const clientComponent: IDojoComponentClient = {
-                id: toOid2(dojoComponent._id, buildLabel),
-                SortId: toOid2(dojoComponent.SortId ?? dojoComponent._id, buildLabel), // always providing a SortId so decos don't need repositioning to reparent
+                id: toOid2(dojoComponent._id, buildVersion),
+                SortId: toOid2(dojoComponent.SortId ?? dojoComponent._id, buildVersion), // always providing a SortId so decos don't need repositioning to reparent
                 pf:
                     dojoComponent.pf == "/Lotus/Levels/ClanDojo/DojoHall.level" &&
-                    version_compare(buildLabel, gameToBuildVersion["9.1.0"]) <= 0
+                    buildVersion <= gameToBuildVersionInt["9.1.0"]
                         ? "/Lotus/Levels/ClanDojo/ClanHallA.level" // Pre-U9.5
                         : dojoComponent.pf,
                 ppf: dojoComponent.ppf,
@@ -397,7 +400,7 @@ export const getDojoClient = async (
                 Settings: dojoComponent.Settings
             };
             if (dojoComponent.pi) {
-                clientComponent.pi = toOid2(dojoComponent.pi, buildLabel);
+                clientComponent.pi = toOid2(dojoComponent.pi, buildVersion);
                 clientComponent.op = dojoComponent.op!;
                 clientComponent.pp = dojoComponent.pp!;
             }
@@ -437,7 +440,7 @@ export const getDojoClient = async (
                 clientComponent.Decos = [];
                 for (const deco of dojoComponent.Decos) {
                     const clientDeco: IDojoDecoClient = {
-                        id: toOid2(deco._id, buildLabel),
+                        id: toOid2(deco._id, buildVersion),
                         Type: deco.Type,
                         Pos: deco.Pos,
                         Rot: deco.Rot,
@@ -1326,7 +1329,7 @@ export const deleteAlliance = async (allianceId: Types.ObjectId): Promise<void> 
 export const getAllianceClient = async (
     alliance: TAllianceDatabaseDocument,
     guild: TGuildDatabaseDocument,
-    buildLabel: string
+    buildVersion: number
 ): Promise<IAllianceClient> => {
     const allianceMembers = await AllianceMember.find({ allianceId: alliance._id });
     const clans: IAllianceMemberClient[] = [];
@@ -1335,7 +1338,7 @@ export const getAllianceClient = async (
             ? guild
             : (await Guild.findById(allianceMember.guildId))!;
         clans.push({
-            _id: toOid2(allianceMember.guildId, buildLabel),
+            _id: toOid2(allianceMember.guildId, buildVersion),
             Name: memberGuild.Name,
             Tier: memberGuild.Tier,
             Pending: allianceMember.Pending,
@@ -1344,12 +1347,12 @@ export const getAllianceClient = async (
         });
     }
     return {
-        _id: toOid2(alliance._id, buildLabel),
+        _id: toOid2(alliance._id, buildVersion),
         Name: alliance.Name,
         MOTD: alliance.MOTD,
         LongMOTD: alliance.LongMOTD,
         Clans: clans,
-        AllianceVault: await getAllianceVault(alliance, buildLabel)
+        AllianceVault: await getAllianceVault(alliance, buildVersion)
     };
 };
 

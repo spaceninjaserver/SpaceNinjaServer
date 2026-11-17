@@ -7,7 +7,7 @@ import {
     removeDojoDeco
 } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
 import { eDojoRequestStatus } from "../../types/guildTypes.ts";
@@ -39,8 +39,8 @@ export const destroyDojoDecoController: RequestHandler = async (req, res) => {
     }
 
     await guild.save();
-    const buildLabel = getBuildLabel(req, account);
-    res.json(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, request.ComponentId, buildLabel));
+    const buildVersion = getBuildVersion(req, account);
+    res.json(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, request.ComponentId, buildVersion));
 };
 
 interface IDestroyDojoDecoRequest {

@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import type { ILoginRewardsReponse } from "../../services/loginRewardService.ts";
 import {
     claimLoginReward,
@@ -10,18 +10,17 @@ import {
 } from "../../services/loginRewardService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { sendWsBroadcastTo } from "../../services/wsService.ts";
-import { version_compare } from "../../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 import { ExportBoosters, ExportResources } from "warframe-public-export-plus";
 
 export const loginRewardsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const today = Math.trunc(Date.now() / 86400000) * 86400;
 
     // https://wiki.warframe.com/w/Login_Rewards
-    const is_pre_daily_tribute = version_compare(buildLabel, gameToBuildVersion["18.0.2"]) < 0;
-    const is_pre_milestones = version_compare(buildLabel, gameToBuildVersion["23.10.0"]) < 0;
+    const is_pre_daily_tribute = buildVersion < gameToBuildVersionInt["18.0.2"];
+    const is_pre_milestones = buildVersion < gameToBuildVersionInt["23.10.0"];
 
     const isMilestoneDay = is_pre_milestones
         ? account.LoginDays % 50 == 0 && account.LoginDays <= 1000 // legacy milestones programmed up to 1000 day
@@ -41,7 +40,7 @@ export const loginRewardsController: RequestHandler = async (req, res) => {
             const useLegacyMilestone = isMilestoneDay && is_pre_milestones && account.LoginDays <= 1000;
             const randomRewards = useLegacyMilestone
                 ? [legacyMilestones[Math.trunc(account.LoginDays / 50) - 1]]
-                : await getRandomLoginRewards(account, inventory, buildLabel);
+                : await getRandomLoginRewards(account, inventory, buildVersion);
             const response: ILoginRewardsReponse = {
                 DailyTributeInfo: {
                     Rewards: randomRewards,

@@ -1,12 +1,12 @@
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 import { getInventory } from "../../services/inventoryService.ts";
-import { modernToU5Recipes, U5Recipes, version_compare } from "../../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { modernToU5Recipes, U5Recipes } from "../../helpers/inventoryHelpers.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 
 export const checkPendingRecipesController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const inventory = await getInventory(account._id, "PendingRecipes");
     const now = Date.now();
     const resp: ICheckPendingRecipesResponse = {
@@ -16,7 +16,7 @@ export const checkPendingRecipesController: RequestHandler = async (req, res) =>
         }))
     };
 
-    if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) < 0) {
+    if (buildVersion < gameToBuildVersionInt["7.3.0"]) {
         resp.PendingRecipes = resp.PendingRecipes.map(recipe => {
             const U5ItemType = modernToU5Recipes[recipe.ItemType];
             return U5ItemType ? { ...recipe, ItemType: U5ItemType } : recipe;

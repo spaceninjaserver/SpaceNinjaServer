@@ -1,5 +1,5 @@
 import type { Request, RequestHandler } from "express";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
 import { config } from "../../services/configService.ts";
 import allDialogue from "../../../static/fixed_responses/allDialogue.json" with { type: "json" };
@@ -60,8 +60,7 @@ import {
     toMongoDate2,
     toOid,
     toOid2,
-    U5Recipes,
-    version_compare
+    U5Recipes
 } from "../../helpers/inventoryHelpers.ts";
 import { Inbox } from "../../models/inboxModel.ts";
 import { unixTimesInMs } from "../../constants/timeConstants.ts";
@@ -70,19 +69,19 @@ import { eEquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { generateRewardSeed } from "../../services/rngService.ts";
 import { getCalendarSeason, getInvasionByOid, getWorldStateTime } from "../../services/worldStateService.ts";
 import { createMessage, getInboxFilter } from "../../services/inboxService.ts";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 import { PendingTrade } from "../../models/tradingModel.ts";
 import { exportTrade } from "../../services/tradingService.ts";
 import { isModularPartKnownToBuild, supplementalSuits, U42AbilityToLegacy } from "../../services/itemDataService.ts";
 import suitDefaultUpgrades from "../../constants/suitDefaultUpgrades.ts";
 import type { ITypeCount } from "../../types/commonTypes.ts";
 import { sendWsBroadcastToWebui } from "../../services/wsService.ts";
-import { wikiDateToBuildVersion } from "../../helpers/versionHelper.ts";
+import { buildVersionToInt, wikiDateToBuildVersionInt } from "../../helpers/versionHelper.ts";
 import { addQuestKey } from "../../services/questService.ts";
 
 export const inventoryController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);
-    const buildLabel = getBuildLabel(request, account);
+    const buildVersion = getBuildVersion(request, account);
     const inventory = await getInventory(account._id, undefined);
     let sendUpdateForWebui = false;
 
@@ -100,7 +99,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
             inventory.TradesRemaining += 2;
         }
 
-        inventory.LibraryAvailableDailyTaskInfo = createLibraryDailyTask(buildLabel);
+        inventory.LibraryAvailableDailyTaskInfo = createLibraryDailyTask(buildVersion);
 
         if (inventory.NextRefill) {
             const lastLoginDay = Math.trunc(inventory.NextRefill.getTime() / 86400000) - 1;
@@ -212,7 +211,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
                 const dialogue = inventory.DialogueHistory.Dialogues.find(x => x.DialogueName == dialogueName);
                 if (dialogue) {
                     if (dialogue.Rank == 7) {
-                        await addEmailItem(inventory, kissEmail, {}, buildLabel);
+                        await addEmailItem(inventory, kissEmail, {}, buildVersion);
                         kalymos = false;
                         break;
                     }
@@ -222,7 +221,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
                 }
             }
             if (kalymos) {
-                await addEmailItem(inventory, "/Lotus/Types/Items/EmailItems/KalymosKissEmailItem", {}, buildLabel);
+                await addEmailItem(inventory, "/Lotus/Types/Items/EmailItems/KalymosKissEmailItem", {}, buildVersion);
             }
         }
 
@@ -230,7 +229,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
             await ensureUserHasFounderHonoria(inventory);
         }
         await ensureUserHasSteelPathRewards(inventory);
-        cleanupInventory(inventory, buildLabel);
+        cleanupInventory(inventory, buildVersion);
 
         inventory.NextRefill = new Date((today + 1) * 86400000); // tomorrow at 0 UTC
         //await inventory.save();
@@ -360,7 +359,7 @@ export const inventoryController: RequestHandler = async (request, response) => 
         }
     }
 
-    if (version_compare(buildLabel, gameToBuildVersion["15.0.0"]) < 0) {
+    if (buildVersion < gameToBuildVersionInt["15.0.0"]) {
         const suitTypes = inventory.Suits.map(s => s.ItemType);
         const rawUpgradeTypes = inventory.RawUpgrades.map(s => s.ItemType);
         const upgradeTypes = inventory.Upgrades.map(s => s.ItemType);
@@ -393,7 +392,13 @@ export const inventoryController: RequestHandler = async (request, response) => 
     }
 
     response.json(
-        await getInventoryResponse(request, inventory, "xpBasedLevelCapDisabled" in request.query, buildLabel, forWebui)
+        await getInventoryResponse(
+            request,
+            inventory,
+            "xpBasedLevelCapDisabled" in request.query,
+            buildVersion,
+            forWebui
+        )
     );
 };
 
@@ -410,18 +415,20 @@ export const getInventoryResponse = async (
     request: Request,
     inventory: TInventoryDatabaseDocument,
     xpBasedLevelCapDisabled: boolean,
-    buildLabel: string,
+    buildVersion: number,
     forWebui: boolean = false,
     forExport: boolean = false
 ): Promise<IInventoryClient> => {
     const [inventoryWithLoadOutPresets, ships, latestMessage, pendingTrades] = await Promise.all([
         inventory.populate<{ LoadOutPresets: ILoadoutDatabase }>("LoadOutPresets"),
         Ship.find({ ShipOwnerId: inventory.accountOwnerId }),
-        Inbox.findOne(getInboxFilter(inventory.accountOwnerId, buildLabel), "_id").sort({ date: -1 }),
+        Inbox.findOne(getInboxFilter(inventory.accountOwnerId, buildVersion), "_id").sort({
+            date: -1
+        }),
         PendingTrade.find({ $or: [{ a: inventory.accountOwnerId }, { b: inventory.accountOwnerId }] })
     ]);
     const inventoryResponse = inventoryWithLoadOutPresets.toJSON<IInventoryClient>();
-    if (version_compare(buildLabel, gameToBuildVersion["23.10.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["23.10.0"]) {
         delete inventoryResponse.TennoOperator;
     }
     inventoryResponse.Ships = ships.map(x => x.toJSON<IShipInventory>());
@@ -557,7 +564,7 @@ export const getInventoryResponse = async (
             }
         }
 
-        if (inventory.universalPolarityEverywhere && version_compare(buildLabel, gameToBuildVersion["24.4.0"]) >= 0) {
+        if (inventory.universalPolarityEverywhere && buildVersion >= gameToBuildVersionInt["24.4.0"]) {
             // Apparently AP_ANY already existed in U24.4
             const Polarity: IPolarity[] = [];
             // 12 is needed for necramechs. 15 is needed for plexus/crewshipharness.
@@ -642,7 +649,7 @@ export const getInventoryResponse = async (
 
     // Convert fusion treasures to client format
     inventoryResponse.FusionTreasures = [];
-    if (!buildLabel || version_compare(buildLabel, gameToBuildVersion["25.7.0"]) >= 0) {
+    if (!buildVersion || buildVersion >= gameToBuildVersionInt["25.7.0"]) {
         for (const treasure of inventory.HybridFusionTreasures) {
             const entry = (inventoryResponse.FusionTreasures as IFusionTreasure[]).find(
                 x => x.ItemType == treasure.ItemType && x.Sockets == treasure.Sockets
@@ -667,7 +674,7 @@ export const getInventoryResponse = async (
                 }
             }
             (inventoryResponse.FusionTreasures as IFusionTreasureClientLegacy[]).push({
-                ItemId: toOid2(treasure._id, buildLabel),
+                ItemId: toOid2(treasure._id, buildVersion),
                 ItemType: treasure.ItemType,
                 Sockets: sockets
             });
@@ -677,7 +684,7 @@ export const getInventoryResponse = async (
     // Remove nemesis if it's using too new of a manifest to avoid script errors
     if (
         inventoryResponse.Nemesis &&
-        version_compare(buildLabel, getNemesisManifest(inventoryResponse.Nemesis.manifest).minBuild) < 0
+        buildVersion < getNemesisManifest(inventoryResponse.Nemesis.manifest).minBuildVersionInt
     ) {
         inventoryResponse.Nemesis = undefined;
     }
@@ -685,12 +692,12 @@ export const getInventoryResponse = async (
     // Old versions can't display equipment with an unrecognised modular part properly, so omit it
     for (const category of equipmentKeys) {
         inventoryResponse[category] = inventoryResponse[category].filter(
-            item => !item.ModularParts || item.ModularParts.every(part => isModularPartKnownToBuild(part, buildLabel))
+            item => !item.ModularParts || item.ModularParts.every(part => isModularPartKnownToBuild(part, buildVersion))
         );
     }
 
     // U44 moved vessel customization from MiscAccountData to VesselCustomization so translate it back for older versions
-    if (version_compare(buildLabel, gameToBuildVersion["44.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["44.0.0"]) {
         return inventoryResponse;
     }
     if (inventoryResponse.VesselCustomization) {
@@ -711,7 +718,7 @@ export const getInventoryResponse = async (
     }
 
     // U42 migrated ability paths so translate them back for older versions
-    if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["42.0.0"]) {
         return inventoryResponse;
     }
     for (const suit of inventoryResponse.Suits) {
@@ -725,7 +732,7 @@ export const getInventoryResponse = async (
     }
 
     // U40 migrated KubrowPetEggs to MiscItems so translate it back for older versions
-    if (version_compare(buildLabel, gameToBuildVersion["40.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["40.0.0"]) {
         return inventoryResponse;
     }
     inventoryResponse.KubrowPetEggs = [];
@@ -738,13 +745,13 @@ export const getInventoryResponse = async (
         for (let i = 0; i != numKubrowEggs; ++i) {
             inventoryResponse.KubrowPetEggs.push({
                 ItemType: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg",
-                ExpirationDate: toMongoDate2(2000000000000, buildLabel),
-                ItemId: toOid2(i.toString().padStart(24, "0"), buildLabel)
+                ExpirationDate: toMongoDate2(2000000000000, buildVersion),
+                ItemId: toOid2(i.toString().padStart(24, "0"), buildVersion)
             });
         }
     }
 
-    if (version_compare(buildLabel, gameToBuildVersion["38.5.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["38.5.0"]) {
         return inventoryResponse;
     }
     for (const category of equipmentKeys) {
@@ -756,7 +763,7 @@ export const getInventoryResponse = async (
         delete item.IsNew;
     }
 
-    if (version_compare(buildLabel, gameToBuildVersion["33.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["33.0.0"]) {
         return inventoryResponse;
     }
     // Old versions crash when faced with an unrecognised CollectibleType, so filter this array.
@@ -774,14 +781,14 @@ export const getInventoryResponse = async (
     }
 
     // U28.1 introduced Steel Path
-    if (version_compare(buildLabel, "2020.07.08.00.00") >= 0) {
+    if (buildVersion >= buildVersionToInt("2020.07.08.00.00")) {
         return inventoryResponse;
     }
     for (const mission of inventoryResponse.Missions) {
         delete mission.Tier;
     }
 
-    if (version_compare(buildLabel, gameToBuildVersion["25.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["25.0.0"]) {
         return inventoryResponse;
     }
     for (const melee of inventoryResponse.Melee) {
@@ -791,7 +798,7 @@ export const getInventoryResponse = async (
     }
 
     // Builds before U24.4.0 handle equipment features differently
-    if (version_compare(buildLabel, gameToBuildVersion["24.4.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["24.4.0"]) {
         return inventoryResponse;
     }
     for (const category of equipmentKeys) {
@@ -823,8 +830,7 @@ export const getInventoryResponse = async (
             if (!introducedAt) {
                 return false;
             }
-            const introducedAtBuildVersion = wikiDateToBuildVersion(introducedAt);
-            return version_compare(buildLabel, introducedAtBuildVersion) >= 0;
+            return buildVersion >= wikiDateToBuildVersionInt(introducedAt);
         });
         if (prevLength != inventoryResponse.XPInfo.length) {
             logger.debug(`omitting mastery info for ${prevLength - inventoryResponse.XPInfo.length} item(s)`);
@@ -832,7 +838,7 @@ export const getInventoryResponse = async (
     }
 
     // Before U23.9.1 the client displays an empty loadout name as "unnamed"
-    if (version_compare(buildLabel, gameToBuildVersion["23.9.1"]) < 0) {
+    if (buildVersion < gameToBuildVersionInt["23.9.1"]) {
         for (const category of loadoutKeysLegacy) {
             if (category in inventoryResponse.LoadOutPresets!) {
                 for (const item of inventoryResponse.LoadOutPresets![category]) {
@@ -843,7 +849,7 @@ export const getInventoryResponse = async (
     }
 
     // Before U22.14.0 Arcanes was installed directly at cosmetic items so client doesn't know about ranked up arcanes and UI displays them unproperly
-    if (version_compare(buildLabel, gameToBuildVersion["22.13.4"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["22.13.4"]) {
         return inventoryResponse;
     }
     inventoryResponse.Upgrades = inventoryResponse.Upgrades.filter(upgrade => !(upgrade.ItemType in ExportArcanes));
@@ -855,7 +861,7 @@ export const getInventoryResponse = async (
     }
 
     // U19.5 and below use $id instead of $oid as well as a different date format
-    if (version_compare(buildLabel, gameToBuildVersion["19.5.3"]) > 0) {
+    if (buildVersion > gameToBuildVersionInt["19.5.3"]) {
         return inventoryResponse;
     }
     if (inventoryResponse.TennoOperator) {
@@ -867,15 +873,15 @@ export const getInventoryResponse = async (
     for (const category of equipmentKeys) {
         for (const item of inventoryResponse[category]) {
             toLegacyOid(item.ItemId);
-            if (version_compare(buildLabel, gameToBuildVersion["16.5.5"]) < 0) {
+            if (buildVersion < gameToBuildVersionInt["16.5.5"]) {
                 // Appearance config format is different for versions before U16.5
                 for (const config of item.Configs) {
-                    if (version_compare(buildLabel, gameToBuildVersion["16.0.2"]) < 0) {
+                    if (buildVersion < gameToBuildVersionInt["16.0.2"]) {
                         config.Customization = {
                             Colors: convertIColorToLegacyColorsWithAtt(config.pricol, config.attcol),
                             Skins: config.Skins ?? []
                         };
-                    } else if (version_compare(buildLabel, gameToBuildVersion["16.0.2"]) >= 0) {
+                    } else if (buildVersion >= gameToBuildVersionInt["16.0.2"]) {
                         config.Colors = convertIColorToLegacyColorsWithAtt(config.pricol, config.attcol);
                     }
                 }
@@ -883,7 +889,7 @@ export const getInventoryResponse = async (
         }
     }
     // Deferring ids conversions for upgrades & skins for pre-U18.18 clients
-    if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["18.18.0"]) {
         for (const upgrade of inventoryResponse.Upgrades) {
             toLegacyOid(upgrade.ItemId);
         }
@@ -908,7 +914,7 @@ export const getInventoryResponse = async (
     for (const item of inventoryResponse.CurrentLoadOutIds) {
         toLegacyOid(item);
     }
-    if (version_compare(buildLabel, "2015.03.19.00.00") > 0) {
+    if (buildVersion > buildVersionToInt("2015.03.19.00.00")) {
         for (const category of loadoutKeysLegacy) {
             if (category in inventoryResponse.LoadOutPresets!) {
                 for (const item of inventoryResponse.LoadOutPresets![category]) {
@@ -945,7 +951,7 @@ export const getInventoryResponse = async (
     }
 
     // Pre-U18.18 builds use a different UpgradeFingerprint format
-    if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["18.18.0"]) {
         return inventoryResponse;
     }
     for (const upgrade of inventoryResponse.Upgrades) {
@@ -953,10 +959,7 @@ export const getInventoryResponse = async (
         const json = JSON.parse(upgrade.UpgradeFingerprint || '{"lvl":0}') as { lvl?: number };
         const rank: number = json.lvl ?? 0;
         upgrade.UpgradeFingerprint = convertToLegacyFingerprint(upgrade.UpgradeFingerprint || '{"lvl":0}');
-        if (
-            version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0 &&
-            version_compare(buildLabel, gameToBuildVersion["13.0.0"]) < 0
-        ) {
+        if (buildVersion >= gameToBuildVersionInt["7.3.0"] && buildVersion < gameToBuildVersionInt["13.0.0"]) {
             // Pre-U10 builds
             if (!upgrade.AmountRemaining || (upgrade.AmountRemaining && upgrade.AmountRemaining <= 0)) {
                 upgrade.AmountRemaining = 1;
@@ -975,7 +978,7 @@ export const getInventoryResponse = async (
     }
 
     // U18.16 merged left & right sentinel wings into the same skin item
-    if (version_compare(buildLabel, gameToBuildVersion["18.16.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["18.16.0"]) {
         return inventoryResponse;
     }
     const rightSkins = [];
@@ -991,31 +994,31 @@ export const getInventoryResponse = async (
         });
     }
 
-    if (version_compare(buildLabel, "2015.03.19.00.00") > 0) {
+    if (buildVersion > buildVersionToInt("2015.03.19.00.00")) {
         return inventoryResponse;
     }
     if (inventoryResponse.CurrentLoadOutIds.length > 0 && inventoryResponse.LoadOutPresets!.NORMAL.length > 0) {
-        if (version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
+        if (buildVersion >= gameToBuildVersionInt["14.0.0"]) {
             // U14-U15
             inventoryResponse.CurrentLoadout = {
                 $id: fromOid(inventoryResponse.CurrentLoadOutIds[0])
             };
             inventoryResponse.LoadoutPresets = [
-                mapLegacyLoadoutConfig(inventory, inventoryResponse.LoadOutPresets!, buildLabel)
+                mapLegacyLoadoutConfig(inventory, inventoryResponse.LoadOutPresets!, buildVersion)
             ] as unknown as FlattenMaps<ILoadoutConfigClientLegacy[]>;
         } else {
             // U13 and below
             inventoryResponse.CurrentLoadout = mapLegacyLoadoutConfig(
                 inventory,
                 inventoryResponse.LoadOutPresets!,
-                buildLabel
+                buildVersion
             );
         }
     }
     delete inventoryResponse.LoadOutPresets;
 
     // Filter out Ancient Fusion Core types for builds older than U14.0.9 as they don't exist there; they override U5 mods instead in those builds
-    if (version_compare(buildLabel, gameToBuildVersion["14.0.9"]) < 0) {
+    if (buildVersion < gameToBuildVersionInt["14.0.9"]) {
         inventoryResponse.Upgrades = inventoryResponse.Upgrades.filter(
             x => !x.ItemType.startsWith("/Lotus/Upgrades/Mods/Fusers/Legacy")
         );
@@ -1025,19 +1028,19 @@ export const getInventoryResponse = async (
     }
 
     // Filter out Legendary Cores for builds older than U12.2.0
-    if (version_compare(buildLabel, gameToBuildVersion["12.2.0"]) < 0) {
+    if (buildVersion < gameToBuildVersionInt["12.2.0"]) {
         inventoryResponse.RawUpgrades = inventoryResponse.RawUpgrades.filter(
             x => x.ItemType != "/Lotus/Upgrades/Mods/Fusers/LegendaryModFuser"
         );
     }
 
     // Pre-U12 builds store mods in an array called Cards, and have no concept of RawUpgrades
-    if (version_compare(buildLabel, "2014.02.05.00.00") >= 0) {
+    if (buildVersion >= buildVersionToInt("2014.02.05.00.00")) {
         return inventoryResponse;
     }
     inventoryResponse.Cards = [];
-    if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0) {
-        if (version_compare(buildLabel, gameToBuildVersion["13.2.0"]) < 0) {
+    if (buildVersion >= gameToBuildVersionInt["7.3.0"]) {
+        if (buildVersion < gameToBuildVersionInt["13.2.0"]) {
             // Unfold Fusion Cores for clients older than U13.2.0
             const unfoldedFusionCores = unfoldFusionCoresForResponse(inventory);
             inventoryResponse.RawUpgrades = inventoryResponse.RawUpgrades.filter(
@@ -1053,7 +1056,7 @@ export const getInventoryResponse = async (
                 for (let i = 0; i < numCards; i++) {
                     const card = {
                         ItemType: rawUpgrade.ItemType,
-                        ItemId: toOid2(id, buildLabel),
+                        ItemId: toOid2(id, buildVersion),
                         Rank: 0,
                         AmountRemaining: rawUpgrade.ItemCount
                     } as IUpgradeClient;
@@ -1067,10 +1070,7 @@ export const getInventoryResponse = async (
     inventoryResponse.RawUpgrades = [];
 
     // Before U9, these aura mods were artifacts, ~U9.1.2 changed their paths
-    if (
-        version_compare(buildLabel, gameToBuildVersion["5.2.0"]) >= 0 &&
-        version_compare(buildLabel, gameToBuildVersion["9.1.2"]) < 0
-    ) {
+    if (buildVersion >= gameToBuildVersionInt["5.2.0"] && buildVersion < gameToBuildVersionInt["9.1.2"]) {
         const supportedAuraMods = new Set([
             "EnemyArmorReductionAuraMod",
             "EnemyShieldReductionAuraMod",
@@ -1154,14 +1154,14 @@ export const getInventoryResponse = async (
     }
 
     // < U8 clients advertise gzip decompression support, but for inventory responses roughly >100k bytes, if we actually made use of that, it would buffer overrun.
-    if (version_compare(buildLabel, gameToBuildVersion["8.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["8.0.0"]) {
         return inventoryResponse;
     }
     request.headers["accept-encoding"] = "";
     //(inventoryResponse as any).Deez = "a".repeat(100_000);
 
     // U5 clients are very sensitive to unknown items
-    if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["7.3.0"]) {
         return inventoryResponse;
     }
     for (const category of equipmentKeys) {
@@ -1181,7 +1181,7 @@ export const getInventoryResponse = async (
     ];
 
     // for some reason they didn't shipped artifacts with U5.1
-    if (version_compare(buildLabel, gameToBuildVersion["5.2.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["5.2.0"]) {
         allowedMods.push("/Lotus/Upgrades/Modules/TennoSwordModule");
         const oldMissionBuffs = [
             "/Lotus/Types/Game/MissionBuffs/EnemyArmorReductionBuff",
@@ -1251,7 +1251,7 @@ export const getInventoryResponse = async (
 const mapLegacyLoadoutConfig = (
     inventory: TInventoryDatabaseDocument,
     loadoutPresets: ILoadOutPresets,
-    buildLabel: string
+    buildVersion: number
 ): ILoadoutConfigClientLegacy | undefined => {
     // Loadout config mapping for U15 and below
     const normPreset =
@@ -1268,16 +1268,13 @@ const mapLegacyLoadoutConfig = (
         const m = mId ? inventory.Melee.id(mId) : null;
         const loadoutConfig = {
             ItemId: {
-                $id:
-                    version_compare(buildLabel, gameToBuildVersion["14.0.0"]) < 0
-                        ? "Current"
-                        : fromOid(normPreset.ItemId)
+                $id: buildVersion < gameToBuildVersionInt["14.0.0"] ? "Current" : fromOid(normPreset.ItemId)
             },
             Name: normPreset.n ?? "Default Loadout",
             Presets: [
                 {
                     ItemId: { $id: s?._id.toString() ?? "ffffffffffffffffffffffff" },
-                    ModSlot: version_compare(buildLabel, "2013.09.13.00.00") < 0 ? 0 : (normPreset.s?.mod ?? 0),
+                    ModSlot: buildVersion < buildVersionToInt("2013.09.13.00.00") ? 0 : (normPreset.s?.mod ?? 0),
                     CustSlot: normPreset.s?.cus ?? 0,
                     Customization: {
                         Emblem: "",
@@ -1287,7 +1284,7 @@ const mapLegacyLoadoutConfig = (
                 },
                 {
                     ItemId: { $id: p?._id.toString() ?? "ffffffffffffffffffffffff" },
-                    ModSlot: version_compare(buildLabel, "2013.09.13.00.00") < 0 ? 0 : (normPreset.p?.mod ?? 0),
+                    ModSlot: buildVersion < buildVersionToInt("2013.09.13.00.00") ? 0 : (normPreset.p?.mod ?? 0),
                     CustSlot: normPreset.p?.cus ?? 0,
                     Customization: {
                         Emblem: "",
@@ -1297,7 +1294,7 @@ const mapLegacyLoadoutConfig = (
                 },
                 {
                     ItemId: { $id: l?._id.toString() ?? "ffffffffffffffffffffffff" },
-                    ModSlot: version_compare(buildLabel, "2013.09.13.00.00") < 0 ? 0 : (normPreset.l?.mod ?? 0),
+                    ModSlot: buildVersion < buildVersionToInt("2013.09.13.00.00") ? 0 : (normPreset.l?.mod ?? 0),
                     CustSlot: normPreset.l?.cus ?? 0,
                     Customization: {
                         Emblem: "",
@@ -1307,7 +1304,7 @@ const mapLegacyLoadoutConfig = (
                 },
                 {
                     ItemId: { $id: m?._id.toString() ?? "ffffffffffffffffffffffff" },
-                    ModSlot: version_compare(buildLabel, "2013.09.13.00.00") < 0 ? 0 : (normPreset.m?.mod ?? 0),
+                    ModSlot: buildVersion < buildVersionToInt("2013.09.13.00.00") ? 0 : (normPreset.m?.mod ?? 0),
                     CustSlot: normPreset.m?.cus ?? 0,
                     Customization: {
                         Emblem: "",
@@ -1318,7 +1315,7 @@ const mapLegacyLoadoutConfig = (
             ]
         };
 
-        if (version_compare(buildLabel, "2013.03.18.00.00") >= 0) {
+        if (buildVersion >= buildVersionToInt("2013.03.18.00.00")) {
             const compPreset =
                 inventory.CurrentLoadOutIds[eLoadoutIndex.SENTINEL] &&
                 loadoutPresets.SENTINEL.find(x =>
@@ -1332,7 +1329,7 @@ const mapLegacyLoadoutConfig = (
                 loadoutConfig.Presets.push(
                     {
                         ItemId: { $id: s?._id.toString() ?? "ffffffffffffffffffffffff" },
-                        ModSlot: version_compare(buildLabel, "2013.09.13.00.00") < 0 ? 0 : (compPreset.s?.mod ?? 0),
+                        ModSlot: buildVersion < buildVersionToInt("2013.09.13.00.00") ? 0 : (compPreset.s?.mod ?? 0),
                         CustSlot: compPreset.s?.cus ?? 0,
                         Customization: {
                             Emblem: "",
@@ -1342,7 +1339,7 @@ const mapLegacyLoadoutConfig = (
                     },
                     {
                         ItemId: { $id: l?._id.toString() ?? "ffffffffffffffffffffffff" },
-                        ModSlot: version_compare(buildLabel, "2013.09.13.00.00") < 0 ? 0 : (compPreset.l?.mod ?? 0),
+                        ModSlot: buildVersion < buildVersionToInt("2013.09.13.00.00") ? 0 : (compPreset.l?.mod ?? 0),
                         CustSlot: compPreset.l?.cus ?? 0,
                         Customization: {
                             Emblem: "",
@@ -1386,7 +1383,7 @@ const mapLegacyLoadoutConfig = (
             }
         }
 
-        if (version_compare(buildLabel, gameToBuildVersion["15.0.0"]) >= 0) {
+        if (buildVersion >= gameToBuildVersionInt["15.0.0"]) {
             const archPreset =
                 inventory.CurrentLoadOutIds[eLoadoutIndex.ARCHWING] &&
                 loadoutPresets.ARCHWING.find(x =>

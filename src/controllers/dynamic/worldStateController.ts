@@ -12,6 +12,7 @@ import {
 import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
 import { BL_LATEST } from "../../constants/gameVersions.ts";
 import { getInventory2 } from "../../services/inventoryService.ts";
+import { buildLabelToVersionInt } from "../../helpers/versionHelper.ts";
 
 export const worldStateController: RequestHandler = async (req, res) => {
     let buildLabel: string;
@@ -34,7 +35,8 @@ export const worldStateController: RequestHandler = async (req, res) => {
         buildLabel = BL_LATEST;
     }
 
-    const worldState = getWorldState(buildLabel);
+    const worldState = getWorldState(buildLabelToVersionInt(buildLabel));
+    worldState.BuildLabel = buildLabel;
     await Promise.all([
         populateDailyDeal(worldState),
         populateFeaturedGuilds(worldState),

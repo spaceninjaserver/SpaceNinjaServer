@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { addMiscItems, getInventory } from "../../services/inventoryService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import type { RivenFingerprint } from "../../helpers/rivenHelper.ts";
@@ -14,7 +14,7 @@ export const rerollRandomModController: RequestHandler = async (req, res) => {
     const request = getJSONfromString<RerollRandomModRequest>(String(req.body));
     logger.debug("reroll random mod request", { request });
     if ("ItemIds" in request) {
-        const buildLabel = getBuildLabel(req, account);
+        const buildVersion = getBuildVersion(req, account);
         const inventory = await getInventory(account._id, "Upgrades MiscItems dontSubtractKuvaForRivens");
         const changes: IChange[] = [];
         let totalKuvaCost = 0;
@@ -51,7 +51,7 @@ export const rerollRandomModController: RequestHandler = async (req, res) => {
             }
 
             changes.push({
-                ItemId: toOid2(toObjectId(request.ItemIds[0]), buildLabel),
+                ItemId: toOid2(toObjectId(request.ItemIds[0]), buildVersion),
                 UpgradeFingerprint: upgrade.UpgradeFingerprint,
                 PendingRerollFingerprint: upgrade.PendingRerollFingerprint
             });

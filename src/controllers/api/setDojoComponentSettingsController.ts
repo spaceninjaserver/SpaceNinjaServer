@@ -6,7 +6,7 @@ import {
     hasPermissionToDecorateComponent
 } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 import { eDojoRequestStatus } from "../../types/guildTypes.ts";
 
@@ -26,8 +26,8 @@ export const setDojoComponentSettingsController: RequestHandler = async (req, re
     const data = getJSONfromString<ISetDojoComponentSettingsRequest>(String(req.body));
     component.Settings = data.Settings;
     await guild.save();
-    const buildLabel = getBuildLabel(req, account);
-    res.json(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, component._id, buildLabel));
+    const buildVersion = getBuildVersion(req, account);
+    res.json(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, component._id, buildVersion));
 };
 
 interface ISetDojoComponentSettingsRequest {

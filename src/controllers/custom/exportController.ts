@@ -3,7 +3,7 @@ import { getAccountForRequest, hasPermission } from "../../services/loginService
 import { getPersonalRooms } from "../../services/personalRoomsService.ts";
 import type { RequestHandler } from "express";
 import { getInventoryResponse } from "../api/inventoryController.ts";
-import { BL_LATEST } from "../../constants/gameVersions.ts";
+import { BV_LATEST } from "../../constants/gameVersions.ts";
 
 export const exportController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -17,7 +17,7 @@ export const exportController: RequestHandler = async (req, res) => {
             getInventory(account._id, undefined),
             getPersonalRooms(account._id, "-__v -_id -personalRoomsOwnerId -activeShipId")
         ]);
-        const inventoryResponse = await getInventoryResponse(req, inventory, false, BL_LATEST, false, true);
+        const inventoryResponse = await getInventoryResponse(req, inventory, false, BV_LATEST, false, true);
 
         res.type("json").send(
             JSON.stringify(

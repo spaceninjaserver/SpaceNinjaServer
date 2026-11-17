@@ -1,11 +1,11 @@
 import type { RequestHandler } from "express";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { getInventory2, addMods, addMiscItem, addSkin } from "../../services/inventoryService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import { logger } from "../../utils/logger.ts";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
-import { fromOid, version_compare } from "../../helpers/inventoryHelpers.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
+import { fromOid } from "../../helpers/inventoryHelpers.ts";
 
 export const arcaneCommonController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -66,8 +66,8 @@ export const arcaneCommonController: RequestHandler = async (req, res) => {
                 item.UpgradeFingerprint = undefined;
                 item.UpgradeType = undefined;
                 addMods(inventory, [{ ItemType: arcaneType, ItemCount: numToRefund }]);
-                const buildLabel = getBuildLabel(req, account);
-                if (version_compare(buildLabel, gameToBuildVersion["19.4.1"]) <= 0) {
+                const buildVersion = getBuildVersion(req, account);
+                if (buildVersion <= gameToBuildVersionInt["19.4.1"]) {
                     addMiscItem(inventory, "/Lotus/Types/Recipes/CosmeticUnenhancerItem", -1);
                 }
                 res.json({ arcaneType, numToRefund });

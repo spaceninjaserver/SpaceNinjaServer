@@ -1,10 +1,9 @@
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { getInventory2, updatePlatinum, updateSlots } from "../../services/inventoryService.ts";
 import type { RequestHandler } from "express";
 import { eInventorySlot, type TInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { exhaustive } from "../../utils/ts-utils.ts";
-import { version_compare } from "../../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 
 /*
     loadout slots are additionally purchased slots only
@@ -23,7 +22,7 @@ import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 export const inventorySlotsController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
     const accountId = account._id.toString();
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const body = JSON.parse(req.body as string) as IInventorySlotsRequest;
 
     let price;
@@ -74,13 +73,13 @@ export const inventorySlotsController: RequestHandler = async (req, res) => {
     updateSlots(inventory, body.Bin, amount, amount);
     await inventory.save();
 
-    if (version_compare(buildLabel, gameToBuildVersion["23.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["23.0.0"]) {
         res.json({ InventoryChanges: currencyChanges });
         return;
     }
 
     // U11-U22 require a different response.
-    if (version_compare(buildLabel, gameToBuildVersion["10.8.0"]) > 0) {
+    if (buildVersion > gameToBuildVersionInt["10.8.0"]) {
         res.json({
             PremiumCredits: inventory.infinitePlatinum ? 999999999 : inventory.PremiumCredits,
             PremiumCreditsFree: inventory.infinitePlatinum ? 0 : inventory.PremiumCreditsFree

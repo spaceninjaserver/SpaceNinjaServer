@@ -7,7 +7,7 @@ import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
 import { Loadout } from "../../models/inventoryModels/loadoutModel.ts";
 import { eLoadoutIndex } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { toObjectId } from "../../helpers/inventoryHelpers.ts";
-import { BL_LATEST } from "../../constants/gameVersions.ts";
+import { BV_LATEST } from "../../constants/gameVersions.ts";
 import type { Types } from "mongoose";
 
 export const asyncMissionAssistController: RequestHandler = async (req, res) => {
@@ -83,7 +83,7 @@ export const asyncMissionAssistController: RequestHandler = async (req, res) => 
             DeploymentType: focusAbilityToDeploymentType[focusAbility],
             FocusAbility: focusAbility,
             Location: payload.MissionTag, // not faithful, but game doesn't complain?
-            Name: getUnicodeName(a, BL_LATEST) || "cat\uE000",
+            Name: getUnicodeName(a, BV_LATEST) || "cat\uE000",
             Operator: operator
         };
         resp.Results.push(result);

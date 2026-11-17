@@ -23,7 +23,7 @@ import type { ITypeCount } from "../types/commonTypes.ts";
 import { addString } from "../helpers/stringHelpers.ts";
 import { unlockShipFeature } from "./personalRoomsService.ts";
 import { eEquipmentFeatures } from "../types/equipmentTypes.ts";
-import { BL_LATEST } from "../constants/gameVersions.ts";
+import { BV_LATEST } from "../constants/gameVersions.ts";
 
 export interface IUpdateQuestRequest {
     QuestKeys: IQuestKeyClient[];
@@ -155,7 +155,7 @@ export const addQuestKey = (
 export const completeQuest = async (
     inventory: TInventoryDatabaseDocument,
     questKey: string,
-    buildLabel: string,
+    buildVersion: number,
     sendMessages: boolean = false
 ): Promise<void | IQuestKeyClient> => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -204,8 +204,8 @@ export const completeQuest = async (
         if (stage.c <= run) {
             stage.c = run;
             await giveKeyChainStageTriggered(inventory, { KeyChain: questKey, ChainStage: i }, sendMessages);
-            await giveKeyChainMissionReward(inventory, { KeyChain: questKey, ChainStage: i }, buildLabel);
-            await installShipFeatures(inventory, { KeyChain: questKey, ChainStage: i }, buildLabel);
+            await giveKeyChainMissionReward(inventory, { KeyChain: questKey, ChainStage: i }, buildVersion);
+            await installShipFeatures(inventory, { KeyChain: questKey, ChainStage: i }, buildVersion);
         }
     }
 
@@ -371,12 +371,12 @@ export const giveKeyChainItem = async (
     inventory: TInventoryDatabaseDocument,
     keyChainInfo: IKeyChainRequest,
     questKey: IQuestKeyDatabase,
-    buildLabel: string
+    buildVersion: number
 ): Promise<IInventoryChanges> => {
     let inventoryChanges: IInventoryChanges = {};
 
     if (!questKey.Progress?.[keyChainInfo.ChainStage]?.i) {
-        inventoryChanges = await addKeyChainItems(inventory, keyChainInfo, buildLabel);
+        inventoryChanges = await addKeyChainItems(inventory, keyChainInfo, buildVersion);
 
         if (isObjectEmpty(inventoryChanges)) {
             logger.warn("inventory changes was empty after getting keychain items: should not happen");
@@ -402,9 +402,9 @@ export const giveKeyChainMessage = async (
     keyChainInfo: IKeyChainRequest,
     questKey: IQuestKeyDatabase,
     sendMessage: boolean = true,
-    buildLabel: string
+    buildVersion: number
 ): Promise<void> => {
-    const keyChainMessage = getKeyChainMessage(keyChainInfo, buildLabel);
+    const keyChainMessage = getKeyChainMessage(keyChainInfo, buildVersion);
 
     if ((questKey.Progress?.[0]?.c ?? 0) > 0) {
         keyChainMessage.att = [];
@@ -429,22 +429,22 @@ export const giveKeyChainMessage = async (
 export const giveKeyChainMissionReward = async (
     inventory: TInventoryDatabaseDocument,
     keyChainInfo: IKeyChainRequest,
-    buildLabel: string
+    buildVersion: number
 ): Promise<void> => {
-    const chainStages = getKey(keyChainInfo.KeyChain, buildLabel)?.chainStages;
+    const chainStages = getKey(keyChainInfo.KeyChain, buildVersion)?.chainStages;
 
     if (chainStages) {
         const missionName = chainStages[keyChainInfo.ChainStage].key;
         const questKey = inventory.QuestKeys.find(q => q.ItemType === keyChainInfo.KeyChain);
         if (missionName && questKey) {
-            const fixedLevelRewards = getLevelKeyRewards(missionName, buildLabel);
+            const fixedLevelRewards = getLevelKeyRewards(missionName, buildVersion);
             const run = questKey.Progress?.[0]?.c ?? 0;
             if (fixedLevelRewards.levelKeyRewards) {
                 const missionRewards: { StoreItem: string; ItemCount: number }[] = [];
                 inventory.RegularCredits += await addFixedLevelRewards(
                     fixedLevelRewards.levelKeyRewards,
                     missionRewards,
-                    buildLabel
+                    buildVersion
                 );
 
                 for (const reward of missionRewards) {
@@ -498,11 +498,11 @@ export const giveKeyChainStageTriggered = async (
             );
         }
         if (chainStages[keyChainInfo.ChainStage].itemsToGiveWhenTriggered.length > 0) {
-            await giveKeyChainItem(inventory, keyChainInfo, questKey, BL_LATEST);
+            await giveKeyChainItem(inventory, keyChainInfo, questKey, BV_LATEST);
         }
 
         if (chainStages[keyChainInfo.ChainStage].messageToSendWhenTriggered) {
-            await giveKeyChainMessage(inventory, keyChainInfo, questKey, sendMessage, BL_LATEST);
+            await giveKeyChainMessage(inventory, keyChainInfo, questKey, sendMessage, BV_LATEST);
         }
     }
 };
@@ -510,7 +510,7 @@ export const giveKeyChainStageTriggered = async (
 const installShipFeatures = async (
     inventory: TInventoryDatabaseDocument,
     keyChainInfo: IKeyChainRequest,
-    buildLabel: string
+    buildVersion: number
 ): Promise<void> => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const chainStages = ExportKeys[keyChainInfo.KeyChain]?.chainStages;
@@ -525,7 +525,7 @@ const installShipFeatures = async (
                 }
             }
             if (prevStage.key) {
-                const fixedLevelRewards = getLevelKeyRewards(prevStage.key, buildLabel);
+                const fixedLevelRewards = getLevelKeyRewards(prevStage.key, buildVersion);
                 if (fixedLevelRewards.levelKeyRewards?.items) {
                     for (const item of fixedLevelRewards.levelKeyRewards.items) {
                         if (item.startsWith("/Lotus/StoreItems/Types/Items/ShipFeatureItems/")) {

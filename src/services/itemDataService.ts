@@ -74,17 +74,20 @@ import dict_uk_supp from "../../static/fixed_responses/supplementalDict/uk.json"
 import dict_zh_supp from "../../static/fixed_responses/supplementalDict/zh.json" with { type: "json" };
 import type { IMessage } from "../types/inboxTypes.ts";
 import { logger } from "../utils/logger.ts";
-import { version_compare } from "../helpers/inventoryHelpers.ts";
 import vorsPrizePreU40Rewards from "../../static/fixed_responses/vorsPrizePreU40Rewards.json" with { type: "json" };
-import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
 import gameToBuildVersionInt from "../constants/gameToBuildVersionInt.ts";
 import { getWorldState } from "./worldStateService.ts";
 import { promises as fs } from "fs";
 import path from "path";
-import { BL_LATEST } from "../constants/gameVersions.ts";
+import { BV_LATEST } from "../constants/gameVersions.ts";
 import type { TInventorySlot } from "../types/inventoryTypes/inventoryTypes.ts";
 import { shouldDoServerQol } from "./configService.ts";
-import { buildLabelToVersionInt, wikiDateToBuildVersionInt } from "../helpers/versionHelper.ts";
+import {
+    buildLabelToVersionInt,
+    buildVersionToInt,
+    intToBuildVersion,
+    wikiDateToBuildVersionInt
+} from "../helpers/versionHelper.ts";
 import baro from "../constants/baro.ts";
 import type { Mutable } from "../utils/ts-utils.ts";
 
@@ -3906,7 +3909,7 @@ const modularPartIntroductions: Record<string, number> = {
 
 interface legacyCacheKey {
     target: string;
-    buildLabel: string;
+    version: string;
 }
 
 const legacyCacheKeyStore = new Map<string, legacyCacheKey>();
@@ -3915,23 +3918,23 @@ const legacyBoosterPacksCache = new WeakMap<legacyCacheKey, Partial<IBoosterPack
 const legacySolarMapCache = new WeakMap<legacyCacheKey, Record<string, IRegion>>();
 const legacySyndicatesCache = new WeakMap<legacyCacheKey, ISyndicate>();
 
-const getLegacyCacheKey = (target: string, buildLabel: string): legacyCacheKey => {
-    const id = `${target}:${buildLabel}`;
+const getLegacyCacheKey = (target: string, version: string): legacyCacheKey => {
+    const id = `${target}:${version}`;
     let obj = legacyCacheKeyStore.get(id);
 
     if (!obj) {
-        obj = { target, buildLabel };
+        obj = { target, version };
         legacyCacheKeyStore.set(id, obj);
     }
 
     return obj;
 };
 
-const getLegacyDataVersion = async (target: string, buildLabel: string): Promise<string | null> => {
+const getLegacyDataVersion = async (target: string, buildVersion: number): Promise<string | null> => {
     const index = await getLegacyData<string[]>(legacyIndexCache, target, "index");
     let selected: string | null = null;
     for (const v of index) {
-        if (version_compare(v, buildLabel) <= 0) {
+        if (buildVersionToInt(v) <= buildVersion) {
             selected = v;
         } else {
             break;
@@ -3940,37 +3943,36 @@ const getLegacyDataVersion = async (target: string, buildLabel: string): Promise
     return selected;
 };
 
-const getLegacyData = async <T>(cache: WeakMap<legacyCacheKey, T>, target: string, buildLabel: string): Promise<T> => {
-    const key = getLegacyCacheKey(target, buildLabel);
+const getLegacyData = async <T>(cache: WeakMap<legacyCacheKey, T>, target: string, version: string): Promise<T> => {
+    const key = getLegacyCacheKey(target, version);
     if (cache.has(key)) {
-        logger.trace(`Using cached ${buildLabel} data for ${target}`);
+        logger.trace(`Using cached ${version} data for ${target}`);
         return cache.get(key)!;
     }
 
-    const filePath = path.join("./static/fixed_responses/data", target, `${buildLabel}.json`);
+    const filePath = path.join("./static/fixed_responses/data", target, `${version}.json`);
     const raw = await fs.readFile(filePath, "utf-8");
     const json = JSON.parse(raw) as T;
     cache.set(key, json);
 
-    logger.trace(`Cached ${buildLabel} data for ${target}`);
+    logger.trace(`Cached ${version} data for ${target}`);
 
     return json;
 };
 
-const getLegacyBoosterPackData = async (target: string, buildLabel: string): Promise<Partial<IBoosterPack>> =>
-    await getLegacyData<Partial<IBoosterPack>>(legacyBoosterPacksCache, target, buildLabel);
+const getLegacyBoosterPackData = async (target: string, version: string): Promise<Partial<IBoosterPack>> =>
+    await getLegacyData<Partial<IBoosterPack>>(legacyBoosterPacksCache, target, version);
 
-const getLegacySolarMapData = async (target: string, buildLabel: string): Promise<Record<string, IRegion>> =>
-    await getLegacyData<Record<string, IRegion>>(legacySolarMapCache, target, buildLabel);
+const getLegacySolarMapData = async (target: string, version: string): Promise<Record<string, IRegion>> =>
+    await getLegacyData<Record<string, IRegion>>(legacySolarMapCache, target, version);
 
-const getLegacySyndicateData = async (target: string, buildLabel: string): Promise<ISyndicate> =>
-    await getLegacyData<ISyndicate>(legacySyndicatesCache, target, buildLabel);
+const getLegacySyndicateData = async (target: string, version: string): Promise<ISyndicate> =>
+    await getLegacyData<ISyndicate>(legacySyndicatesCache, target, version);
 
-const getLegacyRandomProjectionData = (buildLabel: string): Partial<IBoosterPack> => {
-    const buildVersion = buildLabelToVersionInt(buildLabel);
-    const key = getLegacyCacheKey("RandomProjection", buildLabel);
+const getLegacyRandomProjectionData = (buildVersion: number): Partial<IBoosterPack> => {
+    const key = getLegacyCacheKey("RandomProjection", String(buildVersion));
     if (legacyBoosterPacksCache.has(key)) {
-        logger.trace(`Using cached ${buildLabel} data for RandomProjection`);
+        logger.trace(`Using cached ${intToBuildVersion(buildVersion)} data for RandomProjection`);
         return legacyBoosterPacksCache.get(key)!;
     }
     const relics: IBoosterPackComponent[] = Object.entries(ExportRelics)
@@ -4010,14 +4012,14 @@ const getLegacyRandomProjectionData = (buildLabel: string): Partial<IBoosterPack
     }
 
     legacyBoosterPacksCache.set(key, { components: relics });
-    logger.trace(`Cached ${buildLabel} data for RandomProjection`);
+    logger.trace(`Cached ${intToBuildVersion(buildVersion)} data for RandomProjection`);
     return { components: relics };
 };
 
 export const selfTestRandomProjection = (): boolean => {
     let allGood = true;
 
-    const lcomponents = getLegacyRandomProjectionData(BL_LATEST).components;
+    const lcomponents = getLegacyRandomProjectionData(BV_LATEST).components;
     if (!("/Lotus/Types/BoosterPacks/RandomProjection" in ExportBoosterPacks) || !lcomponents) {
         logger.warn("RandomProjection validation failed: clound't get components from either PE+ or legacy data");
         allGood = false;
@@ -4069,10 +4071,10 @@ export const selfTestRandomProjection = (): boolean => {
     return allGood;
 };
 
-export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | undefined => {
+export const getRecipe = (uniqueName: string, buildVersion: number): IRecipe | undefined => {
     let data = ExportRecipes[uniqueName] ?? supplementalRecipes[uniqueName];
     if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/RhinoBlueprint") {
-        if (version_compare(buildLabel, gameToBuildVersion["39.0.0"]) < 0) {
+        if (buildVersion < gameToBuildVersionInt["39.0.0"]) {
             data = {
                 ...data,
                 ingredients: [
@@ -4085,16 +4087,16 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
                     }
                 ]
             };
-            if (version_compare(buildLabel, gameToBuildVersion["38.5.0"]) < 0) {
+            if (buildVersion < gameToBuildVersionInt["38.5.0"]) {
                 data.buildTime = 259200;
                 // Update 19.13 (2017-03-09)
-                if (version_compare(buildLabel, "2017.03.09.00.00") < 0) {
+                if (buildVersion < buildLabelToVersionInt("2017.03.09.00.00")) {
                     data.ingredients[3].ItemType = "/Lotus/Types/Items/MiscItems/OrokinCell";
                 }
             }
         }
     } else if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/RhinoChassisBlueprint") {
-        if (version_compare(buildLabel, gameToBuildVersion["39.0.0"]) < 0) {
+        if (buildVersion < gameToBuildVersionInt["39.0.0"]) {
             data = {
                 ...data,
                 ingredients: [
@@ -4108,7 +4110,7 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
             };
         }
     } else if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/RhinoHelmetBlueprint") {
-        if (version_compare(buildLabel, gameToBuildVersion["39.0.0"]) < 0) {
+        if (buildVersion < gameToBuildVersionInt["39.0.0"]) {
             data = {
                 ...data,
                 ingredients: [
@@ -4122,12 +4124,12 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
                 ]
             };
             // Update 19.13 (2017-03-09)
-            if (version_compare(buildLabel, "2017.03.09.00.00") < 0) {
+            if (buildVersion < buildLabelToVersionInt("2017.03.09.00.00")) {
                 data.ingredients[1].ItemType = "/Lotus/Types/Items/MiscItems/NeuralSensor";
             }
         }
     } else if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/RhinoSystemsBlueprint") {
-        if (version_compare(buildLabel, gameToBuildVersion["39.0.0"]) < 0) {
+        if (buildVersion < gameToBuildVersionInt["39.0.0"]) {
             data = {
                 ...data,
                 ingredients: [
@@ -4150,33 +4152,33 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
                 ]
             };
             // Hotfix 30.0.6 (2021-04-20) Swapped the crafting requirement of Control Module for Gallium in Rhino Systems Blueprint to ease early player acquisition.
-            if (version_compare(buildLabel, "2021.04.20.00.00") < 0) {
+            if (buildVersion < buildLabelToVersionInt("2021.04.20.00.00")) {
                 data.ingredients[0].ItemType = "/Lotus/Types/Items/MiscItems/ControlModule";
             }
         }
     } else if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/ExcaliburBlueprint") {
-        if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) < 0) {
+        if (buildVersion < gameToBuildVersionInt["42.0.0"]) {
             data = {
                 ...data,
                 buildTime: 259200
             };
         }
     } else if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/MagBlueprint") {
-        if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) < 0) {
+        if (buildVersion < gameToBuildVersionInt["42.0.0"]) {
             data = {
                 ...data,
                 buildTime: 259200
             };
         }
     } else if (uniqueName == "/Lotus/Types/Recipes/WarframeRecipes/VOLTBlueprint") {
-        if (version_compare(buildLabel, gameToBuildVersion["42.0.0"]) < 0) {
+        if (buildVersion < gameToBuildVersionInt["42.0.0"]) {
             data = {
                 ...data,
                 buildTime: 259200
             };
         }
     } else if (uniqueName == "/Lotus/Types/Recipes/Weapons/HeatSwordBlueprint") {
-        if (version_compare(buildLabel, gameToBuildVersion["30.9.0"]) < 0) {
+        if (buildVersion < gameToBuildVersionInt["30.9.0"]) {
             data = {
                 ...data,
                 ingredients: [
@@ -4189,14 +4191,14 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
                     data.ingredients[3]
                 ]
             };
-            if (version_compare(buildLabel, gameToBuildVersion["9.1.2"]) < 0) {
+            if (buildVersion < gameToBuildVersionInt["9.1.2"]) {
                 // This is an undocumented change from sometime between 8.3.0 and 9.1.2...
                 data.ingredients[3].ItemCount = 75;
             }
         }
     }
 
-    if (version_compare(buildLabel, gameToBuildVersion["9.1.2"]) < 0) {
+    if (buildVersion < gameToBuildVersionInt["9.1.2"]) {
         // There was an undocumented change to this recipe's ingredients sometime between 8.3.0 and 9.1.2...
         if (uniqueName == "/Lotus/Types/Recipes/Weapons/HuntingBowBlueprint") {
             data = {
@@ -4796,7 +4798,7 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
     }
 
     if (uniqueName.startsWith("/Lotus/StoreItems/Types/Recipes/EidolonRecipes/Arcanes/")) {
-        if (version_compare(buildLabel, gameToBuildVersion["22.2.4"]) >= 0) {
+        if (buildVersion >= gameToBuildVersionInt["22.2.4"]) {
             const wdata = structuredClone(data) as Mutable<IRecipe>;
             if (uniqueName.endsWith("ArmourOnOperatorModeBlueprint")) {
                 wdata.ingredients[0].ItemCount = 20;
@@ -4896,7 +4898,7 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
             }
             data = wdata;
         }
-        if (version_compare(buildLabel, "2017.12.08.15.29") >= 0) {
+        if (buildVersion >= buildLabelToVersionInt("2017.12.08.15.29")) {
             // Should be 22.3.4 - 2017-11-16
             if (
                 uniqueName.endsWith("ArmourOnOperatorModeBlueprint") ||
@@ -4909,13 +4911,13 @@ export const getRecipe = (uniqueName: string, buildLabel: string): IRecipe | und
     return data;
 };
 
-export const getSyndicate = async (tag: string, buildLabel: string): Promise<ISyndicate | undefined> => {
+export const getSyndicate = async (tag: string, buildVersion: number): Promise<ISyndicate | undefined> => {
     if (
-        version_compare(buildLabel, gameToBuildVersion["37.0.0"]) < 0 ||
-        (version_compare(buildLabel, gameToBuildVersion["41.0.0"]) < 0 && tag == "EntratiSyndicate")
+        buildVersion < gameToBuildVersionInt["37.0.0"] ||
+        (buildVersion < gameToBuildVersionInt["41.0.0"] && tag == "EntratiSyndicate")
     ) {
         const target = `ExportSyndicates/${tag}`;
-        const version = await getLegacyDataVersion(target, buildLabel);
+        const version = await getLegacyDataVersion(target, buildVersion);
         if (version) {
             const legacyData = await getLegacySyndicateData(target, version);
             return legacyData;
@@ -5043,8 +5045,11 @@ export const getNormalizedString = (key: string, dict: Record<string, string>): 
     return getString(key, dict).replaceAll("‘", "'").replaceAll("’", "'").replaceAll("\r\n", " ");
 };
 
-export const getKeyChainItems = ({ KeyChain, ChainStage }: IKeyChainRequest, buildLabel: string): readonly string[] => {
-    const chainStages = getKey(KeyChain, buildLabel)?.chainStages;
+export const getKeyChainItems = (
+    { KeyChain, ChainStage }: IKeyChainRequest,
+    buildVersion: number
+): readonly string[] => {
+    const chainStages = getKey(KeyChain, buildVersion)?.chainStages;
     if (!chainStages) {
         throw new Error(`KeyChain ${KeyChain} does not contain chain stages`);
     }
@@ -5066,9 +5071,9 @@ export const getKeyChainItems = ({ KeyChain, ChainStage }: IKeyChainRequest, bui
 
 export const getLevelKeyRewards = (
     levelKey: string,
-    buildLabel: string
+    buildVersion: number
 ): { levelKeyRewards?: IMissionReward; levelKeyRewards2?: readonly TReward[]; levelMission?: Partial<IRegion> } => {
-    const key = getKey(levelKey, buildLabel);
+    const key = getKey(levelKey, buildVersion);
 
     const levelKeyRewards = key?.missionReward;
     let levelKeyRewards2 = key?.rewards;
@@ -5080,12 +5085,12 @@ export const getLevelKeyRewards = (
         );
     }
 
-    if (version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0) {
+    if (buildVersion < gameToBuildVersionInt["40.0.0"]) {
         if (levelKey in vorsPrizePreU40Rewards) {
             levelKeyRewards2 = vorsPrizePreU40Rewards[levelKey as keyof typeof vorsPrizePreU40Rewards] as TReward[];
         } else {
             // Before U19 (Hotfix: Specters of the Rail 0.12, 2016-07-20), The New Strange gave Chroma component blueprints more directly.
-            if (version_compare(buildLabel, "2016.07.20.00.00") < 0) {
+            if (buildVersion < buildLabelToVersionInt("2016.07.20.00.00")) {
                 if (levelKey == "/Lotus/Types/Keys/DragonQuest/DragonQuestMissionTwo") {
                     levelKeyRewards2 = [
                         {
@@ -5112,8 +5117,8 @@ export const getLevelKeyRewards = (
     };
 };
 
-export const getKeyChainMessage = ({ KeyChain, ChainStage }: IKeyChainRequest, buildLabel: string): IMessage => {
-    const chainStages = getKey(KeyChain, buildLabel)?.chainStages;
+export const getKeyChainMessage = ({ KeyChain, ChainStage }: IKeyChainRequest, buildVersion: number): IMessage => {
+    const chainStages = getKey(KeyChain, buildVersion)?.chainStages;
     if (!chainStages) {
         throw new Error(`KeyChain ${KeyChain} does not contain chain stages`);
     }
@@ -5216,10 +5221,10 @@ export const getProductCategory = (uniqueName: string): string => {
     throw new Error(`don't know product category of ${uniqueName}`);
 };
 
-export const getBundle = (uniqueName: string, buildLabel: string): IBundle | undefined => {
+export const getBundle = (uniqueName: string, buildVersion: number): IBundle | undefined => {
     if (
         uniqueName == "/Lotus/Types/StoreItems/Packages/StalkerPack" &&
-        version_compare(buildLabel, "2024.06.12.18.42") < 0 // < 36.0.0
+        buildVersion < buildLabelToVersionInt("2024.06.12.18.42") // < 36.0.0
     ) {
         return {
             name: "/Lotus/Language/Items/StalkerPackName",
@@ -5244,12 +5249,9 @@ export const getBundle = (uniqueName: string, buildLabel: string): IBundle | und
     return ExportBundles[uniqueName];
 };
 
-export const getBoosterPack = async (
-    uniqueName: string,
-    buildLabel: string = ""
-): Promise<IBoosterPack | undefined> => {
+export const getBoosterPack = async (uniqueName: string, buildVersion: number): Promise<IBoosterPack | undefined> => {
     if (
-        version_compare(buildLabel, gameToBuildVersion["18.18.0"]) < 0 &&
+        buildVersion < gameToBuildVersionInt["18.18.0"] &&
         ["/Lotus/Types/BoosterPacks/RandomKey", "/Lotus/Types/BoosterPacks/SyndicateRandomKey"].includes(uniqueName)
     ) {
         const boosterPack: Mutable<IBoosterPack> = {
@@ -5273,10 +5275,10 @@ export const getBoosterPack = async (
             canGiveDuplicates: true,
             platinumCost: 75
         };
-        if (version_compare(buildLabel, "2013.06.07.23.44") >= 0) {
+        if (buildVersion >= buildLabelToVersionInt("2013.06.07.23.44")) {
             boosterPack.rarityWeightsPerRoll[4] = { COMMON: 0, UNCOMMON: 0, RARE: 1, LEGENDARY: 0 };
         }
-        if (version_compare(buildLabel, gameToBuildVersion["9.1.0"]) >= 0) {
+        if (buildVersion >= gameToBuildVersionInt["9.1.0"]) {
             boosterPack.components.push(
                 { Item: "/Lotus/Types/Keys/OrokinCaptureKeyA", Rarity: "COMMON", Amount: 1 },
                 { Item: "/Lotus/Types/Keys/OrokinCaptureKeyB", Rarity: "COMMON", Amount: 1 },
@@ -5289,14 +5291,14 @@ export const getBoosterPack = async (
                 { Item: "/Lotus/Types/Keys/OrokinDefenseKeyC", Rarity: "RARE", Amount: 1 }
             );
         }
-        if (version_compare(buildLabel, gameToBuildVersion["10.3.3"]) >= 0) {
+        if (buildVersion >= gameToBuildVersionInt["10.3.3"]) {
             boosterPack.components.push({
                 Item: "/Lotus/Types/Keys/OrokinTowerSurvivalT3Key",
                 Rarity: "UNCOMMON",
                 Amount: 1
             });
         }
-        if (version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
+        if (buildVersion >= gameToBuildVersionInt["14.0.0"]) {
             boosterPack.components.find(c => c.Item === "/Lotus/Types/Keys/OrokinTowerSurvivalT3Key")!.Rarity = "RARE";
             boosterPack.components.push(
                 { Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerCaptureTier4Key", Rarity: "RARE", Amount: 1 },
@@ -5319,7 +5321,7 @@ export const getBoosterPack = async (
                 { Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerSurvivalTier4Key", Rarity: "RARE", Amount: 1 }
             );
         }
-        if (version_compare(buildLabel, gameToBuildVersion["15.0.6"]) >= 0) {
+        if (buildVersion >= gameToBuildVersionInt["15.0.6"]) {
             boosterPack.components.push(
                 {
                     Item: "/Lotus/Types/Keys/OrokinTowerKeys/OrokinTowerSabotageTier1Key",
@@ -5350,7 +5352,7 @@ export const getBoosterPack = async (
         }
         return boosterPack;
     }
-    if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) < 0) {
+    if (buildVersion < gameToBuildVersionInt["18.18.0"]) {
         if (
             [
                 "/Lotus/Types/BoosterPacks/CommonFusionPack",
@@ -5378,7 +5380,7 @@ export const getBoosterPack = async (
     ) {
         return {
             ...ExportBoosterPacks[uniqueName],
-            ...getLegacyRandomProjectionData(buildLabel)
+            ...getLegacyRandomProjectionData(buildVersion)
         };
     }
     if (
@@ -5391,9 +5393,9 @@ export const getBoosterPack = async (
         ].includes(uniqueName)
     ) {
         // Mod packs retired in U25
-        if (version_compare(buildLabel, gameToBuildVersion["25.0.0"]) < 0) {
+        if (buildVersion < gameToBuildVersionInt["25.0.0"]) {
             const target = "LotusArtifactUpgradePackBase";
-            const version = await getLegacyDataVersion(target, buildLabel);
+            const version = await getLegacyDataVersion(target, buildVersion);
             if (version) {
                 const legacyData = await getLegacyBoosterPackData(target, version);
                 return {
@@ -5407,10 +5409,10 @@ export const getBoosterPack = async (
     return ExportBoosterPacks[uniqueName];
 };
 
-export const getKey = (uniqueName: string, buildLabel: string = BL_LATEST): IKey | undefined => {
+export const getKey = (uniqueName: string, buildVersion: number = BV_LATEST): IKey | undefined => {
     if (uniqueName == "/Lotus/Types/Keys/DragonQuest/DragonQuestKeyChain") {
         // Before U19 (Hotfix: Specters of the Rail 0.12, 2016-07-20), The New Strange gave Chroma component blueprints more directly.
-        if (version_compare(buildLabel, "2016.07.20.00.00") < 0) {
+        if (buildVersion < buildLabelToVersionInt("2016.07.20.00.00")) {
             const latestData = ExportKeys[uniqueName];
             return {
                 ...latestData,
@@ -5441,7 +5443,7 @@ export const getKey = (uniqueName: string, buildLabel: string = BL_LATEST): IKey
             };
         }
     } else if (uniqueName == "/Lotus/Types/Keys/InfestedIntroQuest/InfestedIntroQuestKeyChain") {
-        if (version_compare(buildLabel, gameToBuildVersion["37.0.0"]) < 0) {
+        if (buildVersion < gameToBuildVersionInt["37.0.0"]) {
             const latestData = ExportKeys[uniqueName];
             return {
                 ...latestData,
@@ -5466,7 +5468,7 @@ export const getKey = (uniqueName: string, buildLabel: string = BL_LATEST): IKey
             };
         }
     } else if (uniqueName == "/Lotus/Types/Keys/ArchwingQuest/ArchwingQuestKeyChain") {
-        if (version_compare(buildLabel, gameToBuildVersion["18.5.0"]) < 0) {
+        if (buildVersion < gameToBuildVersionInt["18.5.0"]) {
             const latestData = ExportKeys[uniqueName];
             return {
                 ...latestData,
@@ -5501,14 +5503,14 @@ export const getKey = (uniqueName: string, buildLabel: string = BL_LATEST): IKey
     return ExportKeys[uniqueName] ?? supplementalKeys[uniqueName];
 };
 
-export const getMissionDeck = (uniqueName: string, buildLabel: string): Readonly<TMissionDeck> | undefined => {
+export const getMissionDeck = (uniqueName: string, buildVersion: number): Readonly<TMissionDeck> | undefined => {
     if (
         uniqueName == "/Lotus/Types/Game/MissionDecks/BossMissionRewards/YinYangRewards" &&
-        !shouldDoServerQol("tylRegorDropsTwoEquinoxParts", buildLabel, gameToBuildVersion["42.0.0"])
+        !shouldDoServerQol("tylRegorDropsTwoEquinoxParts", buildVersion, gameToBuildVersionInt["42.0.0"])
     ) {
         return preU42YinYangRewards;
     }
-    if (version_compare(buildLabel, gameToBuildVersion["26.0.0"]) < 0 && uniqueName in preU26SpyMissionDecks) {
+    if (buildVersion < gameToBuildVersionInt["26.0.0"] && uniqueName in preU26SpyMissionDecks) {
         return preU26SpyMissionDecks[uniqueName];
     }
     return ExportRewards[uniqueName] ?? supplementalMissionDecks[uniqueName];
@@ -5560,13 +5562,13 @@ export const getPrice = (
     quantity: number = 1,
     durability: number = 0,
     usePremium: boolean,
-    buildLabel: string
+    buildVersion: number
 ): number => {
     const isBundle = storeItemName in ExportBundles;
     let internalName = isBundle ? storeItemName : fromStoreItem(storeItemName);
 
     {
-        const { FlashSales } = getWorldState(buildLabel);
+        const { FlashSales } = getWorldState(buildVersion);
         const flashSale = FlashSales.find(s => s.TypeName == internalName);
         if (flashSale) {
             if (usePremium && flashSale.PremiumOverride) {
@@ -5581,7 +5583,7 @@ export const getPrice = (
         return 40 * (durability + 1);
     }
 
-    if (!usePremium && version_compare(buildLabel, gameToBuildVersion["8.0.0"]) < 0 && internalName in u7WeaponCosts) {
+    if (!usePremium && buildVersion < gameToBuildVersionInt["8.0.0"] && internalName in u7WeaponCosts) {
         return u7WeaponCosts[internalName];
     }
 
@@ -5595,7 +5597,7 @@ export const getPrice = (
     // Hardcoded sale in this version
     if (
         usePremium &&
-        buildLabel == "2014.05.23.12.12/" &&
+        buildVersion == buildLabelToVersionInt("2014.05.23.12.12/") &&
         storeItemName == "/Lotus/StoreItems/Types/Sentinels/SentinelPowersuits/CarrierPowerSuit"
     ) {
         return 60;
@@ -5603,7 +5605,7 @@ export const getPrice = (
 
     let price: number | undefined;
     if (isBundle) {
-        const bundle = getBundle(storeItemName, buildLabel)!;
+        const bundle = getBundle(storeItemName, buildVersion)!;
         if (usePremium && bundle.platinumCost) {
             price = ExportBundles[storeItemName].platinumCost;
         } else if (!usePremium && bundle.creditsCost) {
@@ -5616,7 +5618,7 @@ export const getPrice = (
                     component.purchaseQuantity,
                     [3, 7, 30, 90].indexOf(component.durabilityDays ?? 3),
                     usePremium,
-                    buildLabel
+                    buildVersion
                 );
             }
             const discount = typeof bundle.packageDiscount === "number" ? bundle.packageDiscount : 0.25;
@@ -5651,7 +5653,7 @@ export const getPrice = (
                 price = item.creditsCost;
             }
         } else {
-            const recipe = getRecipe(internalName, buildLabel);
+            const recipe = getRecipe(internalName, buildVersion);
             if (recipe) {
                 if (usePremium && "platinumCost" in recipe) {
                     price = recipe.platinumCost;
@@ -5662,14 +5664,14 @@ export const getPrice = (
         }
 
         if (usePremium) {
-            if (version_compare(buildLabel, gameToBuildVersion["18.16.0"]) < 0) {
+            if (buildVersion < gameToBuildVersionInt["18.16.0"]) {
                 if (internalName == "/Lotus/Powersuits/Mag/Mag") {
                     price = ExportWarframes["/Lotus/Powersuits/Loki/Loki"].platinumCost;
                 } else if (internalName == "/Lotus/Powersuits/Loki/Loki") {
                     price = ExportWarframes["/Lotus/Powersuits/Mag/Mag"].platinumCost;
                 }
             }
-            if (version_compare(buildLabel, gameToBuildVersion["18.0.2"]) < 0) {
+            if (buildVersion < gameToBuildVersionInt["18.0.2"]) {
                 if (internalName == "/Lotus/Upgrades/Skins/Dragon/DragonAltHelmet") price = 40;
             }
         } else {
@@ -5685,21 +5687,21 @@ export const getPrice = (
     return price * quantity;
 };
 
-export const getRegion = async (uniqueName: string, buildLabel: string): Promise<IRegion | undefined> => {
-    const regions = await getRegions(buildLabel);
+export const getRegion = async (uniqueName: string, buildVersion: number): Promise<IRegion | undefined> => {
+    const regions = await getRegions(buildVersion);
     return regions[uniqueName];
 };
 
-export const getRegions = async (buildLabel: string): Promise<Record<string, IRegion>> => {
+export const getRegions = async (buildVersion: number): Promise<Record<string, IRegion>> => {
     // after U27.2.0 OriginSolarMapRedux moved to binary format, so we don't have data for it
-    if (version_compare(buildLabel, gameToBuildVersion["27.2.0"]) <= 0) {
+    if (buildVersion <= gameToBuildVersionInt["27.2.0"]) {
         const target =
-            version_compare(buildLabel, gameToBuildVersion["14.0.0"]) < 0
+            buildVersion < gameToBuildVersionInt["14.0.0"]
                 ? "SolStarChart"
-                : version_compare(buildLabel, gameToBuildVersion["18.16.0"]) < 0
+                : buildVersion < gameToBuildVersionInt["18.16.0"]
                   ? "OriginSolarMap"
                   : "OriginSolarMapRedux";
-        const version = await getLegacyDataVersion(target, buildLabel);
+        const version = await getLegacyDataVersion(target, buildVersion);
         if (version) {
             return await getLegacySolarMapData(target, version);
         }
@@ -5753,7 +5755,7 @@ export const getVendor = (uniqueName: string): IVendor | undefined => {
     return ExportVendors[uniqueName] ?? supplementalVendors[uniqueName];
 };
 
-export const isModularPartKnownToBuild = (partType: string, buildLabel: string): boolean => {
+export const isModularPartKnownToBuild = (partType: string, buildVersion: number): boolean => {
     const entry = Object.entries(modularPartIntroductions).find(([prefix]) => partType.startsWith(prefix));
-    return !entry || buildLabelToVersionInt(buildLabel) >= entry[1];
+    return !entry || buildVersion >= entry[1];
 };

@@ -1,9 +1,9 @@
 import type { RequestHandler } from "express";
-import { fromOid, version_compare } from "../../helpers/inventoryHelpers.ts";
+import { fromOid } from "../../helpers/inventoryHelpers.ts";
 import type { IUpgradesRequest, IUpgradesRequestLegacy } from "../../types/requestTypes.ts";
 import type { TArtifactPolarity, IAbilityOverride } from "../../types/inventoryTypes/commonInventoryTypes.ts";
 import type { IInventoryClient, IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import {
     addMiscItems,
     addMods,
@@ -18,16 +18,16 @@ import { sendWsBroadcastTo, sendWsBroadcastToWebui } from "../../services/wsServ
 import type { IEquipmentClient, IEquipmentDatabase } from "../../types/equipmentTypes.ts";
 import { eEquipmentFeatures } from "../../types/equipmentTypes.ts";
 import { Types } from "mongoose";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 import { ExportRecipes } from "warframe-public-export-plus";
 
 export const upgradesController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const accountId = account._id.toString();
     const inventoryChanges: IInventoryChanges = {};
 
-    if (version_compare(buildLabel, gameToBuildVersion["24.4.0"]) < 0) {
+    if (buildVersion < gameToBuildVersionInt["24.4.0"]) {
         // Builds before U24.4.0 have a different request format
         const payload = JSON.parse(String(req.body)) as IUpgradesRequestLegacy;
         const itemId = fromOid(payload.Weapon.ItemId);
@@ -169,8 +169,8 @@ export const upgradesController: RequestHandler = async (req, res) => {
                 }
             }
 
-            if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) < 0) {
-                if (version_compare(buildLabel, gameToBuildVersion["5.3.0"]) < 0) {
+            if (buildVersion < gameToBuildVersionInt["7.3.0"]) {
+                if (buildVersion < gameToBuildVersionInt["5.3.0"]) {
                     if (payload.Weapon.UnlockLevel && payload.Weapon.UnlockLevel > 0) {
                         const item = inventory[payload.Category].id(itemId)!;
                         item.Features ??= 0;

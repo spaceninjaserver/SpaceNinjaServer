@@ -1,12 +1,11 @@
-import { version_compare } from "../../helpers/inventoryHelpers.ts";
 import { Alliance, Guild, GuildMember } from "../../models/guildModel.ts";
 import { hasGuildPermissionEx } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getBuildLabel, getSuffixedName } from "../../services/loginService.ts";
+import { getAccountForRequest, getSuffixedName, getBuildVersion } from "../../services/loginService.ts";
 import type { ILongMOTD } from "../../types/guildTypes.ts";
 import { eGuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 
 export const setGuildMotdController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
@@ -62,8 +61,8 @@ export const setGuildMotdController: RequestHandler = async (req, res) => {
         await guild.save();
     }
 
-    const buildLabel = getBuildLabel(req, account);
-    if (version_compare(buildLabel, gameToBuildVersion["29.3.1"]) > 0) {
+    const buildVersion = getBuildVersion(req, account);
+    if (buildVersion > gameToBuildVersionInt["29.3.1"]) {
         res.json({ IsLongMOTD, MOTD });
     } else {
         res.send(MOTD).end();

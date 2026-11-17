@@ -5,7 +5,7 @@ import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "../../
 import type { IGuildMemberClient } from "../../types/guildTypes.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { BL_LATEST } from "../../constants/gameVersions.ts";
+import { BV_LATEST } from "../../constants/gameVersions.ts";
 
 export const getGuildController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
@@ -27,7 +27,7 @@ export const getGuildController: RequestHandler = async (req, res) => {
                 Note: guildMember.RequestMsg,
                 RequestExpiry: guildMember.RequestExpiry ? toMongoDate(guildMember.RequestExpiry) : undefined
             };
-            dataFillInPromises.push(addAccountDataToFriendInfo(member, BL_LATEST));
+            dataFillInPromises.push(addAccountDataToFriendInfo(member, BV_LATEST));
             dataFillInPromises.push(addInventoryDataToFriendInfo(member));
 
             members.push(member);

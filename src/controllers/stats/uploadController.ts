@@ -1,5 +1,5 @@
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { updateStats } from "../../services/statsService.ts";
 import type { IStatsUpdate } from "../../types/statTypes.ts";
 import type { RequestHandler } from "express";
@@ -9,8 +9,8 @@ export const uploadController: RequestHandler = async (req, res) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { PS, ...payload } = getJSONfromString<IStatsUpdate>(String(req.body));
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     logger.trace(`stat upload request:`, payload);
-    await updateStats(account._id.toString(), payload, buildLabel);
+    await updateStats(account._id.toString(), payload, buildVersion);
     res.status(200).end();
 };

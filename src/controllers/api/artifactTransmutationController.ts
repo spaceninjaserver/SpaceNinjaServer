@@ -1,4 +1,5 @@
-import { fromOid, toOid2, version_compare } from "../../helpers/inventoryHelpers.ts";
+import { fromOid, toOid2 } from "../../helpers/inventoryHelpers.ts";
+import { wikiDateToBuildVersionInt } from "../../helpers/versionHelper.ts";
 import { createVeiledRivenFingerprint, rivenRawToRealWeighted } from "../../helpers/rivenHelper.ts";
 import {
     addFusionPoints,
@@ -8,7 +9,7 @@ import {
     updateCredits
 } from "../../services/inventoryService.ts";
 import { getUpgrade } from "../../services/itemDataService.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { getRandomElement, getRandomWeightedRewardUc } from "../../services/rngService.ts";
 import type { IUpgradeFromClient } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { RequestHandler } from "express";
@@ -18,7 +19,7 @@ import { logger } from "../../utils/logger.ts";
 
 export const artifactTransmutationController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const inventory = await getInventory2(
         account._id,
         "infiniteCredits",
@@ -64,7 +65,7 @@ export const artifactTransmutationController: RequestHandler = async (req, res) 
         res.json({
             NewMods: [
                 {
-                    ItemId: toOid2(inventory.Upgrades[upgradeIndex]._id, buildLabel),
+                    ItemId: toOid2(inventory.Upgrades[upgradeIndex]._id, buildVersion),
                     ItemType: rivenType,
                     UpgradeFingerprint: fingerprint
                 }
@@ -125,13 +126,7 @@ export const artifactTransmutationController: RequestHandler = async (req, res) 
                     if ((forcedPolarity && meta.polarity != forcedPolarity) || !meta.introducedAt) {
                         return false;
                     }
-                    const date = new Date(meta.introducedAt * 1000);
-                    return (
-                        version_compare(
-                            buildLabel,
-                            `${date.getUTCFullYear()}.${date.getUTCMonth()}.${date.getUTCDate()}.${date.getUTCHours()}.${date.getUTCMinutes()}`
-                        ) >= 0
-                    );
+                    return buildVersion >= wikiDateToBuildVersionInt(meta.introducedAt);
                 }
             );
             newModType = getRandomWeightedRewardUc(options, weights)!.Item;

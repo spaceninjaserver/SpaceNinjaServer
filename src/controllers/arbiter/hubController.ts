@@ -1,9 +1,8 @@
 import type { RequestHandler } from "express";
 import { config, getReflexiveAddress, type IHubServer, type TRegionId } from "../../services/configService.ts";
 import { hubInstances, pickHubServer } from "../../services/arbiterService.ts";
-import { getBuildLabelForUnauthenticatedRequest } from "../../services/loginService.ts";
-import { version_compare } from "../../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { getBuildVersionForUnauthenticatedRequest } from "../../services/loginService.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 
 export const hubController: RequestHandler = (req, res) => {
     const arr = (req.query.level as string).split("_");
@@ -23,8 +22,8 @@ export const hubController: RequestHandler = (req, res) => {
             Hub: hubServer.address
         };
     }
-    const buildLabel = getBuildLabelForUnauthenticatedRequest(req);
-    const dtlsLevel = version_compare(buildLabel, gameToBuildVersion["43.0.0"]) >= 0 ? 99 : (config.dtls ?? 0);
+    const buildVersion = getBuildVersionForUnauthenticatedRequest(req);
+    const dtlsLevel = buildVersion >= gameToBuildVersionInt["43.0.0"] ? 99 : (config.dtls ?? 0);
     const needToUseUdpProxy = dtlsLevel & 1 && hubServer.dtlsUnsupported;
     const addr = hubServer.address.replaceAll("%THIS_MACHINE%", getReflexiveAddress(req).myAddress);
 

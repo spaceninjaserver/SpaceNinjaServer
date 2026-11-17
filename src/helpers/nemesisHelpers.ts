@@ -4,7 +4,7 @@ import { generateRewardSeed, getRewardAtPercentage, SRng } from "../services/rng
 import type { TInventoryDatabaseDocument } from "../models/inventoryModels/inventoryModel.ts";
 import type { IOid } from "../types/commonTypes.ts";
 import { isArchwingMission } from "../services/worldStateService.ts";
-import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../constants/gameToBuildVersionInt.ts";
 import type { INemesisTaxInfo } from "../types/missionTypes.ts";
 import { lerp } from "./general.ts";
 import { getPowerSuit } from "../services/itemDataService.ts";
@@ -33,7 +33,7 @@ export interface INemesisManifest {
     convertMessageSubject: string;
     convertMessageBody: string;
     convertMessageIcon: string;
-    minBuild: string;
+    minBuildVersionInt: number;
 }
 
 class KuvaLichManifest implements INemesisManifest {
@@ -72,14 +72,14 @@ class KuvaLichManifest implements INemesisManifest {
     convertMessageSubject = "/Lotus/Language/Kingpins/InboxKuvaConvertedSubject";
     convertMessageBody = "/Lotus/Language/Kingpins/InboxKuvaConvertedBody";
     convertMessageIcon = "/Lotus/Interface/Graphics/WorldStatePanel/Grineer.png";
-    minBuild = gameToBuildVersion["26.0.0"];
+    minBuildVersionInt = gameToBuildVersionInt["26.0.0"];
 }
 
 class KuvaLichManifestVersionTwo extends KuvaLichManifest {
     constructor() {
         super();
         this.ephemeraChance = 0.1;
-        this.minBuild = gameToBuildVersion["27.2.0"]; // Unsure about this one, so using the same value as in version three.
+        this.minBuildVersionInt = gameToBuildVersionInt["27.2.0"]; // Unsure about this one, so using the same value as in version three.
     }
 }
 
@@ -90,14 +90,14 @@ class KuvaLichManifestVersionThree extends KuvaLichManifestVersionTwo {
         this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hind/KuvaHind");
         this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/Secondaries/Nukor/KuvaNukor");
         this.ephemeraChance = 0.2;
-        this.minBuild = gameToBuildVersion["27.2.0"]; // Technically, 27.1.0 should also recognise this.
+        this.minBuildVersionInt = gameToBuildVersionInt["27.2.0"]; // Technically, 27.1.0 should also recognise this.
     }
 }
 
 class KuvaLichManifestVersionFour extends KuvaLichManifestVersionThree {
     constructor() {
         super();
-        this.minBuild = gameToBuildVersion["30.5.0"]; // Unsure about this one, so using the same value as in version five.
+        this.minBuildVersionInt = gameToBuildVersionInt["30.5.0"]; // Unsure about this one, so using the same value as in version five.
     }
 }
 
@@ -107,7 +107,7 @@ class KuvaLichManifestVersionFive extends KuvaLichManifestVersionFour {
         this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Hek/KuvaHekWeapon");
         this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Zarr/KuvaZarr");
         this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/HeavyWeapons/Grattler/KuvaGrattler");
-        this.minBuild = gameToBuildVersion["30.5.0"];
+        this.minBuildVersionInt = gameToBuildVersionInt["30.5.0"];
     }
 }
 
@@ -115,7 +115,7 @@ class KuvaLichManifestVersionSix extends KuvaLichManifestVersionFive {
     constructor() {
         super();
         this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/LongGuns/Sobek/KuvaSobek");
-        this.minBuild = gameToBuildVersion["35.6.0"];
+        this.minBuildVersionInt = gameToBuildVersionInt["35.6.0"];
     }
 }
 
@@ -124,7 +124,7 @@ class KuvaLichManifestVersionSeven extends KuvaLichManifestVersionSix {
         super();
         this.weapons.push("/Lotus/Weapons/Grineer/KuvaLich/Melee/Ghoulsaw/KuvaGhoulSaw");
         this.weaponUpgradeValueAttenuationExponent = 1;
-        this.minBuild = gameToBuildVersion["42.0.0"];
+        this.minBuildVersionInt = gameToBuildVersionInt["42.0.0"];
     }
 }
 
@@ -159,14 +159,14 @@ class LawyerManifest implements INemesisManifest {
     convertMessageSubject = "/Lotus/Language/Kingpins/InboxSisterConvertedSubject";
     convertMessageBody = "/Lotus/Language/Kingpins/InboxSisterConvertedBody";
     convertMessageIcon = "/Lotus/Interface/Graphics/WorldStatePanel/Corpus.png";
-    minBuild = gameToBuildVersion["30.5.0"];
+    minBuildVersionInt = gameToBuildVersionInt["30.5.0"];
 }
 
 class LawyerManifestVersionTwo extends LawyerManifest {
     constructor() {
         super();
         this.weapons.push("/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxWeapon");
-        this.minBuild = gameToBuildVersion["32.2.0"];
+        this.minBuildVersionInt = gameToBuildVersionInt["32.2.0"];
     }
 }
 
@@ -174,14 +174,14 @@ class LawyerManifestVersionThree extends LawyerManifestVersionTwo {
     constructor() {
         super();
         this.weapons.push("/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEGlaxion/CrpBEGlaxion");
-        this.minBuild = gameToBuildVersion["35.6.0"];
+        this.minBuildVersionInt = gameToBuildVersionInt["35.6.0"];
     }
 }
 
 class LawyerManifestVersionFour extends LawyerManifestVersionThree {
     constructor() {
         super();
-        this.minBuild = gameToBuildVersion["37.0.0"];
+        this.minBuildVersionInt = gameToBuildVersionInt["37.0.0"];
     }
 }
 
@@ -190,7 +190,7 @@ class LawyerManifestVersionFive extends LawyerManifestVersionFour {
         super();
         this.weapons.push("/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuanta");
         this.weaponUpgradeValueAttenuationExponent = 1;
-        this.minBuild = gameToBuildVersion["42.0.0"];
+        this.minBuildVersionInt = gameToBuildVersionInt["42.0.0"];
     }
 }
 
@@ -207,7 +207,7 @@ class InfestedLichManfest implements INemesisManifest {
     convertMessageSubject = "/Lotus/Language/Kingpins/InboxBandConvertedSubject";
     convertMessageBody = "/Lotus/Language/Kingpins/InboxBandConvertedBody";
     convertMessageIcon = "/Lotus/Interface/Graphics/WorldStatePanel/Infested.png";
-    minBuild = gameToBuildVersion["38.5.0"];
+    minBuildVersionInt = gameToBuildVersionInt["38.5.0"];
 }
 
 const nemesisManifests: Record<string, INemesisManifest> = {

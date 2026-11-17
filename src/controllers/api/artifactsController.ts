@@ -1,5 +1,5 @@
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 import type { IUpgradeClient, IUpgradeFromClient } from "../../types/inventoryTypes/inventoryTypes.ts";
 import {
@@ -11,8 +11,8 @@ import {
     updateCredits
 } from "../../services/inventoryService.ts";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
-import { convertFromLegacyFingerprint, fromOid, version_compare } from "../../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { convertFromLegacyFingerprint, fromOid } from "../../helpers/inventoryHelpers.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 import { getFusionCoreTypeName } from "../../services/itemDataService.ts";
 
 export const artifactsController: RequestHandler = async (req, res) => {
@@ -36,10 +36,10 @@ export const artifactsController: RequestHandler = async (req, res) => {
     const { Upgrades } = inventory;
     const { ItemType, UpgradeFingerprint, ItemId } = Upgrade;
 
-    const buildLabel = getBuildLabel(req, account);
-    if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) >= 0) {
+    const buildVersion = getBuildVersion(req, account);
+    if (buildVersion >= gameToBuildVersionInt["18.18.0"]) {
         const useDiracForFusion =
-            version_compare(buildLabel, gameToBuildVersion["29.10.0"]) < 0 &&
+            buildVersion < gameToBuildVersionInt["29.10.0"] &&
             Upgrade.ItemType.startsWith("/Lotus/Upgrades/Mods/Railjack/");
         const safeUpgradeFingerprint = UpgradeFingerprint || '{"lvl":0}';
         const parsedUpgradeFingerprint = JSON.parse(safeUpgradeFingerprint) as { lvl: number; variant?: number };
@@ -122,7 +122,7 @@ export const artifactsController: RequestHandler = async (req, res) => {
             for (const upgrade of Consumed) {
                 // The client does not send the expected information about the mods, so we have to check if it's an Upgrade or RawUpgrade manually.
                 if (
-                    version_compare(buildLabel, gameToBuildVersion["13.2.0"]) < 0 &&
+                    buildVersion < gameToBuildVersionInt["13.2.0"] &&
                     upgrade.ItemType.includes("ModFuser") &&
                     !upgrade.ItemType.includes("Legendary")
                 ) {

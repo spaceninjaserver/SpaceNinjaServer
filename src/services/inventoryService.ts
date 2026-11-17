@@ -92,8 +92,7 @@ import {
     kubrowWeights,
     toMongoDate2,
     toOid,
-    toOid2,
-    version_compare
+    toOid2
 } from "../helpers/inventoryHelpers.ts";
 import { addQuestKey, completeQuest } from "./questService.ts";
 import { handleBundleAcquisition } from "./purchaseService.ts";
@@ -134,11 +133,12 @@ import { eEquipmentFeatures, eStatus } from "../types/equipmentTypes.ts";
 import type { ITypeCount } from "../types/commonTypes.ts";
 import type { TLoadoutDatabaseDocument } from "../models/inventoryModels/loadoutModel.ts";
 import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../constants/gameToBuildVersionInt.ts";
 import suitDefaultUpgrades from "../constants/suitDefaultUpgrades.ts";
 import kuriaMessage50 from "../../static/fixed_responses/kuriaMessages/fiftyPercent.json" with { type: "json" };
 import kuriaMessage75 from "../../static/fixed_responses/kuriaMessages/seventyFivePercent.json" with { type: "json" };
 import kuriaMessage100 from "../../static/fixed_responses/kuriaMessages/oneHundredPercent.json" with { type: "json" };
-import { BL_LATEST } from "../constants/gameVersions.ts";
+import { BV_LATEST } from "../constants/gameVersions.ts";
 import { Guild } from "../models/guildModel.ts";
 import { handleGuildGoalProgress } from "./guildService.ts";
 import { buildVersionToInt } from "../helpers/versionHelper.ts";
@@ -265,7 +265,7 @@ export const createInventory = async (
             Ships: [defaultItemReferences.ship]
         });
 
-        inventory.LibraryAvailableDailyTaskInfo = createLibraryDailyTask(BL_LATEST);
+        inventory.LibraryAvailableDailyTaskInfo = createLibraryDailyTask(BV_LATEST);
         inventory.RewardSeed = generateRewardSeed();
         inventory.DuviriInfo = {
             Seed: generateRewardSeed(),
@@ -278,8 +278,8 @@ export const createInventory = async (
             inventory.MadeStoryModeDecision = true;
             inventory.PlayedParkourTutorial = true;
             const startingGear = await addStartingGear(inventory);
-            await completeQuest(inventory, "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain", BL_LATEST);
-            await completeQuest(inventory, "/Lotus/Types/Keys/ModQuest/ModQuestKeyChain", BL_LATEST);
+            await completeQuest(inventory, "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain", BV_LATEST);
+            await completeQuest(inventory, "/Lotus/Types/Keys/ModQuest/ModQuestKeyChain", BV_LATEST);
 
             loadout.NORMAL.push({
                 s: {
@@ -319,7 +319,7 @@ export const createInventory = async (
 
 export const addStartingGear = async (
     inventory: TInventoryDatabaseDocument,
-    buildLabel: string = BL_LATEST,
+    buildVersion: number = BV_LATEST,
     startingGear?: Partial<TPartialStartingGear>
 ): Promise<IInventoryChanges> => {
     if (inventory.ReceivedStartingGear) {
@@ -339,12 +339,12 @@ export const addStartingGear = async (
     const inventoryChanges: IInventoryChanges = {};
     addEquipment(inventory, "LongGuns", LongGuns[0].ItemType, { IsNew: false }, inventoryChanges);
     addEquipment(inventory, "Pistols", Pistols[0].ItemType, { IsNew: false }, inventoryChanges);
-    if (shouldDoServerQol("tutorialGivesStanceMods", buildLabel, gameToBuildVersion["38.5.0"])) {
+    if (shouldDoServerQol("tutorialGivesStanceMods", buildVersion, gameToBuildVersionInt["38.5.0"])) {
         combineInventoryChanges(inventoryChanges, await addItem(inventory, Melee[0].ItemType)); // This respects defaultUpgrades
     } else {
         addEquipment(inventory, "Melee", Melee[0].ItemType, { IsNew: false }, inventoryChanges);
     }
-    await addPowerSuit(inventory, Suits[0].ItemType, { IsNew: false }, buildLabel, inventoryChanges);
+    await addPowerSuit(inventory, Suits[0].ItemType, { IsNew: false }, buildVersion, inventoryChanges);
     addEquipment(
         inventory,
         "DataKnives",
@@ -552,11 +552,11 @@ export const addItem = async (
     seed?: bigint,
     targetFingerprint?: string,
     exactQuantity: boolean = false,
-    buildLabel: string = BL_LATEST
+    buildVersion: number = BV_LATEST
 ): Promise<IInventoryChanges> => {
     // Bundles are technically StoreItems but a) they don't have a normal counterpart, and b) they are used in non-StoreItem contexts, e.g. email attachments.
     if (typeName in ExportBundles) {
-        return await handleBundleAcquisition(typeName, inventory, quantity, {}, buildLabel);
+        return await handleBundleAcquisition(typeName, inventory, quantity, {}, buildVersion);
     }
 
     // Strict typing
@@ -593,7 +593,7 @@ export const addItem = async (
 
             if (
                 typeName == "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg" &&
-                version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0
+                buildVersion < gameToBuildVersionInt["40.0.0"]
             ) {
                 if (quantity < 0 || quantity > 100) {
                     throw new Error(
@@ -610,8 +610,8 @@ export const addItem = async (
                 for (let i = 0; i != quantity; ++i) {
                     inventoryChanges.KubrowPetEggs.push({
                         ItemType: "/Lotus/Types/Game/KubrowPet/Eggs/KubrowEgg",
-                        ExpirationDate: toMongoDate2(2000000000000, buildLabel),
-                        ItemId: toOid2((idBase + i).toString().padStart(24, "0"), buildLabel)
+                        ExpirationDate: toMongoDate2(2000000000000, buildVersion),
+                        ItemId: toOid2((idBase + i).toString().padStart(24, "0"), buildVersion)
                     });
                 }
             }
@@ -972,7 +972,7 @@ export const addItem = async (
     }
     if (typeName in ExportKeys || typeName in supplementalKeys) {
         // Note: "/Lotus/Types/Keys/" contains some EmailItems
-        const key = getKey(typeName, buildLabel)!;
+        const key = getKey(typeName, buildVersion)!;
 
         if (key.chainStages) {
             if (quantity != 1) {
@@ -1037,7 +1037,7 @@ export const addItem = async (
                             {
                                 Features: premiumPurchase ? eEquipmentFeatures.DOUBLE_CAPACITY : undefined
                             },
-                            buildLabel
+                            buildVersion
                         )),
                         ...occupySlot(inventory, eInventorySlot.SUITS, premiumPurchase)
                     };
@@ -1193,7 +1193,7 @@ export const addItem = async (
                                     `unexpected acquisition quantity of KubrowPet: got ${quantity}, expected 1`
                                 );
                             }
-                            return addKubrowPet(inventory, typeName, undefined, premiumPurchase, {}, buildLabel);
+                            return addKubrowPet(inventory, typeName, undefined, premiumPurchase, {}, buildVersion);
                         }
                     } else if (
                         typeName.startsWith("/Lotus/Types/Game/CrewShip/CrewMember/") ||
@@ -1536,7 +1536,7 @@ export const addPowerSuit = async (
     inventory: TInventoryDatabaseDocument,
     powersuitName: string,
     defaultOverwrites?: Partial<IEquipmentDatabase>,
-    buildLabel: string = BL_LATEST,
+    buildVersion: number = BV_LATEST,
     inventoryChanges: IInventoryChanges = {}
 ): Promise<IInventoryChanges> => {
     const powersuit = getPowerSuit(powersuitName);
@@ -1552,7 +1552,7 @@ export const addPowerSuit = async (
         }
     }
     let configs: IItemConfig[] = [];
-    if (version_compare(buildLabel, gameToBuildVersion["15.0.0"]) < 0) {
+    if (buildVersion < gameToBuildVersionInt["15.0.0"]) {
         if (powersuitName in suitDefaultUpgrades) {
             configs = applyDefaultUpgrades(inventory, suitDefaultUpgrades[powersuitName], inventoryChanges);
         }
@@ -1703,11 +1703,11 @@ export const addKubrowPet = (
     details: IKubrowPetDetailsDatabase | undefined,
     premiumPurchase: boolean,
     inventoryChanges: IInventoryChanges,
-    buildLabel: string,
+    buildVersion: number,
     inheritedTraits?: Pick<IKubrowGenetics, "DominantTraits" | "RecessiveTraits"> & { ModularParts?: string[] }
 ): IInventoryChanges => {
-    const isPreU28 = version_compare(buildLabel, gameToBuildVersion["28.0.0"]) < 0;
-    const isPreU26 = version_compare(buildLabel, gameToBuildVersion["26.0.0"]) < 0;
+    const isPreU28 = buildVersion < gameToBuildVersionInt["28.0.0"];
+    const isPreU26 = buildVersion < gameToBuildVersionInt["26.0.0"];
     const questCompleted = inventory.QuestKeys.some(x => x.ItemType.endsWith("KubrowQuestKeyChain") && x.Completed);
 
     combineInventoryChanges(
@@ -1995,14 +1995,14 @@ type TStandingSource = (typeof eStandingSource)[keyof typeof eStandingSource];
 
 export const addStanding = async (
     inventory: TInventoryDatabaseDocument,
-    buildLabel: string,
+    buildVersion: number,
     syndicateTag: string,
     gainedStanding: number,
     affiliationMods: IAffiliationMods[] = [],
     source: TStandingSource = eStandingSource.Misc
 ): Promise<void> => {
     let syndicate = inventory.Affiliations.find(x => x.Tag == syndicateTag);
-    const syndicateMeta = (await getSyndicate(syndicateTag, buildLabel))!;
+    const syndicateMeta = (await getSyndicate(syndicateTag, buildVersion))!;
 
     if (!syndicate) {
         syndicate =
@@ -2035,7 +2035,7 @@ export const addStanding = async (
             for (const [tag, factor] of Object.entries(syndicateMeta.alignments)) {
                 await addStanding(
                     inventory,
-                    buildLabel,
+                    buildVersion,
                     tag,
                     gainedStanding * factor,
                     affiliationMods,
@@ -2281,7 +2281,7 @@ const addCrewShip = async (
             const questChanges = await completeQuest(
                 inventory,
                 "/Lotus/Types/Keys/RailJackBuildQuest/RailjackBuildQuestKeyChain",
-                BL_LATEST,
+                BV_LATEST,
                 false
             );
             if (questChanges) {
@@ -2419,7 +2419,7 @@ export const addEmailItem = async (
     >,
     typeName: string,
     inventoryChanges: IInventoryChanges = {},
-    buildLabel: string = BL_LATEST
+    buildVersion: number = BV_LATEST
 ): Promise<IInventoryChanges> => {
     const meta = ExportEmailItems[typeName];
     const emailItem = inventory.EmailItems.find(x => x.ItemType == typeName);
@@ -2429,7 +2429,7 @@ export const addEmailItem = async (
             msg.cinematic == "/Lotus/Levels/1999/PlayerHomeBalconyCinematics.level" ||
             msg.cinematic == "/Lotus/Levels/EntratiLab/TriadRomanceCinematics.level"
         ) {
-            if (version_compare(buildLabel, gameToBuildVersion["41.0.0"]) < 0) {
+            if (buildVersion < gameToBuildVersionInt["41.0.0"]) {
                 msg.customData = JSON.stringify({
                     Tag: msg.customData + "KissCin",
                     CinLoadout: {
@@ -2489,7 +2489,7 @@ export const applyClientEquipmentUpdates = <K extends TEquipmentKey>(
     inventory: Pick<TInventoryDatabaseDocument, K | "XPInfo" | "infiniteRevives">,
     gearArray: IEquipmentClient[],
     categoryName: K,
-    buildLabel: string
+    buildVersion: number
 ): void => {
     const category = inventory[categoryName];
 
@@ -2545,7 +2545,7 @@ export const applyClientEquipmentUpdates = <K extends TEquipmentKey>(
             if (inventory.infiniteRevives) {
                 return;
             }
-            if (version_compare(buildLabel, gameToBuildVersion["10.3.3"]) >= 0) {
+            if (buildVersion >= gameToBuildVersionInt["10.3.3"]) {
                 if (ExtraRemaining > 0) {
                     throw new Error(
                         `unexpected value for ExtraRemaining (${ExtraRemaining}); expected a delta from this client`
@@ -3081,9 +3081,9 @@ export const updateSyndicate = (
 export const addKeyChainItems = async (
     inventory: TInventoryDatabaseDocument,
     keyChainData: IKeyChainRequest,
-    buildLabel: string
+    buildVersion: number
 ): Promise<IInventoryChanges> => {
-    const keyChainItems = getKeyChainItems(keyChainData, buildLabel);
+    const keyChainItems = getKeyChainItems(keyChainData, buildVersion);
 
     logger.debug(
         `adding key chain items ${keyChainItems.join()} for ${keyChainData.KeyChain} at stage ${keyChainData.ChainStage}`
@@ -3101,14 +3101,14 @@ export const addKeyChainItems = async (
     return inventoryChanges;
 };
 
-export const createLibraryDailyTask = (buildLabel: string): ILibraryDailyTaskInfo => {
+export const createLibraryDailyTask = (buildVersion: number): ILibraryDailyTaskInfo => {
     const enemyTypes = getRandomElement(libraryDailyTasks)!;
     const enemyAvatar = ExportEnemies.avatars[enemyTypes[0]];
     const scansRequired = getRandomInt(2, 4);
     const rewardQuantityMultiplier = shouldDoServerQol(
         "doubleDailySynthesisEndoReward",
-        buildLabel,
-        gameToBuildVersion["22.13.4"] // change actually made in 22.13.3
+        buildVersion,
+        gameToBuildVersionInt["22.13.4"] // change actually made in 22.13.3
     )
         ? 2.5
         : 1.25;
@@ -3147,16 +3147,13 @@ export const setupKahlSyndicate = (inventory: TInventoryDatabaseDocument): void 
     }
 };
 
-export const cleanupInventory = (inventory: TInventoryDatabaseDocument, buildLabel: string): void => {
+export const cleanupInventory = (inventory: TInventoryDatabaseDocument, buildVersion: number): void => {
     if (ensureOperatorSuitsRemasterData(inventory)) {
         logger.debug(`added missing Operator suits for Operator remaster`);
     }
 
     // Retroactive fix for accounts that missed the unlock triggers for The Archwing and Stolen Dreams in pre-Specters of the Rail builds.
-    if (
-        version_compare(buildLabel, gameToBuildVersion["18.16.0"]) < 0 &&
-        version_compare(buildLabel, gameToBuildVersion["15.0.0"]) >= 0
-    ) {
+    if (buildVersion < gameToBuildVersionInt["18.16.0"] && buildVersion >= gameToBuildVersionInt["15.0.0"]) {
         const masteryRank = getMasteryRank(inventory);
         if (masteryRank >= 2) {
             if (!inventory.QuestKeys.some(q => q.ItemType.endsWith("ArchwingQuestKeyChain"))) {
@@ -3165,7 +3162,7 @@ export const cleanupInventory = (inventory: TInventoryDatabaseDocument, buildLab
             }
         }
 
-        if (masteryRank >= 3 && version_compare(buildLabel, gameToBuildVersion["15.13.0"]) >= 0) {
+        if (masteryRank >= 3 && buildVersion >= gameToBuildVersionInt["15.13.0"]) {
             if (!inventory.QuestKeys.some(q => q.ItemType.endsWith("SpyQuestKeyChain"))) {
                 addQuestKey(inventory, { ItemType: "/Lotus/Types/Keys/SpyQuestKeyChain/SpyQuestKeyChain" });
                 logger.debug(`adding missing SpyQuestKeyChain`);
@@ -3868,12 +3865,12 @@ export const dispatchPendingPremiumCredits = async (inventory: TInventoryDatabas
 export const processGoalProgressUpdates = async (
     inventory: Pick<TInventoryDatabaseDocument, "PersonalGoalProgress" | "GuildId">,
     account: TAccountDocument,
-    buildLabel: string,
+    buildVersion: number,
     goalProgressUpdates: IGoalsProgress[],
     currentNode?: string,
     isStealPath: boolean = false
 ): Promise<void> => {
-    const worldState = getWorldState(buildLabel, false, false);
+    const worldState = getWorldState(buildVersion, false, false);
     await populateConstructionEvents(worldState);
     for (const uploadProgress of goalProgressUpdates) {
         const goal = worldState.Goals.find(x => fromOid(x._id) == fromOid(uploadProgress._id));

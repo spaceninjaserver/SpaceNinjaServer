@@ -1,6 +1,6 @@
 import { Alliance, AllianceMember, Guild, GuildMember } from "../../models/guildModel.ts";
 import { getAllianceClient } from "../../services/guildService.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 export const confirmAllianceInvitationController: RequestHandler = async (req, res) => {
@@ -29,8 +29,8 @@ export const confirmAllianceInvitationController: RequestHandler = async (req, r
 
     // Give client the new alliance data which uses "AllianceId" instead of "_id" in this response
     const alliance = (await Alliance.findById(allianceMember.allianceId))!;
-    const buildLabel = getBuildLabel(req, account);
-    const { _id, ...rest } = await getAllianceClient(alliance, guild, buildLabel);
+    const buildVersion = getBuildVersion(req, account);
+    const { _id, ...rest } = await getAllianceClient(alliance, guild, buildVersion);
     res.json({
         AllianceId: _id,
         ...rest

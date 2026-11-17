@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
 import { getDojoClient, getGuildForRequest } from "../../services/guildService.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { eDojoRequestStatus } from "../../types/guildTypes.ts";
 
 export const setDojoComponentMessageController: RequestHandler = async (req, res) => {
@@ -15,8 +15,8 @@ export const setDojoComponentMessageController: RequestHandler = async (req, res
         component.Message = payload.Message;
     }
     await guild.save();
-    const buildLabel = getBuildLabel(req, account);
-    res.json(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, component._id, buildLabel));
+    const buildVersion = getBuildVersion(req, account);
+    res.json(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, component._id, buildVersion));
 };
 
 type SetDojoComponentMessageRequest = { Name: string } | { Message: string };

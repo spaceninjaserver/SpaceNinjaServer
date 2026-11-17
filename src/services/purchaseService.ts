@@ -47,7 +47,7 @@ import { fromMongoDate, fromOid, toMongoDate } from "../helpers/inventoryHelpers
 import { Guild } from "../models/guildModel.ts";
 import { handleGuildGoalProgress } from "./guildService.ts";
 import { Types } from "mongoose";
-import { BL_LATEST } from "../constants/gameVersions.ts";
+import { BV_LATEST } from "../constants/gameVersions.ts";
 import { buildVersionToInt } from "../helpers/versionHelper.ts";
 
 const getStoreItemCategory = (storeItem: string): string => {
@@ -175,7 +175,7 @@ export const handlePurchase = async (
                     "/Lotus/Types/Game/VendorManifests/Events/DuviriMurmurInvasionVendorManifest"
             ) {
                 const guild = await Guild.findById(inventory.GuildId, "GoalProgress Tier VaultDecoRecipes");
-                const goal = getWorldState(purchaseRequest.buildLabel).Goals.find(x => x.Tag == "DuviriMurmurEvent");
+                const goal = getWorldState(buildVersion).Goals.find(x => x.Tag == "DuviriMurmurEvent");
                 if (guild && goal) {
                     await handleGuildGoalProgress(guild, {
                         Count: offer.ItemPrices[0].ItemCount * purchaseRequest.PurchaseParams.Quantity,
@@ -230,7 +230,7 @@ export const handlePurchase = async (
         false,
         purchaseRequest.PurchaseParams.UsePremium,
         seed,
-        purchaseRequest.buildLabel
+        buildVersion
     );
     combineInventoryChanges(purchaseResponse.InventoryChanges, prePurchaseInventoryChanges);
 
@@ -244,12 +244,12 @@ export const handlePurchase = async (
                     purchaseRequest.PurchaseParams.Quantity,
                     purchaseRequest.PurchaseParams.Durability,
                     purchaseRequest.PurchaseParams.UsePremium,
-                    purchaseRequest.buildLabel
+                    buildVersion
                 );
             }
             break;
         case ePurchaseSource.VoidTrader: {
-            const worldState = getWorldState(purchaseRequest.buildLabel);
+            const worldState = getWorldState(buildVersion);
             const voidTrader = worldState.VoidTraders.find(
                 x => fromOid(x._id) == purchaseRequest.PurchaseParams.SourceId!
             );
@@ -303,7 +303,7 @@ export const handlePurchase = async (
                         }
                     ];
                 } else if (!inventory.dontSubtractPurchaseStandingCost) {
-                    const syndicate = await getSyndicate(syndicateTag, purchaseRequest.buildLabel);
+                    const syndicate = await getSyndicate(syndicateTag, buildVersion);
                     if (syndicate) {
                         const favour = syndicate.favours.find(
                             x => x.storeItem == purchaseRequest.PurchaseParams.StoreItem
@@ -413,7 +413,7 @@ export const handlePurchase = async (
             }
             break;
         case ePurchaseSource.PrimeVaultTrader: {
-            const worldState = getWorldState(purchaseRequest.buildLabel);
+            const worldState = getWorldState(buildVersion);
             if (purchaseRequest.PurchaseParams.SourceId! != worldState.PrimeVaultTraders[0]._id.$oid) {
                 throw new Error("invalid request source");
             }
@@ -498,9 +498,9 @@ export const handleBundleAcquisition = async (
     inventory: TInventoryDatabaseDocument,
     quantity: number = 1,
     inventoryChanges: IInventoryChanges = {},
-    buildLabel: string = BL_LATEST
+    buildVersion: number = BV_LATEST
 ): Promise<IInventoryChanges> => {
-    const bundle = getBundle(storeItemName, buildLabel)!;
+    const bundle = getBundle(storeItemName, buildVersion)!;
     logger.debug("acquiring bundle", bundle);
     if (bundle.oneTimePurchasable) {
         handleOneTimePurchasable(inventory, storeItemName, inventoryChanges);
@@ -517,7 +517,7 @@ export const handleBundleAcquisition = async (
                     true,
                     true,
                     undefined,
-                    buildLabel
+                    buildVersion
                 )
             ).InventoryChanges
         );
@@ -533,7 +533,7 @@ export const handleStoreItemAcquisition = async (
     ignorePurchaseQuantity: boolean = false,
     premiumPurchase: boolean = true,
     seed?: bigint,
-    buildLabel: string = BL_LATEST
+    buildVersion: number = BV_LATEST
 ): Promise<IPurchaseResponse> => {
     let purchaseResponse: IPurchaseResponse = {
         InventoryChanges: {}
@@ -545,7 +545,7 @@ export const handleStoreItemAcquisition = async (
             inventory,
             quantity,
             purchaseResponse.InventoryChanges,
-            buildLabel
+            buildVersion
         );
     } else {
         const storeCategory = getStoreItemCategory(storeItemName);
@@ -571,7 +571,7 @@ export const handleStoreItemAcquisition = async (
                         seed,
                         undefined,
                         true,
-                        buildLabel
+                        buildVersion
                     )
                 };
                 break;
@@ -584,7 +584,7 @@ export const handleStoreItemAcquisition = async (
                     ignorePurchaseQuantity,
                     premiumPurchase,
                     seed,
-                    buildLabel
+                    buildVersion
                 );
                 break;
             case "Boosters":
@@ -637,9 +637,9 @@ const handleBoosterPackPurchase = async (
     typeName: string,
     inventory: TInventoryDatabaseDocument,
     quantity: number,
-    buildLabel: string = BL_LATEST
+    buildVersion: number = BV_LATEST
 ): Promise<IPurchaseResponse> => {
-    const pack = await getBoosterPack(typeName, buildLabel);
+    const pack = await getBoosterPack(typeName, buildVersion);
     if (!pack) {
         throw new Error(`unknown booster pack: ${typeName}`);
     }
@@ -762,7 +762,7 @@ const handleTypesPurchase = async (
     ignorePurchaseQuantity: boolean,
     premiumPurchase: boolean = true,
     seed?: bigint,
-    buildLabel: string = BL_LATEST
+    buildVersion: number = BV_LATEST
 ): Promise<IPurchaseResponse> => {
     const typeCategory = getStoreItemTypesCategory(typesName);
     logger.debug(`type category ${typeCategory}`);
@@ -777,11 +777,11 @@ const handleTypesPurchase = async (
                     seed,
                     undefined,
                     true,
-                    buildLabel
+                    buildVersion
                 )
             };
         case "BoosterPacks":
-            return handleBoosterPackPurchase(typesName, inventory, quantity, buildLabel);
+            return handleBoosterPackPurchase(typesName, inventory, quantity, buildVersion);
         case "SlotItems":
             return handleSlotPurchase(typesName, inventory, quantity, ignorePurchaseQuantity);
         case "CreditBundles":

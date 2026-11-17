@@ -1,4 +1,4 @@
-import { BL_LATEST, BV_LATEST } from "../../constants/gameVersions.ts";
+import { BV_LATEST } from "../../constants/gameVersions.ts";
 import { addString } from "../../helpers/stringHelpers.ts";
 import { addChallenges, ensureUserHasSteelPathRewards, getInventory } from "../../services/inventoryService.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
@@ -28,7 +28,7 @@ export const completeAllMissionsController: RequestHandler = async (req, res) =>
         if (mission.Completes == 0) {
             mission.Completes++;
             if (node.missionReward) {
-                await addFixedLevelRewards(node.missionReward, MissionRewards, BL_LATEST);
+                await addFixedLevelRewards(node.missionReward, MissionRewards, BV_LATEST);
             }
         }
         if (includeSteelPath) {

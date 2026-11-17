@@ -13,9 +13,8 @@ import {
 } from "warframe-public-export-plus";
 import { fromStoreItem, getBoosterPack, toStoreItem } from "./itemDataService.ts";
 import { logger } from "../utils/logger.ts";
-import { version_compare } from "../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
-import { wikiDateToBuildVersion } from "../helpers/versionHelper.ts";
+import gameToBuildVersionInt from "../constants/gameToBuildVersionInt.ts";
+import { wikiDateToBuildVersionInt } from "../helpers/versionHelper.ts";
 
 export interface ILoginRewardsReponse {
     DailyTributeInfo: {
@@ -68,15 +67,15 @@ export const isLoginRewardAChoice = (account: TAccountDocument): boolean => {
 export const getRandomLoginRewards = async (
     account: TAccountDocument,
     inventory: TInventoryDatabaseDocument,
-    buildLabel: string
+    buildVersion: number
 ): Promise<ILoginReward[]> => {
     const accountSeed = parseInt(account._id.toString().substring(16), 16);
     const rng = new SRng(mixSeeds(accountSeed, account.LoginDays));
     const pick_a_door = rng.randomFloat() < 0.25;
-    const rewards = [await getRandomLoginReward(rng, account.LoginDays, inventory, buildLabel)];
+    const rewards = [await getRandomLoginReward(rng, account.LoginDays, inventory, buildVersion)];
     if (pick_a_door) {
         do {
-            const reward = await getRandomLoginReward(rng, account.LoginDays, inventory, buildLabel);
+            const reward = await getRandomLoginReward(rng, account.LoginDays, inventory, buildVersion);
             if (!rewards.find(x => x.StoreItemType == reward.StoreItemType)) {
                 rewards.push(reward);
             }
@@ -89,10 +88,10 @@ const getRandomLoginReward = async (
     rng: SRng,
     day: number,
     inventory: TInventoryDatabaseDocument,
-    buildLabel: string
+    buildVersion: number
 ): Promise<ILoginReward> => {
     const filteredPool = randomRewards.filter(r => {
-        return !r.minBuildLabel || version_compare(buildLabel, r.minBuildLabel) >= 0;
+        return !r.minBuildVersionInt || buildVersion >= r.minBuildVersionInt;
     });
     const resultPool: (ILoginReward & { probability: number })[] = [];
     const rarityCounts: Record<TRarity, number> = { COMMON: 0, UNCOMMON: 0, RARE: 0, LEGENDARY: 0 };
@@ -121,16 +120,14 @@ const getRandomLoginReward = async (
                 !masteredItems.has(uniqueName) &&
                 data.introducedAt
             ) {
-                const introducedAtBuildVersion = wikiDateToBuildVersion(data.introducedAt);
-                if (version_compare(buildLabel, introducedAtBuildVersion) >= 0) {
+                if (buildVersion >= wikiDateToBuildVersionInt(data.introducedAt)) {
                     unmasteredItems.add(uniqueName);
                 }
             }
         }
         for (const [uniqueName, data] of Object.entries(ExportWarframes)) {
             if (data.variantType == "VT_NORMAL" && !masteredItems.has(uniqueName) && data.introducedAt) {
-                const introducedAtBuildVersion = wikiDateToBuildVersion(data.introducedAt);
-                if (version_compare(buildLabel, introducedAtBuildVersion) >= 0) {
+                if (buildVersion >= wikiDateToBuildVersionInt(data.introducedAt)) {
                     unmasteredItems.add(uniqueName);
                 }
             }
@@ -143,15 +140,15 @@ const getRandomLoginReward = async (
         }
         if (eligibleRecipes.length == 0) {
             // This account has all applicable warframes and weapons already mastered (filthy cheater), need a different reward.
-            return await getRandomLoginReward(rng, day, inventory, buildLabel);
+            return await getRandomLoginReward(rng, day, inventory, buildVersion);
         }
         storeItemType = toStoreItem(rng.randomElement(eligibleRecipes)!);
     } else if (reward.StoreItemType == "/Lotus/StoreItems/Types/BoosterPacks/LoginRewardRandomProjection") {
         const boosterPackType =
-            version_compare(buildLabel, gameToBuildVersion["18.16.0"]) >= 0
+            buildVersion >= gameToBuildVersionInt["18.16.0"]
                 ? "/Lotus/Types/BoosterPacks/LoginRewardRandomProjection"
                 : "/Lotus/Types/BoosterPacks/RandomKey";
-        const boosterPack = await getBoosterPack(boosterPackType, buildLabel);
+        const boosterPack = await getBoosterPack(boosterPackType, buildVersion);
         storeItemType = toStoreItem(rng.randomElement(boosterPack!.components)!.Item);
     }
     return {
@@ -231,7 +228,7 @@ const randomRewardsWeights: Record<TRarity, number> = {
     LEGENDARY: 0
 };
 
-const randomRewards: (ILoginReward & { Rarity: TRarity; minBuildLabel?: string })[] = [
+const randomRewards: (ILoginReward & { Rarity: TRarity; minBuildVersionInt?: number })[] = [
     {
         RewardType: "RT_RESOURCE",
         StoreItemType: "/Lotus/StoreItems/Types/Items/MiscItems/OxiumAlloy",
@@ -239,7 +236,7 @@ const randomRewards: (ILoginReward & { Rarity: TRarity; minBuildLabel?: string }
         ScalingMultiplier: 1,
         Rarity: "COMMON",
         Transmission: "/Lotus/Sounds/Dialog/DailyTribute/Ordis/DDayTribOrdis",
-        minBuildLabel: gameToBuildVersion["12.1.2"] // Should be U11.9
+        minBuildVersionInt: gameToBuildVersionInt["12.1.2"] // Should be U11.9
     },
     {
         RewardType: "RT_RESOURCE",
@@ -256,7 +253,7 @@ const randomRewards: (ILoginReward & { Rarity: TRarity; minBuildLabel?: string }
         ScalingMultiplier: 1,
         Rarity: "COMMON",
         Transmission: "/Lotus/Sounds/Dialog/DailyTribute/Darvo/DDayTribDarvo",
-        minBuildLabel: gameToBuildVersion["8.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["8.0.0"]
     },
     {
         RewardType: "RT_RESOURCE",
@@ -273,7 +270,7 @@ const randomRewards: (ILoginReward & { Rarity: TRarity; minBuildLabel?: string }
         ScalingMultiplier: 1,
         Rarity: "COMMON",
         Transmission: "/Lotus/Sounds/Dialog/DailyTribute/Darvo/DDayTribDarvo",
-        minBuildLabel: gameToBuildVersion["8.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["8.0.0"]
     },
     {
         RewardType: "RT_RESOURCE",
@@ -290,7 +287,7 @@ const randomRewards: (ILoginReward & { Rarity: TRarity; minBuildLabel?: string }
         ScalingMultiplier: 1,
         Rarity: "COMMON",
         Transmission: "/Lotus/Sounds/Dialog/DailyTribute/Darvo/DDayTribDarvo",
-        minBuildLabel: gameToBuildVersion["8.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["8.0.0"]
     },
     {
         RewardType: "RT_RESOURCE",
@@ -315,7 +312,7 @@ const randomRewards: (ILoginReward & { Rarity: TRarity; minBuildLabel?: string }
         ScalingMultiplier: 1,
         Rarity: "COMMON",
         Transmission: "/Lotus/Sounds/Dialog/DailyTribute/Darvo/DDayTribDarvo",
-        minBuildLabel: gameToBuildVersion["15.0.0"] // Should be U14.5
+        minBuildVersionInt: gameToBuildVersionInt["15.0.0"] // Should be U14.5
     },
     {
         RewardType: "RT_RESOURCE",
@@ -324,7 +321,7 @@ const randomRewards: (ILoginReward & { Rarity: TRarity; minBuildLabel?: string }
         ScalingMultiplier: 1,
         Rarity: "COMMON",
         Transmission: "/Lotus/Sounds/Dialog/DailyTribute/Darvo/DDayTribDarvo",
-        minBuildLabel: gameToBuildVersion["15.14.1"] // Should be U15.7.2
+        minBuildVersionInt: gameToBuildVersionInt["15.14.1"] // Should be U15.7.2
     },
     {
         RewardType: "RT_CREDITS",
@@ -361,7 +358,7 @@ const randomRewards: (ILoginReward & { Rarity: TRarity; minBuildLabel?: string }
         Duration: 3,
         Rarity: "COMMON",
         Transmission: "/Lotus/Sounds/Dialog/DailyTribute/Simaris/DDayTribSmrs",
-        minBuildLabel: gameToBuildVersion["11.1.3"] // Wiki says its in game since Vanilla
+        minBuildVersionInt: gameToBuildVersionInt["11.1.3"] // Wiki says its in game since Vanilla
     },
     {
         RewardType: "RT_BOOSTER",
@@ -371,7 +368,7 @@ const randomRewards: (ILoginReward & { Rarity: TRarity; minBuildLabel?: string }
         Duration: 3,
         Rarity: "COMMON",
         Transmission: "/Lotus/Sounds/Dialog/DailyTribute/Simaris/DDayTribSmrs",
-        minBuildLabel: gameToBuildVersion["11.1.3"] // Wiki says its in game since Vanilla
+        minBuildVersionInt: gameToBuildVersionInt["11.1.3"] // Wiki says its in game since Vanilla
     },
     {
         RewardType: "RT_STORE_ITEM",
@@ -380,7 +377,7 @@ const randomRewards: (ILoginReward & { Rarity: TRarity; minBuildLabel?: string }
         ScalingMultiplier: 1,
         Rarity: "COMMON",
         Transmission: "/Lotus/Sounds/Dialog/DailyTribute/Maroo/DDayTribMaroo",
-        minBuildLabel: gameToBuildVersion["18.18.0"]
+        minBuildVersionInt: gameToBuildVersionInt["18.18.0"]
     },
     {
         RewardType: "RT_RECIPE",
@@ -408,7 +405,7 @@ const randomRewards: (ILoginReward & { Rarity: TRarity; minBuildLabel?: string }
     }
 ];
 
-export const legacyMilestones: (ILoginReward & { minBuildLabel?: string })[] = [
+export const legacyMilestones: (ILoginReward & { minBuildVersionInt?: number })[] = [
     {
         RewardType: "RT_STORE_ITEM",
         Icon: "",
@@ -462,7 +459,7 @@ export const legacyMilestones: (ILoginReward & { minBuildLabel?: string })[] = [
         ScalingMultiplier: 1,
         Duration: 0,
         Transmission: "",
-        minBuildLabel: gameToBuildVersion["18.16.0"]
+        minBuildVersionInt: gameToBuildVersionInt["18.16.0"]
     },
     {
         RewardType: "RT_STORE_ITEM",
@@ -499,7 +496,7 @@ export const legacyMilestones: (ILoginReward & { minBuildLabel?: string })[] = [
         ScalingMultiplier: 1,
         Duration: 0,
         Transmission: "",
-        minBuildLabel: gameToBuildVersion["18.16.0"]
+        minBuildVersionInt: gameToBuildVersionInt["18.16.0"]
     },
     {
         RewardType: "RT_STORE_ITEM",
@@ -518,7 +515,7 @@ export const legacyMilestones: (ILoginReward & { minBuildLabel?: string })[] = [
         ScalingMultiplier: 1,
         Duration: 0,
         Transmission: "",
-        minBuildLabel: gameToBuildVersion["21.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["21.0.0"]
     },
     {
         RewardType: "RT_STORE_ITEM",
@@ -528,7 +525,7 @@ export const legacyMilestones: (ILoginReward & { minBuildLabel?: string })[] = [
         ScalingMultiplier: 1,
         Duration: 0,
         Transmission: "",
-        minBuildLabel: gameToBuildVersion["22.0.0"]
+        minBuildVersionInt: gameToBuildVersionInt["22.0.0"]
     },
     {
         RewardType: "RT_STORE_ITEM",
@@ -538,7 +535,7 @@ export const legacyMilestones: (ILoginReward & { minBuildLabel?: string })[] = [
         ScalingMultiplier: 1,
         Duration: 0,
         Transmission: "",
-        minBuildLabel: gameToBuildVersion["22.2.4"]
+        minBuildVersionInt: gameToBuildVersionInt["22.2.4"]
     },
     {
         RewardType: "RT_STORE_ITEM",
@@ -548,7 +545,7 @@ export const legacyMilestones: (ILoginReward & { minBuildLabel?: string })[] = [
         ScalingMultiplier: 1,
         Duration: 0,
         Transmission: "",
-        minBuildLabel: gameToBuildVersion["22.6.0.1"]
+        minBuildVersionInt: gameToBuildVersionInt["22.6.0.1"]
     },
     {
         RewardType: "RT_STORE_ITEM",
@@ -558,7 +555,7 @@ export const legacyMilestones: (ILoginReward & { minBuildLabel?: string })[] = [
         ScalingMultiplier: 1,
         Duration: 0,
         Transmission: "",
-        minBuildLabel: gameToBuildVersion["22.10.1"]
+        minBuildVersionInt: gameToBuildVersionInt["22.10.1"]
     },
     {
         RewardType: "RT_STORE_ITEM",
@@ -568,7 +565,7 @@ export const legacyMilestones: (ILoginReward & { minBuildLabel?: string })[] = [
         ScalingMultiplier: 1,
         Duration: 0,
         Transmission: "",
-        minBuildLabel: gameToBuildVersion["22.16.0"]
+        minBuildVersionInt: gameToBuildVersionInt["22.16.0"]
     },
     {
         RewardType: "RT_STORE_ITEM",
@@ -587,7 +584,7 @@ export const legacyMilestones: (ILoginReward & { minBuildLabel?: string })[] = [
         ScalingMultiplier: 1,
         Duration: 0,
         Transmission: "",
-        minBuildLabel: gameToBuildVersion["23.2.0"]
+        minBuildVersionInt: gameToBuildVersionInt["23.2.0"]
     },
     {
         RewardType: "RT_STORE_ITEM",
@@ -597,6 +594,6 @@ export const legacyMilestones: (ILoginReward & { minBuildLabel?: string })[] = [
         ScalingMultiplier: 1,
         Duration: 0,
         Transmission: "",
-        minBuildLabel: gameToBuildVersion["23.9.1"]
+        minBuildVersionInt: gameToBuildVersionInt["23.9.1"]
     }
 ];

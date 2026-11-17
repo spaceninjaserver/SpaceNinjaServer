@@ -1,4 +1,4 @@
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { logger } from "../../utils/logger.ts";
 import type { RequestHandler } from "express";
@@ -16,11 +16,11 @@ import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import { Types } from "mongoose";
 import type { ISpectreLoadout } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { eInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { fromOid, toOid, U5ToModernRecipes, version_compare } from "../../helpers/inventoryHelpers.ts";
+import { fromOid, toOid, U5ToModernRecipes } from "../../helpers/inventoryHelpers.ts";
 import { ExportWeapons } from "warframe-public-export-plus";
 import { getRandomElement } from "../../services/rngService.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 
 interface IStartRecipeRequest {
     RecipeName: string;
@@ -32,15 +32,15 @@ export const startRecipeController: RequestHandler = async (req, res) => {
     logger.debug("StartRecipe Request", { startRecipeRequest });
 
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
 
     let recipeName = startRecipeRequest.RecipeName;
     if (req.query.recipeName) recipeName = String(req.query.recipeName); // U8
-    if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) < 0) {
+    if (buildVersion < gameToBuildVersionInt["7.3.0"]) {
         const modernItemType = U5ToModernRecipes[recipeName];
         if (modernItemType) recipeName = modernItemType;
     }
-    const recipe = getRecipe(recipeName, buildLabel);
+    const recipe = getRecipe(recipeName, buildVersion);
 
     if (!recipe) {
         throw new Error(`unknown recipe ${recipeName}`);
@@ -125,7 +125,7 @@ export const startRecipeController: RequestHandler = async (req, res) => {
             undefined,
             false,
             {},
-            buildLabel,
+            buildVersion,
             inheritedTraits
         );
         pr.KubrowPet = new Types.ObjectId(fromOid(inventoryChanges.KubrowPets![0].ItemId));

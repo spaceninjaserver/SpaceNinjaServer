@@ -2,7 +2,7 @@ import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { Alliance, AllianceMember, Guild, GuildMember } from "../../models/guildModel.ts";
 import { getAllianceClient } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { broadcastGuildUpdate } from "../../services/wsService.ts";
 import { eGuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
@@ -46,8 +46,8 @@ export const createAllianceController: RequestHandler = async (req, res) => {
                 eGuildPermission.Tactician
         })
     ]);
-    const buildLabel = getBuildLabel(req, account);
-    res.json(await getAllianceClient(alliance, guild, buildLabel));
+    const buildVersion = getBuildVersion(req, account);
+    res.json(await getAllianceClient(alliance, guild, buildVersion));
     broadcastGuildUpdate(req, guild._id.toString());
 };
 

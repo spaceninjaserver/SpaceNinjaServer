@@ -12,7 +12,7 @@ import {
     setDojoRoomLogFunded
 } from "../../services/guildService.ts";
 import { addMiscItems, getInventory2, updateCredits } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { eDojoRequestStatus, type IDojoContributable, type IGuildMemberDatabase } from "../../types/guildTypes.ts";
 import type { IMiscItem } from "../../types/inventoryTypes/inventoryTypes.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
@@ -42,7 +42,7 @@ interface IContributeToDojoComponentRequest {
 
 export const contributeToDojoComponentController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const inventory = await getInventory2(
         account._id,
         "LevelKeys",
@@ -80,7 +80,7 @@ export const contributeToDojoComponentController: RequestHandler = async (req, r
             throw new Error("attempt to contribute to non-existent vault recipe?!");
         }
 
-        const recipe = getRecipe(cRecipe.RecipeType, buildLabel)!;
+        const recipe = getRecipe(cRecipe.RecipeType, buildVersion)!;
         const meta: IDojoBuild = {
             name: "",
             description: "",
@@ -114,8 +114,8 @@ export const contributeToDojoComponentController: RequestHandler = async (req, r
 
     await Promise.all([guild.save(), inventory.save(), guildMember.save(), alliance?.save()]);
     res.json({
-        ...(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, request.ComponentId, buildLabel)),
-        ...(alliance && { AllianceVault: await getAllianceVault(alliance, buildLabel) }),
+        ...(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, request.ComponentId, buildVersion)),
+        ...(alliance && { AllianceVault: await getAllianceVault(alliance, buildVersion) }),
         InventoryChanges: inventoryChanges
     });
 };

@@ -7,8 +7,8 @@ import { getInventory } from "../../services/inventoryService.ts";
 import { sendWsBroadcastTo } from "../../services/wsService.ts";
 import { toStoreItem } from "../../services/itemDataService.ts";
 import { ExportBundles } from "warframe-public-export-plus";
-import { version_compare } from "../../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { buildVersionToInt } from "../../helpers/versionHelper.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 import { logger } from "../../utils/logger.ts";
 
 export const purchasePostController: RequestHandler = async (req, res) => {
@@ -62,14 +62,15 @@ export const purchaseGetController: RequestHandler = async (req, res) => {
     const inventory = await getInventory(accountId, undefined);
     const response = await handlePurchase(purchaseRequest, inventory);
     await inventory.save();
+    const buildVersion = buildVersionToInt(purchaseRequest.buildLabel);
     if (response.Body) {
         let body = response.Body.replace(/\/StoreItems/g, "");
-        if (version_compare(purchaseRequest.buildLabel, gameToBuildVersion["8.3.0"]) <= 0) {
+        if (buildVersion <= gameToBuildVersionInt["8.3.0"]) {
             body = body.replace(/lvl=\d+;/g, "");
         }
         res.send(body);
     } else {
-        if (version_compare(purchaseRequest.buildLabel, gameToBuildVersion["8.0.0"]) > 0) {
+        if (buildVersion > gameToBuildVersionInt["8.0.0"]) {
             res.send(String(req.query.productName));
         } else {
             res.json(1);

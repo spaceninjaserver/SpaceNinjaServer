@@ -1,22 +1,21 @@
 import type { RequestHandler } from "express";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { getInventory2, addMiscItems, addEquipment, occupySlot } from "../../services/inventoryService.ts";
 import type { IMiscItem, TFocusPolarity, TEquipmentKey } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { eInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { logger } from "../../utils/logger.ts";
 import { ExportFocusUpgrades } from "warframe-public-export-plus";
 import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
-import { version_compare } from "../../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 
 export const focusController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
 
     let focusVersion = 3;
-    if (version_compare(buildLabel, gameToBuildVersion["31.5.0"]) < 0) {
+    if (buildVersion < gameToBuildVersionInt["31.5.0"]) {
         focusVersion = 2;
-        if (version_compare(buildLabel, gameToBuildVersion["22.0.0"]) < 0) {
+        if (buildVersion < gameToBuildVersionInt["22.0.0"]) {
             focusVersion = 1;
         }
     }

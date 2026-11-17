@@ -6,14 +6,14 @@ import {
 } from "../../helpers/rivenHelper.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { addMods, getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { getRandomElement } from "../../services/rngService.ts";
 import type { RequestHandler } from "express";
 import { ExportUpgrades } from "warframe-public-export-plus";
 
 export const activateRandomModController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const inventory = await getInventory(account._id, "RawUpgrades Upgrades instantFinishRivenChallenge");
     const request = getJSONfromString<IActiveRandomModRequest>(String(req.body));
     addMods(inventory, [
@@ -39,7 +39,7 @@ export const activateRandomModController: RequestHandler = async (req, res) => {
         NewMod: {
             UpgradeFingerprint: fingerprint,
             ItemType: rivenType,
-            ItemId: toOid2(inventory.Upgrades[upgradeIndex]._id, buildLabel)
+            ItemId: toOid2(inventory.Upgrades[upgradeIndex]._id, buildVersion)
         }
     });
 };

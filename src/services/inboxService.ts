@@ -3,7 +3,7 @@ import type { IMessage, IMessageClient, IMessageDatabase } from "../types/inboxT
 import type { TMessageDocument } from "../models/inboxModel.ts";
 import { Inbox } from "../models/inboxModel.ts";
 import type { QueryFilter, Types } from "mongoose";
-import { buildVersionToInt, wikiDateToBuildVersionInt } from "../helpers/versionHelper.ts";
+import { wikiDateToBuildVersionInt } from "../helpers/versionHelper.ts";
 import {
     ExportRecipes,
     ExportRelics,
@@ -48,9 +48,8 @@ const getItemsUnknownToBuild = (buildVersion: number): string[] => {
 
 export const getInboxFilter = (
     accountId: string | Types.ObjectId,
-    buildLabel: string
+    buildVersion: number
 ): QueryFilter<IMessageDatabase> => {
-    const buildVersion = buildVersionToInt(buildLabel);
     const filter: QueryFilter<IMessageDatabase> = {
         ownerId: accountId,
         $or: [{ minBuildVersion: { $exists: false } }, { minBuildVersion: { $lte: buildVersion } }]
@@ -68,10 +67,10 @@ export const getInboxFilter = (
 
 export const getMessagesSorted = async (
     accountId: string | Types.ObjectId,
-    buildLabel: string,
+    buildVersion: number,
     afterId?: string | Types.ObjectId
 ): Promise<TMessageDocument[]> => {
-    const query = getInboxFilter(accountId, buildLabel);
+    const query = getInboxFilter(accountId, buildVersion);
     if (afterId) {
         query._id = { $gt: afterId };
     }
@@ -106,18 +105,18 @@ export interface IMessageCreationTemplate extends Omit<IMessageDatabase, "_id" |
     date?: Date;
 }
 
-export const exportInboxMessage = (messageDatabase: TMessageDocument, buildLabel: string): IMessageClient => {
+export const exportInboxMessage = (messageDatabase: TMessageDocument, buildVersion: number): IMessageClient => {
     const messageClient = messageDatabase.toJSON<IMessageClient>();
 
     if (messageDatabase.globaUpgradeId) {
-        messageClient.globaUpgradeId = toOid2(messageDatabase.globaUpgradeId, buildLabel);
+        messageClient.globaUpgradeId = toOid2(messageDatabase.globaUpgradeId, buildVersion);
     }
 
-    messageClient.date = toMongoDate2(messageDatabase.date, buildLabel);
+    messageClient.date = toMongoDate2(messageDatabase.date, buildVersion);
 
     if (messageDatabase.startDate && messageDatabase.endDate) {
-        messageClient.startDate = toMongoDate2(messageDatabase.startDate, buildLabel);
-        messageClient.endDate = toMongoDate2(messageDatabase.endDate, buildLabel);
+        messageClient.startDate = toMongoDate2(messageDatabase.startDate, buildVersion);
+        messageClient.endDate = toMongoDate2(messageDatabase.endDate, buildVersion);
     } else {
         delete messageClient.startDate;
         delete messageClient.endDate;

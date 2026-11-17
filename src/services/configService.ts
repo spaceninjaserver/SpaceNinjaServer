@@ -3,7 +3,6 @@ import path from "path";
 import { repoDir } from "../helpers/pathHelper.ts";
 import { args } from "../helpers/commandLineArguments.ts";
 import type { Request } from "express";
-import { version_compare } from "../helpers/inventoryHelpers.ts";
 import configDefaults from "../../config-vanilla.json" with { type: "json" };
 import type { TConfigAlertKey } from "../constants/configAlerts.ts";
 
@@ -371,15 +370,15 @@ export const getNrsAddresses = (): [string, number][] => {
 
 export const shouldDoServerQol = (
     key: TQolConfigKey,
-    clientBuildLabel: string,
-    introducedInBuildLabel: string
+    clientBuildVersion: number,
+    introducedInBuildVersion: number
 ): boolean => {
     let value = config.serversideQualityOfLife?.[key];
     if (value === undefined) {
         value = configDefaults.serversideQualityOfLife[key];
     }
     if (value === null) {
-        return version_compare(clientBuildLabel, introducedInBuildLabel) >= 0;
+        return clientBuildVersion >= introducedInBuildVersion;
     }
     return value;
 };

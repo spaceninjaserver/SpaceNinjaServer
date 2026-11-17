@@ -1,4 +1,5 @@
-import { fromOid, toMongoDate, version_compare } from "../../helpers/inventoryHelpers.ts";
+import { fromOid, toMongoDate } from "../../helpers/inventoryHelpers.ts";
+import { intToBuildVersion } from "../../helpers/versionHelper.ts";
 import type { IKnifeResponse } from "../../helpers/nemesisHelpers.ts";
 import {
     antivirusMods,
@@ -20,7 +21,7 @@ import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
 import { Loadout } from "../../models/inventoryModels/loadoutModel.ts";
 import { addMods, freeUpSlot, getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { generateRewardSeed, SRng } from "../../services/rngService.ts";
 import type { IMongoDate, IOid, IOidWithLegacySupport } from "../../types/commonTypes.ts";
 import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
@@ -254,7 +255,7 @@ export const nemesisController: RequestHandler = async (req, res) => {
         await inventory.save();
         res.json({ LastEnc: inventory.Nemesis!.LastEnc });
     } else if ((req.query.mode as string) == "s") {
-        const buildLabel = getBuildLabel(req, account);
+        const buildVersion = getBuildVersion(req, account);
         const inventory = await getInventory(account._id, "Nemesis noNemesis");
         if (inventory.Nemesis) {
             logger.warn(`overwriting an existing nemesis as a new one is being requested`);
@@ -264,9 +265,9 @@ export const nemesisController: RequestHandler = async (req, res) => {
         body.target.fp = BigInt(body.target.fp) || generateRewardSeed();
 
         const manifest = getNemesisManifest(body.target.manifest);
-        if (version_compare(buildLabel, manifest.minBuild) < 0) {
+        if (buildVersion < manifest.minBuildVersionInt) {
             logger.warn(
-                `client on version ${buildLabel} provided nemesis manifest ${body.target.manifest} which was expected to require ${manifest.minBuild} or above. please file a bug report.`
+                `client on version ${intToBuildVersion(buildVersion)} provided nemesis manifest ${body.target.manifest} which was expected to require ${intToBuildVersion(manifest.minBuildVersionInt)} or above. please file a bug report.`
             );
         }
 

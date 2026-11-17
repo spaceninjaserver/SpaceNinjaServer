@@ -1,4 +1,4 @@
-import { getAccountForRequest, getBuildLabel, type TAccountDocument } from "../../services/loginService.ts";
+import { getAccountForRequest, type TAccountDocument, getBuildVersion } from "../../services/loginService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import type { IMongoDateWithLegacySupport } from "../../types/commonTypes.ts";
@@ -6,9 +6,8 @@ import type { RequestHandler } from "express";
 import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import { createMessage } from "../../services/inboxService.ts";
-import { toMongoDate2, version_compare } from "../../helpers/inventoryHelpers.ts";
+import { toMongoDate2 } from "../../helpers/inventoryHelpers.ts";
 import { shouldDoServerQol } from "../../services/configService.ts";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 import { addQuestKey } from "../../services/questService.ts";
 
@@ -24,7 +23,7 @@ interface ITrainingResultsResponse {
 
 const handleTrainingProgress = async (
     account: TAccountDocument,
-    buildLabel: string,
+    buildVersion: number,
     numLevelsGained: number
 ): Promise<ITrainingResultsResponse> => {
     const inventory = await getInventory(
@@ -37,7 +36,7 @@ const handleTrainingProgress = async (
         if (!inventory.noMasteryRankUpCooldown) {
             time +=
                 unixTimesInMs.hour *
-                (shouldDoServerQol("twentythreeHourMasteryRankCooldown", buildLabel, gameToBuildVersion["38.0.0"])
+                (shouldDoServerQol("twentythreeHourMasteryRankCooldown", buildVersion, gameToBuildVersionInt["38.0.0"])
                     ? 23
                     : 24);
         }
@@ -47,17 +46,14 @@ const handleTrainingProgress = async (
         inventory.TradesRemaining += 1;
 
         // Some quest keys are awarded via Mastery Rank in pre-Specters of the Rail builds, handle that here.
-        if (
-            version_compare(buildLabel, gameToBuildVersion["18.16.0"]) < 0 &&
-            version_compare(buildLabel, gameToBuildVersion["15.0.0"]) >= 0
-        ) {
+        if (buildVersion < gameToBuildVersionInt["18.16.0"] && buildVersion >= gameToBuildVersionInt["15.0.0"]) {
             if (inventory.PlayerLevel >= 2) {
                 if (!inventory.QuestKeys.some(q => q.ItemType.endsWith("ArchwingQuestKeyChain"))) {
                     addQuestKey(inventory, { ItemType: "/Lotus/Types/Keys/ArchwingQuest/ArchwingQuestKeyChain" });
                 }
             }
 
-            if (inventory.PlayerLevel >= 3 && version_compare(buildLabel, gameToBuildVersion["15.13.0"]) >= 0) {
+            if (inventory.PlayerLevel >= 3 && buildVersion >= gameToBuildVersionInt["15.13.0"]) {
                 if (!inventory.QuestKeys.some(q => q.ItemType.endsWith("SpyQuestKeyChain"))) {
                     addQuestKey(inventory, { ItemType: "/Lotus/Types/Keys/SpyQuestKeyChain/SpyQuestKeyChain" });
                 }
@@ -99,7 +95,7 @@ const handleTrainingProgress = async (
     const changedinventory = await inventory.save();
 
     return {
-        NewTrainingDate: toMongoDate2(changedinventory.TrainingDate, buildLabel),
+        NewTrainingDate: toMongoDate2(changedinventory.TrainingDate, buildVersion),
         NewLevel: numLevelsGained == 1 ? changedinventory.PlayerLevel : inventory.PlayerLevel,
         InventoryChanges: {}
     };
@@ -107,18 +103,18 @@ const handleTrainingProgress = async (
 
 export const trainingResultPostController: RequestHandler = async (req, res): Promise<void> => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const { numLevelsGained } = getJSONfromString<ITrainingResultsRequest>(String(req.body));
 
-    const response = await handleTrainingProgress(account, buildLabel, numLevelsGained);
+    const response = await handleTrainingProgress(account, buildVersion, numLevelsGained);
     res.json(response satisfies ITrainingResultsResponse);
 };
 
 export const trainingResultGetController: RequestHandler = async (req, res): Promise<void> => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const numLevelsGained = Number(req.query.numLevelsGained ?? 0);
 
-    const response = await handleTrainingProgress(account, buildLabel, numLevelsGained);
+    const response = await handleTrainingProgress(account, buildVersion, numLevelsGained);
     res.json(response satisfies ITrainingResultsResponse);
 };

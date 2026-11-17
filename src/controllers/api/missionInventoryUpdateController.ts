@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import type { IMissionInventoryUpdateRequest } from "../../types/requestTypes.ts";
 import {
     addMissionInventoryUpdates,
@@ -22,8 +22,7 @@ import type {
 } from "../../types/missionTypes.ts";
 import { sendWsBroadcastTo } from "../../services/wsService.ts";
 import { generateRewardSeed } from "../../services/rngService.ts";
-import { version_compare } from "../../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 import { filterInplace } from "../../helpers/general.ts";
 
 /*
@@ -68,7 +67,7 @@ import { filterInplace } from "../../helpers/general.ts";
 //move credit calc in here, return MissionRewards: [] if no reward info
 export const missionInventoryUpdateController: RequestHandler = async (req, res): Promise<void> => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const missionReport = getJSONfromString<IMissionInventoryUpdateRequest>((req.body as string).toString());
     logger.debug("mission report:", missionReport);
 
@@ -76,7 +75,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     const firstCompletion = missionReport.SortieId
         ? inventory.CompletedSorties.indexOf(missionReport.SortieId) == -1
         : false;
-    const inventoryUpdates = await addMissionInventoryUpdates(account, buildLabel, inventory, missionReport);
+    const inventoryUpdates = await addMissionInventoryUpdates(account, buildVersion, inventory, missionReport);
 
     if (
         (missionReport.MissionStatus ? missionReport.MissionStatus !== "GS_SUCCESS" : missionReport.MissionFailed) &&
@@ -92,7 +91,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
             inventory.RewardSeed = generateRewardSeed();
         }
         await inventory.save();
-        const inventoryResponse = await getInventoryResponse(req, inventory, true, buildLabel);
+        const inventoryResponse = await getInventoryResponse(req, inventory, true, buildVersion);
         res.json({
             InventoryJson: JSON.stringify(inventoryResponse),
             MissionRewards: []
@@ -110,8 +109,8 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         ConquestCompletedMissionsCount,
         NemesisTaxInfo,
         RecoveredItemInfo
-    } = await addMissionRewards(account, buildLabel, inventory, missionReport, firstCompletion);
-    await handleConservation(inventory, buildLabel, missionReport, AffiliationMods); // Conservation reports have GS_SUCCESS
+    } = await addMissionRewards(account, buildVersion, inventory, missionReport, firstCompletion);
+    await handleConservation(inventory, buildVersion, missionReport, AffiliationMods); // Conservation reports have GS_SUCCESS
     const guildVaultBonus = await addGuildVaultBonus(inventory, missionReport);
 
     if (inventory.pendingPremiumCredits) {
@@ -125,7 +124,7 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     }
     await inventory.save();
 
-    if (version_compare(buildLabel, gameToBuildVersion["18.18.0"]) < 0) {
+    if (buildVersion < gameToBuildVersionInt["18.18.0"]) {
         // Client might crash if they see Endo, but their kids are gonna love it.
         filterInplace(MissionRewards, x => !x.StoreItem.startsWith("/Lotus/StoreItems/Upgrades/Mods/FusionBundles/"));
     }
@@ -161,9 +160,9 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
         logger.debug(`classic mission completion, sending everything`);
         const response: IMissionInventoryUpdateResponse = deltas;
         // InventoryJson is not recognised by early versions, and may lead them to buffer overrun if provided.
-        if (version_compare(buildLabel, gameToBuildVersion["8.0.0"]) > 0) {
+        if (buildVersion > gameToBuildVersionInt["8.0.0"]) {
             response.InventoryJson = JSON.stringify(
-                await getInventoryResponse(req, inventory, "xpBasedLevelCapDisabled" in req.query, buildLabel)
+                await getInventoryResponse(req, inventory, "xpBasedLevelCapDisabled" in req.query, buildVersion)
             );
         }
         if (missionReport.RewardInfo.sortieTag == "Final" && firstCompletion) {
@@ -173,12 +172,12 @@ export const missionInventoryUpdateController: RequestHandler = async (req, res)
     } else {
         logger.debug(`no reward info, just syncing inventory`);
         // InventoryJson is not recognised by early versions, and may lead them to buffer overrun if provided.
-        if (version_compare(buildLabel, gameToBuildVersion["8.0.0"]) > 0) {
+        if (buildVersion > gameToBuildVersionInt["8.0.0"]) {
             const inventoryResponse = await getInventoryResponse(
                 req,
                 inventory,
                 "xpBasedLevelCapDisabled" in req.query,
-                buildLabel
+                buildVersion
             );
             res.json({
                 InventoryJson: JSON.stringify(inventoryResponse)

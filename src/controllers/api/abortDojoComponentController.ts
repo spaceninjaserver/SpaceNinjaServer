@@ -10,7 +10,7 @@ import {
     removeDojoRoom
 } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import {
     eDojoRequestStatus,
     eGuildPermission,
@@ -38,7 +38,7 @@ const abortDojoComponent = async (
     isAlliance?: boolean
 ): Promise<{ DojoRequestStatus: TDojoRequestStatus } | (IDojoClient & { AllianceVault?: IGuildVaultClient })> => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const inventory = await getInventory(account._id, "GuildId LevelKeys");
     const guild = await getGuildForRequestEx(req, inventory);
 
@@ -55,13 +55,13 @@ const abortDojoComponent = async (
             removeVaultPendingRecipe(alliance, componentId, resultType);
             await alliance.save();
             return {
-                ...(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, undefined, buildLabel)),
-                AllianceVault: await getAllianceVault(alliance, buildLabel)
+                ...(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, undefined, buildVersion)),
+                AllianceVault: await getAllianceVault(alliance, buildVersion)
             };
         }
         removeVaultPendingRecipe(guild, componentId, resultType);
         await guild.save();
-        return await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, undefined, buildLabel);
+        return await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, undefined, buildVersion);
     } else if (decoId) {
         if (
             !hasAccessToDojo(inventory) ||
@@ -72,7 +72,7 @@ const abortDojoComponent = async (
 
         removeDojoDeco(guild, componentId, decoId);
         await guild.save();
-        return await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, componentId, buildLabel);
+        return await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, componentId, buildVersion);
     } else {
         if (
             !hasAccessToDojo(inventory) ||
@@ -83,7 +83,7 @@ const abortDojoComponent = async (
 
         removeDojoRoom(guild, componentId);
         await guild.save();
-        return await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, undefined, buildLabel);
+        return await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, undefined, buildVersion);
     }
 };
 

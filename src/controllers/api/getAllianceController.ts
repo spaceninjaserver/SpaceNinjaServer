@@ -1,7 +1,7 @@
 import { Alliance, Guild } from "../../models/guildModel.ts";
 import { getAllianceClient } from "../../services/guildService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 
 export const getAllianceController: RequestHandler = async (req, res) => {
@@ -11,8 +11,8 @@ export const getAllianceController: RequestHandler = async (req, res) => {
         const guild = (await Guild.findById(inventory.GuildId, "Name Tier AllianceId"))!;
         if (guild.AllianceId) {
             const alliance = (await Alliance.findById(guild.AllianceId))!;
-            const buildLabel = getBuildLabel(req, account);
-            res.json(await getAllianceClient(alliance, guild, buildLabel));
+            const buildVersion = getBuildVersion(req, account);
+            res.json(await getAllianceClient(alliance, guild, buildVersion));
             return;
         }
     }

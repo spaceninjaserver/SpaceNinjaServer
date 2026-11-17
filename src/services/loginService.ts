@@ -16,11 +16,10 @@ import { createStats } from "./statsService.ts";
 import { crc32 } from "node:zlib";
 import crypto from "node:crypto";
 import { logger } from "../utils/logger.ts";
-import { version_compare } from "../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../constants/gameToBuildVersionInt.ts";
 import { OAuth2Client } from "google-auth-library";
 import { BL_LATEST, BV_LATEST } from "../constants/gameVersions.ts";
-import { buildVersionToInt } from "../helpers/versionHelper.ts";
+import { buildLabelToVersionInt, buildVersionToInt } from "../helpers/versionHelper.ts";
 
 export const isCorrectPassword = (requestPassword: string, databasePassword: string): boolean => {
     return requestPassword === databasePassword;
@@ -159,6 +158,10 @@ export const getBuildLabelForUnauthenticatedRequest = (req: Request): string => 
     return buildLabel;
 };
 
+export const getBuildVersionForUnauthenticatedRequest = (req: Request): number => {
+    return buildLabelToVersionInt(getBuildLabelForUnauthenticatedRequest(req));
+};
+
 export const getBuildLabel = (req: Request, account: Pick<TAccountDocument, "BuildLabel">): string => {
     if ("wsid" in req.query) {
         return BL_LATEST; // WebUI
@@ -242,8 +245,8 @@ export const getAccountFromSuffixedName = (name: string): Promise<TAccountDocume
     return Account.findOne({ DisplayName: name.split("#")[0] });
 };
 
-export const getUnicodeName = (account: TAccountDocument, buildLabel: string): string => {
-    if (version_compare(buildLabel, gameToBuildVersion["32.0.0"]) < 0) {
+export const getUnicodeName = (account: TAccountDocument, buildVersion: number): string => {
+    if (buildVersion < gameToBuildVersionInt["32.0.0"]) {
         return account.DisplayName;
     }
     const platformId = getOriginalPlatform(account);

@@ -3,7 +3,7 @@ import { logger } from "../../utils/logger.ts";
 import { getRecipe } from "../../services/itemDataService.ts";
 import type { IOidWithLegacySupport, ITypeCount } from "../../types/commonTypes.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import {
     getInventory,
     updateCurrency,
@@ -18,14 +18,15 @@ import {
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import type { IPendingRecipeDatabase } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { eInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { fromOid, toLegacyOid, toOid2, U5ToModernRecipes, version_compare } from "../../helpers/inventoryHelpers.ts";
+import { fromOid, toLegacyOid, toOid2, U5ToModernRecipes } from "../../helpers/inventoryHelpers.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
 import type { IRecipe } from "warframe-public-export-plus";
 import type { IEquipmentClient } from "../../types/equipmentTypes.ts";
 import { eEquipmentFeatures, eStatus } from "../../types/equipmentTypes.ts";
 import { pseudoRecipeToOwnedRecipeMap } from "../../services/foundryService.ts";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 import { broadcastInventoryUpdate } from "../../services/wsService.ts";
+import { buildVersionToInt } from "../../helpers/versionHelper.ts";
 
 interface IClaimCompletedRecipeRequest {
     RecipeIds?: IOidWithLegacySupport[]; // U24.4 and beyond
@@ -39,7 +40,7 @@ interface IClaimCompletedRecipeResponse {
 
 export const claimCompletedRecipeController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const inventory = await getInventory(account._id, undefined);
     const resp: IClaimCompletedRecipeResponse = {
         InventoryChanges: {}
@@ -69,7 +70,7 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
 
                 inventory.PendingRecipes.pull(pendingRecipe._id);
 
-                const recipe = getRecipe(pendingRecipe.ItemType, buildLabel);
+                const recipe = getRecipe(pendingRecipe.ItemType, buildVersion);
                 if (!recipe) {
                     throw new Error(`no completed item found for recipe ${pendingRecipe._id.toString()}`);
                 }
@@ -82,14 +83,14 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
                     return;
                 }
 
-                await claimCompletedRecipe(buildLabel, inventory, recipe, pendingRecipe, resp, req.query.rush);
+                await claimCompletedRecipe(buildVersion, inventory, recipe, pendingRecipe, resp, req.query.rush);
             }
         } else {
             throw new Error(`recipe list from request was undefined?`);
         }
     } else {
         let recipeName = String(req.query.recipeName); // U8
-        if (version_compare(buildLabel, gameToBuildVersion["7.3.0"]) < 0) {
+        if (buildVersion < gameToBuildVersionInt["7.3.0"]) {
             const modernItemType = U5ToModernRecipes[recipeName];
             if (modernItemType) recipeName = modernItemType;
         }
@@ -100,12 +101,12 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
 
         inventory.PendingRecipes.pull(pendingRecipe._id);
 
-        const recipe = getRecipe(pendingRecipe.ItemType, buildLabel);
+        const recipe = getRecipe(pendingRecipe.ItemType, buildVersion);
         if (!recipe) {
             throw new Error(`no completed item found for recipe ${pendingRecipe._id.toString()}`);
         }
         await claimCompletedRecipe(
-            buildLabel,
+            buildVersion,
             inventory,
             recipe,
             pendingRecipe,
@@ -115,15 +116,15 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
     }
     await inventory.save();
 
-    if (version_compare(buildLabel, gameToBuildVersion["21.0.0"]) >= 0) {
+    if (buildVersion >= gameToBuildVersionInt["21.0.0"]) {
         res.json(resp);
         broadcastInventoryUpdate(req);
         return;
     }
 
     // U14-U20 expect inventory changes at the root of the response instead of under InventoryChanges.
-    if (version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
-        if (version_compare(buildLabel, gameToBuildVersion["19.5.3"]) <= 0) {
+    if (buildVersion >= gameToBuildVersionInt["14.0.0"]) {
+        if (buildVersion <= gameToBuildVersionInt["19.5.3"]) {
             // ItemIds must be converted to legacy format for U19.5 and below or the client will be unhappy.
             for (const category of [
                 "KubrowPets",
@@ -173,7 +174,7 @@ export const claimCompletedRecipeController: RequestHandler = async (req, res) =
 };
 
 const claimCompletedRecipe = async (
-    buildLabel: string,
+    buildVersion: number,
     inventory: TInventoryDatabaseDocument,
     recipe: IRecipe,
     pendingRecipe: IPendingRecipeDatabase,
@@ -204,7 +205,7 @@ const claimCompletedRecipe = async (
             inventory.BrandedSuits!.findIndex(x => x.equals(pendingRecipe.SuitToUnbrand)),
             1
         );
-        resp.BrandedSuits = [toOid2(pendingRecipe.SuitToUnbrand!, buildLabel)];
+        resp.BrandedSuits = [toOid2(pendingRecipe.SuitToUnbrand!, buildVersion)];
     }
 
     if (recipe.consumeOnUse) {
@@ -228,7 +229,7 @@ const claimCompletedRecipe = async (
         const progress = secondsElapsed / recipe.buildTime;
         logger.debug(`rushing recipe at ${Math.trunc(progress * 100)}% completion`);
         // U18 introduced rush cost scaling, don't use it for older versions.
-        if (version_compare(buildLabel, "2015.12.03.00.00") >= 0) {
+        if (buildVersion >= buildVersionToInt("2015.12.03.00.00")) {
             // Haven't found the real build label for U18.0.0 yet, but this works
             cost =
                 progress > 0.5
@@ -331,7 +332,7 @@ const claimCompletedRecipe = async (
                     XP: 900_000,
                     Features: eEquipmentFeatures.DOUBLE_CAPACITY
                 },
-                buildLabel,
+                buildVersion,
                 resp.InventoryChanges
             );
             inventory.XPInfo.push({
@@ -380,7 +381,7 @@ const claimCompletedRecipe = async (
                     undefined,
                     pendingRecipe.TargetFingerprint,
                     undefined,
-                    buildLabel
+                    buildVersion
                 )
             );
         } else {
@@ -394,7 +395,7 @@ const claimCompletedRecipe = async (
                     undefined,
                     pendingRecipe.TargetFingerprint,
                     undefined,
-                    buildLabel
+                    buildVersion
                 )
             );
         }

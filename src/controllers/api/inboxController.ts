@@ -14,7 +14,7 @@ import {
 import {
     getAccountForRequest,
     getAccountFromSuffixedName,
-    getBuildLabel,
+    getBuildVersion,
     getSuffixedName,
     type TAccountDocument
 } from "../../services/loginService.ts";
@@ -43,7 +43,7 @@ export const inboxController: RequestHandler = async (req, res) => {
     const { deleteId, lastMessage: latestClientMessageId, messageId } = req.query;
 
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
 
     if (deleteId) {
         if (deleteId === "DeleteAllRead") {
@@ -137,19 +137,23 @@ export const inboxController: RequestHandler = async (req, res) => {
         res.end();
     } else if (latestClientMessageId) {
         await createNewEventMessages(account);
-        const newMessages = await getMessagesSorted(account._id, buildLabel, parseOid(latestClientMessageId as string));
+        const newMessages = await getMessagesSorted(
+            account._id,
+            buildVersion,
+            parseOid(latestClientMessageId as string)
+        );
 
         if (newMessages.length === 0) {
             res.send("no-new");
             return;
         }
 
-        res.json({ Inbox: newMessages.map(x => exportInboxMessage(x, buildLabel)) satisfies IMessageClient[] });
+        res.json({ Inbox: newMessages.map(x => exportInboxMessage(x, buildVersion)) satisfies IMessageClient[] });
     } else {
         //newly created event messages must be newer than account.LatestEventMessageDate
         await createNewEventMessages(account);
-        const messages = await getMessagesSorted(account._id, buildLabel);
-        const inbox = messages.map(x => exportInboxMessage(x, buildLabel));
+        const messages = await getMessagesSorted(account._id, buildVersion);
+        const inbox = messages.map(x => exportInboxMessage(x, buildVersion));
         res.json({ Inbox: inbox satisfies IMessageClient[] });
     }
 };

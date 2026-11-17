@@ -11,7 +11,7 @@ import { createMessage } from "../../services/inboxService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import {
     getAccountForRequest,
-    getBuildLabel,
+    getBuildVersion,
     getSuffixedName,
     getUnicodeName,
     type TAccountDocument
@@ -22,25 +22,25 @@ import type { RequestHandler, Response } from "express";
 
 export const removeFromGuildGetController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const guild = await getGuildForRequest(req, account._id);
     const userName = req.query.userName as string;
-    await processRemoveFromGuildRequest(account, buildLabel, guild, { userName }, res);
+    await processRemoveFromGuildRequest(account, buildVersion, guild, { userName }, res);
     broadcastGuildUpdate(req, guild._id.toString());
 };
 
 export const removeFromGuildPostController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const guild = await getGuildForRequest(req, account._id);
     const payload = JSON.parse(String(req.body)) as IRemoveFromGuildRequest;
-    await processRemoveFromGuildRequest(account, buildLabel, guild, payload, res);
+    await processRemoveFromGuildRequest(account, buildVersion, guild, payload, res);
     broadcastGuildUpdate(req, guild._id.toString());
 };
 
 const processRemoveFromGuildRequest = async (
     account: TAccountDocument,
-    buildLabel: string,
+    buildVersion: number,
     guild: TGuildDatabaseDocument,
     payload: IRemoveFromGuildRequest,
     res: Response
@@ -120,7 +120,7 @@ const processRemoveFromGuildRequest = async (
 
     res.json({
         _id: payload.userId,
-        Name: getUnicodeName(accountOfRemovedMember, buildLabel), // U40+ needs this to send social notify over IRC
+        Name: getUnicodeName(accountOfRemovedMember, buildVersion), // U40+ needs this to send social notify over IRC
         ItemToRemove: "/Lotus/Types/Keys/DojoKey",
         RecipeToRemove: "/Lotus/Types/Keys/DojoKeyBlueprint"
     });

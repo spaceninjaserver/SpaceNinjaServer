@@ -8,7 +8,7 @@ import {
     hasAlliancePermission,
     hasGuildPermission
 } from "../../services/guildService.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { getRecipe } from "../../services/itemDataService.ts";
@@ -17,7 +17,7 @@ import { Types } from "mongoose";
 
 export const startGuildRecipeController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const inventory = await getInventory(account._id, "GuildId LevelKeys");
     const guild = await getGuildForRequestEx(req, inventory);
     const payload = getJSONfromString<IStartGuildRecipeRequest>(String(req.body));
@@ -27,7 +27,7 @@ export const startGuildRecipeController: RequestHandler = async (req, res) => {
         return;
     }
 
-    const recipe = getRecipe(payload.Recipe, buildLabel);
+    const recipe = getRecipe(payload.Recipe, buildVersion);
     if (!recipe) {
         res.json({ DojoRequestStatus: eDojoRequestStatus.RECIPE_NOT_FOUND });
         return;
@@ -60,8 +60,8 @@ export const startGuildRecipeController: RequestHandler = async (req, res) => {
     await vault.save();
 
     res.json({
-        ...(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, undefined, buildLabel)),
-        ...(payload.Alliance && { AllianceVault: await getAllianceVault(alliance!, buildLabel) })
+        ...(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, undefined, buildVersion)),
+        ...(payload.Alliance && { AllianceVault: await getAllianceVault(alliance!, buildVersion) })
     });
 };
 

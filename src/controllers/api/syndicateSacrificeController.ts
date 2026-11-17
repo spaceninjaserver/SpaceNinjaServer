@@ -1,6 +1,6 @@
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import type { RequestHandler } from "express";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import type { ISyndicateSacrifice } from "warframe-public-export-plus";
 import { handleStoreItemAcquisition } from "../../services/purchaseService.ts";
 import {
@@ -16,7 +16,7 @@ import { logger } from "../../utils/logger.ts";
 
 export const syndicateSacrificeController: RequestHandler = async (request, response) => {
     const account = await getAccountForRequest(request);
-    const buildLabel = getBuildLabel(request, account);
+    const buildVersion = getBuildVersion(request, account);
     const inventory = await getInventory(account._id, undefined);
     const data = getJSONfromString<ISyndicateSacrificeRequest>(String(request.body));
 
@@ -43,7 +43,7 @@ export const syndicateSacrificeController: RequestHandler = async (request, resp
     };
 
     // Process sacrifices and rewards for every level we're reaching
-    const manifest = (await getSyndicate(data.AffiliationTag, buildLabel))!;
+    const manifest = (await getSyndicate(data.AffiliationTag, buildVersion))!;
     for (let level = oldLevel + Math.min(levelIncrease, 1); level <= data.SacrificeLevel; ++level) {
         let sacrifice: ISyndicateSacrifice | undefined;
         if (level == 0) {

@@ -9,7 +9,7 @@ import { logger } from "../../utils/logger.ts";
 import { eDojoRequestStatus, type IDojoComponentDatabase } from "../../types/guildTypes.ts";
 import { eGuildPermission } from "../../types/guildTypes.ts";
 import { Types } from "mongoose";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { getInventory } from "../../services/inventoryService.ts";
 
 export const changeDojoRootController: RequestHandler = async (req, res) => {
@@ -67,8 +67,8 @@ export const changeDojoRootController: RequestHandler = async (req, res) => {
 
     await guild.save();
 
-    const buildLabel = getBuildLabel(req, account);
-    res.json(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, undefined, buildLabel));
+    const buildVersion = getBuildVersion(req, account);
+    res.json(await getDojoClient(guild, eDojoRequestStatus.VALID_REQUEST, undefined, buildVersion));
 };
 
 interface INode {

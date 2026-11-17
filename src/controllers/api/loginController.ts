@@ -25,7 +25,6 @@ import { createMessage } from "../../services/inboxService.ts";
 import { fromStoreItem } from "../../services/itemDataService.ts";
 import { getTokenForClient, getTunablesForClient } from "../../services/tunablesService.ts";
 import type { AddressInfo } from "node:net";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
 import { args } from "../../helpers/commandLineArguments.ts";
 import { buildLabelToVersionInt } from "../../helpers/versionHelper.ts";
 import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
@@ -61,8 +60,9 @@ export const loginController: RequestHandler = async (request, response) => {
     const account = await Account.findOne({ email: loginRequest.email });
 
     const buildLabel = getBuildLabelForUnauthenticatedRequest(request);
+    const buildVersion = buildLabelToVersionInt(buildLabel);
 
-    if (version_compare(buildLabel, "2026.08.19.11.06") > 0 && !args.dev) {
+    if (buildVersion > buildLabelToVersionInt("2026.08.19.11.06") && !args.dev) {
         response.status(400).json({ error: "I'm making a list and checking it twice" });
         return;
     }
@@ -117,7 +117,7 @@ export const loginController: RequestHandler = async (request, response) => {
 
     if (account.Nonce && account.ClientType != "webui" && !account.Dropped && !loginRequest.kick) {
         // U17 seems to handle "nonce still set" like a login failure.
-        if (version_compare(buildLabel, gameToBuildVersion["18.0.2"]) >= 0) {
+        if (buildVersion >= gameToBuildVersionInt["18.0.2"]) {
             response.status(400).send({ error: "nonce still set" });
             return;
         }

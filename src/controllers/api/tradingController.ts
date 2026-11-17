@@ -10,14 +10,14 @@ import {
     updateCredits,
     updatePlatinum
 } from "../../services/inventoryService.ts";
-import { getAccountForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
 import { eGuildPermission } from "../../types/guildTypes.ts";
 import type { RequestHandler } from "express";
 import type { IPendingTradeDatabase, ITradeOffer } from "../../types/tradingTypes.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { logger } from "../../utils/logger.ts";
-import { fromMongoDate, fromOid, version_compare } from "../../helpers/inventoryHelpers.ts";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import { fromMongoDate, fromOid } from "../../helpers/inventoryHelpers.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 import type { TInventoryDatabaseDocument } from "../../models/inventoryModels/inventoryModel.ts";
 import { importEquipment, importUpgrade } from "../../services/importService.ts";
 import { Guild } from "../../models/guildModel.ts";
@@ -68,7 +68,7 @@ export const tradingController: RequestHandler = async (req, res) => {
             PendingTrades: [exportTrade(trade, us)]
         });
     } else if (op == eTradingOperation.AcceptTrade) {
-        const buildLabel = getBuildLabel(req, account);
+        const buildVersion = getBuildVersion(req, account);
         const buddyId = req.query.buddyId as string;
         const trade = (await getPendingTrade(accountId, buddyId))!;
         if (parseInt(req.query.revision as string) != trade.revision) {
@@ -143,10 +143,10 @@ export const tradingController: RequestHandler = async (req, res) => {
             }
 
             await Promise.all([aInventory.save(), bInventory.save(), trade.deleteOne()]);
-            res.send(version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0 ? "9" : "12").end();
+            res.send(buildVersion < gameToBuildVersionInt["40.0.0"] ? "9" : "12").end();
         } else {
             await trade.save();
-            res.send(version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0 ? "8" : "11").end();
+            res.send(buildVersion < gameToBuildVersionInt["40.0.0"] ? "8" : "11").end();
         }
     } else if (op == eTradingOperation.CancelTrade) {
         const buddyId = req.query.buddyId as string;

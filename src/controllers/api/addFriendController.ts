@@ -1,18 +1,19 @@
 import type { Types } from "mongoose";
-import { fromOid, toOid, version_compare } from "../../helpers/inventoryHelpers.ts";
+import { fromOid, toOid } from "../../helpers/inventoryHelpers.ts";
 import { getJSONfromString } from "../../helpers/stringHelpers.ts";
 import { Friendship } from "../../models/friendModel.ts";
 import { addAccountDataToFriendInfo, addInventoryDataToFriendInfo } from "../../services/friendService.ts";
-import { getAccountForRequest, getAccountIdForRequest, getBuildLabel } from "../../services/loginService.ts";
+import { getAccountForRequest, getAccountIdForRequest, getBuildVersion } from "../../services/loginService.ts";
 import type { IFriendInfo } from "../../types/friendTypes.ts";
 import type { RequestHandler } from "express";
-import gameToBuildVersion from "../../constants/gameToBuildVersion.ts";
+import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 import { Account } from "../../models/loginModel.ts";
 import { sendCustomMessageToNrs } from "../../helpers/udp.ts";
+import { buildVersionToInt } from "../../helpers/versionHelper.ts";
 
 export const addFriendPostController: RequestHandler = async (req, res) => {
     const account = await getAccountForRequest(req);
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const payload = getJSONfromString<IAddFriendRequest>(String(req.body));
     const promises: Promise<void>[] = [];
     const newFriends: IFriendInfo[] = [];
@@ -38,15 +39,15 @@ export const addFriendPostController: RequestHandler = async (req, res) => {
     } else {
         await acceptFriendRequest(account._id, payload.friend, newFriends);
     }
-    const requesterUsesNrsNotifications = version_compare(buildLabel, gameToBuildVersion["40.0.0"]) < 0;
+    const requesterUsesNrsNotifications = buildVersion < gameToBuildVersionInt["40.0.0"];
     for (const newFriend of newFriends) {
-        promises.push(addAccountDataToFriendInfo(newFriend, buildLabel, !requesterUsesNrsNotifications));
+        promises.push(addAccountDataToFriendInfo(newFriend, buildVersion, !requesterUsesNrsNotifications));
         promises.push(addInventoryDataToFriendInfo(newFriend));
         if (!requesterUsesNrsNotifications) {
             void Account.findById(fromOid(newFriend._id), "BuildLabel").then(newFriendAcct => {
                 const requesteeUsesNrsNotifications =
                     newFriendAcct!.BuildLabel &&
-                    version_compare(newFriendAcct!.BuildLabel, gameToBuildVersion["40.0.0"]) < 0;
+                    buildVersionToInt(newFriendAcct!.BuildLabel) < gameToBuildVersionInt["40.0.0"];
                 if (requesteeUsesNrsNotifications) {
                     void sendCustomMessageToNrs(`addFriend,${account._id.toString()},${newFriendAcct!._id.toString()}`);
                 }

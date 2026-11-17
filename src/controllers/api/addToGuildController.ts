@@ -8,7 +8,7 @@ import { getEffectiveAvatarImageType, getInventory } from "../../services/invent
 import {
     getAccountForRequest,
     getAccountIdForRequest,
-    getBuildLabel,
+    getBuildVersion,
     getSuffixedName,
     getUnicodeName
 } from "../../services/loginService.ts";
@@ -114,10 +114,10 @@ const inviteToGuild = async (req: Request, res: Response, userName: string): Pro
         }
     ]);
 
-    const buildLabel = getBuildLabel(req, account);
+    const buildVersion = getBuildVersion(req, account);
     const member: IGuildMemberClient = {
         _id: { $oid: account._id.toString() },
-        DisplayName: getUnicodeName(account, buildLabel),
+        DisplayName: getUnicodeName(account, buildVersion),
         LastLogin: toMongoDate(account.LastLogin),
         Rank: 7,
         Status: 2
