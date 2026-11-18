@@ -31,9 +31,14 @@ import { ExportFlavour } from "warframe-public-export-plus";
 import { handleStoreItemAcquisition } from "../../services/purchaseService.ts";
 import { fromStoreItem, isStoreItem } from "../../services/itemDataService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
-import { unixTimesInMs } from "../../constants/timeConstants.ts";
 import { config } from "../../services/configService.ts";
-import { getWorldState, populateConstructionEvents } from "../../services/worldStateService.ts";
+import {
+    getBaroNode,
+    getBaroTimes,
+    getEvilBaro,
+    getWorldState,
+    populateConstructionEvents
+} from "../../services/worldStateService.ts";
 import { fromMongoDate } from "../../helpers/inventoryHelpers.ts";
 import { Types } from "mongoose";
 import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
@@ -136,7 +141,7 @@ export const inboxController: RequestHandler = async (req, res) => {
         }
         res.end();
     } else if (latestClientMessageId) {
-        await createNewEventMessages(account);
+        await createNewEventMessages(account, buildVersion);
         const newMessages = await getMessagesSorted(
             account._id,
             buildVersion,
@@ -151,7 +156,7 @@ export const inboxController: RequestHandler = async (req, res) => {
         res.json({ Inbox: newMessages.map(x => exportInboxMessage(x, buildVersion)) satisfies IMessageClient[] });
     } else {
         //newly created event messages must be newer than account.LatestEventMessageDate
-        await createNewEventMessages(account);
+        await createNewEventMessages(account, buildVersion);
         const messages = await getMessagesSorted(account._id, buildVersion);
         const inbox = messages.map(x => exportInboxMessage(x, buildVersion));
         res.json({ Inbox: inbox satisfies IMessageClient[] });
@@ -167,68 +172,45 @@ const claimEventMessage = (account: TAccountDocument, key: string): boolean => {
     return true;
 };
 
-const createNewEventMessages = async (account: TAccountDocument): Promise<void> => {
+const createNewEventMessages = async (account: TAccountDocument, buildVersion: number): Promise<void> => {
     const newEventMessages: IMessageCreationTemplate[] = [];
 
     // Baro
-    const baroIndex = Math.trunc((Date.now() - 910800000) / (unixTimesInMs.day * 14));
-    const baroRelayOverride = config.worldState?.baroRelayOverride;
-    const baroNodeIndex = baroRelayOverride && baroRelayOverride > 0 ? baroRelayOverride - 1 : baroIndex % 4;
-    const baroNode = ["EarthHUB", "MercuryHUB", "SaturnHUB", "PlutoHUB"][baroNodeIndex];
-    const baroStart = baroIndex * (unixTimesInMs.day * 14) + 910800000;
-    const prevBaroEnd = (baroIndex - 1) * (unixTimesInMs.day * 14) + 910800000;
-    const baroEnd = baroStart + unixTimesInMs.day * 14;
-    const baroActualStart = baroStart + unixTimesInMs.day * (config.worldState?.baroAlwaysAvailable ? 0 : 12);
-    const evilBaroStage = config.worldState?.evilBaroStage ?? 0;
-    const evilBaroTransmission = [
-        "",
-        "/Lotus/Sounds/Dialog/BaroHalloween/Week1InboxMessage/DWeek1InboxMessage01290Baro",
-        "/Lotus/Sounds/Dialog/BaroHalloween/Week2InboxMessage/DWeek2InboxMessage0060Baro",
-        "/Lotus/Sounds/Dialog/BaroHalloween/Week3InboxMessage/DWeek3InboxMessage0120Baro",
-        "/Lotus/Sounds/Dialog/BaroHalloween/Week4InboxMessage/DWeek4InboxMessage0170Baro"
-    ][evilBaroStage];
+    const { baroIndex, baroStart, baroActualStart, baroEnd } = getBaroTimes();
+    const evilBaro = getEvilBaro(buildVersion);
     if (Date.now() >= baroActualStart && account.LatestEventMessageDate.getTime() < baroActualStart) {
         newEventMessages.push({
             sndr: "/Lotus/Language/G1Quests/VoidTraderName",
-            sub:
-                evilBaroStage > 0
-                    ? "/Lotus/Language/BaroHalloween/HalloweenInboxTitle"
-                    : "/Lotus/Language/CommunityMessages/VoidTraderAppearanceTitle",
-            msg:
-                evilBaroStage > 0
-                    ? `/Lotus/Language/BaroHalloween/HalloweenInboxWeek${evilBaroStage}Body`
-                    : "/Lotus/Language/CommunityMessages/VoidTraderAppearanceMessage",
-            icon:
-                evilBaroStage > 0
-                    ? "/Lotus/Interface/Icons/Npcs/EvilBaro.png"
-                    : "/Lotus/Interface/Icons/Npcs/BaroKiTeerPortrait.png",
-            transmission: evilBaroTransmission,
+            sub: "/Lotus/Language/CommunityMessages/VoidTraderAppearanceTitle",
+            msg: "/Lotus/Language/CommunityMessages/VoidTraderAppearanceMessage",
+            icon: "/Lotus/Interface/Icons/Npcs/BaroKiTeerPortrait.png",
+            transmission: "",
             startDate: new Date(baroActualStart),
             endDate: new Date(baroEnd),
             CrossPlatform: true,
             arg: [
                 {
                     Key: "NODE_NAME",
-                    Tag: baroNode
+                    Tag: getBaroNode(baroIndex, buildVersion)
                 }
             ],
             date: new Date(baroActualStart),
-            minBuildVersion: evilBaroStage > 0 ? gameToBuildVersionInt["40.0.0"] : gameToBuildVersionInt["18.18.0"] // Baro was introduced in U15.6. Unclear when exactly this inbox message was introduced, tho.
+            minBuildVersion: gameToBuildVersionInt["18.18.0"], // Baro was introduced in U15.6. Unclear when exactly this inbox message was introduced, tho.
+            ...evilBaro?.week.message
         });
     }
-    if (Date.now() >= prevBaroEnd && account.LatestEventMessageDate.getTime() < prevBaroEnd && evilBaroStage == 4) {
+    if (
+        evilBaro?.event.endingMessage &&
+        evilBaro.stage == evilBaro.event.weeks.length &&
+        Date.now() >= baroStart &&
+        account.LatestEventMessageDate.getTime() < baroStart
+    ) {
         newEventMessages.push({
-            sndr: "/Lotus/Language/G1Quests/VoidTraderName",
-            sub: "/Lotus/Language/BaroHalloween/HalloweenInboxEndingTitle",
-            msg: "/Lotus/Language/BaroHalloween/HalloweenInboxEndingBody",
-            icon: "/Lotus/Interface/Icons/Npcs/BaroKiTeerPortrait.png",
-            transmission: "/Lotus/Sounds/Dialog/BaroHalloween/EndingInboxMessage/DEndingInboxMessage0230Baro",
-            startDate: new Date(prevBaroEnd),
+            startDate: new Date(baroStart),
             endDate: new Date(baroActualStart),
-            att: ["/Lotus/Types/StoreItems/AvatarImages/ImageBaroKiteerEvil"],
             CrossPlatform: true,
-            date: new Date(prevBaroEnd),
-            minBuildVersion: gameToBuildVersionInt["40.0.0"]
+            date: new Date(baroStart),
+            ...evilBaro.event.endingMessage
         });
     }
 

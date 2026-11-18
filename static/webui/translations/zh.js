@@ -357,6 +357,7 @@ dict = {
     worldState_qtccAlerts: `癌症征服任务警报`,
     worldState_destiny2TributeAlert: `致敬命运2警报`,
     worldState_evilBaroStage: `邪恶Baro`,
+    worldState_evilBaroYear: `[UNTRANSLATED] Evil Baro Year`,
     worldState_baroRelayOverride: `Baro 中继站覆盖`,
     worldState_from_year: `|VAL|`,
     worldState_pre_year: `|VAL|之前`,

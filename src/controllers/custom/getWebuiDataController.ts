@@ -11,7 +11,7 @@ import { circuitGameModes } from "../../types/worldStateTypes.ts";
 import { configAlerts } from "../../constants/configAlerts.ts";
 import { lunarNewYearFlashSales } from "../../constants/flashSales.ts";
 import { anniversaryGoalsByWeek } from "../../constants/anniversary.ts";
-import { baroRelayNodes } from "../../constants/baro.ts";
+import { baroRelayNodes, evilBaroDefaultYear, evilBaroEvents } from "../../constants/baro.ts";
 import { constructionEventRelays } from "../../constants/constructionEvents.ts";
 import { duviriMoods } from "../../constants/duviri.ts";
 
@@ -160,6 +160,15 @@ const worldStateCheats: Record<
                     { value: "3", label: locAttrs("worldState_week", "3") },
                     { value: "4", label: locAttrs("worldState_week", "4") }
                 ]
+            },
+            {
+                key: "worldState.evilBaroYear",
+                type: "enum",
+                default: String(evilBaroDefaultYear),
+                values: Object.keys(evilBaroEvents)
+                    .reverse()
+                    .map(year => ({ value: year, label: locAttrs("worldState_from_year", year) })),
+                sameRow: true
             },
             { key: "worldState.darvoStockMultiplier", type: "float", ...worldStateNumberOptions.darvoStockMultiplier }
         ]

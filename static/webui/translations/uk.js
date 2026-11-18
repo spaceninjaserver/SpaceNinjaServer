@@ -357,6 +357,7 @@ dict = {
     worldState_qtccAlerts: `Виклики Quest to Conquer Cancer`,
     worldState_destiny2TributeAlert: `[UNTRANSLATED] Destiny 2 Tribute Alert`,
     worldState_evilBaroStage: `Злий Баро`,
+    worldState_evilBaroYear: `Рік Злого Баро`,
     worldState_baroRelayOverride: `[UNTRANSLATED] Baro Relay Override`,
     worldState_from_year: `З |VAL|`,
     worldState_pre_year: `До |VAL|`,

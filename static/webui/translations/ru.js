@@ -357,6 +357,7 @@ dict = {
     worldState_qtccAlerts: `Тревоги Quest to Conquer Cancer`,
     worldState_destiny2TributeAlert: `Тревога-дань уважения для Destiny 2`,
     worldState_evilBaroStage: `Злой Баро`,
+    worldState_evilBaroYear: `Год Злого Баро`,
     worldState_baroRelayOverride: `Изменение Реле Баро`,
     worldState_from_year: `Из |VAL|`,
     worldState_pre_year: `До |VAL|`,

@@ -1,4 +1,11 @@
-import baro, { baroRelayNodes, type IBaroDataTradeOffer } from "../constants/baro.ts";
+import baro, {
+    baroRelayNodes,
+    evilBaroDefaultYear,
+    evilBaroEvents,
+    type IEvilBaroEvent,
+    type IEvilBaroWeek,
+    type IBaroDataTradeOffer
+} from "../constants/baro.ts";
 import varzia from "../constants/varzia.ts";
 import fissureMissions from "../../static/fixed_responses/worldState/fissureMissions.json" with { type: "json" };
 import sortieTilesets from "../../static/fixed_responses/worldState/sortieTilesets.json" with { type: "json" };
@@ -1479,10 +1486,45 @@ const getIdealTimeSatsifyingConstraints = (constraints: ITimeConstraint[]): numb
     return timeSecs;
 };
 
+export const getEvilBaro = (
+    buildVersion: number = BV_LATEST
+): { event: IEvilBaroEvent; stage: number; week: IEvilBaroWeek } | undefined => {
+    const year = config.worldState?.evilBaroYear ?? evilBaroDefaultYear;
+    const stage = config.worldState?.evilBaroStage ?? 0;
+    if (!(year in evilBaroEvents) || stage <= 0) {
+        return undefined;
+    }
+    const event = evilBaroEvents[year];
+    if (buildVersion < event.minBuildVersionInt) {
+        return undefined;
+    }
+    return { event, stage, week: event.weeks[stage - 1] };
+};
+
+export const getBaroTimes = (
+    timeMs: number = Date.now()
+): { baroIndex: number; baroStart: number; baroActualStart: number; baroEnd: number } => {
+    const baroIndex = Math.trunc((timeMs - 910800000) / (unixTimesInMs.day * 14));
+    const baroStart = baroIndex * (unixTimesInMs.day * 14) + 910800000;
+    const baroActualStart = baroStart + unixTimesInMs.day * (config.worldState?.baroAlwaysAvailable ? 0 : 12);
+    const baroEnd = baroStart + unixTimesInMs.day * 14;
+    return { baroIndex, baroStart, baroActualStart, baroEnd };
+};
+
+export const getBaroNode = (baroIndex: number, buildVersion: number = BV_LATEST): string => {
+    const baroRelayOverride = config.worldState?.baroRelayOverride;
+    const baroNode = baroRelayNodes[baroRelayOverride ? baroRelayOverride - 1 : baroIndex % baroRelayNodes.length];
+    if (baroNode == "MercuryHUB" && buildVersion < gameToBuildVersionInt["18.18.0"]) {
+        // This Pre-Star Chart 3.0 client won't know Larunda Relay, so move Baro elsewhere.
+        return "EarthHUB";
+    }
+    return baroNode;
+};
+
 const fullyStockBaro = (vt: IVoidTrader, buildVersion: number): void => {
     const tempManifest: IBaroDataTradeOffer[] = [];
-    for (const item of baro.evilBaro) {
-        tempManifest.push(item);
+    for (const { items } of Object.values(evilBaroEvents)) {
+        tempManifest.push(...items);
     }
     for (const armorSet of baro.armorSets) {
         if (armorSet.bundle) {
@@ -4250,22 +4292,8 @@ export const getWorldState = (
     // Baro
     // Introdused in U15.6
     if (buildVersion > gameToBuildVersionInt["15.5.0"]) {
-        const baroIndex = Math.trunc((Date.now() - 910800000) / (unixTimesInMs.day * 14));
-        const baroStart = baroIndex * (unixTimesInMs.day * 14) + 910800000;
-        const baroActualStart = baroStart + unixTimesInMs.day * (config.worldState?.baroAlwaysAvailable ? 0 : 12);
-        const baroEnd = baroStart + unixTimesInMs.day * 14;
-        const baroRelayOverride = config.worldState?.baroRelayOverride;
-        const baroNodeIndex = baroRelayOverride && baroRelayOverride > 0 ? baroRelayOverride - 1 : baroIndex % 4;
-        let baroNode: string = baroRelayNodes[baroNodeIndex];
-        if (baroNode == "MercuryHUB" && buildVersion < gameToBuildVersionInt["18.18.0"]) {
-            // This Pre-Star Chart 3.0 client won't know Larunda Relay, so move Baro elsewhere.
-            baroNode = "EarthHUB";
-        }
-        const evilBaroStage =
-            buildVersion >= gameToBuildVersionInt["40.0.0"] ? (config.worldState?.evilBaroStage ?? 0) : 0;
-        const baroCharacter = ["Baro'Ki Teel", "EvilBaroWeek1", "EvilBaroWeek2", "EvilBaroWeek3", "EvilBaroWeek4"][
-            evilBaroStage
-        ];
+        const { baroIndex, baroStart, baroActualStart, baroEnd } = getBaroTimes();
+        const evilBaro = getEvilBaro(buildVersion);
         const vt: IVoidTrader = {
             _id: toOid2(
                 ((baroStart / 1000) & 0xffffffff).toString(16).padStart(8, "0") + "493c96d6067610bc",
@@ -4273,8 +4301,8 @@ export const getWorldState = (
             ),
             Activation: toMongoDate2(baroActualStart, buildVersion),
             Expiry: toMongoDate2(baroEnd, buildVersion),
-            Character: baroCharacter,
-            Node: baroNode,
+            Character: evilBaro?.week.character ?? "Baro'Ki Teel",
+            Node: getBaroNode(baroIndex, buildVersion),
             Manifest: []
         };
         worldState.VoidTraders.push(vt);
@@ -4309,22 +4337,14 @@ export const getWorldState = (
                 }
                 tempManifest.push(...armorItems);
 
-                {
-                    const evilBaroStock: string[] = [];
-                    if (evilBaroStage >= 1) evilBaroStock.push("EvilBaroArcaArmorA", "BaroEvilEphemera");
-                    if (evilBaroStage >= 2) evilBaroStock.push("GrimoireEvilBaroSkin", "EvilBaroArcaArmorC");
-                    if (evilBaroStage >= 3) evilBaroStock.push("EvilBaroArcaArmorL", "EvilBaroSilvaAndAegis");
-                    if (evilBaroStage >= 4) {
-                        evilBaroStock.push(
-                            "EvilBaroNecraloidSigil",
-                            "DissolveEnemyMod",
-                            "EvilBaroFloatingCandlesShipDeco"
-                        );
-                    }
-
-                    tempManifest.unshift(
-                        ...baro.evilBaro.filter(item => evilBaroStock.some(end => item.ItemType.endsWith(end)))
-                    );
+                if (evilBaro) {
+                    const evilBaroStock = evilBaro.event.weeks.slice(0, evilBaro.stage).flatMap(week => week.stock);
+                    const leadingItems = [
+                        ...evilBaro.event.items.filter(item => evilBaroStock.some(end => item.ItemType.endsWith(end))),
+                        ...(evilBaro.week.extraItems ?? [])
+                    ];
+                    const randomItems = tempManifest.filter(item => !leadingItems.includes(item));
+                    tempManifest.splice(0, tempManifest.length, ...leadingItems, ...randomItems);
                 }
                 for (const item of baro.evergreen) {
                     tempManifest.push(item);

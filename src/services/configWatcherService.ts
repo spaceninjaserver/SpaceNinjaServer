@@ -21,7 +21,7 @@ import {
     type IWsMsgToClient
 } from "./wsService.ts";
 import varzia from "../constants/varzia.ts";
-import { baroRelayNodes } from "../constants/baro.ts";
+import { baroRelayNodes, evilBaroDefaultYear, evilBaroEvents } from "../constants/baro.ts";
 import { anniversaryGoalsByWeek } from "../constants/anniversary.ts";
 import { lunarNewYearFlashSales } from "../constants/flashSales.ts";
 import { getTunablesForClient } from "./tunablesService.ts";
@@ -218,6 +218,19 @@ export const validateConfig = (): void => {
         (config.worldState.baroRelayOverride > baroRelayNodes.length || config.worldState.baroRelayOverride < 0)
     ) {
         config.worldState.baroRelayOverride = 0;
+        modified = true;
+    }
+    if (config.worldState?.evilBaroYear && !(config.worldState.evilBaroYear in evilBaroEvents)) {
+        delete config.worldState.evilBaroYear;
+        modified = true;
+    }
+    if (
+        config.worldState?.evilBaroStage &&
+        (config.worldState.evilBaroStage < 0 ||
+            config.worldState.evilBaroStage >
+                evilBaroEvents[config.worldState.evilBaroYear ?? evilBaroDefaultYear].weeks.length)
+    ) {
+        config.worldState.evilBaroStage = 0;
         modified = true;
     }
     if (

@@ -357,6 +357,7 @@ dict = {
     worldState_qtccAlerts: `Alarmy Walki z Rakiem`,
     worldState_destiny2TributeAlert: `Alarm trybutu Destiny 2`,
     worldState_evilBaroStage: `Zły Baro`,
+    worldState_evilBaroYear: `Rok Złego Baro`,
     worldState_baroRelayOverride: `Nadpisz przekaźnik Baro`,
     worldState_from_year: `Z |VAL|`,
     worldState_pre_year: `Pre-|VAL|`,

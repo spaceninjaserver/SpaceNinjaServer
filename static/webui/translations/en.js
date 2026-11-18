@@ -356,6 +356,7 @@ dict = {
     worldState_qtccAlerts: `Quest to Conquer Cancer Alerts`,
     worldState_destiny2TributeAlert: `Destiny 2 Tribute Alert`,
     worldState_evilBaroStage: `Evil Baro`,
+    worldState_evilBaroYear: `Evil Baro Year`,
     worldState_baroRelayOverride: `Baro Relay Override`,
     worldState_from_year: `From |VAL|`,
     worldState_pre_year: `Pre-|VAL|`,

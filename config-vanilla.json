@@ -70,6 +70,7 @@
     "baroFullyStocked": false,
     "baroRelayOverride": 0,
     "evilBaroStage": 0,
+    "evilBaroYear": 2025,
     "varziaFullyStocked": false,
     "vanguardVaultRelics": false,
     "wolfHunt": null,

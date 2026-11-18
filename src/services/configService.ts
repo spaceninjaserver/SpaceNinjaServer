@@ -85,6 +85,7 @@ export interface IConfig {
         baroFullyStocked?: boolean;
         baroRelayOverride?: number;
         evilBaroStage?: number;
+        evilBaroYear?: number;
         varziaFullyStocked?: boolean;
         vanguardVaultRelics?: boolean;
         wolfHunt?: number;

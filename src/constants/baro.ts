@@ -1,123 +1,128 @@
 import type { IVoidTraderOffer } from "../types/worldStateTypes.ts";
 import gameToBuildVersionInt from "./gameToBuildVersionInt.ts";
+import type { IMessageCreationTemplate } from "../services/inboxService.ts";
 
 const baro: IBaro = {
-    evilBaro: [
-        {
-            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Armor/CrpHighArmor/EvilBaroArcaArmorC",
-            PrimePrice: 196,
-            RegularPrice: 294000,
-            minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
-        },
-        {
-            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Armor/CrpHighArmor/EvilBaroArcaArmorA",
-            PrimePrice: 109,
-            RegularPrice: 278000,
-            minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
-        },
-        {
-            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Armor/CrpHighArmor/EvilBaroArcaArmorL",
-            PrimePrice: 184,
-            RegularPrice: 251000,
-            minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
-        },
-        {
-            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Effects/BaroEvilEphemera",
-            PrimePrice: 69,
-            RegularPrice: 109000,
-            minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
-        },
-        {
-            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Weapons/Grimoire/GrimoireEvilBaroSkin",
-            PrimePrice: 227,
-            RegularPrice: 302000,
-            minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
-        },
-        {
-            ItemType: "/Lotus/StoreItems/Upgrades/Skins/VoidTrader/EvilBaroSilvaAndAegis",
-            PrimePrice: 132,
-            RegularPrice: 298000,
-            minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
-        },
-        {
-            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Sigils/EvilBaroNecraloidSigil",
-            PrimePrice: 34,
-            RegularPrice: 61000,
-            minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
-        },
-        {
-            ItemType: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Peculiars/DissolveEnemyMod",
-            PrimePrice: 228,
-            RegularPrice: 1000001,
-            minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
-        },
-        {
-            ItemType: "/Lotus/StoreItems/Types/Items/ShipDecos/Props/EvilBaroFloatingCandlesShipDeco",
-            PrimePrice: 21,
-            RegularPrice: 88000,
-            minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
-        },
-        {
-            ItemType: "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyBaroEvil",
-            PrimePrice: 111,
-            RegularPrice: 111111,
-            minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
-        },
-        {
-            ItemType: "/Lotus/StoreItems/Types/StoreItems/AvatarImages/ImageBaroKiteerEvil",
-            PrimePrice: 67,
-            RegularPrice: 67,
-            minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
-        },
-        {
-            ItemType: "/Lotus/StoreItems/Upgrades/Skins/MeleeDangles/EvilBaroSugatraMeleeDangle",
-            PrimePrice: 181,
-            RegularPrice: 209066,
-            minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
-        },
-        {
-            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Necramech/EvilBaroNecramechSkin",
-            PrimePrice: 236,
-            RegularPrice: 448114,
-            minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
-        },
-        {
-            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Armor/EvilBaroArmour/EvilBaroArmourA",
-            PrimePrice: 303,
-            RegularPrice: 303303,
-            minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
-        },
-        {
-            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Clan/EvilBaroHaloBadgeItem",
-            PrimePrice: 172,
-            RegularPrice: 336801,
-            minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
-        },
-        {
-            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Effects/BaroEvilEphemeraB",
-            PrimePrice: 88,
-            RegularPrice: 98002,
-            minBuildVersionInt: gameToBuildVersionInt["44.1.2"]
-        },
-        {
-            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Necramech/MechWeapon/EvilBaroMausolonSkin",
-            PrimePrice: 134,
-            RegularPrice: 341876,
-            minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
-        },
-        {
-            ItemType: "/Lotus/StoreItems/Upgrades/Skins/Parazon/EvilBaroParazonSkin",
-            PrimePrice: 163,
-            RegularPrice: 220022,
-            minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
-        },
-        {
-            ItemType: "/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageEvilBaroIcon",
-            PrimePrice: 67,
-            RegularPrice: 67,
-            minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
-        }
-    ],
+    evilBaro: {
+        2025: [
+            {
+                ItemType: "/Lotus/StoreItems/Upgrades/Skins/Armor/CrpHighArmor/EvilBaroArcaArmorC",
+                PrimePrice: 196,
+                RegularPrice: 294000,
+                minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
+            },
+            {
+                ItemType: "/Lotus/StoreItems/Upgrades/Skins/Armor/CrpHighArmor/EvilBaroArcaArmorA",
+                PrimePrice: 109,
+                RegularPrice: 278000,
+                minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
+            },
+            {
+                ItemType: "/Lotus/StoreItems/Upgrades/Skins/Armor/CrpHighArmor/EvilBaroArcaArmorL",
+                PrimePrice: 184,
+                RegularPrice: 251000,
+                minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
+            },
+            {
+                ItemType: "/Lotus/StoreItems/Upgrades/Skins/Effects/BaroEvilEphemera",
+                PrimePrice: 69,
+                RegularPrice: 109000,
+                minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
+            },
+            {
+                ItemType: "/Lotus/StoreItems/Upgrades/Skins/Weapons/Grimoire/GrimoireEvilBaroSkin",
+                PrimePrice: 227,
+                RegularPrice: 302000,
+                minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
+            },
+            {
+                ItemType: "/Lotus/StoreItems/Upgrades/Skins/VoidTrader/EvilBaroSilvaAndAegis",
+                PrimePrice: 132,
+                RegularPrice: 298000,
+                minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
+            },
+            {
+                ItemType: "/Lotus/StoreItems/Upgrades/Skins/Sigils/EvilBaroNecraloidSigil",
+                PrimePrice: 34,
+                RegularPrice: 61000,
+                minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
+            },
+            {
+                ItemType: "/Lotus/StoreItems/Upgrades/CosmeticEnhancers/Peculiars/DissolveEnemyMod",
+                PrimePrice: 228,
+                RegularPrice: 1000001,
+                minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
+            },
+            {
+                ItemType: "/Lotus/StoreItems/Types/Items/ShipDecos/Props/EvilBaroFloatingCandlesShipDeco",
+                PrimePrice: 21,
+                RegularPrice: 88000,
+                minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
+            },
+            {
+                ItemType: "/Lotus/StoreItems/Types/StoreItems/AvatarImages/ImageBaroKiteerEvil",
+                PrimePrice: 67,
+                RegularPrice: 67,
+                minBuildVersionInt: gameToBuildVersionInt["40.0.0"]
+            }
+        ],
+        2026: [
+            {
+                ItemType: "/Lotus/StoreItems/Upgrades/Skins/Parazon/EvilBaroParazonSkin",
+                PrimePrice: 163,
+                RegularPrice: 220022,
+                minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
+            },
+            {
+                ItemType: "/Lotus/StoreItems/Types/StoreItems/AvatarImages/AvatarImageEvilBaroIcon",
+                PrimePrice: 67,
+                RegularPrice: 67,
+                minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
+            },
+            {
+                ItemType: "/Lotus/StoreItems/Upgrades/Skins/Effects/BaroEvilEphemeraB",
+                PrimePrice: 88,
+                RegularPrice: 98002,
+                minBuildVersionInt: gameToBuildVersionInt["44.1.2"]
+            },
+            {
+                ItemType: "/Lotus/StoreItems/Upgrades/Skins/Necramech/MechWeapon/EvilBaroMausolonSkin",
+                PrimePrice: 134,
+                RegularPrice: 341876,
+                minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
+            },
+            {
+                ItemType: "/Lotus/StoreItems/Upgrades/Skins/Armor/EvilBaroArmour/EvilBaroArmourA",
+                PrimePrice: 303,
+                RegularPrice: 303303,
+                minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
+            },
+            {
+                ItemType: "/Lotus/StoreItems/Upgrades/Skins/Clan/EvilBaroHaloBadgeItem",
+                PrimePrice: 172,
+                RegularPrice: 336801,
+                minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
+            },
+            {
+                ItemType: "/Lotus/StoreItems/Upgrades/Skins/Necramech/EvilBaroNecramechSkin",
+                PrimePrice: 236,
+                RegularPrice: 448114,
+                minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
+            },
+            {
+                ItemType: "/Lotus/StoreItems/Upgrades/Skins/MeleeDangles/EvilBaroSugatraMeleeDangle",
+                PrimePrice: 181,
+                RegularPrice: 209066,
+                minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
+            },
+            {
+                ItemType: "/Lotus/StoreItems/Types/Items/ShipDecos/Plushies/PlushyBaroEvil",
+                PrimePrice: 111,
+                RegularPrice: 111111,
+                minBuildVersionInt: gameToBuildVersionInt["44.0.0"]
+            }
+        ]
+    },
     evergreen: [
         {
             ItemType: "/Lotus/StoreItems/Types/Keys/MummyQuestKeyBlueprint",
@@ -2922,7 +2927,7 @@ export interface IBaroDataTradeOffer extends IVoidTraderOffer {
 }
 
 interface IBaro {
-    evilBaro: IBaroDataTradeOffer[];
+    evilBaro: Record<number, IBaroDataTradeOffer[]>;
     evergreen: IBaroDataTradeOffer[];
     armorSets: {
         items: IBaroDataTradeOffer[];
@@ -2933,5 +2938,127 @@ interface IBaro {
 }
 
 export const baroRelayNodes = ["EarthHUB", "MercuryHUB", "SaturnHUB", "PlutoHUB"] as const;
+
+export interface IEvilBaroWeek {
+    character: string;
+    stock: string[];
+    extraItems?: IBaroDataTradeOffer[];
+    message: TEvilBaroMessage;
+}
+
+export interface IEvilBaroEvent {
+    items: IBaroDataTradeOffer[];
+    weeks: IEvilBaroWeek[];
+    minBuildVersionInt: number;
+    endingMessage?: TEvilBaroMessage;
+}
+
+type TEvilBaroMessage = Pick<IMessageCreationTemplate, "sndr" | "sub" | "msg"> & Partial<IMessageCreationTemplate>;
+
+const findBaroItems = (items: IBaroDataTradeOffer[], ends: string[]): IBaroDataTradeOffer[] =>
+    ends.map(end => {
+        const item = items.find(item => item.ItemType.endsWith(end));
+        if (!item) {
+            throw new Error(`Baro item ${end} not found`);
+        }
+        return item;
+    });
+
+const halloweenItems = findBaroItems(baro.rest, [
+    "CatbrowArmorHalloweenA",
+    "VTHalloweenDarkSword",
+    "HalloweenDread",
+    "Halloween2019GrendelTreat"
+]);
+
+export const evilBaroEvents: Record<number, IEvilBaroEvent> = {
+    2025: {
+        items: baro.evilBaro[2025],
+        weeks: [1, 2, 3, 4].map((week, i) => ({
+            character: `EvilBaroWeek${week}`,
+            stock: [
+                ["EvilBaroArcaArmorA", "BaroEvilEphemera"],
+                ["GrimoireEvilBaroSkin", "EvilBaroArcaArmorC"],
+                ["EvilBaroArcaArmorL", "EvilBaroSilvaAndAegis"],
+                ["EvilBaroNecraloidSigil", "DissolveEnemyMod", "EvilBaroFloatingCandlesShipDeco"]
+            ][i],
+            message: {
+                sndr: "/Lotus/Language/G1Quests/VoidTraderName",
+                sub: "/Lotus/Language/BaroHalloween/HalloweenInboxTitle",
+                msg: `/Lotus/Language/BaroHalloween/HalloweenInboxWeek${week}Body`,
+                icon: "/Lotus/Interface/Icons/Npcs/EvilBaro.png",
+                minBuildVersion: gameToBuildVersionInt["40.0.0"],
+                transmission: [
+                    "/Lotus/Sounds/Dialog/BaroHalloween/Week1InboxMessage/DWeek1InboxMessage01290Baro",
+                    "/Lotus/Sounds/Dialog/BaroHalloween/Week2InboxMessage/DWeek2InboxMessage0060Baro",
+                    "/Lotus/Sounds/Dialog/BaroHalloween/Week3InboxMessage/DWeek3InboxMessage0120Baro",
+                    "/Lotus/Sounds/Dialog/BaroHalloween/Week4InboxMessage/DWeek4InboxMessage0170Baro"
+                ][i]
+            },
+            extraItems: halloweenItems
+        })),
+        minBuildVersionInt: gameToBuildVersionInt["40.0.0"],
+        endingMessage: {
+            sndr: "/Lotus/Language/G1Quests/VoidTraderName",
+            icon: "/Lotus/Interface/Icons/Npcs/BaroKiTeerPortrait.png",
+            minBuildVersion: gameToBuildVersionInt["40.0.0"],
+            sub: "/Lotus/Language/BaroHalloween/HalloweenInboxEndingTitle",
+            msg: "/Lotus/Language/BaroHalloween/HalloweenInboxEndingBody",
+            transmission: "/Lotus/Sounds/Dialog/BaroHalloween/EndingInboxMessage/DEndingInboxMessage0230Baro",
+            att: ["/Lotus/Types/StoreItems/AvatarImages/ImageBaroKiteerEvil"]
+        }
+    },
+    2026: {
+        items: baro.evilBaro[2026],
+        weeks: [1, 2, 3, 4].map((week, i) => ({
+            character: `EvilBaroWeek${week}`,
+            stock: [
+                ["EvilBaroNecramechSkin", "EvilBaroSugatraMeleeDangle", "PlushyBaroEvil"],
+                ["EvilBaroArmourA", "EvilBaroHaloBadgeItem"],
+                ["BaroEvilEphemeraB", "EvilBaroMausolonSkin"],
+                ["EvilBaroParazonSkin", "AvatarImageEvilBaroIcon"]
+            ][i],
+            message: {
+                sndr: "/Lotus/Language/G1Quests/VoidTraderName",
+                sub: `/Lotus/Language/BaroHalloween/2026HalloweenWeek${week}InboxTitle`,
+                msg: `/Lotus/Language/BaroHalloween/2026HalloweenInboxWeek${week}Body`,
+                icon: "/Lotus/Interface/Icons/Npcs/EvilBaro.png",
+                minBuildVersion: gameToBuildVersionInt["44.0.0"],
+                transmission: [
+                    "/Lotus/Sounds/Dialog/BaroHalloween2026/DWeekOneInbox0010Baro",
+                    "/Lotus/Sounds/Dialog/BaroHalloween2026/DWeekTwoInbox0080Baro",
+                    "/Lotus/Sounds/Dialog/BaroHalloween2026/DWeekThreeInbox0150Baro",
+                    "/Lotus/Sounds/Dialog/BaroHalloween2026/DWeekFourInbox0220Baro"
+                ][i]
+            },
+            extraItems: [
+                ...findBaroItems(baro.evilBaro[2025], [
+                    "EvilBaroArcaArmorC",
+                    "EvilBaroArcaArmorA",
+                    "EvilBaroArcaArmorL",
+                    "GrimoireEvilBaroSkin",
+                    "EvilBaroSilvaAndAegis",
+                    "BaroEvilEphemera",
+                    "EvilBaroNecraloidSigil",
+                    "DissolveEnemyMod",
+                    "EvilBaroFloatingCandlesShipDeco",
+                    "ImageBaroKiteerEvil"
+                ]),
+                ...halloweenItems
+            ]
+        })),
+        minBuildVersionInt: gameToBuildVersionInt["44.0.0"],
+        endingMessage: {
+            sndr: "/Lotus/Language/G1Quests/VoidTraderName",
+            icon: "/Lotus/Interface/Icons/Npcs/BaroKiTeerPortrait.png",
+            minBuildVersion: gameToBuildVersionInt["44.0.0"],
+            sub: "/Lotus/Language/BaroHalloween/HalloweenInboxEndingTitle",
+            msg: "/Lotus/Language/BaroHalloween/2026HalloweenInboxEndingBody",
+            transmission: "/Lotus/Sounds/Dialog/BaroHalloween2026/DEndingRealBaroInbox0290Baro",
+            att: ["/Lotus/Types/Items/Titles/EvilBaroTitle"]
+        }
+    }
+};
+export const evilBaroDefaultYear = 2025;
 
 export default baro;
