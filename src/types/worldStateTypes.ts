@@ -726,6 +726,7 @@ export interface ITmp {
     tcaz?: number; // Somehow related to domestic drone acquisition on TC2026 demo relay, without it game don't send request to receive it, set to 3 on live
     icbdata?: IIceBladeChampionClient; // First player to pull the Iceblade, their Warframe is shown as a statue on Yuvan Peak
     kkEnabled?: boolean; // Enable Kuva Path aka Glacial Defiance aka The Icebind
+    rttf?: boolean; // Road To Tau event finished. Show Destroyed Eris and unlock TauPrologueKeyChainC
 }
 
 export interface IIceBladeLoadout {

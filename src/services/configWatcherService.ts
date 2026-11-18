@@ -348,4 +348,28 @@ export const syncConfigWithDatabase = (): void => {
             transmission: "/Lotus/Sounds/Dialog/Shadowgrapher/Vendor/DSGInbox0011AspirantZorba"
         }).then(() => {});
     }
+    if (!config.worldState?.epochOperationTaubound) {
+        void Account.find({ receivedEventMessages: "epochOperationTaubound" }, "_id").then(accounts => {
+            for (const account of accounts) {
+                void createMessage(account._id, [
+                    {
+                        sndr: "/Lotus/Language/Menu/Mailbox_WarframeSender",
+                        sub: "/Lotus/Language/TauPrologue/ErisMortemEventEndedInboxSubject",
+                        msg: "/Lotus/Language/TauPrologue/ErisMortemEventEndedInboxBody",
+                        icon: "/Lotus/Interface/Icons/Npcs/Lotus_d.png",
+                        lowPrioNewPlayers: true,
+                        CrossPlatform: true,
+                        transmission: "/Lotus/Sounds/Dialog/RoadToTau/DErisMortemInbox0750Praghasa",
+                        cinematic: "/Lotus/Levels/Cinematics/ErisMortem/ErisMortemErisDevouredCinematic.level",
+                        QuestReq: "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain",
+                        minBuildVersion: gameToBuildVersionInt["44.1.2"]
+                    }
+                ]);
+            }
+            void Account.updateMany({}, { $pull: { receivedEventMessages: "epochOperationTaubound" } }).then(() => {});
+        });
+        void Inbox.deleteMany({
+            transmission: "/Lotus/Sounds/Dialog/RoadToTau/DErisMortem0560Lotus"
+        }).then(() => {});
+    }
 };
