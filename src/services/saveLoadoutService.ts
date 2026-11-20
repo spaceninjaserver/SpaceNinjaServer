@@ -2,12 +2,13 @@ import type {
     IItemEntry,
     ILoadoutClient,
     ILoadoutConfigClientLegacy,
+    ILoadoutConfigDatabase,
     ILoadoutEntry,
     ILoadoutPresetClientLegacy,
     IOperatorConfigEntry,
     ISaveLoadoutRequestNoUpgradeVer
 } from "../types/saveLoadoutTypes.ts";
-import { Loadout } from "../models/inventoryModels/loadoutModel.ts";
+import { getLoadout } from "./loadoutService.ts";
 import { addMods, getInventory } from "./inventoryService.ts";
 import type { IOidWithLegacySupport } from "../types/commonTypes.ts";
 import { Types } from "mongoose";
@@ -16,7 +17,7 @@ import { convertLegacyColorsToIColor, fromOid, toObjectId } from "../helpers/inv
 import { buildVersionToInt } from "../helpers/versionHelper.ts";
 import { logger } from "../utils/logger.ts";
 import type { ISketch, TEquipmentKey } from "../types/inventoryTypes/inventoryTypes.ts";
-import { eLoadoutIndex, equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
+import { eLegacyLoadoutSlot, eLoadoutIndex, equipmentKeys } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IItemConfig, IItemConfigDatabase } from "../types/inventoryTypes/commonInventoryTypes.ts";
 import { importCrewShipMembers, importCrewShipWeapon, importLoadOutConfig } from "./importService.ts";
 import type { IEquipmentDatabase, IEquipmentSelectionDatabase } from "../types/equipmentTypes.ts";
@@ -102,15 +103,32 @@ export const handleInventoryItemConfigChange = async (
 
                     logger.debug("legacy loadout received (U14-U15 format)", configs);
 
-                    for (const key in configs) {
-                        const x = configs[key];
-                        await saveLegacyLoadoutPreset(inventory, x.Presets, x.Name, buildVersion);
+                    for (const [key, x] of Object.entries(configs)) {
+                        const id = (x.ItemId as IOidWithLegacySupport | undefined) ? fromOid(x.ItemId) : key;
+                        if (x.Remove) {
+                            const loadout = await getLoadout(accountId);
+                            for (const category of legacyPresetCategories) {
+                                const index = eLoadoutIndex[category];
+                                loadout[category].pull({ _id: id });
+                                if (inventory.CurrentLoadOutIds[index]?.equals(id) && loadout[category].length != 0) {
+                                    inventory.CurrentLoadOutIds[index] = loadout[category][0]._id;
+                                }
+                            }
+                            await loadout.save();
+                        } else {
+                            const savedId = await saveLegacyLoadoutPreset(
+                                inventory,
+                                x.Presets,
+                                x.Name,
+                                buildVersion,
+                                id == "ffffffffffffffffffffffff" ? "" : id,
+                                false
+                            );
+                            newLoadoutId ??= savedId;
+                        }
                     }
                 } else {
-                    const loadout = await Loadout.findOne({ loadoutOwnerId: accountId });
-                    if (!loadout) {
-                        throw new Error("loadout not found");
-                    }
+                    const loadout = await getLoadout(accountId);
 
                     for (const [_loadoutSlot, _loadout] of Object.entries(equipment)) {
                         const loadoutSlot = _loadoutSlot as keyof ILoadoutClient;
@@ -168,31 +186,39 @@ export const handleInventoryItemConfigChange = async (
                 // U10-U13
                 const config = equipment as ILoadoutConfigClientLegacy;
                 logger.debug("legacy loadout received (U10-U13 format)", config);
+                const configId = (config as Partial<ILoadoutConfigClientLegacy>).ItemId;
 
-                await saveLegacyLoadoutPreset(inventory, config.Presets, config.Name, buildVersion);
+                const savedId = await saveLegacyLoadoutPreset(
+                    inventory,
+                    config.Presets,
+                    config.Name,
+                    buildVersion,
+                    configId && fromOid(configId)
+                );
+                newLoadoutId ??= savedId;
                 break;
             }
             case "Presets": {
-                // U8 and below
                 const presets = equipment as ILoadoutPresetClientLegacy[];
-                logger.debug("legacy loadout received (U8 format)", presets);
+                logger.debug("legacy loadout received (U7.7-U9 format)", presets);
 
-                await saveLegacyLoadoutPreset(inventory, presets, undefined, buildVersion);
+                const savedId = await saveLegacyLoadoutPreset(
+                    inventory,
+                    presets,
+                    equipmentChanges.Name,
+                    buildVersion,
+                    equipmentChanges.ItemId && fromOid(equipmentChanges.ItemId)
+                );
+                newLoadoutId ??= savedId;
+                break;
+            }
+            case "ItemId":
+            case "Name": {
+                // U7.7-U9: handled together with Presets
                 break;
             }
             case "CurrentLoadout": {
-                // U14-U15
-                logger.debug(`ignoring CurrentLoadout from U14-U15 for now`);
-                /*const id = equipment as string;
-                if (inventory.CurrentLoadOutIds[0]) {
-                    inventory.CurrentLoadOutIds[0] = toObjectId(id);
-                }
-                if (inventory.CurrentLoadOutIds[1]) {
-                    inventory.CurrentLoadOutIds[1] = toObjectId(id);
-                }
-                if (inventory.CurrentLoadOutIds[2]) {
-                    inventory.CurrentLoadOutIds[2] = toObjectId(id);
-                }*/
+                // U14-U15, applied after LoadOuts so it can refer to a preset created in the same request
                 break;
             }
             case "CurrentLoadOutIds": {
@@ -429,178 +455,162 @@ export const handleInventoryItemConfigChange = async (
             }
         }
     }
+    if (equipmentChanges.CurrentLoadout) {
+        const raw = equipmentChanges.CurrentLoadout as string | IOidWithLegacySupport;
+        let id = typeof raw == "string" ? raw : fromOid(raw);
+        if (id == "ffffffffffffffffffffffff" && newLoadoutId) {
+            id = newLoadoutId.toString();
+        }
+        if (isLegacyEmptyItemId(id)) {
+            logger.warn(`ignoring invalid CurrentLoadout ${id}`);
+        } else {
+            const loadout = await getLoadout(accountId);
+            for (const category of legacyPresetCategories) {
+                if (loadout[category].id(id)) {
+                    setCurrentLoadoutId(inventory.CurrentLoadOutIds, eLoadoutIndex[category], new Types.ObjectId(id));
+                }
+            }
+        }
+    }
     await inventory.save();
     return newLoadoutId?.toString();
+};
+
+const isLegacyEmptyItemId = (id: string | undefined): boolean =>
+    !id || id == "ffffffffffffffffffffffff" || !/^[0-9a-fA-F]{24}$/.test(id);
+
+const setCurrentLoadoutId = (currentLoadouts: Types.ObjectId[], index: number, id: Types.ObjectId): void => {
+    while (currentLoadouts.length < index) {
+        currentLoadouts.push(new Types.ObjectId("000000000000000000000000"));
+    }
+    if (currentLoadouts.length == index) {
+        currentLoadouts.push(id);
+    } else {
+        currentLoadouts[index] = id;
+    }
+};
+
+const legacyPresetCategories = ["NORMAL", "SENTINEL", "ARCHWING"] as const;
+
+const writeLegacyPreset = (
+    presets: Types.DocumentArray<ILoadoutConfigDatabase>,
+    currentLoadouts: Types.ObjectId[],
+    index: number,
+    targetId: Types.ObjectId | undefined,
+    name: string | undefined,
+    selections: Partial<Record<"s" | "p" | "l" | "m", IEquipmentSelectionDatabase | undefined>>,
+    makeCurrent: boolean
+): void => {
+    let preset: ILoadoutConfigDatabase;
+    if (targetId) {
+        // Named preset (U7.7.0 & U14-U15): update it, or create it if it doesn't exist yet.
+        preset = presets.id(targetId) ?? presets[presets.push({ _id: targetId, n: name }) - 1];
+        if (makeCurrent) {
+            setCurrentLoadoutId(currentLoadouts, index, targetId);
+        }
+    } else if (presets.length == 0) {
+        const loadoutId = new Types.ObjectId("000000000000000000000000");
+        preset = presets[presets.push({ _id: loadoutId, n: name }) - 1];
+        if (currentLoadouts.length <= index) {
+            currentLoadouts.push(loadoutId);
+        } else {
+            currentLoadouts[index] = loadoutId;
+        }
+    } else {
+        if (currentLoadouts.length <= index) {
+            currentLoadouts.push(presets[0]._id);
+        } else if (!presets.id(currentLoadouts[index])) {
+            currentLoadouts[index] = presets[0]._id;
+        }
+        preset = presets.id(currentLoadouts[index])!;
+    }
+    preset.n = name || preset.n;
+    Object.assign(preset, selections);
 };
 
 const saveLegacyLoadoutPreset = async (
     inventory: TInventoryDatabaseDocument,
     presets: ILoadoutPresetClientLegacy[],
     name: string | undefined,
-    buildVersion: number
-): Promise<void> => {
-    const loadout = await Loadout.findOne({ loadoutOwnerId: inventory.accountOwnerId });
-    if (!loadout) {
-        throw new Error("loadout not found");
-    }
+    buildVersion: number,
+    presetId?: string,
+    makeCurrent: boolean = true
+): Promise<Types.ObjectId | undefined> => {
+    const loadout = await getLoadout(inventory.accountOwnerId);
 
     const currentLoadouts = inventory.CurrentLoadOutIds;
 
-    const s =
-        fromOid(presets[0].ItemId) != "ffffffffffffffffffffffff"
-            ? configureLegacyEquipmentSelection(
-                  presets[0],
-                  buildVersion,
-                  inventory.Suits.id(fromOid(presets[0].ItemId)),
-                  loadout.NORMAL.id(currentLoadouts[eLoadoutIndex.NORMAL])?.s?.cus
-              )
-            : undefined;
-    const p =
-        fromOid(presets[1].ItemId) != "ffffffffffffffffffffffff"
-            ? configureLegacyEquipmentSelection(
-                  presets[1],
-                  buildVersion,
-                  inventory.Pistols.id(fromOid(presets[1].ItemId)),
-                  loadout.NORMAL.id(currentLoadouts[eLoadoutIndex.NORMAL])?.p?.cus
-              )
-            : undefined;
-    const l =
-        fromOid(presets[2].ItemId) != "ffffffffffffffffffffffff"
-            ? configureLegacyEquipmentSelection(
-                  presets[2],
-                  buildVersion,
-                  inventory.LongGuns.id(fromOid(presets[2].ItemId)),
-                  loadout.NORMAL.id(currentLoadouts[eLoadoutIndex.NORMAL])?.l?.cus
-              )
-            : undefined;
-    const m =
-        fromOid(presets[3].ItemId) != "ffffffffffffffffffffffff"
-            ? configureLegacyEquipmentSelection(
-                  presets[3],
-                  buildVersion,
-                  inventory.Melee.id(fromOid(presets[3].ItemId)),
-                  loadout.NORMAL.id(currentLoadouts[eLoadoutIndex.NORMAL])?.m?.cus
-              )
-            : undefined;
-
-    if (loadout.NORMAL.length == 0) {
-        const loadoutId = new Types.ObjectId("000000000000000000000000");
-        loadout.NORMAL.push({
-            n: name,
-            s: s,
-            l: l,
-            p: p,
-            m: m,
-            _id: loadoutId
-        });
-        if (currentLoadouts.length == 0) {
-            currentLoadouts.push(loadoutId);
-        } else {
-            currentLoadouts[eLoadoutIndex.NORMAL] = loadoutId;
-        }
-    } else {
-        if (currentLoadouts.length <= eLoadoutIndex.NORMAL) {
-            currentLoadouts.push(loadout.NORMAL[0]._id);
-        } else if (!loadout.NORMAL.id(currentLoadouts[0])) {
-            currentLoadouts[eLoadoutIndex.NORMAL] = loadout.NORMAL[0]._id;
-        }
-        const preset = loadout.NORMAL.id(currentLoadouts[0])!;
-        preset.n = name ?? preset.n;
-        preset.s = s;
-        preset.p = p;
-        preset.l = l;
-        preset.m = m;
+    let targetId: Types.ObjectId | undefined;
+    let newPresetId: Types.ObjectId | undefined;
+    if (presetId === "") {
+        targetId = newPresetId = new Types.ObjectId();
+    } else if (presetId && presetId != "Current" && Types.ObjectId.isValid(presetId) && presetId.length == 24) {
+        targetId = new Types.ObjectId(presetId);
     }
 
-    if (presets.length >= 6) {
-        const s =
-            fromOid(presets[4].ItemId) != "ffffffffffffffffffffffff"
-                ? configureLegacyEquipmentSelection(
-                      presets[4],
-                      buildVersion,
-                      inventory.Sentinels.id(fromOid(presets[4].ItemId)),
-                      loadout.SENTINEL.id(currentLoadouts[eLoadoutIndex.SENTINEL])?.s?.cus
-                  )
-                : undefined;
-        const l =
-            fromOid(presets[5].ItemId) != "ffffffffffffffffffffffff"
-                ? configureLegacyEquipmentSelection(
-                      presets[5],
-                      buildVersion,
-                      inventory.SentinelWeapons.id(fromOid(presets[5].ItemId)),
-                      loadout.SENTINEL.id(currentLoadouts[eLoadoutIndex.SENTINEL])?.l?.cus
-                  )
-                : undefined;
-
-        if (loadout.SENTINEL.length == 0) {
-            const loadoutId = new Types.ObjectId("000000000000000000000000");
-            loadout.SENTINEL.push({
-                n: name,
-                s: s,
-                l: l,
-                _id: loadoutId
-            });
-            if (currentLoadouts.length < 2) {
-                currentLoadouts.push(loadoutId);
-            } else {
-                currentLoadouts[eLoadoutIndex.SENTINEL] = loadoutId;
-            }
-        } else {
-            if (currentLoadouts.length <= eLoadoutIndex.SENTINEL) {
-                currentLoadouts.push(loadout.SENTINEL[0]._id);
-            } else if (!loadout.SENTINEL.id(currentLoadouts[eLoadoutIndex.SENTINEL])) {
-                currentLoadouts[eLoadoutIndex.SENTINEL] = loadout.SENTINEL[0]._id;
-            }
-            const preset = loadout.SENTINEL.id(currentLoadouts[eLoadoutIndex.SENTINEL])!;
-            preset.n = name ?? preset.n;
-            preset.s = s;
-            preset.l = l;
+    const select = (
+        index: number,
+        items?: Types.DocumentArray<IEquipmentDatabase>,
+        appearanceConfig?: number
+    ): IEquipmentSelectionDatabase | undefined => {
+        const preset = presets[index];
+        const itemId = fromOid(preset.ItemId);
+        if (isLegacyEmptyItemId(itemId)) {
+            return undefined;
         }
+        return configureLegacyEquipmentSelection(preset, buildVersion, items?.id(itemId) ?? null, appearanceConfig);
+    };
+
+    const normal = loadout.NORMAL.id(currentLoadouts[eLoadoutIndex.NORMAL]);
+    writeLegacyPreset(
+        loadout.NORMAL,
+        currentLoadouts,
+        eLoadoutIndex.NORMAL,
+        targetId,
+        name,
+        {
+            s: select(eLegacyLoadoutSlot.SUIT, inventory.Suits, normal?.s?.cus),
+            p: select(eLegacyLoadoutSlot.PISTOL, inventory.Pistols, normal?.p?.cus),
+            l: select(eLegacyLoadoutSlot.LONG_GUN, inventory.LongGuns, normal?.l?.cus),
+            m: select(eLegacyLoadoutSlot.MELEE, inventory.Melee, normal?.m?.cus)
+        },
+        makeCurrent
+    );
+
+    if (presets.length > eLegacyLoadoutSlot.SENTINEL_WEAPON) {
+        const sentinel = loadout.SENTINEL.id(currentLoadouts[eLoadoutIndex.SENTINEL]);
+        writeLegacyPreset(
+            loadout.SENTINEL,
+            currentLoadouts,
+            eLoadoutIndex.SENTINEL,
+            targetId,
+            name,
+            {
+                s: select(eLegacyLoadoutSlot.SENTINEL, inventory.Sentinels, sentinel?.s?.cus),
+                l: select(eLegacyLoadoutSlot.SENTINEL_WEAPON, inventory.SentinelWeapons, sentinel?.l?.cus)
+            },
+            makeCurrent
+        );
     }
 
-    if (presets.length == 9) {
-        const s =
-            fromOid(presets[6].ItemId) != "ffffffffffffffffffffffff"
-                ? configureLegacyEquipmentSelection(presets[6], buildVersion, null, 0)
-                : undefined;
-        const l =
-            fromOid(presets[7].ItemId) != "ffffffffffffffffffffffff"
-                ? configureLegacyEquipmentSelection(presets[7], buildVersion, null, 0)
-                : undefined;
-        const m =
-            fromOid(presets[8].ItemId) != "ffffffffffffffffffffffff"
-                ? configureLegacyEquipmentSelection(presets[8], buildVersion, null, 0)
-                : undefined;
-
-        if (loadout.ARCHWING.length == 0) {
-            const loadoutId = new Types.ObjectId("000000000000000000000000");
-            loadout.ARCHWING.push({
-                n: name,
-                s: s,
-                l: l,
-                m: m,
-                _id: loadoutId
-            });
-            if (currentLoadouts.length < 3) {
-                currentLoadouts.push(loadoutId);
-            } else {
-                currentLoadouts[eLoadoutIndex.ARCHWING] = loadoutId;
-            }
-        } else {
-            if (currentLoadouts.length <= eLoadoutIndex.ARCHWING) {
-                currentLoadouts.push(loadout.ARCHWING[0]._id);
-            } else if (!loadout.ARCHWING.id(currentLoadouts[eLoadoutIndex.ARCHWING])) {
-                currentLoadouts[eLoadoutIndex.ARCHWING] = loadout.ARCHWING[0]._id;
-            }
-            const preset = loadout.ARCHWING.id(currentLoadouts[eLoadoutIndex.ARCHWING])!;
-            preset.n = name ?? preset.n;
-            preset.s = s;
-            preset.l = l;
-            preset.m = m;
-        }
+    if (presets.length > eLegacyLoadoutSlot.SPACE_MELEE) {
+        writeLegacyPreset(
+            loadout.ARCHWING,
+            currentLoadouts,
+            eLoadoutIndex.ARCHWING,
+            targetId,
+            name,
+            {
+                s: select(eLegacyLoadoutSlot.SPACE_SUIT),
+                l: select(eLegacyLoadoutSlot.SPACE_GUN),
+                m: select(eLegacyLoadoutSlot.SPACE_MELEE)
+            },
+            makeCurrent
+        );
     }
 
     await loadout.save();
+    return newPresetId;
 };
 
 const configureLegacyEquipmentSelection = (
@@ -609,24 +619,23 @@ const configureLegacyEquipmentSelection = (
     item: IEquipmentDatabase | null,
     appearanceConfig: number | undefined
 ): IEquipmentSelectionDatabase | undefined => {
-    if (preset.ItemId.$id) {
-        const slotEntry = {
-            ItemId: toObjectId(preset.ItemId.$id),
-            mod: preset.ModSlot ?? 0,
-            cus: preset.CustSlot ?? 0
-        };
-
-        if (item && buildVersion < buildVersionToInt("2013.09.13.00.00")) {
-            // Specific code path for U8 and below for applying cosmetics
-            const config = item.Configs[appearanceConfig ?? 0];
-            if (item.Configs[appearanceConfig ?? 0]) {
-                config.pricol = convertLegacyColorsToIColor(preset.Customization?.Colors);
-                config.Skins = preset.Customization?.Skins;
-            }
-        }
-
-        return slotEntry;
-    } else {
+    const itemId = fromOid(preset.ItemId);
+    if (isLegacyEmptyItemId(itemId)) {
         return undefined;
     }
+    const slotEntry = {
+        ItemId: toObjectId(itemId),
+        mod: preset.ModSlot ?? 0,
+        cus: preset.CustSlot ?? 0
+    };
+
+    if (item && buildVersion < gameToBuildVersionInt["10.3.3"]) {
+        const config = item.Configs[appearanceConfig ?? 0];
+        if (item.Configs[appearanceConfig ?? 0]) {
+            config.pricol = convertLegacyColorsToIColor(preset.Customization?.Colors);
+            config.Skins = preset.Customization?.Skins;
+        }
+    }
+
+    return slotEntry;
 };

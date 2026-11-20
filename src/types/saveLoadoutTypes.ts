@@ -20,7 +20,9 @@ export interface ISaveLoadoutRequest {
     TennoOperator: IItemConfig; // U18
     LoadOuts: ILoadoutClient | ILoadoutConfigClientLegacy;
     LoadOut?: ILoadoutPresetClientLegacy[]; // U10-U13
-    Presets?: ILoadoutPresetClientLegacy[]; // U8
+    Presets?: ILoadoutPresetClientLegacy[]; // U7.7-U9
+    ItemId?: IOidWithLegacySupport; // U7.7-U9, sent with Presets
+    Name?: string; // U7.7-U9, sent with Presets
     LongGuns: IItemEntry;
     OperatorAmps: IItemEntry;
     Antiques: IItemEntry;
@@ -159,6 +161,7 @@ export interface ILoadoutConfigClientLegacy {
     ItemId: IOidWithLegacySupport;
     Name: string;
     Presets: ILoadoutPresetClientLegacy[];
+    Remove?: boolean;
 }
 export interface ILoadoutPresetClientLegacy {
     ItemId: IOidWithLegacySupport;

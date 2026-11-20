@@ -367,6 +367,18 @@ export const eLoadoutIndex = {
     DRIFTER: 10
 } as const;
 
+export const eLegacyLoadoutSlot = {
+    SUIT: 0,
+    PISTOL: 1,
+    LONG_GUN: 2,
+    MELEE: 3,
+    SENTINEL: 4, // U7+
+    SENTINEL_WEAPON: 5,
+    SPACE_SUIT: 6, // U15+
+    SPACE_GUN: 7,
+    SPACE_MELEE: 8
+} as const;
+
 export interface IDailyAffiliations {
     DailyAffiliation: number;
     DailyAffiliationPvp: number;
@@ -436,10 +448,10 @@ export interface IInventoryClient
     ActiveQuest: string;
     FlavourItems: IFlavourItem[];
     LoadOutPresets?: ILoadOutPresets; // U16+
-    LoadoutPresets?: ILoadoutConfigClientLegacy[]; // U14-U15
+    LoadoutPresets?: ILoadoutConfigClientLegacy[]; // U7.7.0-10.3.3, U14-U15
     CurrentLoadOutIds: IOid[];
     CurrentLoadout?:
-        | ILoadoutConfigClientLegacy // U8-13
+        | ILoadoutConfigClientLegacy // U7.7-U13
         | { $id: string }; // U14-U15
     Missions: IMission[];
     RandomUpgradesIdentified?: number;
