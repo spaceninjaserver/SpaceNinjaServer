@@ -154,6 +154,8 @@ dict = {
     detailedView_archonShardsDescription2: `Weź pod uwagę że każdy okruch Archona potrzebuje troche czasu aby się poprawnie zaaplikować.`,
     detailedView_valenceBonusLabel: `Premia Walencyjna`,
     detailedView_valenceBonusDescription: `Możesz dodać lub usunąć bonus walencyjny ze swojej broni.`,
+    detailedView_legacyArcaneLabel: `[UNTRANSLATED] Installed Arcane`,
+    detailedView_legacyArcaneDescription: `[UNTRANSLATED] You can set or remove the arcane installed on this cosmetic, as well as its rank.`,
     detailedView_modularPartsLabel: `Zmień części modularne`,
     detailedView_invigorationLabel: `Ożywienie`,
     detailedView_loadoutLabel: `Zestawy`,

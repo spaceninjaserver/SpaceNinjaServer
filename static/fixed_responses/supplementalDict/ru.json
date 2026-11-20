@@ -202,6 +202,7 @@
   "/Lotus/Language/Upgrades/AvatarPowerMaxModDesc": "|val|% к запасу энергии",
   "/Lotus/Language/Upgrades/AvatarPowerRateModDesc": "|val| к восстановлению энергии",
   "/Lotus/Language/Upgrades/AvatarSpawnEnergyPercent": "Пополняет запас энергии на |val|% от максимально возможного при появлении",
+  "/Lotus/Language/Upgrades/CosmeticEnhancer_EnhancedName": "МИСТИЧ. |SKIN|",
   "/Lotus/Language/Upgrades/DataSpikeDamageReduceOnHack": "Уменьшает урон на |VAL|% во время взлома",
   "/Lotus/Language/Upgrades/DataSpikeElectrifyHack": "Шокирует врагов в радиусе |RANGE|м во время Взлома",
   "/Lotus/Language/Upgrades/DataSpikeOnExecutionAmmo": "Выполнение убийства «Милосердием» пополняет магазины основного и вторичного оружия на |AMMO|%",

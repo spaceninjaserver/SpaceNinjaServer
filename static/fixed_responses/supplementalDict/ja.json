@@ -202,6 +202,7 @@
   "/Lotus/Language/Upgrades/AvatarPowerMaxModDesc": "|val|% 最大エネルギー",
   "/Lotus/Language/Upgrades/AvatarPowerRateModDesc": "|val| エネルギー回復率",
   "/Lotus/Language/Upgrades/AvatarSpawnEnergyPercent": "スポーン時に最大エネルギーの|val|％を回復",
+  "/Lotus/Language/Upgrades/CosmeticEnhancer_EnhancedName": "アルケイン |SKIN|",
   "/Lotus/Language/Upgrades/DataSpikeDamageReduceOnHack": "ハッキング中のダメージを|VAL|％低減",
   "/Lotus/Language/Upgrades/DataSpikeElectrifyHack": "ハッキング中、|RANGE|m内の敵を感電させる。",
   "/Lotus/Language/Upgrades/DataSpikeOnExecutionAmmo": "「Mercy」で敵を倒すと、プライマリとセカンダリ武器のマガジンを|AMMO|％補充する",

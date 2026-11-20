@@ -202,6 +202,7 @@
   "/Lotus/Language/Upgrades/AvatarPowerMaxModDesc": "|val|% Energia Massima",
   "/Lotus/Language/Upgrades/AvatarPowerRateModDesc": "|val| Rigenerazione Energia/s",
   "/Lotus/Language/Upgrades/AvatarSpawnEnergyPercent": "|val|% Energia Massima viene riempita alla Generazione",
+  "/Lotus/Language/Upgrades/CosmeticEnhancer_EnhancedName": "ARCANE |SKIN|",
   "/Lotus/Language/Upgrades/DataSpikeDamageReduceOnHack": "Riduce i danni del |VAL|% durante l'hacking",
   "/Lotus/Language/Upgrades/DataSpikeElectrifyHack": "Elettrizza i nemici entro |RANGE|m durante l'Hacking",
   "/Lotus/Language/Upgrades/DataSpikeOnExecutionAmmo": "L'uccisione Mercy ricarica il Caricatore delle armi Primarie e Secondarie del |AMMO|%",

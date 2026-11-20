@@ -202,6 +202,7 @@
   "/Lotus/Language/Upgrades/AvatarPowerMaxModDesc": "|val|% de Energia Máxima",
   "/Lotus/Language/Upgrades/AvatarPowerRateModDesc": "|val| Taxa de Energia",
   "/Lotus/Language/Upgrades/AvatarSpawnEnergyPercent": "|val|% de Energia Máxima fornecida ao Aparecer",
+  "/Lotus/Language/Upgrades/CosmeticEnhancer_EnhancedName": "|SKIN| (ARCANO)",
   "/Lotus/Language/Upgrades/DataSpikeDamageReduceOnHack": "Dano reduzido em |VAL|% durante invasões",
   "/Lotus/Language/Upgrades/DataSpikeElectrifyHack": "Aplicará uma descarga elétrica no raio de |RANGE|m durante a Invasão",
   "/Lotus/Language/Upgrades/DataSpikeOnExecutionAmmo": "Finalizações de Misericórdia reabastecerão o Carregador da Arma Primária e Secundária em |AMMO|%",

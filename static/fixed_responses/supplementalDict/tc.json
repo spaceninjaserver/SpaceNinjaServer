@@ -202,6 +202,7 @@
   "/Lotus/Language/Upgrades/AvatarPowerMaxModDesc": "|val|% 最大能量值",
   "/Lotus/Language/Upgrades/AvatarPowerRateModDesc": "|val| 能量恢復率",
   "/Lotus/Language/Upgrades/AvatarSpawnEnergyPercent": "任務初始獲得 |val|% 最大能量",
+  "/Lotus/Language/Upgrades/CosmeticEnhancer_EnhancedName": "秘奧 |SKIN|",
   "/Lotus/Language/Upgrades/DataSpikeDamageReduceOnHack": "駭入時減傷 |VAL|%",
   "/Lotus/Language/Upgrades/DataSpikeElectrifyHack": "入侵時電擊 |RANGE| 公尺內的敵人",
   "/Lotus/Language/Upgrades/DataSpikeOnExecutionAmmo": "慈悲斬殺為當前武器重新裝填 |AMMO|% 彈匣容量的彈藥",

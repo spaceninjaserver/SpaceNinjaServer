@@ -153,6 +153,8 @@ dict = {
     detailedView_archonShardsDescription2: `Note that each archon shard takes some time to be applied when loading in.`,
     detailedView_valenceBonusLabel: `Valence Bonus`,
     detailedView_valenceBonusDescription: `You can set or remove the Valence Bonus from your weapon.`,
+    detailedView_legacyArcaneLabel: `Installed Arcane`,
+    detailedView_legacyArcaneDescription: `You can set or remove the arcane installed on this cosmetic, as well as its rank.`,
     detailedView_modularPartsLabel: `Change Modular Parts`,
     detailedView_invigorationLabel: `Invigoration`,
     detailedView_loadoutLabel: `Loadouts`,

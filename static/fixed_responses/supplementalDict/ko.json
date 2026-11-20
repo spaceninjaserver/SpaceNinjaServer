@@ -202,6 +202,7 @@
   "/Lotus/Language/Upgrades/AvatarPowerMaxModDesc": "|val|% 최대 에너지량",
   "/Lotus/Language/Upgrades/AvatarPowerRateModDesc": "초당 |val| 에너지 재생",
   "/Lotus/Language/Upgrades/AvatarSpawnEnergyPercent": "스폰 시 최대 에너지량의 |val|% 충전",
+  "/Lotus/Language/Upgrades/CosmeticEnhancer_EnhancedName": "아케인 |SKIN|",
   "/Lotus/Language/Upgrades/DataSpikeDamageReduceOnHack": "해킹 도중 |VAL|% 만큼 피해량 감소",
   "/Lotus/Language/Upgrades/DataSpikeElectrifyHack": "해킹 도중 |RANGE|m 내의 적 감전",
   "/Lotus/Language/Upgrades/DataSpikeOnExecutionAmmo": "자비의 일격 시 주무기 및 보조 무기의 탄창을 |AMMO|%만큼 충전",

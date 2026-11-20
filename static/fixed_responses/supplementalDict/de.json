@@ -202,6 +202,7 @@
   "/Lotus/Language/Upgrades/AvatarPowerMaxModDesc": "|val| % Maximale Energie",
   "/Lotus/Language/Upgrades/AvatarPowerRateModDesc": "|val| Energierate",
   "/Lotus/Language/Upgrades/AvatarSpawnEnergyPercent": "|val| % maximale Energie beim Spawnen",
+  "/Lotus/Language/Upgrades/CosmeticEnhancer_EnhancedName": "ARKANER |SKIN|",
   "/Lotus/Language/Upgrades/DataSpikeDamageReduceOnHack": "Reduziert Schaden beim Hacken um |VAL| %",
   "/Lotus/Language/Upgrades/DataSpikeElectrifyHack": "Setzt beim Hacken Gegner innerhalb von |RANGE| m unter Strom",
   "/Lotus/Language/Upgrades/DataSpikeOnExecutionAmmo": "Gnadenstöße füllen die Magazine der Primär- und Sekundärwaffe um |AMMO| % auf",

@@ -154,6 +154,8 @@ dict = {
     detailedView_archonShardsDescription2: `Un délai sera présent entre l'application des éclats et le chargement en jeu.`,
     detailedView_valenceBonusLabel: `Bonus de Valence`,
     detailedView_valenceBonusDescription: `Définir le Bonus Valence de l'arme.`,
+    detailedView_legacyArcaneLabel: `[UNTRANSLATED] Installed Arcane`,
+    detailedView_legacyArcaneDescription: `[UNTRANSLATED] You can set or remove the arcane installed on this cosmetic, as well as its rank.`,
     detailedView_modularPartsLabel: `Changer l'équipement modulaire`,
     detailedView_invigorationLabel: `Dynamisation`,
     detailedView_loadoutLabel: `Équipements`,

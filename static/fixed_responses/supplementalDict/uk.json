@@ -202,6 +202,7 @@
   "/Lotus/Language/Upgrades/AvatarPowerMaxModDesc": "|val| % до максимальної енергії",
   "/Lotus/Language/Upgrades/AvatarPowerRateModDesc": "|val| до відновлення енергії",
   "/Lotus/Language/Upgrades/AvatarSpawnEnergyPercent": "|val| % до максимальної енергії під час появи на мапі",
+  "/Lotus/Language/Upgrades/CosmeticEnhancer_EnhancedName": "|SKIN| (МІСТИЧНЕ)",
   "/Lotus/Language/Upgrades/DataSpikeDamageReduceOnHack": "Отримувана шкода зменшується на |VAL| % під час зламу",
   "/Lotus/Language/Upgrades/DataSpikeElectrifyHack": "Вороги в межах |RANGE| м отримують удар струмом під час зламу",
   "/Lotus/Language/Upgrades/DataSpikeOnExecutionAmmo": "|AMMO| % до заповненості магазинів основної та допоміжної зброї після добивання паразоном",

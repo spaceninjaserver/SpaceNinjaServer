@@ -154,6 +154,8 @@ dict = {
     detailedView_archonShardsDescription2: `Hinweis: Jede Archon-Scherbe benötigt beim Laden etwas Zeit, um angewendet zu werden.`,
     detailedView_valenceBonusLabel: `Valenzbonus`,
     detailedView_valenceBonusDescription: `Du kannst den Valenzbonus deiner Waffe festlegen oder entfernen.`,
+    detailedView_legacyArcaneLabel: `[UNTRANSLATED] Installed Arcane`,
+    detailedView_legacyArcaneDescription: `[UNTRANSLATED] You can set or remove the arcane installed on this cosmetic, as well as its rank.`,
     detailedView_modularPartsLabel: `Modulare Teile ändern`,
     detailedView_invigorationLabel: `Kräftigung`,
     detailedView_loadoutLabel: `Loadouts`,

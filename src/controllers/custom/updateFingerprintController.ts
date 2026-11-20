@@ -12,10 +12,10 @@ export const updateFingerprintController: RequestHandler = async (req, res) => {
     if (request.category !== "Upgrades") {
         const item = inventory[request.category].id(request.oid);
         if (item) {
-            if (request.action == "set" && request.upgradeFingerprint.buffs[0].Tag) {
-                const newUpgradeFingerprint = request.upgradeFingerprint;
-                if (!newUpgradeFingerprint.compact) newUpgradeFingerprint.compact = item.ItemType;
-
+            const newUpgradeFingerprint = request.upgradeFingerprint;
+            const isValence = "buffs" in newUpgradeFingerprint;
+            if (request.action == "set" && (!isValence || newUpgradeFingerprint.buffs[0].Tag)) {
+                if (isValence && !newUpgradeFingerprint.compact) newUpgradeFingerprint.compact = item.ItemType;
                 item.UpgradeType = request.upgradeType;
                 item.UpgradeFingerprint = JSON.stringify(newUpgradeFingerprint);
             } else if (request.action == "remove") {
@@ -39,17 +39,23 @@ export const updateFingerprintController: RequestHandler = async (req, res) => {
 type IUpdateFingerPrintRequest = IEquipmentRequest | IUpgradeRequest;
 
 interface IEquipmentRequest {
-    category: WeaponTypeInternal;
+    category: WeaponTypeInternal | "WeaponSkins";
     oid: string;
     action: "set" | "remove";
     upgradeType: string;
-    upgradeFingerprint: {
-        compact?: string;
-        buffs: {
-            Tag: string;
-            Value: number;
-        }[];
-    };
+    upgradeFingerprint:
+        | {
+              // Valence bonus
+              compact?: string;
+              buffs: {
+                  Tag: string;
+                  Value: number;
+              }[];
+          }
+        | {
+              // Pre-U22.14 arcane on a cosmetic
+              lvl: number;
+          };
 }
 
 interface IUpgradeRequest {

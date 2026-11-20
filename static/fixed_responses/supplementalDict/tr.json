@@ -202,6 +202,7 @@
   "/Lotus/Language/Upgrades/AvatarPowerMaxModDesc": "%|val| Maksimum Enerji",
   "/Lotus/Language/Upgrades/AvatarPowerRateModDesc": "|val| Enerji Oranı",
   "/Lotus/Language/Upgrades/AvatarSpawnEnergyPercent": "Başlangıçta Maksimum Enerji %|val| doldurulur",
+  "/Lotus/Language/Upgrades/CosmeticEnhancer_EnhancedName": "ARCANE |SKIN|",
   "/Lotus/Language/Upgrades/DataSpikeDamageReduceOnHack": "Sistemleri ele geçirme sırasında alınan hasarı %|VAL| azaltır",
   "/Lotus/Language/Upgrades/DataSpikeElectrifyHack": "Sistem ele geçirme işlemi sırasında |RANGE|m içindeki düşmanları şoklar",
   "/Lotus/Language/Upgrades/DataSpikeOnExecutionAmmo": "Merhamet Öldürmesi, Birincil ve İkincil Silah Şarjörlerini %|AMMO| doldurur",

@@ -202,6 +202,7 @@
   "/Lotus/Language/Upgrades/AvatarPowerMaxModDesc": "|val|% d'Énergie Max",
   "/Lotus/Language/Upgrades/AvatarPowerRateModDesc": "|val| de Taux d'Énergie",
   "/Lotus/Language/Upgrades/AvatarSpawnEnergyPercent": "|val|% de l'Énergie Max est remplie dès l'apparition",
+  "/Lotus/Language/Upgrades/CosmeticEnhancer_EnhancedName": "|SKIN| ARCANE",
   "/Lotus/Language/Upgrades/DataSpikeDamageReduceOnHack": "Réduit les Dégâts de |VAL|% pendant un piratage",
   "/Lotus/Language/Upgrades/DataSpikeElectrifyHack": "Envoie une décharge aux ennemis se situant dans les |RANGE|m lors d'un Piratage",
   "/Lotus/Language/Upgrades/DataSpikeOnExecutionAmmo": "Les éliminations par Miséricorde réapprovisionnent les Chargeurs des Armes Principales et Secondaires de |AMMO|%",

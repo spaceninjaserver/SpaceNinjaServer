@@ -859,6 +859,23 @@
                         </form>
                     </div>
                 </div>
+                <div id="legacyArcane-card" class="card mb-3 d-none">
+                    <h5 class="card-header" data-loc="detailedView_legacyArcaneLabel"></h5>
+                    <div class="card-body">
+                        <p data-loc="detailedView_legacyArcaneDescription"></p>
+                        <form class="input-group mb-3" onsubmit="handleLegacyArcaneChange(event)">
+                            <select class="form-control" id="legacyArcane-type"></select>
+                            <select class="form-select" id="legacyArcane-rank" style="max-width:100px">
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
+                            <button class="btn btn-primary" type="submit" value="set" data-loc="general_setButton"></button>
+                            <button class="btn btn-danger" type="submit" value="remove" data-loc="code_remove"></button>
+                        </form>
+                    </div>
+                </div>
                 <div id="equipmentFeatures-card" class="card mb-3 d-none">
                     <h5 class="card-header" data-loc="detailedView_equipmentFeaturesLabel"></h5>
                     <div id="equipmentFeaturesButtons-card" class="card-body d-flex flex-wrap gap-2"></div>

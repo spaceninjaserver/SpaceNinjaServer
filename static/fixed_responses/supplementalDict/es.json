@@ -202,6 +202,7 @@
   "/Lotus/Language/Upgrades/AvatarPowerMaxModDesc": "|val|% de energía máxima",
   "/Lotus/Language/Upgrades/AvatarPowerRateModDesc": "|val| tasa de energía",
   "/Lotus/Language/Upgrades/AvatarSpawnEnergyPercent": "|val|% de la energía máxima es rellenada al aparecer",
+  "/Lotus/Language/Upgrades/CosmeticEnhancer_EnhancedName": "|SKIN| ARCANO",
   "/Lotus/Language/Upgrades/DataSpikeDamageReduceOnHack": "Reduce el daño en un |VAL| % mientras se realiza un hackeo",
   "/Lotus/Language/Upgrades/DataSpikeElectrifyHack": "Electrocuta a enemigos dentro de |RANGE|m mientras hackeas",
   "/Lotus/Language/Upgrades/DataSpikeOnExecutionAmmo": "Asesinato de Misericordia rellena el cargador del arma primaria y secundaria en un |AMMO| %",

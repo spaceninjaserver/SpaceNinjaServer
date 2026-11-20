@@ -154,6 +154,8 @@ dict = {
     detailedView_archonShardsDescription2: `Обратите внимание: каждый осколок Архонта применяется с задержкой при загрузке.`,
     detailedView_valenceBonusLabel: `Бонус Валентности`,
     detailedView_valenceBonusDescription: `Вы можете установить или убрать бонус Валентности с вашего оружия.`,
+    detailedView_legacyArcaneLabel: `Установленный Мистификатор`,
+    detailedView_legacyArcaneDescription: `Вы можете установить или убрать Мистификатор с этой косметики, а также выбрать его ранг.`,
     detailedView_modularPartsLabel: `Изменить модульные части`,
     detailedView_invigorationLabel: `Воодушевление`,
     detailedView_loadoutLabel: `Конфигурации`,

@@ -154,6 +154,8 @@ dict = {
     detailedView_archonShardsDescription2: `Зверніть увагу: кожен уламок Архонта застосовується з затримкою при завантаженні.`,
     detailedView_valenceBonusLabel: `Ознака Валентності`,
     detailedView_valenceBonusDescription: `Ви можете встановити або прибрати ознаку Валентності з вашої зброї.`,
+    detailedView_legacyArcaneLabel: `[UNTRANSLATED] Installed Arcane`,
+    detailedView_legacyArcaneDescription: `[UNTRANSLATED] You can set or remove the arcane installed on this cosmetic, as well as its rank.`,
     detailedView_modularPartsLabel: `Змінити модульні частини`,
     detailedView_invigorationLabel: `Зміцнення`,
     detailedView_loadoutLabel: `Конфігурації`,

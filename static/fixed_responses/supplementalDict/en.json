@@ -202,6 +202,7 @@
   "/Lotus/Language/Upgrades/AvatarPowerMaxModDesc": "|val|% Energy Max",
   "/Lotus/Language/Upgrades/AvatarPowerRateModDesc": "|val| Energy Rate",
   "/Lotus/Language/Upgrades/AvatarSpawnEnergyPercent": "|val|% Maximum Energy is filled on Spawn",
+  "/Lotus/Language/Upgrades/CosmeticEnhancer_EnhancedName": "ARCANE |SKIN|",
   "/Lotus/Language/Upgrades/DataSpikeDamageReduceOnHack": "Reduces damage by |VAL|% while hacking",
   "/Lotus/Language/Upgrades/DataSpikeElectrifyHack": "Shock enemies within |RANGE|m while Hacking",
   "/Lotus/Language/Upgrades/DataSpikeOnExecutionAmmo": "Mercy Kill refills Primary and Secondary Magazine by |AMMO|%",

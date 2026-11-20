@@ -202,6 +202,7 @@
   "/Lotus/Language/Upgrades/AvatarPowerMaxModDesc": "|val|% Maks. Energii",
   "/Lotus/Language/Upgrades/AvatarPowerRateModDesc": "|val| Regeneracji Energii",
   "/Lotus/Language/Upgrades/AvatarSpawnEnergyPercent": "|val|% Maksymalnej Początkowej Energi zostanie napełniona",
+  "/Lotus/Language/Upgrades/CosmeticEnhancer_EnhancedName": "ARKANUM |SKIN|",
   "/Lotus/Language/Upgrades/DataSpikeDamageReduceOnHack": "Zmniejsza otrzymywane obrażenia o |VAL|% podczas hakowania",
   "/Lotus/Language/Upgrades/DataSpikeElectrifyHack": "Poraź elektrycznością wrogów w zasięgu |RANGE|m przy Hakowaniu",
   "/Lotus/Language/Upgrades/DataSpikeOnExecutionAmmo": "Zabicia Miłosierdziem uzupełniają |AMMO|% Magazynka Broni głównej i bocznej",

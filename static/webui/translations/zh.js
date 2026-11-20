@@ -154,6 +154,8 @@ dict = {
     detailedView_archonShardsDescription2: `请注意,在加载时,每个执政官源力石都需要一定的时间来生效.`,
     detailedView_valenceBonusLabel: `效价加成`,
     detailedView_valenceBonusDescription: `您可以设置或移除武器上的效价加成.`,
+    detailedView_legacyArcaneLabel: `[UNTRANSLATED] Installed Arcane`,
+    detailedView_legacyArcaneDescription: `[UNTRANSLATED] You can set or remove the arcane installed on this cosmetic, as well as its rank.`,
     detailedView_modularPartsLabel: `更换部件`,
     detailedView_invigorationLabel: `活化`,
     detailedView_loadoutLabel: `配置`,

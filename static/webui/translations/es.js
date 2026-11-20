@@ -154,6 +154,8 @@ dict = {
     detailedView_archonShardsDescription2: `Ten en cuenta que cada fragmento de arconte tarda un poco en aplicarse al cargar`,
     detailedView_valenceBonusLabel: `Bonus de Valéncia`,
     detailedView_valenceBonusDescription: `Puedes establecer o quitar el bonus de valencia de tu arma.`,
+    detailedView_legacyArcaneLabel: `[UNTRANSLATED] Installed Arcane`,
+    detailedView_legacyArcaneDescription: `[UNTRANSLATED] You can set or remove the arcane installed on this cosmetic, as well as its rank.`,
     detailedView_modularPartsLabel: `Cambiar partes modulares`,
     detailedView_invigorationLabel: `Fortalecimiento`,
     detailedView_loadoutLabel: `Equipamientos`,

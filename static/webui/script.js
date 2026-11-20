@@ -2194,7 +2194,7 @@ async function populateInventoryRoute() {
                         td.appendChild(a);
                     }
 
-                    {
+                    if (hasDetails(category, item, itemMap)) {
                         const a = document.createElement("a");
                         a.href = "/webui/details?productCategory=" + category + "&itemId=" + item.ItemId.$oid;
                         a.innerHTML = icons.feather;
@@ -2446,8 +2446,7 @@ async function populateInventoryRoute() {
         const tr = document.createElement("tr");
         {
             const td = document.createElement("td");
-            const name = itemMap[item.ItemType]?.name?.trim();
-            td.textContent = name || item.ItemType;
+            td.textContent = getWeaponSkinName(item, itemMap);
             tr.appendChild(td);
         }
         {
@@ -2464,6 +2463,12 @@ async function populateInventoryRoute() {
                 a.title = loc("code_remove");
                 a.innerHTML = icons.trash;
                 td.appendChild(a);
+            }
+            if (hasDetails("WeaponSkins", item, itemMap)) {
+                const a = document.createElement("a");
+                a.href = "/webui/details?productCategory=WeaponSkins&itemId=" + item.ItemId.$oid;
+                a.innerHTML = icons.feather;
+                td.prepend(a);
             }
 
             tr.appendChild(td);
@@ -2735,7 +2740,7 @@ single.getRoute("/webui/mods").on("beforeload", async function () {
                 a.innerHTML = icons.arrowUp;
                 td.appendChild(a);
             }
-            if (itemMap[item.ItemType]?.badReason == "u5mod") {
+            if (hasDetails("Upgrades", item, itemMap)) {
                 const a = document.createElement("a");
                 a.href = "/webui/details?productCategory=Upgrades&itemId=" + item.ItemId.$oid;
                 a.innerHTML = icons.feather;
@@ -4800,16 +4805,7 @@ single.getRoute("#detailedView-route").on("beforeload", async function () {
         document.getElementById("detailedView-loading").classList.remove("d-none");
         document.getElementById("detailedView-title").textContent = "";
         document.querySelector("#detailedView-route .text-body-secondary").textContent = "";
-        document.getElementById("loadout-card").classList.add("d-none");
-        document.getElementById("archonShards-card").classList.add("d-none");
-        document.getElementById("edit-suit-invigorations-card").classList.add("d-none");
-        document.getElementById("umbraEchoes-card").classList.add("d-none");
-        document.getElementById("modularParts-card").classList.add("d-none");
-        document.getElementById("modularParts-form").innerHTML = "";
-        document.getElementById("valenceBonus-card").classList.add("d-none");
-        document.getElementById("u5ModEdit-card").classList.add("d-none");
-        document.getElementById("equipmentFeatures-card").classList.add("d-none");
-        document.getElementById("equipmentFeaturesButtons-card").innerHTML = "";
+        hideDetailedViewCards();
     }
     populateDetailedViewRoute();
 });
@@ -4827,7 +4823,10 @@ async function populateDetailedViewRoute() {
 
     if (item) {
         document.getElementById("detailedView-loading").classList.add("d-none");
-        const itemName = itemMap[item.ItemType]?.name ?? item.ItemType;
+        const itemName =
+            category == "WeaponSkins"
+                ? getWeaponSkinName(item, itemMap)
+                : (itemMap[item.ItemType]?.name ?? item.ItemType);
         if (item.ItemName) {
             const pipeIndex = item.ItemName.indexOf("|");
             if (pipeIndex != -1) {
@@ -4842,8 +4841,13 @@ async function populateDetailedViewRoute() {
             document.querySelector("#detailedView-route .text-body-secondary").textContent = "";
         }
 
-        if (category != "Upgrades") {
-            document.getElementById("equipmentFeatures-card").classList.remove("d-none");
+        const cards = getDetailedViewCards(category, item, itemMap);
+        hideDetailedViewCards();
+        for (const card of cards) {
+            document.getElementById(card).classList.remove("d-none");
+        }
+
+        if (cards.includes("equipmentFeatures-card")) {
             const buttonsCard = document.getElementById("equipmentFeaturesButtons-card");
             buttonsCard.innerHTML = "";
             item.Features ??= 0;
@@ -4906,14 +4910,9 @@ async function populateDetailedViewRoute() {
                 wrapper.appendChild(label);
                 buttonsCard.appendChild(wrapper);
             }
-        } else {
-            document.getElementById("equipmentFeatures-card").classList.add("d-none");
-            document.getElementById("equipmentFeaturesButtons-card").innerHTML = "";
         }
 
-        if (category == "Suits") {
-            document.getElementById("archonShards-card").classList.remove("d-none");
-
+        if (cards.includes("archonShards-card")) {
             const uniqueUpgrades = {};
             (item.ArchonCrystalUpgrades ?? []).forEach(upgrade => {
                 if (upgrade && upgrade.UpgradeType) {
@@ -4948,140 +4947,130 @@ async function populateDetailedViewRoute() {
                 }
                 document.getElementById("crystals-list").appendChild(tr);
             });
-
-            {
-                document.getElementById("edit-suit-invigorations-card").classList.remove("d-none");
-                document.getElementById("invigoration-offensive").value = item.OffensiveUpgrade || "";
-                document.getElementById("invigoration-defensive").value = item.DefensiveUpgrade || "";
-                document.getElementById("invigoration-expiry").value =
-                    formatDatetime("%Y-%m-%d %H:%M", Number(item.UpgradesExpiry?.$date.$numberLong)) || "";
-            }
-
-            if (item.ItemType != "/Lotus/Powersuits/Excalibur/ExcaliburUmbra") {
-                document.getElementById("umbraEchoes-card").classList.remove("d-none");
-                document.getElementById("umbraEchoes-expiry").value =
-                    formatDatetime("%Y-%m-%d %H:%M", Number(item.UmbraDate?.$date.$numberLong)) || "";
-            }
-
-            {
-                document.getElementById("loadout-card").classList.remove("d-none");
-                const maxModConfigNum = Math.min(2 + (item.ModSlotPurchases ?? 0), 5);
-
-                const configs = item.Configs ?? [];
-
-                const loadoutTabs = document.getElementById("loadoutTabs");
-                const loadoutTabsContent = document.getElementById("loadoutTabsContent");
-                loadoutTabs.innerHTML = "";
-                loadoutTabsContent.innerHTML = "";
-                for (let i = 0; i <= maxModConfigNum; i++) {
-                    const config = configs[i] ?? {};
-
-                    {
-                        const li = document.createElement("li");
-                        li.classList.add("nav-item");
-
-                        const button = document.createElement("button");
-                        button.classList.add("nav-link");
-                        if (i === 0) button.classList.add("active");
-                        button.id = `config${i}-tab`;
-                        button.setAttribute("data-bs-toggle", "tab");
-                        button.setAttribute("data-bs-target", `#config${i}`);
-                        button.innerHTML = config.Name?.trim() || String.fromCharCode(65 + i);
-
-                        li.appendChild(button);
-                        loadoutTabs.appendChild(li);
-                    }
-
-                    {
-                        const tabDiv = document.createElement("div");
-                        tabDiv.classList = "tab-pane";
-                        if (i === 0) tabDiv.classList.add("show", "active");
-
-                        tabDiv.id = `config${i}`;
-
-                        {
-                            const abilityOverrideForm = document.createElement("form");
-                            abilityOverrideForm.classList = "form-group mt-2";
-                            abilityOverrideForm.setAttribute(
-                                "onsubmit",
-                                `handleAbilityOverride(event, ${i});return false;`
-                            );
-
-                            const abilityOverrideFormLabel = document.createElement("label");
-                            abilityOverrideFormLabel.setAttribute("data-loc", "abilityOverride_label");
-                            abilityOverrideFormLabel.innerHTML = loc("abilityOverride_label");
-                            abilityOverrideFormLabel.classList = "form-label";
-                            abilityOverrideFormLabel.setAttribute("for", `abilityOverride-ability-config-${i}`);
-                            abilityOverrideForm.appendChild(abilityOverrideFormLabel);
-
-                            const abilityOverrideInputGroup = document.createElement("div");
-                            abilityOverrideInputGroup.classList = "input-group";
-                            abilityOverrideForm.appendChild(abilityOverrideInputGroup);
-
-                            const abilityOverrideInput = document.createElement("input");
-                            abilityOverrideInput.id = `abilityOverride-ability-config-${i}`;
-                            abilityOverrideInput.classList = "form-control";
-                            abilityOverrideInput.setAttribute("list", "datalist-Abilities");
-                            if (config.AbilityOverride) {
-                                const datalist = document.getElementById("datalist-Abilities");
-                                const options = Array.from(datalist.options);
-                                abilityOverrideInput.value =
-                                    options.find(
-                                        option => config.AbilityOverride.Ability == option.getAttribute("data-key")
-                                    )?.value || "";
-                            }
-                            abilityOverrideInputGroup.appendChild(abilityOverrideInput);
-
-                            const abilityOverrideOnSlot = document.createElement("span");
-                            abilityOverrideOnSlot.classList = "input-group-text";
-                            abilityOverrideOnSlot.setAttribute("data-loc", "abilityOverride_onSlot");
-                            abilityOverrideOnSlot.innerHTML = loc("abilityOverride_onSlot");
-                            abilityOverrideInputGroup.appendChild(abilityOverrideOnSlot);
-
-                            const abilityOverrideSecondInput = document.createElement("input");
-                            abilityOverrideSecondInput.id = `abilityOverride-ability-index-config-${i}`;
-                            abilityOverrideSecondInput.classList = "form-control";
-                            abilityOverrideSecondInput.setAttribute("type", "number");
-                            abilityOverrideSecondInput.setAttribute("min", "1");
-                            abilityOverrideSecondInput.setAttribute("max", "4");
-                            if (config.AbilityOverride)
-                                abilityOverrideSecondInput.value = config.AbilityOverride.Index + 1;
-                            abilityOverrideInputGroup.appendChild(abilityOverrideSecondInput);
-
-                            const abilityOverrideSetButton = document.createElement("button");
-                            abilityOverrideSetButton.classList = "btn btn-primary";
-                            abilityOverrideSetButton.setAttribute("type", "submit");
-                            abilityOverrideSetButton.setAttribute("value", "set");
-                            abilityOverrideSetButton.setAttribute("data-loc", "general_setButton");
-                            abilityOverrideSetButton.innerHTML = loc("general_setButton");
-                            abilityOverrideInputGroup.appendChild(abilityOverrideSetButton);
-
-                            const abilityOverrideRemoveButton = document.createElement("button");
-                            abilityOverrideRemoveButton.classList = "btn btn-danger";
-                            abilityOverrideRemoveButton.setAttribute("type", "submit");
-                            abilityOverrideRemoveButton.setAttribute("value", "remove");
-                            abilityOverrideRemoveButton.setAttribute("data-loc", "code_remove");
-                            abilityOverrideRemoveButton.innerHTML = loc("code_remove");
-                            abilityOverrideInputGroup.appendChild(abilityOverrideRemoveButton);
-
-                            abilityOverrideForm.appendChild(abilityOverrideInputGroup);
-
-                            tabDiv.appendChild(abilityOverrideForm);
-                        }
-
-                        loadoutTabsContent.appendChild(tabDiv);
-                    }
-                }
-            }
-        } else {
-            document.getElementById("loadout-card").classList.add("d-none");
-            document.getElementById("archonShards-card").classList.add("d-none");
-            document.getElementById("edit-suit-invigorations-card").classList.add("d-none");
-            document.getElementById("umbraEchoes-card").classList.add("d-none");
         }
 
-        if (["LongGuns", "Pistols", "Melee", "SpaceGuns", "SpaceMelee"].includes(category)) {
-            document.getElementById("valenceBonus-card").classList.remove("d-none");
+        if (cards.includes("edit-suit-invigorations-card")) {
+            document.getElementById("invigoration-offensive").value = item.OffensiveUpgrade || "";
+            document.getElementById("invigoration-defensive").value = item.DefensiveUpgrade || "";
+            document.getElementById("invigoration-expiry").value =
+                formatDatetime("%Y-%m-%d %H:%M", Number(item.UpgradesExpiry?.$date.$numberLong)) || "";
+        }
+
+        if (cards.includes("umbraEchoes-card")) {
+            document.getElementById("umbraEchoes-expiry").value =
+                formatDatetime("%Y-%m-%d %H:%M", Number(item.UmbraDate?.$date.$numberLong)) || "";
+        }
+
+        if (cards.includes("loadout-card")) {
+            const maxModConfigNum = Math.min(2 + (item.ModSlotPurchases ?? 0), 5);
+
+            const configs = item.Configs ?? [];
+
+            const loadoutTabs = document.getElementById("loadoutTabs");
+            const loadoutTabsContent = document.getElementById("loadoutTabsContent");
+            loadoutTabs.innerHTML = "";
+            loadoutTabsContent.innerHTML = "";
+            for (let i = 0; i <= maxModConfigNum; i++) {
+                const config = configs[i] ?? {};
+
+                {
+                    const li = document.createElement("li");
+                    li.classList.add("nav-item");
+
+                    const button = document.createElement("button");
+                    button.classList.add("nav-link");
+                    if (i === 0) button.classList.add("active");
+                    button.id = `config${i}-tab`;
+                    button.setAttribute("data-bs-toggle", "tab");
+                    button.setAttribute("data-bs-target", `#config${i}`);
+                    button.innerHTML = config.Name?.trim() || String.fromCharCode(65 + i);
+
+                    li.appendChild(button);
+                    loadoutTabs.appendChild(li);
+                }
+
+                {
+                    const tabDiv = document.createElement("div");
+                    tabDiv.classList = "tab-pane";
+                    if (i === 0) tabDiv.classList.add("show", "active");
+
+                    tabDiv.id = `config${i}`;
+
+                    {
+                        const abilityOverrideForm = document.createElement("form");
+                        abilityOverrideForm.classList = "form-group mt-2";
+                        abilityOverrideForm.setAttribute(
+                            "onsubmit",
+                            `handleAbilityOverride(event, ${i});return false;`
+                        );
+
+                        const abilityOverrideFormLabel = document.createElement("label");
+                        abilityOverrideFormLabel.setAttribute("data-loc", "abilityOverride_label");
+                        abilityOverrideFormLabel.innerHTML = loc("abilityOverride_label");
+                        abilityOverrideFormLabel.classList = "form-label";
+                        abilityOverrideFormLabel.setAttribute("for", `abilityOverride-ability-config-${i}`);
+                        abilityOverrideForm.appendChild(abilityOverrideFormLabel);
+
+                        const abilityOverrideInputGroup = document.createElement("div");
+                        abilityOverrideInputGroup.classList = "input-group";
+                        abilityOverrideForm.appendChild(abilityOverrideInputGroup);
+
+                        const abilityOverrideInput = document.createElement("input");
+                        abilityOverrideInput.id = `abilityOverride-ability-config-${i}`;
+                        abilityOverrideInput.classList = "form-control";
+                        abilityOverrideInput.setAttribute("list", "datalist-Abilities");
+                        if (config.AbilityOverride) {
+                            const datalist = document.getElementById("datalist-Abilities");
+                            const options = Array.from(datalist.options);
+                            abilityOverrideInput.value =
+                                options.find(
+                                    option => config.AbilityOverride.Ability == option.getAttribute("data-key")
+                                )?.value || "";
+                        }
+                        abilityOverrideInputGroup.appendChild(abilityOverrideInput);
+
+                        const abilityOverrideOnSlot = document.createElement("span");
+                        abilityOverrideOnSlot.classList = "input-group-text";
+                        abilityOverrideOnSlot.setAttribute("data-loc", "abilityOverride_onSlot");
+                        abilityOverrideOnSlot.innerHTML = loc("abilityOverride_onSlot");
+                        abilityOverrideInputGroup.appendChild(abilityOverrideOnSlot);
+
+                        const abilityOverrideSecondInput = document.createElement("input");
+                        abilityOverrideSecondInput.id = `abilityOverride-ability-index-config-${i}`;
+                        abilityOverrideSecondInput.classList = "form-control";
+                        abilityOverrideSecondInput.setAttribute("type", "number");
+                        abilityOverrideSecondInput.setAttribute("min", "1");
+                        abilityOverrideSecondInput.setAttribute("max", "4");
+                        if (config.AbilityOverride) abilityOverrideSecondInput.value = config.AbilityOverride.Index + 1;
+                        abilityOverrideInputGroup.appendChild(abilityOverrideSecondInput);
+
+                        const abilityOverrideSetButton = document.createElement("button");
+                        abilityOverrideSetButton.classList = "btn btn-primary";
+                        abilityOverrideSetButton.setAttribute("type", "submit");
+                        abilityOverrideSetButton.setAttribute("value", "set");
+                        abilityOverrideSetButton.setAttribute("data-loc", "general_setButton");
+                        abilityOverrideSetButton.innerHTML = loc("general_setButton");
+                        abilityOverrideInputGroup.appendChild(abilityOverrideSetButton);
+
+                        const abilityOverrideRemoveButton = document.createElement("button");
+                        abilityOverrideRemoveButton.classList = "btn btn-danger";
+                        abilityOverrideRemoveButton.setAttribute("type", "submit");
+                        abilityOverrideRemoveButton.setAttribute("value", "remove");
+                        abilityOverrideRemoveButton.setAttribute("data-loc", "code_remove");
+                        abilityOverrideRemoveButton.innerHTML = loc("code_remove");
+                        abilityOverrideInputGroup.appendChild(abilityOverrideRemoveButton);
+
+                        abilityOverrideForm.appendChild(abilityOverrideInputGroup);
+
+                        tabDiv.appendChild(abilityOverrideForm);
+                    }
+
+                    loadoutTabsContent.appendChild(tabDiv);
+                }
+            }
+        }
+
+        if (cards.includes("valenceBonus-card")) {
             document.getElementById("valenceBonus-innateDamage").value = "";
             document.getElementById("valenceBonus-procent").value = 25;
 
@@ -5091,12 +5080,35 @@ async function populateDetailedViewRoute() {
                 document.getElementById("valenceBonus-innateDamage").value = buff.Tag ?? "";
                 document.getElementById("valenceBonus-procent").value = Math.round(buffValue * 1000) / 10;
             }
-        } else {
-            document.getElementById("valenceBonus-card").classList.add("d-none");
         }
 
-        if (itemMap[item.ItemType]?.badReason == "u5mod") {
-            document.getElementById("u5ModEdit-card").classList.remove("d-none");
+        if (cards.includes("legacyArcane-card")) {
+            const typeSelect = document.getElementById("legacyArcane-type");
+            typeSelect.innerHTML = "";
+            const arcanes = Object.keys(itemMap).filter(
+                uniqueName =>
+                    uniqueName.startsWith("/Lotus/Upgrades/CosmeticEnhancers/") &&
+                    itemMap[uniqueName].badReason != "frivolous"
+            );
+            if (item.UpgradeType && !arcanes.includes(item.UpgradeType)) {
+                arcanes.push(item.UpgradeType);
+            }
+            arcanes
+                .map(uniqueName => [uniqueName, itemMap[uniqueName]?.name ?? uniqueName])
+                .sort((a, b) => a[1].localeCompare(b[1]))
+                .forEach(([uniqueName, name]) => {
+                    const option = document.createElement("option");
+                    option.value = uniqueName;
+                    option.textContent = name;
+                    typeSelect.appendChild(option);
+                });
+            typeSelect.value = item.UpgradeType ?? "";
+            document.getElementById("legacyArcane-rank").value = item.UpgradeFingerprint
+                ? String(JSON.parse(item.UpgradeFingerprint).lvl ?? 0)
+                : "0";
+        }
+
+        if (cards.includes("u5ModEdit-card")) {
             const oldFitsSelect = document.getElementById("u5ModEdit-fits");
             const fitsSelect = oldFitsSelect.cloneNode(false);
             oldFitsSelect.parentNode.replaceChild(fitsSelect, oldFitsSelect);
@@ -5129,12 +5141,9 @@ async function populateDetailedViewRoute() {
                 createUpgradeInput(upgradeFields, itemMap, item.ItemType, up);
             });
             createUpgradeInput(upgradeFields, itemMap, item.ItemType, null);
-        } else {
-            document.getElementById("u5ModEdit-card").classList.add("d-none");
         }
 
-        if (modularWeapons.includes(item.ItemType)) {
-            document.getElementById("modularParts-card").classList.remove("d-none");
+        if (cards.includes("modularParts-card")) {
             const form = document.getElementById("modularParts-form");
             form.innerHTML = "";
             const requiredParts = getRequiredParts(category, item.ItemType);
@@ -5160,9 +5169,6 @@ async function populateDetailedViewRoute() {
             changeButton.setAttribute("data-loc", "cheats_changeButton");
             changeButton.innerHTML = loc("cheats_changeButton");
             form.appendChild(changeButton);
-        } else {
-            document.getElementById("modularParts-card").classList.add("d-none");
-            document.getElementById("modularParts-form").innerHTML = "";
         }
     } else {
         single.loadRoute("/webui/inventory");
@@ -6022,6 +6028,76 @@ function handleValenceBonusChange(event) {
             })
         }).done(function () {
             inventory_data = undefined; // UI is up-to-date now, but subsequent updates will need to grab new data
+        });
+    });
+}
+
+function hideDetailedViewCards() {
+    for (const card of document.querySelectorAll("#detailedView-route .card")) {
+        card.classList.add("d-none");
+    }
+    document.getElementById("equipmentFeaturesButtons-card").innerHTML = "";
+    document.getElementById("modularParts-form").innerHTML = "";
+}
+
+function getDetailedViewCards(category, item, itemMap) {
+    const cards = [];
+    if (category != "Upgrades" && category != "WeaponSkins") {
+        cards.push("equipmentFeatures-card");
+    }
+    if (category == "Suits") {
+        cards.push("archonShards-card", "edit-suit-invigorations-card", "loadout-card");
+        if (item.ItemType != "/Lotus/Powersuits/Excalibur/ExcaliburUmbra") {
+            cards.push("umbraEchoes-card");
+        }
+    }
+    if (["LongGuns", "Pistols", "Melee", "SpaceGuns", "SpaceMelee"].includes(category)) {
+        cards.push("valenceBonus-card");
+    }
+    if (category == "WeaponSkins" && !item.ItemType.startsWith("/Lotus/Upgrades/Skins/Operator/")) {
+        cards.push("legacyArcane-card");
+    }
+    if (itemMap[item.ItemType]?.badReason == "u5mod") {
+        cards.push("u5ModEdit-card");
+    }
+    if (modularWeapons.includes(item.ItemType)) {
+        cards.push("modularParts-card");
+    }
+    return cards;
+}
+
+function hasDetails(category, item, itemMap) {
+    return getDetailedViewCards(category, item, itemMap).length != 0;
+}
+
+function getWeaponSkinName(item, itemMap) {
+    const name = itemMap[item.ItemType]?.name?.trim() || item.ItemType;
+    const format = itemMap["/Lotus/Language/Upgrades/CosmeticEnhancer_EnhancedName"]?.name;
+    return item.UpgradeType && format ? format.replace("|SKIN|", name) : name;
+}
+
+function handleLegacyArcaneChange(event) {
+    event.preventDefault();
+    const urlParams = new URLSearchParams(window.location.search);
+    const action = event.submitter.value;
+    const remove = action == "remove";
+    revalidateAuthz().then(() => {
+        $.post({
+            url: "/custom/updateFingerprint?" + window.authz,
+            contentType: "application/json",
+            data: JSON.stringify({
+                category: urlParams.get("productCategory"),
+                oid: urlParams.get("itemId"),
+                action,
+                upgradeType: document.getElementById("legacyArcane-type").value,
+                upgradeFingerprint: { lvl: Number(document.getElementById("legacyArcane-rank").value) }
+            })
+        }).done(function () {
+            inventory_data = undefined; // UI is up-to-date now, but subsequent updates will need to grab new data
+            if (remove) {
+                document.getElementById("legacyArcane-rank").value = "0";
+                document.getElementById("legacyArcane-type").value = "";
+            }
         });
     });
 }
