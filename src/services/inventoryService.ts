@@ -275,7 +275,6 @@ export const createInventory = async (
         await addItem(inventory, "/Lotus/Types/Friendly/PlayerControllable/Weapons/DuviriDualSwords");
 
         if (config.skipTutorial) {
-            inventory.MadeStoryModeDecision = true;
             inventory.PlayedParkourTutorial = true;
             const startingGear = await addStartingGear(inventory);
             await completeQuest(inventory, "/Lotus/Types/Keys/VorsPrize/VorsPrizeQuestKeyChain", BV_LATEST);
@@ -326,6 +325,9 @@ export const addStartingGear = async (
         throw new Error(`account has already received starting gear`);
     }
     inventory.ReceivedStartingGear = true;
+    if (version_compare(buildLabel, gameToBuildVersion["14.0.0"]) >= 0) {
+        inventory.MadeStoryModeDecision = true;
+    }
 
     const { LongGuns, Pistols, Suits, Melee } = {
         LongGuns: [{ ItemType: "/Lotus/Weapons/Tenno/Rifle/Rifle" }],
