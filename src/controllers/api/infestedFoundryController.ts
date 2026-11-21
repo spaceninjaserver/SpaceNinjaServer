@@ -411,8 +411,10 @@ export const infestedFoundryController: RequestHandler = async (req, res) => {
                 addRecipes(inventory, recipeChanges);
                 await inventory.save();
                 sendWsBroadcastToGame(account._id.toString(), { sync_inventory: true });
+                res.json({ count: 1 });
+            } else {
+                res.json({ count: 0 });
             }
-            res.end();
             break;
         }
 

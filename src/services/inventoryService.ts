@@ -29,7 +29,8 @@ import type {
     ITauPrequelQuestCustomData,
     ICollectibleEntry,
     TInventorySlot,
-    ITennoCon2026Cust
+    ITennoCon2026Cust,
+    IFocusUpgrade
 } from "../types/inventoryTypes/inventoryTypes.ts";
 import { eInventorySlot, equipmentKeys, slotNames } from "../types/inventoryTypes/inventoryTypes.ts";
 import type { IGenericUpdate, IUpdateNodeIntrosResponse } from "../types/genericUpdateTypes.ts";
@@ -339,7 +340,7 @@ export const addStartingGear = async (
     const inventoryChanges: IInventoryChanges = {};
     addEquipment(inventory, "LongGuns", LongGuns[0].ItemType, { IsNew: false }, inventoryChanges);
     addEquipment(inventory, "Pistols", Pistols[0].ItemType, { IsNew: false }, inventoryChanges);
-    if (shouldDoServerQol("tutorialGivesStanceMods", buildVersion, gameToBuildVersionInt["38.5.0"])) {
+    if (shouldDoServerQol("tutorialGivesStanceMods", buildVersion)) {
         combineInventoryChanges(inventoryChanges, await addItem(inventory, Melee[0].ItemType)); // This respects defaultUpgrades
     } else {
         addEquipment(inventory, "Melee", Melee[0].ItemType, { IsNew: false }, inventoryChanges);
@@ -2831,6 +2832,16 @@ export const addFocusXpIncreases = (inventory: TInventoryDatabaseDocument, focus
     }
 };
 
+export const unlockFocusWay = (
+    inventory: Pick<TInventoryDatabaseDocument, "FocusAbility" | "FocusUpgrades">,
+    focusType: string
+): IFocusUpgrade => {
+    const focusUpgrade: IFocusUpgrade = { ItemType: focusType, IsActive: true, TotalCapacity: 5 };
+    inventory.FocusAbility ??= focusType;
+    inventory.FocusUpgrades.push(focusUpgrade);
+    return focusUpgrade;
+};
+
 export const addLoreFragmentScans = (inventory: TInventoryDatabaseDocument, arr: ILoreFragmentScan[]): void => {
     arr.forEach(clientFragment => {
         const fragment = inventory.LoreFragmentScans.find(x => x.ItemType == clientFragment.ItemType);
@@ -3105,13 +3116,7 @@ export const createLibraryDailyTask = (buildVersion: number): ILibraryDailyTaskI
     const enemyTypes = getRandomElement(libraryDailyTasks)!;
     const enemyAvatar = ExportEnemies.avatars[enemyTypes[0]];
     const scansRequired = getRandomInt(2, 4);
-    const rewardQuantityMultiplier = shouldDoServerQol(
-        "doubleDailySynthesisEndoReward",
-        buildVersion,
-        gameToBuildVersionInt["22.13.4"] // change actually made in 22.13.3
-    )
-        ? 2.5
-        : 1.25;
+    const rewardQuantityMultiplier = shouldDoServerQol("doubleDailySynthesisEndoReward", buildVersion) ? 2.5 : 1.25;
     return {
         EnemyTypes: enemyTypes,
         EnemyLocTag: enemyAvatar.name,

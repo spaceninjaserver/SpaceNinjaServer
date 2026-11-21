@@ -5506,7 +5506,7 @@ export const getKey = (uniqueName: string, buildVersion: number = BV_LATEST): IK
 export const getMissionDeck = (uniqueName: string, buildVersion: number): Readonly<TMissionDeck> | undefined => {
     if (
         uniqueName == "/Lotus/Types/Game/MissionDecks/BossMissionRewards/YinYangRewards" &&
-        !shouldDoServerQol("tylRegorDropsTwoEquinoxParts", buildVersion, gameToBuildVersionInt["42.0.0"])
+        !shouldDoServerQol("tylRegorDropsTwoEquinoxParts", buildVersion)
     ) {
         return preU42YinYangRewards;
     }

@@ -10,9 +10,9 @@ export const resetIceBladeChampionController: RequestHandler = async (req, res) 
         return;
     }
 
-    await Promise.all([
+    const [champion, messages] = await Promise.all([
         IceBladeChampion.deleteMany({}),
         Inbox.deleteMany({ sub: "/Lotus/Language/Iceblade/IcebladeChallengeInboxSubject" })
     ]);
-    res.end();
+    res.json({ count: champion.deletedCount + messages.deletedCount });
 };

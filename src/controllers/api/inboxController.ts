@@ -9,27 +9,11 @@ import {
     exportInboxMessage,
     getMessagesSorted,
     goalEventMessagesByTag,
+    readMessage,
     type IMessageCreationTemplate
 } from "../../services/inboxService.ts";
-import {
-    getAccountForRequest,
-    getAccountFromSuffixedName,
-    getBuildVersion,
-    getSuffixedName,
-    type TAccountDocument
-} from "../../services/loginService.ts";
-import {
-    addItems,
-    combineInventoryChanges,
-    CurrencyType,
-    getEffectiveAvatarImageType,
-    getInventory,
-    updateCurrency
-} from "../../services/inventoryService.ts";
+import { getAccountForRequest, getBuildVersion, type TAccountDocument } from "../../services/loginService.ts";
 import { logger } from "../../utils/logger.ts";
-import { ExportFlavour } from "warframe-public-export-plus";
-import { handleStoreItemAcquisition } from "../../services/purchaseService.ts";
-import { fromStoreItem, isStoreItem } from "../../services/itemDataService.ts";
 import type { IOid } from "../../types/commonTypes.ts";
 import { config } from "../../services/configService.ts";
 import {
@@ -41,7 +25,6 @@ import {
 } from "../../services/worldStateService.ts";
 import { fromMongoDate } from "../../helpers/inventoryHelpers.ts";
 import { Types } from "mongoose";
-import type { IInventoryChanges } from "../../types/purchaseTypes.ts";
 import gameToBuildVersionInt from "../../constants/gameToBuildVersionInt.ts";
 
 export const inboxController: RequestHandler = async (req, res) => {
@@ -67,79 +50,12 @@ export const inboxController: RequestHandler = async (req, res) => {
             res.end();
             return;
         }
-        message.r = true;
-        await message.save();
-
-        const attachmentItems = message.attVisualOnly ? undefined : message.att;
-        const attachmentCountedItems = message.attVisualOnly ? undefined : message.countedAtt;
-        if (
-            attachmentItems ||
-            attachmentCountedItems ||
-            message.gifts ||
-            message.RegularCredits ||
-            message.PremiumCredits
-        ) {
-            const inventory = await getInventory(account._id, undefined);
-            const inventoryChanges: IInventoryChanges = {};
-            if (attachmentItems) {
-                await addItems(
-                    inventory,
-                    attachmentItems.map(attItem => ({
-                        ItemType: isStoreItem(attItem) ? fromStoreItem(attItem) : attItem,
-                        ItemCount: 1
-                    })),
-                    inventoryChanges
-                );
-            }
-            if (attachmentCountedItems) {
-                await addItems(inventory, attachmentCountedItems, inventoryChanges);
-            }
-            if (message.gifts) {
-                const sender = await getAccountFromSuffixedName(message.sndr);
-                const recipientName = getSuffixedName(account);
-                const giftQuantity = message.arg!.find(x => x.Key == "GIFT_QUANTITY")!.Tag as number;
-                for (const gift of message.gifts) {
-                    combineInventoryChanges(
-                        inventoryChanges,
-                        (await handleStoreItemAcquisition(gift.GiftType, inventory, giftQuantity)).InventoryChanges
-                    );
-                    if (sender) {
-                        await createMessage(sender._id, [
-                            {
-                                sndr: recipientName,
-                                msg: "/Lotus/Language/Menu/GiftReceivedConfirmationBody",
-                                arg: [
-                                    {
-                                        Key: "RECIPIENT_NAME",
-                                        Tag: recipientName
-                                    },
-                                    {
-                                        Key: "GIFT_TYPE",
-                                        Tag: gift.GiftType
-                                    },
-                                    {
-                                        Key: "GIFT_QUANTITY",
-                                        Tag: giftQuantity
-                                    }
-                                ],
-                                sub: "/Lotus/Language/Menu/GiftReceivedConfirmationSubject",
-                                icon: ExportFlavour[getEffectiveAvatarImageType(inventory)].icon,
-                                highPriority: true
-                            }
-                        ]);
-                    }
-                }
-            }
-            if (message.RegularCredits) {
-                updateCurrency(inventory, -message.RegularCredits, CurrencyType.CREDITS, inventoryChanges);
-            }
-            if (message.PremiumCredits) {
-                updateCurrency(inventory, -message.PremiumCredits, CurrencyType.PLATINUM, inventoryChanges);
-            }
-            await inventory.save();
+        const inventoryChanges = await readMessage(account, message);
+        if (inventoryChanges) {
             res.json({ InventoryChanges: inventoryChanges });
+        } else {
+            res.end();
         }
-        res.end();
     } else if (latestClientMessageId) {
         await createNewEventMessages(account, buildVersion);
         const newMessages = await getMessagesSorted(

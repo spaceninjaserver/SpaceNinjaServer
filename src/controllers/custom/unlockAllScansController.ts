@@ -30,6 +30,8 @@ export const unlockAllScansController: RequestHandler = async (req, res) => {
     for (const type of Object.keys(ExportCodex.objects)) {
         scanTypes.add(type);
     }
+    const oldScans = new Map((stats.Scans ?? []).map(scan => [scan.type, scan.scans]));
+    let count = [...scanTypes].filter(type => (oldScans.get(type) ?? 0) < 9999).length;
     stats.Scans = [];
     for (const type of scanTypes) {
         stats.Scans.push({ type, scans: 9999 });
@@ -87,6 +89,7 @@ export const unlockAllScansController: RequestHandler = async (req, res) => {
             ];
     }
     if (kuriaSeries.Count != kuriaSeries.ReqScans) {
+        ++count;
         kuriaSeries.Count = kuriaSeries.ReqScans;
         kuriaSeries.Tracking =
             "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
@@ -111,6 +114,7 @@ export const unlockAllScansController: RequestHandler = async (req, res) => {
             ];
     }
     if (duviriSeries.Count != duviriSeries.ReqScans) {
+        ++count;
         duviriSeries.Count = duviriSeries.ReqScans;
         duviriSeries.Tracking =
             "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
@@ -134,6 +138,7 @@ export const unlockAllScansController: RequestHandler = async (req, res) => {
             ];
     }
     if (spiderSeries.Count != spiderSeries.ReqScans) {
+        ++count;
         spiderSeries.Count = spiderSeries.ReqScans;
         spiderSeries.Tracking =
             "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
@@ -141,6 +146,16 @@ export const unlockAllScansController: RequestHandler = async (req, res) => {
     }
 
     // Unlock all lore fragment scans
+    const oldLoreProgress = new Map(inventory.LoreFragmentScans.map(lfs => [lfs.ItemType, lfs.Progress]));
+    for (const [ItemType, data] of Object.entries({
+        ...ExportCodex.loreFragments,
+        ...ExportCodex.songs,
+        ...ExportCodex.fighterFrames
+    })) {
+        if ((oldLoreProgress.get(ItemType) ?? 0) < data.reqScans) {
+            ++count;
+        }
+    }
     const existingPrex = new Set<string>();
     for (const lfs of inventory.LoreFragmentScans) {
         if (lfs.ItemType.startsWith("/Lotus/Types/Lore/Fragments/LoreCardFragments/")) {
@@ -178,10 +193,11 @@ export const unlockAllScansController: RequestHandler = async (req, res) => {
         });
     }
     if (!inventory.receivedThousandYearFishDeco) {
+        ++count;
         await giveThousandYearFishDeco(inventory); // needs accountOwnerId
     }
 
     await Promise.all([stats.save(), inventory.save()]);
-    res.end();
+    res.json({ count });
     broadcastInventoryUpdate(req);
 };

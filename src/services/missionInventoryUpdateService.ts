@@ -182,10 +182,7 @@ const getRotations = async (
         }
     }
 
-    if (
-        rewardInfo.node == "SolNode105" &&
-        shouldDoServerQol("tylRegorDropsTwoEquinoxParts", buildVersion, gameToBuildVersionInt["42.0.0"])
-    ) {
+    if (rewardInfo.node == "SolNode105" && shouldDoServerQol("tylRegorDropsTwoEquinoxParts", buildVersion)) {
         // U42 QoL change:
         // Defeating Tyl Regor now rewards two Equinox Component Blueprints — one guaranteed for the Night and Day Aspect each.
         return [0, 1];
@@ -2409,7 +2406,7 @@ async function getRandomMissionDrops(
     if (
         RewardInfo.node.includes("CrewBattleNode") &&
         mission?.Tier &&
-        shouldDoServerQol("railjackSteelEssencesReward", buildVersion, buildVersionToInt("2026.06.30.09.08"))
+        shouldDoServerQol("railjackSteelEssencesReward", buildVersion)
     ) {
         drops.push({
             StoreItem: "/Lotus/StoreItems/Types/Items/MiscItems/SteelEssence",
@@ -2691,7 +2688,7 @@ async function getRandomMissionDrops(
         //Railjack Extra End-Of-Mission Reward. Extra resource bundles rewarded on mission completion.
         if (
             region.missionType == "MT_RAILJACK" &&
-            shouldDoServerQol("railjackExtraResourceBundlesReward", buildVersion, gameToBuildVersionInt["27.2.0"])
+            shouldDoServerQol("railjackExtraResourceBundlesReward", buildVersion)
         ) {
             if (
                 ![

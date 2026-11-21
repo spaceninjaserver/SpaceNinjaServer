@@ -13,6 +13,7 @@ export const completeAllMissionsController: RequestHandler = async (req, res) =>
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId, undefined);
     const MissionRewards: IMissionReward[] = [];
+    let count = 0;
     for (const [tag, node] of Object.entries(ExportRegions)) {
         let mission = inventory.Missions.find(x => x.Tag == tag);
         if (!mission) {
@@ -26,12 +27,14 @@ export const completeAllMissionsController: RequestHandler = async (req, res) =>
                 ];
         }
         if (mission.Completes == 0) {
+            ++count;
             mission.Completes++;
             if (node.missionReward) {
                 await addFixedLevelRewards(node.missionReward, MissionRewards, BV_LATEST);
             }
         }
-        if (includeSteelPath) {
+        if (includeSteelPath && mission.Tier != 1) {
+            ++count;
             mission.Tier = 1;
         }
     }
@@ -108,5 +111,5 @@ export const completeAllMissionsController: RequestHandler = async (req, res) =>
             inventory.Affiliations[inventory.Affiliations.push({ Tag: "CetusSyndicate", Standing: 250, Title: 0 })]; // Non-zero standing avoids Konzu's "prove yourself" text. 250 is identical to newbie bounty + bonus
     }
     await inventory.save();
-    res.end();
+    res.json({ count });
 };

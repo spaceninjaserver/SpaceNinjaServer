@@ -35,10 +35,7 @@ const handleTrainingProgress = async (
         let time = Date.now();
         if (!inventory.noMasteryRankUpCooldown) {
             time +=
-                unixTimesInMs.hour *
-                (shouldDoServerQol("twentythreeHourMasteryRankCooldown", buildVersion, gameToBuildVersionInt["38.0.0"])
-                    ? 23
-                    : 24);
+                unixTimesInMs.hour * (shouldDoServerQol("twentythreeHourMasteryRankCooldown", buildVersion) ? 23 : 24);
         }
         inventory.TrainingDate = new Date(time);
 

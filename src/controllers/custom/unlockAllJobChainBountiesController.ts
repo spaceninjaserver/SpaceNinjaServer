@@ -1,4 +1,4 @@
-import { getInventory } from "../../services/inventoryService.ts";
+import { Inventory } from "../../models/inventoryModels/inventoryModel.ts";
 import { getAccountIdForRequest } from "../../services/loginService.ts";
 import type { RequestHandler } from "express";
 import { sendWsBroadcastToGame } from "../../services/wsService.ts";
@@ -21,24 +21,27 @@ const allNokkoColonyJobs = [
 
 export const unlockAllJobChainBountiesController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
-    const inventory = await getInventory(accountId, "CompletedJobChains");
-    inventory.CompletedJobChains ??= [];
-
-    const eudicoHeistsChain = inventory.CompletedJobChains.find(x => x.LocationTag == "EudicoHeists");
-    if (eudicoHeistsChain) {
-        eudicoHeistsChain.Jobs = allEudicoHeistJobs;
-    } else {
-        inventory.CompletedJobChains.push({ LocationTag: "EudicoHeists", Jobs: allEudicoHeistJobs });
+    let count = 0;
+    for (const [LocationTag, Jobs] of [
+        ["EudicoHeists", allEudicoHeistJobs],
+        ["NokkoColony", allNokkoColonyJobs]
+    ] as const) {
+        const added = await Inventory.updateOne(
+            { accountOwnerId: accountId, "CompletedJobChains.LocationTag": LocationTag },
+            { $addToSet: { "CompletedJobChains.$.Jobs": { $each: Jobs } } }
+        );
+        if (added.matchedCount == 0) {
+            await Inventory.updateOne(
+                { accountOwnerId: accountId },
+                { $push: { CompletedJobChains: { LocationTag, Jobs } } }
+            );
+            ++count;
+        } else {
+            count += added.modifiedCount;
+        }
     }
-
-    const nokkoColonyChain = inventory.CompletedJobChains.find(x => x.LocationTag == "NokkoColony");
-    if (nokkoColonyChain) {
-        nokkoColonyChain.Jobs = allNokkoColonyJobs;
-    } else {
-        inventory.CompletedJobChains.push({ LocationTag: "NokkoColony", Jobs: allNokkoColonyJobs });
+    if (count != 0) {
+        sendWsBroadcastToGame(accountId, { sync_inventory: true });
     }
-
-    await inventory.save();
-    res.end();
-    sendWsBroadcastToGame(accountId, { sync_inventory: true });
+    res.json({ count });
 };

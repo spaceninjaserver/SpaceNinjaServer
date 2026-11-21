@@ -1,6 +1,12 @@
 import type { RequestHandler } from "express";
 import { getAccountForRequest, getBuildVersion } from "../../services/loginService.ts";
-import { getInventory2, addMiscItems, addEquipment, occupySlot } from "../../services/inventoryService.ts";
+import {
+    getInventory2,
+    addMiscItems,
+    addEquipment,
+    occupySlot,
+    unlockFocusWay
+} from "../../services/inventoryService.ts";
 import type { IMiscItem, TFocusPolarity, TEquipmentKey } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { eInventorySlot } from "../../types/inventoryTypes/inventoryTypes.ts";
 import { logger } from "../../utils/logger.ts";
@@ -157,14 +163,13 @@ export const focusController: RequestHandler = async (req, res) => {
             const focusPolarity = focusTypeToPolarity(focusType);
             const inventory = await getInventory2(account._id, "FocusAbility", "FocusUpgrades", "FocusXP");
             const cost = inventory.FocusAbility ? 50_000 : 0;
-            inventory.FocusAbility ??= focusType;
-            inventory.FocusUpgrades.push({ ItemType: focusType, IsActive: true, TotalCapacity: 5 });
+            const focusUpgrade = unlockFocusWay(inventory, focusType);
             if (cost) {
                 inventory.FocusXP![focusPolarity]! -= cost;
             }
             await inventory.save();
             res.json({
-                FocusUpgrade: { ItemType: focusType, IsActive: true, TotalCapacity: 5 },
+                FocusUpgrade: focusUpgrade,
                 FocusPointCosts: { [focusPolarity]: cost }
             });
             break;

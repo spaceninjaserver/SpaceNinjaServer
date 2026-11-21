@@ -6,7 +6,7 @@ import {
     accountCheatNumbers,
     type TAccountCheatBooleanKey
 } from "../../types/inventoryTypes/inventoryTypes.ts";
-import { serverCheatBooleans, worldStateNumberOptions } from "../../services/configService.ts";
+import { qolConfigIntroducedIn, serverCheatBooleans, worldStateNumberOptions } from "../../services/configService.ts";
 import { circuitGameModes } from "../../types/worldStateTypes.ts";
 import { configAlerts } from "../../constants/configAlerts.ts";
 import { lunarNewYearFlashSales } from "../../constants/flashSales.ts";
@@ -43,7 +43,7 @@ function toDisableAttrs(value: number): TWebuiLoc {
     return { "data-loc-title": "general_toDisable", "data-loc-title-replace": String(value) };
 }
 
-type TWorldStateCheat = {
+type TServerCheat = {
     key: string;
     label?: TWebuiLoc; // defaults to "worldState_<option name>"
     note?: TWebuiLoc; // shown as a (!) icon after the label, its text is shown as a tooltip on hover
@@ -69,6 +69,16 @@ type TWorldStateCheat = {
           values?: readonly string[];
       }
     | {
+          type: "action";
+          endpoint: string;
+          query?: string;
+          method?: "GET" | "POST"; // defaults to GET
+          confirm?: string; // loc key of a question asked first
+          success?: string; // loc key of the toast shown when it's done, |COUNT| is replaced if the endpoint responds with { count }
+          nothing?: string; // loc key of the toast shown when the endpoint responds with { count: 0 }
+          debounce?: boolean;
+      }
+    | {
           // shown as a card of its own, items are from getItemLists[itemList]
           type: "itemList";
           itemList: string;
@@ -82,9 +92,9 @@ type TWorldStateCheat = {
       }
 );
 
-const configAlertCheats = (): TWorldStateCheat[] => {
-    const cheats: TWorldStateCheat[] = [];
-    const weeklyCheats: TWorldStateCheat[] = [];
+const configAlertCheats = (): TServerCheat[] => {
+    const cheats: TServerCheat[] = [];
+    const weeklyCheats: TServerCheat[] = [];
     let group: string | undefined;
     for (const key of Object.keys(configAlerts)) {
         const match = key.match(/^([a-zA-Z]+?)(\d{4})Week(\d+)$/);
@@ -105,7 +115,7 @@ const configAlertCheats = (): TWorldStateCheat[] => {
     return [...cheats, ...weeklyCheats];
 };
 
-const relayEventCheats = (): TWorldStateCheat[] =>
+const relayEventCheats = (): TServerCheat[] =>
     constructionEventRelays.map((relay, i) => ({
         key: "worldState." + relay.configKey,
         type: "enum",
@@ -120,16 +130,102 @@ const relayEventCheats = (): TWorldStateCheat[] =>
         ...(i % 2 == 1 ? { sameRow: true } : {})
     }));
 
-const worldStateCheats: Record<
-    string,
-    {
-        column: 0 | 1; // which column of "Server Cheats" tab the card goes in
-        label?: TWebuiLoc;
-        options: TWorldStateCheat[];
-    }
-> = {
+const qolCheats: TServerCheat[] = Object.entries(qolConfigIntroducedIn).map(([key, version]) => ({
+    key: "serversideQualityOfLife." + key,
+    type: "enum",
+    default: "null",
+    values: [
+        { value: "null", label: locAttrs("general_enabledFromVersion", version) },
+        { value: "true", label: locAttrs("general_enabledForAllVersions") },
+        { value: "false", label: locAttrs("general_disabledForAllVersions") }
+    ],
+    label: locAttrs("cheats_qol_" + key)
+}));
+
+const accountCheatActions: TServerCheat[] = (
+    [
+        { key: "unlockAllShipFeatures", endpoint: "/custom/unlockAllShipFeatures", debounce: true },
+        {
+            key: "unlockAllNormalMissions",
+            endpoint: "/custom/completeAllMissions",
+            query: "&normalOnly=1",
+            success: "cheats_unlockAllMissions_ok",
+            debounce: true
+        },
+        {
+            key: "unlockAllMissions",
+            endpoint: "/custom/completeAllMissions",
+            success: "cheats_unlockAllMissions_ok",
+            debounce: true
+        },
+        { key: "markAllAsRead", endpoint: "/custom/markAllAsRead", success: "code_succRelog", debounce: true },
+        {
+            key: "unlockAllScans",
+            endpoint: "/custom/unlockAllScans",
+            success: "cheats_unlockSuccRelog",
+            debounce: true
+        },
+        { key: "unlockAllCapturaScenes", endpoint: "/custom/unlockAllCapturaScenes", debounce: true },
+        {
+            key: "unlockAllFocusSchools",
+            endpoint: "/custom/unlockAllFocusSchools",
+            success: "code_focusUnlocked",
+            nothing: "code_focusAllUnlocked"
+        },
+        {
+            key: "helminthUnlockAll",
+            endpoint: "/api/infestedFoundry.php",
+            query: "&mode=custom_unlockall",
+            method: "POST"
+        },
+        { key: "addMissingSubsumedAbilities", endpoint: "/custom/addMissingHelminthBlueprints", debounce: true },
+        { key: "intrinsicsUnlockAll", endpoint: "/custom/unlockAllIntrinsics" },
+        {
+            key: "maxPlexus",
+            endpoint: "/custom/maxPlexus",
+            success: "code_succRankUp",
+            nothing: "code_noEquipmentToRankUp",
+            debounce: true
+        },
+        { key: "unlockAllJobChainBounties", endpoint: "/custom/unlockAllJobChainBounties", debounce: true },
+        { key: "unlockAllSimarisResearchEntries", endpoint: "/custom/unlockAllSimarisResearchEntries", debounce: true },
+        {
+            key: "addMissingDangerRooms",
+            endpoint: "/custom/addMissingDangerRooms",
+            success: "code_succAdded",
+            debounce: true
+        }
+    ] as const
+).map(action => ({ ...action, type: "action", label: locAttrs("cheats_" + action.key) }));
+
+interface IServerCheatCard {
+    label?: TWebuiLoc;
+    options: TServerCheat[];
+}
+
+const serverCheats = {
+    server: {
+        label: locAttrs("cheats_server"),
+        options: [
+            ...serverCheatBooleans.map(key => ({ key, type: "boolean" as const, label: locAttrs("cheats_" + key) })),
+            ...qolCheats
+        ]
+    },
+    actions: {
+        label: locAttrs("cheats_actions"),
+        options: [
+            {
+                key: "resetIceBladeChampion",
+                type: "action",
+                endpoint: "/custom/resetIceBladeChampion",
+                confirm: "code_resetIceBladeChampionConfirm",
+                success: "code_succChange",
+                debounce: true,
+                label: locAttrs("worldState_resetIceBladeChampion")
+            }
+        ]
+    },
     relaysAndVendors: {
-        column: 0,
         options: [
             { key: "worldState.tennoLiveRelay", type: "boolean" },
             { key: "worldState.baroTennoConRelay", type: "boolean" },
@@ -174,7 +270,6 @@ const worldStateCheats: Record<
         ]
     },
     boosters: {
-        column: 0,
         options: [
             {
                 key: "worldState.creditBoostMultiplier",
@@ -203,7 +298,6 @@ const worldStateCheats: Record<
         ]
     },
     rotations: {
-        column: 0,
         options: [
             { key: "worldState.nightwaveOverride", type: "enum", default: "" },
             {
@@ -262,11 +356,9 @@ const worldStateCheats: Record<
         ]
     },
     nightwaveExcludedChallenges: {
-        column: 0,
         options: [{ key: "worldState.nightwaveExcludedChallenges", type: "itemList", itemList: "NightwaveChallenges" }]
     },
     invasionsAndConstruction: {
-        column: 0,
         options: [
             {
                 key: "worldState.invasionGrineerCount",
@@ -329,7 +421,6 @@ const worldStateCheats: Record<
         ]
     },
     alerts: {
-        column: 1,
         options: [
             { key: "worldState.qtccAlerts", type: "boolean" },
             ...configAlertCheats(),
@@ -346,7 +437,6 @@ const worldStateCheats: Record<
         ]
     },
     events: {
-        column: 1,
         options: [
             { key: "unfaithfulBugFixes.useAnniversaryTagForOldGoals", type: "boolean" },
             {
@@ -623,7 +713,6 @@ const worldStateCheats: Record<
         ]
     },
     featuredGuilds: {
-        column: 0,
         label: itemMapAttrs("/Lotus/Language/Dojo/FeaturedDojo"),
         options: [
             {
@@ -657,22 +746,42 @@ const worldStateCheats: Record<
             }
         ]
     }
-};
+} satisfies Record<string, IServerCheatCard>;
+
+const serverCheatsLayout: (keyof typeof serverCheats)[][] = [
+    ["server", "actions", "relaysAndVendors", "boosters", "rotations", "nightwaveExcludedChallenges", "featuredGuilds"],
+    ["alerts", "events", "invasionsAndConstruction"]
+];
+
+for (const name of Object.keys(serverCheats)) {
+    if (serverCheatsLayout.flat().filter(x => x == name).length != 1) {
+        throw new Error(`server cheats card ${name} must be in serverCheatsLayout exactly once`);
+    }
+}
 
 const supportedSyndicates = Object.entries(ExportSyndicates)
     .filter(([, syndicate]) => !["STANDING_LIMIT_BIN_KAHL", "STANDING_LIMIT_BIN_PVP"].includes(syndicate.dailyLimitBin))
     .map(([tag]) => tag);
 
-const getCheatLabel = (cheat: TWorldStateCheat): TWebuiLoc =>
+const getCheatLabel = (cheat: TServerCheat): TWebuiLoc =>
     cheat.label ?? locAttrs("worldState_" + cheat.key.split(".")[1]);
 
-const getCheatLabelKey = (cheat: TWorldStateCheat): string => {
+const getCheatLabelKey = (cheat: TServerCheat): string => {
     const label = getCheatLabel(cheat);
     const attr = ["data-loc-itemMap", "data-loc-itemMap-tc", "data-loc"].find(attr => attr in label);
     return attr ? label[attr] : cheat.key;
 };
 
-const toWebuiCheats = (cards: typeof worldStateCheats): typeof worldStateCheats => {
+interface IWebuiServerCheatCard extends IServerCheatCard {
+    column: number;
+}
+
+const toWebuiCheats = (): Record<string, IWebuiServerCheatCard> => {
+    const cards: Record<string, IWebuiServerCheatCard> = Object.fromEntries(
+        serverCheatsLayout.flatMap((names, column) =>
+            names.map(name => [name, { ...serverCheats[name], column }] as const)
+        )
+    );
     const cheatsByKey = new Map(
         Object.values(cards).flatMap(card => card.options.map(cheat => [cheat.key, cheat] as const))
     );
@@ -702,11 +811,9 @@ interface IWebuiData {
         booleans: TAccountCheatBooleanKey[];
         numbers: typeof accountCheatNumbers;
         supportedSyndicates: string[];
+        actions: TServerCheat[];
     };
-    serverCheats: {
-        booleans: typeof serverCheatBooleans;
-    };
-    worldStateCheats: typeof worldStateCheats;
+    serverCheats: Record<string, IWebuiServerCheatCard>;
 }
 
 export const getWebuiDataController: RequestHandler = (_req, res) => {
@@ -714,12 +821,10 @@ export const getWebuiDataController: RequestHandler = (_req, res) => {
         accountCheats: {
             booleans: accountCheatBooleans.filter(key => !accountCheatBooleansHiddenFromWebui.includes(key)),
             numbers: accountCheatNumbers,
-            supportedSyndicates
+            supportedSyndicates,
+            actions: accountCheatActions
         },
-        serverCheats: {
-            booleans: serverCheatBooleans
-        },
-        worldStateCheats: toWebuiCheats(worldStateCheats)
+        serverCheats: toWebuiCheats()
     };
     res.json(data);
 };

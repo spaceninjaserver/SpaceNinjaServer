@@ -8,19 +8,19 @@ export const unlockAllCapturaScenesController: RequestHandler = async (req, res)
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId, "MiscItems");
 
-    let needSync = false;
+    let count = 0;
     for (const uniqueName of Object.keys(ExportResources)) {
         if (resourceInheritsFrom(uniqueName, "/Lotus/Types/Items/MiscItems/PhotoboothTile")) {
             if (!inventory.MiscItems.some(x => x.ItemType == uniqueName)) {
                 addMiscItem(inventory, uniqueName, 1);
+                ++count;
             }
-            needSync = true;
         }
     }
 
     await inventory.save();
-    res.end();
-    if (needSync) {
+    res.json({ count });
+    if (count != 0) {
         sendWsBroadcastToGame(accountId, { sync_inventory: true });
     }
 };

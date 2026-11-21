@@ -8,12 +8,14 @@ import { logger } from "../../utils/logger.ts";
 export const addMissingHelminthBlueprintsController: RequestHandler = async (req, res) => {
     const accountId = await getAccountIdForRequest(req);
     const inventory = await getInventory(accountId, "Recipes InfestedFoundry");
+    let count = 0;
 
     for (const [recipeType, recipe] of Object.entries(ExportRecipes)) {
         if (recipe.secretIngredientAction == "SIA_WARFRAME_ABILITY") {
             if (!inventory.Recipes.some(recipe => recipe.ItemType == recipeType)) {
                 logger.trace(`adding recipe: ${recipeType}`);
                 addRecipes(inventory, [{ ItemType: recipeType, ItemCount: 1 }]);
+                ++count;
 
                 const suitType = recipe.secretIngredients!.find(x =>
                     x.ItemType.startsWith("/Lotus/Powersuits")
@@ -28,7 +30,9 @@ export const addMissingHelminthBlueprintsController: RequestHandler = async (req
         }
     }
 
-    await inventory.save();
-    res.end();
-    broadcastInventoryUpdate(req);
+    if (count != 0) {
+        await inventory.save();
+        broadcastInventoryUpdate(req);
+    }
+    res.json({ count });
 };

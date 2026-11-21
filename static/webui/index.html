@@ -985,51 +985,22 @@
                         <div class="card">
                             <h5 class="card-header" data-loc="cheats_actions"></h5>
                             <div class="card-body">
-                                <div class="d-flex flex-wrap gap-2">
-                                    <button class="btn btn-primary" onclick="debounce(doUnlockAllShipFeatures);" data-loc="cheats_unlockAllShipFeatures"></button>
-                                    <button class="btn btn-primary" onclick="debounce(unlockAllNormalMissions);" data-loc="cheats_unlockAllNormalMissions"></button>
-                                    <button class="btn btn-primary" onclick="debounce(unlockAllMissions);" data-loc="cheats_unlockAllMissions"></button>
-                                    <button class="btn btn-primary" onclick="debounce(markAllAsRead);" data-loc="cheats_markAllAsRead"></button>
-                                    <button class="btn btn-primary" onclick="debounce(doUnlockAllScans);" data-loc="cheats_unlockAllScans"></button>
-                                    <button class="btn btn-primary" onclick="debounce(doUnlockAllCapturaScenes);" data-loc="cheats_unlockAllCapturaScenes"></button>
-                                    <button class="btn btn-primary" onclick="doUnlockAllFocusSchools();" data-loc="cheats_unlockAllFocusSchools"></button>
-                                    <button class="btn btn-primary" onclick="doHelminthUnlockAll();" data-loc="cheats_helminthUnlockAll"></button>
-                                    <button class="btn btn-primary" onclick="debounce(addMissingHelminthRecipes);" data-loc="cheats_addMissingSubsumedAbilities"></button>
-                                    <button class="btn btn-primary" onclick="doIntrinsicsUnlockAll();" data-loc="cheats_intrinsicsUnlockAll"></button>
-                                    <button class="btn btn-primary" onclick="debounce(doMaxPlexus);" data-loc="cheats_maxPlexus"></button>
-                                    <button class="btn btn-primary" onclick="debounce(unlockAllJobChainBounties);" data-loc="cheats_unlockAllJobChainBounties"></button>
-                                    <button class="btn btn-primary" onclick="debounce(unlockAllSimarisResearchEntries);" data-loc="cheats_unlockAllSimarisResearchEntries"></button>
-                                    <button class="btn btn-primary" onclick="debounce(addMissingDangerRooms);" data-loc="cheats_addMissingDangerRooms"></button>
-                                </div>
+                                <div id="account-cheats-actions"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div data-route="/webui/serverCheats" data-title-tag="navbar_serverCheats">
+                <div class="d-none admin-hide">
+                    <p class="card-text" data-loc="cheats_administratorRequirement"></p>
+                </div>
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <div class="card mb-3">
-                            <h5 class="card-header" data-loc="cheats_server"></h5>
-                            <div class="card-body">
-                                <div class="d-none admin-hide">
-                                    <p class="card-text" data-loc="cheats_administratorRequirement"></p>
-                                </div>
-                                <div class="d-none admin-show config-form" id="server-cheats-booleans"></div>
-                            </div>
-                        </div>
-                        <div class="card mb-3 d-none admin-show">
-                            <h5 class="card-header" data-loc="cheats_actions"></h5>
-                            <div class="card-body">
-                                <div class="d-flex flex-wrap gap-2">
-                                    <button class="btn btn-primary" onclick="debounce(doResetIceBladeChampion);" data-loc="worldState_resetIceBladeChampion"></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="worldStateCheats-0"></div>
+                        <div id="serverCheats-0"></div>
                     </div>
                     <div class="col-md-6">
-                        <div id="worldStateCheats-1"></div>
+                        <div id="serverCheats-1"></div>
                     </div>
                 </div>
             </div>

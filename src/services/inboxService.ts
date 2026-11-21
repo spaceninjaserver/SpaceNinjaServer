@@ -5,13 +5,25 @@ import { Inbox } from "../models/inboxModel.ts";
 import type { QueryFilter, Types } from "mongoose";
 import { wikiDateToBuildVersionInt } from "../helpers/versionHelper.ts";
 import {
+    ExportFlavour,
     ExportRecipes,
     ExportRelics,
     ExportUpgrades,
     ExportWarframes,
     ExportWeapons
 } from "warframe-public-export-plus";
-import { supplementalSuits, toStoreItem } from "./itemDataService.ts";
+import { fromStoreItem, isStoreItem, supplementalSuits, toStoreItem } from "./itemDataService.ts";
+import type { IInventoryChanges } from "../types/purchaseTypes.ts";
+import { getAccountFromSuffixedName, getSuffixedName, type TAccountDocument } from "./loginService.ts";
+import {
+    addItems,
+    combineInventoryChanges,
+    CurrencyType,
+    getEffectiveAvatarImageType,
+    getInventory,
+    updateCurrency
+} from "./inventoryService.ts";
+import { handleStoreItemAcquisition } from "./purchaseService.ts";
 
 const unknownItemsCache = new Map<number, string[]>();
 const getItemsUnknownToBuild = (buildVersion: number): string[] => {
@@ -160,4 +172,83 @@ export const goalEventMessagesByTag: Record<string, { start: IMessage; end: IMes
             CrossPlatform: true
         }
     }
+};
+
+export const readMessage = async (
+    account: TAccountDocument,
+    message: TMessageDocument
+): Promise<IInventoryChanges | undefined> => {
+    message.r = true;
+    await message.save();
+
+    const attachmentItems = message.attVisualOnly ? undefined : message.att;
+    const attachmentCountedItems = message.attVisualOnly ? undefined : message.countedAtt;
+    if (
+        attachmentItems ||
+        attachmentCountedItems ||
+        message.gifts ||
+        message.RegularCredits ||
+        message.PremiumCredits
+    ) {
+        const inventory = await getInventory(account._id, undefined);
+        const inventoryChanges: IInventoryChanges = {};
+        if (attachmentItems) {
+            await addItems(
+                inventory,
+                attachmentItems.map(attItem => ({
+                    ItemType: isStoreItem(attItem) ? fromStoreItem(attItem) : attItem,
+                    ItemCount: 1
+                })),
+                inventoryChanges
+            );
+        }
+        if (attachmentCountedItems) {
+            await addItems(inventory, attachmentCountedItems, inventoryChanges);
+        }
+        if (message.gifts) {
+            const sender = await getAccountFromSuffixedName(message.sndr);
+            const recipientName = getSuffixedName(account);
+            const giftQuantity = message.arg!.find(x => x.Key == "GIFT_QUANTITY")!.Tag as number;
+            for (const gift of message.gifts) {
+                combineInventoryChanges(
+                    inventoryChanges,
+                    (await handleStoreItemAcquisition(gift.GiftType, inventory, giftQuantity)).InventoryChanges
+                );
+                if (sender) {
+                    await createMessage(sender._id, [
+                        {
+                            sndr: recipientName,
+                            msg: "/Lotus/Language/Menu/GiftReceivedConfirmationBody",
+                            arg: [
+                                {
+                                    Key: "RECIPIENT_NAME",
+                                    Tag: recipientName
+                                },
+                                {
+                                    Key: "GIFT_TYPE",
+                                    Tag: gift.GiftType
+                                },
+                                {
+                                    Key: "GIFT_QUANTITY",
+                                    Tag: giftQuantity
+                                }
+                            ],
+                            sub: "/Lotus/Language/Menu/GiftReceivedConfirmationSubject",
+                            icon: ExportFlavour[getEffectiveAvatarImageType(inventory)].icon,
+                            highPriority: true
+                        }
+                    ]);
+                }
+            }
+        }
+        if (message.RegularCredits) {
+            updateCurrency(inventory, -message.RegularCredits, CurrencyType.CREDITS, inventoryChanges);
+        }
+        if (message.PremiumCredits) {
+            updateCurrency(inventory, -message.PremiumCredits, CurrencyType.PLATINUM, inventoryChanges);
+        }
+        await inventory.save();
+        return inventoryChanges;
+    }
+    return undefined;
 };

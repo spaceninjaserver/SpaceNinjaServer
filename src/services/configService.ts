@@ -5,6 +5,7 @@ import { args } from "../helpers/commandLineArguments.ts";
 import type { Request } from "express";
 import configDefaults from "../../config-vanilla.json" with { type: "json" };
 import type { TConfigAlertKey } from "../constants/configAlerts.ts";
+import gameToBuildVersionInt from "../constants/gameToBuildVersionInt.ts";
 
 export type TRegionId = "ASIA" | "OCEANIA" | "EUROPE" | "RUSSIA" | "NORTH_AMERICA" | "SOUTH_AMERICA";
 
@@ -23,13 +24,16 @@ export interface IWebuiConfig {
 
 export type TLogLevel = "error" | "warn" | "info" | "http" | "debug" | "trace";
 
-type TQolConfigKey =
-    | "tutorialGivesStanceMods"
-    | "twentythreeHourMasteryRankCooldown"
-    | "doubleDailySynthesisEndoReward"
-    | "tylRegorDropsTwoEquinoxParts"
-    | "railjackExtraResourceBundlesReward"
-    | "railjackSteelEssencesReward";
+export const qolConfigIntroducedIn = {
+    tutorialGivesStanceMods: "38.5.0",
+    twentythreeHourMasteryRankCooldown: "38.0.0",
+    doubleDailySynthesisEndoReward: "22.13.4", // change actually made in 22.13.3
+    tylRegorDropsTwoEquinoxParts: "42.0.0",
+    railjackExtraResourceBundlesReward: "27.2.0",
+    railjackSteelEssencesReward: "43.0.6"
+} as const satisfies Record<string, keyof typeof gameToBuildVersionInt>;
+
+type TQolConfigKey = keyof typeof qolConfigIntroducedIn;
 
 export interface IConfig {
     /** @deprecated */ mongodbUrl?: string;
@@ -369,17 +373,18 @@ export const getNrsAddresses = (): [string, number][] => {
     });
 };
 
-export const shouldDoServerQol = (
-    key: TQolConfigKey,
-    clientBuildVersion: number,
-    introducedInBuildVersion: number
-): boolean => {
-    let value = config.serversideQualityOfLife?.[key];
-    if (value === undefined) {
-        value = configDefaults.serversideQualityOfLife[key];
+export const getConfigFallback = (id: string): boolean | null | undefined => {
+    const [section, key] = id.split(".");
+    if (section == "serversideQualityOfLife") {
+        return configDefaults.serversideQualityOfLife[key as TQolConfigKey] as boolean | null | undefined;
     }
-    if (value === null) {
-        return clientBuildVersion >= introducedInBuildVersion;
-    }
-    return value;
+    return undefined;
+};
+
+export const shouldDoServerQol = (key: TQolConfigKey, clientBuildVersion: number): boolean => {
+    const value = config.serversideQualityOfLife?.[key];
+    return (
+        (value !== undefined ? value : configDefaults.serversideQualityOfLife[key]) ??
+        clientBuildVersion >= gameToBuildVersionInt[qolConfigIntroducedIn[key]]
+    );
 };

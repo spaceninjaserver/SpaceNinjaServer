@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { configIdToIndexable } from "../../services/configService.ts";
+import { configIdToIndexable, getConfigFallback } from "../../services/configService.ts";
 import { syncConfigWithDatabase } from "../../services/configWatcherService.ts";
 import { getAccountForRequest, isAdministrator } from "../../services/loginService.ts";
 import { saveConfig } from "../../services/configWriterService.ts";
@@ -11,7 +11,7 @@ export const getConfigController: RequestHandler = async (req, res) => {
         const responseData: Record<string, boolean | string | number | null> = {};
         for (const id of req.body as string[]) {
             const [obj, idx] = configIdToIndexable(id);
-            responseData[id] = obj[idx] ?? null;
+            responseData[id] = (obj[idx] !== undefined ? obj[idx] : getConfigFallback(id)) ?? null;
         }
         res.json(responseData);
     } else {

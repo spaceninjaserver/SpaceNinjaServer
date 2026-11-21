@@ -179,6 +179,11 @@ function addCheatDescription(label, key) {
 }
 
 function buildAccountCheatsCard(webuiData) {
+    const actionsContainer = document.getElementById("account-cheats-actions");
+    for (const entry of webuiData.accountCheats.actions) {
+        actionsContainer.appendChild(buildConfigItem(toServerCheatConfigItem(entry)));
+    }
+
     const booleansContainer = document.getElementById("account-cheats-booleans");
     for (const key of webuiData.accountCheats.booleans) {
         const div = document.createElement("div");
@@ -236,32 +241,6 @@ function buildAccountCheatsCard(webuiData) {
     }
 }
 
-function buildServerCheatsCard(webuiData) {
-    const booleansContainer = document.getElementById("server-cheats-booleans");
-    for (const key of webuiData.serverCheats.booleans) {
-        const div = document.createElement("div");
-        div.className = "form-check";
-
-        const input = document.createElement("input");
-        input.className = "form-check-input";
-        input.type = "checkbox";
-        input.id = key;
-        div.appendChild(input);
-
-        const label = document.createElement("label");
-        label.className = "form-check-label";
-        label.htmlFor = key;
-        label.setAttribute("data-loc", "cheats_" + key);
-        div.appendChild(label);
-        addCheatDescription(label, key);
-
-        booleansContainer.appendChild(div);
-
-        uiConfigs.push(key);
-        attachConfigHandler(input);
-    }
-}
-
 function applyLocAttrs(elm, attrs) {
     for (const [name, value] of Object.entries(attrs ?? {})) {
         elm.setAttribute(name, value);
@@ -311,6 +290,13 @@ const dbLists = [];
 
 function buildConfigItem(item, inRow = false) {
     switch (item.type) {
+        case "action": {
+            const button = createElm("button", "btn btn-primary me-2 mb-2");
+            button.type = "button";
+            applyLocAttrs(button, item.label);
+            button.onclick = () => (item.debounce ? debounce(doCheatAction, item.action) : doCheatAction(item.action));
+            return button;
+        }
         case "toggle": {
             const div = createElm("div", "form-check");
             const input = createElm("input", "form-check-input");
@@ -476,14 +462,14 @@ function locAttrs(key, replace) {
     return replace === undefined ? { "data-loc": key } : { "data-loc": key, "data-loc-replace": replace };
 }
 
-function worldStateOption(value) {
+function serverCheatOption(value) {
     if (typeof value == "object") {
         return value;
     }
     return { value, label: locAttrs({ true: "enabled", false: "disabled", null: "normal" }[value]) };
 }
 
-function toWorldStateConfigItem(entry, inRow = false) {
+function toServerCheatConfigItem(entry, inRow = false) {
     const item = { key: entry.key, label: entry.label, note: entry.note };
     switch (entry.type) {
         case "boolean":
@@ -492,7 +478,7 @@ function toWorldStateConfigItem(entry, inRow = false) {
                     ...item,
                     type: "select",
                     default: entry.nullable ? "null" : "false",
-                    options: (entry.nullable ? ["null", "true", "false"] : ["true", "false"]).map(worldStateOption)
+                    options: (entry.nullable ? ["null", "true", "false"] : ["true", "false"]).map(serverCheatOption)
                 };
             }
             return { ...item, type: "toggle" };
@@ -501,7 +487,7 @@ function toWorldStateConfigItem(entry, inRow = false) {
                 ...item,
                 type: "select",
                 default: entry.default,
-                options: entry.values?.map(worldStateOption)
+                options: entry.values?.map(serverCheatOption)
             };
         case "int":
         case "float":
@@ -535,6 +521,10 @@ function toWorldStateConfigItem(entry, inRow = false) {
             }
             return { ...item, type: "itemList", list };
         }
+        case "action": {
+            const { key, label, note, type, debounce, ...action } = entry;
+            return { ...item, type: "action", action, debounce };
+        }
         case "dbList":
             return {
                 ...item,
@@ -547,7 +537,7 @@ function toWorldStateConfigItem(entry, inRow = false) {
     throw new Error(`unknown world state option type: ${entry.type}`);
 }
 
-function toWorldStateConfigItems(entries) {
+function toServerCheatConfigItems(entries) {
     const items = [];
     const runEnd = (i, flag) => {
         let end = i + 1;
@@ -562,26 +552,26 @@ function toWorldStateConfigItems(entries) {
         if (rowEnd > i + 1) {
             items.push({
                 type: "row",
-                items: entries.slice(i, rowEnd).map(entry => toWorldStateConfigItem(entry, true))
+                items: entries.slice(i, rowEnd).map(entry => toServerCheatConfigItem(entry, true))
             });
             i = rowEnd;
         } else if (groupEnd > i + 1) {
             items.push({
                 type: "group",
                 label: entries[i].groupLabel,
-                items: entries.slice(i, groupEnd).map(entry => toWorldStateConfigItem(entry))
+                items: entries.slice(i, groupEnd).map(entry => toServerCheatConfigItem(entry))
             });
             i = groupEnd;
         } else {
-            items.push(toWorldStateConfigItem(entries[i]));
+            items.push(toServerCheatConfigItem(entries[i]));
             ++i;
         }
     }
     return items;
 }
 
-function buildWorldStateCards(webuiData) {
-    for (const [name, card] of Object.entries(webuiData.worldStateCheats)) {
+function buildServerCheatsCards(webuiData) {
+    for (const [name, card] of Object.entries(webuiData.serverCheats)) {
         const div = createElm("div", "card mb-3 d-none admin-show config-form");
         const header = createElm("h5", "card-header");
         applyLocAttrs(header, card.label ?? locAttrs("worldState_" + name));
@@ -590,19 +580,18 @@ function buildWorldStateCards(webuiData) {
             div.style.height = "400px";
             body.classList.add("d-flex", "flex-column");
         }
-        for (const item of toWorldStateConfigItems(card.options)) {
+        for (const item of toServerCheatConfigItems(card.options)) {
             body.appendChild(buildConfigItem(item));
         }
         div.append(header, body);
-        document.getElementById("worldStateCheats-" + card.column).appendChild(div);
+        document.getElementById("serverCheats-" + card.column).appendChild(div);
     }
 }
 
 window.webuiDataPromise = new Promise(resolve => {
     $.get("/custom/getWebuiData").done(webuiData => {
         buildAccountCheatsCard(webuiData);
-        buildServerCheatsCard(webuiData);
-        buildWorldStateCards(webuiData);
+        buildServerCheatsCards(webuiData);
 
         document.querySelectorAll("[data-enabling-permission]").forEach(elm => {
             const perm = elm.getAttribute("data-enabling-permission");
@@ -2477,13 +2466,6 @@ async function populateInventoryRoute() {
         document.getElementById("WeaponSkins-list").appendChild(tr);
     });
 
-    if (data.CrewShipHarnesses?.length) {
-        window.plexus = {
-            id: data.CrewShipHarnesses[0].ItemId.$oid,
-            xp: data.CrewShipHarnesses[0].XP
-        };
-    }
-
     document.getElementById("ShipDecorations-list").innerHTML = "";
     data.ShipDecorations.forEach(item => {
         if (item.ItemCount > 0) {
@@ -3293,40 +3275,6 @@ function addMissingEquipment(categories) {
     }
 }
 
-function addMissingDangerRooms() {
-    revalidateAuthz().then(() => {
-        inventory_data = undefined;
-        getInventoryData().then(data => {
-            const requests = [];
-            window.itemListPromise.then(itemMap => {
-                const allItemKeys = Object.entries(itemMap)
-                    .filter(([_key, item]) => item.parentName === "/Lotus/Types/Items/DangerRoom/DangerRoomTile")
-                    .map(([key]) => key);
-                allItemKeys.push("/Lotus/Types/Items/MiscItems/DangerRoomKey"); // also give access to the simulacrum itself
-                const existingItems = new Set(
-                    data.MiscItems.filter(item => item.ItemCount > 0).map(item => item.ItemType)
-                );
-                allItemKeys.forEach(item => {
-                    if (!existingItems.has(item)) {
-                        requests.push({ ItemType: item, ItemCount: 1 });
-                    }
-                });
-                if (requests.length == 0) {
-                    toast(loc("code_nothingToDo"));
-                } else if (
-                    window.confirm(
-                        replacePluralForms(loc("code_addItemsConfirm"), {
-                            COUNT: requests.length
-                        })
-                    )
-                ) {
-                    return dispatchAddItemsRequestsBatch(requests);
-                }
-            });
-        });
-    });
-}
-
 function addVaultItem(vaultType) {
     const ItemType = getKey(document.getElementById(`acquire-type-${vaultType}`));
     if (!ItemType) {
@@ -3663,11 +3611,6 @@ function completeAllTechProjects() {
             }
         });
     });
-}
-
-async function addMissingHelminthRecipes() {
-    await revalidateAuthz();
-    await fetch("/custom/addMissingHelminthBlueprints?" + window.authz);
 }
 
 function addMissingEvolutionProgress() {
@@ -4504,76 +4447,6 @@ single.getRoute("/webui/serverCheats").on("beforeload", function () {
         });
     });
 });
-
-function doUnlockAllFocusSchools() {
-    revalidateAuthz().then(() => {
-        getInventoryData().then(async data => {
-            const missingFocusUpgrades = {
-                "/Lotus/Upgrades/Focus/Attack/AttackFocusAbility": true,
-                "/Lotus/Upgrades/Focus/Tactic/TacticFocusAbility": true,
-                "/Lotus/Upgrades/Focus/Ward/WardFocusAbility": true,
-                "/Lotus/Upgrades/Focus/Defense/DefenseFocusAbility": true,
-                "/Lotus/Upgrades/Focus/Power/PowerFocusAbility": true
-            };
-            if (data.FocusUpgrades) {
-                for (const focusUpgrade of data.FocusUpgrades) {
-                    if (focusUpgrade.ItemType in missingFocusUpgrades) {
-                        delete missingFocusUpgrades[focusUpgrade.ItemType];
-                    }
-                }
-            }
-            for (const upgradeType of Object.keys(missingFocusUpgrades)) {
-                await unlockFocusSchool(upgradeType);
-            }
-            if (Object.keys(missingFocusUpgrades).length == 0) {
-                toast(loc("code_focusAllUnlocked"));
-            } else {
-                toast(
-                    replacePluralForms(loc("code_focusUnlocked"), {
-                        COUNT: Object.keys(missingFocusUpgrades).length
-                    })
-                );
-                if (ws_is_open) {
-                    window.ws.send(JSON.stringify({ sync_inventory: true }));
-                }
-            }
-        });
-    });
-}
-
-function unlockFocusSchool(upgradeType) {
-    return new Promise(resolve => {
-        // Deselect current FocusAbility so we will be able to unlock the way for free
-        $.post({
-            url: "/api/focus.php?" + window.authz + "&op=ActivateWay",
-            contentType: "text/plain",
-            data: JSON.stringify({ FocusType: null })
-        }).done(function () {
-            // Unlock the way now
-            $.post({
-                url: "/api/focus.php?" + window.authz + "&op=UnlockWay",
-                contentType: "text/plain",
-                data: JSON.stringify({
-                    FocusType: upgradeType
-                })
-            }).done(function () {
-                resolve();
-            });
-        });
-    });
-}
-
-function doHelminthUnlockAll() {
-    revalidateAuthz().then(() => {
-        $.post("/api/infestedFoundry.php?" + window.authz + "&mode=custom_unlockall");
-    });
-}
-
-function doIntrinsicsUnlockAll() {
-    revalidateAuthz().then(() => {
-        $.get("/custom/unlockAllIntrinsics?" + window.authz);
-    });
-}
 
 function attachAccountCheatsHandlers() {
     document.querySelectorAll(".account-cheats input[type=checkbox]").forEach(elm => {
@@ -5871,65 +5744,24 @@ async function debounce(func, ...args) {
     }
 }
 
-async function doMaxPlexus() {
-    if ((window.plexus?.xp ?? 0) < 900_000) {
-        await addGearExp("CrewShipHarnesses", window.plexus.id, 900_000 - window.plexus.xp);
-        window.plexus.xp = 900_000;
-        toast(loc("code_succRankUp"));
-    } else {
-        toast(loc("code_noEquipmentToRankUp"));
-    }
+async function doCustomRequest(endpoint, { success, nothing = "code_nothingToDo", query = "", method = "GET" } = {}) {
+    await revalidateAuthz();
+    const res = await fetch(endpoint + "?" + window.authz + query, { method });
+    const count = res.headers.get("Content-Type")?.startsWith("application/json")
+        ? (await res.json()).count
+        : undefined;
+    toast(count === 0 ? loc(nothing) : replacePluralForms(loc(success ?? getUnlockSuccLoc()), { COUNT: count }));
 }
 
-async function doResetIceBladeChampion() {
-    if (!window.confirm(loc("code_resetIceBladeChampionConfirm"))) {
+function getUnlockSuccLoc() {
+    return window.have_game_ws ? "code_succAdded" : "cheats_unlockSuccInventory";
+}
+
+async function doCheatAction({ endpoint, confirm, ...options }) {
+    if (confirm && !window.confirm(loc(confirm))) {
         return;
     }
-    await revalidateAuthz();
-    await fetch("/custom/resetIceBladeChampion?" + window.authz);
-    toast(loc("code_succChange"));
-}
-
-async function doUnlockAllScans() {
-    await revalidateAuthz();
-    await fetch("/custom/unlockAllScans?" + window.authz);
-    toast(loc("cheats_unlockSuccRelog"));
-}
-
-async function doUnlockAllShipFeatures() {
-    await revalidateAuthz();
-    await fetch("/custom/unlockAllShipFeatures?" + window.authz);
-    toast(loc(window.have_game_ws ? "code_succAdded" : "cheats_unlockSuccInventory"));
-}
-
-async function doUnlockAllCapturaScenes() {
-    await revalidateAuthz();
-    await fetch("/custom/unlockAllCapturaScenes?" + window.authz);
-    toast(loc(window.have_game_ws ? "code_succAdded" : "cheats_unlockSuccInventory"));
-}
-
-async function unlockAllMissions() {
-    await revalidateAuthz();
-    await fetch("/custom/completeAllMissions?" + window.authz);
-    toast(loc("cheats_unlockAllMissions_ok"));
-}
-
-async function unlockAllNormalMissions() {
-    await revalidateAuthz();
-    await fetch("/custom/completeAllMissions?" + window.authz + "&normalOnly=1");
-    toast(loc("cheats_unlockAllMissions_ok"));
-}
-
-async function unlockAllJobChainBounties() {
-    await revalidateAuthz();
-    await fetch("/custom/unlockAllJobChainBounties?" + window.authz);
-    toast(loc(window.have_game_ws ? "code_succAdded" : "cheats_unlockSuccInventory"));
-}
-
-async function unlockAllSimarisResearchEntries() {
-    await revalidateAuthz();
-    await fetch("/custom/unlockAllSimarisResearchEntries?" + window.authz);
-    toast(loc(window.have_game_ws ? "code_succAdded" : "cheats_unlockSuccInventory"));
+    await doCustomRequest(endpoint, options);
 }
 
 function setImportSample(key) {
@@ -6345,19 +6177,6 @@ document.querySelectorAll("#sidebar .nav-link").forEach(function (elm) {
         window.scrollTo(0, 0);
     });
 });
-
-async function markAllAsRead() {
-    await revalidateAuthz();
-    const { Inbox } = await fetch("/api/inbox.php?" + window.authz).then(x => x.json());
-    let any = false;
-    for (const msg of Inbox) {
-        if (!msg.r) {
-            await fetch("/api/inbox.php?" + window.authz + "&messageId=" + msg.messageId.$oid);
-            any = true;
-        }
-    }
-    toast(loc(any ? "code_succRelog" : "code_nothingToDo"));
-}
 
 function handleModularPartsChange(event) {
     event.preventDefault();
