@@ -1,5 +1,6 @@
 import type { RequestHandler } from "express";
 import { ExportSyndicates } from "warframe-public-export-plus";
+import type { TStandingLimitBin } from "warframe-public-export-plus";
 import {
     accountCheatBooleans,
     accountCheatBooleansHiddenFromWebui,
@@ -763,6 +764,47 @@ const supportedSyndicates = Object.entries(ExportSyndicates)
     .filter(([, syndicate]) => !["STANDING_LIMIT_BIN_KAHL", "STANDING_LIMIT_BIN_PVP"].includes(syndicate.dailyLimitBin))
     .map(([tag]) => tag);
 
+const syndicateBinOrder: TStandingLimitBin[] = [
+    "STANDING_LIMIT_BIN_NORMAL",
+    "STANDING_LIMIT_BIN_PVP",
+    "STANDING_LIMIT_BIN_LIBRARY",
+    "STANDING_LIMIT_BIN_CETUS",
+    "STANDING_LIMIT_BIN_QUILLS",
+    "STANDING_LIMIT_BIN_SOLARIS",
+    "STANDING_LIMIT_BIN_VENTKIDS",
+    "STANDING_LIMIT_BIN_VOX",
+    "STANDING_LIMIT_BIN_ENTRATI",
+    "STANDING_LIMIT_BIN_NECRALOID",
+    "STANDING_LIMIT_BIN_CAVIA",
+    "STANDING_LIMIT_BIN_ZARIMAN",
+    "STANDING_LIMIT_BIN_HEX",
+    "STANDING_LIMIT_BIN_NONE"
+];
+
+const syndicateBinLabels: Partial<Record<TStandingLimitBin, string>> = {
+    STANDING_LIMIT_BIN_NORMAL: "syndicates_dailyLimitBin_normal",
+    STANDING_LIMIT_BIN_NONE: "syndicates_dailyLimitBin_none"
+};
+
+interface IWebuiSyndicateBin {
+    bin: TStandingLimitBin;
+    label?: string;
+    syndicates: string[];
+    nightwave?: true;
+}
+
+const syndicateBins: IWebuiSyndicateBin[] = syndicateBinOrder.flatMap(bin => {
+    const entries = Object.entries(ExportSyndicates).filter(([, syndicate]) => syndicate.dailyLimitBin == bin);
+    return [false, true]
+        .map(nightwave => ({
+            bin,
+            label: syndicateBinLabels[bin],
+            syndicates: entries.filter(([, syndicate]) => !!syndicate.dailyChallenges == nightwave).map(([tag]) => tag),
+            nightwave: nightwave || undefined
+        }))
+        .filter(group => group.syndicates.length != 0);
+});
+
 const getCheatLabel = (cheat: TServerCheat): TWebuiLoc =>
     cheat.label ?? locAttrs("worldState_" + cheat.key.split(".")[1]);
 
@@ -814,6 +856,7 @@ interface IWebuiData {
         actions: TServerCheat[];
     };
     serverCheats: Record<string, IWebuiServerCheatCard>;
+    syndicateBins: IWebuiSyndicateBin[];
 }
 
 export const getWebuiDataController: RequestHandler = (_req, res) => {
@@ -824,7 +867,8 @@ export const getWebuiDataController: RequestHandler = (_req, res) => {
             supportedSyndicates,
             actions: accountCheatActions
         },
-        serverCheats: toWebuiCheats()
+        serverCheats: toWebuiCheats(),
+        syndicateBins
     };
     res.json(data);
 };

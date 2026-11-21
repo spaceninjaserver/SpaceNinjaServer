@@ -112,6 +112,7 @@ dict = {
     navbar_inventory: `Inventaire`,
     navbar_guildView: `Clan`,
     navbar_mods: `Mods`,
+    navbar_syndicates: `[UNTRANSLATED] Syndicates`,
     navbar_cheats: `Cheats`,
     navbar_serverCheats: `[UNTRANSLATED] Server Cheats`,
     navbar_import: `Importer`,
@@ -149,6 +150,16 @@ dict = {
     inventory_bulkComplete: `Tout compléter`,
     inventory_bulkReset: `Tout réinitialiser`,
     inventory_removeIsNew: `Supprimer "!" sur les nouveaux équipements`,
+
+    syndicates_minStanding: `[UNTRANSLATED] Min Standing`,
+    syndicates_maxStanding: `[UNTRANSLATED] Max Standing`,
+    syndicates_supportedSyndicate: `Allégeance`,
+    syndicates_setSupportedSyndicate: `[UNTRANSLATED] Set As Supported Syndicate`,
+    syndicates_dailyLimitBin: `[UNTRANSLATED] Daily Limit Bin: |BIN|`,
+    syndicates_dailyLimitBin_normal: `[UNTRANSLATED] Faction Syndicates`,
+    syndicates_dailyLimitBin_none: `[UNTRANSLATED] None`,
+    syndicates_rank: `Rang: |RANK|`,
+    syndicates_standing: `[UNTRANSLATED] Standing: |STANDING|/|REQUIRED|`,
 
     currency_owned: `|COUNT| possédés.`,
 
@@ -295,7 +306,6 @@ dict = {
     cheats_addMissingSubsumedAbilities: `Ajouter les capacités subsumées manquantes`,
     cheats_intrinsicsUnlockAll: `Inhérences niveau max`,
     cheats_maxPlexus: `Plexus au rang max`,
-    cheats_changeSupportedSyndicate: `Allégeance`,
     cheats_changeButton: `Changer`,
     cheats_markAllAsRead: `Marquer la boîte de réception comme lue`,
     cheats_finishInvasionsInOneMission: `Compléter les invasions en une mission.`,

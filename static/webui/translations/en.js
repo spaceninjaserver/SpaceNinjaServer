@@ -111,6 +111,7 @@ dict = {
     navbar_inventory: `Inventory`,
     navbar_guildView: `Clan`,
     navbar_mods: `Mods`,
+    navbar_syndicates: `Syndicates`,
     navbar_cheats: `Cheats`,
     navbar_serverCheats: `Server Cheats`,
     navbar_import: `Import`,
@@ -148,6 +149,16 @@ dict = {
     inventory_bulkComplete: `Complete All`,
     inventory_bulkReset: `Reset All`,
     inventory_removeIsNew: `Remove New Equipment Exclamation Icon`,
+
+    syndicates_minStanding: `Min Standing`,
+    syndicates_maxStanding: `Max Standing`,
+    syndicates_supportedSyndicate: `Supported Syndicate`,
+    syndicates_setSupportedSyndicate: `Set As Supported Syndicate`,
+    syndicates_dailyLimitBin: `Daily Limit Bin: |BIN|`,
+    syndicates_dailyLimitBin_normal: `Faction Syndicates`,
+    syndicates_dailyLimitBin_none: `None`,
+    syndicates_rank: `Rank: |RANK|`,
+    syndicates_standing: `Standing: |STANDING|/|REQUIRED|`,
 
     currency_owned: `You have |COUNT|.`,
 
@@ -294,7 +305,6 @@ dict = {
     cheats_addMissingSubsumedAbilities: `Add Missing Subsumed Abilities`,
     cheats_intrinsicsUnlockAll: `Max Rank All Intrinsics`,
     cheats_maxPlexus: `Max Rank Plexus`,
-    cheats_changeSupportedSyndicate: `Supported Syndicate`,
     cheats_changeButton: `Change`,
     cheats_markAllAsRead: `Mark Inbox As Read`,
     cheats_finishInvasionsInOneMission: `Finish Invasions in One Mission`,

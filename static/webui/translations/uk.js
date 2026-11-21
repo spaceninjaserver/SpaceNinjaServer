@@ -112,6 +112,7 @@ dict = {
     navbar_inventory: `Спорядження`,
     navbar_guildView: `Клан`,
     navbar_mods: `Модифікатори`,
+    navbar_syndicates: `[UNTRANSLATED] Syndicates`,
     navbar_cheats: `Чити`,
     navbar_serverCheats: `[UNTRANSLATED] Server Cheats`,
     navbar_import: `Імпорт`,
@@ -149,6 +150,16 @@ dict = {
     inventory_bulkComplete: `[UNTRANSLATED] Complete All`,
     inventory_bulkReset: `[UNTRANSLATED] Reset All`,
     inventory_removeIsNew: `Видалити значок вигуку нового обладнання`,
+
+    syndicates_minStanding: `[UNTRANSLATED] Min Standing`,
+    syndicates_maxStanding: `[UNTRANSLATED] Max Standing`,
+    syndicates_supportedSyndicate: `Підтримуваний синдикат`,
+    syndicates_setSupportedSyndicate: `[UNTRANSLATED] Set As Supported Syndicate`,
+    syndicates_dailyLimitBin: `[UNTRANSLATED] Daily Limit Bin: |BIN|`,
+    syndicates_dailyLimitBin_normal: `[UNTRANSLATED] Faction Syndicates`,
+    syndicates_dailyLimitBin_none: `[UNTRANSLATED] None`,
+    syndicates_rank: `Рівень: |RANK|`,
+    syndicates_standing: `[UNTRANSLATED] Standing: |STANDING|/|REQUIRED|`,
 
     currency_owned: `У тебе |COUNT|.`,
 
@@ -295,7 +306,6 @@ dict = {
     cheats_addMissingSubsumedAbilities: `Додати відсутні поглинуті здібності`,
     cheats_intrinsicsUnlockAll: `Повністю покращити Кваліфікації`,
     cheats_maxPlexus: `Макс. рівень Плексу`,
-    cheats_changeSupportedSyndicate: `Підтримуваний синдикат`,
     cheats_changeButton: `Змінити`,
     cheats_markAllAsRead: `Помітити всі вхідні як прочитані`,
     cheats_finishInvasionsInOneMission: `Завершувати вторгнення за одну місію`,

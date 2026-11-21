@@ -46,6 +46,8 @@
       "addDirac": true,
       "import": true,
       "export": true,
+      "setSyndicateStanding": true,
+      "setSupportedSyndicate": true,
       "toggleCheat": {
         "*": true,
         "skipAllDialogue": true

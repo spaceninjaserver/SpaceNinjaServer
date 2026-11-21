@@ -44,6 +44,7 @@ import varzia from "../../constants/varzia.ts";
 import suitDefaultUpgrades from "../../constants/suitDefaultUpgrades.ts";
 import { pseudoRecipeToOwnedRecipeMap } from "../../services/foundryService.ts";
 import { nightwaveTagToSeasonName } from "../../services/worldStateService.ts";
+import { getMaxStanding } from "../../helpers/syndicateStandingHelper.ts";
 
 interface ListedItem {
     uniqueName: string;
@@ -66,6 +67,10 @@ interface ListedItem {
     permanentEvolutionWeapon?: true;
     challengeType?: "daily" | "weekly" | "eliteWeekly" | "permanentWeekly";
     description?: string;
+    colour?: string;
+    backgroundColour?: string;
+    titles?: { level: number; minStanding: number; maxStanding: number }[];
+    maxStanding?: number;
 }
 
 interface ItemLists {
@@ -113,6 +118,8 @@ const relicQualitySuffixes: Record<TRelicQuality, string> = {
 const toTitleCase = (str: string): string => {
     return str.replace(/[^\s-]+/g, word => word.charAt(0).toUpperCase() + word.substring(1).toLowerCase());
 };
+
+const toCssColour = (value: string | undefined): string | undefined => (value ? "#" + value.slice(-6) : undefined);
 
 const getItemListsController: RequestHandler = (req, response) => {
     const lang = getDict(typeof req.query.lang == "string" ? req.query.lang : "en");
@@ -489,7 +496,15 @@ const getItemListsController: RequestHandler = (req, response) => {
     for (const [uniqueName, syndicate] of Object.entries(ExportSyndicates)) {
         res.Syndicates.push({
             uniqueName,
-            name: getString(syndicate.name, lang)
+            name: getString(syndicate.name, lang),
+            titles: syndicate.titles?.map(({ level, minStanding, maxStanding }) => ({
+                level,
+                minStanding,
+                maxStanding
+            })),
+            maxStanding: syndicate.titles ? undefined : getMaxStanding(syndicate, 0),
+            colour: toCssColour(syndicate.colour.value),
+            backgroundColour: toCssColour(syndicate.backgroundColour.value)
         });
     }
     for (const [uniqueName, key] of Object.entries({ ...ExportKeys, ...supplementalKeys })) {
@@ -625,9 +640,13 @@ const getItemListsController: RequestHandler = (req, response) => {
     }
 
     for (const [uniqueName, name] of Object.entries(nightwaveTagToSeasonName)) {
+        let seasonName = getNormalizedString(name, lang) || name;
+        if (uniqueName in nightwaveIntermissionNumerals) {
+            seasonName += " " + nightwaveIntermissionNumerals[uniqueName];
+        }
         res.NightwaveTags.push({
             uniqueName,
-            name: getString(name, lang) || name
+            name: seasonName
         });
     }
 
@@ -675,3 +694,9 @@ const getItemListsController: RequestHandler = (req, response) => {
 };
 
 export { getItemListsController };
+
+const nightwaveIntermissionNumerals: Record<string, string> = {
+    RadioLegionIntermissionSyndicate: "I",
+    RadioLegionIntermission2Syndicate: "II",
+    RadioLegionIntermission3Syndicate: "III"
+};

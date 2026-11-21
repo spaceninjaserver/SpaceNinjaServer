@@ -112,6 +112,7 @@ dict = {
     navbar_inventory: `Инвентарь`,
     navbar_guildView: `Клан`,
     navbar_mods: `Моды`,
+    navbar_syndicates: `Синдикаты`,
     navbar_cheats: `Читы`,
     navbar_serverCheats: `Читы сервера`,
     navbar_import: `Импорт`,
@@ -149,6 +150,16 @@ dict = {
     inventory_bulkComplete: `Завершить все`,
     inventory_bulkReset: `Сбросить прогресс всего`,
     inventory_removeIsNew: `Удалить значок восклицательного знака нового снаряжения`,
+
+    syndicates_minStanding: `Мин. репутация`,
+    syndicates_maxStanding: `Макс. репутация`,
+    syndicates_supportedSyndicate: `Поддерживаемый синдикат`,
+    syndicates_setSupportedSyndicate: `Сделать поддерживаемым синдикатом`,
+    syndicates_dailyLimitBin: `Дневной лимит: |BIN|`,
+    syndicates_dailyLimitBin_normal: `Синдикаты фракций`,
+    syndicates_dailyLimitBin_none: `нет`,
+    syndicates_rank: `Ранг: |RANK|`,
+    syndicates_standing: `Репутация: |STANDING|/|REQUIRED|`,
 
     currency_owned: `У тебя |COUNT|.`,
 
@@ -295,7 +306,6 @@ dict = {
     cheats_addMissingSubsumedAbilities: `Добавить отсутствующие поглощённые способности`,
     cheats_intrinsicsUnlockAll: `Полностью улучшить Модуляры`,
     cheats_maxPlexus: `Макс. ранг Плексуса`,
-    cheats_changeSupportedSyndicate: `Поддерживаемый синдикат`,
     cheats_changeButton: `Изменить`,
     cheats_markAllAsRead: `Пометить все входящие как прочитанные`,
     cheats_finishInvasionsInOneMission: `Завершать вторжение за одну миссию`,

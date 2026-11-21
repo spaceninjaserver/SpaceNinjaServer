@@ -112,6 +112,7 @@ dict = {
     navbar_inventory: `Ekwipunek`,
     navbar_guildView: `Klan`,
     navbar_mods: `Mody`,
+    navbar_syndicates: `[UNTRANSLATED] Syndicates`,
     navbar_cheats: `Cheaty`,
     navbar_serverCheats: `[UNTRANSLATED] Server Cheats`,
     navbar_import: `Import`,
@@ -149,6 +150,16 @@ dict = {
     inventory_bulkComplete: `Zakończ wszystkie`,
     inventory_bulkReset: `Zresetuj wszystkie`,
     inventory_removeIsNew: `Usuń ikonę informującą o nowych przedmiotach`,
+
+    syndicates_minStanding: `[UNTRANSLATED] Min Standing`,
+    syndicates_maxStanding: `[UNTRANSLATED] Max Standing`,
+    syndicates_supportedSyndicate: `Wspierany syndykat`,
+    syndicates_setSupportedSyndicate: `[UNTRANSLATED] Set As Supported Syndicate`,
+    syndicates_dailyLimitBin: `[UNTRANSLATED] Daily Limit Bin: |BIN|`,
+    syndicates_dailyLimitBin_normal: `[UNTRANSLATED] Faction Syndicates`,
+    syndicates_dailyLimitBin_none: `[UNTRANSLATED] None`,
+    syndicates_rank: `Ranga: |RANK|`,
+    syndicates_standing: `[UNTRANSLATED] Standing: |STANDING|/|REQUIRED|`,
 
     currency_owned: `Masz |COUNT|.`,
 
@@ -295,7 +306,6 @@ dict = {
     cheats_addMissingSubsumedAbilities: `Dodaj brakujące wchłonięte umiejętności`,
     cheats_intrinsicsUnlockAll: `Maksymalna ranga rozwoju wędrowca`,
     cheats_maxPlexus: `Maksymalna ranga Plexus'a`,
-    cheats_changeSupportedSyndicate: `Wspierane syndykaty`,
     cheats_changeButton: `Zmień`,
     cheats_markAllAsRead: `Oznacz skrzynkę odbiorczą jako przeczytaną`,
     cheats_finishInvasionsInOneMission: `Ukończ inwazje w jednej misji`,

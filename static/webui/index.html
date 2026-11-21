@@ -65,6 +65,9 @@
                             <a class="nav-link" href="/webui/mods" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_mods"></a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="/webui/syndicates" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_syndicates"></a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="/webui/cheats" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" data-loc="navbar_cheats"></a>
                         </li>
                         <li class="nav-item">
@@ -958,6 +961,10 @@
                     </div>
                 </div>
             </div>
+            <div data-route="/webui/syndicates" data-title-tag="navbar_syndicates">
+                <p class="mb-3 inventory-update-note"></p>
+                <div class="row g-3" id="syndicates-list"></div>
+            </div>
             <div data-route="/webui/cheats, /webui/settings" data-title-tag="navbar_cheats">
                 <div class="row g-3">
                     <div class="col-md-6">
@@ -972,13 +979,6 @@
                         <div class="card mb-3">
                             <h5 class="card-header" data-loc="cheats_values"></h5>
                             <div class="card-body account-cheats">
-                                <form class="form-group" onsubmit="doChangeSupportedSyndicate(); return false;">
-                                    <label class="form-label" for="changeSyndicate" data-loc="cheats_changeSupportedSyndicate"></label>
-                                    <div class="input-group">
-                                        <select class="form-control" id="changeSyndicate"></select>
-                                        <button class="btn btn-secondary" type="submit" data-loc="cheats_changeButton"></button>
-                                    </div>
-                                </form>
                                 <div id="account-cheats-numbers"></div>
                             </div>
                         </div>

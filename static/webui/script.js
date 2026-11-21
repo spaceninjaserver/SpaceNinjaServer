@@ -10,6 +10,7 @@
 
 const webUITranslations = ["en", "ru", "fr", "de", "zh", "es", "uk", "pl"];
 const allPermissions = [];
+let grantedPermissions = [];
 let accountCheats;
 
 let auth_pending = false,
@@ -95,6 +96,7 @@ function openWebSocket() {
             }
         }
         if ("permissions" in msg) {
+            grantedPermissions = msg.permissions;
             for (const perm of allPermissions) {
                 const granted = msg.permissions.indexOf(perm) != -1;
                 //console.log(`Permission ${perm} was ${granted ? 'granted' : 'denied'}`);
@@ -599,6 +601,7 @@ window.webuiDataPromise = new Promise(resolve => {
                 allPermissions.push(perm);
             }
         });
+        allPermissions.push("setSyndicateStanding", "setSupportedSyndicate");
 
         accountCheats = document.querySelectorAll(".account-cheats input[id]");
         attachAccountCheatsHandlers();
@@ -1033,6 +1036,7 @@ const icons = {
     angleRight: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg>`,
     angleUp: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg>`,
     arrowRotateRight: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M463.5 224l8.5 0c13.3 0 24-10.7 24-24l0-128c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8l119.5 0z"/></svg>`,
+    arrowDown: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free v7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M169.4 502.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 402.7 224 32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 370.7-105.4-105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/></svg>`,
     arrowUp: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>`,
     chartSimple: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M160 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H208c-26.5 0-48-21.5-48-48V80zM0 272c0-26.5 21.5-48 48-48H80c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V272zM368 96h32c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H368c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48z"/></svg>`,
     check: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg>`,
@@ -1068,24 +1072,20 @@ const areItemsUnambiguous = (items, stringifier) => {
     return true;
 };
 
+let nightwaveSeasonNames = {};
+
 function fetchItemList() {
     window.itemListPromise = new Promise(resolve => {
         const req = $.get("/custom/getItemLists?lang=" + window.lang);
         req.done(async data => {
             await dictPromise;
-            const webuiData = await window.webuiDataPromise;
+            await window.webuiDataPromise;
 
             document.querySelectorAll('[id^="datalist-"]').forEach(datalist => {
                 if (datalist.id != "datalist-usernames") {
                     datalist.innerHTML = "";
                 }
             });
-
-            const syndicateNone = document.createElement("option");
-            syndicateNone.value = "";
-            syndicateNone.textContent = loc("general_none");
-            document.getElementById("changeSyndicate").innerHTML = "";
-            document.getElementById("changeSyndicate").appendChild(syndicateNone);
 
             document.getElementById("valenceBonus-innateDamage").innerHTML = "";
             const rememberedVarziaOverride = document.getElementById("worldState.varziaOverride").value;
@@ -1742,8 +1742,8 @@ function fetchItemList() {
                     });
                     select.value = rememberedVarziaOverride;
                 } else if (type == "NightwaveTags") {
+                    nightwaveSeasonNames = Object.fromEntries(items.map(item => [item.uniqueName, item.name]));
                     const select = document.getElementById("worldState.nightwaveOverride");
-                    let oldNWIntermissionLeft = 3;
                     {
                         const nwDisabledOption = document.createElement("option");
                         nwDisabledOption.value = "";
@@ -1755,16 +1755,6 @@ function fetchItemList() {
                         const option = document.createElement("option");
                         option.value = item.uniqueName;
                         option.textContent = item.name;
-                        if (
-                            [
-                                "RadioLegionIntermissionSyndicate",
-                                "RadioLegionIntermission2Syndicate",
-                                "RadioLegionIntermission3Syndicate"
-                            ].includes(item.uniqueName)
-                        ) {
-                            option.textContent += ` ${"I".repeat(oldNWIntermissionLeft)}`;
-                            oldNWIntermissionLeft--;
-                        }
                         select.appendChild(option);
                     });
                     {
@@ -1775,17 +1765,6 @@ function fetchItemList() {
                         select.appendChild(nwDisableOption);
                     }
                     select.value = rememberedNWOverride;
-                } else if (type == "Syndicates") {
-                    const names = Object.fromEntries(items.map(item => [item.uniqueName, item.name]));
-                    for (const uniqueName of webuiData.accountCheats.supportedSyndicates) {
-                        const option = document.createElement("option");
-                        option.value = uniqueName;
-                        option.textContent = names[uniqueName];
-                        if (uniqueName.startsWith("RadioLegion")) {
-                            option.textContent += " (" + uniqueName + ")";
-                        }
-                        document.getElementById("changeSyndicate").appendChild(option);
-                    }
                 } else if (type == "FlavourItems") {
                     const cursorPrefixes = {
                         Controller: loc("code_controller"),
@@ -1839,7 +1818,7 @@ function fetchItemList() {
                         }
                         itemMap[item.uniqueName] = { ...item, type };
                     });
-                } else if (["MissionTypes", "Nodes", "AdditionalDict"].includes(type)) {
+                } else if (["MissionTypes", "Nodes", "AdditionalDict", "Syndicates"].includes(type)) {
                     items.forEach(item => {
                         if (!itemMap[item.uniqueName]) {
                             itemMap[item.uniqueName] = { ...item, type };
@@ -1999,6 +1978,7 @@ function updateInventory() {
         single.getCurrentPath() == "/webui/inventory" ||
         single.getCurrentPath().startsWith("/webui/details") ||
         single.getCurrentPath() == "/webui/mods" ||
+        single.getCurrentPath() == "/webui/syndicates" ||
         single.getCurrentPath() == "/webui/cheats"
     ) {
         single.loadRoute(single.getCurrentPath());
@@ -2606,6 +2586,197 @@ async function populateInventoryRoute() {
     });
 }
 single.getRoute("/webui/inventory").on("beforeload", populateInventoryRoute);
+
+single.getRoute("/webui/syndicates").on("beforeload", async function () {
+    const [data, itemMap, [webuiData, nightwaveTag]] = await Promise.all([
+        awaitAuthz().then(getInventoryData),
+        window.itemListPromise,
+        window.webuiDataPromise.then(async webuiData => [
+            webuiData,
+            webuiData.syndicateBins.some(x => x.nightwave)
+                ? await awaitAuthz().then(() => $.get("/custom/getNightwaveTag?" + window.authz))
+                : undefined
+        ])
+    ]);
+    const affiliations = Object.fromEntries((data.Affiliations ?? []).map(x => [x.Tag, x]));
+    const entries = webuiData.syndicateBins.flatMap(({ label, syndicates, nightwave }) => {
+        const binName = label
+            ? loc(label)
+            : new Intl.ListFormat(window.lang).format(
+                  syndicates.map(tag => itemMap[tag]?.name || tag).sort((a, b) => a.localeCompare(b))
+              );
+        return syndicates
+            .filter(tag => !nightwave || tag == nightwaveTag)
+            .map(tag => ({
+                tag,
+                name: itemMap[tag]?.name || tag,
+                subtitle: nightwaveSeasonNames[tag],
+                colour: itemMap[tag]?.colour,
+                backgroundColour: itemMap[tag]?.backgroundColour,
+                binName,
+                affiliation: affiliations[tag] ?? { Tag: tag, Standing: 0, Title: 0 }
+            }))
+            .sort((a, b) => a.name.localeCompare(b.name));
+    });
+
+    syndicatesContext = {
+        itemMap,
+        supportedSyndicates: webuiData.accountCheats.supportedSyndicates,
+        supportedSyndicate: data.SupportedSyndicate,
+        entries: Object.fromEntries(entries.map(entry => [entry.tag, entry]))
+    };
+    const list = document.getElementById("syndicates-list");
+    list.innerHTML = "";
+    for (const entry of entries) {
+        list.appendChild(createSyndicateCard(entry));
+    }
+});
+
+let syndicatesContext;
+
+function createSyndicateCard(entry) {
+    const { tag, name, subtitle, binName, colour, backgroundColour, affiliation } = entry;
+    const col = document.createElement("div");
+    col.className = "col-md-6 col-xl-4";
+    const card = document.createElement("div");
+    card.className = "card h-100 syndicate-card";
+    if (colour && backgroundColour) {
+        const [light, dark] =
+            getRelativeLuminance(colour) >= getRelativeLuminance(backgroundColour)
+                ? [colour, backgroundColour]
+                : [backgroundColour, colour];
+        card.style.setProperty("--syndicate-light", light);
+        card.style.setProperty("--syndicate-dark", dark);
+    }
+    const displayedStanding = getDisplayedStanding(syndicatesContext.itemMap[tag], affiliation);
+    {
+        const header = document.createElement("div");
+        header.className = "card-header d-flex justify-content-between align-items-center";
+        const h5 = document.createElement("h5");
+        h5.className = "mb-0";
+        h5.textContent = name;
+        header.appendChild(h5);
+        const actions = document.createElement("div");
+        actions.className = "d-flex gap-2";
+        for (const [mode, locStr, icon] of displayedStanding
+            ? [
+                  ["min", "syndicates_minStanding", icons.arrowDown],
+                  ["max", "syndicates_maxStanding", icons.arrowUp]
+              ]
+            : []) {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "btn btn-link p-0 border-0 lh-1 link-opacity-75 link-opacity-100-hover";
+            button.style.color = "inherit";
+            button.title = loc(locStr);
+            button.setAttribute("data-loc-title", locStr);
+            button.innerHTML = icon;
+            button.onclick = function () {
+                doSetSyndicateStanding(tag, mode);
+            };
+            applyEnablingPermission(button, "setSyndicateStanding");
+            actions.appendChild(button);
+        }
+        if (syndicatesContext.supportedSyndicates.includes(tag)) {
+            const supported = syndicatesContext.supportedSyndicate == tag;
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "btn btn-link p-0 border-0 lh-1" + (supported ? "" : " opacity-25");
+            button.style.color = "inherit";
+            const titleLoc = supported ? "syndicates_supportedSyndicate" : "syndicates_setSupportedSyndicate";
+            button.title = loc(titleLoc);
+            button.setAttribute("data-loc-title", titleLoc);
+            button.innerHTML = icons.star;
+            button.onclick = function () {
+                doChangeSupportedSyndicate(supported ? "" : tag);
+            };
+            applyEnablingPermission(button, "setSupportedSyndicate");
+            actions.appendChild(button);
+        }
+        header.appendChild(actions);
+        card.appendChild(header);
+    }
+    const body = document.createElement("div");
+    body.className = "card-body d-flex flex-column gap-2";
+    if (subtitle || binName) {
+        const p = document.createElement("p");
+        p.className = "card-text mb-0 small text-body-secondary";
+        p.textContent = subtitle || loc("syndicates_dailyLimitBin").replaceAll("|BIN|", binName);
+        body.appendChild(p);
+    }
+    {
+        const p = document.createElement("p");
+        p.className = "card-text mb-0";
+        p.textContent = loc("syndicates_rank").replaceAll("|RANK|", affiliation.Title ?? 0);
+        body.appendChild(p);
+    }
+    if (displayedStanding) {
+        const [standing, required] = displayedStanding;
+        const p = document.createElement("p");
+        p.className = "card-text mb-0";
+        p.textContent = loc("syndicates_standing")
+            .replaceAll("|STANDING|", standing.toLocaleString())
+            .replaceAll("|REQUIRED|", required.toLocaleString());
+        body.appendChild(p);
+        {
+            const progress = document.createElement("div");
+            progress.className = "progress";
+            const bar = document.createElement("div");
+            bar.className = "progress-bar";
+            bar.style.width = Math.min(100, Math.max(0, (standing / required) * 100)) + "%";
+            progress.appendChild(bar);
+            body.appendChild(progress);
+        }
+        const controls = document.createElement("div");
+        controls.className = "mt-auto d-flex flex-column gap-2";
+        {
+            const form = document.createElement("form");
+            form.className = "input-group";
+            const input = document.createElement("input");
+            input.className = "form-control";
+            input.type = "number";
+            input.value = standing;
+            applyEnablingPermission(input, "setSyndicateStanding");
+            form.appendChild(input);
+            for (const [mode, locStr, style] of [
+                ["set", "general_setButton", "btn-primary"],
+                ["add", "general_addButton", "btn-success"]
+            ]) {
+                const button = document.createElement("button");
+                button.className = "btn " + style;
+                button.type = "submit";
+                button.value = mode;
+                button.textContent = loc(locStr);
+                button.setAttribute("data-loc", locStr);
+                applyEnablingPermission(button, "setSyndicateStanding");
+                form.appendChild(button);
+            }
+            form.onsubmit = function (event) {
+                event.preventDefault();
+                const value = parseInt(input.value);
+                if (Number.isNaN(value)) {
+                    input.classList.add("is-invalid");
+                    input.focus();
+                    return;
+                }
+                doSetSyndicateStanding(tag, event.submitter?.value ?? "set", value);
+            };
+            controls.appendChild(form);
+        }
+        body.appendChild(controls);
+    }
+    card.appendChild(body);
+    col.appendChild(card);
+    entry.col = col;
+    return col;
+}
+
+function refreshSyndicateCard(tag) {
+    const entry = syndicatesContext?.entries[tag];
+    if (entry?.col) {
+        entry.col.replaceWith(createSyndicateCard(entry));
+    }
+}
 
 single.getRoute("/webui/mods").on("beforeload", async function () {
     const [data, itemMap] = await Promise.all([awaitAuthz().then(getInventoryData), window.itemListPromise]);
@@ -3904,6 +4075,70 @@ function setEvolutionProgress(requests) {
     });
 }
 
+function getDisplayedStanding(syndicate, affiliation) {
+    const titles = syndicate?.titles;
+    affiliation = { ...affiliation, Standing: affiliation.Standing ?? 0 };
+    const title = affiliation.Title ?? 0;
+    if (!titles) {
+        return syndicate?.maxStanding ? [affiliation.Standing, syndicate.maxStanding] : undefined;
+    }
+    if (title == 0) {
+        const first = titles.find(x => x.level == 1);
+        if (!first) {
+            return undefined;
+        }
+        return [affiliation.Standing, affiliation.Standing < 0 ? -first.minStanding : first.minStanding];
+    }
+    const meta = titles.find(x => x.level == title);
+    if (!meta) {
+        return undefined;
+    }
+    const range = meta.maxStanding - meta.minStanding;
+    if (title < 0) {
+        return [affiliation.Standing - meta.maxStanding, -range];
+    }
+    return [affiliation.Standing - meta.minStanding, range];
+}
+
+// WCAG relative luminance
+function getRelativeLuminance(hex) {
+    const [r, g, b] = [1, 3, 5].map(i => {
+        const c = parseInt(hex.substring(i, i + 2), 16) / 255;
+        return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function applyEnablingPermission(elm, perm) {
+    elm.setAttribute("data-enabling-permission", perm);
+    elm.disabled = grantedPermissions.indexOf(perm) == -1;
+}
+
+function doSetSyndicateStanding(tag, mode, standing) {
+    revalidateAuthz().then(() => {
+        $.post({
+            url: "/custom/setSyndicateStanding?" + window.authz,
+            contentType: "application/json",
+            data: JSON.stringify({ Tag: tag, Mode: mode, Standing: standing })
+        }).done(affiliation => {
+            if (inventory_data) {
+                const affiliations = (inventory_data.Affiliations ??= []);
+                const index = affiliations.findIndex(x => x.Tag == tag);
+                if (index == -1) {
+                    affiliations.push(affiliation);
+                } else {
+                    affiliations[index] = affiliation;
+                }
+            }
+            const entry = syndicatesContext?.entries[tag];
+            if (entry) {
+                entry.affiliation = affiliation;
+                refreshSyndicateCard(tag);
+            }
+        });
+    });
+}
+
 function doAcquireCountItems(category) {
     const uniqueName = getKey(document.getElementById("acquire-type-" + category));
     if (!uniqueName) {
@@ -4407,7 +4642,6 @@ function getServerConfig() {
 single.getRoute("/webui/cheats").on("beforeload", function () {
     awaitAuthz().then(() => {
         getInventoryData().then(data => {
-            document.getElementById("changeSyndicate").value = data.SupportedSyndicate ?? "";
             for (const elm of accountCheats) {
                 if (elm.type === "checkbox") {
                     elm.checked = !!data[elm.id];
@@ -5509,12 +5743,22 @@ function doExport() {
     });
 }
 
-function doChangeSupportedSyndicate() {
-    const uniqueName = document.getElementById("changeSyndicate").value;
-
+function doChangeSupportedSyndicate(uniqueName) {
     revalidateAuthz().then(() => {
-        $.get("/api/setSupportedSyndicate.php?" + window.authz + "&syndicate=" + uniqueName).done(function () {
-            inventory_data.SupportedSyndicate = uniqueName;
+        $.post({
+            url: "/custom/setSupportedSyndicate?" + window.authz,
+            contentType: "application/json",
+            data: JSON.stringify({ Tag: uniqueName })
+        }).done(function () {
+            if (inventory_data) {
+                inventory_data.SupportedSyndicate = uniqueName;
+            }
+            if (syndicatesContext) {
+                const previous = syndicatesContext.supportedSyndicate;
+                syndicatesContext.supportedSyndicate = uniqueName;
+                refreshSyndicateCard(previous);
+                refreshSyndicateCard(uniqueName);
+            }
         });
     });
 }

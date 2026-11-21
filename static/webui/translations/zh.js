@@ -112,6 +112,7 @@ dict = {
     navbar_inventory: `仓库`,
     navbar_guildView: `氏族`,
     navbar_mods: `Mods`,
+    navbar_syndicates: `[UNTRANSLATED] Syndicates`,
     navbar_cheats: `作弊选项`,
     navbar_serverCheats: `[UNTRANSLATED] Server Cheats`,
     navbar_import: `导入`,
@@ -149,6 +150,16 @@ dict = {
     inventory_bulkComplete: `全部完成`,
     inventory_bulkReset: `全部重置`,
     inventory_removeIsNew: `移除所有新装备上的感叹号图标`,
+
+    syndicates_minStanding: `[UNTRANSLATED] Min Standing`,
+    syndicates_maxStanding: `[UNTRANSLATED] Max Standing`,
+    syndicates_supportedSyndicate: `支持的集团`,
+    syndicates_setSupportedSyndicate: `[UNTRANSLATED] Set As Supported Syndicate`,
+    syndicates_dailyLimitBin: `[UNTRANSLATED] Daily Limit Bin: |BIN|`,
+    syndicates_dailyLimitBin_normal: `[UNTRANSLATED] Faction Syndicates`,
+    syndicates_dailyLimitBin_none: `[UNTRANSLATED] None`,
+    syndicates_rank: `等级: |RANK|`,
+    syndicates_standing: `[UNTRANSLATED] Standing: |STANDING|/|REQUIRED|`,
 
     currency_owned: `当前拥有 |COUNT|`,
 
@@ -295,7 +306,6 @@ dict = {
     cheats_addMissingSubsumedAbilities: `添加Helminth未汲取的战甲技能`,
     cheats_intrinsicsUnlockAll: `所有内源之力最大等级`,
     cheats_maxPlexus: `最大深控等级`,
-    cheats_changeSupportedSyndicate: `支持的集团`,
     cheats_changeButton: `更改`,
     cheats_markAllAsRead: `收件箱全部标记为已读`,
     cheats_finishInvasionsInOneMission: `一场任务完成整场入侵`,

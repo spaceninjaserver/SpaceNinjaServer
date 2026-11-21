@@ -112,6 +112,7 @@ dict = {
     navbar_inventory: `Inventario`,
     navbar_guildView: `Clan`,
     navbar_mods: `Mods`,
+    navbar_syndicates: `[UNTRANSLATED] Syndicates`,
     navbar_cheats: `Trucos`,
     navbar_serverCheats: `[UNTRANSLATED] Server Cheats`,
     navbar_import: `Importar`,
@@ -149,6 +150,16 @@ dict = {
     inventory_bulkComplete: `[UNTRANSLATED] Complete All`,
     inventory_bulkReset: `[UNTRANSLATED] Reset All`,
     inventory_removeIsNew: `[UNTRANSLATED] Remove New Equipment Exclamation Icon`,
+
+    syndicates_minStanding: `[UNTRANSLATED] Min Standing`,
+    syndicates_maxStanding: `[UNTRANSLATED] Max Standing`,
+    syndicates_supportedSyndicate: `[UNTRANSLATED] Supported Syndicate`,
+    syndicates_setSupportedSyndicate: `[UNTRANSLATED] Set As Supported Syndicate`,
+    syndicates_dailyLimitBin: `[UNTRANSLATED] Daily Limit Bin: |BIN|`,
+    syndicates_dailyLimitBin_normal: `[UNTRANSLATED] Faction Syndicates`,
+    syndicates_dailyLimitBin_none: `[UNTRANSLATED] None`,
+    syndicates_rank: `Rango: |RANK|`,
+    syndicates_standing: `[UNTRANSLATED] Standing: |STANDING|/|REQUIRED|`,
 
     currency_owned: `Tienes |COUNT|.`,
 
@@ -295,7 +306,6 @@ dict = {
     cheats_addMissingSubsumedAbilities: `Agregar habilidades subsumidas faltantes`,
     cheats_intrinsicsUnlockAll: `Maximizar todos los intrínsecos`,
     cheats_maxPlexus: `Rango máximo de Plexus`,
-    cheats_changeSupportedSyndicate: `Sindicatos disponibles`,
     cheats_changeButton: `Cambiar`,
     cheats_markAllAsRead: `Marcar bandeja de entrada como leída`,
     cheats_finishInvasionsInOneMission: `Finaliza Invasión en una mision`,

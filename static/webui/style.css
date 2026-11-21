@@ -58,3 +58,24 @@ td.text-end > a > svg {
     padding-right: var(--bs-navbar-nav-link-padding-x);
     padding-left: var(--bs-navbar-nav-link-padding-x);
 }
+
+/* syndicate colours: dark background in the dark theme, light background in the light theme */
+[data-bs-theme="dark"] .syndicate-card {
+    --syndicate-bg: var(--syndicate-dark);
+    --syndicate-fg: var(--syndicate-light);
+}
+[data-bs-theme="light"] .syndicate-card {
+    --syndicate-bg: var(--syndicate-light);
+    --syndicate-fg: var(--syndicate-dark);
+}
+.syndicate-card .card-header {
+    background-color: var(--syndicate-bg);
+    color: var(--syndicate-fg);
+}
+/* the light colour is the distinctive one, so the bar always fills with it, regardless of theme */
+.syndicate-card .progress {
+    background-color: var(--syndicate-dark);
+}
+.syndicate-card .progress-bar {
+    background-color: var(--syndicate-light);
+}
